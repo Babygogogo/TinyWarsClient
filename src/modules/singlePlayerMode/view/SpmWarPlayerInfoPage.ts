@@ -8,7 +8,9 @@ import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPane
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
 import * as SpmModel                    from "../model/SpmModel";
@@ -28,8 +30,8 @@ export class SpmWarPlayerInfoPage extends UiTabPage<OpenDataForSpmWarPlayerInfoP
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgSpmGetWarSaveSlotFullDataArray,  callback: this._onNotifyMsgSpmGetWarSaveSlotFullDataArray },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgSpmGetWarSaveSlotFullDataArray,  callback: this._onNotifyMsgSpmGetWarSaveSlotFullDataArray },
         ]);
 
         this.left   = 0;
@@ -94,7 +96,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             { ui: this._groupCo,    callback: this._onTouchedGroupCo },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -138,8 +140,8 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerData            = this._getPlayerData();
         this._imgSkin.source        = getSourceForImgSkin(playerData ? playerData.unitAndTileSkinId : null);
         this._labelPlayerType.text  = playerData.userId == null
-            ? Lang.getText(Lang.Type.B0607)
-            : Lang.getText(Lang.Type.B0031);
+            ? Lang.getText(LangTextType.B0607)
+            : Lang.getText(LangTextType.B0031);
 
         const coId                  = playerData ? playerData.coId : null;
         const coCfg                 = ConfigManager.getCoBasicCfg(settingsForCommon.configVersion, coId);

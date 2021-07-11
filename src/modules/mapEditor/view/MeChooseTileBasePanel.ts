@@ -11,7 +11,9 @@ import { MeTileSimpleView }             from "./MeTileSimpleView";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as MeModel                     from "../model/MeModel";
 
@@ -56,7 +58,7 @@ export class MeChooseTileBasePanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnCancel,  callback: this.close },
@@ -115,9 +117,9 @@ export class MeChooseTileBasePanel extends UiPanel<void> {
     // Private functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
-        this._labelFill.text        = Lang.getText(Lang.Type.B0294);
-        this._labelRecentTitle.text = `${Lang.getText(Lang.Type.B0372)}:`;
+        this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+        this._labelFill.text        = Lang.getText(LangTextType.B0294);
+        this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
     }
 
     private _updateImgFill(): void {
@@ -205,7 +207,7 @@ class TileBaseRenderer extends UiListItemRenderer<DataForTileBaseRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+            { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
         ]);
 
         const tileView = this._tileView;
@@ -241,7 +243,7 @@ class TileBaseRenderer extends UiListItemRenderer<DataForTileBaseRenderer> {
             MeModel.getWar().getDrawer().setModeDrawTileBase(dataForDrawTileBase);
         } else {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0089),
+                content : Lang.getText(LangTextType.A0089),
                 callback: () => {
                     const war           = MeModel.getWar();
                     const configVersion = war.getConfigVersion();
@@ -260,7 +262,7 @@ class TileBaseRenderer extends UiListItemRenderer<DataForTileBaseRenderer> {
 
                     panel.updateOnChooseTileBase(dataForDrawTileBase);
                     panel.close();
-                    Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: war.getCursor().getGridIndex() } as Notify.Data.MeTileChanged);
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: war.getCursor().getGridIndex() } as Notify.Data.MeTileChanged);
                 },
             });
         }

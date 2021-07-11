@@ -3,6 +3,7 @@ import { UiZoomableComponent }          from "../../../gameui/UiZoomableComponen
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as StageManager                from "../../../utility/StageManager";
 import * as Types                       from "../../../utility/Types";
 import GridIndex                        = Types.GridIndex;
@@ -19,8 +20,8 @@ export class BwWarView extends eui.Group {
     private _vibrationTimeoutId : number;
 
     private _notifyListeners: Notify.Listener[] = [
-        { type: Notify.Type.BwFieldZoomed,  callback: this._onNotifyBwFieldZoomed },
-        { type: Notify.Type.BwFieldDragged, callback: this._onNotifyBwFieldDragged },
+        { type: NotifyType.BwFieldZoomed,  callback: this._onNotifyBwFieldZoomed },
+        { type: NotifyType.BwFieldDragged, callback: this._onNotifyBwFieldDragged },
     ];
     private _uiListeners: Types.UiListener[] = [
         { ui: this,     callback: this._onEnterFrame,   eventType: egret.Event.ENTER_FRAME },

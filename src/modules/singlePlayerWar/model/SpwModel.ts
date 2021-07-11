@@ -10,6 +10,7 @@ import { SpwPlayerManager }             from "./SpwPlayerManager";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as FlowManager                 from "../../../utility/FlowManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger                      from "../../../utility/Logger";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
@@ -157,24 +158,24 @@ function checkAndEndWar(war: BwWar): boolean {
         const callback = () => FlowManager.gotoLobby();
         if (war.getDrawVoteManager().checkIsDraw()) {
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0030),
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0030),
                 callback,
             });
         } else {
             const humanPlayerList = (war.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
             if (humanPlayerList.length <= 0) {
                 CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0035),
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0035),
                     callback,
                 });
             } else {
                 CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
+                    title   : Lang.getText(LangTextType.B0088),
                     content : humanPlayerList.some(v => v.getAliveState() === Types.PlayerAliveState.Alive)
-                        ? Lang.getText(Lang.Type.A0022)
-                        : Lang.getText(Lang.Type.A0023),
+                        ? Lang.getText(LangTextType.A0022)
+                        : Lang.getText(LangTextType.A0023),
                     callback,
                 });
             }

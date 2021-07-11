@@ -2,6 +2,7 @@
 import { NetMessageCodes }      from "../../../network/NetMessageCodes";
 import * as NetManager          from "../../../network/NetManager";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as ChangeLogModel      from "./ChangeLogModel";
 import NetMessage       = ProtoTypes.NetMessage;
@@ -25,7 +26,7 @@ export function reqChangeLogAddMessage(textList: ILanguageText[]): void {
 function _onMsgChangeLogAddMessage(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgChangeLogAddMessage.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgChangeLogAddMessage, data);
+        Notify.dispatch(NotifyType.MsgChangeLogAddMessage, data);
     }
 }
 
@@ -40,7 +41,7 @@ export function reqChangeLogModifyMessage(messageId: number, textList: ILanguage
 function _onMsgChangeLogModifyMessage(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgChangeLogModifyMessage.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgChangeLogModifyMessage, data);
+        Notify.dispatch(NotifyType.MsgChangeLogModifyMessage, data);
     }
 }
 
@@ -52,6 +53,6 @@ function _onMsgChangeLogGetMessageList(e: egret.Event): void {
     const data = e.data as NetMessage.MsgChangeLogGetMessageList.IS;
     if (!data.errorCode) {
         ChangeLogModel.setAllMessageList(data.messageList);
-        Notify.dispatch(Notify.Type.MsgChangeLogGetMessageList, data);
+        Notify.dispatch(NotifyType.MsgChangeLogGetMessageList, data);
     }
 }

@@ -2,6 +2,7 @@
 import * as Types           from "./Types";
 import * as FloatText       from "./FloatText";
 import * as Lang            from "./Lang";
+import { LangTextType } from "./LangTextType";
 import * as Logger          from "./Logger";
 import * as LocalStorage    from "./LocalStorage";
 import SoundType            = Types.SoundType;
@@ -75,7 +76,7 @@ export async function init(): Promise<void> {
         _bgmGain        = _audioContext.createGain();
         _bgmGain.connect(_audioContext.destination);
     } catch (e) {
-        FloatText.show(Lang.getText(Lang.Type.A0196));
+        FloatText.show(Lang.getText(LangTextType.A0196));
     }
 
     _initBgmMute();

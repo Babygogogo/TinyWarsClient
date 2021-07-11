@@ -14,7 +14,9 @@ import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
 import * as ChatModel                   from "../../chat/model/ChatModel";
@@ -68,18 +70,18 @@ export class MpwTopPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.TimeTick,                       callback: this._onNotifyTimeTick },
-            { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
-            { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
-            { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
-            { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
-            { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
-            { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-            { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
-            { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
-            { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
-            { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.TimeTick,                       callback: this._onNotifyTimeTick },
+            { type: NotifyType.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
+            { type: NotifyType.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
+            { type: NotifyType.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
+            { type: NotifyType.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
+            { type: NotifyType.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
+            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
+            { type: NotifyType.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
+            { type: NotifyType.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
+            { type: NotifyType.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
         ]);
         this._setUiListenerArray([
             { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
@@ -185,7 +187,7 @@ export class MpwTopPanel extends UiPanel<void> {
 
             const gridIndex = BwHelpers.getIdleBuildingGridIndex(war);
             if (!gridIndex) {
-                FloatText.show(Lang.getText(Lang.Type.A0077));
+                FloatText.show(Lang.getText(LangTextType.A0077));
             } else {
                 const cursor = field.getCursor();
                 cursor.setGridIndex(gridIndex);
@@ -197,10 +199,10 @@ export class MpwTopPanel extends UiPanel<void> {
     private _onTouchedBtnEndTurn(): void {
         const war = this._war;
         if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
-            FloatText.show(Lang.getText(Lang.Type.A0034));
+            FloatText.show(Lang.getText(LangTextType.A0034));
         } else {
             CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0036),
+                title   : Lang.getText(LangTextType.B0036),
                 content : this._getHintForEndTurn(),
                 callback: () => (this._war.getActionPlanner() as MpwActionPlanner).setStateRequestingPlayerEndTurn(),
             });
@@ -235,7 +237,7 @@ export class MpwTopPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTimerTitle.text = Lang.getText(Lang.Type.B0188);
+        this._labelTimerTitle.text = Lang.getText(LangTextType.B0188);
     }
 
     private async _updateLabelPlayer(): Promise<void> {
@@ -353,7 +355,7 @@ export class MpwTopPanel extends UiPanel<void> {
                     ++idleUnitsCount;
                 }
             }
-            (idleUnitsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0006, idleUnitsCount)));
+            (idleUnitsCount) && (hints.push(Lang.getFormattedText(LangTextType.F0006, idleUnitsCount)));
         }
 
         {
@@ -372,7 +374,7 @@ export class MpwTopPanel extends UiPanel<void> {
             const textArrayForBuildings: string[] = [];
             for (const [tileType, gridIndexArray] of idleBuildingsDict) {
                 textArrayForBuildings.push(Lang.getFormattedText(
-                    Lang.Type.F0007, gridIndexArray.length,
+                    LangTextType.F0007, gridIndexArray.length,
                     Lang.getTileName(tileType),
                     gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
                 );
@@ -380,7 +382,7 @@ export class MpwTopPanel extends UiPanel<void> {
             (textArrayForBuildings.length) && (hints.push(textArrayForBuildings.join(`\n`)));
         }
 
-        hints.push(Lang.getText(Lang.Type.A0024));
+        hints.push(Lang.getText(LangTextType.A0024));
         return hints.join(`\n\n`);
     }
 }

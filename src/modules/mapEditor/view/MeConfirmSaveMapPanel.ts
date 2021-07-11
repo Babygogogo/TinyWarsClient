@@ -5,7 +5,9 @@ import { UiButton }                     from "../../../gameui/UiButton";
 import { UiLabel }                      from "../../../gameui/UiLabel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as MeModel                     from "../model/MeModel";
@@ -54,7 +56,7 @@ export class MeConfirmSaveMapPanel extends UiPanel<void> {
 
     protected async _onOpened(): Promise<void> {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnCancel,          callback: this._onTouchedBtnCancel, },
@@ -87,7 +89,7 @@ export class MeConfirmSaveMapPanel extends UiPanel<void> {
             this.close();
         } else {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0084),
+                content : Lang.getText(LangTextType.A0084),
                 callback: () => {
                     MeProxy.reqMeSubmitMap(this._slotIndex, this._mapRawData, needReview);
                     this.close();
@@ -106,13 +108,13 @@ export class MeConfirmSaveMapPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnConfirm.label          = Lang.getText(Lang.Type.B0026);
-        this._btnCancel.label           = Lang.getText(Lang.Type.B0154);
-        this._labelTitle.text           = Lang.getText(Lang.Type.B0088);
-        this._labelReviewDescTitle.text = Lang.getText(Lang.Type.A0083);
-        this._labelReviewDesc.text      = Lang.getText(Lang.Type.A0083);
-        this._labelNeedReview.text      = Lang.getText(Lang.Type.B0289);
-        this._labelContent.setRichText(Lang.getText(Lang.Type.A0082));
+        this._btnConfirm.label          = Lang.getText(LangTextType.B0026);
+        this._btnCancel.label           = Lang.getText(LangTextType.B0154);
+        this._labelTitle.text           = Lang.getText(LangTextType.B0088);
+        this._labelReviewDescTitle.text = Lang.getText(LangTextType.A0083);
+        this._labelReviewDesc.text      = Lang.getText(LangTextType.A0083);
+        this._labelNeedReview.text      = Lang.getText(LangTextType.B0289);
+        this._labelContent.setRichText(Lang.getText(LangTextType.A0082));
     }
 
     private _updateImgNeedReview(): void {

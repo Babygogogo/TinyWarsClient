@@ -2,6 +2,7 @@
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as BwWarRuleHelper     from "../../baseWar/model/BwWarRuleHelper";
@@ -55,8 +56,8 @@ export function getRoomInfo(roomId: number): Promise<IMfrRoomInfo | undefined | 
         const callbackOnSucceed = (e: egret.Event): void => {
             const data = e.data as NetMessage.MsgMfrGetRoomInfo.IS;
             if (data.roomId === roomId) {
-                Notify.removeEventListener(Notify.Type.MsgMfrGetRoomInfo,         callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgMfrGetRoomInfoFailed,   callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgMfrGetRoomInfo,         callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgMfrGetRoomInfoFailed,   callbackOnFailed);
 
                 for (const cb of _roomInfoRequests.get(roomId)) {
                     cb(data);
@@ -69,8 +70,8 @@ export function getRoomInfo(roomId: number): Promise<IMfrRoomInfo | undefined | 
         const callbackOnFailed = (e: egret.Event): void => {
             const data = e.data as NetMessage.MsgMfrGetRoomInfo.IS;
             if (data.roomId === roomId) {
-                Notify.removeEventListener(Notify.Type.MsgMfrGetRoomInfo,         callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgMfrGetRoomInfoFailed,   callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgMfrGetRoomInfo,         callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgMfrGetRoomInfoFailed,   callbackOnFailed);
 
                 for (const cb of _roomInfoRequests.get(roomId)) {
                     cb(data);
@@ -81,8 +82,8 @@ export function getRoomInfo(roomId: number): Promise<IMfrRoomInfo | undefined | 
             }
         };
 
-        Notify.addEventListener(Notify.Type.MsgMfrGetRoomInfo,        callbackOnSucceed);
-        Notify.addEventListener(Notify.Type.MsgMfrGetRoomInfoFailed,  callbackOnFailed);
+        Notify.addEventListener(NotifyType.MsgMfrGetRoomInfo,        callbackOnSucceed);
+        Notify.addEventListener(NotifyType.MsgMfrGetRoomInfoFailed,  callbackOnFailed);
 
         MfrProxy.reqMfrGetRoomInfo(roomId);
     });
@@ -309,7 +310,7 @@ export namespace Create {
     export function setSelfPlayerIndex(playerIndex: number): void {
         if (playerIndex !== getSelfPlayerIndex()) {
             getData().selfPlayerIndex = playerIndex;
-            Notify.dispatch(Notify.Type.MfrCreateSelfPlayerIndexChanged);
+            Notify.dispatch(NotifyType.MfrCreateSelfPlayerIndexChanged);
         }
     }
     export function tickSelfPlayerIndex(): void {
@@ -469,7 +470,7 @@ export namespace Join {
     export function setTargetRoomId(roomId: number): void {
         if (getTargetRoomId() !== roomId) {
             getData().roomId = roomId;
-            Notify.dispatch(Notify.Type.MfrJoinTargetRoomIdChanged);
+            Notify.dispatch(NotifyType.MfrJoinTargetRoomIdChanged);
         }
     }
 
@@ -543,7 +544,7 @@ export namespace Joined {
     export function setPreviewingRoomId(roomId: number | null): void {
         if (getPreviewingRoomId() != roomId) {
             _previewingRoomId = roomId;
-            Notify.dispatch(Notify.Type.MfrJoinedPreviewingRoomIdChanged);
+            Notify.dispatch(NotifyType.MfrJoinedPreviewingRoomIdChanged);
         }
     }
 }

@@ -2,6 +2,7 @@
 import Tween                    = egret.Tween;
 import * as Types               from "../../../utility/Types";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Lang                from "../../../utility/Lang";
 import * as StageManager        from "../../../utility/StageManager";
 import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
@@ -65,18 +66,18 @@ export class BwTileBriefPanel extends UiPanel<OpenDataForBwTileBriefPanel> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
-            { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-            { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
-            { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-            { type: Notify.Type.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
-            { type: Notify.Type.BwWarMenuPanelClosed,           callback: this._onNotifyBwWarMenuPanelClosed },
-            { type: Notify.Type.BwCoListPanelOpened,            callback: this._onNotifyBwCoListPanelOpened },
-            { type: Notify.Type.BwCoListPanelClosed,            callback: this._onNotifyBwCoListPanelClosed },
-            { type: Notify.Type.BwProduceUnitPanelOpened,       callback: this._onNotifyBwProduceUnitPanelOpened },
-            { type: Notify.Type.BwProduceUnitPanelClosed,       callback: this._onNotifyBwProduceUnitPanelClosed },
-            { type: Notify.Type.MeTileChanged,                  callback: this._onNotifyMeTileChanged },
-            { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
+            { type: NotifyType.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
+            { type: NotifyType.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
+            { type: NotifyType.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
+            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
+            { type: NotifyType.BwWarMenuPanelClosed,           callback: this._onNotifyBwWarMenuPanelClosed },
+            { type: NotifyType.BwCoListPanelOpened,            callback: this._onNotifyBwCoListPanelOpened },
+            { type: NotifyType.BwCoListPanelClosed,            callback: this._onNotifyBwCoListPanelClosed },
+            { type: NotifyType.BwProduceUnitPanelOpened,       callback: this._onNotifyBwProduceUnitPanelOpened },
+            { type: NotifyType.BwProduceUnitPanelClosed,       callback: this._onNotifyBwProduceUnitPanelClosed },
+            { type: NotifyType.MeTileChanged,                  callback: this._onNotifyMeTileChanged },
+            { type: NotifyType.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
         ]);
         this._setUiListenerArray([
             { ui: this, callback: this._onTouchedThis, },

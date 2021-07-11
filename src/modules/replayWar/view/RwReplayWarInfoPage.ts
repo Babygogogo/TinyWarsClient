@@ -4,7 +4,9 @@ import { UiTabPage }                    from "../../../gameui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as WarMapModel                 from "../../warMap/model/WarMapModel";
 import * as RwModel                     from "../model/RwModel";
@@ -41,8 +43,8 @@ export class RwReplayWarInfoPage extends UiTabPage<OpenDataForRwReplayWarInfoPag
         this._setUiListenerArray([
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgReplayGetInfoList,   callback: this._onNotifyMsgReplayGetInfoList },
+            { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgReplayGetInfoList,   callback: this._onNotifyMsgReplayGetInfoList },
         ]);
         this.left       = 0;
         this.right      = 0;
@@ -70,8 +72,8 @@ export class RwReplayWarInfoPage extends UiTabPage<OpenDataForRwReplayWarInfoPag
 
     private _onTouchedBtnTimerTypeHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0574),
-            content: Lang.getText(Lang.Type.R0003),
+            title  : Lang.getText(LangTextType.B0574),
+            content: Lang.getText(LangTextType.R0003),
         });
     }
 
@@ -79,12 +81,12 @@ export class RwReplayWarInfoPage extends UiTabPage<OpenDataForRwReplayWarInfoPag
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelMapNameTitle.text            = Lang.getText(Lang.Type.B0225);
-        this._labelWarTypeTitle.text            = Lang.getText(Lang.Type.B0599);
-        this._labelGlobalRatingTitle.text       = Lang.getText(Lang.Type.B0364);
-        this._labelMyRatingTitle.text           = Lang.getText(Lang.Type.B0363);
-        this._labelTurnIndexTitle.text          = Lang.getText(Lang.Type.B0600);
-        this._labelEndTimeTitle.text            = Lang.getText(Lang.Type.B0601);
+        this._labelMapNameTitle.text            = Lang.getText(LangTextType.B0225);
+        this._labelWarTypeTitle.text            = Lang.getText(LangTextType.B0599);
+        this._labelGlobalRatingTitle.text       = Lang.getText(LangTextType.B0364);
+        this._labelMyRatingTitle.text           = Lang.getText(LangTextType.B0363);
+        this._labelTurnIndexTitle.text          = Lang.getText(LangTextType.B0600);
+        this._labelEndTimeTitle.text            = Lang.getText(LangTextType.B0601);
     }
 
     private _updateComponentsForReplayInfo(): void {
@@ -105,13 +107,13 @@ export class RwReplayWarInfoPage extends UiTabPage<OpenDataForRwReplayWarInfoPag
         const replayInfo                = this._getReplayInfo();
         const replayBriefInfo           = replayInfo ? replayInfo.replayBriefInfo : null;
         const raters                    = replayBriefInfo ? replayBriefInfo.totalRaters : null;
-        this._labelGlobalRating.text    = raters ? (replayBriefInfo.totalRating / raters).toFixed(2) : Lang.getText(Lang.Type.B0001);
+        this._labelGlobalRating.text    = raters ? (replayBriefInfo.totalRating / raters).toFixed(2) : Lang.getText(LangTextType.B0001);
     }
 
     private async _updateLabelMyRating(): Promise<void> {
         const replayInfo            = this._getReplayInfo();
         const rating                = replayInfo ? replayInfo.myRating : null;
-        this._labelMyRating.text    = rating == null ? Lang.getText(Lang.Type.B0001) : `${rating}`;
+        this._labelMyRating.text    = rating == null ? Lang.getText(LangTextType.B0001) : `${rating}`;
     }
 
     private async _updateLabelMapName(): Promise<void> {

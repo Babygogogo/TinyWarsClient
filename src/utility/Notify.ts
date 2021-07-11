@@ -1,310 +1,9 @@
 
-import * as Types   from "./Types";
-import { BwPlayer } from "../modules/baseWar/model/BwPlayer";
-import GridIndex    = Types.GridIndex;
-import TouchPoints  = Types.TouchPoints;
-
-////////////////////////////////////////////////////////////////////////////////
-// Notify types.
-////////////////////////////////////////////////////////////////////////////////
-// eslint-disable-next-line no-shadow
-export const enum Type {
-    NetworkConnected,
-    NetworkDisconnected,
-
-    TimeTick,
-    TileAnimationTick,
-    UnitAnimationTick,
-    GridAnimationTick,
-    UnitAndTileTextureVersionChanged,
-    IsShowGridBorderChanged,
-
-    MouseWheel,
-    GlobalTouchBegin,
-    GlobalTouchMove,
-    ZoomableContentsMoved,
-
-    ConfigLoaded,
-    TileModelUpdated,
-    LanguageChanged,
-
-    ChatPanelOpened,
-    ChatPanelClosed,
-
-    McrCreateBannedCoIdArrayChanged,
-    McrCreateTeamIndexChanged,
-    McrCreateSelfCoIdChanged,
-    McrCreateSelfSkinIdChanged,
-    McrCreateSelfPlayerIndexChanged,
-    McrCreatePresetWarRuleIdChanged,
-
-    McrJoinTargetRoomIdChanged,
-    McrJoinedPreviewingRoomIdChanged,
-
-    MfrCreateSelfCoIdChanged,
-    MfrCreateTeamIndexChanged,
-    MfrCreateSelfPlayerIndexChanged,
-    MfrCreateSelfSkinIdChanged,
-
-    MfrJoinTargetRoomIdChanged,
-    MfrJoinedPreviewingRoomIdChanged,
-
-    CcrCreateBannedCoIdArrayChanged,
-    CcrCreateTeamIndexChanged,
-    CcrCreateAiCoIdChanged,
-    CcrCreateSelfCoIdChanged,
-    CcrCreateSelfSkinIdChanged,
-    CcrCreateSelfPlayerIndexChanged,
-    CcrCreatePresetWarRuleIdChanged,
-
-    CcrJoinTargetRoomIdChanged,
-    CcrJoinedPreviewingRoomIdChanged,
-
-    MrrMyRoomAdded,
-    MrrMyRoomDeleted,
-    MrrJoinedPreviewingRoomIdChanged,
-    MrrSelfSettingsCoIdChanged,
-    MrrSelfSettingsSkinIdChanged,
-
-    ScrCreatePresetWarRuleIdChanged,
-    ScrCreateBannedCoIdArrayChanged,
-    ScrCreateWarSaveSlotChanged,
-    ScrCreatePlayerInfoChanged,
-
-    MrrPreviewingMapIdChanged,
-    McwPreviewingWarIdChanged,
-    MrwPreviewingWarIdChanged,
-    MfwPreviewingWarIdChanged,
-    CcwPreviewingWarIdChanged,
-    RwPreviewingReplayIdChanged,
-    SpmPreviewingWarSaveSlotChanged,
-
-    BroadcastOngoingMessagesChanged,
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    RwNextActionIdChanged,
-    BwTurnIndexChanged,
-    BwTurnPhaseCodeChanged,
-    BwPlayerIndexInTurnChanged,
-
-    BwPlayerFundChanged,
-    BwCoEnergyChanged,
-    BwCoUsingSkillTypeChanged,
-    BwCoIdChanged,
-
-    BwCursorTapped,
-    BwCursorDragged,
-    BwCursorDragEnded,
-    BwCursorGridIndexChanged,
-
-    BwFieldZoomed,
-    BwFieldDragged,
-
-    BwActionPlannerStateChanged,
-
-    BwWarMenuPanelOpened,
-    BwWarMenuPanelClosed,
-    BwProduceUnitPanelOpened,
-    BwProduceUnitPanelClosed,
-    BwCoListPanelOpened,
-    BwCoListPanelClosed,
-
-    BwUnitBeDestroyed,
-    BwUnitBeAttacked,
-    BwUnitBeSupplied,
-    BwUnitBeRepaired,
-
-    BwTileBeDestroyed,
-    BwTileBeAttacked,
-
-    BwSiloExploded,
-
-    ReplayAutoReplayChanged,
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    MeDrawerModeChanged,
-    MeUnitChanged,
-    MeTileChanged,
-    MeMapNameChanged,
-    MeWarRuleNameChanged,
-    MeWarEventIdArrayChanged,
-    MeBannedCoIdArrayChanged,
-
-    WarEventFullDataChanged,
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    MsgCommonHeartbeat,
-    MsgCommonLatestConfigVersion,
-    MsgCommonGetServerStatus,
-    MsgCommonGetRankList,
-
-    MsgBroadcastGetMessageList,
-    MsgBroadcastAddMessage,
-    MsgBroadcastDeleteMessage,
-    MsgBroadcastDoBroadcast,
-
-    MsgChangeLogGetMessageList,
-    MsgChangeLogAddMessage,
-    MsgChangeLogModifyMessage,
-
-    MsgUserLogin,
-    MsgUserRegister,
-    MsgUserLogout,
-
-    MsgMapGetRawData,
-    MsgMapGetRawDataFailed,
-    MsgMapGetEnabledBriefDataList,
-    MsgMapGetEnabledRawDataList,
-    MsgMapGetBriefData,
-    MsgMapGetBriefDataFailed,
-
-    MsgChatGetAllMessages,
-    MsgChatAddMessage,
-    MsgChatUpdateReadProgress,
-    MsgChatGetAllReadProgressList,
-
-    MsgUserGetPublicInfo,
-    MsgUserGetPublicInfoFailed,
-    MsgUserSetNickname,
-    MsgUserSetNicknameFailed,
-    MsgUserSetDiscordId,
-    MsgUserSetDiscordIdFailed,
-    MsgUserGetOnlineUsers,
-    MsgUserSetPrivilege,
-    MsgUserSetPassword,
-    MsgUserGetSettings,
-    MsgUserSetSettings,
-
-    MsgMeGetDataList,
-    MsgMeGetData,
-    MsgMeSubmitMap,
-
-    MsgMmSetMapAvailability,
-    MsgMmReloadAllMaps,
-    MsgMmSetMapEnabled,
-    MsgMmGetReviewingMaps,
-    MsgMmReviewMap,
-    MsgMmSetMapTag,
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    MsgMcrCreateRoom,
-    MsgMcrGetRoomInfo,
-    MsgMcrGetRoomInfoFailed,
-    MsgMcrGetJoinedRoomInfoList,
-    MsgMcrGetJoinableRoomInfoList,
-    MsgMcrExitRoom,
-    MsgMcrSetWarRule,
-    MsgMcrJoinRoom,
-    MsgMcrDeleteRoomByPlayer,
-    MsgMcrDeleteRoomByServer,
-    MsgMcrDeletePlayer,
-    MsgMcrSetReady,
-    MsgMcrSetSelfSettings,
-    MsgMcrGetOwnerPlayerIndex,
-    MsgMcrStartWar,
-
-    MsgMfrCreateRoom,
-    MsgMfrGetRoomInfo,
-    MsgMfrGetRoomInfoFailed,
-    MsgMfrGetJoinedRoomInfoList,
-    MsgMfrGetJoinableRoomInfoList,
-    MsgMfrExitRoom,
-    MsgMfrJoinRoom,
-    MsgMfrDeleteRoomByPlayer,
-    MsgMfrDeleteRoomByServer,
-    MsgMfrDeletePlayer,
-    MsgMfrSetReady,
-    MsgMfrSetSelfSettings,
-    MsgMfrGetOwnerPlayerIndex,
-    MsgMfrStartWar,
-
-    MsgCcrCreateRoom,
-    MsgCcrGetRoomInfo,
-    MsgCcrGetRoomInfoFailed,
-    MsgCcrGetJoinedRoomInfoList,
-    MsgCcrGetJoinableRoomInfoList,
-    MsgCcrExitRoom,
-    MsgCcrJoinRoom,
-    MsgCcrDeleteRoomByPlayer,
-    MsgCcrDeleteRoomByServer,
-    MsgCcrDeletePlayer,
-    MsgCcrSetReady,
-    MsgCcrSetSelfSettings,
-    MsgCcrGetOwnerPlayerIndex,
-    MsgCcrStartWar,
-
-    MsgMrrGetMaxConcurrentCount,
-    MsgMrrSetMaxConcurrentCount,
-    MsgMrrGetRoomPublicInfo,
-    MsgMrrGetRoomPublicInfoFailed,
-    MsgMrrGetMyRoomPublicInfoList,
-    MsgMrrSetBannedCoIdList,
-    MsgMrrSetSelfSettings,
-    MsgMrrDeleteRoomByServer,
-
-    MsgReplayGetInfoList,
-    MsgReplayGetData,
-    MsgReplayGetDataFailed,
-    MsgReplaySetRating,
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    MsgMpwCommonGetMyWarInfoList,
-    MsgMpwCommonContinueWarFailed,
-    MsgMpwCommonContinueWar,
-    MsgMpwCommonSyncWar,
-    MsgMpwCommonHandleBoot,
-
-    MsgMpwWatchGetUnwatchedWarInfos,
-    MsgMpwWatchGetOngoingWarInfos,
-    MsgMpwWatchGetRequestedWarInfos,
-    MsgMpwWatchGetWatchedWarInfos,
-    MsgMpwWatchMakeRequest,
-    MsgMpwWatchHandleRequest,
-    MsgMpwWatchDeleteWatcher,
-    MsgMpwWatchContinueWar,
-    MsgMpwWatchContinueWarFailed,
-
-    MsgMpwActionSystemBeginTurn,
-    MsgMpwActionSystemCallWarEvent,
-    MsgMpwActionSystemDestroyPlayerForce,
-    MsgMpwActionSystemEndWar,
-    MsgMpwActionSystemEndTurn,
-    MsgMpwActionSystemHandleBootPlayer,
-
-    MsgMpwExecuteWarAction,
-    MsgMpwActionPlayerEndTurn,
-    MsgMpwActionPlayerProduceUnit,
-    MsgMpwActionPlayerSurrender,
-    MsgMpwActionPlayerVoteForDraw,
-    MsgMpwActionUnitAttackUnit,
-    MsgMpwActionUnitAttackTile,
-    MsgMpwActionUnitBeLoaded,
-    MsgMpwActionUnitBuildTile,
-    MsgMpwActionUnitCaptureTile,
-    MsgMpwActionUnitDive,
-    MsgMpwActionUnitDropUnit,
-    MsgMpwActionUnitJoinUnit,
-    MsgMpwActionUnitLaunchFlare,
-    MsgMpwActionUnitLaunchSilo,
-    MsgMpwActionUnitLoadCo,
-    MsgMpwActionUnitProduceUnit,
-    MsgMpwActionUnitSupplyUnit,
-    MsgMpwActionUnitSurface,
-    MsgMpwActionUnitUseCoSkill,
-    MsgMpwActionUnitWait,
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    MsgSpmCreateScw,
-    MsgSpmCreateSfw,
-    MsgSpmCreateSrw,
-    MsgSpmGetWarSaveSlotFullDataArray,
-    MsgSpmDeleteWarSaveSlot,
-    MsgSpmSaveScw,
-    MsgSpmSaveSfw,
-    MsgSpmSaveSrw,
-    MsgSpmGetSrwRankInfo,
-    MsgSpmValidateSrw,
-}
+import * as Types       from "./Types";
+import { BwPlayer }     from "../modules/baseWar/model/BwPlayer";
+import { NotifyType }   from "./NotifyType";
+import GridIndex        = Types.GridIndex;
+import TouchPoints      = Types.TouchPoints;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Notify datas.
@@ -329,7 +28,7 @@ export namespace Data {
 const _DISPATCHER = new egret.EventDispatcher();
 
 export type Listener = {
-    type        : Type,
+    type        : NotifyType,
     callback    : (e: egret.Event) => void,
     thisObject? : any,
     useCapture? : boolean,
@@ -337,12 +36,12 @@ export type Listener = {
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function dispatch(t: Type, data?: any): void {
+export function dispatch(t: NotifyType, data?: any): void {
     _DISPATCHER.dispatchEventWith(getTypeName(t), false, data);
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function addEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any, useCapture?: boolean, priority?: number): void {
+export function addEventListener(type: NotifyType, callback: (e: egret.Event) => void, thisObject?: any, useCapture?: boolean, priority?: number): void {
     _DISPATCHER.addEventListener(getTypeName(type), callback, thisObject, useCapture, priority);
 }
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -359,7 +58,7 @@ export function addEventListeners(listeners: Listener[], thisObject?: any, useCa
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function removeEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any, useCapture?: boolean): void {
+export function removeEventListener(type: NotifyType, callback: (e: egret.Event) => void, thisObject?: any, useCapture?: boolean): void {
     _DISPATCHER.removeEventListener(getTypeName(type), callback, thisObject, useCapture);
 }
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -374,6 +73,6 @@ export function removeEventListeners(listeners: Listener[], thisObject?: any, us
     }
 }
 
-function getTypeName(t: Type): string {
+function getTypeName(t: NotifyType): string {
     return "Notify" + t;
 }

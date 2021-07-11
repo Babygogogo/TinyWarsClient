@@ -11,7 +11,9 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as SoundManager                from "../../../utility/SoundManager";
 import * as Types                       from "../../../utility/Types";
 import * as TimeModel                   from "../../time/model/TimeModel";
@@ -56,9 +58,9 @@ export class LoginBackgroundPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-            { type: Notify.Type.MsgCommonLatestConfigVersion,   callback: this._onMsgCommonLatestConfigVersion },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.MsgCommonLatestConfigVersion,   callback: this._onMsgCommonLatestConfigVersion },
         ]);
         this._setUiListenerArray([
             { ui: this,                 callback: this._onTouchedSelf },
@@ -105,7 +107,7 @@ export class LoginBackgroundPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnVersion.label = Lang.getText(Lang.Type.B0620);
+        this._btnVersion.label = Lang.getText(LangTextType.B0620);
         this._labelVersion.text = `${Lang.getGameVersionName(CommonConstants.GameVersion)}\nv.${window.CLIENT_VERSION}`;
     }
     private _initListLanguage(): void {
@@ -215,7 +217,7 @@ class LanguageRenderer extends UiListItemRenderer<DataForLanguageRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this, callback: this._onTouchedSelf, },
@@ -234,7 +236,7 @@ class LanguageRenderer extends UiListItemRenderer<DataForLanguageRenderer> {
         const languageType = this.data.languageType;
         if (Lang.getCurrentLanguageType() !== languageType) {
             Lang.setLanguageType(languageType);
-            Notify.dispatch(Notify.Type.LanguageChanged);
+            Notify.dispatch(NotifyType.LanguageChanged);
         }
     }
 

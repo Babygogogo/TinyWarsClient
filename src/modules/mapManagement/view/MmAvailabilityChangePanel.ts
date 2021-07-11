@@ -6,8 +6,10 @@ import { UiLabel }              from "../../../gameui/UiLabel";
 import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
 import { MmWarRulePanel }       from "./MmWarRulePanel";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger              from "../../../utility/Logger";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import * as WarMapModel         from "../../warMap/model/WarMapModel";
 import * as WarMapProxy         from "../../warMap/model/WarMapProxy";
@@ -94,7 +96,7 @@ export class MmAvailabilityChangePanel extends UiPanel<OpenDataForMmAvailability
 
     protected async _onOpened(): Promise<void> {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
@@ -132,7 +134,7 @@ export class MmAvailabilityChangePanel extends UiPanel<OpenDataForMmAvailability
 
     private _onTouchedBtnDelete(): void {
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0080),
+            content : Lang.getText(LangTextType.A0080),
             callback: () => {
                 WarMapProxy.reqMmSetMapEnabled(this._getOpenData().mapId, false);
                 this.close();
@@ -193,15 +195,15 @@ export class MmAvailabilityChangePanel extends UiPanel<OpenDataForMmAvailability
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
-        this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-        this._btnDelete.label   = Lang.getText(Lang.Type.B0270);
-        this._btnWarRule.label  = Lang.getText(Lang.Type.B0314);
-        this._labelMcw.text     = Lang.getText(Lang.Type.B0200);
-        this._labelCcw.text     = Lang.getText(Lang.Type.B0619);
-        this._labelMrwStd.text  = Lang.getText(Lang.Type.B0404);
-        this._labelMrwFog.text  = Lang.getText(Lang.Type.B0408);
-        this._labelScw.text     = Lang.getText(Lang.Type.B0409);
-        this._labelSrw.text     = Lang.getText(Lang.Type.B0614);
+        this._btnCancel.label   = Lang.getText(LangTextType.B0154);
+        this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+        this._btnDelete.label   = Lang.getText(LangTextType.B0270);
+        this._btnWarRule.label  = Lang.getText(LangTextType.B0314);
+        this._labelMcw.text     = Lang.getText(LangTextType.B0200);
+        this._labelCcw.text     = Lang.getText(LangTextType.B0619);
+        this._labelMrwStd.text  = Lang.getText(LangTextType.B0404);
+        this._labelMrwFog.text  = Lang.getText(LangTextType.B0408);
+        this._labelScw.text     = Lang.getText(LangTextType.B0409);
+        this._labelSrw.text     = Lang.getText(LangTextType.B0614);
     }
 }

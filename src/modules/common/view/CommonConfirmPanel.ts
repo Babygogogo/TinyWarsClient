@@ -5,6 +5,7 @@ import { UiLabel }              from "../../../gameui/UiLabel";
 import { UiImage }              from "../../../gameui/UiImage";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Types               from "../../../utility/Types";
 
 type OpenDataForCommonConfirmPanel = {
@@ -66,9 +67,9 @@ export class CommonConfirmPanel extends UiPanel<OpenDataForCommonConfirmPanel> {
         this._showOpenAnimation();
 
         const openData          = this._getOpenData();
-        this._btnConfirm.label  = openData.textForConfirm || Lang.getText(Lang.Type.B0026);
-        this._btnCancel.label   = openData.textForCancel || Lang.getText(Lang.Type.B0154);
-        this._labelTitle.text   = openData.title || Lang.getText(Lang.Type.B0088);
+        this._btnConfirm.label  = openData.textForConfirm || Lang.getText(LangTextType.B0026);
+        this._btnCancel.label   = openData.textForCancel || Lang.getText(LangTextType.B0154);
+        this._labelTitle.text   = openData.title || Lang.getText(LangTextType.B0088);
         this._labelContent.setRichText(openData.content);
         this._scrContent.viewport.scrollV = 0;
     }

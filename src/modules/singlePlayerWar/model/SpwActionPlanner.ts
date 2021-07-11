@@ -8,6 +8,7 @@ import { SpwWar }                               from "./SpwWar";
 import * as FloatText                           from "../../../utility/FloatText";
 import * as GridIndexHelpers                    from "../../../utility/GridIndexHelpers";
 import * as Lang                                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as ProtoTypes                          from "../../../utility/ProtoTypes";
 import * as Types                               from "../../../utility/Types";
 import * as BwHelpers                           from "../../baseWar/model/BwHelpers";
@@ -456,7 +457,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                     actionType  : UnitActionType.UseCoSuperPower,
                     callback    : () => {
                         CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0058),
+                            content : Lang.getText(LangTextType.A0058),
                             callback: () => this._setStateRequestingUnitUseCoSuperPower(),
                         });
                     },
@@ -473,7 +474,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                     actionType  : UnitActionType.UseCoPower,
                     callback    : () => {
                         CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0054),
+                            content : Lang.getText(LangTextType.A0054),
                             callback: () => this._setStateRequestingUnitUseCoPower(),
                         });
                     },
@@ -555,21 +556,21 @@ export class SpwActionPlanner extends BwActionPlanner {
                 if (focusUnit.getCurrentProduceMaterial() < 1) {
                     return [{
                         actionType      : UnitActionType.ProduceUnit,
-                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0051)),
+                        callback        : () => FloatText.show(Lang.getText(LangTextType.B0051)),
                         canProduceUnit  : false,
                         produceUnitType,
                     }];
                 } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
                     return [{
                         actionType      : UnitActionType.ProduceUnit,
-                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0052)),
+                        callback        : () => FloatText.show(Lang.getText(LangTextType.B0052)),
                         canProduceUnit  : false,
                         produceUnitType,
                     }];
                 } else if ((this._getWar() as SpwWar).getPlayerInTurn().getFund() < focusUnit.getProduceUnitCost()) {
                     return [{
                         actionType      : UnitActionType.ProduceUnit,
-                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0053)),
+                        callback        : () => FloatText.show(Lang.getText(LangTextType.B0053)),
                         canProduceUnit  : false,
                         produceUnitType,
                     }];
@@ -595,7 +596,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                     callback    : !hasOtherAction
                         ? () => this._setStateRequestingUnitDropOnChooseAction()
                         : () => CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0055),
+                            content : Lang.getText(LangTextType.A0055),
                             callback: () => this._setStateRequestingUnitDropOnChooseAction(),
                         }),
                 }];
@@ -605,7 +606,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                     callback    : !hasOtherAction
                         ? () => this._setStateRequestingUnitWait()
                         : () => CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0055),
+                            content : Lang.getText(LangTextType.A0055),
                             callback: () => this._setStateRequestingUnitWait(),
                         }),
                 }];

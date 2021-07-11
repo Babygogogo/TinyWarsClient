@@ -15,7 +15,9 @@ import { MeVisibilityPanel }            from "./MeVisibilityPanel";
 import { MeSymmetryPanel }              from "./MeSymmetryPanel";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as MeModel                     from "../model/MeModel";
 import DrawerMode                       = Types.MapEditorDrawerMode;
@@ -69,16 +71,16 @@ export class MeTopPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
-            { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-            { type: Notify.Type.MeDrawerModeChanged,            callback: this._onNotifyMeDrawerModeChanged },
-            { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
-            { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
-            { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
-            { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
-            { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
-            { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
+            { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.MeDrawerModeChanged,            callback: this._onNotifyMeDrawerModeChanged },
+            { type: NotifyType.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
+            { type: NotifyType.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
+            { type: NotifyType.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
+            { type: NotifyType.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
+            { type: NotifyType.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
+            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnModePreview,             callback: this._onTouchedBtnModePreview },
@@ -196,14 +198,14 @@ export class MeTopPanel extends UiPanel<void> {
     private _updateComponentsForLanguage(): void {
         this._updateLabelModeTitle();
         this._updateLabelMode();
-        this._btnModePreview.label          = Lang.getText(Lang.Type.B0286);
-        this._btnModeDrawUnit.label         = Lang.getText(Lang.Type.B0281);
-        this._btnModeDrawTileObject.label   = Lang.getText(Lang.Type.B0283);
-        this._btnModeDrawTileBase.label     = Lang.getText(Lang.Type.B0282);
-        this._btnModeDeleteUnit.label       = Lang.getText(Lang.Type.B0284);
-        this._btnModeDeleteTileObject.label = Lang.getText(Lang.Type.B0285);
-        this._btnVisibility.label           = Lang.getText(Lang.Type.B0301);
-        this._btnSymmetry.label             = Lang.getText(Lang.Type.B0306);
+        this._btnModePreview.label          = Lang.getText(LangTextType.B0286);
+        this._btnModeDrawUnit.label         = Lang.getText(LangTextType.B0281);
+        this._btnModeDrawTileObject.label   = Lang.getText(LangTextType.B0283);
+        this._btnModeDrawTileBase.label     = Lang.getText(LangTextType.B0282);
+        this._btnModeDeleteUnit.label       = Lang.getText(LangTextType.B0284);
+        this._btnModeDeleteTileObject.label = Lang.getText(LangTextType.B0285);
+        this._btnVisibility.label           = Lang.getText(LangTextType.B0301);
+        this._btnSymmetry.label             = Lang.getText(LangTextType.B0306);
     }
 
     private _updateGroupMode(): void {
@@ -215,7 +217,7 @@ export class MeTopPanel extends UiPanel<void> {
 
     private _updateLabelModeTitle(): void {
         const label     = this._labelModeTitle;
-        label.text      = `${Lang.getText(Lang.Type.B0280)}: `;
+        label.text      = `${Lang.getText(LangTextType.B0280)}: `;
         label.textColor = getTextColorForDrawerMode(this._drawer.getMode());
     }
 
@@ -301,7 +303,7 @@ export class MeTopPanel extends UiPanel<void> {
     }
 
     private _updateBtnMenu(): void {
-        this._btnMenu.label = Lang.getText(Lang.Type.B0155);
+        this._btnMenu.label = Lang.getText(LangTextType.B0155);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

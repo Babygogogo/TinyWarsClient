@@ -1,6 +1,7 @@
 
 import * as Types               from "../utility/Types";
 import * as Notify              from "../utility/Notify";
+import { NotifyType } from "../utility/NotifyType";
 import * as Logger              from "../utility/Logger";
 import * as StageManager        from "../utility/StageManager";
 import * as SoundManager        from "../utility/SoundManager";
@@ -88,7 +89,7 @@ export class UiScrollList<DataForRenderer> extends eui.Scroller {
         }
 
         this._setNotifyListenerArray([
-            { type: Notify.Type.MouseWheel, callback: this._onNotifyMouseWheel },
+            { type: NotifyType.MouseWheel, callback: this._onNotifyMouseWheel },
         ]);
         this._setUiListenerArray([
             { ui: list,     callback: this._onResizeList,       eventType: egret.Event.RESIZE },

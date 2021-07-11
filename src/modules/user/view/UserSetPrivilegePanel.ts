@@ -6,7 +6,9 @@ import { UiLabel }              from "../../../gameui/UiLabel";
 import { UiTextInput }          from "../../../gameui/UiTextInput";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as UserProxy           from "../../user/model/UserProxy";
@@ -64,8 +66,8 @@ export class UserSetPrivilegePanel extends UiPanel<OpenDataForUserSetPrivilegePa
 
     public _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.MsgUserGetPublicInfo,   callback: this._onNotifyMsgUserGetPublicInfo },
-            { type: Notify.Type.MsgUserSetPrivilege,    callback: this._onNotifyMsgUserSetPrivilege },
+            { type: NotifyType.MsgUserGetPublicInfo,   callback: this._onNotifyMsgUserGetPublicInfo },
+            { type: NotifyType.MsgUserSetPrivilege,    callback: this._onNotifyMsgUserSetPrivilege },
         ]);
         this._setUiListenerArray([
             { ui: this._btnGetInfo,             callback: this._onTouchedBtnGetInfo },
@@ -98,7 +100,7 @@ export class UserSetPrivilegePanel extends UiPanel<OpenDataForUserSetPrivilegePa
     }
 
     private _onNotifyMsgUserSetPrivilege(e: egret.Event): void {
-        FloatText.show(Lang.getText(Lang.Type.A0157));
+        FloatText.show(Lang.getText(LangTextType.A0157));
         this.close();
     }
 

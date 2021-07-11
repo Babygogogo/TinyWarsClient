@@ -20,7 +20,9 @@ import * as ConfigManager                                                       
 import * as FloatText                                                           from "../../../utility/FloatText";
 import * as Helpers                                                             from "../../../utility/Helpers";
 import * as Lang                                                                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                                                              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                                                          from "../../../utility/ProtoTypes";
 import * as Types                                                               from "../../../utility/Types";
 import * as BwHelpers                                                           from "../../baseWar/model/BwHelpers";
@@ -103,13 +105,13 @@ export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
             { ui: this._btnChooseCo,    callback: this._onTouchedBtnChooseCo },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.TimeTick,                   callback: this._onNotifyTimeTick },
-            { type: Notify.Type.MrrSelfSettingsCoIdChanged, callback: this._onNotifyMrrSelfSettingsCoIdChanged },
-            { type: Notify.Type.MsgMrrGetRoomPublicInfo,    callback: this._onNotifyMsgMrrGetRoomPublicInfo },
-            { type: Notify.Type.MsgMrrSetSelfSettings,      callback: this._onNotifyMsgMrrSetSelfSettings },
-            { type: Notify.Type.MsgMrrSetBannedCoIdList,    callback: this._onNotifyMsgMrrSetBannedCoIdList },
-            { type: Notify.Type.MsgMrrDeleteRoomByServer,   callback: this._onNotifyMsgMrrDeleteRoomByServer },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.TimeTick,                   callback: this._onNotifyTimeTick },
+            { type: NotifyType.MrrSelfSettingsCoIdChanged, callback: this._onNotifyMrrSelfSettingsCoIdChanged },
+            { type: NotifyType.MsgMrrGetRoomPublicInfo,    callback: this._onNotifyMsgMrrGetRoomPublicInfo },
+            { type: NotifyType.MsgMrrSetSelfSettings,      callback: this._onNotifyMsgMrrSetSelfSettings },
+            { type: NotifyType.MsgMrrSetBannedCoIdList,    callback: this._onNotifyMsgMrrSetBannedCoIdList },
+            { type: NotifyType.MsgMrrDeleteRoomByServer,   callback: this._onNotifyMsgMrrDeleteRoomByServer },
         ]);
         this._tabSettings.setBarItemRenderer(TabItemRenderer);
         this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
@@ -122,28 +124,28 @@ export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
         const roomId = this._getOpenData().roomId;
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : MrrRoomMapInfoPage,
                 pageData    : {
                     roomId
                 } as OpenDataForMrrRoomMapInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                tabItemData : { name: Lang.getText(LangTextType.B0224) },
                 pageClass   : MrrRoomPlayerInfoPage,
                 pageData    : {
                     roomId,
                 } as OpenDataForMrrRoomPlayerInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : MrrRoomBasicSettingsPage,
                 pageData    : {
                     roomId
                 } as OpenDataForMrrRoomBasicSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData : { name: Lang.getText(LangTextType.B0003) },
                 pageClass   : MrrRoomAdvancedSettingsPage,
                 pageData    : {
                     roomId
@@ -189,7 +191,7 @@ export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
         const selfPlayerData    = roomInfo ? roomInfo.playerDataList.find(v => v.userId === selfUserId) : null;
         if (selfPlayerData != null) {
             if (selfPlayerData.isReady) {
-                FloatText.show(Lang.getText(Lang.Type.A0207));
+                FloatText.show(Lang.getText(LangTextType.A0207));
             } else {
                 MrrRoomChooseCoPanel.show({
                     coId: MrrModel.SelfSettings.getCoId(),
@@ -239,7 +241,7 @@ export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
     private _onNotifyMsgMrrDeleteRoomByServer(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrDeleteRoomByServer.IS;
         if (data.roomId === this._getOpenData().roomId) {
-            FloatText.show(Lang.getText(Lang.Type.A0019));
+            FloatText.show(Lang.getText(LangTextType.A0019));
             this.close();
             MrrMyRoomListPanel.show();
         }
@@ -289,16 +291,16 @@ export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelRankMatch.text           = Lang.getText(Lang.Type.B0404);
-        this._labelMyRoom.text              = Lang.getText(Lang.Type.B0410);
-        this._labelRoomInfo.text            = Lang.getText(Lang.Type.B0398);
-        this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-        this._btnBanCo.label                = Lang.getText(Lang.Type.B0590);
-        this._btnBannedCo.label             = Lang.getText(Lang.Type.B0591);
-        this._labelChooseCo.text            = Lang.getText(Lang.Type.B0145);
-        this._labelChoosePlayerIndex.text   = Lang.getText(Lang.Type.B0572);
-        this._labelChooseSkinId.text        = Lang.getText(Lang.Type.B0573);
-        this._labelChooseReady.text         = Lang.getText(Lang.Type.B0402);
+        this._labelRankMatch.text           = Lang.getText(LangTextType.B0404);
+        this._labelMyRoom.text              = Lang.getText(LangTextType.B0410);
+        this._labelRoomInfo.text            = Lang.getText(LangTextType.B0398);
+        this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+        this._btnBanCo.label                = Lang.getText(LangTextType.B0590);
+        this._btnBannedCo.label             = Lang.getText(LangTextType.B0591);
+        this._labelChooseCo.text            = Lang.getText(LangTextType.B0145);
+        this._labelChoosePlayerIndex.text   = Lang.getText(LangTextType.B0572);
+        this._labelChooseSkinId.text        = Lang.getText(LangTextType.B0573);
+        this._labelChooseReady.text         = Lang.getText(LangTextType.B0402);
     }
 
     private async _updateGroupBanCo(): Promise<void> {
@@ -326,7 +328,7 @@ export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
                 btnBannedCo.visible = true;
                 labelBanCo.text     = coIdArray.length
                     ? coIdArray.map(v => ConfigManager.getCoBasicCfg(roomInfo.settingsForCommon.configVersion, v).name).join(`\n`)
-                    : Lang.getText(Lang.Type.B0001);
+                    : Lang.getText(LangTextType.B0001);
             }
         }
     }
@@ -367,10 +369,10 @@ export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
         const timeForStartSetSelfSettings   = roomInfo.timeForStartSetSelfSettings;
         const currentTime                   = TimeModel.getServerTimestamp();
         if (timeForStartSetSelfSettings != null) {
-            labelCountdownTitle.text    = Lang.getText(Lang.Type.B0593);
+            labelCountdownTitle.text    = Lang.getText(LangTextType.B0593);
             labelCountdown.text         = Helpers.getTimeDurationText2(Math.max(0, timeForStartSetSelfSettings + CommonConstants.RankRoomPhaseTime - currentTime));
         } else {
-            labelCountdownTitle.text    = Lang.getText(Lang.Type.B0592);
+            labelCountdownTitle.text    = Lang.getText(LangTextType.B0592);
             labelCountdown.text         = Helpers.getTimeDurationText2(Math.max(0, roomInfo.timeForCreateRoom + CommonConstants.RankRoomPhaseTime - currentTime));
         }
     }
@@ -387,12 +389,12 @@ export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
         const playerIndex   = playerData.playerIndex;
         if (roomInfo.timeForStartSetSelfSettings == null) {
             labelState.text = ((roomInfo.settingsForMrw.dataArrayForBanCo || []).some(v => v.srcPlayerIndex === playerIndex))
-                ? Lang.getText(Lang.Type.A0133)
-                : Lang.getText(Lang.Type.A0210);
+                ? Lang.getText(LangTextType.A0133)
+                : Lang.getText(LangTextType.A0210);
         } else {
             labelState.text = playerData.isReady
-                ? Lang.getText(Lang.Type.A0134)
-                : Lang.getText(Lang.Type.A0211);
+                ? Lang.getText(LangTextType.A0134)
+                : Lang.getText(LangTextType.A0211);
         }
     }
 
@@ -488,9 +490,9 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMrrGetRoomPublicInfo,    callback: this._onNotifyMsgMrrGetRoomPublicInfo },
-            { type: Notify.Type.MsgMrrSetSelfSettings,      callback: this._onNotifyMsgMrrSetSelfSettings },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMrrGetRoomPublicInfo,    callback: this._onNotifyMsgMrrGetRoomPublicInfo },
+            { type: NotifyType.MsgMrrSetSelfSettings,      callback: this._onNotifyMsgMrrSetSelfSettings },
         ]);
     }
 
@@ -500,7 +502,7 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
     }
 
     public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
-        FloatText.show(Lang.getText(Lang.Type.A0209));
+        FloatText.show(Lang.getText(LangTextType.A0209));
     }
     private _onNotifyLanguageChanged(e: egret.Event): void {
         this._updateLabelName();
@@ -546,7 +548,7 @@ class SkinIdRenderer extends UiListItemRenderer<DataForSkinIdRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.MrrSelfSettingsSkinIdChanged,   callback: this._onNotifyMrrSelfSettingsSkinIdChanged },
+            { type: NotifyType.MrrSelfSettingsSkinIdChanged,   callback: this._onNotifyMrrSelfSettingsSkinIdChanged },
         ]);
     }
 
@@ -564,14 +566,14 @@ class SkinIdRenderer extends UiListItemRenderer<DataForSkinIdRenderer> {
             return;
         }
         if (selfPlayerData.isReady) {
-            FloatText.show(Lang.getText(Lang.Type.A0207));
+            FloatText.show(Lang.getText(LangTextType.A0207));
             return;
         }
 
         const newSkinId         = data.skinId;
         const currPlayerData    = playerDataList.some(v => (v.isReady) && (v.unitAndTileSkinId === newSkinId));
         if ((currPlayerData) && (currPlayerData !== selfPlayerData)) {
-            FloatText.show(Lang.getText(Lang.Type.A0203));
+            FloatText.show(Lang.getText(LangTextType.A0203));
         } else {
             MrrModel.SelfSettings.setUnitAndTileSkinId(newSkinId);
         }
@@ -599,9 +601,9 @@ class ReadyRenderer extends UiListItemRenderer<DataForReadyRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMrrGetRoomPublicInfo,    callback: this._onNotifyMsgMrrGetRoomPublicInfo },
-            { type: Notify.Type.MsgMrrSetSelfSettings,      callback: this._onNotifyMsgMrrSetSelfSettings },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMrrGetRoomPublicInfo,    callback: this._onNotifyMsgMrrGetRoomPublicInfo },
+            { type: NotifyType.MsgMrrSetSelfSettings,      callback: this._onNotifyMsgMrrSetSelfSettings },
         ]);
     }
 
@@ -620,12 +622,12 @@ class ReadyRenderer extends UiListItemRenderer<DataForReadyRenderer> {
         const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
         if ((selfPlayerData) && (selfPlayerData.isReady !== isReady)) {
             if (!isReady) {
-                FloatText.show(Lang.getText(Lang.Type.A0205));
+                FloatText.show(Lang.getText(LangTextType.A0205));
             } else {
                 const coId      = MrrModel.SelfSettings.getCoId();
                 const callback  = () => {
                     CommonConfirmPanel.show({
-                        content : Lang.getText(Lang.Type.A0206),
+                        content : Lang.getText(LangTextType.A0206),
                         callback: () => {
                             MrrProxy.reqMrrSetSelfSettings(roomId, coId, MrrModel.SelfSettings.getUnitAndTileSkinId());
                         },
@@ -635,7 +637,7 @@ class ReadyRenderer extends UiListItemRenderer<DataForReadyRenderer> {
                     ((MrrModel.SelfSettings.getAvailableCoIdArray() || []).some(v => v !== CommonConstants.CoEmptyId))
                 ) {
                     CommonConfirmPanel.show({
-                        content : Lang.getText(Lang.Type.A0208),
+                        content : Lang.getText(LangTextType.A0208),
                         callback,
                     });
                 } else {
@@ -663,7 +665,7 @@ class ReadyRenderer extends UiListItemRenderer<DataForReadyRenderer> {
     private _updateLabelName(): void {
         const data = this.data;
         if (data) {
-            this._labelName.text = Lang.getText(data.isReady ? Lang.Type.B0012 : Lang.Type.B0013);
+            this._labelName.text = Lang.getText(data.isReady ? LangTextType.B0012 : LangTextType.B0013);
         }
     }
     private async _updateStateAndImgRed(): Promise<void> {

@@ -2,6 +2,7 @@
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
 import * as UserModel                   from "../../user/model/UserModel";
@@ -48,8 +49,8 @@ export function getRoomInfo(roomId: number): Promise<IMrrRoomInfo | undefined | 
         const callbackOnSucceed = (e: egret.Event): void => {
             const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
             if (data.roomId === roomId) {
-                Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
 
                 for (const cb of _roomInfoRequests.get(roomId)) {
                     cb(data);
@@ -62,8 +63,8 @@ export function getRoomInfo(roomId: number): Promise<IMrrRoomInfo | undefined | 
         const callbackOnFailed = (e: egret.Event): void => {
             const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
             if (data.roomId === roomId) {
-                Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
 
                 for (const cb of _roomInfoRequests.get(roomId)) {
                     cb(data);
@@ -74,8 +75,8 @@ export function getRoomInfo(roomId: number): Promise<IMrrRoomInfo | undefined | 
             }
         };
 
-        Notify.addEventListener(Notify.Type.MsgMrrGetRoomPublicInfo,        callbackOnSucceed);
-        Notify.addEventListener(Notify.Type.MsgMrrGetRoomPublicInfoFailed,  callbackOnFailed);
+        Notify.addEventListener(NotifyType.MsgMrrGetRoomPublicInfo,        callbackOnSucceed);
+        Notify.addEventListener(NotifyType.MsgMrrGetRoomPublicInfoFailed,  callbackOnFailed);
 
         MrrProxy.reqMrrGetRoomPublicInfo(roomId);
     });
@@ -89,7 +90,7 @@ export function deleteRoomInfo(roomId: number): void {
     _allRoomDict.delete(roomId);
 
     if ((roomInfo) && (checkIsMyRoom(roomInfo))) {
-        Notify.dispatch(Notify.Type.MrrMyRoomDeleted);
+        Notify.dispatch(NotifyType.MrrMyRoomDeleted);
     }
 }
 
@@ -222,7 +223,7 @@ export namespace Joined {
     export function setPreviewingRoomId(roomId: number | null): void {
         if (getPreviewingRoomId() != roomId) {
             _previewingRoomId = roomId;
-            Notify.dispatch(Notify.Type.MrrJoinedPreviewingRoomIdChanged);
+            Notify.dispatch(NotifyType.MrrJoinedPreviewingRoomIdChanged);
         }
     }
 }
@@ -236,7 +237,7 @@ export namespace PreviewMap {
     export function setPreviewingMapId(mapId: number): void {
         if (getPreviewingMapId() != mapId) {
             _previewingMapId = mapId;
-            Notify.dispatch(Notify.Type.MrrPreviewingMapIdChanged);
+            Notify.dispatch(NotifyType.MrrPreviewingMapIdChanged);
         }
     }
 }
@@ -293,7 +294,7 @@ export namespace SelfSettings {
     export function setCoId(coId: number | null | undefined): void {
         if (_coId !== coId) {
             _coId = coId;
-            Notify.dispatch(Notify.Type.MrrSelfSettingsCoIdChanged);
+            Notify.dispatch(NotifyType.MrrSelfSettingsCoIdChanged);
         }
     }
     export function getCoId(): number | null | undefined {
@@ -303,7 +304,7 @@ export namespace SelfSettings {
     export function setUnitAndTileSkinId(skinId: number | null | undefined): void {
         if (_unitAndTileSkinId !== skinId) {
             _unitAndTileSkinId = skinId;
-            Notify.dispatch(Notify.Type.MrrSelfSettingsSkinIdChanged);
+            Notify.dispatch(NotifyType.MrrSelfSettingsSkinIdChanged);
         }
     }
     export function getUnitAndTileSkinId(): number | null | undefined {

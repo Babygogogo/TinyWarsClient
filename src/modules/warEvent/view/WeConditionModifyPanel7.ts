@@ -6,7 +6,9 @@ import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiTextInput }                  from "../../../gameui/UiTextInput";
 import { WeConditionTypeListPanel }     from "./WeConditionTypeListPanel";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
@@ -58,7 +60,7 @@ export class WeConditionModifyPanel7 extends UiPanel<OpenDataForWeConditionModif
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,           callback: this.close },
@@ -86,7 +88,7 @@ export class WeConditionModifyPanel7 extends UiPanel<OpenDataForWeConditionModif
         data.isNot  = !data.isNot;
         this._updateImgIsNot();
         this._updateLabelDescAndLabelError();
-        Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+        Notify.dispatch(NotifyType.WarEventFullDataChanged);
     }
     private _onFocusOutInputPlayerIndex(e: egret.FocusEvent): void {
         const value = parseInt(this._inputPlayerIndex.text);
@@ -97,7 +99,7 @@ export class WeConditionModifyPanel7 extends UiPanel<OpenDataForWeConditionModif
             data.valueGreaterThan = value;
             this._updateLabelDescAndLabelError();
             this._updateInputPlayerIndex();
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
 
@@ -110,11 +112,11 @@ export class WeConditionModifyPanel7 extends UiPanel<OpenDataForWeConditionModif
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text       = `${Lang.getText(Lang.Type.B0501)} C${this._getCondition().WecCommonData.conditionId}`;
-        this._btnClose.label        = Lang.getText(Lang.Type.B0146);
-        this._btnType.label         = Lang.getText(Lang.Type.B0516);
-        this._labelIsNot.text       = Lang.getText(Lang.Type.B0517);
-        this._labelPlayerIndex.text = Lang.getText(Lang.Type.B0521);
+        this._labelTitle.text       = `${Lang.getText(LangTextType.B0501)} C${this._getCondition().WecCommonData.conditionId}`;
+        this._btnClose.label        = Lang.getText(LangTextType.B0146);
+        this._btnType.label         = Lang.getText(LangTextType.B0516);
+        this._labelIsNot.text       = Lang.getText(LangTextType.B0517);
+        this._labelPlayerIndex.text = Lang.getText(LangTextType.B0521);
 
         this._updateLabelDescAndLabelError();
     }
@@ -124,7 +126,7 @@ export class WeConditionModifyPanel7 extends UiPanel<OpenDataForWeConditionModif
         const condition         = openData.condition;
         const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition);
         const labelError        = this._labelError;
-        labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+        labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
         labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
         this._labelDesc.text    = WarEventHelper.getDescForCondition(condition);
     }

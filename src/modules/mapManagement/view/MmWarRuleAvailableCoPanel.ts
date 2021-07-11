@@ -7,7 +7,9 @@ import { UiLabel }              from "../../../gameui/UiLabel";
 import * as ConfigManager       from "../../../utility/ConfigManager";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import WarRule                  = ProtoTypes.WarRule;
@@ -57,7 +59,7 @@ export class MmWarRuleAvailableCoPanel extends UiPanel<OpenDataForMmWarRuleAvail
             { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
 
         const bannedCoIdSet = this._bannedCoIdSet;
@@ -91,8 +93,8 @@ export class MmWarRuleAvailableCoPanel extends UiPanel<OpenDataForMmWarRuleAvail
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
-        this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._getOpenData().playerRule.playerIndex})`;
+        this._btnCancel.label               = Lang.getText(LangTextType.B0154);
+        this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._getOpenData().playerRule.playerIndex})`;
     }
 
     private _initGroupCoTiers(): void {
@@ -163,7 +165,7 @@ export class MmWarRuleAvailableCoPanel extends UiPanel<OpenDataForMmWarRuleAvail
 }
 
 // eslint-disable-next-line no-shadow
-const enum CoTierState {
+enum CoTierState {
     AllAvailable,
     PartialAvailable,
     Unavailable,

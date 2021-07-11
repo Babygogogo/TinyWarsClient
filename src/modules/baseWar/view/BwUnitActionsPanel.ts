@@ -2,7 +2,9 @@
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Types               from "../../../utility/Types";
 import * as StageManager        from "../../../utility/StageManager";
 import { BwUnitView }           from "./BwUnitView";
@@ -52,7 +54,7 @@ export class BwUnitActionsPanel extends UiPanel<OpenDataForBwUnitActionsPanel> {
             // { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
             // { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
             // { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
-            { type: Notify.Type.ZoomableContentsMoved,      callback: this._onNotifyZoomableContentsMoved },
+            { type: NotifyType.ZoomableContentsMoved,      callback: this._onNotifyZoomableContentsMoved },
         ]);
         this._listAction.setItemRenderer(UnitActionRenderer);
 
@@ -167,7 +169,7 @@ class UnitActionRenderer extends UiListItemRenderer<DataForUnitActionRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
         ]);
 
         this._unitView = new BwUnitView();
@@ -186,7 +188,7 @@ class UnitActionRenderer extends UiListItemRenderer<DataForUnitActionRenderer> {
             this.currentState       = "withUnit";
             this._labelCost.text    = data.actionType !== Types.UnitActionType.ProduceUnit
                 ? ""
-                : `${Lang.getText(Lang.Type.B0079)}: ${unit.getProductionFinalCost()}`;
+                : `${Lang.getText(LangTextType.B0079)}: ${unit.getProductionFinalCost()}`;
             this._unitView.init(unit).startRunningView();
         }
     }

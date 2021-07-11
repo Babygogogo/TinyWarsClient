@@ -11,8 +11,10 @@ import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger              from "../../../utility/Logger";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as TimeModel           from "../../time/model/TimeModel";
@@ -81,9 +83,9 @@ export class ChatPanel extends UiPanel<OpenDataForChatPanel> {
 
     protected async _onOpened(): Promise<void> {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgChatAddMessage,      callback: this._onMsgChatAddMessage },
-            { type: Notify.Type.MsgChatGetAllMessages,  callback: this._onMsgChatGetAllMessages },
+            { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgChatAddMessage,      callback: this._onMsgChatAddMessage },
+            { type: NotifyType.MsgChatGetAllMessages,  callback: this._onMsgChatGetAllMessages },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,   callback: this.close },
@@ -100,7 +102,7 @@ export class ChatPanel extends UiPanel<OpenDataForChatPanel> {
         this._listChat.bindData(this._dataForListChat);
         this.setSelectedIndex(this._getDefaultSelectedIndex());
 
-        Notify.dispatch(Notify.Type.ChatPanelOpened);
+        Notify.dispatch(NotifyType.ChatPanelOpened);
     }
     protected async _onClosed(): Promise<void> {
         await this._showCloseAnimation();
@@ -108,7 +110,7 @@ export class ChatPanel extends UiPanel<OpenDataForChatPanel> {
         this._dataForListChat   = null;
         this._selectedIndex     = null;
 
-        Notify.dispatch(Notify.Type.ChatPanelClosed);
+        Notify.dispatch(NotifyType.ChatPanelClosed);
     }
 
     public setSelectedIndex(newIndex: number): void {
@@ -193,7 +195,7 @@ export class ChatPanel extends UiPanel<OpenDataForChatPanel> {
         const currTime  = TimeModel.getServerTimestamp();
         const cdTime    = ChatModel.getTimestampForNextReqAllMessages() - currTime;
         if (cdTime > 0) {
-            FloatText.show(Lang.getFormattedText(Lang.Type.F0026, cdTime));
+            FloatText.show(Lang.getFormattedText(LangTextType.F0026, cdTime));
         } else {
             ChatModel.setTimestampForNextReqAllMessages(currTime + 30);
             ChatProxy.reqGetAllMessages();
@@ -204,7 +206,7 @@ export class ChatPanel extends UiPanel<OpenDataForChatPanel> {
         const content = this._inputMessage.text;
         if (content) {
             if (content.length > CommonConstants.ChatContentMaxLength) {
-                FloatText.show(Lang.getText(Lang.Type.B0375));
+                FloatText.show(Lang.getText(LangTextType.B0375));
             } else {
                 const data = this._dataForListChat[this.getSelectedIndex()];
                 if (data) {
@@ -266,10 +268,10 @@ export class ChatPanel extends UiPanel<OpenDataForChatPanel> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelNoMessage.text   = Lang.getText(Lang.Type.B0381);
-        this._btnClose.label        = Lang.getText(Lang.Type.B0146);
-        this._btnRefresh.label      = Lang.getText(Lang.Type.B0602);
-        this._btnSend.label         = Lang.getText(Lang.Type.B0382);
+        this._labelNoMessage.text   = Lang.getText(LangTextType.B0381);
+        this._btnClose.label        = Lang.getText(LangTextType.B0146);
+        this._btnRefresh.label      = Lang.getText(LangTextType.B0602);
+        this._btnSend.label         = Lang.getText(LangTextType.B0382);
     }
 
     private _updateComponentsForMessage(): void {
@@ -556,10 +558,10 @@ class ChatPageRenderer extends UiListItemRenderer<DataForChatPageRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.MsgChatGetAllMessages,            callback: this._onMsgChatGetAllMessages },
-            { type: Notify.Type.MsgChatAddMessage,                callback: this._onMsgChatAddMessage },
-            { type: Notify.Type.MsgChatGetAllReadProgressList,    callback: this._onMsgChatGetAllReadProgressList },
-            { type: Notify.Type.MsgChatUpdateReadProgress,        callback: this._onMsgChatUpdateReadProgress },
+            { type: NotifyType.MsgChatGetAllMessages,            callback: this._onMsgChatGetAllMessages },
+            { type: NotifyType.MsgChatAddMessage,                callback: this._onMsgChatAddMessage },
+            { type: NotifyType.MsgChatGetAllReadProgressList,    callback: this._onMsgChatGetAllReadProgressList },
+            { type: NotifyType.MsgChatUpdateReadProgress,        callback: this._onMsgChatUpdateReadProgress },
         ]);
     }
 
@@ -596,22 +598,22 @@ class ChatPageRenderer extends UiListItemRenderer<DataForChatPageRenderer> {
         const labelName     = this._labelName;
 
         if (toCategory === ChatCategory.PublicChannel) {
-            labelType.text  = Lang.getText(Lang.Type.B0376);
+            labelType.text  = Lang.getText(LangTextType.B0376);
             labelName.text  = Lang.getChatChannelName(toTarget);
 
         } else if (toCategory === ChatCategory.WarAndTeam) {
             const divider       = CommonConstants.ChatTeamDivider;
             const teamIndex     = toTarget % divider;
-            labelType.text      = Lang.getText(Lang.Type.B0377);
-            labelName.text      = `ID:${Math.floor(toTarget / divider)} ${teamIndex === 0 ? Lang.getText(Lang.Type.B0379) : Lang.getPlayerTeamName(teamIndex)}`;
+            labelType.text      = Lang.getText(LangTextType.B0377);
+            labelName.text      = `ID:${Math.floor(toTarget / divider)} ${teamIndex === 0 ? Lang.getText(LangTextType.B0379) : Lang.getPlayerTeamName(teamIndex)}`;
 
         } else if (toCategory === ChatCategory.Private) {
-            labelType.text = Lang.getText(Lang.Type.B0378);
+            labelType.text = Lang.getText(LangTextType.B0378);
             labelName.text = null;
             UserModel.getUserNickname(toTarget).then(name => labelName.text = name);
 
         } else if (toCategory === ChatCategory.McrRoom) {
-            labelType.text = `${Lang.getText(Lang.Type.B0443)} #${toTarget}`;
+            labelType.text = `${Lang.getText(LangTextType.B0443)} #${toTarget}`;
             labelName.text = null;
             McrModel.getRoomInfo(toTarget).then(async (v) => {
                 const warName = v ? v.settingsForMcw.warName : null;
@@ -623,7 +625,7 @@ class ChatPageRenderer extends UiListItemRenderer<DataForChatPageRenderer> {
             });
 
         } else if (toCategory === ChatCategory.CcrRoom) {
-            labelType.text = `${Lang.getText(Lang.Type.B0643)} #${toTarget}`;
+            labelType.text = `${Lang.getText(LangTextType.B0643)} #${toTarget}`;
             labelName.text = null;
             CcrModel.getRoomInfo(toTarget).then(async (v) => {
                 const warName = v ? v.settingsForCcw.warName : null;
@@ -635,10 +637,10 @@ class ChatPageRenderer extends UiListItemRenderer<DataForChatPageRenderer> {
             });
 
         } else if (toCategory === ChatCategory.MfrRoom) {
-            labelType.text = `${Lang.getText(Lang.Type.B0556)} #${toTarget}`;
+            labelType.text = `${Lang.getText(LangTextType.B0556)} #${toTarget}`;
             labelName.text = null;
             MfrModel.getRoomInfo(toTarget).then(async (v) => {
-                labelName.text = v.settingsForMfw.warName || Lang.getText(Lang.Type.B0555);
+                labelName.text = v.settingsForMfw.warName || Lang.getText(LangTextType.B0555);
             });
 
         } else {
@@ -681,7 +683,7 @@ class MessageRenderer extends UiListItemRenderer<DataForMessageRenderer> {
                 const info = await UserModel.getUserPublicInfo(userId);
                 if (info) {
                     CommonConfirmPanel.show({
-                        content : Lang.getFormattedText(Lang.Type.F0025, info.nickname),
+                        content : Lang.getFormattedText(LangTextType.F0025, info.nickname),
                         callback: () => {
                             ChatPanel.show({ toUserId: userId });
                         },

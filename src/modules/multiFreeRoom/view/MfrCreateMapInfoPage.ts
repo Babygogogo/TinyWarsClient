@@ -4,7 +4,9 @@ import { UiZoomableMap }        from "../../../gameui/UiZoomableMap";
 import { UiTabPage }            from "../../../gameui/UiTabPage";
 import { UiMapInfo }            from "../../../gameui/UiMapInfo";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as MfrModel            from "../../multiFreeRoom/model/MfrModel";
 
 export class MfrCreateMapInfoPage extends UiTabPage<void> {
@@ -20,7 +22,7 @@ export class MfrCreateMapInfoPage extends UiTabPage<void> {
 
     protected async _onOpened(): Promise<void> {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this.left   = 0;
@@ -42,6 +44,6 @@ export class MfrCreateMapInfoPage extends UiTabPage<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text = Lang.getText(Lang.Type.A0150);
+        this._labelLoading.text = Lang.getText(LangTextType.A0150);
     }
 }

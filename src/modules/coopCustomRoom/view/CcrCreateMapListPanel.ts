@@ -14,7 +14,9 @@ import { CcrCreateSettingsPanel }       from "./CcrCreateSettingsPanel";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
@@ -88,7 +90,7 @@ export class CcrCreateMapListPanel extends UiPanel<FiltersForMapList> {
             { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._listMap.setItemRenderer(MapNameRenderer);
 
@@ -169,15 +171,15 @@ export class CcrCreateMapListPanel extends UiPanel<FiltersForMapList> {
     // Private functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0000);
-        this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0646);
-        this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
-        this._labelLoading.text             = Lang.getText(Lang.Type.A0150);
-        this._labelNoMap.text               = Lang.getText(Lang.Type.A0010);
-        this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-        this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
-        this._btnMapInfo.label              = Lang.getText(Lang.Type.B0298);
-        this._btnNextStep.label             = Lang.getText(Lang.Type.B0566);
+        this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
+        this._labelMultiPlayer.text         = Lang.getText(LangTextType.B0646);
+        this._labelChooseMap.text           = Lang.getText(LangTextType.B0227);
+        this._labelLoading.text             = Lang.getText(LangTextType.A0150);
+        this._labelNoMap.text               = Lang.getText(LangTextType.A0010);
+        this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+        this._btnSearch.label               = Lang.getText(LangTextType.B0228);
+        this._btnMapInfo.label              = Lang.getText(LangTextType.B0298);
+        this._btnNextStep.label             = Lang.getText(LangTextType.B0566);
     }
 
     private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {

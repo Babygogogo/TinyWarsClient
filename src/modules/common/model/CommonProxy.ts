@@ -1,6 +1,7 @@
 
 import * as CommonModel     from "./CommonModel";
 import * as Notify          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes      from "../../../utility/ProtoTypes";
 import * as ConfigManager   from "../../../utility/ConfigManager";
 import * as NetManager      from "../../../network/NetManager";
@@ -27,7 +28,7 @@ export function reqCommonHeartbeat(counter: number): void {
 function _onMsgCommonHeartbeat(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgCommonHeartbeat.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgCommonHeartbeat, data);
+        Notify.dispatch(NotifyType.MsgCommonHeartbeat, data);
     }
 }
 
@@ -40,7 +41,7 @@ function _onMsgCommonLatestConfigVersion(e: egret.Event): void {
     const version   = data.version;
     ConfigManager.setLatestFormalVersion(version);
     ConfigManager.loadConfig(version);
-    Notify.dispatch(Notify.Type.MsgCommonLatestConfigVersion, data);
+    Notify.dispatch(NotifyType.MsgCommonLatestConfigVersion, data);
 }
 
 export function reqCommonGetServerStatus(): void {
@@ -49,7 +50,7 @@ export function reqCommonGetServerStatus(): void {
 function _onMsgCommonGetServerStatus(e: egret.Event): void {
     const data = e.data as NetMessage.MsgCommonGetServerStatus.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgCommonGetServerStatus, data);
+        Notify.dispatch(NotifyType.MsgCommonGetServerStatus, data);
     }
 }
 
@@ -60,6 +61,6 @@ function _onMsgCommonGetRankList(e: egret.Event): void {
     const data = e.data as NetMessage.MsgCommonGetRankList.IS;
     if (!data.errorCode) {
         CommonModel.setRankList(data.rankDataList);
-        Notify.dispatch(Notify.Type.MsgCommonGetRankList, data);
+        Notify.dispatch(NotifyType.MsgCommonGetRankList, data);
     }
 }

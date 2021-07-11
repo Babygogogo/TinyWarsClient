@@ -1,11 +1,11 @@
 
 import { NetMessageCodes }  from "../../../network/NetMessageCodes";
+import { NotifyType }       from "../../../utility/NotifyType";
 import * as NetManager      from "../../../network/NetManager";
 import * as ProtoTypes      from "../../../utility/ProtoTypes";
 import * as Notify          from "../../../utility/Notify";
 import * as Helpers         from "../../../utility/Helpers";
 import * as UserModel       from "../../user/model/UserModel";
-import NotifyType           = Notify.Type;
 import NetMessage           = ProtoTypes.NetMessage;
 
 export function init(): void {
@@ -79,10 +79,10 @@ export function reqUserGetPublicInfo(userId: number): void {
 function _onMsgUserGetPublicInfo(e: egret.Event): void {
     const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
     if (data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgUserGetPublicInfoFailed, data);
+        Notify.dispatch(NotifyType.MsgUserGetPublicInfoFailed, data);
     } else {
         UserModel.setUserPublicInfo(data.userPublicInfo);
-        Notify.dispatch(Notify.Type.MsgUserGetPublicInfo, data);
+        Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
     }
 }
 
@@ -96,10 +96,10 @@ export function reqSetNickname(nickname: string): void {
 async function _onMsgUserSetNickname(e: egret.Event): Promise<void> {
     const data = e.data as NetMessage.MsgUserSetNickname.IS;
     if (data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgUserSetNicknameFailed, data);
+        Notify.dispatch(NotifyType.MsgUserSetNicknameFailed, data);
     } else {
         await UserModel.updateOnMsgUserSetNickname(data);
-        Notify.dispatch(Notify.Type.MsgUserSetNickname, data);
+        Notify.dispatch(NotifyType.MsgUserSetNickname, data);
     }
 }
 
@@ -113,10 +113,10 @@ export function reqSetDiscordId(discordId: string): void {
 async function _onMsgUserSetDiscordId(e: egret.Event): Promise<void> {
     const data = e.data as NetMessage.MsgUserSetDiscordId.IS;
     if (data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgUserSetDiscordIdFailed, data);
+        Notify.dispatch(NotifyType.MsgUserSetDiscordIdFailed, data);
     } else {
         await UserModel.updateOnMsgUserSetDiscordId(data);
-        Notify.dispatch(Notify.Type.MsgUserSetDiscordId, data);
+        Notify.dispatch(NotifyType.MsgUserSetDiscordId, data);
     }
 }
 
@@ -128,7 +128,7 @@ export function reqUserGetOnlineUsers(): void {
 function _onMsgUserGetOnlineUsers(e: egret.Event): void {
     const data = e.data as NetMessage.MsgUserGetOnlineUsers.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgUserGetOnlineUsers, data);
+        Notify.dispatch(NotifyType.MsgUserGetOnlineUsers, data);
     }
 }
 
@@ -142,7 +142,7 @@ async function _onMsgUserSetPrivilege(e: egret.Event): Promise<void> {
     const data = e.data as ProtoTypes.NetMessage.MsgUserSetPrivilege.IS;
     if (!data.errorCode) {
         await UserModel.updateOnMsgUserSetPrivilege(data);
-        Notify.dispatch(Notify.Type.MsgUserSetPrivilege, data);
+        Notify.dispatch(NotifyType.MsgUserSetPrivilege, data);
     }
 }
 
@@ -155,7 +155,7 @@ export function reqUserSetPassword(oldRawPassword: string, newRawPassword: strin
 function _onMsgUserSetPassword(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgUserSetPassword.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgUserSetPassword, data);
+        Notify.dispatch(NotifyType.MsgUserSetPassword, data);
     }
 }
 
@@ -168,6 +168,6 @@ function _onMsgUserSetSettings(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgUserSetSettings.IS;
     if (!data.errorCode) {
         UserModel.updateOnMsgUserSetSettings(data);
-        Notify.dispatch(Notify.Type.MsgUserSetSettings, data);
+        Notify.dispatch(NotifyType.MsgUserSetSettings, data);
     }
 }

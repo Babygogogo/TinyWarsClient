@@ -10,7 +10,9 @@ import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as ConfigManager       from "../../../utility/ConfigManager";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import * as UserModel           from "../../user/model/UserModel";
 import * as UserProxy           from "../../user/model/UserProxy";
@@ -138,10 +140,10 @@ export class UserPanel extends UiPanel<OpenDataForUserPanel> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgUserGetPublicInfo,   callback: this._onMsgUserGetPublicInfo },
-            { type: Notify.Type.MsgUserSetNickname,     callback: this._onMsgUserSetNickname },
-            { type: Notify.Type.MsgUserSetDiscordId,    callback: this._onMsgUserSetDiscordId },
+            { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgUserGetPublicInfo,   callback: this._onMsgUserGetPublicInfo },
+            { type: NotifyType.MsgUserSetNickname,     callback: this._onMsgUserSetNickname },
+            { type: NotifyType.MsgUserSetDiscordId,    callback: this._onMsgUserSetDiscordId },
         ]);
         this._setUiListenerArray([
             { ui: this._btnChat,            callback: this._onTouchedBtnChat },
@@ -260,25 +262,25 @@ export class UserPanel extends UiPanel<OpenDataForUserPanel> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelStdRankScoreTitle.text   = Lang.getText(Lang.Type.B0198);
-        this._labelStdRankRankTitle.text    = Lang.getText(Lang.Type.B0546);
-        this._labelFogRankScoreTitle.text   = Lang.getText(Lang.Type.B0199);
-        this._labelFogRankRankTitle.text    = Lang.getText(Lang.Type.B0547);
-        this._labelUserIdTitle.text         = Lang.getText(Lang.Type.B0640);
-        this._labelRegisterTimeTitle.text   = Lang.getText(Lang.Type.B0194);
-        this._labelLastLoginTimeTitle.text  = Lang.getText(Lang.Type.B0195);
-        this._labelOnlineTimeTitle.text     = Lang.getText(Lang.Type.B0196);
-        this._labelLoginCountTitle.text     = Lang.getText(Lang.Type.B0197);
-        this._labelHistoryStd.text          = Lang.getText(Lang.Type.B0548);
-        this._labelHistoryStdWin.text       = Lang.getText(Lang.Type.B0550);
-        this._labelHistoryStdLose.text      = Lang.getText(Lang.Type.B0551);
-        this._labelHistoryStdDraw.text      = Lang.getText(Lang.Type.B0552);
-        this._labelHistoryStdRatio.text     = Lang.getText(Lang.Type.B0553);
-        this._labelHistoryFog.text          = Lang.getText(Lang.Type.B0549);
-        this._labelHistoryFogWin.text       = Lang.getText(Lang.Type.B0550);
-        this._labelHistoryFogLose.text      = Lang.getText(Lang.Type.B0551);
-        this._labelHistoryFogDraw.text      = Lang.getText(Lang.Type.B0552);
-        this._labelHistoryFogRatio.text     = Lang.getText(Lang.Type.B0553);
+        this._labelStdRankScoreTitle.text   = Lang.getText(LangTextType.B0198);
+        this._labelStdRankRankTitle.text    = Lang.getText(LangTextType.B0546);
+        this._labelFogRankScoreTitle.text   = Lang.getText(LangTextType.B0199);
+        this._labelFogRankRankTitle.text    = Lang.getText(LangTextType.B0547);
+        this._labelUserIdTitle.text         = Lang.getText(LangTextType.B0640);
+        this._labelRegisterTimeTitle.text   = Lang.getText(LangTextType.B0194);
+        this._labelLastLoginTimeTitle.text  = Lang.getText(LangTextType.B0195);
+        this._labelOnlineTimeTitle.text     = Lang.getText(LangTextType.B0196);
+        this._labelLoginCountTitle.text     = Lang.getText(LangTextType.B0197);
+        this._labelHistoryStd.text          = Lang.getText(LangTextType.B0548);
+        this._labelHistoryStdWin.text       = Lang.getText(LangTextType.B0550);
+        this._labelHistoryStdLose.text      = Lang.getText(LangTextType.B0551);
+        this._labelHistoryStdDraw.text      = Lang.getText(LangTextType.B0552);
+        this._labelHistoryStdRatio.text     = Lang.getText(LangTextType.B0553);
+        this._labelHistoryFog.text          = Lang.getText(LangTextType.B0549);
+        this._labelHistoryFogWin.text       = Lang.getText(LangTextType.B0550);
+        this._labelHistoryFogLose.text      = Lang.getText(LangTextType.B0551);
+        this._labelHistoryFogDraw.text      = Lang.getText(LangTextType.B0552);
+        this._labelHistoryFogRatio.text     = Lang.getText(LangTextType.B0553);
 
         this._updateLabelTitle();
         this._updateComponentsForStdRank();
@@ -290,7 +292,7 @@ export class UserPanel extends UiPanel<OpenDataForUserPanel> {
 
     private async _updateLabelTitle(): Promise<void> {
         const nickname          = await UserModel.getUserNickname(this._getOpenData().userId);
-        this._labelTitle.text   = Lang.getFormattedText(Lang.Type.F0009, nickname);
+        this._labelTitle.text   = Lang.getFormattedText(LangTextType.F0009, nickname);
     }
     private async _updateComponentsForStdRank(): Promise<void> {
         const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
@@ -360,7 +362,7 @@ export class UserPanel extends UiPanel<OpenDataForUserPanel> {
         this._labelOnlineTime.text  = onlineTime == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimeDurationText2(onlineTime);
     }
     private _updateBtnChat(): void {
-        this._btnChat.label = Lang.getText(Lang.Type.B0383);
+        this._btnChat.label = Lang.getText(LangTextType.B0383);
     }
 }
 
@@ -397,7 +399,7 @@ class HistoryRenderer extends UiListItemRenderer<DataForHistoryRenderer> {
         const playersCount  = data.playersCount;
         const labelType     = this._labelType;
         if ((warType === WarType.MrwFog) || (warType === WarType.MrwStd)) {
-            labelType.text = Lang.getText(Lang.Type.B0554);
+            labelType.text = Lang.getText(LangTextType.B0554);
         } else {
             labelType.text  = `${playersCount}P`;
         }

@@ -3,6 +3,7 @@ import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import * as TimeModel           from "../../time/model/TimeModel";
 import { UiImage }              from "../../../gameui/UiImage";
@@ -96,8 +97,8 @@ export class BwActionPlannerView extends egret.DisplayObjectContainer {
     private _focusUnitViews         = new Map<number, BwUnitView>();
 
     private _notifyEvents: Notify.Listener[] = [
-        { type: Notify.Type.GridAnimationTick, callback: this._onNotifyGridAnimationTick },
-        { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick },
+        { type: NotifyType.GridAnimationTick, callback: this._onNotifyGridAnimationTick },
+        { type: NotifyType.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick },
     ];
 
     public constructor() {

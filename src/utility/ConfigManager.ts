@@ -3,6 +3,7 @@ import * as Types           from "./Types";
 import * as ProtoTypes      from "./ProtoTypes";
 import * as ProtoManager    from "./ProtoManager";
 import * as Notify          from "./Notify";
+import { NotifyType } from "./NotifyType";
 import * as CommonConstants from "./CommonConstants";
 import * as Helpers         from "./Helpers";
 import * as Lang            from "./Lang";
@@ -248,7 +249,7 @@ export async function loadConfig(version: string): Promise<ExtendedFullConfig | 
         secondaryWeaponFlag : _getSecondaryWeaponFlags(damageChartCfg),
     };
     setCachedConfig(version, fullCfg);
-    Notify.dispatch(Notify.Type.ConfigLoaded);
+    Notify.dispatch(NotifyType.ConfigLoaded);
 
     return fullCfg;
 }

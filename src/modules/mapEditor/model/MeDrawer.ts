@@ -8,8 +8,10 @@ import * as DestructionHelpers          from "../../../utility/DestructionHelper
 import * as FloatText                   from "../../../utility/FloatText";
 import * as GridIndexHelpers            from "../../../utility/GridIndexHelpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as MeUtility                   from "./MeUtility";
 import DrawerMode                       = Types.MapEditorDrawerMode;
@@ -45,8 +47,8 @@ export class MeDrawer {
     private _symmetricalDrawType            = SymmetryType.None;
 
     private _notifyListeners: Notify.Listener[] = [
-        { type: Notify.Type.BwCursorTapped,     callback: this._onNotifyBwCursorTapped },
-        { type: Notify.Type.BwCursorDragged,    callback: this._onNotifyBwCursorDragged },
+        { type: NotifyType.BwCursorTapped,     callback: this._onNotifyBwCursorTapped },
+        { type: NotifyType.BwCursorDragged,    callback: this._onNotifyBwCursorDragged },
     ];
 
     public init(): MeDrawer {
@@ -88,7 +90,7 @@ export class MeDrawer {
 
     private _setMode(mode: DrawerMode): void {
         this._mode = mode;
-        Notify.dispatch(Notify.Type.MeDrawerModeChanged);
+        Notify.dispatch(NotifyType.MeDrawerModeChanged);
     }
     public setModeDeleteUnit(): void {
         this._setMode(DrawerMode.DeleteUnit);
@@ -191,7 +193,7 @@ export class MeDrawer {
         tile.startRunning(this._getWar());
         tile.flushDataToView();
 
-        Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
+        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
 
         const symmetryType = this.getSymmetricalDrawType();
         const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -208,7 +210,7 @@ export class MeDrawer {
             t2.startRunning(this._getWar());
             t2.flushDataToView();
 
-            Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
         }
     }
     private _handleDrawTileObject(gridIndex: GridIndex): void {
@@ -229,7 +231,7 @@ export class MeDrawer {
         tile.startRunning(this._getWar());
         tile.flushDataToView();
 
-        Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
+        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
 
         const symmetryType = this.getSymmetricalDrawType();
         const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -246,7 +248,7 @@ export class MeDrawer {
             t2.startRunning(this._getWar());
             t2.flushDataToView();
 
-            Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
         }
     }
     private _handleDrawUnit(gridIndex: GridIndex): void {
@@ -258,7 +260,7 @@ export class MeDrawer {
             return;
         }
         if (tile.getMaxHp() != null) {
-            FloatText.show(Lang.getFormattedText(Lang.Type.F0067, Lang.getTileName(tile.getType())));
+            FloatText.show(Lang.getFormattedText(LangTextType.F0067, Lang.getTileName(tile.getType())));
             return;
         }
 
@@ -278,7 +280,7 @@ export class MeDrawer {
         unitMap.setUnitOnMap(unit);
         unitMap.setNextUnitId(unitId + 1);
 
-        Notify.dispatch(Notify.Type.MeUnitChanged, { gridIndex } as Notify.Data.MeUnitChanged);
+        Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as Notify.Data.MeUnitChanged);
     }
     private _handleDeleteTileObject(gridIndex: GridIndex): void {
         const tileMap   = this._tileMap;
@@ -286,7 +288,7 @@ export class MeDrawer {
         tile.destroyTileObject();
         tile.flushDataToView();
 
-        Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
+        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
 
         const symmetryType = this.getSymmetricalDrawType();
         const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -295,13 +297,13 @@ export class MeDrawer {
             t2.destroyTileObject();
             t2.flushDataToView();
 
-            Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
         }
     }
     private _handleDeleteUnit(gridIndex: GridIndex): void {
         if (this._unitMap.getUnitOnMap(gridIndex)) {
             DestructionHelpers.destroyUnitOnMap(this._getWar(), gridIndex, true);
-            Notify.dispatch(Notify.Type.MeUnitChanged, { gridIndex } as Notify.Data.MeUnitChanged);
+            Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as Notify.Data.MeUnitChanged);
         }
     }
 }

@@ -9,6 +9,7 @@ import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel"
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 
@@ -113,8 +114,8 @@ export class SpwChooseCoPanel extends UiPanel<OpenDataForSpwChooseCoPanel> {
     ////////////////////////////////////////////////////////////////////////////////
     private _onTouchedBtnHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title   : Lang.getText(Lang.Type.B0147),
-            content : Lang.getText(Lang.Type.R0004),
+            title   : Lang.getText(LangTextType.B0147),
+            content : Lang.getText(LangTextType.R0004),
         });
     }
 
@@ -126,9 +127,9 @@ export class SpwChooseCoPanel extends UiPanel<OpenDataForSpwChooseCoPanel> {
     // Private functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateView(): void {
-        this._labelChooseCo.text    = Lang.getText(Lang.Type.B0145);
-        this._btnHelp.label         = Lang.getText(Lang.Type.B0143);
-        this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+        this._labelChooseCo.text    = Lang.getText(LangTextType.B0145);
+        this._btnHelp.label         = Lang.getText(LangTextType.B0143);
+        this._btnBack.label         = Lang.getText(LangTextType.B0146);
     }
 
     private _initListCo(): void {
@@ -162,13 +163,13 @@ export class SpwChooseCoPanel extends UiPanel<OpenDataForSpwChooseCoPanel> {
     }
 
     private _showCoInfo(data: DataForCoRenderer): void {
-        this._labelNameTitle.text                   = `${Lang.getText(Lang.Type.B0162)}: `;
-        this._labelDesignerTitle.text               = `${Lang.getText(Lang.Type.B0163)}: `;
-        this._labelBoardCostPercentageTitle.text    = `${Lang.getText(Lang.Type.B0164)}: `;
-        this._labelZoneRadiusTitle.text             = `${Lang.getText(Lang.Type.B0165)}: `;
-        this._labelEnergyBarTitle.text              = `${Lang.getText(Lang.Type.B0166)}: `;
-        this._labelCopEnergyTitle.text              = `${Lang.getText(Lang.Type.B0167)}: `;
-        this._labelScopEnergyTitle.text             = `${Lang.getText(Lang.Type.B0167)}: `;
+        this._labelNameTitle.text                   = `${Lang.getText(LangTextType.B0162)}: `;
+        this._labelDesignerTitle.text               = `${Lang.getText(LangTextType.B0163)}: `;
+        this._labelBoardCostPercentageTitle.text    = `${Lang.getText(LangTextType.B0164)}: `;
+        this._labelZoneRadiusTitle.text             = `${Lang.getText(LangTextType.B0165)}: `;
+        this._labelEnergyBarTitle.text              = `${Lang.getText(LangTextType.B0166)}: `;
+        this._labelCopEnergyTitle.text              = `${Lang.getText(LangTextType.B0167)}: `;
+        this._labelScopEnergyTitle.text             = `${Lang.getText(LangTextType.B0167)}: `;
 
         const cfg = data.coBasicCfg;
         if (!cfg) {
@@ -178,10 +179,10 @@ export class SpwChooseCoPanel extends UiPanel<OpenDataForSpwChooseCoPanel> {
             this._labelBoardCostPercentage.text = "--";
             this._labelZoneRadius.text          = "--";
             this._labelEnergyBar.text           = "--";
-            this._labelNoPassiveSkill.text      = Lang.getText(Lang.Type.B0001);
-            this._labelNoCop.text               = Lang.getText(Lang.Type.B0001);
+            this._labelNoPassiveSkill.text      = Lang.getText(LangTextType.B0001);
+            this._labelNoCop.text               = Lang.getText(LangTextType.B0001);
             this._labelCopEnergy.text           = "--";
-            this._labelNoScop.text              = Lang.getText(Lang.Type.B0001);
+            this._labelNoScop.text              = Lang.getText(LangTextType.B0001);
             this._labelScopEnergy.text          = "--";
             this._listPassiveSkill.clear();
             this._listCop.clear();
@@ -197,7 +198,7 @@ export class SpwChooseCoPanel extends UiPanel<OpenDataForSpwChooseCoPanel> {
 
             const passiveSkills = cfg.passiveSkills || [];
             if (!passiveSkills.length) {
-                this._labelNoPassiveSkill.text = Lang.getText(Lang.Type.B0001);
+                this._labelNoPassiveSkill.text = Lang.getText(LangTextType.B0001);
                 this._listPassiveSkill.clear();
             } else {
                 this._labelNoPassiveSkill.text = "";
@@ -213,7 +214,7 @@ export class SpwChooseCoPanel extends UiPanel<OpenDataForSpwChooseCoPanel> {
 
             const copSkills = cfg.powerSkills || [];
             if (!copSkills.length) {
-                this._labelNoCop.text       = Lang.getText(Lang.Type.B0001);
+                this._labelNoCop.text       = Lang.getText(LangTextType.B0001);
                 this._labelCopEnergy.text   = "--";
                 this._listCop.clear();
             } else {
@@ -232,7 +233,7 @@ export class SpwChooseCoPanel extends UiPanel<OpenDataForSpwChooseCoPanel> {
 
             const scopSkills = cfg.superPowerSkills || [];
             if (!scopSkills.length) {
-                this._labelNoScop.text      = Lang.getText(Lang.Type.B0001);
+                this._labelNoScop.text      = Lang.getText(LangTextType.B0001);
                 this._labelScopEnergy.text  = "--";
                 this._listScop.clear();
             } else {
@@ -275,7 +276,7 @@ class CoRenderer extends UiListItemRenderer<DataForCoRenderer> {
         const data              = this.data;
         const cfg               = data.coBasicCfg;
         this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-        this._labelName.text    = cfg ? `${cfg.name} (T${cfg.tier})` : `(${Lang.getText(Lang.Type.B0001)} CO)`;
+        this._labelName.text    = cfg ? `${cfg.name} (T${cfg.tier})` : `(${Lang.getText(LangTextType.B0001)} CO)`;
     }
 
     private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

@@ -5,6 +5,7 @@ import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as ConfigManager       from "../../../utility/ConfigManager";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as BwHelpers           from "../../baseWar/model/BwHelpers";
@@ -67,8 +68,8 @@ class TileMapView extends egret.DisplayObjectContainer {
     private readonly _objectLayer           = new TileObjectLayer();
 
     private readonly _notifyListenerArray   : Notify.Listener[] = [
-        { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
-        { type: Notify.Type.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
+        { type: NotifyType.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+        { type: NotifyType.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
     ];
 
     public constructor() {
@@ -280,7 +281,7 @@ class WarMapUnitMapView extends egret.DisplayObjectContainer {
     private readonly _groundLayer           = new egret.DisplayObjectContainer();
     private readonly _seaLayer              = new egret.DisplayObjectContainer();
     private readonly _notifyListenerArray   : Notify.Listener[] = [
-        { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
+        { type: NotifyType.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
     ];
 
     public constructor() {

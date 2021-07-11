@@ -11,7 +11,9 @@ import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as ConfigManager       from "../../../utility/ConfigManager";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as CommonModel         from "../../common/model/CommonModel";
@@ -67,8 +69,8 @@ export class BwTileDetailPanel extends UiPanel<OpenDataForBwTileDetailPanel> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
         ]);
         this._listInfo.setItemRenderer(InfoRenderer);
         this._listMoveCost.setItemRenderer(MoveCostRenderer);
@@ -101,7 +103,7 @@ export class BwTileDetailPanel extends UiPanel<OpenDataForBwTileDetailPanel> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelMoveCost.text = Lang.getText(Lang.Type.B0351);
+        this._labelMoveCost.text = Lang.getText(LangTextType.B0351);
         this._updateListMoveCost();
     }
 
@@ -148,46 +150,46 @@ export class BwTileDetailPanel extends UiPanel<OpenDataForBwTileDetailPanel> {
 
         const dataList: DataForInfoRenderer[] = [
             {
-                titleText               : Lang.getText(Lang.Type.B0352),
+                titleText               : Lang.getText(LangTextType.B0352),
                 valueText               : defenseBonus ? `${defenseBonus}(${Lang.getUnitCategoryName(cfg.defenseUnitCategory)})` : `--`,
                 callbackOnTouchedTitle  : null,
             },
             {
-                titleText               : Lang.getText(Lang.Type.B0353),
+                titleText               : Lang.getText(LangTextType.B0353),
                 valueText               : `${income != null ? income : `--`}`,
                 callbackOnTouchedTitle  : null,
             },
             {
-                titleText               : Lang.getText(Lang.Type.B0354),
+                titleText               : Lang.getText(LangTextType.B0354),
                 valueText               : visionRange != null
-                    ? `${visionRange}${cfg.isVisionEnabledForAllPlayers ? `(${Lang.getText(Lang.Type.B0355)})`: ``}`
+                    ? `${visionRange}${cfg.isVisionEnabledForAllPlayers ? `(${Lang.getText(LangTextType.B0355)})`: ``}`
                     : `--`,
                 callbackOnTouchedTitle  : null,
             },
             {
-                titleText               : Lang.getText(Lang.Type.B0356),
+                titleText               : Lang.getText(LangTextType.B0356),
                 valueText               : `${hideCategory != null ? Lang.getUnitCategoryName(hideCategory) : `--`}`,
                 callbackOnTouchedTitle  : null,
             },
             {
-                titleText               : Lang.getText(Lang.Type.B0357),
-                valueText               : cfg.isDefeatedOnCapture ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                titleText               : Lang.getText(LangTextType.B0357),
+                valueText               : cfg.isDefeatedOnCapture ? Lang.getText(LangTextType.B0012) : Lang.getText(LangTextType.B0013),
                 callbackOnTouchedTitle  : null,
             },
             {
-                titleText               : Lang.getText(Lang.Type.B0358),
+                titleText               : Lang.getText(LangTextType.B0358),
                 valueText               : cfg.produceUnitCategory
                     ? Lang.getUnitCategoryName(cfg.produceUnitCategory)
-                    : Lang.getText(Lang.Type.B0013),
+                    : Lang.getText(LangTextType.B0013),
                 callbackOnTouchedTitle  : null,
             },
             {
-                titleText               : Lang.getText(Lang.Type.B0359),
+                titleText               : Lang.getText(LangTextType.B0359),
                 valueText               : `${globalAttackBonus == null ? `--` : globalAttackBonus + "%"} / ${globalDefenseBonus == null ? `--` : globalDefenseBonus + "%"}`,
                 callbackOnTouchedTitle  : null,
             },
             {
-                titleText               : Lang.getText(Lang.Type.B0360),
+                titleText               : Lang.getText(LangTextType.B0360),
                 valueText               : repairAmount != null ? `${repairAmount}(${Lang.getUnitCategoryName(cfg.repairUnitCategory)})` : `--`,
                 callbackOnTouchedTitle  : null,
             },
@@ -207,22 +209,22 @@ export class BwTileDetailPanel extends UiPanel<OpenDataForBwTileDetailPanel> {
             const currValue = tile.getCurrentHp();
             const minValue  = 1;
             return {
-                titleText               : Lang.getText(Lang.Type.B0339),
+                titleText               : Lang.getText(LangTextType.B0339),
                 valueText               : `${currValue} / ${maxValue}`,
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
                         CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0339),
+                            title           : Lang.getText(LangTextType.B0339),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
                             charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
                                     tile.setCurrentHp(value);
                                     tile.flushDataToView();
@@ -243,22 +245,22 @@ export class BwTileDetailPanel extends UiPanel<OpenDataForBwTileDetailPanel> {
             const currValue = tile.getCurrentCapturePoint();
             const minValue  = 1;
             return {
-                titleText               : Lang.getText(Lang.Type.B0361),
+                titleText               : Lang.getText(LangTextType.B0361),
                 valueText               : `${currValue} / ${maxValue}`,
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
                         CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0361),
+                            title           : Lang.getText(LangTextType.B0361),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
                             charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
                                     tile.setCurrentCapturePoint(value);
                                     tile.flushDataToView();
@@ -279,22 +281,22 @@ export class BwTileDetailPanel extends UiPanel<OpenDataForBwTileDetailPanel> {
             const currValue = tile.getCurrentBuildPoint();
             const minValue  = 1;
             return {
-                titleText               : Lang.getText(Lang.Type.B0362),
+                titleText               : Lang.getText(LangTextType.B0362),
                 valueText               : `${currValue} / ${maxValue}`,
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
                         CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0362),
+                            title           : Lang.getText(LangTextType.B0362),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
                             charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
                                     tile.setCurrentBuildPoint(value);
                                     tile.flushDataToView();
@@ -382,7 +384,7 @@ class MoveCostRenderer extends UiListItemRenderer<DataForMoveRangeRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
         ]);
 
         this._unitView = new WarMapUnitView();

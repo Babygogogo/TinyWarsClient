@@ -10,7 +10,9 @@ import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel"
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as FlowManager                 from "../../../utility/FlowManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
 import * as SpmModel                    from "../../singlePlayerMode/model/SpmModel";
@@ -59,7 +61,7 @@ export class SpwLoadWarPanel extends UiPanel<void> {
             { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
         this._srlSaveSlot.setItemRenderer(SlotRenderer);
 
@@ -78,8 +80,8 @@ export class SpwLoadWarPanel extends UiPanel<void> {
 
     private _onTouchedBtnHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title   : Lang.getText(Lang.Type.B0325),
-            content : Lang.getText(Lang.Type.R0006),
+            title   : Lang.getText(LangTextType.B0325),
+            content : Lang.getText(LangTextType.R0006),
         });
     }
 
@@ -99,9 +101,9 @@ export class SpwLoadWarPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelPanelTitle.text  = Lang.getText(Lang.Type.B0259);
-        this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
-        this._btnHelp.label         = Lang.getText(Lang.Type.B0143);
+        this._labelPanelTitle.text  = Lang.getText(LangTextType.B0259);
+        this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+        this._btnHelp.label         = Lang.getText(LangTextType.B0143);
     }
 
     private _createDataForList(): DataForSlotRenderer[] {
@@ -136,7 +138,7 @@ class SlotRenderer extends UiListItemRenderer<DataForSlotRenderer> {
         ]);
 
         this._imgBg.touchEnabled    = true;
-        this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
+        this._labelChoose.text      = Lang.getText(LangTextType.B0258);
     }
 
     protected _onDataChanged(): void {
@@ -148,7 +150,7 @@ class SlotRenderer extends UiListItemRenderer<DataForSlotRenderer> {
         const slotInfo  = data.slotInfo;
         if (slotInfo) {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0072),
+                content : Lang.getText(LangTextType.A0072),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
                         slotIndex       : slotInfo.slotIndex,
@@ -183,7 +185,7 @@ class SlotRenderer extends UiListItemRenderer<DataForSlotRenderer> {
             } else {
                 const mapId         = BwHelpers.getMapId(warData);
                 labelMapName.text   = mapId == null
-                    ? `(${Lang.getText(Lang.Type.B0321)})`
+                    ? `(${Lang.getText(LangTextType.B0321)})`
                     : await WarMapModel.getMapNameInCurrentLanguage(mapId);
             }
         }

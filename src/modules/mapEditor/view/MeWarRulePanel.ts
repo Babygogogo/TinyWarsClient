@@ -21,7 +21,9 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
@@ -99,9 +101,9 @@ export class MeWarRulePanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MeWarRuleNameChanged,       callback: this._onNotifyMeWarRuleNameChanged },
-            { type: Notify.Type.MeWarEventIdArrayChanged,   callback: this._onNotifyMeWarEventIdArrayChanged },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MeWarRuleNameChanged,       callback: this._onNotifyMeWarRuleNameChanged },
+            { type: NotifyType.MeWarEventIdArrayChanged,   callback: this._onNotifyMeWarEventIdArrayChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,                callback: this._onTouchTapBtnBack },
@@ -131,7 +133,7 @@ export class MeWarRulePanel extends UiPanel<void> {
     protected async _onClosed(): Promise<void> {
         this._war = null;
 
-        Notify.dispatch(Notify.Type.BwCoListPanelClosed);
+        Notify.dispatch(NotifyType.BwCoListPanelClosed);
     }
 
     public setSelectedIndex(newIndex: number): void {
@@ -180,10 +182,10 @@ export class MeWarRulePanel extends UiPanel<void> {
         if (selectedRule != null) {
             const war = this._war;
             if (war.getWarRuleArray().length <= 1) {
-                FloatText.show(Lang.getText(Lang.Type.A0096));
+                FloatText.show(Lang.getText(LangTextType.A0096));
             } else {
                 CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0097),
+                    content : Lang.getText(LangTextType.A0097),
                     callback: () => {
                         war.deleteWarRule(selectedRule.ruleId);
                         this._resetView();
@@ -196,7 +198,7 @@ export class MeWarRulePanel extends UiPanel<void> {
     private _onTouchedBtnAddRule(): void {
         const war = this._war;
         if (war.getWarRuleArray().length >= CommonConstants.WarRuleMaxCount) {
-            FloatText.show(Lang.getText(Lang.Type.A0099));
+            FloatText.show(Lang.getText(LangTextType.A0099));
         } else {
             war.addWarRule();
             this._resetView();
@@ -205,8 +207,8 @@ export class MeWarRulePanel extends UiPanel<void> {
 
     private _onTouchedBtnHelpHasFog(): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0020),
-            content: Lang.getText(Lang.Type.R0002),
+            title  : Lang.getText(LangTextType.B0020),
+            content: Lang.getText(LangTextType.R0002),
         });
     }
 
@@ -432,22 +434,22 @@ export class MeWarRulePanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelMenuTitle.text           = Lang.getText(Lang.Type.B0314);
-        this._labelAvailability.text        = Lang.getText(Lang.Type.B0406);
-        this._labelPlayerList.text          = Lang.getText(Lang.Type.B0407);
-        this._btnAvailabilityMcw.label      = Lang.getText(Lang.Type.B0137);
-        this._btnAvailabilityScw.label      = Lang.getText(Lang.Type.B0138);
-        this._btnAvailabilityMrw.label      = Lang.getText(Lang.Type.B0404);
-        this._btnAvailabilityCcw.label      = Lang.getText(Lang.Type.B0619);
-        this._btnAvailabilitySrw.label      = Lang.getText(Lang.Type.B0614);
-        this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-        this._btnDelete.label               = Lang.getText(Lang.Type.B0220);
-        this._btnAddRule.label              = Lang.getText(Lang.Type.B0320);
-        this._btnModifyRuleName.label       = Lang.getText(Lang.Type.B0315);
-        this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
-        this._labelWarEventListTitle.text   = Lang.getText(Lang.Type.B0461);
-        this._btnAddWarEvent.label          = Lang.getText(Lang.Type.B0320);
-        this._btnEditWarEvent.label         = Lang.getText(Lang.Type.B0465);
+        this._labelMenuTitle.text           = Lang.getText(LangTextType.B0314);
+        this._labelAvailability.text        = Lang.getText(LangTextType.B0406);
+        this._labelPlayerList.text          = Lang.getText(LangTextType.B0407);
+        this._btnAvailabilityMcw.label      = Lang.getText(LangTextType.B0137);
+        this._btnAvailabilityScw.label      = Lang.getText(LangTextType.B0138);
+        this._btnAvailabilityMrw.label      = Lang.getText(LangTextType.B0404);
+        this._btnAvailabilityCcw.label      = Lang.getText(LangTextType.B0619);
+        this._btnAvailabilitySrw.label      = Lang.getText(LangTextType.B0614);
+        this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+        this._btnDelete.label               = Lang.getText(LangTextType.B0220);
+        this._btnAddRule.label              = Lang.getText(LangTextType.B0320);
+        this._btnModifyRuleName.label       = Lang.getText(LangTextType.B0315);
+        this._btnModifyHasFog.label         = Lang.getText(LangTextType.B0020);
+        this._labelWarEventListTitle.text   = Lang.getText(LangTextType.B0461);
+        this._btnAddWarEvent.label          = Lang.getText(LangTextType.B0320);
+        this._btnEditWarEvent.label         = Lang.getText(LangTextType.B0465);
     }
 
     private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
@@ -479,7 +481,7 @@ export class MeWarRulePanel extends UiPanel<void> {
     }
 
     private _updateLabelRuleName(rule: IWarRule): void {
-        this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(Lang.Type.B0001);
+        this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(LangTextType.B0001);
     }
     private _updateImgHasFog(rule: IWarRule): void {
         this._imgHasFog.visible = rule ? rule.ruleForGlobalParams.hasFogByDefault : false;
@@ -559,7 +561,7 @@ class WarRuleNameRenderer extends UiListItemRenderer<DataForWarRuleNameRenderer>
         const data              = this.data;
         const index             = data.index;
         this.currentState       = index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-        this._labelName.text    = `${Lang.getText(Lang.Type.B0318)} ${index}`;
+        this._labelName.text    = `${Lang.getText(LangTextType.B0318)} ${index}`;
     }
 
     private _onTouchTapBtnChoose(): void {
@@ -580,7 +582,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.MeBannedCoIdArrayChanged, callback: this._onNotifyMeBannedCoIdArrayChanged },
+            { type: NotifyType.MeBannedCoIdArrayChanged, callback: this._onNotifyMeBannedCoIdArrayChanged },
         ]);
         this._listInfo.setItemRenderer(InfoRenderer);
     }
@@ -621,7 +623,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
     private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
         return {
-            titleText               : Lang.getText(Lang.Type.B0018),
+            titleText               : Lang.getText(LangTextType.B0018),
             infoText                : Lang.getPlayerForceName(playerRule.playerIndex),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : null,
@@ -629,7 +631,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
     private _createDataTeamIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         return {
-            titleText               : Lang.getText(Lang.Type.B0019),
+            titleText               : Lang.getText(LangTextType.B0019),
             infoText                : Lang.getPlayerTeamName(playerRule.teamIndex),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : isReviewing
@@ -642,7 +644,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
     private _createDataBannedCoIdArray(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         return {
-            titleText               : Lang.getText(Lang.Type.B0403),
+            titleText               : Lang.getText(LangTextType.B0403),
             infoText                : `${(playerRule.bannedCoIdArray || []).length}`,
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : isReviewing
@@ -659,7 +661,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataInitialFund(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.initialFund;
         return {
-            titleText               : Lang.getText(Lang.Type.B0178),
+            titleText               : Lang.getText(LangTextType.B0178),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
             callbackOnTouchedTitle  : isReviewing
@@ -668,16 +670,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                     const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0178),
+                        title           : Lang.getText(LangTextType.B0178),
                         currentValue    : "" + currValue,
                         maxChars        : 7,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setInitialFund(warRule, playerRule.playerIndex, value);
                                 this._updateView();
@@ -690,7 +692,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataIncomeMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.incomeMultiplier;
         return {
-            titleText               : Lang.getText(Lang.Type.B0179),
+            titleText               : Lang.getText(LangTextType.B0179),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
             callbackOnTouchedTitle  : isReviewing
@@ -699,16 +701,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
                     const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0179),
+                        title           : Lang.getText(LangTextType.B0179),
                         currentValue    : "" + currValue,
                         maxChars        : 5,
                         charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setIncomeMultiplier(warRule, playerRule.playerIndex, value);
                                 this._updateView();
@@ -721,7 +723,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataEnergyAddPctOnLoadCo(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.energyAddPctOnLoadCo;
         return {
-            titleText               : Lang.getText(Lang.Type.B0180),
+            titleText               : Lang.getText(LangTextType.B0180),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
             callbackOnTouchedTitle  : isReviewing
@@ -730,16 +732,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
                     const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0180),
+                        title           : Lang.getText(LangTextType.B0180),
                         currentValue    : "" + currValue,
                         maxChars        : 3,
                         charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setEnergyAddPctOnLoadCo(warRule, playerRule.playerIndex, value);
                                 this._updateView();
@@ -752,7 +754,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataEnergyGrowthMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.energyGrowthMultiplier;
         return {
-            titleText               : Lang.getText(Lang.Type.B0181),
+            titleText               : Lang.getText(LangTextType.B0181),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
             callbackOnTouchedTitle  : isReviewing
@@ -761,16 +763,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
                     const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0181),
+                        title           : Lang.getText(LangTextType.B0181),
                         currentValue    : "" + currValue,
                         maxChars        : 5,
                         charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setEnergyGrowthMultiplier(warRule, playerRule.playerIndex, value);
                                 this._updateView();
@@ -783,7 +785,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataMoveRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.moveRangeModifier;
         return {
-            titleText               : Lang.getText(Lang.Type.B0182),
+            titleText               : Lang.getText(LangTextType.B0182),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
             callbackOnTouchedTitle  : isReviewing
@@ -792,16 +794,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
                     const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0182),
+                        title           : Lang.getText(LangTextType.B0182),
                         currentValue    : "" + currValue,
                         maxChars        : 3,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setMoveRangeModifier(warRule, playerRule.playerIndex, value);
                                 this._updateView();
@@ -814,7 +816,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataAttackPowerModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.attackPowerModifier;
         return {
-            titleText               : Lang.getText(Lang.Type.B0183),
+            titleText               : Lang.getText(LangTextType.B0183),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
             callbackOnTouchedTitle  : isReviewing
@@ -823,16 +825,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
                     const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0183),
+                        title           : Lang.getText(LangTextType.B0183),
                         currentValue    : "" + currValue,
                         maxChars        : 5,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setAttackPowerModifier(warRule, playerRule.playerIndex, value);
                                 this._updateView();
@@ -845,7 +847,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataVisionRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.visionRangeModifier;
         return {
-            titleText               : Lang.getText(Lang.Type.B0184),
+            titleText               : Lang.getText(LangTextType.B0184),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
             callbackOnTouchedTitle  : isReviewing
@@ -854,16 +856,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
                     const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0184),
+                        title           : Lang.getText(LangTextType.B0184),
                         currentValue    : "" + currValue,
                         maxChars        : 3,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setVisionRangeModifier(warRule, playerRule.playerIndex, value);
                                 this._updateView();
@@ -877,7 +879,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const currValue     = playerRule.luckLowerLimit;
         const playerIndex   = playerRule.playerIndex;
         return {
-            titleText               : Lang.getText(Lang.Type.B0189),
+            titleText               : Lang.getText(LangTextType.B0189),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
             callbackOnTouchedTitle  : isReviewing
@@ -886,16 +888,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     const minValue      = CommonConstants.WarRuleLuckMinLimit;
                     const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0189),
+                        title           : Lang.getText(LangTextType.B0189),
                         currentValue    : "" + currValue,
                         maxChars        : 4,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 const upperLimit = BwWarRuleHelper.getLuckUpperLimit(warRule, playerIndex);
                                 if (value <= upperLimit) {
@@ -915,7 +917,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const currValue     = playerRule.luckUpperLimit;
         const playerIndex   = playerRule.playerIndex;
         return {
-            titleText               : Lang.getText(Lang.Type.B0190),
+            titleText               : Lang.getText(LangTextType.B0190),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
             callbackOnTouchedTitle  : isReviewing
@@ -924,16 +926,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     const minValue      = CommonConstants.WarRuleLuckMinLimit;
                     const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0190),
+                        title           : Lang.getText(LangTextType.B0190),
                         currentValue    : "" + currValue,
                         maxChars        : 4,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 const lowerLimit = BwWarRuleHelper.getLuckLowerLimit(warRule, playerIndex);
                                 if (value >= lowerLimit) {
@@ -952,14 +954,14 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataAiCoIdInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const isControlledByAi = playerRule.fixedCoIdInCcw != null;
         return {
-            titleText               : Lang.getText(Lang.Type.B0645),
-            infoText                : Lang.getText(isControlledByAi ? Lang.Type.B0012 : Lang.Type.B0013),
+            titleText               : Lang.getText(LangTextType.B0645),
+            infoText                : Lang.getText(isControlledByAi ? LangTextType.B0012 : LangTextType.B0013),
             infoColor               : isControlledByAi ? 0x00FF00 : 0xFFFFFF,
             callbackOnTouchedTitle  : isReviewing
                 ? null
                 : () => {
                     if (!warRule.ruleAvailability.canCcw) {
-                        FloatText.show(Lang.getText(Lang.Type.A0221));
+                        FloatText.show(Lang.getText(LangTextType.A0221));
                         return;
                     }
 
@@ -977,14 +979,14 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const coId          = playerRule.fixedCoIdInCcw;
         const configVersion = ConfigManager.getLatestFormalVersion();
         return {
-            titleText               : Lang.getText(Lang.Type.B0644),
+            titleText               : Lang.getText(LangTextType.B0644),
             infoText                : coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId),
             infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
             callbackOnTouchedTitle  : isReviewing
                 ? null
                 : () => {
                     if (!warRule.ruleAvailability.canCcw) {
-                        FloatText.show(Lang.getText(Lang.Type.A0221));
+                        FloatText.show(Lang.getText(LangTextType.A0221));
                         return;
                     }
 
@@ -1057,7 +1059,7 @@ class WarEventRenderer extends UiListItemRenderer<DataForWarEventRenderer> {
             { ui: this._btnDelete,  callback: this._onTouchedBtnDelete },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -1067,21 +1069,21 @@ class WarEventRenderer extends UiListItemRenderer<DataForWarEventRenderer> {
         const data = this.data;
         if (data) {
             BwWarRuleHelper.moveWarEventId(data.warRule, data.warEventId, -1);
-            Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+            Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
         }
     }
     private _onTouchedBtnDown(): void {
         const data = this.data;
         if (data) {
             BwWarRuleHelper.moveWarEventId(data.warRule, data.warEventId, 1);
-            Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+            Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
         }
     }
     private _onTouchedBtnDelete(): void {
         const data = this.data;
         if (data) {
             BwWarRuleHelper.deleteWarEventId(data.warRule, data.warEventId);
-            Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+            Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
         }
     }
     private _onNotifyLanguageChanged(): void {
@@ -1095,10 +1097,10 @@ class WarEventRenderer extends UiListItemRenderer<DataForWarEventRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelWarEventIdTitle.text = `${Lang.getText(Lang.Type.B0462)}:`;
-        this._btnUp.label               = Lang.getText(Lang.Type.B0463);
-        this._btnDown.label             = Lang.getText(Lang.Type.B0464);
-        this._btnDelete.label           = Lang.getText(Lang.Type.B0220);
+        this._labelWarEventIdTitle.text = `${Lang.getText(LangTextType.B0462)}:`;
+        this._btnUp.label               = Lang.getText(LangTextType.B0463);
+        this._btnDown.label             = Lang.getText(LangTextType.B0464);
+        this._btnDelete.label           = Lang.getText(LangTextType.B0220);
         this._updateLabelWarEventName();
     }
     private _updateLabelWarEventName(): void {

@@ -1,6 +1,7 @@
 
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as ProtoManager        from "../../../utility/ProtoManager";
 import * as Types               from "../../../utility/Types";
@@ -57,7 +58,7 @@ export namespace SaveSlot {
     export function setPreviewingSlotIndex(index: number): void {
         if (getPreviewingSlotIndex() !== index) {
             _previewingSlotIndex = index;
-            Notify.dispatch(Notify.Type.SpmPreviewingWarSaveSlotChanged);
+            Notify.dispatch(NotifyType.SpmPreviewingWarSaveSlotChanged);
         }
     }
 

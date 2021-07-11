@@ -4,15 +4,15 @@ import { UiTextInput }          from "../../../gameui/UiTextInput";
 import { UiImage }              from "../../../gameui/UiImage";
 import { UiPanel }              from "../../../gameui/UiPanel";
 import { UiLabel }              from "../../../gameui/UiLabel";
+import { NotifyType }           from "../../../utility/NotifyType";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as LocalStorage        from "../../../utility/LocalStorage";
-import * as Notify              from "../../../utility/Notify";
 import * as Types               from "../../../utility/Types";
 import * as UserModel           from "../../user/model/UserModel";
 import * as UserProxy           from "../../user/model/UserProxy";
-import NotifyType               = Notify.Type;
 
 export class UserSetPasswordPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -82,7 +82,7 @@ export class UserSetPasswordPanel extends UiPanel<void> {
     }
 
     private _onMsgUserSetPassword(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0148));
+        FloatText.show(Lang.getText(LangTextType.A0148));
 
         const password = this._inputNewPassword0.text;
         LocalStorage.setPassword(password);
@@ -96,21 +96,21 @@ export class UserSetPasswordPanel extends UiPanel<void> {
     private _onTouchedBtnConfirm(): void {
         const newPassword = this._inputNewPassword0.text;
         if (!Helpers.checkIsPasswordValid(newPassword)) {
-            FloatText.show(Lang.getText(Lang.Type.A0003));
+            FloatText.show(Lang.getText(LangTextType.A0003));
         } else if (newPassword !== this._inputNewPassword1.text) {
-            FloatText.show(Lang.getText(Lang.Type.A0147));
+            FloatText.show(Lang.getText(LangTextType.A0147));
         } else {
             UserProxy.reqUserSetPassword(this._inputOldPassword.text, newPassword);
         }
     }
 
     private _updateOnLanguageChanged(): void {
-        this._labelTitle.text               = Lang.getText(Lang.Type.B0426);
-        this._labelOldPasswordTitle.text    = Lang.getText(Lang.Type.B0427);
-        this._labelNewPasswordTitle0.text   = Lang.getText(Lang.Type.B0428);
-        this._labelNewPasswordTitle1.text   = Lang.getText(Lang.Type.B0429);
-        this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-        this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
+        this._labelTitle.text               = Lang.getText(LangTextType.B0426);
+        this._labelOldPasswordTitle.text    = Lang.getText(LangTextType.B0427);
+        this._labelNewPasswordTitle0.text   = Lang.getText(LangTextType.B0428);
+        this._labelNewPasswordTitle1.text   = Lang.getText(LangTextType.B0429);
+        this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+        this._btnCancel.label               = Lang.getText(LangTextType.B0154);
     }
 
     private _showOpenAnimation(): void {

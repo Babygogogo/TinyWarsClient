@@ -2569,14 +2569,14 @@ var eui;
          * @private
          */
         Group.prototype.$hitTest = function (stageX, stageY) {
+            //Bug: 当 group.sacleX or scaleY ==0 的时候，随便点击那里都点击成功
+            //虽然 super.$hitTest里面检测过一次 宽高大小，但是没有直接退出这个函数，所以要再判断一次;
+            if (!this.$visible || !this.touchEnabled || this.scaleX === 0 || this.scaleY === 0) {
+                return null;
+            }
             var target = _super.prototype.$hitTest.call(this, stageX, stageY);
             if (target || this.$Group[5 /* touchThrough */]) {
                 return target;
-            }
-            //Bug: 当 group.sacleX or scaleY ==0 的时候，随便点击那里都点击成功
-            //虽然 super.$hitTest里面检测过一次 宽高大小，但是没有直接退出这个函数，所以要再判断一次;（width,height可以不判断）
-            if (!this.$visible || !this.touchEnabled || this.scaleX === 0 || this.scaleY === 0 || this.width === 0 || this.height === 0) {
-                return null;
             }
             var point = this.globalToLocal(stageX, stageY, egret.$TempPoint);
             var values = this.$UIComponent;
@@ -3697,6 +3697,11 @@ var eui;
          * @platform Web,Native
          */
         Component.prototype.getPreferredBounds = function (bounds) {
+        };
+        Component.prototype.unwatchAll = function () {
+            if (this.skin && this.skin.unwatchAll) {
+                this.skin.unwatchAll();
+            }
         };
         return Component;
     }(egret.DisplayObjectContainer));
@@ -7592,6 +7597,96 @@ var eui;
         var wingKeys = ["id", "locked", "includeIn", "excludeFrom"];
         var htmlEntities = [["<", "&lt;"], [">", "&gt;"], ["&", "&amp;"], ["\"", "&quot;"], ["'", "&apos;"]];
         var jsKeyWords = ["null", "NaN", "undefined", "true", "false"];
+        var getRepeatedIds;
+        var getIds;
+        var checkDeclarations;
+        if (true) {
+            /**
+             * 获取重复的ID名
+             */
+            getRepeatedIds = function (xml) {
+                var result = [];
+                this.repeatedIdMap = {};
+                this.getIds(xml, result);
+                return result;
+            };
+            getIds = function (xml, result) {
+                if (xml.namespace != sys.NS_W && xml.attributes.id) {
+                    var id = xml.attributes.id;
+                    if (this.repeatedIdMap[id]) {
+                        result.push(toXMLString(xml));
+                    }
+                    else {
+                        this.repeatedIdMap[id] = true;
+                    }
+                }
+                var children = xml.children;
+                if (children) {
+                    var length_15 = children.length;
+                    for (var i = 0; i < length_15; i++) {
+                        var node = children[i];
+                        if (node.nodeType !== 1 || this.isInnerClass(node)) {
+                            continue;
+                        }
+                        this.getIds(node, result);
+                    }
+                }
+            };
+            function toXMLString(node) {
+                if (!node) {
+                    return "";
+                }
+                var str = "  at <" + node.name;
+                var attributes = node.attributes;
+                var keys = Object.keys(attributes);
+                var length = keys.length;
+                for (var i = 0; i < length; i++) {
+                    var key = keys[i];
+                    var value = attributes[key];
+                    if (key == "id" && value.substring(0, 2) == "__") {
+                        continue;
+                    }
+                    str += " " + key + "=\"" + value + "\"";
+                }
+                if (node.children.length == 0) {
+                    str += "/>";
+                }
+                else {
+                    str += ">";
+                }
+                return str;
+            }
+            /**
+             * 清理声明节点里的状态标志
+             */
+            checkDeclarations = function (declarations, list) {
+                if (!declarations) {
+                    return;
+                }
+                var children = declarations.children;
+                if (children) {
+                    var length_16 = children.length;
+                    for (var i = 0; i < length_16; i++) {
+                        var node = children[i];
+                        if (node.nodeType != 1) {
+                            continue;
+                        }
+                        if (node.attributes.includeIn) {
+                            list.push(toXMLString(node));
+                        }
+                        if (node.attributes.excludeFrom) {
+                            list.push(toXMLString(node));
+                        }
+                        checkDeclarations(node, list);
+                    }
+                }
+            };
+            function getPropertyStr(child) {
+                var parentStr = toXMLString(child.parent);
+                var childStr = toXMLString(child).substring(5);
+                return parentStr + "\n      \t" + childStr;
+            }
+        }
         /**
          * @private
          */
@@ -7627,13 +7722,13 @@ var eui;
                 if (hasClass && clazz) {
                     egret.registerClass(clazz, className);
                     var paths = className.split(".");
-                    var length_15 = paths.length;
+                    var length_17 = paths.length;
                     var definition = __global;
-                    for (var i = 0; i < length_15 - 1; i++) {
+                    for (var i = 0; i < length_17 - 1; i++) {
                         var path = paths[i];
                         definition = definition[path] || (definition[path] = {});
                     }
-                    if (definition[paths[length_15 - 1]]) {
+                    if (definition[paths[length_17 - 1]]) {
                         if (true && !parsedClasses[className]) {
                             egret.$warn(2101, className, codeText);
                         }
@@ -7642,7 +7737,7 @@ var eui;
                         if (true) {
                             parsedClasses[className] = true;
                         }
-                        definition[paths[length_15 - 1]] = clazz;
+                        definition[paths[length_17 - 1]] = clazz;
                     }
                 }
                 return clazz;
@@ -7700,13 +7795,13 @@ var eui;
                 if (hasClass && clazz) {
                     egret.registerClass(clazz, className);
                     var paths = className.split(".");
-                    var length_16 = paths.length;
+                    var length_18 = paths.length;
                     var definition = __global;
-                    for (var i = 0; i < length_16 - 1; i++) {
+                    for (var i = 0; i < length_18 - 1; i++) {
                         var path = paths[i];
                         definition = definition[path] || (definition[path] = {});
                     }
-                    if (definition[paths[length_16 - 1]]) {
+                    if (definition[paths[length_18 - 1]]) {
                         if (true && !parsedClasses[className]) {
                             egret.$warn(2101, className, toXMLString(xmlData));
                         }
@@ -7715,7 +7810,7 @@ var eui;
                         if (true) {
                             parsedClasses[className] = true;
                         }
-                        definition[paths[length_16 - 1]] = clazz;
+                        definition[paths[length_18 - 1]] = clazz;
                     }
                 }
                 return clazz;
@@ -7768,8 +7863,8 @@ var eui;
                 this.getStateNames();
                 var children = this.currentXML.children;
                 if (children) {
-                    var length_17 = children.length;
-                    for (var i = 0; i < length_17; i++) {
+                    var length_19 = children.length;
+                    for (var i = 0; i < length_19; i++) {
                         var node = children[i];
                         if (node.nodeType === 1 && node.namespace == sys.NS_W &&
                             node.localName == DECLARATIONS) {
@@ -7974,8 +8069,8 @@ var eui;
                 this.initlizeChildNode(node, cb, varName);
                 var delayAssignments = this.delayAssignmentDic[id];
                 if (delayAssignments) {
-                    var length_18 = delayAssignments.length;
-                    for (var i = 0; i < length_18; i++) {
+                    var length_20 = delayAssignments.length;
+                    for (var i = 0; i < length_20; i++) {
                         var codeBlock = delayAssignments[i];
                         cb.concat(codeBlock);
                     }
@@ -8010,8 +8105,8 @@ var eui;
                     case TYPE_ARRAY:
                         var values = [];
                         if (children) {
-                            var length_19 = children.length;
-                            for (var i = 0; i < length_19; i++) {
+                            var length_21 = children.length;
+                            for (var i = 0; i < length_21; i++) {
                                 var child = children[i];
                                 if (child.nodeType == 1) {
                                     values.push(this.createFuncForNode(child));
@@ -8510,8 +8605,8 @@ var eui;
                 if (this.declarations) {
                     var children = this.declarations.children;
                     if (children && children.length > 0) {
-                        var length_20 = children.length;
-                        for (var i = 0; i < length_20; i++) {
+                        var length_22 = children.length;
+                        for (var i = 0; i < length_22; i++) {
                             var decl = children[i];
                             if (decl.nodeType != 1) {
                                 continue;
@@ -8646,8 +8741,8 @@ var eui;
                 var children = root.children;
                 var item;
                 if (children) {
-                    var length_21 = children.length;
-                    for (var i = 0; i < length_21; i++) {
+                    var length_23 = children.length;
+                    for (var i = 0; i < length_23; i++) {
                         item = children[i];
                         if (item.nodeType == 1 &&
                             item.localName == "states") {
@@ -8670,8 +8765,8 @@ var eui;
                 }
                 if (statesValue) {
                     var states = statesValue.split(",");
-                    var length_22 = states.length;
-                    for (var i = 0; i < length_22; i++) {
+                    var length_24 = states.length;
+                    for (var i = 0; i < length_24; i++) {
                         var stateName = states[i].trim();
                         if (!stateName) {
                             continue;
@@ -8977,93 +9072,6 @@ var eui;
         }());
         sys.EXMLParser = EXMLParser;
         __reflect(EXMLParser.prototype, "eui.sys.EXMLParser");
-        if (true) {
-            /**
-             * 获取重复的ID名
-             */
-            function getRepeatedIds(xml) {
-                var result = [];
-                this.repeatedIdMap = {};
-                this.getIds(xml, result);
-                return result;
-            }
-            function getIds(xml, result) {
-                if (xml.namespace != sys.NS_W && xml.attributes.id) {
-                    var id = xml.attributes.id;
-                    if (this.repeatedIdMap[id]) {
-                        result.push(toXMLString(xml));
-                    }
-                    else {
-                        this.repeatedIdMap[id] = true;
-                    }
-                }
-                var children = xml.children;
-                if (children) {
-                    var length_23 = children.length;
-                    for (var i = 0; i < length_23; i++) {
-                        var node = children[i];
-                        if (node.nodeType !== 1 || this.isInnerClass(node)) {
-                            continue;
-                        }
-                        this.getIds(node, result);
-                    }
-                }
-            }
-            function toXMLString(node) {
-                if (!node) {
-                    return "";
-                }
-                var str = "  at <" + node.name;
-                var attributes = node.attributes;
-                var keys = Object.keys(attributes);
-                var length = keys.length;
-                for (var i = 0; i < length; i++) {
-                    var key = keys[i];
-                    var value = attributes[key];
-                    if (key == "id" && value.substring(0, 2) == "__") {
-                        continue;
-                    }
-                    str += " " + key + "=\"" + value + "\"";
-                }
-                if (node.children.length == 0) {
-                    str += "/>";
-                }
-                else {
-                    str += ">";
-                }
-                return str;
-            }
-            /**
-             * 清理声明节点里的状态标志
-             */
-            function checkDeclarations(declarations, list) {
-                if (!declarations) {
-                    return;
-                }
-                var children = declarations.children;
-                if (children) {
-                    var length_24 = children.length;
-                    for (var i = 0; i < length_24; i++) {
-                        var node = children[i];
-                        if (node.nodeType != 1) {
-                            continue;
-                        }
-                        if (node.attributes.includeIn) {
-                            list.push(toXMLString(node));
-                        }
-                        if (node.attributes.excludeFrom) {
-                            list.push(toXMLString(node));
-                        }
-                        checkDeclarations(node, list);
-                    }
-                }
-            }
-            function getPropertyStr(child) {
-                var parentStr = toXMLString(child.parent);
-                var childStr = toXMLString(child).substring(5);
-                return parentStr + "\n      \t" + childStr;
-            }
-        }
     })(sys = eui.sys || (eui.sys = {}));
 })(eui || (eui = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -14649,6 +14657,15 @@ var eui;
             stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.onTouchCancel, this);
             this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveListeners, this);
+            var values = this.$Scroller;
+            var viewport = values[10 /* viewport */];
+            var uiValues = viewport.$UIComponent;
+            if (values[8 /* touchScrollH */].isStarted()) {
+                values[8 /* touchScrollH */].finish(viewport.scrollH, viewport.contentWidth - uiValues[10 /* width */]);
+            }
+            if (values[9 /* touchScrollV */].isStarted()) {
+                values[9 /* touchScrollV */].finish(viewport.scrollV, viewport.contentHeight - uiValues[11 /* height */]);
+            }
         };
         /**
          * @private
@@ -15016,6 +15033,7 @@ var eui;
              * @private
              */
             _this.$stateValues = new eui.sys.StateValues();
+            _this.$watchers = [];
             return _this;
         }
         Object.defineProperty(Skin.prototype, "elementsContent", {
@@ -15075,6 +15093,15 @@ var eui;
          */
         Skin.prototype.onAddedToStage = function (event) {
             this.initializeStates(this._hostComponent.$stage);
+        };
+        Skin.prototype.unwatchAll = function () {
+            if (this.$watchers && this.$watchers.length > 0) {
+                for (var _i = 0, _a = this.$watchers; _i < _a.length; _i++) {
+                    var watcher = _a[_i];
+                    watcher.unwatch();
+                }
+                this.$watchers.length = 0;
+            }
         };
         return Skin;
     }(egret.EventDispatcher));
@@ -17254,6 +17281,13 @@ var eui;
                 };
                 watcher.setHandler(assign, null);
                 assign(watcher.getValue());
+                if (egret.is(host, "eui.Skin")) {
+                    var skin = host;
+                    if (!skin.$watchers) {
+                        skin.$watchers = [];
+                    }
+                    skin.$watchers.push(watcher);
+                }
             }
             return watcher;
         };
@@ -17301,11 +17335,25 @@ var eui;
             var watcher;
             for (var i = 0; i < length; i++) {
                 var index = chainIndex[i];
-                var chain = templates[index].split(".");
-                watcher = eui.Watcher.watch(host, chain, null, null);
+                var element = templates[index];
+                if (typeof element == "string") {
+                    var chain = element.split(".");
+                    watcher = eui.Watcher.watch(host, chain, null, null);
+                }
+                else if (element instanceof eui.Watcher) {
+                    watcher = element;
+                    watcher.reset(host);
+                }
                 if (watcher) {
                     templates[index] = watcher;
                     watcher.setHandler(assign, null);
+                    if (egret.is(host, "eui.Skin")) {
+                        var skin = host;
+                        if (!skin.$watchers) {
+                            skin.$watchers = [];
+                        }
+                        skin.$watchers.push(watcher);
+                    }
                 }
             }
             assign();

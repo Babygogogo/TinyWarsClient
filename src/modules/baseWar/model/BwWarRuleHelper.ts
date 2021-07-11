@@ -5,6 +5,7 @@ import * as Logger              from "../../../utility/Logger";
 import * as Helpers             from "../../../utility/Helpers";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Types               from "../../../utility/Types";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import LanguageType         = Types.LanguageType;
@@ -509,8 +510,8 @@ export function createDefaultWarRule(ruleId: number, playersCount: number): IWar
     return {
         ruleId,
         ruleNameArray   : [
-            { languageType: LanguageType.Chinese, text: Lang.getText(Lang.Type.B0001, LanguageType.Chinese) },
-            { languageType: LanguageType.English, text: Lang.getText(Lang.Type.B0001, LanguageType.English) },
+            { languageType: LanguageType.Chinese, text: Lang.getText(LangTextType.B0001, LanguageType.Chinese) },
+            { languageType: LanguageType.English, text: Lang.getText(LangTextType.B0001, LanguageType.English) },
         ],
         ruleAvailability: {
             canMcw  : false,

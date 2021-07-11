@@ -5,6 +5,7 @@ import * as BroadcastModel      from "../model/BroadcastModel";
 import * as Lang                from "../../../utility/Lang";
 import * as Types               from "../../../utility/Types";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as StageManager        from "../../../utility/StageManager";
 
@@ -42,9 +43,9 @@ export class BroadcastPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.TimeTick,                   callback: this._onNotifyTimeTick },
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgBroadcastGetMessageList, callback: this._onMsgBroadcastGetMessageList },
+            { type: NotifyType.TimeTick,                   callback: this._onNotifyTimeTick },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgBroadcastGetMessageList, callback: this._onMsgBroadcastGetMessageList },
         ]);
 
         this.touchEnabled   = false;

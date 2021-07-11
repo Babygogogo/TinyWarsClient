@@ -11,7 +11,9 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as MeModel                     from "../model/MeModel";
 
 export class MeSimAdvancedSettingsPage extends UiTabPage<void> {
@@ -30,7 +32,7 @@ export class MeSimAdvancedSettingsPage extends UiTabPage<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._listPlayer.setItemRenderer(PlayerRenderer);
 
@@ -51,9 +53,9 @@ export class MeSimAdvancedSettingsPage extends UiTabPage<void> {
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}:`;
-        this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}:`;
-        this._labelPlayerList.text          = Lang.getText(Lang.Type.B0395);
+        this._labelMapNameTitle.text        = `${Lang.getText(LangTextType.B0225)}:`;
+        this._labelPlayersCountTitle.text   = `${Lang.getText(LangTextType.B0229)}:`;
+        this._labelPlayerList.text          = Lang.getText(LangTextType.B0395);
     }
 
     private _updateLabelMapName(): void {
@@ -115,8 +117,8 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataController(playerIndex: number): DataForInfoRenderer {
         const isControlledByPlayer = MeModel.Sim.getIsControlledByPlayer(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0424),
-            infoText                : isControlledByPlayer ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256),
+            titleText               : Lang.getText(LangTextType.B0424),
+            infoText                : isControlledByPlayer ? Lang.getText(LangTextType.B0031) : Lang.getText(LangTextType.B0256),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : () => {
                 MeModel.Sim.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
@@ -126,7 +128,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
     private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
         return {
-            titleText               : Lang.getText(Lang.Type.B0019),
+            titleText               : Lang.getText(LangTextType.B0019),
             infoText                : Lang.getPlayerTeamName(MeModel.Sim.getTeamIndex(playerIndex)),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : () => {
@@ -141,7 +143,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const coId          = MeModel.Sim.getCoId(playerIndex);
         const configVersion = MeModel.Sim.getWarData().settingsForCommon.configVersion;
         return {
-            titleText               : Lang.getText(Lang.Type.B0425),
+            titleText               : Lang.getText(LangTextType.B0425),
             infoText                : ConfigManager.getCoNameAndTierText(configVersion, coId),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : () => {
@@ -160,7 +162,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
     private _createDataSkinId(playerIndex: number): DataForInfoRenderer {
         return {
-            titleText               : Lang.getText(Lang.Type.B0397),
+            titleText               : Lang.getText(LangTextType.B0397),
             infoText                : Lang.getUnitAndTileSkinName(MeModel.Sim.getUnitAndTileSkinId(playerIndex)),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : () => {
@@ -172,7 +174,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataInitialFund(playerIndex: number): DataForInfoRenderer {
         const currValue = MeModel.Sim.getInitialFund(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0178),
+            titleText               : Lang.getText(LangTextType.B0178),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
             callbackOnTouchedTitle  : () => {
@@ -180,16 +182,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                     const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0178),
+                        title           : Lang.getText(LangTextType.B0178),
                         currentValue    : "" + currValue,
                         maxChars        : 7,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 MeModel.Sim.setInitialFund(playerIndex, value);
                                 this._updateView();
@@ -205,22 +207,22 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
         const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0179),
+            titleText               : Lang.getText(LangTextType.B0179),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
             callbackOnTouchedTitle  : () => {
                 this._confirmUseCustomRule(() => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0179),
+                        title           : Lang.getText(LangTextType.B0179),
                         currentValue    : "" + currValue,
                         maxChars        : 5,
                         charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 MeModel.Sim.setIncomeMultiplier(playerIndex, value);
                                 this._updateView();
@@ -236,22 +238,22 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
         const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0180),
+            titleText               : Lang.getText(LangTextType.B0180),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
             callbackOnTouchedTitle  : () => {
                 this._confirmUseCustomRule(() => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0180),
+                        title           : Lang.getText(LangTextType.B0180),
                         currentValue    : "" + currValue,
                         maxChars        : 3,
                         charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 MeModel.Sim.setEnergyAddPctOnLoadCo(playerIndex, value);
                                 this._updateView();
@@ -267,22 +269,22 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
         const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0181),
+            titleText               : Lang.getText(LangTextType.B0181),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
             callbackOnTouchedTitle  : () => {
                 this._confirmUseCustomRule(() => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0181),
+                        title           : Lang.getText(LangTextType.B0181),
                         currentValue    : "" + currValue,
                         maxChars        : 5,
                         charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 MeModel.Sim.setEnergyGrowthMultiplier(playerIndex, value);
                                 this._updateView();
@@ -298,22 +300,22 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
         const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0182),
+            titleText               : Lang.getText(LangTextType.B0182),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
             callbackOnTouchedTitle  : () => {
                 this._confirmUseCustomRule(() => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0182),
+                        title           : Lang.getText(LangTextType.B0182),
                         currentValue    : "" + currValue,
                         maxChars        : 3,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 MeModel.Sim.setMoveRangeModifier(playerIndex, value);
                                 this._updateView();
@@ -329,22 +331,22 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
         const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0183),
+            titleText               : Lang.getText(LangTextType.B0183),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
             callbackOnTouchedTitle  : () => {
                 this._confirmUseCustomRule(() => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0183),
+                        title           : Lang.getText(LangTextType.B0183),
                         currentValue    : "" + currValue,
                         maxChars        : 5,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 MeModel.Sim.setAttackPowerModifier(playerIndex, value);
                                 this._updateView();
@@ -360,22 +362,22 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
         const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0184),
+            titleText               : Lang.getText(LangTextType.B0184),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
             callbackOnTouchedTitle  : () => {
                 this._confirmUseCustomRule(() => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0184),
+                        title           : Lang.getText(LangTextType.B0184),
                         currentValue    : "" + currValue,
                         maxChars        : 3,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 MeModel.Sim.setVisionRangeModifier(playerIndex, value);
                                 this._updateView();
@@ -391,22 +393,22 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleLuckMinLimit;
         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0189),
+            titleText               : Lang.getText(LangTextType.B0189),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
             callbackOnTouchedTitle  : () => {
                 this._confirmUseCustomRule(() => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0189),
+                        title           : Lang.getText(LangTextType.B0189),
                         currentValue    : "" + currValue,
                         maxChars        : 4,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 const upperLimit = MeModel.Sim.getLuckUpperLimit(playerIndex);
                                 if (value <= upperLimit) {
@@ -428,22 +430,22 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleLuckMinLimit;
         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0190),
+            titleText               : Lang.getText(LangTextType.B0190),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
             callbackOnTouchedTitle  : () => {
                 this._confirmUseCustomRule(() => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0190),
+                        title           : Lang.getText(LangTextType.B0190),
                         currentValue    : "" + currValue,
                         maxChars        : 4,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 const lowerLimit = MeModel.Sim.getLuckLowerLimit(playerIndex);
                                 if (value >= lowerLimit) {
@@ -466,7 +468,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             callback();
         } else {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0129),
+                content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     MeModel.Sim.setPresetWarRuleId(null);
                     callback();

@@ -1,6 +1,8 @@
 
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Types               from "../../../utility/Types";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as ConfigManager       from "../../../utility/ConfigManager";
@@ -77,9 +79,9 @@ export class CommonDamageChartPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-            { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,    callback: this.close },
@@ -168,17 +170,17 @@ export class CommonDamageChartPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-        this._labelTitle.text           = Lang.getText(Lang.Type.B0440);
-        this._labelDamageChart.text     = Lang.getText(Lang.Type.B0334);
-        this._labelOffenseMain1.text    = Lang.getText(Lang.Type.B0335);
-        this._labelOffenseSub1.text     = Lang.getText(Lang.Type.B0336);
-        this._labelDefenseMain1.text    = Lang.getText(Lang.Type.B0337);
-        this._labelDefenseSub1.text     = Lang.getText(Lang.Type.B0338);
-        this._labelOffenseMain2.text    = Lang.getText(Lang.Type.B0335);
-        this._labelOffenseSub2.text     = Lang.getText(Lang.Type.B0336);
-        this._labelDefenseMain2.text    = Lang.getText(Lang.Type.B0337);
-        this._labelDefenseSub2.text     = Lang.getText(Lang.Type.B0338);
+        this._btnBack.label             = Lang.getText(LangTextType.B0146);
+        this._labelTitle.text           = Lang.getText(LangTextType.B0440);
+        this._labelDamageChart.text     = Lang.getText(LangTextType.B0334);
+        this._labelOffenseMain1.text    = Lang.getText(LangTextType.B0335);
+        this._labelOffenseSub1.text     = Lang.getText(LangTextType.B0336);
+        this._labelDefenseMain1.text    = Lang.getText(LangTextType.B0337);
+        this._labelDefenseSub1.text     = Lang.getText(LangTextType.B0338);
+        this._labelOffenseMain2.text    = Lang.getText(LangTextType.B0335);
+        this._labelOffenseSub2.text     = Lang.getText(LangTextType.B0336);
+        this._labelDefenseMain2.text    = Lang.getText(LangTextType.B0337);
+        this._labelDefenseSub2.text     = Lang.getText(LangTextType.B0338);
         this._updateListInfo();
     }
 
@@ -235,58 +237,58 @@ export class CommonDamageChartPanel extends UiPanel<void> {
     private _createInfoHp(cfg: IUnitTemplateCfg): DataForInfoRenderer {
         const maxHp = cfg.maxHp;
         return {
-            titleText   : Lang.getText(Lang.Type.B0339),
+            titleText   : Lang.getText(LangTextType.B0339),
             valueText   : `${maxHp} / ${maxHp}`,
         };
     }
     private _createInfoProductionCost(cfg: IUnitTemplateCfg): DataForInfoRenderer {
         return {
-            titleText   : Lang.getText(Lang.Type.B0341),
+            titleText   : Lang.getText(LangTextType.B0341),
             valueText   : `${cfg.productionCost}`,
         };
     }
     private _createInfoMovement(cfg: IUnitTemplateCfg): DataForInfoRenderer {
         return {
-            titleText   : Lang.getText(Lang.Type.B0340),
+            titleText   : Lang.getText(LangTextType.B0340),
             valueText   : `${cfg.moveRange} (${Lang.getMoveTypeName(cfg.moveType)})`,
         };
     }
     private _createInfoFuel(cfg: IUnitTemplateCfg): DataForInfoRenderer {
         const maxFuel = cfg.maxFuel;
         return {
-            titleText   : Lang.getText(Lang.Type.B0342),
+            titleText   : Lang.getText(LangTextType.B0342),
             valueText   : `${maxFuel} / ${maxFuel}`,
         };
     }
     private _createInfoFuelConsumption(cfg: IUnitTemplateCfg): DataForInfoRenderer {
         return {
-            titleText   : Lang.getText(Lang.Type.B0343),
+            titleText   : Lang.getText(LangTextType.B0343),
             valueText   : `${cfg.fuelConsumptionPerTurn}${cfg.diveCfgs == null ? `` : ` (${cfg.diveCfgs[0]})`}`,
         };
     }
     private _createInfoFuelDestruction(cfg: IUnitTemplateCfg): DataForInfoRenderer {
         return {
-            titleText   : Lang.getText(Lang.Type.B0344),
+            titleText   : Lang.getText(LangTextType.B0344),
             valueText   : cfg.isDestroyedOnOutOfFuel
-                ? Lang.getText(Lang.Type.B0012)
-                : Lang.getText(Lang.Type.B0013),
+                ? Lang.getText(LangTextType.B0012)
+                : Lang.getText(LangTextType.B0013),
         };
     }
     private _createInfoAttackRange(cfg: IUnitTemplateCfg): DataForInfoRenderer {
         return {
-            titleText   : Lang.getText(Lang.Type.B0345),
-            valueText   : cfg.minAttackRange == null ? Lang.getText(Lang.Type.B0001) : `${cfg.minAttackRange} - ${cfg.maxAttackRange}`,
+            titleText   : Lang.getText(LangTextType.B0345),
+            valueText   : cfg.minAttackRange == null ? Lang.getText(LangTextType.B0001) : `${cfg.minAttackRange} - ${cfg.maxAttackRange}`,
         };
     }
     private _createInfoAttackAfterMove(cfg: IUnitTemplateCfg): DataForInfoRenderer {
         return {
-            titleText   : Lang.getText(Lang.Type.B0346),
-            valueText   : cfg.canAttackAfterMove ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+            titleText   : Lang.getText(LangTextType.B0346),
+            valueText   : cfg.canAttackAfterMove ? Lang.getText(LangTextType.B0012) : Lang.getText(LangTextType.B0013),
         };
     }
     private _createInfoVisionRange(cfg: IUnitTemplateCfg): DataForInfoRenderer {
         return {
-            titleText   : Lang.getText(Lang.Type.B0354),
+            titleText   : Lang.getText(LangTextType.B0354),
             valueText   : `${cfg.visionRange}`,
         };
     }
@@ -296,7 +298,7 @@ export class CommonDamageChartPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                titleText   : Lang.getText(Lang.Type.B0350),
+                titleText   : Lang.getText(LangTextType.B0350),
                 valueText   : `${maxValue} / ${maxValue}`,
             };
         }
@@ -307,7 +309,7 @@ export class CommonDamageChartPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                titleText   : Lang.getText(Lang.Type.B0347),
+                titleText   : Lang.getText(LangTextType.B0347),
                 valueText   : `${maxValue} / ${maxValue}`,
             };
         }
@@ -318,7 +320,7 @@ export class CommonDamageChartPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                titleText   : Lang.getText(Lang.Type.B0348),
+                titleText   : Lang.getText(LangTextType.B0348),
                 valueText   : `${maxValue} / ${maxValue}`,
             };
         }
@@ -329,7 +331,7 @@ export class CommonDamageChartPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                titleText   : Lang.getText(Lang.Type.B0349),
+                titleText   : Lang.getText(LangTextType.B0349),
                 valueText   : `${maxValue} / ${maxValue}`,
             };
         }
@@ -337,8 +339,8 @@ export class CommonDamageChartPanel extends UiPanel<void> {
     private _createInfoDive(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
         const isDiver = !!cfg.diveCfgs;
         return {
-            titleText   : Lang.getText(Lang.Type.B0439),
-            valueText   : isDiver ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+            titleText   : Lang.getText(LangTextType.B0439),
+            valueText   : isDiver ? Lang.getText(LangTextType.B0012) : Lang.getText(LangTextType.B0013),
         };
     }
 
@@ -453,7 +455,7 @@ class DamageRenderer extends UiListItemRenderer<DataForDamageRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
         ]);
 
         this._unitView = new WarMapUnitView();

@@ -3,6 +3,7 @@ import { RwWar }                        from "./RwWar";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as ProtoManager                from "../../../utility/ProtoManager";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
@@ -39,7 +40,7 @@ export function getReplayData(): ProtoTypes.NetMessage.MsgReplayGetData.IS | und
 export function setPreviewingReplayId(replayId: number): void {
     if (getPreviewingReplayId() != replayId) {
         _previewingReplayId = replayId;
-        Notify.dispatch(Notify.Type.RwPreviewingReplayIdChanged);
+        Notify.dispatch(NotifyType.RwPreviewingReplayIdChanged);
     }
 }
 export function getPreviewingReplayId(): number | null | undefined {

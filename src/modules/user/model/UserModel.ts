@@ -3,8 +3,10 @@ import * as UserProxy           from "./UserProxy";
 import * as CommonModel         from "../../common/model/CommonModel";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import NetMessage               = ProtoTypes.NetMessage;
 import IUserPublicInfo          = ProtoTypes.User.IUserPublicInfo;
@@ -21,8 +23,8 @@ const _userPublicInfoRequests   = new Map<number, ((info: NetMessage.MsgUserGetP
 
 export function init(): void {
     Notify.addEventListeners([
-        { type: Notify.Type.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, },
-        { type: Notify.Type.MsgUserLogout,          callback: _onNotifyMsgUserLogout, },
+        { type: NotifyType.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, },
+        { type: NotifyType.MsgUserLogout,          callback: _onNotifyMsgUserLogout, },
     ], undefined);
 }
 
@@ -129,8 +131,8 @@ export function getUserPublicInfo(userId: number): Promise<IUserPublicInfo | und
         const callbackOnSucceed = (e: egret.Event): void => {
             const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
             if (data.userId === userId) {
-                Notify.removeEventListener(Notify.Type.MsgUserGetPublicInfo,        callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgUserGetPublicInfoFailed,  callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgUserGetPublicInfo,        callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgUserGetPublicInfoFailed,  callbackOnFailed);
 
                 for (const cb of _userPublicInfoRequests.get(userId)) {
                     cb(data);
@@ -143,8 +145,8 @@ export function getUserPublicInfo(userId: number): Promise<IUserPublicInfo | und
         const callbackOnFailed = (e: egret.Event): void => {
             const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
             if (data.userId === userId) {
-                Notify.removeEventListener(Notify.Type.MsgUserGetPublicInfo,        callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgUserGetPublicInfoFailed,  callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgUserGetPublicInfo,        callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgUserGetPublicInfoFailed,  callbackOnFailed);
 
                 for (const cb of _userPublicInfoRequests.get(userId)) {
                     cb(data);
@@ -155,8 +157,8 @@ export function getUserPublicInfo(userId: number): Promise<IUserPublicInfo | und
             }
         };
 
-        Notify.addEventListener(Notify.Type.MsgUserGetPublicInfo,       callbackOnSucceed);
-        Notify.addEventListener(Notify.Type.MsgUserGetPublicInfoFailed, callbackOnFailed);
+        Notify.addEventListener(NotifyType.MsgUserGetPublicInfo,       callbackOnSucceed);
+        Notify.addEventListener(NotifyType.MsgUserGetPublicInfoFailed, callbackOnFailed);
 
         UserProxy.reqUserGetPublicInfo(userId);
     });
@@ -237,10 +239,10 @@ export function updateOnMsgUserSetSettings(data: NetMessage.MsgUserSetSettings.I
 
     if (oldVersion !== getSelfSettingsTextureVersion()) {
         CommonModel.updateOnUnitAndTileTextureVersionChanged();
-        Notify.dispatch(Notify.Type.UnitAndTileTextureVersionChanged);
+        Notify.dispatch(NotifyType.UnitAndTileTextureVersionChanged);
     }
     if (oldIsShowGridBorder !== getSelfSettingsIsShowGridBorder()) {
-        Notify.dispatch(Notify.Type.IsShowGridBorderChanged);
+        Notify.dispatch(NotifyType.IsShowGridBorderChanged);
     }
 }
 
@@ -250,11 +252,11 @@ function _onNotifyNetworkDisconnected(): void {
 function _onNotifyMsgUserLogout(e: egret.Event): void {
     const data = e.data as NetMessage.MsgUserLogout.IS;
     if (data.reason === Types.LogoutType.SelfRequest) {
-        FloatText.show(Lang.getText(Lang.Type.A0005));
+        FloatText.show(Lang.getText(LangTextType.A0005));
     } else if (data.reason === Types.LogoutType.LoginCollision) {
-        FloatText.show(Lang.getText(Lang.Type.A0006));
+        FloatText.show(Lang.getText(LangTextType.A0006));
     } else if (data.reason === Types.LogoutType.NetworkFailure) {
-        FloatText.show(Lang.getText(Lang.Type.A0013));
+        FloatText.show(Lang.getText(LangTextType.A0013));
     }
 
     setIsLoggedIn(false);

@@ -49,10 +49,12 @@ import * as NetManager              from "../network/NetManager";
 import * as CompatibilityHelper     from "./CompatibilityHelper";
 import * as ConfigManager           from "./ConfigManager";
 import * as Lang                    from "./Lang";
+import { LangTextType } from "./LangTextType";
 import * as LocalStorage            from "./LocalStorage";
 import * as Logger                  from "./Logger";
 import * as NoSleepManager          from "./NoSleepManager";
 import * as Notify                  from "./Notify";
+import { NotifyType } from "./NotifyType";
 import * as ProtoManager            from "./ProtoManager";
 import * as ProtoTypes              from "./ProtoTypes";
 import * as ResManager              from "./ResManager";
@@ -64,11 +66,11 @@ const _NET_EVENTS = [
     { msgCode: NetMessageCodes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
 ];
 const _NOTIFY_EVENTS = [
-    { type: Notify.Type.ConfigLoaded,               callback: _onNotifyConfigLoaded },
-    { type: Notify.Type.NetworkConnected,           callback: _onNotifyNetworkConnected, },
-    { type: Notify.Type.MsgUserLogin,               callback: _onMsgUserLogin },
-    { type: Notify.Type.MsgUserLogout,              callback: _onMsgUserLogout },
-    { type: Notify.Type.MsgMpwCommonContinueWar,    callback: _onMsgMpwCommonContinueWar },
+    { type: NotifyType.ConfigLoaded,               callback: _onNotifyConfigLoaded },
+    { type: NotifyType.NetworkConnected,           callback: _onNotifyNetworkConnected, },
+    { type: NotifyType.MsgUserLogin,               callback: _onMsgUserLogin },
+    { type: NotifyType.MsgUserLogout,              callback: _onMsgUserLogout },
+    { type: NotifyType.MsgMpwCommonContinueWar,    callback: _onMsgMpwCommonContinueWar },
 ];
 
 let _hasOnceWentToLobby = false;
@@ -298,8 +300,8 @@ function _onMsgCommonServerDisconnect(): void {
     UserModel.clearLoginInfo();
     gotoLogin();
 
-    const title     = Lang.getText(Lang.Type.B0025);
-    const content   = Lang.getText(Lang.Type.A0020);
+    const title     = Lang.getText(LangTextType.B0025);
+    const content   = Lang.getText(LangTextType.A0020);
     if ((title == null) || (content == null)) {
         Logger.error(`FlowManager._onMsgCommonServerDisconnect() empty title/content.`);
         return;

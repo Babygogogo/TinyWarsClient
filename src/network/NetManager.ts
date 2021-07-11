@@ -1,8 +1,10 @@
 
 import * as Logger          from "../utility/Logger";
 import * as Notify          from "../utility/Notify";
+import { NotifyType } from "../utility/NotifyType";
 import * as FloatText       from "../utility/FloatText";
 import * as Lang            from "../utility/Lang";
+import { LangTextType } from "../utility/LangTextType";
 import * as ProtoTypes      from "../utility/ProtoTypes";
 import * as ProtoManager    from "../utility/ProtoManager";
 import * as Helpers         from "../utility/Helpers";
@@ -91,7 +93,7 @@ export function removeListeners(listeners: MsgListener[], thisObject?: any): voi
 
 export function send(container: ProtoTypes.NetMessage.IMessageContainer): void {
     if ((!_socket) || (!_socket.connected)) {
-        const errorText = Lang.getText(Lang.Type.A0014);
+        const errorText = Lang.getText(LangTextType.A0014);
         (errorText) && (FloatText.show(errorText));
     } else {
         const messageName = Helpers.getMessageName(container);
@@ -147,17 +149,17 @@ function destroySocket(): void {
 }
 
 function onSocketConnect(): void {
-    const successText = Lang.getText(Lang.Type.A0007);
+    const successText = Lang.getText(LangTextType.A0007);
     (successText) && (FloatText.show(successText));
 
-    Notify.dispatch(Notify.Type.NetworkConnected);
+    Notify.dispatch(NotifyType.NetworkConnected);
 }
 function onSocketClose(): void {
-    Notify.dispatch(Notify.Type.NetworkDisconnected);
+    Notify.dispatch(NotifyType.NetworkDisconnected);
     if (!checkCanAutoReconnect()) {
         // FloatText.show(Lang.getText(Lang.Type.A0013));
     } else {
-        const tips = Lang.getText(Lang.Type.A0008);
+        const tips = Lang.getText(LangTextType.A0008);
         (tips) && (FloatText.show(tips));
 
         if (_socket == null) {

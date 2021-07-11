@@ -11,7 +11,9 @@ import { LobbyPanel }                   from "../../lobby/view/LobbyPanel";
 import { LobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
 import * as FlowManager                 from "../../../utility/FlowManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as MeModel                     from "../model/MeModel";
@@ -54,8 +56,8 @@ export class MeMapListPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMeGetDataList,     callback: this._onNotifySMeGetDataList },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMeGetDataList,     callback: this._onNotifySMeGetDataList },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -119,10 +121,10 @@ export class MeMapListPanel extends UiPanel<void> {
     // Private functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelNoData.text      = Lang.getText(Lang.Type.B0278);
-        this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0272);
-        this._labelLoading.text     = Lang.getText(Lang.Type.A0078);
-        this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+        this._labelNoData.text      = Lang.getText(LangTextType.B0278);
+        this._labelMenuTitle.text   = Lang.getText(LangTextType.B0272);
+        this._labelLoading.text     = Lang.getText(LangTextType.A0078);
+        this._btnBack.label         = Lang.getText(LangTextType.B0146);
     }
 
     private _createDataForListMap(dict: Map<number, IMapEditorData>): DataForMapRenderer[] {
@@ -180,7 +182,7 @@ class MapRenderer extends UiListItemRenderer<DataForMapRenderer> {
         this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
         this._labelStatus.text      = Lang.getMapReviewStatusText(status);
         this._labelStatus.textColor = getReviewStatusTextColor(status);
-        this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData ? mapRawData.mapNameArray : [] }) || `(${Lang.getText(Lang.Type.B0277)})`;
+        this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData ? mapRawData.mapNameArray : [] }) || `(${Lang.getText(LangTextType.B0277)})`;
     }
 
     private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
@@ -195,16 +197,16 @@ class MapRenderer extends UiListItemRenderer<DataForMapRenderer> {
 
         if (reviewStatus === Types.MapReviewStatus.Rejected) {
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0305),
-                content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
+                title   : Lang.getText(LangTextType.B0305),
+                content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                 callback: () => {
                     FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
                 },
             });
         } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0326),
-                content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
+                title   : Lang.getText(LangTextType.B0326),
+                content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                 callback: () => {
                     FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
                 },

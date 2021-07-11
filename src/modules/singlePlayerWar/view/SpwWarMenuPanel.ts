@@ -24,8 +24,10 @@ import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as FlowManager                 from "../../../utility/FlowManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
@@ -37,7 +39,7 @@ import * as SpmProxy                    from "../../singlePlayerMode/model/SpmPr
 import * as SpwModel                    from "../model/SpwModel";
 
 // eslint-disable-next-line no-shadow
-const enum MenuType {
+enum MenuType {
     Main,
     Advanced,
 }
@@ -93,14 +95,14 @@ export class SpwWarMenuPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
-            { type: Notify.Type.BwCoIdChanged,                      callback: this._onNotifyBwCoIdChanged },
-            { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-            { type: Notify.Type.MsgSpmSaveScw,                      callback: this._onMsgSpmSaveScw },
-            { type: Notify.Type.MsgSpmSaveSfw,                      callback: this._onMsgSpmSaveSfw },
-            { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
-            { type: Notify.Type.MsgSpmDeleteWarSaveSlot,            callback: this._onNotifyMsgSpmDeleteWarSaveSlot },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
+            { type: NotifyType.BwCoIdChanged,                      callback: this._onNotifyBwCoIdChanged },
+            { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+            { type: NotifyType.MsgSpmSaveScw,                      callback: this._onMsgSpmSaveScw },
+            { type: NotifyType.MsgSpmSaveSfw,                      callback: this._onMsgSpmSaveSfw },
+            { type: NotifyType.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
+            { type: NotifyType.MsgSpmDeleteWarSaveSlot,            callback: this._onNotifyMsgSpmDeleteWarSaveSlot },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -117,14 +119,14 @@ export class SpwWarMenuPanel extends UiPanel<void> {
 
         this._updateView();
 
-        Notify.dispatch(Notify.Type.BwWarMenuPanelOpened);
+        Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
     }
     protected async _onClosed(): Promise<void> {
         this._war           = null;
         this._unitMap       = null;
         this._dataForList   = null;
 
-        Notify.dispatch(Notify.Type.BwWarMenuPanelClosed);
+        Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,17 +150,17 @@ export class SpwWarMenuPanel extends UiPanel<void> {
     }
 
     private _onMsgSpmSaveScw(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0073));
+        FloatText.show(Lang.getText(LangTextType.A0073));
     }
 
     private _onMsgSpmSaveSfw(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0073));
+        FloatText.show(Lang.getText(LangTextType.A0073));
     }
 
     private _onMsgSpmCreateSfw(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0107),
+            content : Lang.getText(LangTextType.A0107),
             callback: () => {
                 FlowManager.gotoSinglePlayerWar({
                     slotIndex       : data.slotIndex,
@@ -170,7 +172,7 @@ export class SpwWarMenuPanel extends UiPanel<void> {
     }
 
     private _onNotifyMsgSpmDeleteWarSaveSlot(): void {
-        FloatText.show(Lang.getFormattedText(Lang.Type.A0141));
+        FloatText.show(Lang.getFormattedText(LangTextType.A0141));
     }
 
     private _onNotifyLanguageChanged(): void {
@@ -212,18 +214,18 @@ export class SpwWarMenuPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0155);
-        this._labelWarInfoTitle.text    = Lang.getText(Lang.Type.B0223);
-        this._labelPlayerInfoTitle.text = Lang.getText(Lang.Type.B0224);
-        this._btnMapNameTitle.label     = Lang.getText(Lang.Type.B0225);
-        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+        this._labelMenuTitle.text       = Lang.getText(LangTextType.B0155);
+        this._labelWarInfoTitle.text    = Lang.getText(LangTextType.B0223);
+        this._labelPlayerInfoTitle.text = Lang.getText(LangTextType.B0224);
+        this._btnMapNameTitle.label     = Lang.getText(LangTextType.B0225);
+        this._btnBack.label             = Lang.getText(LangTextType.B0146);
         this._updateListWarInfo();
     }
 
     private async _updateGroupInfo(): Promise<void> {
         const war               = this._war;
         const mapFileName       = war.getMapId();
-        this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
+        this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(LangTextType.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
     }
 
     private _updateListWarInfo(): void {
@@ -254,8 +256,8 @@ export class SpwWarMenuPanel extends UiPanel<void> {
         const turnIndex             = war.getTurnManager().getTurnIndex();
         const executedActionsCount  = war.getExecutedActionManager().getExecutedActionsCount();
         return {
-            titleText               : Lang.getText(Lang.Type.B0091),
-            infoText                : `${turnIndex} (${Lang.getText(Lang.Type.B0090)}: ${executedActionsCount})`,
+            titleText               : Lang.getText(LangTextType.B0091),
+            infoText                : `${turnIndex} (${Lang.getText(LangTextType.B0090)}: ${executedActionsCount})`,
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : null,
         };
@@ -301,7 +303,7 @@ export class SpwWarMenuPanel extends UiPanel<void> {
 
     private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
         return {
-            name    : Lang.getText(Lang.Type.B0080),
+            name    : Lang.getText(LangTextType.B0080),
             callback: () => {
                 this._menuType = MenuType.Advanced;
                 this._updateListCommand();
@@ -311,7 +313,7 @@ export class SpwWarMenuPanel extends UiPanel<void> {
 
     private _createCommandChat(): DataForCommandRenderer | null {
         return {
-            name    : Lang.getText(Lang.Type.B0383),
+            name    : Lang.getText(LangTextType.B0383),
             callback: () => {
                 this.close();
                 ChatPanel.show({});
@@ -321,7 +323,7 @@ export class SpwWarMenuPanel extends UiPanel<void> {
 
     private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
         return {
-            name    : Lang.getText(Lang.Type.B0140),
+            name    : Lang.getText(LangTextType.B0140),
             callback: () => {
                 const war = this._war;
                 BwCoListPanel.show({
@@ -349,10 +351,10 @@ export class SpwWarMenuPanel extends UiPanel<void> {
         }
 
         return {
-            name    : Lang.getText(Lang.Type.B0260),
+            name    : Lang.getText(LangTextType.B0260),
             callback: () => {
                 CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0071),
+                    content : Lang.getText(LangTextType.A0071),
                     callback: () => {
                         SpmProxy.reqSpmSaveScw(war);
                     },
@@ -377,10 +379,10 @@ export class SpwWarMenuPanel extends UiPanel<void> {
         }
 
         return {
-            name    : Lang.getText(Lang.Type.B0260),
+            name    : Lang.getText(LangTextType.B0260),
             callback: () => {
                 CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0071),
+                    content : Lang.getText(LangTextType.A0071),
                     callback: () => {
                         SpmProxy.reqSpmSaveSfw(war);
                     },
@@ -399,7 +401,7 @@ export class SpwWarMenuPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0261),
+                name    : Lang.getText(LangTextType.B0261),
                 callback: () => {
                     SpwLoadWarPanel.show();
                 },
@@ -409,11 +411,11 @@ export class SpwWarMenuPanel extends UiPanel<void> {
 
     private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
         return {
-            name    : Lang.getText(Lang.Type.B0054),
+            name    : Lang.getText(LangTextType.B0054),
             callback: () => {
                 CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0054),
-                    content : Lang.getText(Lang.Type.A0025),
+                    title   : Lang.getText(LangTextType.B0054),
+                    content : Lang.getText(LangTextType.A0025),
                     callback: () => FlowManager.gotoLobby(),
                 });
             },
@@ -429,21 +431,21 @@ export class SpwWarMenuPanel extends UiPanel<void> {
             return undefined;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0081),
+                name    : Lang.getText(LangTextType.B0081),
                 callback: () => {
                     const unitMap       = war.getUnitMap();
                     const unit          = unitMap.getUnitOnMap(war.getCursor().getGridIndex());
                     const playerIndex   = war.getPlayerIndexInTurn();
                     if (!unit) {
-                        FloatText.show(Lang.getText(Lang.Type.A0027));
+                        FloatText.show(Lang.getText(LangTextType.A0027));
                     } else if ((unit.getPlayerIndex() !== playerIndex) || (unit.getActionState() !== Types.UnitActionState.Idle)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0028));
+                        FloatText.show(Lang.getText(LangTextType.A0028));
                     } else if (unitMap.countUnitsOnMapForPlayer(playerIndex) <= 1) {
-                        FloatText.show(Lang.getText(Lang.Type.A0076));
+                        FloatText.show(Lang.getText(LangTextType.A0076));
                     } else {
                         CommonConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0081),
-                            content : Lang.getText(Lang.Type.A0029),
+                            title   : Lang.getText(LangTextType.B0081),
+                            content : Lang.getText(LangTextType.A0029),
                             callback: () => this._actionPlanner.setStateRequestingPlayerDeleteUnit(),
                         });
                     }
@@ -455,10 +457,10 @@ export class SpwWarMenuPanel extends UiPanel<void> {
     private _createCommandSimulation(): DataForCommandRenderer | null {
         const war = this._war;
         return {
-            name    : Lang.getText(Lang.Type.B0325),
+            name    : Lang.getText(LangTextType.B0325),
             callback: () => {
                 if (war.getIsExecutingAction()) {
-                    FloatText.show(Lang.getText(Lang.Type.A0103));
+                    FloatText.show(Lang.getText(LangTextType.A0103));
                 } else {
                     SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
                 }
@@ -469,16 +471,16 @@ export class SpwWarMenuPanel extends UiPanel<void> {
     private _createCommandCreateMfr(): DataForCommandRenderer | null {
         const war = this._war;
         return {
-            name    : Lang.getText(Lang.Type.B0557),
+            name    : Lang.getText(LangTextType.B0557),
             callback: async () => {
                 if (war.getPlayerManager().getAliveOrDyingTeamsCount(false) < 2) {
-                    FloatText.show(Lang.getText(Lang.Type.A0199));
+                    FloatText.show(Lang.getText(LangTextType.A0199));
                     return;
                 }
 
                 const warData = war.serializeForCreateMfr();
                 if (warData == null) {
-                    FloatText.show(Lang.getText(Lang.Type.A0200));
+                    FloatText.show(Lang.getText(LangTextType.A0200));
                     return;
                 }
 
@@ -489,7 +491,7 @@ export class SpwWarMenuPanel extends UiPanel<void> {
                 }
 
                 CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0201),
+                    content : Lang.getText(LangTextType.A0201),
                     callback: () => {
                         MfrModel.Create.resetDataByInitialWarData(warData);
                         MfrCreateSettingsPanel.show();
@@ -506,10 +508,10 @@ export class SpwWarMenuPanel extends UiPanel<void> {
         return saveSlotIndex == null
             ? null
             : {
-                name    : Lang.getText(Lang.Type.B0420),
+                name    : Lang.getText(LangTextType.B0420),
                 callback: () => {
                     CommonConfirmPanel.show({
-                        content : Lang.getText(Lang.Type.A0140),
+                        content : Lang.getText(LangTextType.A0140),
                         callback: () => {
                             SpmProxy.reqSpmDeleteWarSaveSlot(saveSlotIndex);
                         },
@@ -519,7 +521,7 @@ export class SpwWarMenuPanel extends UiPanel<void> {
     }
     private _createCommandUserSettings(): DataForCommandRenderer | null {
         return {
-            name    : Lang.getText(Lang.Type.B0560),
+            name    : Lang.getText(LangTextType.B0560),
             callback: () => {
                 UserSettingsPanel.show();
             }
@@ -527,16 +529,16 @@ export class SpwWarMenuPanel extends UiPanel<void> {
     }
     private _createCommandSetPathMode(): DataForCommandRenderer {
         return {
-            name    : Lang.getText(Lang.Type.B0430),
+            name    : Lang.getText(LangTextType.B0430),
             callback: () => {
                 const isEnabled = UserModel.getSelfSettingsIsSetPathMode();
                 CommonConfirmPanel.show({
                     content : Lang.getFormattedText(
-                        Lang.Type.F0033,
-                        Lang.getText(isEnabled ? Lang.Type.B0431 : Lang.Type.B0432),
+                        LangTextType.F0033,
+                        Lang.getText(isEnabled ? LangTextType.B0431 : LangTextType.B0432),
                     ),
-                    textForConfirm  : Lang.getText(Lang.Type.B0433),
-                    textForCancel   : Lang.getText(Lang.Type.B0434),
+                    textForConfirm  : Lang.getText(LangTextType.B0433),
+                    textForCancel   : Lang.getText(LangTextType.B0434),
                     callback: () => {
                         if (!isEnabled) {
                             UserProxy.reqUserSetSettings({
@@ -622,7 +624,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             const player        = war.getPlayer(playerIndex);
             const isHuman       = player.getUserId() != null;
             CommonConfirmPanel.show({
-                content : isHuman ? Lang.getText(Lang.Type.A0110) : Lang.getText(Lang.Type.A0111),
+                content : isHuman ? Lang.getText(LangTextType.A0110) : Lang.getText(LangTextType.A0111),
                 callback: () => {
                     if (!isHuman) {
                         player.setUserId(UserModel.getSelfUserId());
@@ -642,11 +644,11 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerIndex           = data.playerIndex;
         const player                = war.getPlayer(playerIndex);
         const isPlayerInTurn        = playerIndex === war.getPlayerIndexInTurn();
-        this._btnName.label         = player.getUserId() != null ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
+        this._btnName.label         = player.getUserId() != null ? Lang.getText(LangTextType.B0031) : Lang.getText(LangTextType.B0256);
         this._labelForce.textColor  = isPlayerInTurn ? 0x00FF00 : 0xFFFFFF;
         this._labelForce.text       = `${Lang.getPlayerForceName(playerIndex)}`
             + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
-            + `  ${isPlayerInTurn ? Lang.getText(Lang.Type.B0086) : ""}`;
+            + `  ${isPlayerInTurn ? Lang.getText(LangTextType.B0086) : ""}`;
         this._btnName.setTextColor(war.getCanCheat() ? 0x00FF00 : 0xFFFFFF);
 
         if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
@@ -691,7 +693,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         menuPanel   : SpwWarMenuPanel,
     ): DataForInfoRenderer {
         return {
-            titleText               : Lang.getText(Lang.Type.B0397),
+            titleText               : Lang.getText(LangTextType.B0397),
             infoText                : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : null,
@@ -708,23 +710,23 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleInitialFundMinLimit;
         const isCheating    = war.getCanCheat();
         return {
-            titleText               : Lang.getText(Lang.Type.B0032),
+            titleText               : Lang.getText(LangTextType.B0032),
             infoText                : (isInfoKnown || isCheating) ? `${player.getFund()}` : `?`,
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : !isCheating
                 ? null
                 : () => {
                     CommonInputPanel.show({
-                        title           : `P${player.getPlayerIndex()} ${Lang.getText(Lang.Type.B0032)}`,
+                        title           : `P${player.getPlayerIndex()} ${Lang.getText(LangTextType.B0032)}`,
                         currentValue    : "" + currValue,
                         maxChars        : 7,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 player.setFund(value);
                                 menuPanel.updateListPlayer();
@@ -742,7 +744,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     ): DataForInfoRenderer {
         const info = getTilesCountAndIncome(war, player.getPlayerIndex());
         return {
-            titleText               : Lang.getText(Lang.Type.B0158),
+            titleText               : Lang.getText(LangTextType.B0158),
             infoText                : `${info.count} / +${info.income}${isInfoKnown ? `` : `  ?`}`,
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : null,
@@ -788,26 +790,26 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
 
         return {
-            titleText               : Lang.getText(Lang.Type.B0159),
+            titleText               : Lang.getText(LangTextType.B0159),
             infoText                : `${!hasLoadedCo ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : ((!war.getCanCheat()) || (!maxValue))
                 ? null
                 : () => {
                     if (!hasLoadedCo) {
-                        FloatText.show(Lang.getText(Lang.Type.A0109));
+                        FloatText.show(Lang.getText(LangTextType.A0109));
                     } else {
                         CommonInputPanel.show({
-                            title           : `P${playerIndex} ${Lang.getText(Lang.Type.B0159)}`,
+                            title           : `P${playerIndex} ${Lang.getText(LangTextType.B0159)}`,
                             currentValue    : "" + currValue,
                             maxChars        : 3,
                             charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
                                     player.setCoCurrentEnergy(value);
                                     menuPanel.updateListPlayer();
@@ -826,7 +828,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     ): DataForInfoRenderer {
         const unitsCountAndValue = getUnitsCountAndValue(war, player.getPlayerIndex());
         return {
-            titleText               : Lang.getText(Lang.Type.B0160),
+            titleText               : Lang.getText(LangTextType.B0160),
             infoText                : `${unitsCountAndValue.count} / ${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`,
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : null,
@@ -841,7 +843,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerIndex   = player.getPlayerIndex();
         const currValue     = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0178),
+            titleText               : Lang.getText(LangTextType.B0178),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
             callbackOnTouchedTitle  : !war.getCanCheat()
@@ -850,16 +852,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                     const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0178),
+                        title           : Lang.getText(LangTextType.B0178),
                         currentValue    : "" + currValue,
                         maxChars        : 7,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setInitialFund(war.getWarRule(), playerIndex, value);
                                 this._updateView();
@@ -880,23 +882,23 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const maxValue      = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
         const minValue      = CommonConstants.WarRuleIncomeMultiplierMinLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0179),
+            titleText               : Lang.getText(LangTextType.B0179),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
             callbackOnTouchedTitle  : !war.getCanCheat()
                 ? null
                 : () => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0179),
+                        title           : Lang.getText(LangTextType.B0179),
                         currentValue    : "" + currValue,
                         maxChars        : 5,
                         charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setIncomeMultiplier(war.getWarRule(), playerIndex, value);
                                 this._updateView();
@@ -917,23 +919,23 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
         const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0180),
+            titleText               : Lang.getText(LangTextType.B0180),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
             callbackOnTouchedTitle  : !war.getCanCheat()
                 ? null
                 : () => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0180),
+                        title           : Lang.getText(LangTextType.B0180),
                         currentValue    : "" + currValue,
                         maxChars        : 3,
                         charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setEnergyAddPctOnLoadCo(war.getWarRule(), playerIndex, value);
                                 this._updateView();
@@ -954,23 +956,23 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
         const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0181),
+            titleText               : Lang.getText(LangTextType.B0181),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
             callbackOnTouchedTitle  : !war.getCanCheat()
                 ? null
                 : () => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0181),
+                        title           : Lang.getText(LangTextType.B0181),
                         currentValue    : "" + currValue,
                         maxChars        : 5,
                         charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setEnergyGrowthMultiplier(war.getWarRule(), playerIndex, value);
                                 this._updateView();
@@ -991,23 +993,23 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
         const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0182),
+            titleText               : Lang.getText(LangTextType.B0182),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
             callbackOnTouchedTitle  : !war.getCanCheat()
                 ? null
                 : () => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0182),
+                        title           : Lang.getText(LangTextType.B0182),
                         currentValue    : "" + currValue,
                         maxChars        : 3,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setMoveRangeModifier(war.getWarRule(), playerIndex, value);
                                 this._updateView();
@@ -1028,23 +1030,23 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
         const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0183),
+            titleText               : Lang.getText(LangTextType.B0183),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
             callbackOnTouchedTitle  : !war.getCanCheat()
                 ? null
                 : () => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0183),
+                        title           : Lang.getText(LangTextType.B0183),
                         currentValue    : "" + currValue,
                         maxChars        : 5,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setAttackPowerModifier(war.getWarRule(), playerIndex, value);
                                 this._updateView();
@@ -1065,23 +1067,23 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
         const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0184),
+            titleText               : Lang.getText(LangTextType.B0184),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
             callbackOnTouchedTitle  : !war.getCanCheat()
                 ? null
                 : () => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0184),
+                        title           : Lang.getText(LangTextType.B0184),
                         currentValue    : "" + currValue,
                         maxChars        : 3,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 BwWarRuleHelper.setVisionRangeModifier(war.getWarRule(), playerIndex, value);
                                 this._updateView();
@@ -1102,23 +1104,23 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleLuckMinLimit;
         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0189),
+            titleText               : Lang.getText(LangTextType.B0189),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
             callbackOnTouchedTitle  : !war.getCanCheat()
                 ? null
                 : () => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0189),
+                        title           : Lang.getText(LangTextType.B0189),
                         currentValue    : "" + currValue,
                         maxChars        : 4,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 const upperLimit    = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
                                 const warRule       = war.getWarRule();
@@ -1146,23 +1148,23 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const minValue      = CommonConstants.WarRuleLuckMinLimit;
         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0190),
+            titleText               : Lang.getText(LangTextType.B0190),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
             callbackOnTouchedTitle  : !war.getCanCheat()
                 ? null
                 : () => {
                     CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0190),
+                        title           : Lang.getText(LangTextType.B0190),
                         currentValue    : "" + currValue,
                         maxChars        : 4,
                         charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
                             const text  = panel.getInputText();
                             const value = text ? Number(text) : NaN;
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 const lowerLimit    = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
                                 const warRule       = war.getWarRule();

@@ -19,8 +19,10 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as FlowManager                 from "../../../utility/FlowManager";
@@ -32,7 +34,7 @@ import * as UserProxy                   from "../../user/model/UserProxy";
 import * as WarMapModel                 from "../../warMap/model/WarMapModel";
 
 // eslint-disable-next-line no-shadow
-const enum MenuType {
+enum MenuType {
     Main,
     Advanced,
 }
@@ -90,10 +92,10 @@ export class MpwWarMenuPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-            { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onNotifyMsgSpmCreateSfw },
+            { type: NotifyType.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+            { type: NotifyType.MsgSpmCreateSfw,                    callback: this._onNotifyMsgSpmCreateSfw },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,        callback: this._onTouchedBtnBack },
@@ -113,7 +115,7 @@ export class MpwWarMenuPanel extends UiPanel<void> {
 
         this._updateView();
 
-        Notify.dispatch(Notify.Type.BwWarMenuPanelOpened);
+        Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
     }
     protected async _onClosed(): Promise<void> {
         await this._showCloseAnimation();
@@ -121,7 +123,7 @@ export class MpwWarMenuPanel extends UiPanel<void> {
         this._war           = null;
         this._dataForList   = null;
 
-        Notify.dispatch(Notify.Type.BwWarMenuPanelClosed);
+        Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +146,7 @@ export class MpwWarMenuPanel extends UiPanel<void> {
     private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0107),
+            content : Lang.getText(LangTextType.A0107),
             callback: () => {
                 FlowManager.gotoSinglePlayerWar({
                     slotIndex       : data.slotIndex,
@@ -170,8 +172,8 @@ export class MpwWarMenuPanel extends UiPanel<void> {
 
     private _onTouchedBtnHome(): void {
         CommonConfirmPanel.show({
-            title   : Lang.getText(Lang.Type.B0054),
-            content : Lang.getText(Lang.Type.A0025),
+            title   : Lang.getText(LangTextType.B0054),
+            content : Lang.getText(LangTextType.A0025),
             callback: () => FlowManager.gotoLobby(),
         });
     }
@@ -232,31 +234,31 @@ export class MpwWarMenuPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelMenuTitle.text                   = Lang.getText(Lang.Type.B0155);
-        this._labelWarInfoTitle.text                = Lang.getText(Lang.Type.B0223);
-        this._labelPlayerInfoTitle.text             = Lang.getText(Lang.Type.B0224);
-        this._btnMapNameTitle.label                 = Lang.getText(Lang.Type.B0225);
-        this._btnBuildings.label                    = Lang.getText(Lang.Type.B0333);
+        this._labelMenuTitle.text                   = Lang.getText(LangTextType.B0155);
+        this._labelWarInfoTitle.text                = Lang.getText(LangTextType.B0223);
+        this._labelPlayerInfoTitle.text             = Lang.getText(LangTextType.B0224);
+        this._btnMapNameTitle.label                 = Lang.getText(LangTextType.B0225);
+        this._btnBuildings.label                    = Lang.getText(LangTextType.B0333);
         this._updateListWarInfo();
     }
 
     private async _updateGroupInfo(): Promise<void> {
         const war                   = this._war;
         const mapFileName           = war.getMapId();
-        this._labelMapName.text     = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
+        this._labelMapName.text     = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(LangTextType.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
     }
 
     private _updateListWarInfo(): void {
         const war       = this._war;
         const dataList  : DataForInfoRenderer[] = [
             {
-                titleText   : Lang.getText(Lang.Type.B0226),
+                titleText   : Lang.getText(LangTextType.B0226),
                 infoText    : `${war.getWarId()}`,
                 infoColor   : 0xFFFFFF,
             },
             {
-                titleText   : Lang.getText(Lang.Type.B0091),
-                infoText    : `${war.getTurnManager().getTurnIndex()} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionManager().getExecutedActionsCount()})`,
+                titleText   : Lang.getText(LangTextType.B0091),
+                infoText    : `${war.getTurnManager().getTurnIndex()} (${Lang.getText(LangTextType.B0090)}: ${war.getExecutedActionManager().getExecutedActionsCount()})`,
                 infoColor   : 0xFFFFFF,
             },
         ];
@@ -313,7 +315,7 @@ export class MpwWarMenuPanel extends UiPanel<void> {
 
     private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
         return {
-            name    : Lang.getText(Lang.Type.B0080),
+            name    : Lang.getText(LangTextType.B0080),
             callback: () => {
                 this._menuType = MenuType.Advanced;
                 this._updateListCommand();
@@ -323,7 +325,7 @@ export class MpwWarMenuPanel extends UiPanel<void> {
 
     private _createCommandOpenDamageChartPanel(): DataForCommandRenderer | undefined {
         return {
-            name    : Lang.getText(Lang.Type.B0440),
+            name    : Lang.getText(LangTextType.B0440),
             callback: () => {
                 CommonDamageChartPanel.show();
                 this.close();
@@ -333,7 +335,7 @@ export class MpwWarMenuPanel extends UiPanel<void> {
 
     private _createCommandSyncWar(): DataForCommandRenderer | undefined {
         return {
-            name    : Lang.getText(Lang.Type.B0089),
+            name    : Lang.getText(LangTextType.B0089),
             callback: () => {
                 const war = this._war;
                 MpwProxy.reqMpwCommonSyncWar(
@@ -349,7 +351,7 @@ export class MpwWarMenuPanel extends UiPanel<void> {
 
     private _createCommandChat(): DataForCommandRenderer | null {
         return {
-            name    : Lang.getText(Lang.Type.B0383),
+            name    : Lang.getText(LangTextType.B0383),
             callback: () => {
                 this.close();
                 ChatPanel.show({});
@@ -366,11 +368,11 @@ export class MpwWarMenuPanel extends UiPanel<void> {
             return undefined;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0055),
+                name    : Lang.getText(LangTextType.B0055),
                 callback: () => {
                     CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0055),
-                        content : Lang.getText(Lang.Type.A0026),
+                        title   : Lang.getText(LangTextType.B0055),
+                        content : Lang.getText(LangTextType.A0026),
                         callback: () => this._actionPlanner.setStateRequestingPlayerSurrender(),
                     });
                 },
@@ -381,10 +383,10 @@ export class MpwWarMenuPanel extends UiPanel<void> {
     private _createCommandSimulation(): DataForCommandRenderer | null {
         const war = this._war;
         return {
-            name    : Lang.getText(Lang.Type.B0325),
+            name    : Lang.getText(LangTextType.B0325),
             callback: () => {
                 if (war.getIsExecutingAction()) {
-                    FloatText.show(Lang.getText(Lang.Type.A0103));
+                    FloatText.show(Lang.getText(LangTextType.A0103));
                 } else {
                     SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
                 }
@@ -395,16 +397,16 @@ export class MpwWarMenuPanel extends UiPanel<void> {
     private _createCommandCreateMfr(): DataForCommandRenderer | null {
         const war = this._war;
         return {
-            name    : Lang.getText(Lang.Type.B0557),
+            name    : Lang.getText(LangTextType.B0557),
             callback: async () => {
                 if (war.getPlayerManager().getAliveOrDyingTeamsCount(false) < 2) {
-                    FloatText.show(Lang.getText(Lang.Type.A0199));
+                    FloatText.show(Lang.getText(LangTextType.A0199));
                     return;
                 }
 
                 const warData = war.serializeForCreateMfr();
                 if (warData == null) {
-                    FloatText.show(Lang.getText(Lang.Type.A0200));
+                    FloatText.show(Lang.getText(LangTextType.A0200));
                     return;
                 }
 
@@ -415,7 +417,7 @@ export class MpwWarMenuPanel extends UiPanel<void> {
                 }
 
                 CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0201),
+                    content : Lang.getText(LangTextType.A0201),
                     callback: () => {
                         MfrModel.Create.resetDataByInitialWarData(warData);
                         MfrCreateSettingsPanel.show();
@@ -437,13 +439,13 @@ export class MpwWarMenuPanel extends UiPanel<void> {
             return undefined;
         } else {
             const drawVoteManager   = war.getDrawVoteManager();
-            const title             = drawVoteManager.getRemainingVotes() == null ? Lang.getText(Lang.Type.B0083) : Lang.getText(Lang.Type.B0084);
+            const title             = drawVoteManager.getRemainingVotes() == null ? Lang.getText(LangTextType.B0083) : Lang.getText(LangTextType.B0084);
             return {
                 name    : title,
                 callback: () => {
                     CommonConfirmPanel.show({
                         title,
-                        content : drawVoteManager.getRemainingVotes() == null ? Lang.getText(Lang.Type.A0031) : Lang.getText(Lang.Type.A0032),
+                        content : drawVoteManager.getRemainingVotes() == null ? Lang.getText(LangTextType.A0031) : Lang.getText(LangTextType.A0032),
                         callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(true),
                     });
                 },
@@ -462,13 +464,13 @@ export class MpwWarMenuPanel extends UiPanel<void> {
         ) {
             return undefined;
         } else {
-            const title = Lang.getText(Lang.Type.B0085);
+            const title = Lang.getText(LangTextType.B0085);
             return {
                 name    : title,
                 callback: () => {
                     CommonConfirmPanel.show({
                         title,
-                        content : Lang.getText(Lang.Type.A0033),
+                        content : Lang.getText(LangTextType.A0033),
                         callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(false),
                     });
                 },
@@ -485,21 +487,21 @@ export class MpwWarMenuPanel extends UiPanel<void> {
             return undefined;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0081),
+                name    : Lang.getText(LangTextType.B0081),
                 callback: () => {
                     const unitMap       = war.getUnitMap();
                     const unit          = unitMap.getUnitOnMap(war.getCursor().getGridIndex());
                     const playerIndex   = war.getPlayerIndexLoggedIn();
                     if (!unit) {
-                        FloatText.show(Lang.getText(Lang.Type.A0027));
+                        FloatText.show(Lang.getText(LangTextType.A0027));
                     } else if ((unit.getPlayerIndex() !== playerIndex) || (unit.getActionState() !== Types.UnitActionState.Idle)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0028));
+                        FloatText.show(Lang.getText(LangTextType.A0028));
                     } else if (unitMap.countUnitsOnMapForPlayer(playerIndex) <= 1) {
-                        FloatText.show(Lang.getText(Lang.Type.A0076));
+                        FloatText.show(Lang.getText(LangTextType.A0076));
                     } else {
                         CommonConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0081),
-                            content : Lang.getText(Lang.Type.A0029),
+                            title   : Lang.getText(LangTextType.B0081),
+                            content : Lang.getText(LangTextType.A0029),
                             callback: () => this._actionPlanner.setStateRequestingPlayerDeleteUnit(),
                         });
                     }
@@ -509,7 +511,7 @@ export class MpwWarMenuPanel extends UiPanel<void> {
     }
     private _createCommandUserSettings(): DataForCommandRenderer | null {
         return {
-            name    : Lang.getText(Lang.Type.B0560),
+            name    : Lang.getText(LangTextType.B0560),
             callback: () => {
                 UserSettingsPanel.show();
             }
@@ -517,16 +519,16 @@ export class MpwWarMenuPanel extends UiPanel<void> {
     }
     private _createCommandSetPathMode(): DataForCommandRenderer {
         return {
-            name    : Lang.getText(Lang.Type.B0430),
+            name    : Lang.getText(LangTextType.B0430),
             callback: () => {
                 const isEnabled = UserModel.getSelfSettingsIsSetPathMode();
                 CommonConfirmPanel.show({
                     content : Lang.getFormattedText(
-                        Lang.Type.F0033,
-                        Lang.getText(isEnabled ? Lang.Type.B0431 : Lang.Type.B0432),
+                        LangTextType.F0033,
+                        Lang.getText(isEnabled ? LangTextType.B0431 : LangTextType.B0432),
                     ),
-                    textForConfirm  : Lang.getText(Lang.Type.B0433),
-                    textForCancel   : Lang.getText(Lang.Type.B0434),
+                    textForConfirm  : Lang.getText(LangTextType.B0433),
+                    textForCancel   : Lang.getText(LangTextType.B0434),
                     callback: () => {
                         if (!isEnabled) {
                             UserProxy.reqUserSetSettings({
@@ -602,7 +604,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
         this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
             + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
-            + `  ${player === war.getPlayerInTurn() ? Lang.getText(Lang.Type.B0086) : ""}`;
+            + `  ${player === war.getPlayerInTurn() ? Lang.getText(LangTextType.B0086) : ""}`;
 
         if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
             this._labelLost.visible = true;
@@ -644,7 +646,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         isInfoKnown : boolean,
     ): DataForInfoRenderer {
         return {
-            titleText   : Lang.getText(Lang.Type.B0397),
+            titleText   : Lang.getText(LangTextType.B0397),
             infoText    : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()),
             infoColor   : 0xFFFFFF,
         };
@@ -655,7 +657,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         isInfoKnown : boolean,
     ): DataForInfoRenderer {
         return {
-            titleText   : Lang.getText(Lang.Type.B0032),
+            titleText   : Lang.getText(LangTextType.B0032),
             infoText    : isInfoKnown ? `${player.getFund()}` : `?`,
             infoColor   : 0xFFFFFF,
         };
@@ -667,7 +669,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     ): DataForInfoRenderer {
         const info = this._getTilesCountAndIncome(war, player.getPlayerIndex());
         return {
-            titleText   : Lang.getText(Lang.Type.B0158),
+            titleText   : Lang.getText(LangTextType.B0158),
             infoText    : `${info.count} / +${info.income}${isInfoKnown ? `` : `  ?`}`,
             infoColor   : 0xFFFFFF,
         };
@@ -681,7 +683,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const cfg   = coId == null ? null : ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
         return {
             titleText   : `CO`,
-            infoText    : !cfg ? `(${Lang.getText(Lang.Type.B0001)})` : `${cfg.name}`,
+            infoText    : !cfg ? `(${Lang.getText(LangTextType.B0001)})` : `${cfg.name}`,
             infoColor   : 0xFFFFFF,
         };
     }
@@ -698,7 +700,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             ? "" + currValue
             : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
         return {
-            titleText               : Lang.getText(Lang.Type.B0159),
+            titleText               : Lang.getText(LangTextType.B0159),
             infoText                : `${currValue == null ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
             infoColor               : 0xFFFFFF,
         };
@@ -710,7 +712,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     ): DataForInfoRenderer {
         const unitsCountAndValue = this._getUnitsCountAndValue(war, player.getPlayerIndex());
         return {
-            titleText               : Lang.getText(Lang.Type.B0160),
+            titleText               : Lang.getText(LangTextType.B0160),
             infoText                : `${unitsCountAndValue.count} / ${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`,
             infoColor               : 0xFFFFFF,
         };
@@ -723,7 +725,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerIndex   = player.getPlayerIndex();
         const currValue     = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0178),
+            titleText               : Lang.getText(LangTextType.B0178),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
         };
@@ -736,7 +738,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerIndex   = player.getPlayerIndex();
         const currValue     = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0179),
+            titleText               : Lang.getText(LangTextType.B0179),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
         };
@@ -749,7 +751,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerIndex   = player.getPlayerIndex();
         const currValue     = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0180),
+            titleText               : Lang.getText(LangTextType.B0180),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
         };
@@ -762,7 +764,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerIndex   = player.getPlayerIndex();
         const currValue     = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0181),
+            titleText               : Lang.getText(LangTextType.B0181),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
         };
@@ -775,7 +777,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerIndex   = player.getPlayerIndex();
         const currValue     = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0182),
+            titleText               : Lang.getText(LangTextType.B0182),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
         };
@@ -788,7 +790,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerIndex   = player.getPlayerIndex();
         const currValue     = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0183),
+            titleText               : Lang.getText(LangTextType.B0183),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
         };
@@ -801,7 +803,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerIndex   = player.getPlayerIndex();
         const currValue     = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0184),
+            titleText               : Lang.getText(LangTextType.B0184),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
         };
@@ -814,7 +816,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerIndex   = player.getPlayerIndex();
         const currValue     = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0189),
+            titleText               : Lang.getText(LangTextType.B0189),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
         };
@@ -827,7 +829,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerIndex   = player.getPlayerIndex();
         const currValue     = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
         return {
-            titleText               : Lang.getText(Lang.Type.B0190),
+            titleText               : Lang.getText(LangTextType.B0190),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
         };

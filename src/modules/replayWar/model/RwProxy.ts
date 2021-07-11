@@ -2,6 +2,7 @@
 import { NetMessageCodes }              from "../../../network/NetMessageCodes";
 import * as NetManager                  from "../../../network/NetManager";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as RwModel                     from "./RwModel";
 import NetMessage                       = ProtoTypes.NetMessage;
@@ -25,7 +26,7 @@ function _onMsgReplayGetInfoList(e: egret.Event): void {
     const data = e.data as NetMessage.MsgReplayGetInfoList.IS;
     if (!data.errorCode) {
         RwModel.setReplayInfoList(data.infos);
-        Notify.dispatch(Notify.Type.MsgReplayGetInfoList, data);
+        Notify.dispatch(NotifyType.MsgReplayGetInfoList, data);
     }
 }
 
@@ -39,10 +40,10 @@ export function reqReplayGetData(replayId: number): void {
 function _onMsgReplayGetData(e: egret.Event): void {
     const data = e.data as NetMessage.MsgReplayGetData.IS;
     if (data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgReplayGetDataFailed);
+        Notify.dispatch(NotifyType.MsgReplayGetDataFailed);
     } else {
         RwModel.setReplayData(data);
-        Notify.dispatch(Notify.Type.MsgReplayGetData, data);
+        Notify.dispatch(NotifyType.MsgReplayGetData, data);
     }
 }
 
@@ -57,6 +58,6 @@ export function reqReplaySetRating(replayId: number, rating: number): void {
 function _onMsgReplaySetRating(e: egret.Event): void {
     const data = e.data as NetMessage.MsgReplaySetRating.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgReplaySetRating, data);
+        Notify.dispatch(NotifyType.MsgReplaySetRating, data);
     }
 }

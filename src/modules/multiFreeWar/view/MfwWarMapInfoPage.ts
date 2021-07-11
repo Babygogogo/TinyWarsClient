@@ -4,7 +4,9 @@ import { UiZoomableMap }        from "../../../gameui/UiZoomableMap";
 import { UiTabPage }            from "../../../gameui/UiTabPage";
 import { UiMapInfo }            from "../../../gameui/UiMapInfo";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as MpwModel            from "../../multiPlayerWar/model/MpwModel";
 
@@ -24,8 +26,8 @@ export class MfwWarMapInfoPage extends UiTabPage<OpenDataForMfwWarMapInfoPage> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
         ]);
 
         this.left   = 0;
@@ -50,7 +52,7 @@ export class MfwWarMapInfoPage extends UiTabPage<OpenDataForMfwWarMapInfoPage> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text = Lang.getText(Lang.Type.A0150);
+        this._labelLoading.text = Lang.getText(LangTextType.A0150);
     }
     private async _updateComponentsForWarInfo(): Promise<void> {
         const warInfo       = MpwModel.getMyWarInfo(this._getOpenData().warId);

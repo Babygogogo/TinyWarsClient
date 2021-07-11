@@ -6,7 +6,9 @@ import { UiButton }                         from "../../../gameui/UiButton";
 import { UiLabel }                          from "../../../gameui/UiLabel";
 import { UiScrollList }                     from "../../../gameui/UiScrollList";
 import * as Lang                            from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                           from "../../../utility/Types";
 import * as MpwModel                        from "../../multiPlayerWar/model/MpwModel";
 import { LobbyBottomPanel }                 from "../../lobby/view/LobbyBottomPanel";
@@ -51,8 +53,8 @@ export class McrWatchMainMenuPanel extends UiPanel<void> {
             { ui: this._btnBack, callback: this._onTouchedBtnBack },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
         ]);
         this._listCommand.setItemRenderer(CommandRenderer);
 
@@ -80,22 +82,22 @@ export class McrWatchMainMenuPanel extends UiPanel<void> {
     // Private functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateView(): void {
-        this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0206);
-        this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+        this._labelMenuTitle.text   = Lang.getText(LangTextType.B0206);
+        this._btnBack.label         = Lang.getText(LangTextType.B0146);
         this._listCommand.bindData(this._createDataForListCommand());
     }
 
     private _createDataForListCommand(): DataForCommandRenderer[] {
         return [
             {
-                name    : Lang.getText(Lang.Type.B0207),
+                name    : Lang.getText(LangTextType.B0207),
                 callback: (): void => {
                     this.close();
                     McrWatchMakeRequestWarsPanel.show();
                 },
             },
             {
-                name    : Lang.getText(Lang.Type.B0208),
+                name    : Lang.getText(LangTextType.B0208),
                 callback: (): void => {
                     this.close();
                     McrWatchHandleRequestWarsPanel.show();
@@ -106,14 +108,14 @@ export class McrWatchMainMenuPanel extends UiPanel<void> {
                 },
             },
             {
-                name    : Lang.getText(Lang.Type.B0219),
+                name    : Lang.getText(LangTextType.B0219),
                 callback: (): void => {
                     this.close();
                     McrWatchDeleteWatcherWarsPanel.show();
                 },
             },
             {
-                name    : Lang.getText(Lang.Type.B0222),
+                name    : Lang.getText(LangTextType.B0222),
                 callback: (): void => {
                     this.close();
                     McrWatchOngoingWarsPanel.show();

@@ -4,7 +4,9 @@ import { UiZoomableMap }                from "../../../gameui/UiZoomableMap";
 import { UiTabPage }                    from "../../../gameui/UiTabPage";
 import { UiMapInfo }                    from "../../../gameui/UiMapInfo";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as WarMapModel                 from "../../warMap/model/WarMapModel";
 import * as RwModel                     from "../model/RwModel";
@@ -25,8 +27,8 @@ export class RwReplayMapInfoPage extends UiTabPage<OpenDataForRwReplayMapInfoPag
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgReplayGetInfoList,   callback: this._onNotifyMsgReplayGetInfoList },
+            { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgReplayGetInfoList,   callback: this._onNotifyMsgReplayGetInfoList },
         ]);
 
         this.left   = 0;
@@ -51,7 +53,7 @@ export class RwReplayMapInfoPage extends UiTabPage<OpenDataForRwReplayMapInfoPag
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text = Lang.getText(Lang.Type.A0150);
+        this._labelLoading.text = Lang.getText(LangTextType.A0150);
     }
     private async _updateComponentsForReplayInfo(): Promise<void> {
         const replayInfo        = RwModel.getReplayInfo(this._getOpenData().replayId);

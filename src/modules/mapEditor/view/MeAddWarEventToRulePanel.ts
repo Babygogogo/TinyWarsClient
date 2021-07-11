@@ -5,7 +5,9 @@ import { UiButton }                     from "../../../gameui/UiButton";
 import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiScrollList }                 from "../../../gameui/UiScrollList";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
@@ -48,7 +50,7 @@ export class MeAddWarEventToRulePanel extends UiPanel<OpenDataForMeAddWarEventId
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,       callback: this.close },
@@ -68,9 +70,9 @@ export class MeAddWarEventToRulePanel extends UiPanel<OpenDataForMeAddWarEventId
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text       = Lang.getText(Lang.Type.B0468);
-        this._labelNoWarEvent.text  = Lang.getText(Lang.Type.B0278);
-        this._btnClose.label        = Lang.getText(Lang.Type.B0146);
+        this._labelTitle.text       = Lang.getText(LangTextType.B0468);
+        this._labelNoWarEvent.text  = Lang.getText(LangTextType.B0278);
+        this._btnClose.label        = Lang.getText(LangTextType.B0146);
     }
     private _updateListMessageAndLabelNoMessage(): void {
         const dataArray : DataForWarEventRenderer[] = [];
@@ -103,8 +105,8 @@ class WarEventRenderer extends UiListItemRenderer<DataForWarEventRenderer> {
             { ui: this._btnDelete,  callback: this._onTouchedBtnDelete },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MeWarEventIdArrayChanged,   callback: this._onNotifyMeWarEventIdArrayChanged },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MeWarEventIdArrayChanged,   callback: this._onNotifyMeWarEventIdArrayChanged },
         ]);
         this._updateComponentsForLanguage();
         this._btnDelete.setTextColor(0xFF0000);
@@ -120,14 +122,14 @@ class WarEventRenderer extends UiListItemRenderer<DataForWarEventRenderer> {
         const data = this.data;
         if (data) {
             BwWarRuleHelper.addWarEventId(data.warRule, data.warEventId);
-            Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+            Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
         }
     }
     private _onTouchedBtnDelete(e: egret.TouchEvent): void {
         const data = this.data;
         if (data) {
             BwWarRuleHelper.deleteWarEventId(data.warRule, data.warEventId);
-            Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+            Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
         }
     }
 
@@ -139,8 +141,8 @@ class WarEventRenderer extends UiListItemRenderer<DataForWarEventRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnDelete.label   = Lang.getText(Lang.Type.B0220);
-        this._btnAdd.label      = Lang.getText(Lang.Type.B0467);
+        this._btnDelete.label   = Lang.getText(LangTextType.B0220);
+        this._btnAdd.label      = Lang.getText(LangTextType.B0467);
 
         this._updateLabelName();
     }

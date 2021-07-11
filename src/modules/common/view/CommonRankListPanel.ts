@@ -9,8 +9,10 @@ import { UserPanel }            from "../../user/view/UserPanel";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger              from "../../../utility/Logger";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import * as CommonModel         from "../../common/model/CommonModel";
 import * as CommonProxy         from "../../common/model/CommonProxy";
@@ -75,8 +77,8 @@ export class CommonRankListPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgCommonGetRankList,   callback: this._onMsgCommonGetRankList },
+            { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgCommonGetRankList,   callback: this._onMsgCommonGetRankList },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,   callback: this.close },
@@ -115,15 +117,15 @@ export class CommonRankListPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text       = Lang.getText(Lang.Type.B0436);
-        this._labelStdTitle.text    = Lang.getText(Lang.Type.B0548);
-        this._labelStdNoData.text   = Lang.getText(Lang.Type.B0278);
-        this._labelStdNickname.text = Lang.getText(Lang.Type.B0175);
-        this._labelStdScore.text    = Lang.getText(Lang.Type.B0579);
-        this._labelFogTitle.text    = Lang.getText(Lang.Type.B0549);
-        this._labelFogNoData.text   = Lang.getText(Lang.Type.B0278);
-        this._labelFogNickname.text = Lang.getText(Lang.Type.B0175);
-        this._labelFogScore.text    = Lang.getText(Lang.Type.B0579);
+        this._labelTitle.text       = Lang.getText(LangTextType.B0436);
+        this._labelStdTitle.text    = Lang.getText(LangTextType.B0548);
+        this._labelStdNoData.text   = Lang.getText(LangTextType.B0278);
+        this._labelStdNickname.text = Lang.getText(LangTextType.B0175);
+        this._labelStdScore.text    = Lang.getText(LangTextType.B0579);
+        this._labelFogTitle.text    = Lang.getText(LangTextType.B0549);
+        this._labelFogNoData.text   = Lang.getText(LangTextType.B0278);
+        this._labelFogNickname.text = Lang.getText(LangTextType.B0175);
+        this._labelFogScore.text    = Lang.getText(LangTextType.B0579);
     }
 
     private _updateComponentsForStd(): void {
@@ -254,7 +256,7 @@ class UserRenderer extends UiListItemRenderer<DataForUserRenderer> {
         const rank              = data.rank;
         const labelNickname     = this._labelNickname;
         const labelScore        = this._labelScore;
-        labelNickname.text      = Lang.getText(Lang.Type.B0029);
+        labelNickname.text      = Lang.getText(LangTextType.B0029);
         labelScore.text         = ``;
         this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
         this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;

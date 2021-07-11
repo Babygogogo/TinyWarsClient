@@ -2,6 +2,7 @@
 import * as Types           from "./Types";
 import * as ProtoTypes      from "./ProtoTypes";
 import * as Lang            from "./Lang";
+import { LangTextType } from "./LangTextType";
 import ColorType            = Types.ColorType;
 import ILanguageText        = ProtoTypes.Structure.ILanguageText;
 import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
@@ -298,7 +299,7 @@ export function getSquaredPointDistance(x1: number, y1: number, x2: number, y2: 
 
 export function getTimeDurationText(totalSeconds: number): string {
     if (totalSeconds <= 0) {
-        return `0${Lang.getText(Lang.Type.B0017)}`;
+        return `0${Lang.getText(LangTextType.B0017)}`;
     } else {
         const seconds = totalSeconds % 60;
         const minutes = Math.floor(totalSeconds / 60) % 60;
@@ -306,10 +307,10 @@ export function getTimeDurationText(totalSeconds: number): string {
         const days    = Math.floor(totalSeconds / (60 * 60 * 24));
 
         let text = "";
-        (days    > 0) && (text = `${text}${days}${Lang.getText(Lang.Type.B0014)}`);
-        (hours   > 0) && (text = `${text}${hours}${Lang.getText(Lang.Type.B0015)}`);
-        (minutes > 0) && (text = `${text}${minutes}${Lang.getText(Lang.Type.B0016)}`);
-        (seconds > 0) && (text = `${text}${seconds}${Lang.getText(Lang.Type.B0017)}`);
+        (days    > 0) && (text = `${text}${days}${Lang.getText(LangTextType.B0014)}`);
+        (hours   > 0) && (text = `${text}${hours}${Lang.getText(LangTextType.B0015)}`);
+        (minutes > 0) && (text = `${text}${minutes}${Lang.getText(LangTextType.B0016)}`);
+        (seconds > 0) && (text = `${text}${seconds}${Lang.getText(LangTextType.B0017)}`);
         return text;
     }
 }
@@ -341,9 +342,9 @@ export function getTimestampText(timestamp: number, controller?: TimeTextControl
     const needHour   = (!controller) || (controller.hour !== false);
     const needMinute = (!controller) || (controller.minute !== false);
     const needSecond = (!controller) || (controller.second !== false);
-    const strYear    = (!controller) || (controller.year !== false)  ? `${getNumText(d.getFullYear(), 4)}${Lang.getText(Lang.Type.B0059)}`     : ``;
-    const strMonth   = (!controller) || (controller.month !== false) ? `${getNumText(d.getMonth() + 1)}${Lang.getText(Lang.Type.B0058)}`    : ``;
-    const strDate    = (!controller) || (controller.date !== false)  ? `${getNumText(d.getDate())}${Lang.getText(Lang.Type.B0057)}`         : ``;
+    const strYear    = (!controller) || (controller.year !== false)  ? `${getNumText(d.getFullYear(), 4)}${Lang.getText(LangTextType.B0059)}`     : ``;
+    const strMonth   = (!controller) || (controller.month !== false) ? `${getNumText(d.getMonth() + 1)}${Lang.getText(LangTextType.B0058)}`    : ``;
+    const strDate    = (!controller) || (controller.date !== false)  ? `${getNumText(d.getDate())}${Lang.getText(LangTextType.B0057)}`         : ``;
     const strHour    = needHour                 ? `${getNumText(d.getHours())}`   : "";
     const sep1       = needHour   && needMinute ? ":" : "";
     const strMinute  = needMinute               ? `${getNumText(d.getMinutes())}` : "";

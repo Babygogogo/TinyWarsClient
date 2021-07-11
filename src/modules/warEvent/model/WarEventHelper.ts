@@ -20,6 +20,7 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger                      from "../../../utility/Logger";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
@@ -750,62 +751,62 @@ export function getDescForCondition(con: IWarEventCondition): string | undefined
 }
 function getDescForWecEventCalledCountTotalEqualTo(data: WarEvent.IWecEventCalledCountTotalEqualTo): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0035 : Lang.Type.F0036, data.eventIdEqualTo, data.countEqualTo)
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0035 : LangTextType.F0036, data.eventIdEqualTo, data.countEqualTo)
         : undefined;
 }
 function getDescForWecEventCalledCountTotalGreaterThan(data: WarEvent.IWecEventCalledCountTotalGreaterThan): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0037 : Lang.Type.F0038, data.eventIdEqualTo, data.countGreaterThan)
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0037 : LangTextType.F0038, data.eventIdEqualTo, data.countGreaterThan)
         : undefined;
 }
 function getDescForWecEventCalledCountTotalLessThan(data: WarEvent.IWecEventCalledCountTotalLessThan): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0039 : Lang.Type.F0040, data.eventIdEqualTo, data.countLessThan)
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0039 : LangTextType.F0040, data.eventIdEqualTo, data.countLessThan)
         : undefined;
 }
 function getDescForWecPlayerAliveStateEqualTo(data: WarEvent.IWecPlayerAliveStateEqualTo): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0041 : Lang.Type.F0042, data.playerIndexEqualTo, Lang.getPlayerAliveStateName(data.aliveStateEqualTo))
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0041 : LangTextType.F0042, data.playerIndexEqualTo, Lang.getPlayerAliveStateName(data.aliveStateEqualTo))
         : undefined;
 }
 function getDescForWecPlayerIndexInTurnEqualTo(data: WarEvent.IWecPlayerIndexInTurnEqualTo): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0043 : Lang.Type.F0044, data.valueEqualTo)
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0043 : LangTextType.F0044, data.valueEqualTo)
         : undefined;
 }
 function getDescForWecPlayerIndexInTurnGreaterThan(data: WarEvent.IWecPlayerIndexInTurnGreaterThan): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0045 : Lang.Type.F0046, data.valueGreaterThan)
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0045 : LangTextType.F0046, data.valueGreaterThan)
         : undefined;
 }
 function getDescForWecPlayerIndexInTurnLessThan(data: WarEvent.IWecPlayerIndexInTurnLessThan): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0047 : Lang.Type.F0048, data.valueLessThan)
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0047 : LangTextType.F0048, data.valueLessThan)
         : undefined;
 }
 function getDescForWecTurnIndexEqualTo(data: WarEvent.IWecTurnIndexEqualTo): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0049 : Lang.Type.F0050, data.valueEqualTo)
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0049 : LangTextType.F0050, data.valueEqualTo)
         : undefined;
 }
 function getDescForWecTurnIndexGreaterThan(data: WarEvent.IWecTurnIndexGreaterThan): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0051 : Lang.Type.F0052, data.valueGreaterThan)
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0051 : LangTextType.F0052, data.valueGreaterThan)
         : undefined;
 }
 function getDescForWecTurnIndexLessThan(data: WarEvent.IWecTurnIndexLessThan): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0053 : Lang.Type.F0054, data.valueLessThan)
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0053 : LangTextType.F0054, data.valueLessThan)
         : undefined;
 }
 function getDescForWecTurnIndexRemainderEqualTo(data: WarEvent.IWecTurnIndexRemainderEqualTo): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0055 : Lang.Type.F0056, data.divider, data.remainderEqualTo)
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0055 : LangTextType.F0056, data.divider, data.remainderEqualTo)
         : undefined;
 }
 function getDescForWecTurnPhaseEqualTo(data: WarEvent.IWecTurnPhaseEqualTo): string | undefined {
     return (data)
-        ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0057 : Lang.Type.F0058, Lang.getTurnPhaseName(data.valueEqualTo))
+        ? Lang.getFormattedText(!data.isNot ? LangTextType.F0057 : LangTextType.F0058, Lang.getTurnPhaseName(data.valueEqualTo))
         : undefined;
 }
 
@@ -828,14 +829,14 @@ function getDescForWeaAddUnit(data: WarEvent.IWeaAddUnit): string | undefined {
         for (const [unitType, count] of unitCountDict) {
             unitNameArray.push(`${Lang.getUnitName(unitType)} * ${count}`);
         }
-        return Lang.getFormattedText(Lang.Type.F0059, unitNameArray.join(", "));
+        return Lang.getFormattedText(LangTextType.F0059, unitNameArray.join(", "));
     }
 }
 function getDescForWeaSetPlayerAliveState(data: WarEvent.IWeaSetPlayerAliveState): string | undefined {
     if (!data) {
         return undefined;
     } else {
-        return Lang.getFormattedText(Lang.Type.F0066, data.playerIndex, Lang.getPlayerAliveStateName(data.playerAliveState));
+        return Lang.getFormattedText(LangTextType.F0066, data.playerIndex, Lang.getPlayerAliveStateName(data.playerAliveState));
     }
 }
 
@@ -845,20 +846,20 @@ function getDescForWeaSetPlayerAliveState(data: WarEvent.IWeaSetPlayerAliveState
 export function getErrorTipForEvent(fullData: IWarEventFullData, event: IWarEvent): string | undefined {
     const eventsCount = (fullData.eventArray || []).length;
     if (eventsCount > CommonConstants.WarEventMaxEventsPerMap) {
-        return `${Lang.getText(Lang.Type.A0182)} (${eventsCount}/${CommonConstants.WarEventMaxEventsPerMap})`;
+        return `${Lang.getText(LangTextType.A0182)} (${eventsCount}/${CommonConstants.WarEventMaxEventsPerMap})`;
     }
 
     const actionsCount = (event.actionIdArray || []).length;
     if (actionsCount < 1) {
-        return Lang.getText(Lang.Type.A0167);
+        return Lang.getText(LangTextType.A0167);
     }
     if (actionsCount > CommonConstants.WarEventMaxActionsPerEvent) {
-        return `${Lang.getText(Lang.Type.A0180)} (${actionsCount}/${CommonConstants.WarEventMaxActionsPerEvent})`;
+        return `${Lang.getText(LangTextType.A0180)} (${actionsCount}/${CommonConstants.WarEventMaxActionsPerEvent})`;
     }
 
     const nodeId = event.conditionNodeId;
     if (nodeId == null) {
-        return Lang.getText(Lang.Type.A0159);
+        return Lang.getText(LangTextType.A0159);
     }
 
     return undefined;
@@ -867,7 +868,7 @@ export function getErrorTipForEvent(fullData: IWarEventFullData, event: IWarEven
 export function getErrorTipForEventCallCountInPlayerTurn(event: IWarEvent): string | undefined {
     const count = event.maxCallCountInPlayerTurn;
     if ((count == null) || (count < 1) || (count > CommonConstants.WarEventMaxCallCountInPlayerTurn)) {
-        return Lang.getText(Lang.Type.A0181);
+        return Lang.getText(LangTextType.A0181);
     }
 
     return undefined;
@@ -876,7 +877,7 @@ export function getErrorTipForEventCallCountInPlayerTurn(event: IWarEvent): stri
 export function getErrorTipForEventCallCountTotal(event: IWarEvent): string | undefined {
     const count = event.maxCallCountTotal;
     if ((count == null) || (count < 1) || (count > CommonConstants.WarEventMaxCallCountTotal)) {
-        return Lang.getText(Lang.Type.A0181);
+        return Lang.getText(LangTextType.A0181);
     }
 
     return undefined;
@@ -885,22 +886,22 @@ export function getErrorTipForEventCallCountTotal(event: IWarEvent): string | un
 export function getErrorTipForConditionNode(fullData: IWarEventFullData, node: IWarEventConditionNode): string | undefined {
     const nodesCount = (fullData.conditionNodeArray || []).length;
     if (nodesCount > CommonConstants.WarEventMaxConditionNodesPerMap) {
-        return `${Lang.getText(Lang.Type.A0183)} (${nodesCount}/${CommonConstants.WarEventMaxConditionNodesPerMap})`;
+        return `${Lang.getText(LangTextType.A0183)} (${nodesCount}/${CommonConstants.WarEventMaxConditionNodesPerMap})`;
     }
 
     if (((node.subNodeIdArray || []).length) + ((node.conditionIdArray || []).length) <= 0) {
-        return Lang.getText(Lang.Type.A0161);
+        return Lang.getText(LangTextType.A0161);
     }
 
     const nodeId            = node.nodeId;
     const duplicatedNodeId  = getDuplicatedSubNodeId(fullData, nodeId);
     if (duplicatedNodeId != null) {
-        return Lang.getFormattedText(Lang.Type.F0061, `N${duplicatedNodeId}`);
+        return Lang.getFormattedText(LangTextType.F0061, `N${duplicatedNodeId}`);
     }
 
     const duplicatedConditionId = getDuplicatedConditionId(fullData, nodeId);
     if (duplicatedConditionId != null) {
-        return Lang.getFormattedText(Lang.Type.F0062, `C${duplicatedConditionId}`);
+        return Lang.getFormattedText(LangTextType.F0062, `C${duplicatedConditionId}`);
     }
 
     return undefined;
@@ -909,11 +910,11 @@ export function getErrorTipForConditionNode(fullData: IWarEventFullData, node: I
 export function getErrorTipForCondition(fullData: IWarEventFullData, condition: IWarEventCondition): string | undefined {
     const conditionsCount = (fullData.conditionArray || []).length;
     if (conditionsCount > CommonConstants.WarEventMaxConditionsPerMap) {
-        return `${Lang.getText(Lang.Type.A0185)} (${conditionsCount}/${CommonConstants.WarEventMaxConditionsPerMap})`;
+        return `${Lang.getText(LangTextType.A0185)} (${conditionsCount}/${CommonConstants.WarEventMaxConditionsPerMap})`;
     }
 
     if (Object.keys(condition).length !== 2) {
-        return Lang.getText(Lang.Type.A0187);
+        return Lang.getText(LangTextType.A0187);
     }
 
     // TODO add more tips for the future conditions.
@@ -942,26 +943,26 @@ export function getErrorTipForCondition(fullData: IWarEventFullData, condition: 
     } else if (condition.WecTurnPhaseEqualTo) {
         return getErrorTipForWecTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo);
     } else {
-        return Lang.getText(Lang.Type.A0187);
+        return Lang.getText(LangTextType.A0187);
     }
 }
 function getErrorTipForWecEventCalledCountTotalEqualTo(data: WarEvent.IWecEventCalledCountTotalEqualTo): string | undefined {
     if ((data.countEqualTo == null) || (data.eventIdEqualTo == null) || (data.isNot == null)) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
 }
 function getErrorTipForWecEventCalledCountTotalGreaterThan(data: WarEvent.IWecEventCalledCountTotalGreaterThan): string | undefined {
     if ((data.countGreaterThan == null) || (data.eventIdEqualTo == null) || (data.isNot == null)) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
 }
 function getErrorTipForWecEventCalledCountTotalLessThan(data: WarEvent.IWecEventCalledCountTotalLessThan): string | undefined {
     if ((data.countLessThan == null) || (data.eventIdEqualTo == null) || (data.isNot == null)) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
@@ -969,55 +970,55 @@ function getErrorTipForWecEventCalledCountTotalLessThan(data: WarEvent.IWecEvent
 function getErrorTipForWecPlayerAliveStateEqualTo(data: WarEvent.IWecPlayerAliveStateEqualTo): string | undefined {
     const aliveState = data.aliveStateEqualTo;
     if ((aliveState == null) || (data.playerIndexEqualTo == null) || (data.isNot == null)) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
     if ((aliveState !== PlayerAliveState.Alive)   &&
         (aliveState !== PlayerAliveState.Dead)    &&
         (aliveState !== PlayerAliveState.Dying)
     ) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
 }
 function getErrorTipForWecPlayerIndexInTurnEqualTo(data: WarEvent.IWecPlayerIndexInTurnEqualTo): string | undefined {
     if ((data.valueEqualTo == null) || (data.isNot == null)) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
 }
 function getErrorTipForWecPlayerIndexInTurnGreaterThan(data: WarEvent.IWecPlayerIndexInTurnGreaterThan): string | undefined {
     if ((data.valueGreaterThan == null) || (data.isNot == null)) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
 }
 function getErrorTipForWecPlayerIndexInTurnLessThan(data: WarEvent.IWecPlayerIndexInTurnLessThan): string | undefined {
     if ((data.valueLessThan == null) || (data.isNot == null)) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
 }
 function getErrorTipForWecTurnIndexEqualTo(data: WarEvent.IWecTurnIndexEqualTo): string | undefined {
     if ((data.valueEqualTo == null) || (data.isNot == null)) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
 }
 function getErrorTipForWecTurnIndexGreaterThan(data: WarEvent.IWecTurnIndexGreaterThan): string | undefined {
     if ((data.valueGreaterThan == null) || (data.isNot == null)) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
 }
 function getErrorTipForWecTurnIndexLessThan(data: WarEvent.IWecTurnIndexLessThan): string | undefined {
     if ((data.valueLessThan == null) || (data.isNot == null)) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
@@ -1031,7 +1032,7 @@ function getErrorTipForWecTurnIndexRemainderEqualTo(data: WarEvent.IWecTurnIndex
         (divider < 1)           ||
         (remainder >= divider)
     ) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
@@ -1039,13 +1040,13 @@ function getErrorTipForWecTurnIndexRemainderEqualTo(data: WarEvent.IWecTurnIndex
 function getErrorTipForWecTurnPhaseEqualTo(data: WarEvent.IWecTurnPhaseEqualTo): string | undefined {
     const turnPhase = data.valueEqualTo;
     if ((turnPhase == null) || (data.isNot == null)) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     if ((turnPhase !== Types.TurnPhaseCode.WaitBeginTurn)   &&
         (turnPhase !== Types.TurnPhaseCode.Main)
     ) {
-        return Lang.getText(Lang.Type.A0165);
+        return Lang.getText(LangTextType.A0165);
     }
 
     return undefined;
@@ -1054,11 +1055,11 @@ function getErrorTipForWecTurnPhaseEqualTo(data: WarEvent.IWecTurnPhaseEqualTo):
 export function getErrorTipForAction(fullData: IWarEventFullData, action: IWarEventAction, war: MeWar): string | undefined {
     const actionsCountTotal = (fullData.actionArray || []).length;
     if (actionsCountTotal > CommonConstants.WarEventMaxActionsPerMap) {
-        return `${Lang.getText(Lang.Type.A0184)} (${actionsCountTotal}/${CommonConstants.WarEventMaxActionsPerMap})`;
+        return `${Lang.getText(LangTextType.A0184)} (${actionsCountTotal}/${CommonConstants.WarEventMaxActionsPerMap})`;
     }
 
     if (Object.keys(action).length !== 2) {
-        return Lang.getText(Lang.Type.A0177);
+        return Lang.getText(LangTextType.A0177);
     }
 
     // TODO add more tips for the future actions.
@@ -1067,14 +1068,14 @@ export function getErrorTipForAction(fullData: IWarEventFullData, action: IWarEv
     } else if (action.WeaSetPlayerAliveState) {
         return getErrorTipForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState);
     } else {
-        return Lang.getText(Lang.Type.A0177);
+        return Lang.getText(LangTextType.A0177);
     }
 }
 function getErrorTipForWeaAddUnit(data: WarEvent.IWeaAddUnit, war: MeWar): string | undefined {
     const unitArray     = data.unitArray || [];
     const unitsCount    = unitArray.length;
     if ((unitsCount <= 0) || (unitsCount > CommonConstants.WarEventActionAddUnitMaxCount)) {
-        return `${Lang.getText(Lang.Type.A0191)} (${unitsCount} / ${CommonConstants.WarEventActionAddUnitMaxCount})`;
+        return `${Lang.getText(LangTextType.A0191)} (${unitsCount} / ${CommonConstants.WarEventActionAddUnitMaxCount})`;
     }
 
     const mapSize       = war.getTileMap().getMapSize();
@@ -1092,7 +1093,7 @@ function getErrorTipForWeaAddUnit(data: WarEvent.IWeaAddUnit, war: MeWar): strin
             }));
     };
     if (!unitArray.every(validator)) {
-        return Lang.getText(Lang.Type.A0169);
+        return Lang.getText(LangTextType.A0169);
     }
 
     return undefined;
@@ -1103,19 +1104,19 @@ function getErrorTipForWeaSetPlayerAliveState(data: WarEvent.IWeaSetPlayerAliveS
         (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
         (playerIndex < CommonConstants.WarFirstPlayerIndex)
     ) {
-        return `${Lang.getText(Lang.Type.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${CommonConstants.WarMaxPlayerIndex})`;
+        return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${CommonConstants.WarMaxPlayerIndex})`;
     }
 
     const playerAliveState: PlayerAliveState | null | undefined = data.playerAliveState;
     if (playerAliveState == null) {
-        return Lang.getText(Lang.Type.A0213);
+        return Lang.getText(LangTextType.A0213);
     }
 
     if ((playerAliveState !== PlayerAliveState.Alive)   &&
         (playerAliveState !== PlayerAliveState.Dead)    &&
         (playerAliveState !== PlayerAliveState.Dying)
     ) {
-        return Lang.getText(Lang.Type.A0213);
+        return Lang.getText(LangTextType.A0213);
     }
 
     return undefined;
@@ -1600,8 +1601,8 @@ export function addEvent(fullData: IWarEventFullData): number | undefined {
             eventArray.push({
                 eventId,
                 eventNameArray          : [
-                    { languageType: LanguageType.Chinese, text: `${Lang.getText(Lang.Type.B0469, LanguageType.Chinese)} #${eventId}` },
-                    { languageType: LanguageType.English, text: `${Lang.getText(Lang.Type.B0469, LanguageType.English)} #${eventId}` },
+                    { languageType: LanguageType.Chinese, text: `${Lang.getText(LangTextType.B0469, LanguageType.Chinese)} #${eventId}` },
+                    { languageType: LanguageType.English, text: `${Lang.getText(LangTextType.B0469, LanguageType.English)} #${eventId}` },
                 ],
                 maxCallCountInPlayerTurn: 1,
                 maxCallCountTotal       : 1,

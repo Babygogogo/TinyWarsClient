@@ -14,7 +14,9 @@ import { OpenDataForMrrPreviewBasicSettingsPage, MrrPreviewBasicSettingsPage }  
 import { OpenDataForMrrPreviewMapInfoPage, MrrPreviewMapInfoPage }                      from "./MrrPreviewMapInfoPage";
 import * as Helpers                                                                     from "../../../utility/Helpers";
 import * as Lang                                                                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                                                                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                                                                  from "../../../utility/ProtoTypes";
 import * as Types                                                                       from "../../../utility/Types";
 import * as WarMapModel                                                                 from "../../warMap/model/WarMapModel";
@@ -65,8 +67,8 @@ export class MrrPreviewMapListPanel extends UiPanel<OpenDataForMrrPreviewMapList
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MrrPreviewingMapIdChanged,  callback: this._onNotifyMrrPreviewingMapIdChanged },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MrrPreviewingMapIdChanged,  callback: this._onNotifyMrrPreviewingMapIdChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,        callback: this._onTouchedBtnBack },
@@ -118,17 +120,17 @@ export class MrrPreviewMapListPanel extends UiPanel<OpenDataForMrrPreviewMapList
         const hasFog = this._getOpenData().hasFog;
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : MrrPreviewMapInfoPage,
                 pageData    : { mapId: null } as OpenDataForMrrPreviewMapInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : MrrPreviewBasicSettingsPage,
                 pageData    : { hasFog, mapId: null } as OpenDataForMrrPreviewBasicSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData : { name: Lang.getText(LangTextType.B0003) },
                 pageClass   : MrrPreviewAdvancedSettingsPage,
                 pageData    : { hasFog, mapId: null } as OpenDataForMrrPreviewAdvancedSettingsPage,
             },
@@ -136,13 +138,13 @@ export class MrrPreviewMapListPanel extends UiPanel<OpenDataForMrrPreviewMapList
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text     = Lang.getText(Lang.Type.A0040);
-        this._labelRankMatch.text   = Lang.getText(Lang.Type.B0404);
-        this._labelPreviewMap.text  = Lang.getText(Lang.Type.B0594);
-        this._labelMapType.text     = Lang.getText(this._getOpenData().hasFog ? Lang.Type.B0596 : Lang.Type.B0595);
-        this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-        this._labelNoMap.text       = Lang.getText(Lang.Type.B0582);
-        this._btnSwitch.label       = Lang.getText(Lang.Type.B0597);
+        this._labelLoading.text     = Lang.getText(LangTextType.A0040);
+        this._labelRankMatch.text   = Lang.getText(LangTextType.B0404);
+        this._labelPreviewMap.text  = Lang.getText(LangTextType.B0594);
+        this._labelMapType.text     = Lang.getText(this._getOpenData().hasFog ? LangTextType.B0596 : LangTextType.B0595);
+        this._btnBack.label         = Lang.getText(LangTextType.B0146);
+        this._labelNoMap.text       = Lang.getText(LangTextType.B0582);
+        this._btnSwitch.label       = Lang.getText(LangTextType.B0597);
     }
 
     private async _updateGroupMapList(): Promise<void> {
@@ -297,7 +299,7 @@ class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
             { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.MrrPreviewingMapIdChanged, callback: this._onNotifyMrrPreviewingMapIdChanged },
+            { type: NotifyType.MrrPreviewingMapIdChanged, callback: this._onNotifyMrrPreviewingMapIdChanged },
         ]);
     }
 

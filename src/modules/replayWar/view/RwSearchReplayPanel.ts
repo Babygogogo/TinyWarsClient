@@ -7,7 +7,9 @@ import { UiTextInput }                  from "../../../gameui/UiTextInput";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as RwProxy                     from "../model/RwProxy";
 
@@ -71,7 +73,7 @@ export class RwSearchReplayPanel extends UiPanel<void> {
             { ui: this._inputMinMyRating,       callback: this._onFocusOutInputMinMyRating,     eventType: egret.Event.FOCUS_OUT },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._showOpenAnimation();
@@ -120,16 +122,16 @@ export class RwSearchReplayPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelName.text                    = Lang.getText(Lang.Type.B0447);
-        this._labelReplayIdTitle.text           = Lang.getText(Lang.Type.B0235);
-        this._labelMapNameTitle.text            = Lang.getText(Lang.Type.B0225);
-        this._labelUserNicknameTitle.text       = Lang.getText(Lang.Type.B0393);
-        this._labelCoNameTitle.text             = Lang.getText(Lang.Type.B0394);
-        this._labelMinMyRatingTitle.text        = Lang.getText(Lang.Type.B0363);
-        this._labelMinGlobalRatingTitle.text    = Lang.getText(Lang.Type.B0364);
-        this._labelDesc.text                    = Lang.getText(Lang.Type.A0063);
-        this._btnReset.label                    = Lang.getText(Lang.Type.B0567);
-        this._btnSearch.label                   = Lang.getText(Lang.Type.B0228);
+        this._labelName.text                    = Lang.getText(LangTextType.B0447);
+        this._labelReplayIdTitle.text           = Lang.getText(LangTextType.B0235);
+        this._labelMapNameTitle.text            = Lang.getText(LangTextType.B0225);
+        this._labelUserNicknameTitle.text       = Lang.getText(LangTextType.B0393);
+        this._labelCoNameTitle.text             = Lang.getText(LangTextType.B0394);
+        this._labelMinMyRatingTitle.text        = Lang.getText(LangTextType.B0363);
+        this._labelMinGlobalRatingTitle.text    = Lang.getText(LangTextType.B0364);
+        this._labelDesc.text                    = Lang.getText(LangTextType.A0063);
+        this._btnReset.label                    = Lang.getText(LangTextType.B0567);
+        this._btnSearch.label                   = Lang.getText(LangTextType.B0228);
     }
 
     private _showOpenAnimation(): void {

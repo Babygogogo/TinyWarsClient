@@ -13,7 +13,9 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
@@ -38,8 +40,8 @@ export class CcrCreateAdvancedSettingsPage extends UiTabPage<void> {
 
     protected async _onOpened(): Promise<void> {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.CcrCreatePresetWarRuleIdChanged,    callback: this._onNotifyCcrCreatePresetWarRuleIdChanged },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.CcrCreatePresetWarRuleIdChanged,    callback: this._onNotifyCcrCreatePresetWarRuleIdChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnReset,       callback: this._onTouchedBtnReset },
@@ -78,7 +80,7 @@ export class CcrCreateAdvancedSettingsPage extends UiTabPage<void> {
     }
     private _onTouchedBtnCustomize(): void {
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0129),
+            content : Lang.getText(LangTextType.A0129),
             callback: () => {
                 CreateModel.setCustomWarRuleId();
             },
@@ -89,8 +91,8 @@ export class CcrCreateAdvancedSettingsPage extends UiTabPage<void> {
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._btnReset.label        = Lang.getText(Lang.Type.B0567);
-        this._btnCustomize.label    = Lang.getText(Lang.Type.B0575);
+        this._btnReset.label        = Lang.getText(LangTextType.B0567);
+        this._btnCustomize.label    = Lang.getText(LangTextType.B0575);
     }
 
     private _updateBtnReset(): void {
@@ -159,7 +161,7 @@ class SettingRenderer extends UiListItemRenderer<DataForSettingRenderer> {
         if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
             CommonHelpPanel.show({
                 title   : `CO`,
-                content : Lang.getText(Lang.Type.R0004),
+                content : Lang.getText(LangTextType.R0004),
             });
         }
     }
@@ -236,9 +238,9 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             { ui: this._inputValue, callback: this._onFocusOutInputValue, eventType: egret.FocusEvent.FOCUS_OUT },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.CcrCreatePresetWarRuleIdChanged,    callback: this._onNotifyCcrCreatePresetWarRuleIdChanged },
-            { type: Notify.Type.CcrCreateBannedCoIdArrayChanged,    callback: this._onNotifyCcrCreateBannedCoIdArrayChanged },
-            { type: Notify.Type.CcrCreateAiCoIdChanged,             callback: this._onNotifyCcrCreateAiCoIdChanged },
+            { type: NotifyType.CcrCreatePresetWarRuleIdChanged,    callback: this._onNotifyCcrCreatePresetWarRuleIdChanged },
+            { type: NotifyType.CcrCreateBannedCoIdArrayChanged,    callback: this._onNotifyCcrCreateBannedCoIdArrayChanged },
+            { type: NotifyType.CcrCreateAiCoIdChanged,             callback: this._onNotifyCcrCreateAiCoIdChanged },
         ]);
         this._labelValue.touchEnabled = true;
     }
@@ -254,7 +256,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
 
     private _onTouchedBtnCustom(): void {
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0129),
+            content : Lang.getText(LangTextType.A0129),
             callback: () => {
                 CreateModel.setCustomWarRuleId();
             },
@@ -349,7 +351,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleInitialFundMaxLimit)    ||
                 (value < CommonConstants.WarRuleInitialFundMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 CreateModel.setInitialFund(playerIndex, value);
             }
@@ -373,7 +375,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleIncomeMultiplierMaxLimit)   ||
                 (value < CommonConstants.WarRuleIncomeMultiplierMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 CreateModel.setIncomeMultiplier(playerIndex, value);
             }
@@ -397,7 +399,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
                 (value < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 CreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
             }
@@ -421,7 +423,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit) ||
                 (value < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 CreateModel.setEnergyGrowthMultiplier(playerIndex, value);
             }
@@ -445,7 +447,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
                 (value < CommonConstants.WarRuleMoveRangeModifierMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 CreateModel.setMoveRangeModifier(playerIndex, value);
             }
@@ -469,7 +471,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleOffenseBonusMaxLimit)   ||
                 (value < CommonConstants.WarRuleOffenseBonusMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 CreateModel.setAttackPowerModifier(playerIndex, value);
             }
@@ -493,7 +495,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleVisionRangeModifierMaxLimit)    ||
                 (value < CommonConstants.WarRuleVisionRangeModifierMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 CreateModel.setVisionRangeModifier(playerIndex, value);
             }
@@ -518,7 +520,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value < CommonConstants.WarRuleLuckMinLimit)           ||
                 (value > CreateModel.getLuckUpperLimit(playerIndex))
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 CreateModel.setLuckLowerLimit(playerIndex, value);
             }
@@ -543,7 +545,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value < CommonConstants.WarRuleLuckMinLimit)           ||
                 (value < CreateModel.getLuckLowerLimit(playerIndex))
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 CreateModel.setLuckUpperLimit(playerIndex, value);
             }
@@ -556,7 +558,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         const labelValue    = this._labelValue;
         const isAiControl   = CreateModel.getAiCoId(playerIndex) != null;
         labelValue.visible  = true;
-        labelValue.text     = Lang.getText(isAiControl ? Lang.Type.B0012 : Lang.Type.B0013);
+        labelValue.text     = Lang.getText(isAiControl ? LangTextType.B0012 : LangTextType.B0013);
 
         this._callbackForTouchLabelValue = () => {
             if (isAiControl) {
@@ -564,7 +566,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 CreateModel.deleteAiSkinId(playerIndex);
             } else {
                 if (playerIndex === CreateModel.getSelfPlayerIndex()) {
-                    FloatText.show(Lang.getText(Lang.Type.A0220));
+                    FloatText.show(Lang.getText(LangTextType.A0220));
                 } else {
                     CreateModel.setAiCoId(playerIndex, CommonConstants.CoEmptyId);
                     CreateModel.setAiSkinId(playerIndex, playerIndex);
@@ -584,7 +586,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
 
         this._callbackForTouchLabelValue = () => {
             if (playerIndex === CreateModel.getSelfPlayerIndex()) {
-                FloatText.show(Lang.getText(Lang.Type.A0220));
+                FloatText.show(Lang.getText(LangTextType.A0220));
             } else {
                 CommonChooseCoPanel.show({
                     currentCoId         : coId,

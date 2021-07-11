@@ -4,7 +4,9 @@ import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
 import { BwWar }                from "../../baseWar/model/BwWar";
 import * as NetManager          from "../../../network/NetManager";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as MpwModel            from "../../multiPlayerWar/model/MpwModel";
@@ -35,7 +37,7 @@ function _onMsgMpwCommonBroadcastGameStart(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwCommonBroadcastGameStart.IS;
     Lang.getGameStartDesc(data).then(desc => {
         CommonConfirmPanel.show({
-            title   : Lang.getText(Lang.Type.B0392),
+            title   : Lang.getText(LangTextType.B0392),
             content : desc,
             callback: () => {
                 reqMpwCommonContinueWar(data.warId);
@@ -54,9 +56,9 @@ export function reqMpwCommonContinueWar(warId: number): void {
 function _onMsgMpwCommonContinueWar(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwCommonContinueWar.IS;
     if (data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMpwCommonContinueWarFailed, data);
+        Notify.dispatch(NotifyType.MsgMpwCommonContinueWarFailed, data);
     } else {
-        Notify.dispatch(Notify.Type.MsgMpwCommonContinueWar, data);
+        Notify.dispatch(NotifyType.MsgMpwCommonContinueWar, data);
     }
 }
 
@@ -68,7 +70,7 @@ export function reqMpwCommonGetMyWarInfoList(): void {
 function _onMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
     MpwModel.setAllMyWarInfoList(data.infos);
-    Notify.dispatch(Notify.Type.MsgMpwCommonGetMyWarInfoList, data);
+    Notify.dispatch(NotifyType.MsgMpwCommonGetMyWarInfoList, data);
 }
 
 export function reqMpwCommonSyncWar(war: BwWar, requestType: Types.SyncWarRequestType): void {
@@ -84,7 +86,7 @@ function _onMsgMpwCommonSyncWar(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwCommonSyncWar.IS;
     if (!data.errorCode) {
         MpwModel.updateOnPlayerSyncWar(data);
-        Notify.dispatch(Notify.Type.MsgMpwCommonSyncWar);
+        Notify.dispatch(NotifyType.MsgMpwCommonSyncWar);
     }
 }
 
@@ -98,7 +100,7 @@ function _onMsgMpwWatchGetUnwatchedWarInfos(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwWatchGetUnwatchedWarInfos.IS;
     if (!data.errorCode) {
         MpwModel.setUnwatchedWarInfos(data.infos);
-        Notify.dispatch(Notify.Type.MsgMpwWatchGetUnwatchedWarInfos, data);
+        Notify.dispatch(NotifyType.MsgMpwWatchGetUnwatchedWarInfos, data);
     }
 }
 
@@ -112,7 +114,7 @@ function _onMsgMpwWatchGetOngoingWarInfos(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwWatchGetOngoingWarInfos.IS;
     if (!data.errorCode) {
         MpwModel.setWatchOngoingWarInfos(data.infos);
-        Notify.dispatch(Notify.Type.MsgMpwWatchGetOngoingWarInfos, data);
+        Notify.dispatch(NotifyType.MsgMpwWatchGetOngoingWarInfos, data);
     }
 }
 
@@ -126,7 +128,7 @@ function _onMsgMpwWatchGetRequestedWarInfos(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwWatchGetRequestedWarInfos.IS;
     if (!data.errorCode) {
         MpwModel.setWatchRequestedWarInfos(data.infos);
-        Notify.dispatch(Notify.Type.MsgMpwWatchGetRequestedWarInfos, data);
+        Notify.dispatch(NotifyType.MsgMpwWatchGetRequestedWarInfos, data);
     }
 }
 
@@ -140,7 +142,7 @@ function _onMsgMpwWatchGetWatchedWarInfos(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwWatchGetWatchedWarInfos.IS;
     if (!data.errorCode) {
         MpwModel.setWatchedWarInfos(data.infos);
-        Notify.dispatch(Notify.Type.MsgMpwWatchGetWatchedWarInfos, data);
+        Notify.dispatch(NotifyType.MsgMpwWatchGetWatchedWarInfos, data);
     }
 }
 
@@ -155,7 +157,7 @@ export function reqWatchMakeRequest(warId: number, dstUserIds: number[]): void {
 function _onMsgMpwWatchMakeRequest(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwWatchMakeRequest.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMpwWatchMakeRequest, data);
+        Notify.dispatch(NotifyType.MsgMpwWatchMakeRequest, data);
     }
 }
 
@@ -171,7 +173,7 @@ export function reqWatchHandleRequest(warId: number, acceptSrcUserIds: number[],
 function _onMsgMpwWatchHandleRequest(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwWatchHandleRequest.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMpwWatchHandleRequest, data);
+        Notify.dispatch(NotifyType.MsgMpwWatchHandleRequest, data);
     }
 }
 
@@ -186,7 +188,7 @@ export function reqWatchDeleteWatcher(warId: number, watcherUserIds: number[]): 
 function _onMsgMpwWatchDeleteWatcher(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwWatchDeleteWatcher.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMpwWatchDeleteWatcher, data);
+        Notify.dispatch(NotifyType.MsgMpwWatchDeleteWatcher, data);
     }
 }
 
@@ -200,9 +202,9 @@ export function reqWatchContinueWar(warId: number): void {
 function _onMsgMpwWatchContinueWar(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwWatchContinueWar.IS;
     if (data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMpwWatchContinueWarFailed, data);
+        Notify.dispatch(NotifyType.MsgMpwWatchContinueWarFailed, data);
     } else {
-        Notify.dispatch(Notify.Type.MsgMpwWatchContinueWar, data);
+        Notify.dispatch(NotifyType.MsgMpwWatchContinueWar, data);
     }
 }
 
@@ -216,7 +218,7 @@ export function reqMpwCommonHandleBoot(warId: number): void {
 function _onMsgMpwCommonHandleBoot(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwCommonHandleBoot.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMpwCommonHandleBoot, data);
+        Notify.dispatch(NotifyType.MsgMpwCommonHandleBoot, data);
     }
 }
 
@@ -232,6 +234,6 @@ function _onMsgMpwExecuteWarAction(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMpwExecuteWarAction.IS;
     if (!data.errorCode) {
         MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-        Notify.dispatch(Notify.Type.MsgMpwExecuteWarAction, data);
+        Notify.dispatch(NotifyType.MsgMpwExecuteWarAction, data);
     }
 }

@@ -9,7 +9,9 @@ import { SpmMainMenuPanel }             from "../../singlePlayerMode/view/SpmMai
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
 import * as McrModel                    from "../../multiCustomRoom/model/McrModel";
@@ -88,12 +90,12 @@ export class LobbyPanel extends UiPanel<void> {
             { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
-            { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
-            { type: Notify.Type.MsgMfrGetJoinedRoomInfoList,    callback: this._onMsgMfrGetJoinedRoomInfoList },
-            { type: Notify.Type.MsgCcrGetJoinedRoomInfoList,    callback: this._onMsgCcrGetJoinedRoomInfoList },
-            { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgUserLogout,                  callback: this._onMsgUserLogout },
+            { type: NotifyType.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
+            { type: NotifyType.MsgMfrGetJoinedRoomInfoList,    callback: this._onMsgMfrGetJoinedRoomInfoList },
+            { type: NotifyType.MsgCcrGetJoinedRoomInfoList,    callback: this._onMsgCcrGetJoinedRoomInfoList },
+            { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
         ]);
 
         this._showOpenAnimation();
@@ -113,7 +115,7 @@ export class LobbyPanel extends UiPanel<void> {
     private _onTouchedGroupDiscord(): void {
         if ((window) && (window.open)) {
             CommonConfirmPanel.show({
-                content : Lang.getFormattedText(Lang.Type.F0065, `Discord`),
+                content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                 callback: () => {
                     window.open(CommonConstants.DiscordUrl);
                 },
@@ -124,7 +126,7 @@ export class LobbyPanel extends UiPanel<void> {
     private _onTouchedGroupGithub(): void {
         if ((window) && (window.open)) {
             CommonConfirmPanel.show({
-                content : Lang.getFormattedText(Lang.Type.F0065, `GitHub`),
+                content : Lang.getFormattedText(LangTextType.F0065, `GitHub`),
                 callback: () => {
                     window.open(CommonConstants.GithubUrl);
                 },
@@ -253,13 +255,13 @@ export class LobbyPanel extends UiPanel<void> {
     }
 
     private async _updateComponentsForLanguage(): Promise<void> {
-        this._labelTips0.text   = Lang.getText(Lang.Type.A0195);
+        this._labelTips0.text   = Lang.getText(LangTextType.A0195);
         this._labelTips1.text   = ` `;
-        this._labelTips2.text   = `${Lang.getText(Lang.Type.B0537)}:`;
+        this._labelTips2.text   = `${Lang.getText(LangTextType.B0537)}:`;
         this._labelTips3.text   = `368142455`;
-        this._labelTips4.text   = `${Lang.getText(Lang.Type.B0538)}:`;
+        this._labelTips4.text   = `${Lang.getText(LangTextType.B0538)}:`;
         this._labelTips5.text   = CommonConstants.DiscordUrl;
-        this._labelTips6.text   = `${Lang.getText(Lang.Type.B0539)}:`;
+        this._labelTips6.text   = `${Lang.getText(LangTextType.B0539)}:`;
         this._labelTips7.text   = CommonConstants.GithubUrl;
     }
 

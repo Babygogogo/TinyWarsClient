@@ -2,7 +2,9 @@
 import * as CommonModel     from "../../common/model/CommonModel";
 import * as CommonProxy     from "../../common/model/CommonProxy";
 import * as Notify          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Lang            from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as FloatText       from "../../../utility/FloatText";
 import * as LocalStorage    from "../../../utility/LocalStorage";
 import * as ProtoTypes      from "../../../utility/ProtoTypes";
@@ -26,14 +28,14 @@ let _gridAnimationTickCount     = 0;
 
 export function init(): void {
     Notify.addEventListeners([
-        { type: Notify.Type.NetworkConnected,       callback: _onNotifyNetworkConnected, },
-        { type: Notify.Type.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, },
-        { type: Notify.Type.MsgCommonHeartbeat,     callback: _onMsgCommonHeartbeat, },
+        { type: NotifyType.NetworkConnected,       callback: _onNotifyNetworkConnected, },
+        { type: NotifyType.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, },
+        { type: NotifyType.MsgCommonHeartbeat,     callback: _onMsgCommonHeartbeat, },
     ]);
 
     egret.setInterval(() => {
         (_serverTimestamp) && (++_serverTimestamp);
-        Notify.dispatch(Notify.Type.TimeTick);
+        Notify.dispatch(NotifyType.TimeTick);
     }, undefined, 1000);
 
     if (LocalStorage.getShowTileAnimation()) {
@@ -45,7 +47,7 @@ export function init(): void {
 
     egret.setInterval(() => {
         ++_gridAnimationTickCount;
-        Notify.dispatch(Notify.Type.GridAnimationTick);
+        Notify.dispatch(NotifyType.GridAnimationTick);
     }, undefined, GRID_ANIMATION_INTERVAL_MS);
 }
 
@@ -59,7 +61,7 @@ export function startTileAnimationTick(): void {
     _intervalIdForTileAnimation = egret.setInterval(() => {
         ++_tileAnimationTickCount;
         CommonModel.tickTileImageSources();
-        Notify.dispatch(Notify.Type.TileAnimationTick);
+        Notify.dispatch(NotifyType.TileAnimationTick);
     }, undefined, TILE_ANIMATION_INTERVAL_MS);
 }
 export function stopTileAnimationTick(): void {
@@ -81,7 +83,7 @@ export function startUnitAnimationTick(): void {
     _intervalIdForUnitAnimation = egret.setInterval(() => {
         ++_unitAnimationTickCount;
         CommonModel.tickUnitImageSources();
-        Notify.dispatch(Notify.Type.UnitAnimationTick);
+        Notify.dispatch(NotifyType.UnitAnimationTick);
     }, undefined, UNIT_ANIMATION_INTERVAL_MS);
 }
 export function stopUnitAnimationTick(): void {
@@ -130,9 +132,9 @@ function _onMsgCommonHeartbeat(e: egret.Event): void {
 function heartbeat(): void {
     if (!_isHeartbeatAnswered) {
         if (!NetManager.checkCanAutoReconnect()) {
-            FloatText.show(Lang.getText(Lang.Type.A0013));
+            FloatText.show(Lang.getText(LangTextType.A0013));
         } else {
-            FloatText.show(Lang.getText(Lang.Type.A0008));
+            FloatText.show(Lang.getText(LangTextType.A0008));
             NetManager.init();
         }
     }

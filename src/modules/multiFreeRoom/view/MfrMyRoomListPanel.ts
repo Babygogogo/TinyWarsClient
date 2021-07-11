@@ -16,7 +16,9 @@ import { MfrRoomBasicSettingsPage, OpenDataForMfrRoomBasicSettingsPage }        
 import { OpenDataForMfrRoomAdvancedSettingsPage, MfrRoomAdvancedSettingsPage }  from "./MfrRoomAdvancedSettingsPage";
 import * as Helpers                                                             from "../../../utility/Helpers";
 import * as Lang                                                                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                                                              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                                                               from "../../../utility/Types";
 import * as MfrModel                                                            from "../../multiFreeRoom/model/MfrModel";
 import * as MfrProxy                                                            from "../../multiFreeRoom/model/MfrProxy";
@@ -65,14 +67,14 @@ export class MfrMyRoomListPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MfrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMfrJoinedPreviewingRoomIdChanged },
-            { type: Notify.Type.MsgMfrGetJoinedRoomInfoList,        callback: this._onNotifyMsgMfrGetJoinedRoomInfoList },
-            { type: Notify.Type.MsgMfrCreateRoom,                   callback: this._onNotifyMsgCreateRoom },
-            { type: Notify.Type.MsgMfrDeleteRoomByServer,           callback: this._onNotifyMsgMfrDeleteRoomByServer },
-            { type: Notify.Type.MsgMfrJoinRoom,                     callback: this._onNotifyMsgMfrJoinRoom },
-            { type: Notify.Type.MsgMfrDeletePlayer,                 callback: this._onNotifyMsgMfrDeletePlayer },
-            { type: Notify.Type.MsgMfrExitRoom,                     callback: this._onNotifyMsgMfrExitRoom },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MfrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMfrJoinedPreviewingRoomIdChanged },
+            { type: NotifyType.MsgMfrGetJoinedRoomInfoList,        callback: this._onNotifyMsgMfrGetJoinedRoomInfoList },
+            { type: NotifyType.MsgMfrCreateRoom,                   callback: this._onNotifyMsgCreateRoom },
+            { type: NotifyType.MsgMfrDeleteRoomByServer,           callback: this._onNotifyMsgMfrDeleteRoomByServer },
+            { type: NotifyType.MsgMfrJoinRoom,                     callback: this._onNotifyMsgMfrJoinRoom },
+            { type: NotifyType.MsgMfrDeletePlayer,                 callback: this._onNotifyMsgMfrDeletePlayer },
+            { type: NotifyType.MsgMfrExitRoom,                     callback: this._onNotifyMsgMfrExitRoom },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -156,22 +158,22 @@ export class MfrMyRoomListPanel extends UiPanel<void> {
     private _initTabSettings(): void {
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : MfrRoomMapInfoPage,
                 pageData    : { roomId: null } as OpenDataForMfrRoomMapInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                tabItemData : { name: Lang.getText(LangTextType.B0224) },
                 pageClass   : MfrRoomPlayerInfoPage,
                 pageData    : { roomId: null } as OpenDataForMfrRoomPlayerInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : MfrRoomBasicSettingsPage,
                 pageData    : { roomId: null } as OpenDataForMfrRoomBasicSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData : { name: Lang.getText(LangTextType.B0003) },
                 pageClass   : MfrRoomAdvancedSettingsPage,
                 pageData    : { roomId: null } as OpenDataForMfrRoomAdvancedSettingsPage,
             },
@@ -179,13 +181,13 @@ export class MfrMyRoomListPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-        this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0137);
-        this._labelFreeMode.text        = Lang.getText(Lang.Type.B0557);
-        this._labelMyRoom.text          = Lang.getText(Lang.Type.B0410);
-        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-        this._labelNoRoom.text          = Lang.getText(Lang.Type.B0582);
-        this._btnNextStep.label         = Lang.getText(Lang.Type.B0398);
+        this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+        this._labelMultiPlayer.text     = Lang.getText(LangTextType.B0137);
+        this._labelFreeMode.text        = Lang.getText(LangTextType.B0557);
+        this._labelMyRoom.text          = Lang.getText(LangTextType.B0410);
+        this._btnBack.label             = Lang.getText(LangTextType.B0146);
+        this._labelNoRoom.text          = Lang.getText(LangTextType.B0582);
+        this._btnNextStep.label         = Lang.getText(LangTextType.B0398);
     }
 
     private _updateGroupRoomList(): void {
@@ -325,7 +327,7 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
             { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.MfrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMfrJoinedPreviewingRoomIdChanged },
+            { type: NotifyType.MfrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMfrJoinedPreviewingRoomIdChanged },
         ]);
     }
 

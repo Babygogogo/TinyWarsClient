@@ -4,7 +4,9 @@ import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiTabPage }                    from "../../../gameui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
 import * as WarMapModel                 from "../../warMap/model/WarMapModel";
@@ -41,8 +43,8 @@ export class SpmWarBasicSettingsPage extends UiTabPage<OpenDataForSpmWarBasicSet
             { ui: this._btnHasFogHelp,  callback: this._onTouchedBtnHasFogHelp },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgSpmGetWarSaveSlotFullDataArray,  callback: this._onNotifyMsgSpmGetWarSaveSlotFullDataArray },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgSpmGetWarSaveSlotFullDataArray,  callback: this._onNotifyMsgSpmGetWarSaveSlotFullDataArray },
         ]);
         this.left       = 0;
         this.right      = 0;
@@ -66,8 +68,8 @@ export class SpmWarBasicSettingsPage extends UiTabPage<OpenDataForSpmWarBasicSet
 
     private _onTouchedBtnHasFogHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0020),
-            content: Lang.getText(Lang.Type.R0002),
+            title  : Lang.getText(LangTextType.B0020),
+            content: Lang.getText(LangTextType.R0002),
         });
     }
 
@@ -75,11 +77,11 @@ export class SpmWarBasicSettingsPage extends UiTabPage<OpenDataForSpmWarBasicSet
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelMapNameTitle.text            = Lang.getText(Lang.Type.B0225);
-        this._labelSaveSlotTitle.text           = Lang.getText(Lang.Type.B0606);
-        this._labelSlotCommentTitle.text        = Lang.getText(Lang.Type.B0605);
-        this._labelWarRuleTitle.text            = Lang.getText(Lang.Type.B0318);
-        this._labelHasFogTitle.text             = Lang.getText(Lang.Type.B0020);
+        this._labelMapNameTitle.text            = Lang.getText(LangTextType.B0225);
+        this._labelSaveSlotTitle.text           = Lang.getText(LangTextType.B0606);
+        this._labelSlotCommentTitle.text        = Lang.getText(LangTextType.B0605);
+        this._labelWarRuleTitle.text            = Lang.getText(LangTextType.B0318);
+        this._labelHasFogTitle.text             = Lang.getText(LangTextType.B0020);
     }
 
     private _updateComponentsForWarInfo(): void {
@@ -104,7 +106,7 @@ export class SpmWarBasicSettingsPage extends UiTabPage<OpenDataForSpmWarBasicSet
         const warData           = slotData ? slotData.warData : null;
         const mapId             = warData ? BwHelpers.getMapId(warData) : null;
         this._labelMapName.text = mapId == null
-            ? `(${Lang.getText(Lang.Type.B0321)})`
+            ? `(${Lang.getText(LangTextType.B0321)})`
             : await WarMapModel.getMapNameInCurrentLanguage(mapId);
     }
 
@@ -129,7 +131,7 @@ export class SpmWarBasicSettingsPage extends UiTabPage<OpenDataForSpmWarBasicSet
             labelHasFog.text = undefined;
         } else {
             const hasFog            = !!warData.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
-            labelHasFog.text        = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
+            labelHasFog.text        = Lang.getText(hasFog ? LangTextType.B0012 : LangTextType.B0013);
             labelHasFog.textColor   = hasFog ? 0xFFFF00 : 0xFFFFFF;
         }
     }

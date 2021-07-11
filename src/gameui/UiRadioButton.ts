@@ -2,15 +2,17 @@
 import { UiImage }                      from "../gameui/UiImage";
 import { UiComponent }                  from "../gameui/UiComponent";
 import { UiLabel }                      from "../gameui/UiLabel";
+import { LangTextType }                 from "../utility/LangTextType";
+import { NotifyType }                   from "../utility/NotifyType";
 import * as Lang                        from "../utility/Lang";
 import * as Notify                      from "../utility/Notify";
 import * as Types                       from "../utility/Types";
 
 type DataForUiRadioButton = {
-    titleTextType           : Lang.Type;
-    leftTextType            : Lang.Type;
+    titleTextType           : LangTextType;
+    leftTextType            : LangTextType;
     leftLangType?           : Types.LanguageType;
-    rightTextType           : Lang.Type;
+    rightTextType           : LangTextType;
     rightLangType?          : Types.LanguageType;
     callbackOnLeft          : () => void;
     callbackOnRight         : () => void;
@@ -42,7 +44,7 @@ export class UiRadioButton extends UiComponent {
             { ui: this._imgRightOff,    callback: this._onTouchedImgRightOff },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._imgLeftOff.touchEnabled   = true;
         this._imgRightOff.touchEnabled  = true;

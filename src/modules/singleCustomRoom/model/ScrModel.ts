@@ -3,8 +3,10 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
 import * as UserModel                   from "../../user/model/UserModel";
@@ -117,7 +119,7 @@ export namespace Create {
         const settingsForCommon             = getData().settingsForCommon;
         settingsForCommon.warRule.ruleId    = ruleId;
         settingsForCommon.presetWarRuleId   = ruleId;
-        Notify.dispatch(Notify.Type.ScrCreatePresetWarRuleIdChanged);
+        Notify.dispatch(NotifyType.ScrCreatePresetWarRuleIdChanged);
     }
     export function setCustomWarRuleId(): void {
         setPresetWarRuleId(null);
@@ -193,7 +195,7 @@ export namespace Create {
         const data = getData();
         if (data.slotIndex !== slotIndex) {
             data.slotIndex = slotIndex;
-            Notify.dispatch(Notify.Type.ScrCreateWarSaveSlotChanged);
+            Notify.dispatch(NotifyType.ScrCreateWarSaveSlotChanged);
         }
     }
     export function getSaveSlotIndex(): number {
@@ -210,7 +212,7 @@ export namespace Create {
     export function tickUserId(playerIndex: number): void {
         const playerInfo    = getPlayerInfo(playerIndex);
         playerInfo.userId   = playerInfo.userId ? null : UserModel.getSelfUserId();
-        Notify.dispatch(Notify.Type.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.Data.ScrCreatePlayerInfoChanged);
+        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.Data.ScrCreatePlayerInfoChanged);
     }
 
     export function tickUnitAndTileSkinId(playerIndex: number): void {
@@ -222,13 +224,13 @@ export namespace Create {
         if (existingPlayerData) {
             existingPlayerData.unitAndTileSkinId = oldSkinId;
             Notify.dispatch(
-                Notify.Type.ScrCreatePlayerInfoChanged,
+                NotifyType.ScrCreatePlayerInfoChanged,
                 { playerIndex: existingPlayerData.playerIndex } as Notify.Data.ScrCreatePlayerInfoChanged
             );
         }
 
         targetPlayerData.unitAndTileSkinId = newSkinId;
-        Notify.dispatch(Notify.Type.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.Data.ScrCreatePlayerInfoChanged);
+        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.Data.ScrCreatePlayerInfoChanged);
     }
 
     export function getTeamIndex(playerIndex: number): number {
@@ -240,7 +242,7 @@ export namespace Create {
         const playerRule        = getPlayerRule(playerIndex);
         playerRule.teamIndex    = playerRule.teamIndex % (BwWarRuleHelper.getPlayersCount(getWarRule())) + 1;
 
-        Notify.dispatch(Notify.Type.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.Data.ScrCreatePlayerInfoChanged);
+        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.Data.ScrCreatePlayerInfoChanged);
     }
 
     export function getBannedCoIdArray(playerIndex: number): number[] {
@@ -261,7 +263,7 @@ export namespace Create {
     }
     export function setCoId(playerIndex: number, coId: number): void {
         getPlayerInfo(playerIndex).coId = coId;
-        Notify.dispatch(Notify.Type.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.Data.ScrCreatePlayerInfoChanged);
+        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.Data.ScrCreatePlayerInfoChanged);
     }
 
     export function getHasFog(): boolean {
@@ -366,7 +368,7 @@ export namespace Create {
             teamSet.add(playerRule.teamIndex);
         }
         if (teamSet.size <= 1) {
-            return Lang.getText(Lang.Type.A0069);
+            return Lang.getText(LangTextType.A0069);
         }
 
         return null;

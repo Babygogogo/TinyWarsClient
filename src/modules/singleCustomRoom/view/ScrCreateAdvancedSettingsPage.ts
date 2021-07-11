@@ -11,7 +11,9 @@ import { ScrCreateBanCoPanel }          from "./ScrCreateBanCoPanel";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as ScrModel                    from "../model/ScrModel";
@@ -35,8 +37,8 @@ export class ScrCreateAdvancedSettingsPage extends UiTabPage<void> {
 
     protected async _onOpened(): Promise<void> {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.ScrCreatePresetWarRuleIdChanged,    callback: this._onNotifyScrCreatePresetWarRuleIdChanged },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.ScrCreatePresetWarRuleIdChanged,    callback: this._onNotifyScrCreatePresetWarRuleIdChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnReset,       callback: this._onTouchedBtnReset },
@@ -75,7 +77,7 @@ export class ScrCreateAdvancedSettingsPage extends UiTabPage<void> {
     }
     private _onTouchedBtnCustomize(e: egret.TouchEvent): void {
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0129),
+            content : Lang.getText(LangTextType.A0129),
             callback: () => {
                 ScrModel.Create.setCustomWarRuleId();
             },
@@ -86,8 +88,8 @@ export class ScrCreateAdvancedSettingsPage extends UiTabPage<void> {
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._btnReset.label        = Lang.getText(Lang.Type.B0567);
-        this._btnCustomize.label    = Lang.getText(Lang.Type.B0575);
+        this._btnReset.label        = Lang.getText(LangTextType.B0567);
+        this._btnCustomize.label    = Lang.getText(LangTextType.B0575);
     }
 
     private _updateBtnReset(): void {
@@ -154,7 +156,7 @@ class SettingRenderer extends UiListItemRenderer<DataForSettingRenderer> {
         if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
             CommonHelpPanel.show({
                 title   : `CO`,
-                content : Lang.getText(Lang.Type.R0004),
+                content : Lang.getText(LangTextType.R0004),
             });
         }
     }
@@ -229,8 +231,8 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             { ui: this._inputValue, callback: this._onFocusOutInputValue, eventType: egret.FocusEvent.FOCUS_OUT },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.ScrCreatePresetWarRuleIdChanged,    callback: this._onNotifyScrCreatePresetWarRuleIdChanged },
-            { type: Notify.Type.ScrCreateBannedCoIdArrayChanged,    callback: this._onNotifyScrCreateBannedCoIdArrayChanged },
+            { type: NotifyType.ScrCreatePresetWarRuleIdChanged,    callback: this._onNotifyScrCreatePresetWarRuleIdChanged },
+            { type: NotifyType.ScrCreateBannedCoIdArrayChanged,    callback: this._onNotifyScrCreateBannedCoIdArrayChanged },
         ]);
         this._labelValue.touchEnabled = true;
     }
@@ -246,7 +248,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
 
     private _onTouchedBtnCustom(e: egret.TouchEvent): void {
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0129),
+            content : Lang.getText(LangTextType.A0129),
             callback: () => {
                 ScrModel.Create.setCustomWarRuleId();
             },
@@ -336,7 +338,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleInitialFundMaxLimit)    ||
                 (value < CommonConstants.WarRuleInitialFundMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 ScrModel.Create.setInitialFund(playerIndex, value);
             }
@@ -360,7 +362,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleIncomeMultiplierMaxLimit)   ||
                 (value < CommonConstants.WarRuleIncomeMultiplierMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 ScrModel.Create.setIncomeMultiplier(playerIndex, value);
             }
@@ -384,7 +386,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
                 (value < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 ScrModel.Create.setEnergyAddPctOnLoadCo(playerIndex, value);
             }
@@ -408,7 +410,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit) ||
                 (value < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 ScrModel.Create.setEnergyGrowthMultiplier(playerIndex, value);
             }
@@ -432,7 +434,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
                 (value < CommonConstants.WarRuleMoveRangeModifierMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 ScrModel.Create.setMoveRangeModifier(playerIndex, value);
             }
@@ -456,7 +458,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleOffenseBonusMaxLimit)   ||
                 (value < CommonConstants.WarRuleOffenseBonusMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 ScrModel.Create.setAttackPowerModifier(playerIndex, value);
             }
@@ -480,7 +482,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value > CommonConstants.WarRuleVisionRangeModifierMaxLimit)    ||
                 (value < CommonConstants.WarRuleVisionRangeModifierMinLimit)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 ScrModel.Create.setVisionRangeModifier(playerIndex, value);
             }
@@ -505,7 +507,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value < CommonConstants.WarRuleLuckMinLimit)           ||
                 (value > ScrModel.Create.getLuckUpperLimit(playerIndex))
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 ScrModel.Create.setLuckLowerLimit(playerIndex, value);
             }
@@ -530,7 +532,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                 (value < CommonConstants.WarRuleLuckMinLimit)           ||
                 (value < ScrModel.Create.getLuckLowerLimit(playerIndex))
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0098));
+                FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
                 ScrModel.Create.setLuckUpperLimit(playerIndex, value);
             }

@@ -6,8 +6,10 @@ import * as DamageCalculator    from "../../../utility/DamageCalculator";
 import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger              from "../../../utility/Logger";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import { BwActionPlanner }      from "../model/BwActionPlanner";
 import { BwCursor }             from "../model/BwCursor";
@@ -99,7 +101,7 @@ export class BwCursorView extends eui.Group {
         const field         = this._cursor.getWar().getField();
         this._actionPlanner = field.getActionPlanner();
 
-        Notify.addEventListener(Notify.Type.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
+        Notify.addEventListener(NotifyType.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
         this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,             this._onTouchBegin,             this);
         this.addEventListener(egret.TouchEvent.TOUCH_CANCEL,            this._onTouchCancel,            this);
         this.addEventListener(egret.TouchEvent.TOUCH_END,               this._onTouchEnd,               this);
@@ -114,7 +116,7 @@ export class BwCursorView extends eui.Group {
         this._stopNormalAnimation();
         this._stopTargetAnimation();
 
-        Notify.removeEventListener(Notify.Type.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
+        Notify.removeEventListener(NotifyType.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
         this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,              this._onTouchBegin,             this);
         this.removeEventListener(egret.TouchEvent.TOUCH_CANCEL,             this._onTouchCancel,            this);
         this.removeEventListener(egret.TouchEvent.TOUCH_END,                this._onTouchEnd,               this);
@@ -157,7 +159,7 @@ export class BwCursorView extends eui.Group {
             const currGridIndex = this._cursor.getGridIndex();
             if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
                 this._isTouchMovedOrMultiple = true;
-                Notify.dispatch(Notify.Type.BwCursorDragged, {
+                Notify.dispatch(NotifyType.BwCursorDragged, {
                     current     : currGridIndex,
                     draggedTo   : gridIndex,
                 } as Notify.Data.BwCursorDragged);
@@ -202,7 +204,7 @@ export class BwCursorView extends eui.Group {
             currGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
 
             if (currGlobalTouchPoints.size > 1) {
-                Notify.dispatch(Notify.Type.BwFieldZoomed, {
+                Notify.dispatch(NotifyType.BwFieldZoomed, {
                     current : currGlobalTouchPoints,
                     previous: this._prevGlobalTouchPoints,
                 } as Notify.Data.BwFieldZoomed);
@@ -212,14 +214,14 @@ export class BwCursorView extends eui.Group {
                     const currGridIndex = this._cursor.getGridIndex();
                     if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
                         this._isTouchMovedOrMultiple = true;
-                        Notify.dispatch(Notify.Type.BwCursorDragged, {
+                        Notify.dispatch(NotifyType.BwCursorDragged, {
                             current     : currGridIndex,
                             draggedTo   : gridIndex,
                         } as Notify.Data.BwCursorDragged);
                     }
                 } else {
                     if (this._isTouchMovedOrMultiple) {
-                        Notify.dispatch(Notify.Type.BwFieldDragged, {
+                        Notify.dispatch(NotifyType.BwFieldDragged, {
                             current : currGlobalTouchPoints.values().next().value,
                             previous: this._prevGlobalTouchPoints.values().next().value,
                         } as Notify.Data.BwFieldDragged);
@@ -244,13 +246,13 @@ export class BwCursorView extends eui.Group {
             if (!currGlobalTouchPoints.size) {
                 this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
                 if (!this._isTouchMovedOrMultiple) {
-                    Notify.dispatch(Notify.Type.BwCursorTapped, {
+                    Notify.dispatch(NotifyType.BwCursorTapped, {
                         current : this._cursor.getGridIndex(),
                         tappedOn: this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y),
                     } as Notify.Data.BwCursorTapped);
                 } else {
                     if (hasTouchedCursor) {
-                        Notify.dispatch(Notify.Type.BwCursorDragEnded);
+                        Notify.dispatch(NotifyType.BwCursorDragEnded);
                     }
                 }
                 this._initialGlobalTouchPoint = null;
@@ -456,8 +458,8 @@ export class BwCursorView extends eui.Group {
 
                         const { attackDamage, counterDamage } = damages;
                         const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
-                        labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
-                            + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
+                        labelDamage.text    = `${Lang.getText(LangTextType.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
+                            + `${Lang.getText(LangTextType.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
                         this._updatePositionForConForDamage();
                     }
                 }
@@ -504,8 +506,8 @@ export class BwCursorView extends eui.Group {
 
                         const { attackDamage, counterDamage } = damages;
                         const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
-                        labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
-                            + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
+                        labelDamage.text    = `${Lang.getText(LangTextType.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
+                            + `${Lang.getText(LangTextType.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
                         this._updatePositionForConForDamage();
                     }
                 }

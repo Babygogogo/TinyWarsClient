@@ -7,6 +7,7 @@ import { UserPanel }                    from "../../user/view/UserPanel";
 import { UserSettingsPanel }            from "../../user/view/UserSettingsPanel";
 import { UserOnlineUsersPanel }         from "../../user/view/UserOnlineUsersPanel";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as UserModel                   from "../../user/model/UserModel";
 
@@ -45,10 +46,10 @@ export class LobbyTopPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgUserLogin,                   callback: this._onMsgUserLogin },
-            { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
-            { type: Notify.Type.MsgUserSetNickname,             callback: this._onMsgUserSetNickname },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgUserLogin,                   callback: this._onMsgUserLogin },
+            { type: NotifyType.MsgUserLogout,                  callback: this._onMsgUserLogout },
+            { type: NotifyType.MsgUserSetNickname,             callback: this._onMsgUserSetNickname },
         ]);
         this._setUiListenerArray([
             { ui: this._groupUserInfo,  callback: this._onTouchedGroupUserInfo },

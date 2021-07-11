@@ -9,6 +9,7 @@ import * as UserModel           from "../modules/user/model/UserModel";
 import * as WarMapModel         from "../modules/warMap/model/WarMapModel";
 import { ServerErrorCode }      from "./ServerErrorCode";
 import { ClientErrorCode }      from "./ClientErrorCode";
+import { LangTextType }         from "./LangTextType";
 import LanguageType             = Types.LanguageType;
 import WarEventConditionType    = Types.WarEventConditionType;
 import WarEventActionType       = Types.WarEventActionType;
@@ -16,462 +17,327 @@ import PlayerRuleType           = Types.PlayerRuleType;
 import GameVersion              = Types.GameVersion;
 import BgmCode                  = Types.BgmCode;
 
-// eslint-disable-next-line no-shadow
-export const enum Type {
-    A0000, A0001, A0002, A0003, A0004, A0005, A0006, A0007, A0008, A0009,
-    A0010, A0011, A0012, A0013, A0014, A0015, A0016, A0017, A0018, A0019,
-    A0020, A0021, A0022, A0023, A0024, A0025, A0026, A0027, A0028, A0029,
-    A0030, A0031, A0032, A0033, A0034, A0035, A0036, A0037, A0038, A0039,
-    A0040, A0041, A0042, A0043, A0044, A0045, A0046, A0047, A0048, A0049,
-    A0050, A0051, A0052, A0053, A0054, A0055, A0056, A0057, A0058, A0059,
-    A0060, A0061, A0062, A0063, A0064, A0065, A0066, A0067, A0068, A0069,
-    A0070, A0071, A0072, A0073, A0074, A0075, A0076, A0077, A0078, A0079,
-    A0080, A0081, A0082, A0083, A0084, A0085, A0086, A0087, A0088, A0089,
-    A0090, A0091, A0092, A0093, A0094, A0095, A0096, A0097, A0098, A0099,
-
-    A0100, A0101, A0102, A0103, A0104, A0105, A0106, A0107, A0108, A0109,
-    A0110, A0111, A0112, A0113, A0114, A0115, A0116, A0117, A0118, A0119,
-    A0120, A0121, A0122, A0123, A0124, A0125, A0126, A0127, A0128, A0129,
-    A0130, A0131, A0132, A0133, A0134, A0135, A0136, A0137, A0138, A0139,
-    A0140, A0141, A0142, A0143, A0144, A0145, A0146, A0147, A0148, A0149,
-    A0150, A0151, A0152, A0153, A0154, A0155, A0156, A0157, A0158, A0159,
-    A0160, A0161, A0162, A0163, A0164, A0165, A0166, A0167, A0168, A0169,
-    A0170, A0171, A0172, A0173, A0174, A0175, A0176, A0177, A0178, A0179,
-    A0180, A0181, A0182, A0183, A0184, A0185, A0186, A0187, A0188, A0189,
-    A0190, A0191, A0192, A0193, A0194, A0195, A0196, A0197, A0198, A0199,
-
-    A0200, A0201, A0202, A0203, A0204, A0205, A0206, A0207, A0208, A0209,
-    A0210, A0211, A0212, A0213, A0214, A0215, A0216, A0217, A0218, A0219,
-    A0220, A0221, A0222, A0223, A0224, A0225, A0226, A0227, A0228, A0229,
-    A0230, A0231, A0232, A0233, A0234, A0235, A0236, A0237, A0238, A0239,
-    A0240, A0241, A0242, A0243, A0244, A0245, A0246, A0247, A0248, A0249,
-    A0250, A0251, A0252, A0253, A0254, A0255, A0256, A0257, A0258, A0259,
-    A0260, A0261, A0262, A0263, A0264, A0265, A0266, A0267, A0268, A0269,
-    A0270, A0271, A0272, A0273, A0274, A0275, A0276, A0277, A0278, A0279,
-    A0280, A0281, A0282, A0283, A0284, A0285, A0286, A0287, A0288, A0289,
-    A0290, A0291, A0292, A0293, A0294, A0295, A0296, A0297, A0298, A0299,
-
-    B0000, B0001, B0002, B0003, B0004, B0005, B0006, B0007, B0008, B0009,
-    B0010, B0011, B0012, B0013, B0014, B0015, B0016, B0017, B0018, B0019,
-    B0020, B0021, B0022, B0023, B0024, B0025, B0026, B0027, B0028, B0029,
-    B0030, B0031, B0032, B0033, B0034, B0035, B0036, B0037, B0038, B0039,
-    B0040, B0041, B0042, B0043, B0044, B0045, B0046, B0047, B0048, B0049,
-    B0050, B0051, B0052, B0053, B0054, B0055, B0056, B0057, B0058, B0059,
-    B0060, B0061, B0062, B0063, B0064, B0065, B0066, B0067, B0068, B0069,
-    B0070, B0071, B0072, B0073, B0074, B0075, B0076, B0077, B0078, B0079,
-    B0080, B0081, B0082, B0083, B0084, B0085, B0086, B0087, B0088, B0089,
-    B0090, B0091, B0092, B0093, B0094, B0095, B0096, B0097, B0098, B0099,
-
-    B0100, B0101, B0102, B0103, B0104, B0105, B0106, B0107, B0108, B0109,
-    B0110, B0111, B0112, B0113, B0114, B0115, B0116, B0117, B0118, B0119,
-    B0120, B0121, B0122, B0123, B0124, B0125, B0126, B0127, B0128, B0129,
-    B0130, B0131, B0132, B0133, B0134, B0135, B0136, B0137, B0138, B0139,
-    B0140, B0141, B0142, B0143, B0144, B0145, B0146, B0147, B0148, B0149,
-    B0150, B0151, B0152, B0153, B0154, B0155, B0156, B0157, B0158, B0159,
-    B0160, B0161, B0162, B0163, B0164, B0165, B0166, B0167, B0168, B0169,
-    B0170, B0171, B0172, B0173, B0174, B0175, B0176, B0177, B0178, B0179,
-    B0180, B0181, B0182, B0183, B0184, B0185, B0186, B0187, B0188, B0189,
-    B0190, B0191, B0192, B0193, B0194, B0195, B0196, B0197, B0198, B0199,
-
-    B0200, B0201, B0202, B0203, B0204, B0205, B0206, B0207, B0208, B0209,
-    B0210, B0211, B0212, B0213, B0214, B0215, B0216, B0217, B0218, B0219,
-    B0220, B0221, B0222, B0223, B0224, B0225, B0226, B0227, B0228, B0229,
-    B0230, B0231, B0232, B0233, B0234, B0235, B0236, B0237, B0238, B0239,
-    B0240, B0241, B0242, B0243, B0244, B0245, B0246, B0247, B0248, B0249,
-    B0250, B0251, B0252, B0253, B0254, B0255, B0256, B0257, B0258, B0259,
-    B0260, B0261, B0262, B0263, B0264, B0265, B0266, B0267, B0268, B0269,
-    B0270, B0271, B0272, B0273, B0274, B0275, B0276, B0277, B0278, B0279,
-    B0280, B0281, B0282, B0283, B0284, B0285, B0286, B0287, B0288, B0289,
-    B0290, B0291, B0292, B0293, B0294, B0295, B0296, B0297, B0298, B0299,
-
-    B0300, B0301, B0302, B0303, B0304, B0305, B0306, B0307, B0308, B0309,
-    B0310, B0311, B0312, B0313, B0314, B0315, B0316, B0317, B0318, B0319,
-    B0320, B0321, B0322, B0323, B0324, B0325, B0326, B0327, B0328, B0329,
-    B0330, B0331, B0332, B0333, B0334, B0335, B0336, B0337, B0338, B0339,
-    B0340, B0341, B0342, B0343, B0344, B0345, B0346, B0347, B0348, B0349,
-    B0350, B0351, B0352, B0353, B0354, B0355, B0356, B0357, B0358, B0359,
-    B0360, B0361, B0362, B0363, B0364, B0365, B0366, B0367, B0368, B0369,
-    B0370, B0371, B0372, B0373, B0374, B0375, B0376, B0377, B0378, B0379,
-    B0380, B0381, B0382, B0383, B0384, B0385, B0386, B0387, B0388, B0389,
-    B0390, B0391, B0392, B0393, B0394, B0395, B0396, B0397, B0398, B0399,
-
-    B0400, B0401, B0402, B0403, B0404, B0405, B0406, B0407, B0408, B0409,
-    B0410, B0411, B0412, B0413, B0414, B0415, B0416, B0417, B0418, B0419,
-    B0420, B0421, B0422, B0423, B0424, B0425, B0426, B0427, B0428, B0429,
-    B0430, B0431, B0432, B0433, B0434, B0435, B0436, B0437, B0438, B0439,
-    B0440, B0441, B0442, B0443, B0444, B0445, B0446, B0447, B0448, B0449,
-    B0450, B0451, B0452, B0453, B0454, B0455, B0456, B0457, B0458, B0459,
-    B0460, B0461, B0462, B0463, B0464, B0465, B0466, B0467, B0468, B0469,
-    B0470, B0471, B0472, B0473, B0474, B0475, B0476, B0477, B0478, B0479,
-    B0480, B0481, B0482, B0483, B0484, B0485, B0486, B0487, B0488, B0489,
-    B0490, B0491, B0492, B0493, B0494, B0495, B0496, B0497, B0498, B0499,
-
-    B0500, B0501, B0502, B0503, B0504, B0505, B0506, B0507, B0508, B0509,
-    B0510, B0511, B0512, B0513, B0514, B0515, B0516, B0517, B0518, B0519,
-    B0520, B0521, B0522, B0523, B0524, B0525, B0526, B0527, B0528, B0529,
-    B0530, B0531, B0532, B0533, B0534, B0535, B0536, B0537, B0538, B0539,
-    B0540, B0541, B0542, B0543, B0544, B0545, B0546, B0547, B0548, B0549,
-    B0550, B0551, B0552, B0553, B0554, B0555, B0556, B0557, B0558, B0559,
-    B0560, B0561, B0562, B0563, B0564, B0565, B0566, B0567, B0568, B0569,
-    B0570, B0571, B0572, B0573, B0574, B0575, B0576, B0577, B0578, B0579,
-    B0580, B0581, B0582, B0583, B0584, B0585, B0586, B0587, B0588, B0589,
-    B0590, B0591, B0592, B0593, B0594, B0595, B0596, B0597, B0598, B0599,
-
-    B0600, B0601, B0602, B0603, B0604, B0605, B0606, B0607, B0608, B0609,
-    B0610, B0611, B0612, B0613, B0614, B0615, B0616, B0617, B0618, B0619,
-    B0620, B0621, B0622, B0623, B0624, B0625, B0626, B0627, B0628, B0629,
-    B0630, B0631, B0632, B0633, B0634, B0635, B0636, B0637, B0638, B0639,
-    B0640, B0641, B0642, B0643, B0644, B0645, B0646, B0647, B0648, B0649,
-    B0650, B0651, B0652, B0653, B0654, B0655, B0656, B0657, B0658, B0659,
-    B0660, B0661, B0662, B0663, B0664, B0665, B0666, B0667, B0668, B0669,
-    B0670, B0671, B0672, B0673, B0674, B0675, B0676, B0677, B0678, B0679,
-    B0680, B0681, B0682, B0683, B0684, B0685, B0686, B0687, B0688, B0689,
-    B0690, B0691, B0692, B0693, B0694, B0695, B0696, B0697, B0698, B0699,
-
-    B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
-    B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
-    B1020, B1021, B1022, B1023, B1024, B1025, B1026, B1027, B1028, B1029,
-    B1030, B1031, B1032, B1033, B1034, B1035, B1036, B1037, B1038, B1039,
-    B1200, B1201, B1202, B1203, B1204, B1205, B1206, B1207, B1208, B1209,
-    B1210, B1211, B1212, B1213, B1214, B1215, B1216, B1217, B1218, B1219,
-    B1220, B1221, B1222, B1223, B1224, B1225, B1226, B1227, B1228, B1229,
-    B1230, B1231, B1232, B1233, B1234, B1235, B1236, B1237, B1238, B1239,
-
-    F0000, F0001, F0002, F0003, F0004, F0005, F0006, F0007, F0008, F0009,
-    F0010, F0011, F0012, F0013, F0014, F0015, F0016, F0017, F0018, F0019,
-    F0020, F0021, F0022, F0023, F0024, F0025, F0026, F0027, F0028, F0029,
-    F0030, F0031, F0032, F0033, F0034, F0035, F0036, F0037, F0038, F0039,
-    F0040, F0041, F0042, F0043, F0044, F0045, F0046, F0047, F0048, F0049,
-    F0050, F0051, F0052, F0053, F0054, F0055, F0056, F0057, F0058, F0059,
-    F0060, F0061, F0062, F0063, F0064, F0065, F0066, F0067, F0068, F0069,
-    F0070, F0071, F0072, F0073, F0074, F0075, F0076, F0077, F0078, F0079,
-    F0080, F0081, F0082, F0083, F0084, F0085, F0086, F0087, F0088, F0089,
-    F0090, F0091, F0092, F0093, F0094, F0095, F0096, F0097, F0098, F0099,
-
-    R0000, R0001, R0002, R0003, R0004, R0005, R0006, R0007, R0008, R0009,
-}
-
 const _LANG_DATA: { [type: number]: string [] } = {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Long strings.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    [Type.A0000]: [
+    [LangTextType.A0000]: [
         "登陆成功，祝您游戏愉快！",
         "Logged in successfully!",
     ],
-    [Type.A0001]: [
+    [LangTextType.A0001]: [
         "账号不符合要求，请检查后重试",
         "Invalid account.",
     ],
-    [Type.A0002]: [
+    [LangTextType.A0002]: [
         "昵称不符合要求，请检查后重试",
         "Invalid nickname.",
     ],
-    [Type.A0003]: [
+    [LangTextType.A0003]: [
         "密码不符合要求，请检查后重试",
         "Invalid password.",
     ],
-    [Type.A0004]: [
+    [LangTextType.A0004]: [
         "注册成功，正在自动登陆…",
         "Register successfully! Now logging in...",
     ],
-    [Type.A0005]: [
+    [LangTextType.A0005]: [
         "您已成功退出登陆，欢迎再次进入游戏。",
         "Logout successfully.",
     ],
-    [Type.A0006]: [
+    [LangTextType.A0006]: [
         "您的账号被异地登陆，您已自动下线。",
         "Someone logged in with your account!",
     ],
-    [Type.A0007]: [
+    [LangTextType.A0007]: [
         "已成功连接服务器。",
         "Connected to server successfully.",
     ],
-    [Type.A0008]: [
+    [LangTextType.A0008]: [
         "连接服务器失败，正在重新连接…",
         "Failed to connect to server. Now reconnecting...",
     ],
-    [Type.A0009]: [
+    [LangTextType.A0009]: [
         "您的网络连接不稳定，请尝试改善",
         "The network connection is not stable.",
     ],
-    [Type.A0010]: [
+    [LangTextType.A0010]: [
         "没有符合条件的地图，请更换条件再试",
         "No maps found.",
     ],
-    [Type.A0011]: [
+    [LangTextType.A0011]: [
         "正在查找地图",
         "Searching for maps...",
     ],
-    [Type.A0012]: [
+    [LangTextType.A0012]: [
         "已找到符合条件的地图",
         "Maps found.",
     ],
-    [Type.A0013]: [
+    [LangTextType.A0013]: [
         "发生网络错误，请重新登陆。",
         "Network went wrong. Please re-login.",
     ],
-    [Type.A0014]: [
+    [LangTextType.A0014]: [
         "发生网络错误，请稍后再试。亦可尝试刷新浏览器。",
         "Network went wrong. Please try again later or refresh the browser.",
     ],
-    [Type.A0015]: [
+    [LangTextType.A0015]: [
         "已成功创建战局，请等待其他玩家加入",
         "The war is created successfully.",
     ],
-    [Type.A0016]: [
+    [LangTextType.A0016]: [
         "已成功退出房间",
         "Quit successfully.",
     ],
-    [Type.A0017]: [
+    [LangTextType.A0017]: [
         "密码不正确，请检查后重试",
         "Invalid password.",
     ],
-    [Type.A0018]: [
+    [LangTextType.A0018]: [
         "已成功加入房间。",
         "Joined successfully.",
     ],
-    [Type.A0019]: [
+    [LangTextType.A0019]: [
         "该房间已被销毁。",
         "The room has been destroyed.",
     ],
-    [Type.A0020]: [
+    [LangTextType.A0020]: [
         `服务器维护中，请稍后登陆`,
         `The server is under maintenance. Please wait and login later.`,
     ],
-    [Type.A0021]: [
+    [LangTextType.A0021]: [
         `正在读取战局数据，请稍候`,
         `Downloading the war data. Please wait.`,
     ],
-    [Type.A0022]: [
+    [LangTextType.A0022]: [
         `恭喜您获得本局的胜利！\n即将回到大厅…`,
         `Congratulations!`,
     ],
-    [Type.A0023]: [
+    [LangTextType.A0023]: [
         `很遗憾您已战败，请再接再厉！\n即将回到大厅…`,
         `Good luck next war!`,
     ],
-    [Type.A0024]: [
+    [LangTextType.A0024]: [
         `您确定要结束回合吗？`,
         `Are you sure to end your turn?`,
     ],
-    [Type.A0025]: [
+    [LangTextType.A0025]: [
         `您确定要返回大厅吗？`,
         `Are you sure to go to the lobby?`,
     ],
-    [Type.A0026]: [
+    [LangTextType.A0026]: [
         `您确定要投降吗？`,
         `Are you sure to resign?`,
     ],
-    [Type.A0027]: [
+    [LangTextType.A0027]: [
         `请先选中您想要删除的部队，再进行此操作`,
         `Please select the unit you want to delete with the cursor before doing this.`,
     ],
-    [Type.A0028]: [
+    [LangTextType.A0028]: [
         `您只能删除您自己的未行动的部队`,
         `You can delete your own idle units only.`,
     ],
-    [Type.A0029]: [
+    [LangTextType.A0029]: [
         `是否确定要删除此部队？`,
         `Are you sure to delete the selected unit?`,
     ],
-    [Type.A0030]: [
+    [LangTextType.A0030]: [
         `所有玩家都已同意和局，战局结束！\n即将回到大厅...`,
         `The game ends in draw!`,
     ],
-    [Type.A0031]: [
+    [LangTextType.A0031]: [
         `您确定要求和吗？`,
         `Are you sure to request a drawn game?`,
     ],
-    [Type.A0032]: [
+    [LangTextType.A0032]: [
         `您确定要同意和局吗？`,
         `Are you sure to agree the request from your opponent for a drawn game?`,
     ],
-    [Type.A0033]: [
+    [LangTextType.A0033]: [
         `您确定要拒绝和局吗？`,
         `Are you sure to decline the request from your opponent for a drawn game?`,
     ],
-    [Type.A0034]: [
+    [LangTextType.A0034]: [
         `已有玩家求和，请先决定是否同意（通过菜单选项操作）`,
         `There is a request for a drawn game. Please decide whether to agree it before ending your turn.`,
     ],
-    [Type.A0035]: [
+    [LangTextType.A0035]: [
         `战局已结束，即将回到大厅…`,
         `The war is ended. Going back to the lobby...`,
     ],
-    [Type.A0036]: [
+    [LangTextType.A0036]: [
         `检测到战局数据错误，已自动与服务器成功同步`,
         `The war is synchronized successfully.`,
     ],
-    [Type.A0037]: [
+    [LangTextType.A0037]: [
         `发生未知错误，正在返回大厅...`,
         `Something wrong happened! Going back to the lobby...`,
     ],
-    [Type.A0038]: [
+    [LangTextType.A0038]: [
         `战局数据已同步`,
         `The war is synchronized successfully.`,
     ],
-    [Type.A0039]: [
+    [LangTextType.A0039]: [
         `数据加载中，请稍后重试`,
         `Now loading, please wait and retry.`,
     ],
-    [Type.A0040]: [
+    [LangTextType.A0040]: [
         `数据加载中，请稍候...`,
         `Now loading, please wait...`,
     ],
-    [Type.A0041]: [
+    [LangTextType.A0041]: [
         `回放已播放完毕`,
         `The replay is completed.`,
     ],
-    [Type.A0042]: [
+    [LangTextType.A0042]: [
         `已处于战局初始状态，无法切换到上一回合`,
         `Can't rewind because it's the beginning of the replay.`,
     ],
-    [Type.A0043]: [
+    [LangTextType.A0043]: [
         `已处于战局结束状态，无法切换到下一回合`,
         `Can't forward because it's the end of the replay.`,
     ],
-    [Type.A0044]: [
+    [LangTextType.A0044]: [
         `当前正在回放玩家动作，请待其结束后重试`,
         `Now replaying an action. Please wait until it ends.`,
     ],
-    [Type.A0045]: [
+    [LangTextType.A0045]: [
         `已成功切换回合`,
         `Turn switched.`,
     ],
-    [Type.A0046]: [
+    [LangTextType.A0046]: [
         `请求中，请稍候`,
         `Now requesting, please wait...`,
     ],
-    [Type.A0047]: [
+    [LangTextType.A0047]: [
         `昵称已更改`,
         `Your nickname is changed successfully`,
     ],
-    [Type.A0048]: [
+    [LangTextType.A0048]: [
         `Discord ID 不正确，请检查后重试`,
         `Invalid discord ID.`,
     ],
-    [Type.A0049]: [
+    [LangTextType.A0049]: [
         `Discord ID 已更改`,
         `Your discord ID is changed successfully`,
     ],
-    [Type.A0050]: [
+    [LangTextType.A0050]: [
         `您尚未选择任何CO。`,
         `You have chosen no CO.`,
     ],
-    [Type.A0051]: [
+    [LangTextType.A0051]: [
         `是否确定要创建战局？`,
         `Are you sure to create the game?`,
     ],
-    [Type.A0052]: [
+    [LangTextType.A0052]: [
         `是否确定要加入战局？`,
         `Are you sure to join the game?`,
     ],
-    [Type.A0053]: [
+    [LangTextType.A0053]: [
         `该功能正在开发中，敬请期待`,
         `This feature is under development...`,
     ],
-    [Type.A0054]: [
+    [LangTextType.A0054]: [
         `您确定要发动CO POWER吗？`,
         `Are you sure to activate the CO POWER?`,
     ],
-    [Type.A0055]: [
+    [LangTextType.A0055]: [
         `当前有其他操作可选。您确定要直接待机吗？`,
         `Another action is available. Are you sure to make the unit wait?`,
     ],
-    [Type.A0056]: [
+    [LangTextType.A0056]: [
         `未知错误，请拖动截图发给作者，谢谢`,
         `Error! Please make a screenshot and send it to the developing group.`,
     ],
-    [Type.A0057]: [
+    [LangTextType.A0057]: [
         `禁用此项会清空您当前选择的CO（您可以重新选择一个）。确定要禁用吗？`,
         `You have chosen a CO that is banned by your current selection. Are you sure to continue the ban?`,
     ],
-    [Type.A0058]: [
+    [LangTextType.A0058]: [
         `您确定要发动SUPER POWER吗？`,
         `Are you sure to activate the SUPER POWER?`,
     ],
-    [Type.A0059]: [
+    [LangTextType.A0059]: [
         `已成功修改地图可用性`,
         `The availability has been changed successfully.`,
     ],
-    [Type.A0060]: [
+    [LangTextType.A0060]: [
         `已发出观战请求，对方同意后即可观战`,
         `Requested. You can watch the game when accepted.`,
     ],
-    [Type.A0061]: [
+    [LangTextType.A0061]: [
         `请求已处理`,
         `Handled.`,
     ],
-    [Type.A0062]: [
+    [LangTextType.A0062]: [
         `已删除指定观战者`,
         `The selected watcher is removed`,
     ],
-    [Type.A0063]: [
+    [LangTextType.A0063]: [
         `注:任意条件均可留空,等同于忽略该查找条件`,
         `Tips: You can leave any of the filters blank. Those filters will be ignored.`,
     ],
-    [Type.A0064]: [
+    [LangTextType.A0064]: [
         `双击玩家名称，可以查看其详细信息`,
         `Touch a name to see the player's profile.`,
     ],
-    [Type.A0065]: [
+    [LangTextType.A0065]: [
         `本页设置对局内所有玩家都生效`,
         `The settings affect all players in the game.`,
     ],
-    [Type.A0066]: [
+    [LangTextType.A0066]: [
         `昵称可使用任意字符，长度不小于4位`,
         `You can use any character for the nickname, and the nickname should consist of at least 4 characters.`,
     ],
-    [Type.A0067]: [
+    [LangTextType.A0067]: [
         `输入正确的Discord ID，并加入以下游戏频道即可实时收到游戏相关消息，如回合轮转等。`,
         `By entering your correct discord ID and joining the following discord server you can receive tinywars-related information, including turn notification.`,
     ],
-    [Type.A0068]: [
+    [LangTextType.A0068]: [
         `可点击以下各个文字以更改设置`,
         `Touch texts below to change the settings.`,
     ],
-    [Type.A0069]: [
+    [LangTextType.A0069]: [
         `请为参赛玩家设置至少两个队伍`,
         `Please set at least two teams for players.`,
     ],
-    [Type.A0070]: [
+    [LangTextType.A0070]: [
         `您选择的存档位置非空，其内容将被覆盖。确定要继续创建战局吗？`,
         `The save slot is not empty and will be overwritten. Are you sure to create the game?`,
     ],
-    [Type.A0071]: [
+    [LangTextType.A0071]: [
         `您的存档将被覆盖。确定要存档吗？`,
         `Your save slot will be overwritten. Are you sure to continue?`,
     ],
-    [Type.A0072]: [
+    [LangTextType.A0072]: [
         `您当前的进度将会丢失。确定要读档吗？`,
         `Your current progress will be lost. Are you sure to continue?`,
     ],
-    [Type.A0073]: [
+    [LangTextType.A0073]: [
         `已成功存档`,
         `Game saved successfully.`,
     ],
-    [Type.A0074]: [
+    [LangTextType.A0074]: [
         `确定要重新载入所有地图吗？`,
         `Are you sure to reload all maps?`,
     ],
-    [Type.A0075]: [
+    [LangTextType.A0075]: [
         `地图重载成功`,
         `Successfully reloaded all maps.`,
     ],
-    [Type.A0076]: [
+    [LangTextType.A0076]: [
         `您无法删除最后一个部队`,
         `You can't delete your last unit.`,
     ],
-    [Type.A0077]: [
+    [LangTextType.A0077]: [
         `您没有可用于建造部队的建筑。`,
         `You don't have any buildings that can produce units.`,
     ],
-    [Type.A0078]: [
+    [LangTextType.A0078]: [
         `加载中，请稍候`,
         `Now loading`,
     ],
-    [Type.A0079]: [
+    [LangTextType.A0079]: [
         [
             `确定要把其他地图合并到当前选中的目标地图吗？`,
             `注：`,
@@ -488,7 +354,7 @@ const _LANG_DATA: { [type: number]: string [] } = {
             `3.若有多个图可以合并，请重复操作几次`,
         ].join("\n"),
     ],
-    [Type.A0080]: [
+    [LangTextType.A0080]: [
         [
             `确定要删除此地图吗？`,
             `删除后，此地图将不再可用，但相关战局/回放仍可正常运作。`,
@@ -499,507 +365,507 @@ const _LANG_DATA: { [type: number]: string [] } = {
             `删除后，此地图将不再可用，但相关战局/回放仍可正常运作。`,
         ].join("\n"),
     ],
-    [Type.A0081]: [
+    [LangTextType.A0081]: [
         `已成功删除地图`,
         `The map has been deleted successfully`,
     ],
-    [Type.A0082]: [
+    [LangTextType.A0082]: [
         `确定要保存此地图吗？`,
         `Are you sure to save the map?`,
     ],
-    [Type.A0083]: [
+    [LangTextType.A0083]: [
         `此地图存在以下问题，暂不能提审，但可以正常保存以备后续编辑。`,
         `This map is not playable (see below), but you can save it and edit it later.`,
     ],
-    [Type.A0084]: [
+    [LangTextType.A0084]: [
         `您已提审过其他地图。若提审此地图，则其他地图将被自动撤销提审。确定要继续吗？`,
         `You have submitted some other maps for review. If you submit this map, the submitted maps will not be reviewed. Are you sure to continue?`,
     ],
-    [Type.A0085]: [
+    [LangTextType.A0085]: [
         `已成功保存地图`,
         `The map has been saved.`,
     ],
-    [Type.A0086]: [
+    [LangTextType.A0086]: [
         `注：若新的宽高小于当前宽高，则超出的图块会被裁剪掉（以左上角为原点）`,
         `Warning: If width/height is set lower than the current value, right & bottom map area exceeding the limit will be deleted.`,
     ],
-    [Type.A0087]: [
+    [LangTextType.A0087]: [
         `您输入的宽高不合法，请检查`,
         `The W/H is not valid.`,
     ],
-    [Type.A0088]: [
+    [LangTextType.A0088]: [
         `注：偏移后超出范围的图块会被裁剪（以左上角为原点）`,
         `Warning: Data that out of range will be dismissed! The origin point is at the upper left corner.`,
     ],
-    [Type.A0089]: [
+    [LangTextType.A0089]: [
         `您确定要填充整个地图吗？`,
         `Are you sure to fill the map?`,
     ],
-    [Type.A0090]: [
+    [LangTextType.A0090]: [
         `您确定要让过审此地图吗？`,
         `Are you sure to accept the map?`,
     ],
-    [Type.A0091]: [
+    [LangTextType.A0091]: [
         `您确定要拒审此地图吗？`,
         `Are you sure to reject the map?`,
     ],
-    [Type.A0092]: [
+    [LangTextType.A0092]: [
         `您已成功过审该地图。`,
         `You have accepted the map successfully.`,
     ],
-    [Type.A0093]: [
+    [LangTextType.A0093]: [
         `您已成功拒审该地图。`,
         `You have rejected the map successfully.`,
     ],
-    [Type.A0094]: [
+    [LangTextType.A0094]: [
         `请输入拒审理由`,
         `Please write down the reason for the rejection`,
     ],
-    [Type.A0095]: [
+    [LangTextType.A0095]: [
         `您确定要导入此地图吗？`,
         `Are you sure to import this map?`,
     ],
-    [Type.A0096]: [
+    [LangTextType.A0096]: [
         `至少需要保留一个预设规则`,
         `There must be at least one preset rule.`,
     ],
-    [Type.A0097]: [
+    [LangTextType.A0097]: [
         `确定要删除这个预设规则吗？`,
         `Are you sure to delete this preset rule?`,
     ],
-    [Type.A0098]: [
+    [LangTextType.A0098]: [
         `输入的值无效，请重试`,
         `Invalid value. Please retry.`,
     ],
-    [Type.A0099]: [
+    [LangTextType.A0099]: [
         `无法创建更多的预设规则`,
         `You can't create more rules. `,
     ],
-    [Type.A0100]: [
+    [LangTextType.A0100]: [
         `此地图没有预设规则`,
         `This map has no preset rules.`,
     ],
-    [Type.A0101]: [
+    [LangTextType.A0101]: [
         `此选项已被预设规则锁定，无法修改`,
         `This setting is locked because a preset rule is chosen.`,
     ],
-    [Type.A0102]: [
+    [LangTextType.A0102]: [
         `这是一局自定义规则的游戏，请确保您已经理解了所有的规则设定。\n确定要加入这局游戏吗？`,
         `Please make sure that you have recognized all the custom rules before joining this game.\nAre you sure to continue?`,
     ],
-    [Type.A0103]: [
+    [LangTextType.A0103]: [
         `有玩家正在进行操作，请等待该操作结束后重试`,
         `A player is taking a move. Please retry when the move ends`,
     ],
-    [Type.A0104]: [
+    [LangTextType.A0104]: [
         `模拟战已成功创建。您可以通过单人模式进入该战局。`,
         `The simulation war is created successfully.`,
     ],
-    [Type.A0105]: [
+    [LangTextType.A0105]: [
         `请输入您对此地图的评价以及改进建议，可留空`,
         `Please leave your comment here if any.`,
     ],
-    [Type.A0106]: [
+    [LangTextType.A0106]: [
         `已成功评分`,
         `Rated successfully.`,
     ],
-    [Type.A0107]: [
+    [LangTextType.A0107]: [
         `已成功创建模拟战。您想现在就开始游玩吗？`,
         `The simulation war has been created successfully. Do you want to play it now?`,
     ],
-    [Type.A0108]: [
+    [LangTextType.A0108]: [
         `开启作弊模式后，您可以随意修改战局上的各种数据。开启作弊模式后，将无法再取消。\n确定要开启吗？`,
         `You can modify most of the game data if cheating is enabled. However, you can't disable it after enabling it.\nAre you sure to continue?`,
     ],
-    [Type.A0109]: [
+    [LangTextType.A0109]: [
         `请先把CO搭载到部队上`,
         `Please board your CO first.`,
     ],
-    [Type.A0110]: [
+    [LangTextType.A0110]: [
         `您确定要让AI来控制这个势力吗？`,
         `Are you sure to make the A.I. to take control of the force?`,
     ],
-    [Type.A0111]: [
+    [LangTextType.A0111]: [
         `您确定要自行控制这个势力吗？`,
         `Are you sure to take control of the force?`,
     ],
-    [Type.A0112]: [
+    [LangTextType.A0112]: [
         `有棋子正在移动中，请稍候再试`,
         `A unit is moving. Please retry later.`,
     ],
-    [Type.A0113]: [
+    [LangTextType.A0113]: [
         `您确定要切换该部队的行动状态吗？`,
         `Are you sure to switch the unit's action state?`,
     ],
-    [Type.A0114]: [
+    [LangTextType.A0114]: [
         `您确定要切换该部队的下潜状态吗？`,
         `Are you sure to switch the unit's diving state?`,
     ],
-    [Type.A0115]: [
+    [LangTextType.A0115]: [
         `请联系babygogogo以解决问题`,
         `Please refer to babygogogo.`,
     ],
-    [Type.A0116]: [
+    [LangTextType.A0116]: [
         `战局已开始，并已进入您的回合。要现在就进入战局吗？`,
         `The war has started and it's your turn now. Do you want to play it now?`,
     ],
-    [Type.A0117]: [
+    [LangTextType.A0117]: [
         `注：清空后，所有地形都会被设置为平原，所有部队都会被删除！`,
         `Caution: All tiles will be set as plain and all units will be deleted!`,
     ],
-    [Type.A0118]: [
+    [LangTextType.A0118]: [
         `设计者名称不合法`,
         `Invalid MapDesigner.`,
     ],
-    [Type.A0119]: [
+    [LangTextType.A0119]: [
         `地图名称不合法`,
         `Invalid MapName.`,
     ],
-    [Type.A0120]: [
+    [LangTextType.A0120]: [
         `地图英文名称不合法`,
         `Invalid English MapName.`,
     ],
-    [Type.A0121]: [
+    [LangTextType.A0121]: [
         `请确保至少有两名玩家，且没有跳过势力颜色`,
         `Invalid forces.`,
     ],
-    [Type.A0122]: [
+    [LangTextType.A0122]: [
         `部队数据不合法`,
         `Invalid units.`,
     ],
-    [Type.A0123]: [
+    [LangTextType.A0123]: [
         `地形数据不合法`,
         `Invalid tiles.`,
     ],
-    [Type.A0124]: [
+    [LangTextType.A0124]: [
         `预设规则未设置或不合法`,
         `Preset rules are not set or invalid.`,
     ],
-    [Type.A0125]: [
+    [LangTextType.A0125]: [
         `要现在就进入战局吗？`,
         `Do you want to play it now?`,
     ],
-    [Type.A0126]: [
+    [LangTextType.A0126]: [
         `您确定要退出此房间吗？`,
         `Are you sure to exit the room?`,
     ],
-    [Type.A0127]: [
+    [LangTextType.A0127]: [
         `您已被请出此房间。`,
         `You have been removed from the room.`,
     ],
-    [Type.A0128]: [
+    [LangTextType.A0128]: [
         `请先取消您的准备状态`,
         `Please cancel the "ready" state first.`,
     ],
-    [Type.A0129]: [
+    [LangTextType.A0129]: [
         `您确定要使用自定义规则吗？`,
         `Are you sure to use a custom rule?`,
     ],
-    [Type.A0130]: [
+    [LangTextType.A0130]: [
         `您必须保留"无CO"选项。`,
         `The 'No CO' option must be available.`,
     ],
-    [Type.A0131]: [
+    [LangTextType.A0131]: [
         `请尽量同时提供中英文名，以英文逗号分隔`,
         `Please write down a Chinese Name and an English name if possible. Use a , as a separator.`,
     ],
-    [Type.A0132]: [
+    [LangTextType.A0132]: [
         `请设定您愿意同时进行的排位赛的数量上限（设置为0等同于您不参加对应模式的排位赛）。`,
         `Please set the maximum number of qualifying matches you are willing to play at the same time. Setting it to 0 is equivalent to not participating in qualifying matches.`
     ],
-    [Type.A0133]: [
+    [LangTextType.A0133]: [
         `正在等待对战各方禁用CO。`,
         `Waiting for the COs to be banned from all sides.`,
     ],
-    [Type.A0134]: [
+    [LangTextType.A0134]: [
         `正在等待对战各方选择CO和势力颜色并进入准备状态。`,
         `Waiting for all the players to be ready for the game.`,
     ],
-    [Type.A0135]: [
+    [LangTextType.A0135]: [
         `您尚未禁用任何CO。`,
         `You have not banned any COs.`,
     ],
-    [Type.A0136]: [
+    [LangTextType.A0136]: [
         `您已选择不禁用任何CO。`,
         `You have chosen not to ban any COs.`,
     ],
-    [Type.A0137]: [
+    [LangTextType.A0137]: [
         `进入准备状态后，您将无法再次修改CO和势力颜色设定。确定要继续吗？`,
         `You can't change your CO and color settings after being ready. Are you sure to continue?`,
     ],
-    [Type.A0138]: [
+    [LangTextType.A0138]: [
         `确定要禁用这些CO吗？`,
         `Are you sure to ban these COs?`,
     ],
-    [Type.A0139]: [
+    [LangTextType.A0139]: [
         `确定要不禁用任何CO吗？`,
         `Are you sure to ban no CO?`,
     ],
-    [Type.A0140]: [
+    [LangTextType.A0140]: [
         `确定要删除当前存档吗？（注：其他存档不受影响；您可以继续游玩当前游戏并存档）`,
         `Are you sure to clear the current save slot?`,
     ],
-    [Type.A0141]: [
+    [LangTextType.A0141]: [
         `已成功删除存档。`,
         `The save slot has been cleared.`,
     ],
-    [Type.A0142]: [
+    [LangTextType.A0142]: [
         `此地图已被修改，需要先保存吗？`,
         `The map has been modified. Do you want to save the map?`,
     ],
-    [Type.A0143]: [
+    [LangTextType.A0143]: [
         `此地图已被修改，确定不保存直接退出吗？`,
         `The map has been modified. Are you sure to exit anyway?`,
     ],
-    [Type.A0144]: [
+    [LangTextType.A0144]: [
         `请输入存档备注以便于区分，可留空`,
         `Please input a comment for the save slot.`,
     ],
-    [Type.A0145]: [
+    [LangTextType.A0145]: [
         `房间已满员`,
         `The room is full of players.`,
     ],
-    [Type.A0146]: [
+    [LangTextType.A0146]: [
         `战局数据不合法，请检查后重试`,
         `The war data is invalid. Please check and retry.`,
     ],
-    [Type.A0147]: [
+    [LangTextType.A0147]: [
         `新密码与确认密码不相同，请检查后重试`,
         `The new password is different from the confirm password.`,
     ],
-    [Type.A0148]: [
+    [LangTextType.A0148]: [
         `已成功修改密码。`,
         `Your password has been changed successfully.`
     ],
-    [Type.A0149]: [
+    [LangTextType.A0149]: [
         `您确定要删除此房间吗？`,
         `Are you sure to delete this room?`
     ],
-    [Type.A0150]: [
+    [LangTextType.A0150]: [
         `正在加载图片\n请耐心等候`,
         `Now loading\nPlease wait...`,
     ],
-    [Type.A0151]: [
+    [LangTextType.A0151]: [
         `已成功修改地图标签`,
         `The map tag has been updated successfully.`,
     ],
-    [Type.A0152]: [
+    [LangTextType.A0152]: [
         `您正在观战的玩家已被击败。\n即将回到大厅…`,
         `The player that you are watching has lost.`,
     ],
-    [Type.A0153]: [
+    [LangTextType.A0153]: [
         `请把错误码告知开发组`,
         `Please notify the developing group.`,
     ],
-    [Type.A0154]: [
+    [LangTextType.A0154]: [
         `已成功提交更新日志。`,
         `The change log has been updated successfully.`,
     ],
-    [Type.A0155]: [
+    [LangTextType.A0155]: [
         `输入内容太短，请检查`,
         `The texts are too short.`,
     ],
-    [Type.A0156]: [
+    [LangTextType.A0156]: [
         `您最少需要填写一种语言的内容`,
         `You have to write down at least one of the text.`,
     ],
-    [Type.A0157]: [
+    [LangTextType.A0157]: [
         `已成功修改用户权限`,
         `The user privilege has been updated successfully.`,
     ],
-    [Type.A0158]: [
+    [LangTextType.A0158]: [
         `事件数据不存在，请删除本事件`,
         `The event data doesn't exist. Please delete it.`,
     ],
-    [Type.A0159]: [
+    [LangTextType.A0159]: [
         `此事件尚未设定条件节点`,
         `The event contains no condition node.`,
     ],
-    [Type.A0160]: [
+    [LangTextType.A0160]: [
         `条件节点的数据不存在。请删除此条件节点。`,
         `The condition node data doesn't exist. Please delete it.`,
     ],
-    [Type.A0161]: [
+    [LangTextType.A0161]: [
         `此条件节点不包含任何子条件和子条件节点。`,
         `The condition node contains no condition nor sub node.`,
     ],
-    [Type.A0162]: [
+    [LangTextType.A0162]: [
         `所有子条件和子节点都成立时，此节点成立。`,
         `The condition node is true if ALL of the sub conditions and/or sub nodes are true.`,
     ],
-    [Type.A0163]: [
+    [LangTextType.A0163]: [
         `任意子条件或子节点成立时，此节点成立。`,
         `The condition node is true if ANY of the sub conditions and/or sub nodes is true.`,
     ],
-    [Type.A0164]: [
+    [LangTextType.A0164]: [
         `条件数据不存在，请删除本条件`,
         `The condition data doesn't exist. Please delete it.`,
     ],
-    [Type.A0165]: [
+    [LangTextType.A0165]: [
         `条件数据不合法，请编辑修正`,
         `The condition data is not valid. Please edit it.`,
     ],
-    [Type.A0166]: [
+    [LangTextType.A0166]: [
         `数据出错，请删除本项`,
         `Error. Please delete this line.`,
     ],
-    [Type.A0167]: [
+    [LangTextType.A0167]: [
         `此事件尚未设定动作。请至少设定一个动作。`,
         `The event contains no action. Please add at least one action.`,
     ],
-    [Type.A0168]: [
+    [LangTextType.A0168]: [
         `动作数据不存在，请删除本动作`,
         `The action data doesn't exist. Please delete this action.`,
     ],
-    [Type.A0169]: [
+    [LangTextType.A0169]: [
         `动作中部分部队的数据不合法`,
         `Some of the unit data in the action is not valid.`,
     ],
-    [Type.A0170]: [
+    [LangTextType.A0170]: [
         `事件数量已达上限`,
         `There are too many events already.`,
     ],
-    [Type.A0171]: [
+    [LangTextType.A0171]: [
         `您确定要删除事件吗？`,
         `Are you sure to delete this event?`,
     ],
-    [Type.A0172]: [
+    [LangTextType.A0172]: [
         `您确定要删除该条件节点吗？`,
         `Are you sure to delete the condition node?`,
     ],
-    [Type.A0173]: [
+    [LangTextType.A0173]: [
         `条件节点数量已达上限`,
         `There are too many condition nodes already.`,
     ],
-    [Type.A0174]: [
+    [LangTextType.A0174]: [
         `条件数量已达上限`,
         `There are too many conditions already.`,
     ],
-    [Type.A0175]: [
+    [LangTextType.A0175]: [
         `您确定要删除该条件吗？`,
         `Are you sure to delete the condition?`,
     ],
-    [Type.A0176]: [
+    [LangTextType.A0176]: [
         `您确定要删除该动作吗？`,
         `Are you sure to delete the action?`,
     ],
-    [Type.A0177]: [
+    [LangTextType.A0177]: [
         `此动作数据出错，请删除`,
         `There is something wrong with the action. Please delete it.`,
     ],
-    [Type.A0178]: [
+    [LangTextType.A0178]: [
         `事件中的动作数量已达上限`,
         `There are too many actions in the event already.`,
     ],
-    [Type.A0179]: [
+    [LangTextType.A0179]: [
         `无法替换节点，因为这样做会造成循环引用`,
         `Can't replace the node because of circular reference.`,
     ],
-    [Type.A0180]: [
+    [LangTextType.A0180]: [
         `事件包含的动作太多，请删除一些动作。`,
         `There are too many actions in this event. Please delete some of them.`,
     ],
-    [Type.A0181]: [
+    [LangTextType.A0181]: [
         `数值不合法，请修改。`,
         `The value is illegal. Please modify it.`,
     ],
-    [Type.A0182]: [
+    [LangTextType.A0182]: [
         `此地图已包含太多事件，请删除一些。`,
         `The map contains too many events. Please delete some of them.`,
     ],
-    [Type.A0183]: [
+    [LangTextType.A0183]: [
         `此地图已包含太多条件节点，请删除一些。`,
         `The map contains too many condition nodes. Please delete some of them.`,
     ],
-    [Type.A0184]: [
+    [LangTextType.A0184]: [
         `此地图已包含太多事件动作，请删除一些。`,
         `The map contains too many actions. Please delete some of them.`,
     ],
-    [Type.A0185]: [
+    [LangTextType.A0185]: [
         `此地图已包含太多条件，请删除一些。`,
         `The map contains too many conditions. Please delete some of them.`,
     ],
-    [Type.A0186]: [
+    [LangTextType.A0186]: [
         `此条件在同一事件中重复出现。请删除重复的条件。`,
         `There are duplicated conditions in the same event. Please remove the duplication.`,
     ],
-    [Type.A0187]: [
+    [LangTextType.A0187]: [
         `此条件数据出错，请删除`,
         `There is something wrong with the condition. Please delete it.`,
     ],
-    [Type.A0188]: [
+    [LangTextType.A0188]: [
         `未被引用的条件节点、条件、动作都将被删除。您确定要继续吗？`,
         `All of the unused condition nodes, conditions and actions will be deleted. Are you sure to continue?`,
     ],
-    [Type.A0189]: [
+    [LangTextType.A0189]: [
         `此动作已包含太多部队`,
         `There are too many units in this action.`,
     ],
-    [Type.A0190]: [
+    [LangTextType.A0190]: [
         `您确定要清空所有部队吗？`,
         `Are you sure to delete all the units?`,
     ],
-    [Type.A0191]: [
+    [LangTextType.A0191]: [
         `此动作包含的部队的数量不合法`,
         `The total number of the units is invalid.`,
     ],
-    [Type.A0192]: [
+    [LangTextType.A0192]: [
         `未设置是否会被其他部队阻挡`,
         `'Blockable By Unit' has not been set.`,
     ],
-    [Type.A0193]: [
+    [LangTextType.A0193]: [
         `未设置是否自动寻找有效地形`,
         `'NeedMovableTile' has not been set.`,
     ],
-    [Type.A0194]: [
+    [LangTextType.A0194]: [
         `再次点击返回将退出游戏`,
         `Click the go back button again to exit the game.`,
     ],
-    [Type.A0195]: [
+    [LangTextType.A0195]: [
         `感谢您游玩Tiny Wars!`,
         `Thank you for playing Tiny Wars!`,
     ],
-    [Type.A0196]: [
+    [LangTextType.A0196]: [
         `您的浏览器不支持播放背景音乐`,
         `BGM is not supported by your browser.`,
     ],
-    [Type.A0197]: [
+    [LangTextType.A0197]: [
         `地图已保存，但数据不合法，因而无法提审`,
         `The map has been saved, however the data is invalid for review.`,
     ],
-    [Type.A0198]: [
+    [LangTextType.A0198]: [
         `您可以通过地图编辑器和模拟战来创建自由模式房间。`,
         `You can create rooms via the map editor or the simulation wars.`,
     ],
-    [Type.A0199]: [
+    [LangTextType.A0199]: [
         `请确保地图上至少有两个存活的势力`,
         `Please ensure that there're at least 2 alive forces.`,
     ],
-    [Type.A0200]: [
+    [LangTextType.A0200]: [
         `创建自由模式游戏失败`,
         `Failed to create the free mode game.`,
     ],
-    [Type.A0201]: [
+    [LangTextType.A0201]: [
         `将离开战局并前往创建自由模式房间的页面。\n您确定要继续吗？`,
         `You have to leave the war scene (you can enter it again later) in order to create the free mode room.\nAre you sure to continue?`,
     ],
-    [Type.A0202]: [
+    [LangTextType.A0202]: [
         `已有其他玩家选择该势力`,
         `The force has been chosen by another player.`,
     ],
-    [Type.A0203]: [
+    [LangTextType.A0203]: [
         `已有其他玩家选择该颜色`,
         `The color has been chosen by another player.`,
     ],
-    [Type.A0204]: [
+    [LangTextType.A0204]: [
         `该势力不可选`,
         `The force is unavailable.`,
     ],
-    [Type.A0205]: [
+    [LangTextType.A0205]: [
         `无法撤销准备状态`,
         `It's not allowed to cancel the "ready" state.`,
     ],
-    [Type.A0206]: [
+    [LangTextType.A0206]: [
         [
             `一旦进入准备状态，您将无法反悔，也无法修改您的CO和颜色设定。`,
             `确定要继续吗？`,
@@ -1013,75 +879,75 @@ const _LANG_DATA: { [type: number]: string [] } = {
             `Tips: Your opponent(s) will not know which CO you have chosen until the game starts.`,
         ].join(`\n`),
     ],
-    [Type.A0207]: [
+    [LangTextType.A0207]: [
         `您已准备就绪，无法再修改各项设定`,
         `You're in the ready state and can no longer change the settings.`,
     ],
-    [Type.A0208]: [
+    [LangTextType.A0208]: [
         `您确定要不使用任何CO吗？`,
         `Are you sure to use no CO?`,
     ],
-    [Type.A0209]: [
+    [LangTextType.A0209]: [
         `排位模式下无法修改势力`,
         `It's not allowed to change your force in ranking matches.`,
     ],
-    [Type.A0210]: [
+    [LangTextType.A0210]: [
         `请禁用CO`,
         `Please ban COs for the match.`
     ],
-    [Type.A0211]: [
+    [LangTextType.A0211]: [
         `请选择您的CO和颜色，并进入准备就绪状态`,
         `Please choose your CO and color, and then set ready for the match.`,
     ],
-    [Type.A0212]: [
+    [LangTextType.A0212]: [
         `玩家序号不合法`,
         `The index of the player is invalid.`,
     ],
-    [Type.A0213]: [
+    [LangTextType.A0213]: [
         `玩家状态不合法`,
         `The state of the player is invalid.`,
     ],
-    [Type.A0214]: [
+    [LangTextType.A0214]: [
         `"存活"状态下，玩家可以正常行动。可以从其他状态切换到本状态（死而复生）。`,
         `In the Alive state, players can do anything as usual. It's possible to make a (Being) Defeated player Alive again.`,
     ],
-    [Type.A0215]: [
+    [LangTextType.A0215]: [
         `"即将战败"状态下，玩家无法行动。除非有其他事件把玩家状态改为"存活"，否则系统将自动清除所有该玩家的部队，建筑将变为中立，且状态将变为已战败。`,
         `In the Being Defeated state, players can not do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
     ],
-    [Type.A0216]: [
+    [LangTextType.A0216]: [
         `"已战败"状态下，玩家无法行动。如果玩家是直接从存活状态切换到已战败状态，则其部队和建筑所有权都会残留。`,
         `In the Being Defeated state, players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
     ],
-    [Type.A0217]: [
+    [LangTextType.A0217]: [
         `所有数值设定与《高级战争：毁灭之日》保持一致。`,
         `All data of units and tiles is the same as Advance Wars: Days of Ruin.`,
     ],
-    [Type.A0218]: [
+    [LangTextType.A0218]: [
         `相比原版，部分兵种的数据已被重新设计。设计者：NGC6240。`,
         `Some units' data is rebalanced. Designed by NGC6240.`,
     ],
-    [Type.A0219]: [
+    [LangTextType.A0219]: [
         `注意：各版本的玩家数据不互通。您可能需要重新注册账户。`,
         `Note: The user data is not interchangeable between the versions. You may need to register again.`,
     ],
-    [Type.A0220]: [
+    [LangTextType.A0220]: [
         `您已选择由自己控制此势力，无法修改为AI控制。`,
         `You have chosen to use this force.`,
     ],
-    [Type.A0221]: [
+    [LangTextType.A0221]: [
         `此规则已被设定为不可用于合作模式，因此无法修改此选项。`,
         `The war rule is not available for the Coop mode. Please change that first.`,
     ],
-    [Type.A0222]: [
+    [LangTextType.A0222]: [
         `无法切换控制权，因为其他势力都由AI控制。`,
         `All other forces are controlled by the A.I. already.`,
     ],
-    [Type.A0223]: [
+    [LangTextType.A0223]: [
         `请确保此地图已包含预设规则。`,
         `Please make sure that there is at least one preset war rule.`,
     ],
-    [Type.A0224]: [
+    [LangTextType.A0224]: [
         `这是《高级战争》1、2、DS版的网络对战版。主要维护者：Amarriner、Walker、Matsuzen。`,
         `This is a web version of Advance Wars 1/2/Dual Strike. Maintained by Amarriner, Walker and Matsuzen.`,
     ],
@@ -1089,2830 +955,2830 @@ const _LANG_DATA: { [type: number]: string [] } = {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Short strings.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    [Type.B0000]: [
+    [LangTextType.B0000]: [
         "创建房间",
         "Create Rooms",
     ],
-    [Type.B0001]: [
+    [LangTextType.B0001]: [
         "无",
         "None",
     ],
-    [Type.B0002]: [
+    [LangTextType.B0002]: [
         "基本设置",
         "Basic Settings",
     ],
-    [Type.B0003]: [
+    [LangTextType.B0003]: [
         "高级设置",
         "Advanced Settings",
     ],
-    [Type.B0004]: [
+    [LangTextType.B0004]: [
         "红",
         "Red",
     ],
-    [Type.B0005]: [
+    [LangTextType.B0005]: [
         "蓝",
         "Blue",
     ],
-    [Type.B0006]: [
+    [LangTextType.B0006]: [
         "黄",
         "Yellow",
     ],
-    [Type.B0007]: [
+    [LangTextType.B0007]: [
         "黑",
         "Black",
     ],
-    [Type.B0008]: [
+    [LangTextType.B0008]: [
         "A队",
         "Team A",
     ],
-    [Type.B0009]: [
+    [LangTextType.B0009]: [
         "B队",
         "Team B",
     ],
-    [Type.B0010]: [
+    [LangTextType.B0010]: [
         "C队",
         "Team C",
     ],
-    [Type.B0011]: [
+    [LangTextType.B0011]: [
         "D队",
         "Team D",
     ],
-    [Type.B0012]: [
+    [LangTextType.B0012]: [
         "是",
         "Yes",
     ],
-    [Type.B0013]: [
+    [LangTextType.B0013]: [
         "否",
         "No",
     ],
-    [Type.B0014]: [
+    [LangTextType.B0014]: [
         "天",
         "d",
     ],
-    [Type.B0015]: [
+    [LangTextType.B0015]: [
         "时",
         "h",
     ],
-    [Type.B0016]: [
+    [LangTextType.B0016]: [
         "分",
         "m",
     ],
-    [Type.B0017]: [
+    [LangTextType.B0017]: [
         "秒",
         "s",
     ],
-    [Type.B0018]: [
+    [LangTextType.B0018]: [
         "行动次序",
         "Force",
     ],
-    [Type.B0019]: [
+    [LangTextType.B0019]: [
         "队伍",
         "Team",
     ],
-    [Type.B0020]: [
+    [LangTextType.B0020]: [
         "战争迷雾",
         "FoW",
     ],
-    [Type.B0021]: [
+    [LangTextType.B0021]: [
         "回合限时",
         "Time Limit",
     ],
-    [Type.B0022]: [
+    [LangTextType.B0022]: [
         "退出房间",
         "Exit Game"
     ],
-    [Type.B0023]: [
+    [LangTextType.B0023]: [
         "加入房间",
         "Join Room"
     ],
-    [Type.B0024]: [
+    [LangTextType.B0024]: [
         "继续战斗",
         "Continue",
     ],
-    [Type.B0025]: [
+    [LangTextType.B0025]: [
         `连接已断开`,
         `Disconnected`,
     ],
-    [Type.B0026]: [
+    [LangTextType.B0026]: [
         `确定`,
         `Confirm`,
     ],
-    [Type.B0027]: [
+    [LangTextType.B0027]: [
         `倒计时`,
         `Countdown`,
     ],
-    [Type.B0028]: [
+    [LangTextType.B0028]: [
         `即将超时`,
         `Timeout soon`,
     ],
-    [Type.B0029]: [
+    [LangTextType.B0029]: [
         `读取中`,
         `Now loading`,
     ],
-    [Type.B0030]: [
+    [LangTextType.B0030]: [
         `中立`,
         `Neutral`,
     ],
-    [Type.B0031]: [
+    [LangTextType.B0031]: [
         `玩家`,
         `Player`,
     ],
-    [Type.B0032]: [
+    [LangTextType.B0032]: [
         `金钱`,
         `Fund`,
     ],
-    [Type.B0033]: [
+    [LangTextType.B0033]: [
         `能量`,
         `Energy`,
     ],
-    [Type.B0034]: [
+    [LangTextType.B0034]: [
         `胜利`,
         `Win`,
     ],
-    [Type.B0035]: [
+    [LangTextType.B0035]: [
         `失败`,
         `Defeat`,
     ],
-    [Type.B0036]: [
+    [LangTextType.B0036]: [
         `结束回合`,
         `End Turn`,
     ],
-    [Type.B0037]: [
+    [LangTextType.B0037]: [
         `装载`,
         `load`,
     ],
-    [Type.B0038]: [
+    [LangTextType.B0038]: [
         `合流`,
         `Join`,
     ],
-    [Type.B0039]: [
+    [LangTextType.B0039]: [
         `攻击`,
         `Attack`,
     ],
-    [Type.B0040]: [
+    [LangTextType.B0040]: [
         `占领`,
         `Capture`,
     ],
-    [Type.B0041]: [
+    [LangTextType.B0041]: [
         `下潜`,
         `Dive`,
     ],
-    [Type.B0042]: [
+    [LangTextType.B0042]: [
         `上浮`,
         `Surface`,
     ],
-    [Type.B0043]: [
+    [LangTextType.B0043]: [
         `建造`,
         `Build`,
     ],
-    [Type.B0044]: [
+    [LangTextType.B0044]: [
         `补给`,
         `Supply`,
     ],
-    [Type.B0045]: [
+    [LangTextType.B0045]: [
         `发射`,
         `Launch`,
     ],
-    [Type.B0046]: [
+    [LangTextType.B0046]: [
         `卸载`,
         `Drop`,
     ],
-    [Type.B0047]: [
+    [LangTextType.B0047]: [
         `照明`,
         `Flare`,
     ],
-    [Type.B0048]: [
+    [LangTextType.B0048]: [
         `发射导弹`,
         `Silo`,
     ],
-    [Type.B0049]: [
+    [LangTextType.B0049]: [
         `制造`,
         `Produce`,
     ],
-    [Type.B0050]: [
+    [LangTextType.B0050]: [
         `待机`,
         `Wait`,
     ],
-    [Type.B0051]: [
+    [LangTextType.B0051]: [
         `生产材料已耗尽`,
         `No material`,
     ],
-    [Type.B0052]: [
+    [LangTextType.B0052]: [
         `没有空闲的装载位置`,
         `No empty load slot`,
     ],
-    [Type.B0053]: [
+    [LangTextType.B0053]: [
         `资金不足`,
         `Insufficient fund`,
     ],
-    [Type.B0054]: [
+    [LangTextType.B0054]: [
         `返回大厅`,
         `Go to lobby`,
     ],
-    [Type.B0055]: [
+    [LangTextType.B0055]: [
         `投降`,
         `Resign`,
     ],
-    [Type.B0056]: [
+    [LangTextType.B0056]: [
         `已战败`,
         `Defeat`
     ],
-    [Type.B0057]: [
+    [LangTextType.B0057]: [
         `日`,
         `Day`,
     ],
-    [Type.B0058]: [
+    [LangTextType.B0058]: [
         `月`,
         `Month`,
     ],
-    [Type.B0059]: [
+    [LangTextType.B0059]: [
         `年`,
         `Year`,
     ],
-    [Type.B0060]: [
+    [LangTextType.B0060]: [
         `排位积分`,
         `RankScore`,
     ],
-    [Type.B0061]: [
+    [LangTextType.B0061]: [
         `列兵`,
         `Lv.0`,
     ],
-    [Type.B0062]: [
+    [LangTextType.B0062]: [
         `上等兵`,
         `Lv.1`,
     ],
-    [Type.B0063]: [
+    [LangTextType.B0063]: [
         `下士`,
         `Lv.2`,
     ],
-    [Type.B0064]: [
+    [LangTextType.B0064]: [
         `中士`,
         `Lv.3`,
     ],
-    [Type.B0065]: [
+    [LangTextType.B0065]: [
         `上士`,
         `Lv.4`,
     ],
-    [Type.B0066]: [
+    [LangTextType.B0066]: [
         `军士长`,
         `Lv.5`,
     ],
-    [Type.B0067]: [
+    [LangTextType.B0067]: [
         `少尉`,
         `Lv.6`,
     ],
-    [Type.B0068]: [
+    [LangTextType.B0068]: [
         `中尉`,
         `Lv.7`,
     ],
-    [Type.B0069]: [
+    [LangTextType.B0069]: [
         `上尉`,
         `Lv.8`,
     ],
-    [Type.B0070]: [
+    [LangTextType.B0070]: [
         `少校`,
         `Lv.9`,
     ],
-    [Type.B0071]: [
+    [LangTextType.B0071]: [
         `中校`,
         `Lv.10`,
     ],
-    [Type.B0072]: [
+    [LangTextType.B0072]: [
         `上校`,
         `Lv.11`,
     ],
-    [Type.B0073]: [
+    [LangTextType.B0073]: [
         `大校`,
         `Lv.12`,
     ],
-    [Type.B0074]: [
+    [LangTextType.B0074]: [
         `少将`,
         `Lv.13`,
     ],
-    [Type.B0075]: [
+    [LangTextType.B0075]: [
         `中将`,
         `Lv.14`,
     ],
-    [Type.B0076]: [
+    [LangTextType.B0076]: [
         `上将`,
         `Lv.15`,
     ],
-    [Type.B0077]: [
+    [LangTextType.B0077]: [
         `攻`,
         `Deal`,
     ],
-    [Type.B0078]: [
+    [LangTextType.B0078]: [
         `反`,
         `Take`,
     ],
-    [Type.B0079]: [
+    [LangTextType.B0079]: [
         `费用`,
         `Cost`,
     ],
-    [Type.B0080]: [
+    [LangTextType.B0080]: [
         `高级`,
         `Advanced`,
     ],
-    [Type.B0081]: [
+    [LangTextType.B0081]: [
         `删除部队`,
         `Delete Unit`,
     ],
-    [Type.B0082]: [
+    [LangTextType.B0082]: [
         `和局`,
         `Drawn Game`,
     ],
-    [Type.B0083]: [
+    [LangTextType.B0083]: [
         `求和`,
         `Request Draw`,
     ],
-    [Type.B0084]: [
+    [LangTextType.B0084]: [
         `同意和局`,
         `Agree Draw`,
     ],
-    [Type.B0085]: [
+    [LangTextType.B0085]: [
         `拒绝和局`,
         `Decline Draw`,
     ],
-    [Type.B0086]: [
+    [LangTextType.B0086]: [
         `回合中`,
         `In Turn`,
     ],
-    [Type.B0087]: [
+    [LangTextType.B0087]: [
         `战局已结束`,
         `Game Ended`,
     ],
-    [Type.B0088]: [
+    [LangTextType.B0088]: [
         `提示`,
         `Message`,
     ],
-    [Type.B0089]: [
+    [LangTextType.B0089]: [
         `刷新战局`,
         `Refresh`,
     ],
-    [Type.B0090]: [
+    [LangTextType.B0090]: [
         `行动数`,
         `Actions`,
     ],
-    [Type.B0091]: [
+    [LangTextType.B0091]: [
         `回合数`,
         `Turns`,
     ],
-    [Type.B0092]: [
+    [LangTextType.B0092]: [
         `观看回放`,
         `Replays`,
     ],
-    [Type.B0093]: [
+    [LangTextType.B0093]: [
         `回放已结束`,
         `The replay is completed.`,
     ],
-    [Type.B0094]: [
+    [LangTextType.B0094]: [
         `开始回合`,
         `Begin turn`,
     ],
-    [Type.B0095]: [
+    [LangTextType.B0095]: [
         `生产`,
         `Produce`,
     ],
-    [Type.B0096]: [
+    [LangTextType.B0096]: [
         `提议和局`,
         `Propose a draw`,
     ],
-    [Type.B0097]: [
+    [LangTextType.B0097]: [
         `发起攻击`,
         `Launch an attack`,
     ],
-    [Type.B0098]: [
+    [LangTextType.B0098]: [
         `装载部队`,
         `Load a unit`,
     ],
-    [Type.B0099]: [
+    [LangTextType.B0099]: [
         `建造建筑`,
         `Build a building`,
     ],
-    [Type.B0100]: [
+    [LangTextType.B0100]: [
         `占领建筑`,
         `Capture a building`,
     ],
-    [Type.B0101]: [
+    [LangTextType.B0101]: [
         `部队下潜`,
         `Unit dive`,
     ],
-    [Type.B0102]: [
+    [LangTextType.B0102]: [
         `卸载部队`,
         `Drop unit(s)`,
     ],
-    [Type.B0103]: [
+    [LangTextType.B0103]: [
         `部队合流`,
         `Join units`,
     ],
-    [Type.B0104]: [
+    [LangTextType.B0104]: [
         `发射照明弹`,
         `Launch a flare`,
     ],
-    [Type.B0105]: [
+    [LangTextType.B0105]: [
         `发射导弹`,
         `Launch a silo`,
     ],
-    [Type.B0106]: [
+    [LangTextType.B0106]: [
         `生产舰载机`,
         `Produce a seaplane`,
     ],
-    [Type.B0107]: [
+    [LangTextType.B0107]: [
         `补给部队`,
         `Supply unit(s)`,
     ],
-    [Type.B0108]: [
+    [LangTextType.B0108]: [
         `部队上浮`,
         `Unit surface`,
     ],
-    [Type.B0109]: [
+    [LangTextType.B0109]: [
         `部队移动`,
         `Unit move`,
     ],
-    [Type.B0110]: [
+    [LangTextType.B0110]: [
         `发生未知错误`,
         `Something errors`,
     ],
-    [Type.B0111]: [
+    [LangTextType.B0111]: [
         `中立玩家`,
         `Neutral`,
     ],
-    [Type.B0112]: [
+    [LangTextType.B0112]: [
         `步兵`,
         `Inf`,
     ],
-    [Type.B0113]: [
+    [LangTextType.B0113]: [
         `反坦克兵`,
         `Mech`,
     ],
-    [Type.B0114]: [
+    [LangTextType.B0114]: [
         `履带`,
         `Tank`,
     ],
-    [Type.B0115]: [
+    [LangTextType.B0115]: [
         `轮胎A`,
         `TireA`,
     ],
-    [Type.B0116]: [
+    [LangTextType.B0116]: [
         `轮胎B`,
         `TireB`,
     ],
-    [Type.B0117]: [
+    [LangTextType.B0117]: [
         `飞行`,
         `Air`,
     ],
-    [Type.B0118]: [
+    [LangTextType.B0118]: [
         `航行`,
         `Ship`,
     ],
-    [Type.B0119]: [
+    [LangTextType.B0119]: [
         `运输`,
         `Trans`,
     ],
-    [Type.B0120]: [
+    [LangTextType.B0120]: [
         `全部`,
         `All`,
     ],
-    [Type.B0121]: [
+    [LangTextType.B0121]: [
         `陆军`,
         `Ground`,
     ],
-    [Type.B0122]: [
+    [LangTextType.B0122]: [
         `海军`,
         `Naval`,
     ],
-    [Type.B0123]: [
+    [LangTextType.B0123]: [
         `空军`,
         `Air`,
     ],
-    [Type.B0124]: [
+    [LangTextType.B0124]: [
         `陆军&海军`,
         `Ground & Naval`,
     ],
-    [Type.B0125]: [
+    [LangTextType.B0125]: [
         `陆军&空军`,
         `Ground & Air`,
     ],
-    [Type.B0126]: [
+    [LangTextType.B0126]: [
         `近战`,
         `Direct`,
     ],
-    [Type.B0127]: [
+    [LangTextType.B0127]: [
         `远程`,
         `Indirect`,
     ],
-    [Type.B0128]: [
+    [LangTextType.B0128]: [
         `步行`,
         `Foot`,
     ],
-    [Type.B0129]: [
+    [LangTextType.B0129]: [
         `步兵系`,
         `Inf`,
     ],
-    [Type.B0130]: [
+    [LangTextType.B0130]: [
         `车辆系`,
         `Vehicle`,
     ],
-    [Type.B0131]: [
+    [LangTextType.B0131]: [
         `近战机械`,
         `DirectMachine`,
     ],
-    [Type.B0132]: [
+    [LangTextType.B0132]: [
         `运输系`,
         `Transport`,
     ],
-    [Type.B0133]: [
+    [LangTextType.B0133]: [
         `大型船只`,
         `LargeNaval`,
     ],
-    [Type.B0134]: [
+    [LangTextType.B0134]: [
         `直升机`,
         `Copter`,
     ],
-    [Type.B0135]: [
+    [LangTextType.B0135]: [
         `坦克`,
         `Tank`,
     ],
-    [Type.B0136]: [
+    [LangTextType.B0136]: [
         `空军除舰载机`,
         `AirExceptSeaplane`,
     ],
-    [Type.B0137]: [
+    [LangTextType.B0137]: [
         `多人对战`,
         `Multi Player`,
     ],
-    [Type.B0138]: [
+    [LangTextType.B0138]: [
         `单人模式`,
         `Single Player`,
     ],
-    [Type.B0139]: [
+    [LangTextType.B0139]: [
         `CO搭乘`,
         `CO Board`,
     ],
-    [Type.B0140]: [
+    [LangTextType.B0140]: [
         `CO信息`,
         `CO Info`,
     ],
-    [Type.B0141]: [
+    [LangTextType.B0141]: [
         `无限`,
         `Infinity`,
     ],
-    [Type.B0142]: [
+    [LangTextType.B0142]: [
         `发动COP`,
         `Power`,
     ],
-    [Type.B0143]: [
+    [LangTextType.B0143]: [
         `帮助`,
         `Help`,
     ],
-    [Type.B0144]: [
+    [LangTextType.B0144]: [
         `发动SCOP`,
         `SCOP`,
     ],
-    [Type.B0145]: [
+    [LangTextType.B0145]: [
         `选择CO`,
         `Choose a CO`,
     ],
-    [Type.B0146]: [
+    [LangTextType.B0146]: [
         `返回`,
         `Back`,
     ],
-    [Type.B0147]: [
+    [LangTextType.B0147]: [
         `CO系统规则`,
         `CO Rules`,
     ],
-    [Type.B0148]: [
+    [LangTextType.B0148]: [
         `切换语言`,
         `Change Language`,
     ],
-    [Type.B0149]: [
+    [LangTextType.B0149]: [
         `更改昵称`,
         `Change Nickname`,
     ],
-    [Type.B0150]: [
+    [LangTextType.B0150]: [
         `更改Discord ID`,
         `Change Discord ID`,
     ],
-    [Type.B0151]: [
+    [LangTextType.B0151]: [
         `查看在线玩家`,
         `Online Players`,
     ],
-    [Type.B0152]: [
+    [LangTextType.B0152]: [
         `部队列表`,
         `Units`,
     ],
-    [Type.B0153]: [
+    [LangTextType.B0153]: [
         `寻找建筑`,
         `Building`,
     ],
-    [Type.B0154]: [
+    [LangTextType.B0154]: [
         `取消`,
         `Cancel`,
     ],
-    [Type.B0155]: [
+    [LangTextType.B0155]: [
         `菜单`,
         `Menu`,
     ],
-    [Type.B0156]: [
+    [LangTextType.B0156]: [
         `资金`,
         `Fund`,
     ],
-    [Type.B0157]: [
+    [LangTextType.B0157]: [
         `收入`,
         `Income`,
     ],
-    [Type.B0158]: [
+    [LangTextType.B0158]: [
         `建筑数`,
         `Buildings`,
     ],
-    [Type.B0159]: [
+    [LangTextType.B0159]: [
         `能量`,
         `Energy`,
     ],
-    [Type.B0160]: [
+    [LangTextType.B0160]: [
         `部队数`,
         `Units`,
     ],
-    [Type.B0161]: [
+    [LangTextType.B0161]: [
         `部队价值`,
         `Units Value`,
     ],
-    [Type.B0162]: [
+    [LangTextType.B0162]: [
         `姓名`,
         `Name`,
     ],
-    [Type.B0163]: [
+    [LangTextType.B0163]: [
         `设计者`,
         `Designer`,
     ],
-    [Type.B0164]: [
+    [LangTextType.B0164]: [
         `搭载费用`,
         `Boarding Cost`,
     ],
-    [Type.B0165]: [
+    [LangTextType.B0165]: [
         `Zone范围`,
         `Zone Radius`,
     ],
-    [Type.B0166]: [
+    [LangTextType.B0166]: [
         `Zone扩张能量值`,
         `ZoneExpandingEnergy`,
     ],
-    [Type.B0167]: [
+    [LangTextType.B0167]: [
         `能量消耗`,
         `Energy Cost`,
     ],
-    [Type.B0168]: [
+    [LangTextType.B0168]: [
         `势力`,
         `Force`,
     ],
-    [Type.B0169]: [
+    [LangTextType.B0169]: [
         `我的履历`,
         `Profile`,
     ],
-    [Type.B0170]: [
+    [LangTextType.B0170]: [
         `账号`,
         `Account`,
     ],
-    [Type.B0171]: [
+    [LangTextType.B0171]: [
         `密码`,
         `Password`,
     ],
-    [Type.B0172]: [
+    [LangTextType.B0172]: [
         `记住密码`,
         `Remember Password`,
     ],
-    [Type.B0173]: [
+    [LangTextType.B0173]: [
         `登录`,
         `Login`,
     ],
-    [Type.B0174]: [
+    [LangTextType.B0174]: [
         `注册`,
         `Register`,
     ],
-    [Type.B0175]: [
+    [LangTextType.B0175]: [
         `昵称`,
         `Nickname`,
     ],
-    [Type.B0176]: [
+    [LangTextType.B0176]: [
         `打开地形动画`,
         `Tile Animation On`,
     ],
-    [Type.B0177]: [
+    [LangTextType.B0177]: [
         `关闭地形动画`,
         `Tile Animation Off`,
     ],
-    [Type.B0178]: [
+    [LangTextType.B0178]: [
         `初始资金`,
         `Initial Fund`,
     ],
-    [Type.B0179]: [
+    [LangTextType.B0179]: [
         `收入倍率%`,
         `Income Multiplier %`,
     ],
-    [Type.B0180]: [
+    [LangTextType.B0180]: [
         `装载CO时获得能量%`,
         `Energy Gain % on Load CO`,
     ],
-    [Type.B0181]: [
+    [LangTextType.B0181]: [
         `能量增速%`,
         `Energy Growth Multiplier %`,
     ],
-    [Type.B0182]: [
+    [LangTextType.B0182]: [
         `移动力加成`,
         `Movement Bonus`,
     ],
-    [Type.B0183]: [
+    [LangTextType.B0183]: [
         `攻击力加成%`,
         `Offense Bonus %`,
     ],
-    [Type.B0184]: [
+    [LangTextType.B0184]: [
         `视野加成`,
         `Vision Bonus`,
     ],
-    [Type.B0185]: [
+    [LangTextType.B0185]: [
         `房间名称`,
         `Game Name`,
     ],
-    [Type.B0186]: [
+    [LangTextType.B0186]: [
         `房间密码`,
         `Game Password`,
     ],
-    [Type.B0187]: [
+    [LangTextType.B0187]: [
         `附言`,
         `Comment`,
     ],
-    [Type.B0188]: [
+    [LangTextType.B0188]: [
         `回合限时`,
         `Boot Timer`,
     ],
-    [Type.B0189]: [
+    [LangTextType.B0189]: [
         `幸运下限%`,
         `Min Luck %`,
     ],
-    [Type.B0190]: [
+    [LangTextType.B0190]: [
         `幸运上限%`,
         `Max Luck %`,
     ],
-    [Type.B0191]: [
+    [LangTextType.B0191]: [
         `回合`,
         `Turn`,
     ],
-    [Type.B0192]: [
+    [LangTextType.B0192]: [
         `管理地图`,
         `Map Management`,
     ],
-    [Type.B0193]: [
+    [LangTextType.B0193]: [
         `可用性`,
         `Availability`,
     ],
-    [Type.B0194]: [
+    [LangTextType.B0194]: [
         `注册时间`,
         `Registration`,
     ],
-    [Type.B0195]: [
+    [LangTextType.B0195]: [
         `上次登陆时间`,
         `Last Login`,
     ],
-    [Type.B0196]: [
+    [LangTextType.B0196]: [
         `在线总时长`,
         `Online Time`,
     ],
-    [Type.B0197]: [
+    [LangTextType.B0197]: [
         `登陆次数`,
         `Login Times`,
     ],
-    [Type.B0198]: [
+    [LangTextType.B0198]: [
         `明战排位积分`,
         `Std Rank Score`,
     ],
-    [Type.B0199]: [
+    [LangTextType.B0199]: [
         `雾战排位积分`,
         `FoW Rank Score`,
     ],
-    [Type.B0200]: [
+    [LangTextType.B0200]: [
         `多人自由对战`,
         `MP Custom Games`,
     ],
-    [Type.B0201]: [
+    [LangTextType.B0201]: [
         `历史战绩`,
         `History`,
     ],
-    [Type.B0202]: [
+    [LangTextType.B0202]: [
         `3人局`,
         `3P`,
     ],
-    [Type.B0203]: [
+    [LangTextType.B0203]: [
         `4人局`,
         `4P`,
     ],
-    [Type.B0204]: [
+    [LangTextType.B0204]: [
         `关闭`,
         `Close`,
     ],
-    [Type.B0205]: [
+    [LangTextType.B0205]: [
         `多人游戏`,
         `Multi Player`,
     ],
-    [Type.B0206]: [
+    [LangTextType.B0206]: [
         `观战`,
         `Watch`,
     ],
-    [Type.B0207]: [
+    [LangTextType.B0207]: [
         `发起请求`,
         `Make Request`,
     ],
-    [Type.B0208]: [
+    [LangTextType.B0208]: [
         `处理请求`,
         `Handle Request`,
     ],
-    [Type.B0209]: [
+    [LangTextType.B0209]: [
         `暂无请求`,
         `No Requests`,
     ],
-    [Type.B0210]: [
+    [LangTextType.B0210]: [
         `暂无战局`,
         `No Wars`,
     ],
-    [Type.B0211]: [
+    [LangTextType.B0211]: [
         `无`,
         `No`,
     ],
-    [Type.B0212]: [
+    [LangTextType.B0212]: [
         `已请求`,
         `Requested`,
     ],
-    [Type.B0213]: [
+    [LangTextType.B0213]: [
         `正在观战`,
         `Watching`,
     ],
-    [Type.B0214]: [
+    [LangTextType.B0214]: [
         `同意`,
         `Accept`,
     ],
-    [Type.B0215]: [
+    [LangTextType.B0215]: [
         `拒绝`,
         `Decline`,
     ],
-    [Type.B0216]: [
+    [LangTextType.B0216]: [
         `自己`,
         `Self`,
     ],
-    [Type.B0217]: [
+    [LangTextType.B0217]: [
         `对手`,
         `Opponent`,
     ],
-    [Type.B0218]: [
+    [LangTextType.B0218]: [
         `已观战他人`,
         `Watching Others`,
     ],
-    [Type.B0219]: [
+    [LangTextType.B0219]: [
         `删除观战者`,
         `Delete Watcher`,
     ],
-    [Type.B0220]: [
+    [LangTextType.B0220]: [
         `删除`,
         `Delete`,
     ],
-    [Type.B0221]: [
+    [LangTextType.B0221]: [
         `保留`,
         `Keep`,
     ],
-    [Type.B0222]: [
+    [LangTextType.B0222]: [
         `继续观战`,
         `Continue`,
     ],
-    [Type.B0223]: [
+    [LangTextType.B0223]: [
         `战局信息`,
         `War Info`,
     ],
-    [Type.B0224]: [
+    [LangTextType.B0224]: [
         `玩家信息`,
         `Player Info`,
     ],
-    [Type.B0225]: [
+    [LangTextType.B0225]: [
         `地图名称`,
         `Map Name`,
     ],
-    [Type.B0226]: [
+    [LangTextType.B0226]: [
         `战局ID`,
         `War ID`,
     ],
-    [Type.B0227]: [
+    [LangTextType.B0227]: [
         `选择地图`,
         `Select a Map`,
     ],
-    [Type.B0228]: [
+    [LangTextType.B0228]: [
         `查找`,
         `Search`,
     ],
-    [Type.B0229]: [
+    [LangTextType.B0229]: [
         `玩家数量`,
         `Players`,
     ],
-    [Type.B0230]: [
+    [LangTextType.B0230]: [
         `更换CO`,
         `Change CO`,
     ],
-    [Type.B0231]: [
+    [LangTextType.B0231]: [
         `我的回合`,
         `My Turn`,
     ],
-    [Type.B0232]: [
+    [LangTextType.B0232]: [
         `玩家`,
         `Players`,
     ],
-    [Type.B0233]: [
+    [LangTextType.B0233]: [
         `全部显示`,
         `Show All`,
     ],
-    [Type.B0234]: [
+    [LangTextType.B0234]: [
         `查找回放`,
         `Search Replay`,
     ],
-    [Type.B0235]: [
+    [LangTextType.B0235]: [
         `回放ID`,
         `Replay ID`,
     ],
-    [Type.B0236]: [
+    [LangTextType.B0236]: [
         `在线玩家列表`,
         `Online Players List`,
     ],
-    [Type.B0237]: [
+    [LangTextType.B0237]: [
         `当前在线人数`,
         `Online Players`
     ],
-    [Type.B0238]: [
+    [LangTextType.B0238]: [
         `可用CO`,
         `Available COs`,
     ],
-    [Type.B0239]: [
+    [LangTextType.B0239]: [
         `最大`,
         `Max.`,
     ],
-    [Type.B0240]: [
+    [LangTextType.B0240]: [
         `指挥官信息`,
         `CO Info`,
     ],
-    [Type.B0241]: [
+    [LangTextType.B0241]: [
         `暂无回放`,
         `No Replays`,
     ],
-    [Type.B0242]: [
+    [LangTextType.B0242]: [
         `新昵称`,
         `New nickname`,
     ],
-    [Type.B0243]: [
+    [LangTextType.B0243]: [
         `新ID`,
         `New ID`,
     ],
-    [Type.B0244]: [
+    [LangTextType.B0244]: [
         `切换玩家`,
         `Next Player`,
     ],
-    [Type.B0245]: [
+    [LangTextType.B0245]: [
         `房间设定总览`,
         `Overview Room Settings`,
     ],
-    [Type.B0246]: [
+    [LangTextType.B0246]: [
         `进入战局`,
         `Enter Game`,
     ],
-    [Type.B0247]: [
+    [LangTextType.B0247]: [
         `上个回合`,
         `Prev. Turn`,
     ],
-    [Type.B0248]: [
+    [LangTextType.B0248]: [
         `下个回合`,
         `Next Turn`,
     ],
-    [Type.B0249]: [
+    [LangTextType.B0249]: [
         `开始回放`,
         `Start Replays`,
     ],
-    [Type.B0250]: [
+    [LangTextType.B0250]: [
         `暂停回放`,
         `Pause Replays`,
     ],
-    [Type.B0251]: [
+    [LangTextType.B0251]: [
         `作者`,
         `Designer`,
     ],
-    [Type.B0252]: [
+    [LangTextType.B0252]: [
         `游玩次数`,
         `Games Played`,
     ],
-    [Type.B0253]: [
+    [LangTextType.B0253]: [
         `评分`,
         `Rating`,
     ],
-    [Type.B0254]: [
+    [LangTextType.B0254]: [
         `单人明战`,
         `Free Battle`,
     ],
-    [Type.B0255]: [
+    [LangTextType.B0255]: [
         `存档编号`,
         `Save Slot`,
     ],
-    [Type.B0256]: [
+    [LangTextType.B0256]: [
         `电脑`,
         `COM`,
     ],
-    [Type.B0257]: [
+    [LangTextType.B0257]: [
         `War Room`,
         `War Room`,
     ],
-    [Type.B0258]: [
+    [LangTextType.B0258]: [
         `选择`,
         `Select`,
     ],
-    [Type.B0259]: [
+    [LangTextType.B0259]: [
         `选择存档位置`,
         `Select Save Slot`,
     ],
-    [Type.B0260]: [
+    [LangTextType.B0260]: [
         `存档`,
         `Save Game`,
     ],
-    [Type.B0261]: [
+    [LangTextType.B0261]: [
         `读档`,
         `Load Game`,
     ],
-    [Type.B0262]: [
+    [LangTextType.B0262]: [
         `重载所有地图`,
         `Reload Maps`,
     ],
-    [Type.B0267]: [
+    [LangTextType.B0267]: [
         `详细信息`,
         `Detailed Info`,
     ],
-    [Type.B0268]: [
+    [LangTextType.B0268]: [
         `合并地图`,
         `Merge Maps`,
     ],
-    [Type.B0269]: [
+    [LangTextType.B0269]: [
         `无可合并的地图`,
         `No Maps`,
     ],
-    [Type.B0270]: [
+    [LangTextType.B0270]: [
         `删除地图`,
         `Delete Map`,
     ],
-    [Type.B0271]: [
+    [LangTextType.B0271]: [
         `地图编辑器`,
         `Map Editor`,
     ],
-    [Type.B0272]: [
+    [LangTextType.B0272]: [
         `地图列表`,
         `Map List`,
     ],
-    [Type.B0273]: [
+    [LangTextType.B0273]: [
         `未提审`,
         `Not Reviewed`,
     ],
-    [Type.B0274]: [
+    [LangTextType.B0274]: [
         `审核中`,
         `Reviewing`,
     ],
-    [Type.B0275]: [
+    [LangTextType.B0275]: [
         `被拒审`,
         `Rejected`,
     ],
-    [Type.B0276]: [
+    [LangTextType.B0276]: [
         `已过审`,
         `Accepted`,
     ],
-    [Type.B0277]: [
+    [LangTextType.B0277]: [
         `未命名`,
         `Unnamed`,
     ],
-    [Type.B0278]: [
+    [LangTextType.B0278]: [
         `无数据`,
         `No Data`,
     ],
-    [Type.B0279]: [
+    [LangTextType.B0279]: [
         `新地图`,
         `New Map`,
     ],
-    [Type.B0280]: [
+    [LangTextType.B0280]: [
         `模式`,
         `Mode`,
     ],
-    [Type.B0281]: [
+    [LangTextType.B0281]: [
         `绘制部队`,
         `Draw Unit`,
     ],
-    [Type.B0282]: [
+    [LangTextType.B0282]: [
         `绘制地形基底`,
         `Draw Tile Base`,
     ],
-    [Type.B0283]: [
+    [LangTextType.B0283]: [
         `绘制地形物体`,
         `Draw Tile Object`,
     ],
-    [Type.B0284]: [
+    [LangTextType.B0284]: [
         `删除部队`,
         `Del Unit`,
     ],
-    [Type.B0285]: [
+    [LangTextType.B0285]: [
         `删除地形物体`,
         `Del Tile Object`,
     ],
-    [Type.B0286]: [
+    [LangTextType.B0286]: [
         `预览`,
         `Preview`,
     ],
-    [Type.B0287]: [
+    [LangTextType.B0287]: [
         `保存地图`,
         `Save Map`,
     ],
-    [Type.B0288]: [
+    [LangTextType.B0288]: [
         `读取地图`,
         `Load Map`,
     ],
-    [Type.B0289]: [
+    [LangTextType.B0289]: [
         `提审`,
         `Submit for review`,
     ],
-    [Type.B0290]: [
+    [LangTextType.B0290]: [
         `调整大小`,
         `Resize`,
     ],
-    [Type.B0291]: [
+    [LangTextType.B0291]: [
         `当前宽高`,
         `Current W/H`,
     ],
-    [Type.B0292]: [
+    [LangTextType.B0292]: [
         `新的宽高`,
         `New W/H`,
     ],
-    [Type.B0293]: [
+    [LangTextType.B0293]: [
         `地图偏移`,
         `Map Offset`,
     ],
-    [Type.B0294]: [
+    [LangTextType.B0294]: [
         `全图填充`,
         `Fill Map`,
     ],
-    [Type.B0295]: [
+    [LangTextType.B0295]: [
         `审核地图`,
         `Review Maps`,
     ],
-    [Type.B0296]: [
+    [LangTextType.B0296]: [
         `过审`,
         `Accept`,
     ],
-    [Type.B0297]: [
+    [LangTextType.B0297]: [
         `拒审`,
         `Reject`,
     ],
-    [Type.B0298]: [
+    [LangTextType.B0298]: [
         `地图信息`,
         `Map Info`,
     ],
-    [Type.B0299]: [
+    [LangTextType.B0299]: [
         `地图英文名称`,
         `Map English Name`,
     ],
-    [Type.B0300]: [
+    [LangTextType.B0300]: [
         `地图尺寸`,
         `Map Size`,
     ],
-    [Type.B0301]: [
+    [LangTextType.B0301]: [
         `可见性`,
         `Visibility`,
     ],
-    [Type.B0302]: [
+    [LangTextType.B0302]: [
         `地形基底`,
         `Tile Bases`,
     ],
-    [Type.B0303]: [
+    [LangTextType.B0303]: [
         `地形物体`,
         `Tile Objects`,
     ],
-    [Type.B0304]: [
+    [LangTextType.B0304]: [
         `部队`,
         `Units`,
     ],
-    [Type.B0305]: [
+    [LangTextType.B0305]: [
         `拒审理由`,
         `Reason for Rejection`,
     ],
-    [Type.B0306]: [
+    [LangTextType.B0306]: [
         `对称性`,
         `Symmetry`,
     ],
-    [Type.B0307]: [
+    [LangTextType.B0307]: [
         `自动绘制地形`,
         `Auto Draw Tile`,
     ],
-    [Type.B0308]: [
+    [LangTextType.B0308]: [
         `上下对称`,
         `U to D`,
     ],
-    [Type.B0309]: [
+    [LangTextType.B0309]: [
         `左右对称`,
         `L to R`,
     ],
-    [Type.B0310]: [
+    [LangTextType.B0310]: [
         `旋转对称`,
         `Rotational`,
     ],
-    [Type.B0311]: [
+    [LangTextType.B0311]: [
         `左上右下对称`,
         `UL to DR`,
     ],
-    [Type.B0312]: [
+    [LangTextType.B0312]: [
         `右上左下对称`,
         `UR to DL`,
     ],
-    [Type.B0313]: [
+    [LangTextType.B0313]: [
         `导入`,
         `Import`,
     ],
-    [Type.B0314]: [
+    [LangTextType.B0314]: [
         `预设规则`,
         `Preset Rules`,
     ],
-    [Type.B0315]: [
+    [LangTextType.B0315]: [
         `规则名称`,
         `Rule Name`,
     ],
-    [Type.B0316]: [
+    [LangTextType.B0316]: [
         `规则英文名`,
         `Rule English Name`,
     ],
-    [Type.B0317]: [
+    [LangTextType.B0317]: [
         `修改`,
         `Modify`,
     ],
-    [Type.B0318]: [
+    [LangTextType.B0318]: [
         `规则`,
         `Rule`,
     ],
-    [Type.B0319]: [
+    [LangTextType.B0319]: [
         `值域`,
         `Range`,
     ],
-    [Type.B0320]: [
+    [LangTextType.B0320]: [
         `新增`,
         `Add`,
     ],
-    [Type.B0321]: [
+    [LangTextType.B0321]: [
         `自定义`,
         `Custom`,
     ],
-    [Type.B0322]: [
+    [LangTextType.B0322]: [
         `无`,
         `Empty`,
     ],
-    [Type.B0323]: [
+    [LangTextType.B0323]: [
         `只能使用数字`,
         `Digits only`,
     ],
-    [Type.B0324]: [
+    [LangTextType.B0324]: [
         `暂无预览`,
         `No Preview`,
     ],
-    [Type.B0325]: [
+    [LangTextType.B0325]: [
         `模拟战`,
         `Simulation`,
     ],
-    [Type.B0326]: [
+    [LangTextType.B0326]: [
         `评审意见`,
         `Comments`,
     ],
-    [Type.B0327]: [
+    [LangTextType.B0327]: [
         `服务器状态`,
         `Server Status`,
     ],
-    [Type.B0328]: [
+    [LangTextType.B0328]: [
         `账号总数`,
         `Accounts`,
     ],
-    [Type.B0329]: [
+    [LangTextType.B0329]: [
         `在线总时长`,
         `Online Time`,
     ],
-    [Type.B0330]: [
+    [LangTextType.B0330]: [
         `新增账号数`,
         `New Accounts`,
     ],
-    [Type.B0331]: [
+    [LangTextType.B0331]: [
         `活跃账号数`,
         `Active Accounts`,
     ],
-    [Type.B0332]: [
+    [LangTextType.B0332]: [
         `无可用选项`,
         `No available options`,
     ],
-    [Type.B0333]: [
+    [LangTextType.B0333]: [
         `建筑统计`,
         `Buildings`,
     ],
-    [Type.B0334]: [
+    [LangTextType.B0334]: [
         `基础伤害表`,
         `Base Damage Chart`,
     ],
-    [Type.B0335]: [
+    [LangTextType.B0335]: [
         `攻击(主)`,
         `ATK(main)`,
     ],
-    [Type.B0336]: [
+    [LangTextType.B0336]: [
         `攻击(副)`,
         `ATK(sub)`,
     ],
-    [Type.B0337]: [
+    [LangTextType.B0337]: [
         `受击(主)`,
         `DEF(main)`,
     ],
-    [Type.B0338]: [
+    [LangTextType.B0338]: [
         `受击(副)`,
         `DEF(sub)`,
     ],
-    [Type.B0339]: [
+    [LangTextType.B0339]: [
         `HP`,
         `HP`,
     ],
-    [Type.B0340]: [
+    [LangTextType.B0340]: [
         `移动力`,
         `Movement`,
     ],
-    [Type.B0341]: [
+    [LangTextType.B0341]: [
         `造价`,
         `Production Cost`,
     ],
-    [Type.B0342]: [
+    [LangTextType.B0342]: [
         `燃料`,
         `Fuel`,
     ],
-    [Type.B0343]: [
+    [LangTextType.B0343]: [
         `燃料消耗量`,
         `Fuel Consumption`,
     ],
-    [Type.B0344]: [
+    [LangTextType.B0344]: [
         `耗尽燃料时自毁`,
         `Explodes without fuel`,
     ],
-    [Type.B0345]: [
+    [LangTextType.B0345]: [
         `攻击距离`,
         `Attack Range`,
     ],
-    [Type.B0346]: [
+    [LangTextType.B0346]: [
         `移动后攻击`,
         `Run & hit`,
     ],
-    [Type.B0347]: [
+    [LangTextType.B0347]: [
         `建筑材料`,
         `Build Material`,
     ],
-    [Type.B0348]: [
+    [LangTextType.B0348]: [
         `生产材料`,
         `Production Material`,
     ],
-    [Type.B0349]: [
+    [LangTextType.B0349]: [
         `照明弹`,
         `Flare Ammo`,
     ],
-    [Type.B0350]: [
+    [LangTextType.B0350]: [
         `主武器弹药`,
         `Primary Weapon Ammo`,
     ],
-    [Type.B0351]: [
+    [LangTextType.B0351]: [
         `移动基础消耗表`,
         `Base Move Cost Chart`,
     ],
-    [Type.B0352]: [
+    [LangTextType.B0352]: [
         `防御加成`,
         `Defense Bonus`,
     ],
-    [Type.B0353]: [
+    [LangTextType.B0353]: [
         `资金收入`,
         `Income`,
     ],
-    [Type.B0354]: [
+    [LangTextType.B0354]: [
         `视野范围`,
         `Vision Range`,
     ],
-    [Type.B0355]: [
+    [LangTextType.B0355]: [
         `对全体玩家生效`,
         `For all players`,
     ],
-    [Type.B0356]: [
+    [LangTextType.B0356]: [
         `雾战中隐蔽部队`,
         `Hide units in FoW`,
     ],
-    [Type.B0357]: [
+    [LangTextType.B0357]: [
         `被占领即失败`,
         `Defeat if captured`,
     ],
-    [Type.B0358]: [
+    [LangTextType.B0358]: [
         `生产部队`,
         `Produce Unit`,
     ],
-    [Type.B0359]: [
+    [LangTextType.B0359]: [
         `全局攻防加成`,
         `Global ATK/DEF Bonus`,
     ],
-    [Type.B0360]: [
+    [LangTextType.B0360]: [
         `部队维修量`,
         `Repair Amount`,
     ],
-    [Type.B0361]: [
+    [LangTextType.B0361]: [
         `占领点数`,
         `Capture Point`,
     ],
-    [Type.B0362]: [
+    [LangTextType.B0362]: [
         `建筑点数`,
         `Build Point`,
     ],
-    [Type.B0363]: [
+    [LangTextType.B0363]: [
         `我的评分`,
         `My Rating`,
     ],
-    [Type.B0364]: [
+    [LangTextType.B0364]: [
         `全服评分`,
         `Global Rating`,
     ],
-    [Type.B0365]: [
+    [LangTextType.B0365]: [
         `评分`,
         `Set Rating`,
     ],
-    [Type.B0366]: [
+    [LangTextType.B0366]: [
         `开启作弊模式`,
         `Cheating`,
     ],
-    [Type.B0367]: [
+    [LangTextType.B0367]: [
         `状态`,
         `Status`,
     ],
-    [Type.B0368]: [
+    [LangTextType.B0368]: [
         `已行动`,
         `Waiting`,
     ],
-    [Type.B0369]: [
+    [LangTextType.B0369]: [
         `空闲`,
         `Idle`,
     ],
-    [Type.B0370]: [
+    [LangTextType.B0370]: [
         `晋升等级`,
         `Promotion`,
     ],
-    [Type.B0371]: [
+    [LangTextType.B0371]: [
         `下潜中`,
         `Diving`,
     ],
-    [Type.B0372]: [
+    [LangTextType.B0372]: [
         `最近`,
         `Recent`,
     ],
-    [Type.B0373]: [
+    [LangTextType.B0373]: [
         `公共(英语)`,
         `Public(EN)`,
     ],
-    [Type.B0374]: [
+    [LangTextType.B0374]: [
         `系统频道`,
         `System`,
     ],
-    [Type.B0375]: [
+    [LangTextType.B0375]: [
         `字数太多`,
         `Too many characters`,
     ],
-    [Type.B0376]: [
+    [LangTextType.B0376]: [
         `频道`,
         `Channel`,
     ],
-    [Type.B0377]: [
+    [LangTextType.B0377]: [
         `组队`,
         `Team`,
     ],
-    [Type.B0378]: [
+    [LangTextType.B0378]: [
         `私聊`,
         `Private`,
     ],
-    [Type.B0379]: [
+    [LangTextType.B0379]: [
         `全局`,
         `Global`,
     ],
-    [Type.B0380]: [
+    [LangTextType.B0380]: [
         `聊天列表`,
         `Chat List`,
     ],
-    [Type.B0381]: [
+    [LangTextType.B0381]: [
         `暂无消息`,
         `No Message`,
     ],
-    [Type.B0382]: [
+    [LangTextType.B0382]: [
         `发送`,
         `Send`,
     ],
-    [Type.B0383]: [
+    [LangTextType.B0383]: [
         `聊天`,
         `Chat`
     ],
-    [Type.B0384]: [
+    [LangTextType.B0384]: [
         `公共(中文)`,
         `Public(CN)`,
     ],
-    [Type.B0385]: [
+    [LangTextType.B0385]: [
         `原版`,
         `Legacy`,
     ],
-    [Type.B0386]: [
+    [LangTextType.B0386]: [
         `新版`,
         `New`,
     ],
-    [Type.B0387]: [
+    [LangTextType.B0387]: [
         `常规`,
         `Regular`,
     ],
-    [Type.B0388]: [
+    [LangTextType.B0388]: [
         `增量`,
         `Incremental`,
     ],
-    [Type.B0389]: [
+    [LangTextType.B0389]: [
         `初始时间`,
         `Initial Time`,
     ],
-    [Type.B0390]: [
+    [LangTextType.B0390]: [
         `增量时间`,
         `Incremental Time`,
     ],
-    [Type.B0391]: [
+    [LangTextType.B0391]: [
         `清空`,
         `Clear`,
     ],
-    [Type.B0392]: [
+    [LangTextType.B0392]: [
         `游戏已开始`,
         `Game Started`,
     ],
-    [Type.B0393]: [
+    [LangTextType.B0393]: [
         `玩家昵称`,
         `User Nickname`,
     ],
-    [Type.B0394]: [
+    [LangTextType.B0394]: [
         `CO名称`,
         `CO Name`,
     ],
-    [Type.B0395]: [
+    [LangTextType.B0395]: [
         `玩家列表`,
         `Players List`,
     ],
-    [Type.B0396]: [
+    [LangTextType.B0396]: [
         `超时告负`,
         `Boot`,
     ],
-    [Type.B0397]: [
+    [LangTextType.B0397]: [
         `势力颜色`,
         `Color`,
     ],
-    [Type.B0398]: [
+    [LangTextType.B0398]: [
         `房间信息`,
         `Room Info`,
     ],
-    [Type.B0399]: [
+    [LangTextType.B0399]: [
         `修改规则`,
         `Modify Rules`,
     ],
-    [Type.B0400]: [
+    [LangTextType.B0400]: [
         `删除房间`,
         `Delete Room`,
     ],
-    [Type.B0401]: [
+    [LangTextType.B0401]: [
         `开战`,
         `Start Game`,
     ],
-    [Type.B0402]: [
+    [LangTextType.B0402]: [
         `准备就绪`,
         `Ready`,
     ],
-    [Type.B0403]: [
+    [LangTextType.B0403]: [
         `禁用CO数量`,
         `Banned COs Number`,
     ],
-    [Type.B0404]: [
+    [LangTextType.B0404]: [
         `排位赛`,
         `Ranking Match`,
     ],
-    [Type.B0405]: [
+    [LangTextType.B0405]: [
         `房间`,
         `Room`,
     ],
-    [Type.B0406]: [
+    [LangTextType.B0406]: [
         `规则可用性`,
         `Rule Availability`,
     ],
-    [Type.B0407]: [
+    [LangTextType.B0407]: [
         `玩家规则列表`,
         `Player Rule List`,
     ],
-    [Type.B0408]: [
+    [LangTextType.B0408]: [
         `排位赛(雾战)`,
         `Ranking Match FoW`,
     ],
-    [Type.B0409]: [
+    [LangTextType.B0409]: [
         `单人自定义游戏`,
         `SP Custom Games`,
     ],
-    [Type.B0410]: [
+    [LangTextType.B0410]: [
         `我的房间`,
         `My Rooms`,
     ],
-    [Type.B0411]: [
+    [LangTextType.B0411]: [
         `踢出`,
         `Kick Off`,
     ],
-    [Type.B0412]: [
+    [LangTextType.B0412]: [
         `数量`,
         `Number`,
     ],
-    [Type.B0413]: [
+    [LangTextType.B0413]: [
         `设定战局数量`,
         `Set Games Number`,
     ],
-    [Type.B0414]: [
+    [LangTextType.B0414]: [
         `房间状态`,
         `Room Status`,
     ],
-    [Type.B0415]: [
+    [LangTextType.B0415]: [
         `排位明战`,
         `Rank Std`,
     ],
-    [Type.B0416]: [
+    [LangTextType.B0416]: [
         `排位雾战`,
         `Rank FoW`,
     ],
-    [Type.B0417]: [
+    [LangTextType.B0417]: [
         `自由明战`,
         `Custom Std`,
     ],
-    [Type.B0418]: [
+    [LangTextType.B0418]: [
         `自由雾战`,
         `Custom FoW`,
     ],
-    [Type.B0419]: [
+    [LangTextType.B0419]: [
         `地图编辑器`,
         `Map Editor`,
     ],
-    [Type.B0420]: [
+    [LangTextType.B0420]: [
         `删除存档`,
         `Delete War`,
     ],
-    [Type.B0421]: [
+    [LangTextType.B0421]: [
         `已搭载CO`,
         `CO on board`,
     ],
-    [Type.B0422]: [
+    [LangTextType.B0422]: [
         `战斗`,
         `Fight`,
     ],
-    [Type.B0423]: [
+    [LangTextType.B0423]: [
         `信息`,
         `Info`,
     ],
-    [Type.B0424]: [
+    [LangTextType.B0424]: [
         `控制者`,
         `Controller`,
     ],
-    [Type.B0425]: [
+    [LangTextType.B0425]: [
         `CO`,
         `CO`,
     ],
-    [Type.B0426]: [
+    [LangTextType.B0426]: [
         `修改密码`,
         `Change Password`,
     ],
-    [Type.B0427]: [
+    [LangTextType.B0427]: [
         `旧密码`,
         `Old Password`,
     ],
-    [Type.B0428]: [
+    [LangTextType.B0428]: [
         `新密码`,
         `New Password`,
     ],
-    [Type.B0429]: [
+    [LangTextType.B0429]: [
         `确认密码`,
         `Confirm Password`,
     ],
-    [Type.B0430]: [
+    [LangTextType.B0430]: [
         `SetPath模式`,
         `Set Path Mode`,
     ],
-    [Type.B0431]: [
+    [LangTextType.B0431]: [
         `已启用`,
         `Enabled`,
     ],
-    [Type.B0432]: [
+    [LangTextType.B0432]: [
         `已禁用`,
         `Disabled`,
     ],
-    [Type.B0433]: [
+    [LangTextType.B0433]: [
         `启用`,
         `Enable`,
     ],
-    [Type.B0434]: [
+    [LangTextType.B0434]: [
         `禁用`,
         `Disable`,
     ],
-    [Type.B0435]: [
+    [LangTextType.B0435]: [
         `未上榜`,
         `No Rank`,
     ],
-    [Type.B0436]: [
+    [LangTextType.B0436]: [
         `排位积分榜`,
         `Rank List`,
     ],
-    [Type.B0437]: [
+    [LangTextType.B0437]: [
         `标准`,
         `Standard`,
     ],
-    [Type.B0438]: [
+    [LangTextType.B0438]: [
         `雾战`,
         `Fog of War`,
     ],
-    [Type.B0439]: [
+    [LangTextType.B0439]: [
         `能否下潜`,
         `Can Dive`,
     ],
-    [Type.B0440]: [
+    [LangTextType.B0440]: [
         `部队属性表`,
         `Units Info`,
     ],
-    [Type.B0441]: [
+    [LangTextType.B0441]: [
         `标准图池`,
         `Standard Maps`,
     ],
-    [Type.B0442]: [
+    [LangTextType.B0442]: [
         `雾战图池`,
         `Fog Maps`,
     ],
-    [Type.B0443]: [
+    [LangTextType.B0443]: [
         `多人房间`,
         `MP Room`,
     ],
-    [Type.B0444]: [
+    [LangTextType.B0444]: [
         `设置标签`,
         `Set Tags`,
     ],
-    [Type.B0445]: [
+    [LangTextType.B0445]: [
         `地图标签`,
         `Map Tags`,
     ],
-    [Type.B0446]: [
+    [LangTextType.B0446]: [
         `忽略`,
         `Ignored`,
     ],
-    [Type.B0447]: [
+    [LangTextType.B0447]: [
         `查找地图`,
         `Search Maps`,
     ],
-    [Type.B0448]: [
+    [LangTextType.B0448]: [
         `需要密码`,
         `Password required`,
     ],
-    [Type.B0449]: [
+    [LangTextType.B0449]: [
         `输入密码`,
         `Input Password`,
     ],
-    [Type.B0450]: [
+    [LangTextType.B0450]: [
         `势力被摧毁`,
         `'s force is destroyed`,
     ],
-    [Type.B0451]: [
+    [LangTextType.B0451]: [
         `触发事件`,
         `An event is triggered.`,
     ],
-    [Type.B0452]: [
+    [LangTextType.B0452]: [
         `错误码`,
         `Error`,
     ],
-    [Type.B0453]: [
+    [LangTextType.B0453]: [
         `意见反馈`,
         `Complaint`,
     ],
-    [Type.B0454]: [
+    [LangTextType.B0454]: [
         `新增日志`,
         `Add Log`,
     ],
-    [Type.B0455]: [
+    [LangTextType.B0455]: [
         `中文`,
         `In Chinese`,
     ],
-    [Type.B0456]: [
+    [LangTextType.B0456]: [
         `英文`,
         `In English`,
     ],
-    [Type.B0457]: [
+    [LangTextType.B0457]: [
         `更新日志`,
         `Change Log`,
     ],
-    [Type.B0458]: [
+    [LangTextType.B0458]: [
         `设定地图名称`,
         `Edit Map Name`,
     ],
-    [Type.B0459]: [
+    [LangTextType.B0459]: [
         `设定规则名称`,
         `Edit Rule Name`,
     ],
-    [Type.B0460]: [
+    [LangTextType.B0460]: [
         `设置权限`,
         `Set Privilege`,
     ],
-    [Type.B0461]: [
+    [LangTextType.B0461]: [
         `战局事件列表`,
         `War Event List`,
     ],
-    [Type.B0462]: [
+    [LangTextType.B0462]: [
         `战局事件ID`,
         `War Event ID`,
     ],
-    [Type.B0463]: [
+    [LangTextType.B0463]: [
         `上移`,
         `Up`,
     ],
-    [Type.B0464]: [
+    [LangTextType.B0464]: [
         `下移`,
         `Down`,
     ],
-    [Type.B0465]: [
+    [LangTextType.B0465]: [
         `编辑`,
         `Edit`,
     ],
-    [Type.B0466]: [
+    [LangTextType.B0466]: [
         `已添加`,
         `Added`,
     ],
-    [Type.B0467]: [
+    [LangTextType.B0467]: [
         `添加`,
         `Add`,
     ],
-    [Type.B0468]: [
+    [LangTextType.B0468]: [
         `添加事件到规则`,
         `Add War Event To Rule`,
     ],
-    [Type.B0469]: [
+    [LangTextType.B0469]: [
         `战局事件`,
         `War Event`,
     ],
-    [Type.B0470]: [
+    [LangTextType.B0470]: [
         `事件列表`,
         `Event List`,
     ],
-    [Type.B0471]: [
+    [LangTextType.B0471]: [
         `存活`,
         `Alive`,
     ],
-    [Type.B0472]: [
+    [LangTextType.B0472]: [
         `已战败`,
         `Defeated`,
     ],
-    [Type.B0473]: [
+    [LangTextType.B0473]: [
         `即将战败`,
         `Being Defeated`,
     ],
-    [Type.B0474]: [
+    [LangTextType.B0474]: [
         `准备阶段`,
         `Standby Phase`,
     ],
-    [Type.B0475]: [
+    [LangTextType.B0475]: [
         `主要阶段`,
         `Main Phase`,
     ],
-    [Type.B0476]: [
+    [LangTextType.B0476]: [
         `事件在每个玩家回合的触发次数上限`,
         `Upper limit of trigger times per player's turn`,
     ],
-    [Type.B0477]: [
+    [LangTextType.B0477]: [
         `事件在整局游戏中的触发次数上限`,
         `Upper limit of trigger times per game`,
     ],
-    [Type.B0478]: [
+    [LangTextType.B0478]: [
         `修改事件名称`,
         `Edit Event Name`,
     ],
-    [Type.B0479]: [
+    [LangTextType.B0479]: [
         `删除事件`,
         `Delete Event`,
     ],
-    [Type.B0480]: [
+    [LangTextType.B0480]: [
         `替换`,
         `Replace`,
     ],
-    [Type.B0481]: [
+    [LangTextType.B0481]: [
         `删除条件节点`,
         `Delete Condition Node`,
     ],
-    [Type.B0482]: [
+    [LangTextType.B0482]: [
         `切换与/或`,
         `ALL/ANY`,
     ],
-    [Type.B0483]: [
+    [LangTextType.B0483]: [
         `+子条件`,
         `Sub Cond.`,
     ],
-    [Type.B0484]: [
+    [LangTextType.B0484]: [
         `+子节点`,
         `Sub Node`,
     ],
-    [Type.B0485]: [
+    [LangTextType.B0485]: [
         `删除条件`,
         `Delete Condition`,
     ],
-    [Type.B0486]: [
+    [LangTextType.B0486]: [
         `删除动作`,
         `Delete Action`,
     ],
-    [Type.B0487]: [
+    [LangTextType.B0487]: [
         `克隆`,
         `Clone`,
     ],
-    [Type.B0488]: [
+    [LangTextType.B0488]: [
         `条件节点`,
         `Condition Node`,
     ],
-    [Type.B0489]: [
+    [LangTextType.B0489]: [
         `子节点`,
         `Sub Node`,
     ],
-    [Type.B0490]: [
+    [LangTextType.B0490]: [
         `子条件`,
         `Sub Condition`,
     ],
-    [Type.B0491]: [
+    [LangTextType.B0491]: [
         `替换条件节点`,
         `Replace Condition Node`,
     ],
-    [Type.B0492]: [
+    [LangTextType.B0492]: [
         `引用`,
         `Reference`,
     ],
-    [Type.B0493]: [
+    [LangTextType.B0493]: [
         `无错误`,
         `No Error`,
     ],
-    [Type.B0494]: [
+    [LangTextType.B0494]: [
         `重置条件节点`,
         `Reset Node`,
     ],
-    [Type.B0495]: [
+    [LangTextType.B0495]: [
         `修改名称`,
         `Modify Name`,
     ],
-    [Type.B0496]: [
+    [LangTextType.B0496]: [
         `新增动作`,
         `Add Action`,
     ],
-    [Type.B0497]: [
+    [LangTextType.B0497]: [
         `新增事件`,
         `Add Event`,
     ],
-    [Type.B0498]: [
+    [LangTextType.B0498]: [
         `删除多余数据`,
         `Delete Redundancy`,
     ],
-    [Type.B0499]: [
+    [LangTextType.B0499]: [
         `删除节点`,
         `Delete Node`,
     ],
-    [Type.B0500]: [
+    [LangTextType.B0500]: [
         `替换条件`,
         `Replace Condition`,
     ],
-    [Type.B0501]: [
+    [LangTextType.B0501]: [
         `修改条件`,
         `Modify Condition`,
     ],
-    [Type.B0502]: [
+    [LangTextType.B0502]: [
         `条件`,
         `Condition`,
     ],
-    [Type.B0503]: [
+    [LangTextType.B0503]: [
         `使用中`,
         `In Use`,
     ],
-    [Type.B0504]: [
+    [LangTextType.B0504]: [
         `当前回合数等于...`,
         `The current turn equals to ...`,
     ],
-    [Type.B0505]: [
+    [LangTextType.B0505]: [
         `当前回合数大于...`,
         `The current turn is greater than ...`,
     ],
-    [Type.B0506]: [
+    [LangTextType.B0506]: [
         `当前回合数小于...`,
         `The current turn is less than ...`,
     ],
-    [Type.B0507]: [
+    [LangTextType.B0507]: [
         `当前回合数的余数等于...`,
         `The current turn's remainder equals to ...`,
     ],
-    [Type.B0508]: [
+    [LangTextType.B0508]: [
         `当前的回合阶段是...`,
         `The current turn phase is ...`,
     ],
-    [Type.B0509]: [
+    [LangTextType.B0509]: [
         `处于当前回合的玩家序号等于...`,
         `The current player index equals to ...`,
     ],
-    [Type.B0510]: [
+    [LangTextType.B0510]: [
         `处于当前回合的玩家序号大于...`,
         `The current player index is greater than ...`,
     ],
-    [Type.B0511]: [
+    [LangTextType.B0511]: [
         `处于当前回合的玩家序号小于...`,
         `The current player index is less than ...`,
     ],
-    [Type.B0512]: [
+    [LangTextType.B0512]: [
         `事件的发生次数等于...`,
         `The event occurred times equals to ...`,
     ],
-    [Type.B0513]: [
+    [LangTextType.B0513]: [
         `事件的发生次数大于...`,
         `The event occurred times is greater than ...`,
     ],
-    [Type.B0514]: [
+    [LangTextType.B0514]: [
         `事件的发生次数小于...`,
         `The event occurred times is less than ...`,
     ],
-    [Type.B0515]: [
+    [LangTextType.B0515]: [
         `玩家的状态是...`,
         `The player's state is ...`,
     ],
-    [Type.B0516]: [
+    [LangTextType.B0516]: [
         `切换类型`,
         `Change Type`,
     ],
-    [Type.B0517]: [
+    [LangTextType.B0517]: [
         `取反`,
         `Is Not`,
     ],
-    [Type.B0518]: [
+    [LangTextType.B0518]: [
         `除数`,
         `Divider`,
     ],
-    [Type.B0519]: [
+    [LangTextType.B0519]: [
         `余数`,
         `Remainder`,
     ],
-    [Type.B0520]: [
+    [LangTextType.B0520]: [
         `切换`,
         `Switch`,
     ],
-    [Type.B0521]: [
+    [LangTextType.B0521]: [
         `玩家序号`,
         `Player Index`,
     ],
-    [Type.B0522]: [
+    [LangTextType.B0522]: [
         `次数`,
         `Times`,
     ],
-    [Type.B0523]: [
+    [LangTextType.B0523]: [
         `玩家状态`,
         `Player State`,
     ],
-    [Type.B0524]: [
+    [LangTextType.B0524]: [
         `部队总数`,
         `Total number of the units`,
     ],
-    [Type.B0525]: [
+    [LangTextType.B0525]: [
         `部队类型`,
         `Unit Type`,
     ],
-    [Type.B0526]: [
+    [LangTextType.B0526]: [
         `行动状态`,
         `Action State`,
     ],
-    [Type.B0527]: [
+    [LangTextType.B0527]: [
         `部队ID`,
         `Unit ID`,
     ],
-    [Type.B0528]: [
+    [LangTextType.B0528]: [
         `装载部队ID`,
         `Loader ID`,
     ],
-    [Type.B0529]: [
+    [LangTextType.B0529]: [
         `建筑中`,
         `Building`,
     ],
-    [Type.B0530]: [
+    [LangTextType.B0530]: [
         `占领中`,
         `Capturing`,
     ],
-    [Type.B0531]: [
+    [LangTextType.B0531]: [
         `坐标`,
         `Coordinate`,
     ],
-    [Type.B0532]: [
+    [LangTextType.B0532]: [
         `是否会被部队阻挡`,
         `Blockable By Unit`,
     ],
-    [Type.B0533]: [
+    [LangTextType.B0533]: [
         `修改动作`,
         `Modify Action`,
     ],
-    [Type.B0534]: [
+    [LangTextType.B0534]: [
         `自动寻找合适的地形`,
         `Auto Find Suitable Tile`,
     ],
-    [Type.B0535]: [
+    [LangTextType.B0535]: [
         `新增部队`,
         `Add Unit`,
     ],
-    [Type.B0536]: [
+    [LangTextType.B0536]: [
         `单人雾战`,
         `Free Battle`,
     ],
-    [Type.B0537]: [
+    [LangTextType.B0537]: [
         `QQ群`,
         `QQ Group`,
     ],
-    [Type.B0538]: [
+    [LangTextType.B0538]: [
         `Discord`,
         `Discord`,
     ],
-    [Type.B0539]: [
+    [LangTextType.B0539]: [
         `GitHub`,
         `GitHub`,
     ],
-    [Type.B0540]: [
+    [LangTextType.B0540]: [
         `声音设定`,
         `Sound Settings`,
     ],
-    [Type.B0541]: [
+    [LangTextType.B0541]: [
         `音乐`,
         `BGM`,
     ],
-    [Type.B0542]: [
+    [LangTextType.B0542]: [
         `音效`,
         `SFX`,
     ],
-    [Type.B0543]: [
+    [LangTextType.B0543]: [
         `默认`,
         `Default`,
     ],
-    [Type.B0544]: [
+    [LangTextType.B0544]: [
         `上一首BGM`,
         `Previous BGM`,
     ],
-    [Type.B0545]: [
+    [LangTextType.B0545]: [
         `下一首BGM`,
         `Next BGM`,
     ],
-    [Type.B0546]: [
+    [LangTextType.B0546]: [
         `明战排位`,
         `Std Rank`,
     ],
-    [Type.B0547]: [
+    [LangTextType.B0547]: [
         `雾战排位`,
         `FoW Rank`,
     ],
-    [Type.B0548]: [
+    [LangTextType.B0548]: [
         `明战`,
         `Std`,
     ],
-    [Type.B0549]: [
+    [LangTextType.B0549]: [
         `雾战`,
         `FoW`,
     ],
-    [Type.B0550]: [
+    [LangTextType.B0550]: [
         `胜`,
         `Win`,
     ],
-    [Type.B0551]: [
+    [LangTextType.B0551]: [
         `负`,
         `Lose`,
     ],
-    [Type.B0552]: [
+    [LangTextType.B0552]: [
         `平`,
         `Draw`,
     ],
-    [Type.B0553]: [
+    [LangTextType.B0553]: [
         `胜率`,
         `Win %`,
     ],
-    [Type.B0554]: [
+    [LangTextType.B0554]: [
         `排位`,
         `Ranking`,
     ],
-    [Type.B0555]: [
+    [LangTextType.B0555]: [
         `无名`,
         `No Name`,
     ],
-    [Type.B0556]: [
+    [LangTextType.B0556]: [
         `多人自由房间`,
         `MP Free Room`,
     ],
-    [Type.B0557]: [
+    [LangTextType.B0557]: [
         `自由模式`,
         `Free Mode`,
     ],
-    [Type.B0558]: [
+    [LangTextType.B0558]: [
         `分辨率设定`,
         `Resolution Settings`,
     ],
-    [Type.B0559]: [
+    [LangTextType.B0559]: [
         `UI缩放倍率`,
         `UI Scale`,
     ],
-    [Type.B0560]: [
+    [LangTextType.B0560]: [
         `设置`,
         `Settings`,
     ],
-    [Type.B0561]: [
+    [LangTextType.B0561]: [
         `打开`,
         `On`,
     ],
-    [Type.B0562]: [
+    [LangTextType.B0562]: [
         `关闭`,
         `Off`,
     ],
-    [Type.B0563]: [
+    [LangTextType.B0563]: [
         `使用中文`,
         `Use Chinese`,
     ],
-    [Type.B0564]: [
+    [LangTextType.B0564]: [
         `使用英文`,
         `Use English`,
     ],
-    [Type.B0565]: [
+    [LangTextType.B0565]: [
         `热度`,
         `Popularity`,
     ],
-    [Type.B0566]: [
+    [LangTextType.B0566]: [
         `下一步`,
         `Next`,
     ],
-    [Type.B0567]: [
+    [LangTextType.B0567]: [
         `重置`,
         `Reset`,
     ],
-    [Type.B0568]: [
+    [LangTextType.B0568]: [
         `最小热度`,
         `Min. Popularity`,
     ],
-    [Type.B0569]: [
+    [LangTextType.B0569]: [
         `最低评分`,
         `Min. Rating`,
     ],
-    [Type.B0570]: [
+    [LangTextType.B0570]: [
         `雾战标签`,
         `FoW Tagged`,
     ],
-    [Type.B0571]: [
+    [LangTextType.B0571]: [
         `房间设置`,
         `Room Settings`,
     ],
-    [Type.B0572]: [
+    [LangTextType.B0572]: [
         `选择势力`,
         `Choose a Force`,
     ],
-    [Type.B0573]: [
+    [LangTextType.B0573]: [
         `选择颜色`,
         `Choose a Color`,
     ],
-    [Type.B0574]: [
+    [LangTextType.B0574]: [
         `计时模式`,
         `Timer Mode`,
     ],
-    [Type.B0575]: [
+    [LangTextType.B0575]: [
         `自定义`,
         `Customize`,
     ],
-    [Type.B0576]: [
+    [LangTextType.B0576]: [
         `D2D`,
         `D2D`,
     ],
-    [Type.B0577]: [
+    [LangTextType.B0577]: [
         `COP`,
         `COP`,
     ],
-    [Type.B0578]: [
+    [LangTextType.B0578]: [
         `SCOP`,
         `SCOP`,
     ],
-    [Type.B0579]: [
+    [LangTextType.B0579]: [
         `积分`,
         `Score`,
     ],
-    [Type.B0580]: [
+    [LangTextType.B0580]: [
         `加入房间`,
         `Join Rooms`,
     ],
-    [Type.B0581]: [
+    [LangTextType.B0581]: [
         `选择房间`,
         `Choose a Room`,
     ],
-    [Type.B0582]: [
+    [LangTextType.B0582]: [
         `暂无房间`,
         `No Rooms`,
     ],
-    [Type.B0583]: [
+    [LangTextType.B0583]: [
         `加入`,
         `Join`,
     ],
-    [Type.B0584]: [
+    [LangTextType.B0584]: [
         `棋盘网格线`,
         `Border Lines`,
     ],
-    [Type.B0585]: [
+    [LangTextType.B0585]: [
         `显示棋盘格子`,
         `Show Border`,
     ],
-    [Type.B0586]: [
+    [LangTextType.B0586]: [
         `您的势力颜色`,
         `Your Force Color`,
     ],
-    [Type.B0587]: [
+    [LangTextType.B0587]: [
         `您的CO`,
         `Your CO`,
     ],
-    [Type.B0588]: [
+    [LangTextType.B0588]: [
         `我的战局`,
         `My Wars`,
     ],
-    [Type.B0589]: [
+    [LangTextType.B0589]: [
         `选择战局`,
         `Choose a war`,
     ],
-    [Type.B0590]: [
+    [LangTextType.B0590]: [
         `禁用CO`,
         `Ban COs`,
     ],
-    [Type.B0591]: [
+    [LangTextType.B0591]: [
         `已禁用CO`,
         `Banned COs`,
     ],
-    [Type.B0592]: [
+    [LangTextType.B0592]: [
         `禁用CO阶段倒计时`,
         `Ban CO Phase Countdown`,
     ],
-    [Type.B0593]: [
+    [LangTextType.B0593]: [
         `准备阶段倒计时`,
         `Standby Phase Countdown`,
     ],
-    [Type.B0594]: [
+    [LangTextType.B0594]: [
         `预览地图`,
         `Preview Maps`,
     ],
-    [Type.B0595]: [
+    [LangTextType.B0595]: [
         `标准地图`,
         `Standard Maps`,
     ],
-    [Type.B0596]: [
+    [LangTextType.B0596]: [
         `雾战地图`,
         `FoW Maps`,
     ],
-    [Type.B0597]: [
+    [LangTextType.B0597]: [
         `切换`,
         `Switch`,
     ],
-    [Type.B0598]: [
+    [LangTextType.B0598]: [
         `选择回放`,
         `Choose a Replay`,
     ],
-    [Type.B0599]: [
+    [LangTextType.B0599]: [
         `战局类型`,
         `War Type`,
     ],
-    [Type.B0600]: [
+    [LangTextType.B0600]: [
         `回合数和行动数`,
         `Turns and Actions`,
     ],
-    [Type.B0601]: [
+    [LangTextType.B0601]: [
         `结束时间`,
         `End Time`,
     ],
-    [Type.B0602]: [
+    [LangTextType.B0602]: [
         `刷新`,
         `Refresh`,
     ],
-    [Type.B0603]: [
+    [LangTextType.B0603]: [
         `自定义模式`,
         `Custom Mode`,
     ],
-    [Type.B0604]: [
+    [LangTextType.B0604]: [
         `游戏设置`,
         `Game Settings`,
     ],
-    [Type.B0605]: [
+    [LangTextType.B0605]: [
         `存档备注`,
         `Save Comment`,
     ],
-    [Type.B0606]: [
+    [LangTextType.B0606]: [
         `存档编号`,
         `Save Slot`,
     ],
-    [Type.B0607]: [
+    [LangTextType.B0607]: [
         `电脑`,
         `A.I.`,
     ],
-    [Type.B0608]: [
+    [LangTextType.B0608]: [
         `更换控制者`,
         `Controller`,
     ],
-    [Type.B0609]: [
+    [LangTextType.B0609]: [
         `更换颜色`,
         `Change Color`,
     ],
-    [Type.B0610]: [
+    [LangTextType.B0610]: [
         `自定义明战`,
         `Custom Std`,
     ],
-    [Type.B0611]: [
+    [LangTextType.B0611]: [
         `自定义雾战`,
         `Custom FoW`,
     ],
-    [Type.B0612]: [
+    [LangTextType.B0612]: [
         `模拟战明战`,
         `Simulation Std`,
     ],
-    [Type.B0613]: [
+    [LangTextType.B0613]: [
         `模拟战雾战`,
         `Simulation FoW`,
     ],
-    [Type.B0614]: [
+    [LangTextType.B0614]: [
         `单人排位游戏`,
         `SP Ranking Games`,
     ],
-    [Type.B0615]: [
+    [LangTextType.B0615]: [
         `替换动作`,
         `Replace Action`,
     ],
-    [Type.B0616]: [
+    [LangTextType.B0616]: [
         `动作`,
         `Action`,
     ],
-    [Type.B0617]: [
+    [LangTextType.B0617]: [
         `增加部队`,
         `Add Unit(s)`,
     ],
-    [Type.B0618]: [
+    [LangTextType.B0618]: [
         `修改玩家状态`,
         `Modify a Player's State`,
     ],
-    [Type.B0619]: [
+    [LangTextType.B0619]: [
         `多人合作自定义游戏`,
         `Coop Custom Games`,
     ],
-    [Type.B0620]: [
+    [LangTextType.B0620]: [
         `切换游戏版本`,
         `Switch Game Version`,
     ],
-    [Type.B0621]: [
+    [LangTextType.B0621]: [
         `原版`,
         `Legacy Version`,
     ],
-    [Type.B0622]: [
+    [LangTextType.B0622]: [
         `测试版`,
         `Test Version`,
     ],
-    [Type.B0623]: [
+    [LangTextType.B0623]: [
         `当前版本`,
         `Current Version`,
     ],
-    [Type.B0624]: [
+    [LangTextType.B0624]: [
         `中文`,
         `Chinese`,
     ],
-    [Type.B0625]: [
+    [LangTextType.B0625]: [
         `英文`,
         `English`,
     ],
-    [Type.B0626]: [
+    [LangTextType.B0626]: [
         `找回密码`,
         `Forget?`,
     ],
-    [Type.B0627]: [
+    [LangTextType.B0627]: [
         `语言`,
         `Language`,
     ],
-    [Type.B0628]: [
+    [LangTextType.B0628]: [
         `贴图`,
         `Texture`,
     ],
-    [Type.B0629]: [
+    [LangTextType.B0629]: [
         `部队动画`,
         `Unit Animation`,
     ],
-    [Type.B0630]: [
+    [LangTextType.B0630]: [
         `地形动画`,
         `Tile Animation`,
     ],
-    [Type.B0631]: [
+    [LangTextType.B0631]: [
         `切换BGM`,
         `Switch BGM`,
     ],
-    [Type.B0632]: [
+    [LangTextType.B0632]: [
         `Wandering Path`,
         `Wandering Path`,
     ],
-    [Type.B0633]: [
+    [LangTextType.B0633]: [
         `Design Time`,
         `Design Time`,
     ],
-    [Type.B0634]: [
+    [LangTextType.B0634]: [
         `We Will Prevail`,
         `We Will Prevail`,
     ],
-    [Type.B0635]: [
+    [LangTextType.B0635]: [
         `Hope Never Dies`,
         `Hope Never Dies`,
     ],
-    [Type.B0636]: [
+    [LangTextType.B0636]: [
         `Lost Memories`,
         `Lost Memories`,
     ],
-    [Type.B0637]: [
+    [LangTextType.B0637]: [
         `Proud Soldier`,
         `Proud Soldier`,
     ],
-    [Type.B0638]: [
+    [LangTextType.B0638]: [
         `Days of Ruin`,
         `Days of Ruin`,
     ],
-    [Type.B0639]: [
+    [LangTextType.B0639]: [
         `Rutty`,
         `Rutty`,
     ],
-    [Type.B0640]: [
+    [LangTextType.B0640]: [
         `用户ID`,
         `User ID`,
     ],
-    [Type.B0641]: [
+    [LangTextType.B0641]: [
         `由AI控制`,
         `Controlled by A.I.`,
     ],
-    [Type.B0642]: [
+    [LangTextType.B0642]: [
         `AI使用的CO`,
         `CO for A.I.`,
     ],
-    [Type.B0643]: [
+    [LangTextType.B0643]: [
         `合作房间`,
         `Coop Room`,
     ],
-    [Type.B0644]: [
+    [LangTextType.B0644]: [
         `合作模式中AI的CO`,
         `CO for A.I. in Coop`,
     ],
-    [Type.B0645]: [
+    [LangTextType.B0645]: [
         `合作模式中由AI控制`,
         `Controlled by A.I. in Coop`,
     ],
-    [Type.B0646]: [
+    [LangTextType.B0646]: [
         `合作模式`,
         `Coop Mode`,
     ],
-    [Type.B0647]: [
+    [LangTextType.B0647]: [
         `我`,
         `Me`,
     ],
-    [Type.B0648]: [
+    [LangTextType.B0648]: [
         `其他玩家`,
         `Others`,
     ],
-    [Type.B0649]: [
+    [LangTextType.B0649]: [
         `Advance Wars by Web`,
         `Advance Wars by Web`,
     ],
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    [Type.B1000]: [
+    [LangTextType.B1000]: [
         `平原`,
         `Plain`,
     ],
-    [Type.B1001]: [
+    [LangTextType.B1001]: [
         `河流`,
         `River`,
     ],
-    [Type.B1002]: [
+    [LangTextType.B1002]: [
         `海洋`,
         `Sea`,
     ],
-    [Type.B1003]: [
+    [LangTextType.B1003]: [
         `沙滩`,
         `Beach`,
     ],
-    [Type.B1004]: [
+    [LangTextType.B1004]: [
         `道路`,
         `Road`,
     ],
-    [Type.B1005]: [
+    [LangTextType.B1005]: [
         `桥梁`,
         `BridgeOnPlain`,
     ],
-    [Type.B1006]: [
+    [LangTextType.B1006]: [
         `桥梁`,
         `BridgeOnRiver`,
     ],
-    [Type.B1007]: [
+    [LangTextType.B1007]: [
         `桥梁`,
         `BridgeOnBeach`,
     ],
-    [Type.B1008]: [
+    [LangTextType.B1008]: [
         `桥梁`,
         `BridgeOnSea`,
     ],
-    [Type.B1009]: [
+    [LangTextType.B1009]: [
         `森林`,
         `Wood`,
     ],
-    [Type.B1010]: [
+    [LangTextType.B1010]: [
         `高山`,
         `Mountain`,
     ],
-    [Type.B1011]: [
+    [LangTextType.B1011]: [
         `荒野`,
         `Wasteland`,
     ],
-    [Type.B1012]: [
+    [LangTextType.B1012]: [
         `废墟`,
         `Ruins`,
     ],
-    [Type.B1013]: [
+    [LangTextType.B1013]: [
         `火堆`,
         `Fire`,
     ],
-    [Type.B1014]: [
+    [LangTextType.B1014]: [
         `巨浪`,
         `Rough`,
     ],
-    [Type.B1015]: [
+    [LangTextType.B1015]: [
         `迷雾`,
         `MistOnSea`,
     ],
-    [Type.B1016]: [
+    [LangTextType.B1016]: [
         `礁石`,
         `Reef`,
     ],
-    [Type.B1017]: [
+    [LangTextType.B1017]: [
         `等离子`,
         `Plasma`,
     ],
-    [Type.B1018]: [
+    [LangTextType.B1018]: [
         `超级等离子`,
         `GreenPlasma`,
     ],
-    [Type.B1019]: [
+    [LangTextType.B1019]: [
         `陨石`,
         `Meteor`,
     ],
-    [Type.B1020]: [
+    [LangTextType.B1020]: [
         `导弹井`,
         `Silo`,
     ],
-    [Type.B1021]: [
+    [LangTextType.B1021]: [
         `空导弹井`,
         `EmptySilo`,
     ],
-    [Type.B1022]: [
+    [LangTextType.B1022]: [
         `指挥部`,
         `Headquarters`,
     ],
-    [Type.B1023]: [
+    [LangTextType.B1023]: [
         `城市`,
         `City`,
     ],
-    [Type.B1024]: [
+    [LangTextType.B1024]: [
         `指挥塔`,
         `CommandTower`,
     ],
-    [Type.B1025]: [
+    [LangTextType.B1025]: [
         `雷达`,
         `Radar`,
     ],
-    [Type.B1026]: [
+    [LangTextType.B1026]: [
         `工厂`,
         `Factory`,
     ],
-    [Type.B1027]: [
+    [LangTextType.B1027]: [
         `机场`,
         `Airport`,
     ],
-    [Type.B1028]: [
+    [LangTextType.B1028]: [
         `海港`,
         `Seaport`,
     ],
-    [Type.B1029]: [
+    [LangTextType.B1029]: [
         `临时机场`,
         `TempAirport`,
     ],
-    [Type.B1030]: [
+    [LangTextType.B1030]: [
         `临时海港`,
         `TempSeaport`,
     ],
-    [Type.B1031]: [
+    [LangTextType.B1031]: [
         `迷雾`,
         `MistOnPlain`,
     ],
-    [Type.B1032]: [
+    [LangTextType.B1032]: [
         `迷雾`,
         `MistOnRiver`,
     ],
-    [Type.B1033]: [
+    [LangTextType.B1033]: [
         `迷雾`,
         `MistOnBeach`,
     ],
 
-    [Type.B1200]: [
+    [LangTextType.B1200]: [
         `步兵`,
         `Infantry`,
     ],
-    [Type.B1201]: [
+    [LangTextType.B1201]: [
         `反坦克兵`,
         `Mech`,
     ],
-    [Type.B1202]: [
+    [LangTextType.B1202]: [
         `摩托兵`,
         `Bike`,
     ],
-    [Type.B1203]: [
+    [LangTextType.B1203]: [
         `侦察车`,
         `Recon`,
     ],
-    [Type.B1204]: [
+    [LangTextType.B1204]: [
         `照明车`,
         `Flare`,
     ],
-    [Type.B1205]: [
+    [LangTextType.B1205]: [
         `防空车`,
         `AntiAir`,
     ],
-    [Type.B1206]: [
+    [LangTextType.B1206]: [
         `轻型坦克`,
         `Tank`,
     ],
-    [Type.B1207]: [
+    [LangTextType.B1207]: [
         `中型坦克`,
         `MediumTank`,
     ],
-    [Type.B1208]: [
+    [LangTextType.B1208]: [
         `弩级坦克`,
         `WarTank`,
     ],
-    [Type.B1209]: [
+    [LangTextType.B1209]: [
         `自走炮`,
         `Artillery`,
     ],
-    [Type.B1210]: [
+    [LangTextType.B1210]: [
         `反坦克炮`,
         `AntiTank`,
     ],
-    [Type.B1211]: [
+    [LangTextType.B1211]: [
         `火箭炮`,
         `Rockets`,
     ],
-    [Type.B1212]: [
+    [LangTextType.B1212]: [
         `防空导弹车`,
         `Missiles`,
     ],
-    [Type.B1213]: [
+    [LangTextType.B1213]: [
         `工程车`,
         `Rig`,
     ],
-    [Type.B1214]: [
+    [LangTextType.B1214]: [
         `战斗机`,
         `Fighter`,
     ],
-    [Type.B1215]: [
+    [LangTextType.B1215]: [
         `轰炸机`,
         `Bomber`,
     ],
-    [Type.B1216]: [
+    [LangTextType.B1216]: [
         `攻击机`,
         `Duster`,
     ],
-    [Type.B1217]: [
+    [LangTextType.B1217]: [
         `武装直升机`,
         `BattleCopter`,
     ],
-    [Type.B1218]: [
+    [LangTextType.B1218]: [
         `运输直升机`,
         `TransportCopter`,
     ],
-    [Type.B1219]: [
+    [LangTextType.B1219]: [
         `舰载机`,
         `Seaplane`,
     ],
-    [Type.B1220]: [
+    [LangTextType.B1220]: [
         `战列舰`,
         `Battleship`,
     ],
-    [Type.B1221]: [
+    [LangTextType.B1221]: [
         `航母`,
         `Carrier`,
     ],
-    [Type.B1222]: [
+    [LangTextType.B1222]: [
         `潜艇`,
         `Submarine`,
     ],
-    [Type.B1223]: [
+    [LangTextType.B1223]: [
         `驱逐舰`,
         `Cruiser`,
     ],
-    [Type.B1224]: [
+    [LangTextType.B1224]: [
         `登陆舰`,
         `Lander`,
     ],
-    [Type.B1225]: [
+    [LangTextType.B1225]: [
         `炮舰`,
         `Gunboat`,
     ],
@@ -3920,275 +3786,275 @@ const _LANG_DATA: { [type: number]: string [] } = {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Format strings.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    [Type.F0000]: [
+    [LangTextType.F0000]: [
         "地图名称: %s",
         "Map name: %s",
     ],
-    [Type.F0001]: [
+    [LangTextType.F0001]: [
         "作者: %s",
         "Designer: %s",
     ],
-    [Type.F0002]: [
+    [LangTextType.F0002]: [
         "人数: %s",
         "Players: %s",
     ],
-    [Type.F0003]: [
+    [LangTextType.F0003]: [
         "全服评分: %s",
         "Rating: %s",
     ],
-    [Type.F0004]: [
+    [LangTextType.F0004]: [
         "全服游玩次数: %s",
         "Games played: %s",
     ],
-    [Type.F0005]: [
+    [LangTextType.F0005]: [
         "战争迷雾: %s",
         "Fog: %s",
     ],
-    [Type.F0006]: [
+    [LangTextType.F0006]: [
         `%d个部队尚未行动。`,
         `%d unit(s) is(are) idle.`
     ],
-    [Type.F0007]: [
+    [LangTextType.F0007]: [
         `%d个%s空闲，位置：%s。`,
         `%d %s(s) is(are) idle. Position(s): %s.`
     ],
-    [Type.F0008]: [
+    [LangTextType.F0008]: [
         `玩家[%s]已投降！`,
         `Player [%s] has resigned!`,
     ],
-    [Type.F0009]: [
+    [LangTextType.F0009]: [
         `%s 的履历`,
         `%s's Profile`,
     ],
-    [Type.F0010]: [
+    [LangTextType.F0010]: [
         `%d胜`,
         `Win: %d`,
     ],
-    [Type.F0011]: [
+    [LangTextType.F0011]: [
         `%d负`,
         `Lose: %d`,
     ],
-    [Type.F0012]: [
+    [LangTextType.F0012]: [
         `%d平`,
         `Draw: %d`,
     ],
-    [Type.F0013]: [
+    [LangTextType.F0013]: [
         `玩家[%s]已战败！`,
         `Player [%s] is defeated!`,
     ],
-    [Type.F0014]: [
+    [LangTextType.F0014]: [
         `玩家[%s]的最后一个部队耗尽燃料而坠毁，因而战败！`,
         `Player [%s] is defeated!`,
     ],
-    [Type.F0015]: [
+    [LangTextType.F0015]: [
         `玩家[%s]的所有部队均被消灭，因而战败！`,
         `Player [%s] is defeated!`,
     ],
-    [Type.F0016]: [
+    [LangTextType.F0016]: [
         `玩家[%s]的指挥部被占领，因而战败！`,
         `Player [%s] is defeated!`,
     ],
-    [Type.F0017]: [
+    [LangTextType.F0017]: [
         `P%d [%s] 已拒绝和局！`,
         `P%d [%s] declines to end the game in draw!`,
     ],
-    [Type.F0018]: [
+    [LangTextType.F0018]: [
         `P%d [%s] 已同意和局！`,
         `P%d [%s] agrees to end the game in draw!`,
     ],
-    [Type.F0019]: [
+    [LangTextType.F0019]: [
         `P%d [%s] 求和！`,
         `P%d [%s] requests to end the game in draw!`,
     ],
-    [Type.F0020]: [
+    [LangTextType.F0020]: [
         `最多%d字，可留空`,
         `%d characters for maximum, optional`,
     ],
-    [Type.F0021]: [
+    [LangTextType.F0021]: [
         `最多%d位数字，可留空`,
         `%d digits for maximum, optional`,
     ],
-    [Type.F0022]: [
+    [LangTextType.F0022]: [
         `%s (p%d) 回合正式开始！！`,
         `It's %s (p%d)'s turn!!`,
     ],
-    [Type.F0023]: [
+    [LangTextType.F0023]: [
         `地图的总格子数必须小于%d，否则不能提审`,
         `The number of the tiles must be less than %d, or the map can't be submitted for review.`,
     ],
-    [Type.F0024]: [
+    [LangTextType.F0024]: [
         `修改时间: %s`,
         `Modify Time: %s`,
     ],
-    [Type.F0025]: [
+    [LangTextType.F0025]: [
         `要和玩家"%s"私聊吗？`,
         `Do you want to make a private chat with %s?`,
     ],
-    [Type.F0026]: [
+    [LangTextType.F0026]: [
         `数据加载中，请%s秒后重试`,
         `Now loading, please wait %ds and retry.`,
     ],
-    [Type.F0027]: [
+    [LangTextType.F0027]: [
         `"%s"上的一局多人对战已经正式开始！`,
         `A game on "%s" has started!`
     ],
-    [Type.F0028]: [
+    [LangTextType.F0028]: [
         `玩家[%s]因超时而告负！`,
         `Player [%s] has ran out of time!`,
     ],
-    [Type.F0029]: [
+    [LangTextType.F0029]: [
         `您确定要踢掉玩家"%s"吗？`,
         `Are you sure to kick off the player '%s'?`,
     ],
-    [Type.F0030]: [
+    [LangTextType.F0030]: [
         `%s (p%d) 回合结束。`,
         `%s (p%d) has ended the turn!!`,
     ],
-    [Type.F0031]: [
+    [LangTextType.F0031]: [
         `您最多只能禁用%d名CO。`,
         `You can only ban up to %d COs.`,
     ],
-    [Type.F0032]: [
+    [LangTextType.F0032]: [
         `请把名称长度控制在%d个字符以内。`,
         `Please limit the length of the name to %d characters.`
     ],
-    [Type.F0033]: [
+    [LangTextType.F0033]: [
         `启用SetPath模式后，在指定部队移动路线时，您需要连续点击两次目标格子才能呼出操作菜单。这会增加操作量，但同时也便于指定移动路线，这在雾战中尤其有用。\n您确定要启用吗？\n（当前状态：%s）`,
         `While the Set Path mode is enabled, you have to double click (or touch) a tile in order to make the unit action panel appear when you are moving units. This mode can be useful especially in FoW.\nAre you sure to enable it? \n(Current status: %s)`,
     ],
-    [Type.F0034]: [
+    [LangTextType.F0034]: [
         `最多输入%d个字符，请检查`,
         `Please limit the text length to %d characters.`,
     ],
-    [Type.F0035]: [
+    [LangTextType.F0035]: [
         `事件#%d发生次数等于%d`,
         `Event #%d occurred times == %d`,
     ],
-    [Type.F0036]: [
+    [LangTextType.F0036]: [
         `事件#%d发生次数不等于%d`,
         `Event #%d occurred times != %d`,
     ],
-    [Type.F0037]: [
+    [LangTextType.F0037]: [
         `事件#%d发生次数大于%d`,
         `Event #%d occurred times > %d`,
     ],
-    [Type.F0038]: [
+    [LangTextType.F0038]: [
         `事件#%d发生次数小于等于%d`,
         `Event #%d occurred times <= %d`,
     ],
-    [Type.F0039]: [
+    [LangTextType.F0039]: [
         `事件#%d发生次数小于%d`,
         `Event #%d occurred times < %d`,
     ],
-    [Type.F0040]: [
+    [LangTextType.F0040]: [
         `事件#%d发生次数大于等于%d`,
         `Event #%d occurred times >= %d`,
     ],
-    [Type.F0041]: [
+    [LangTextType.F0041]: [
         `玩家P%d的当前状态 == %s`,
         `The state of the player P%d == %s`,
     ],
-    [Type.F0042]: [
+    [LangTextType.F0042]: [
         `玩家P%d的当前状态 != %s`,
         `The state of the player P%d != %s`,
     ],
-    [Type.F0043]: [
+    [LangTextType.F0043]: [
         `当前是玩家P%d的回合`,
         `It's P%d's turn currently.`,
     ],
-    [Type.F0044]: [
+    [LangTextType.F0044]: [
         `当前不是玩家P%d的回合`,
         `It's not P%d's turn currently.`
     ],
-    [Type.F0045]: [
+    [LangTextType.F0045]: [
         `处于当前回合的玩家序号大于%d`,
         `The player index in the current turn > %d.`,
     ],
-    [Type.F0046]: [
+    [LangTextType.F0046]: [
         `处于当前回合的玩家序号小于等于%d`,
         `The player index in the current turn <= %d.`,
     ],
-    [Type.F0047]: [
+    [LangTextType.F0047]: [
         `处于当前回合的玩家序号小于%d`,
         `The player index in the current turn < %d.`,
     ],
-    [Type.F0048]: [
+    [LangTextType.F0048]: [
         `处于当前回合的玩家序号大于等于%d`,
         `The player index in the current turn >= %d.`,
     ],
-    [Type.F0049]: [
+    [LangTextType.F0049]: [
         `当前的回合数等于%d`,
         `The current turn == %d.`,
     ],
-    [Type.F0050]: [
+    [LangTextType.F0050]: [
         `当前的回合等于%d`,
         `The current turn != %d.`,
     ],
-    [Type.F0051]: [
+    [LangTextType.F0051]: [
         `当前的回合数大于%d`,
         `The current turn > %d.`,
     ],
-    [Type.F0052]: [
+    [LangTextType.F0052]: [
         `当前的回合数小于等于%d`,
         `The current turn <= %d.`,
     ],
-    [Type.F0053]: [
+    [LangTextType.F0053]: [
         `当前的回合数小于%d`,
         `The current turn < %d.`,
     ],
-    [Type.F0054]: [
+    [LangTextType.F0054]: [
         `当前的回合数大于等于%d`,
         `The current turn >= %d.`,
     ],
-    [Type.F0055]: [
+    [LangTextType.F0055]: [
         `当前的回合数除以 %d 的余数 == %d`,
         `The current turn mod %d == %d.`,
     ],
-    [Type.F0056]: [
+    [LangTextType.F0056]: [
         `当前的回合数除以 %d 的余数 != %d`,
         `The current turn mod %d != %d.`,
     ],
-    [Type.F0057]: [
+    [LangTextType.F0057]: [
         `当前的回合阶段 == %s`,
         `The current turn phase == %s.`,
     ],
-    [Type.F0058]: [
+    [LangTextType.F0058]: [
         `当前的回合阶段 != %s`,
         `The current turn phase != %s.`,
     ],
-    [Type.F0059]: [
+    [LangTextType.F0059]: [
         `在地图上增加部队: %s`,
         `Add units on map: %s`,
     ],
-    [Type.F0060]: [
+    [LangTextType.F0060]: [
         `当前正在使用条件节点%s。确定要用新的空节点代替它吗？`,
         `The condition node %s is being used. Are you sure to replace it by a new empty one?`,
     ],
-    [Type.F0061]: [
+    [LangTextType.F0061]: [
         `此条件节点中包含了重复的节点%s。请删除重复的节点。`,
         `There are duplicated sub nodes %s in the node. Please remove the duplication.`,
     ],
-    [Type.F0062]: [
+    [LangTextType.F0062]: [
         `此条件节点中包含了重复的条件%s。请删除重复的条件。`,
         `There are duplicated condition %s in the node. Please remove the duplication.`,
     ],
-    [Type.F0063]: [
+    [LangTextType.F0063]: [
         `已删除%d个节点、%d个条件和%d个动作。`,
         `%d nodes, %d conditions and %d actions have been deleted.`,
     ],
-    [Type.F0064]: [
+    [LangTextType.F0064]: [
         `%s无效`,
         `The %s is invalid.`,
     ],
-    [Type.F0065]: [
+    [LangTextType.F0065]: [
         `您是否希望前往 %s 网站?`,
         `Do you want to go to the %s website?`,
     ],
-    [Type.F0066]: [
+    [LangTextType.F0066]: [
         `设置玩家 P%d 的状态为 %s`,
         `Set P%d's state as %s.`,
     ],
-    [Type.F0067]: [
+    [LangTextType.F0067]: [
         `无法在 %s 上放置部队。`,
         `It's not allowed to place units on %s.`,
     ],
@@ -4196,7 +4062,7 @@ const _LANG_DATA: { [type: number]: string [] } = {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Rich strings.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    [Type.R0000]: [
+    [LangTextType.R0000]: [
         [
             `本选项影响您在回合中的行动顺序，以及您所属的队伍（由地图规则设定）`,
             ``,
@@ -4222,7 +4088,7 @@ const _LANG_DATA: { [type: number]: string [] } = {
         ].join("\n"),
     ],
 
-    [Type.R0001]: [
+    [LangTextType.R0001]: [
         [
             `本选项影响您部队和建筑的外观（颜色）。`,
         ].join("\n"),
@@ -4232,7 +4098,7 @@ const _LANG_DATA: { [type: number]: string [] } = {
         ].join("\n"),
     ],
 
-    [Type.R0002]: [
+    [LangTextType.R0002]: [
         [
             `本选项影响战局是明战或雾战。`,
             ``,
@@ -4252,7 +4118,7 @@ const _LANG_DATA: { [type: number]: string [] } = {
         ].join("\n"),
     ],
 
-    [Type.R0003]: [
+    [LangTextType.R0003]: [
         [
             `本选项影响所有玩家的每回合的时限。`,
             ``,
@@ -4286,7 +4152,7 @@ const _LANG_DATA: { [type: number]: string [] } = {
         ].join("\n"),
     ],
 
-    [Type.R0004]: [
+    [LangTextType.R0004]: [
         [
             `CO能够搭乘到部队中，并改变临近区域的部队的战斗能力。此外，部分CO能通过战斗积累能量，并以此释放强大的power，从而进一步制造优势。`,
             `CO详细规则如下：`,
@@ -4338,7 +4204,7 @@ const _LANG_DATA: { [type: number]: string [] } = {
         ].join("\n\n"),
     ],
 
-    [Type.R0005]: [
+    [LangTextType.R0005]: [
         [
             `1.账号和密码都只能使用数字、字母、下划线，长度不小于6位`,
             ``,
@@ -4356,7 +4222,7 @@ const _LANG_DATA: { [type: number]: string [] } = {
         ].join("\n"),
     ],
 
-    [Type.R0006]: [
+    [LangTextType.R0006]: [
         [
             `模拟战是一种辅助您进行战局规划/地图测试的工具。`,
             `该工具允许您把当前所见到的战局信息原样复制到单人战局中。您可以在该单人战局中随意操作，还可以无限制地存档、读档，直到您找到最好的走法为止。`,
@@ -4373,7 +4239,7 @@ const _LANG_DATA: { [type: number]: string [] } = {
         ].join("\n"),
     ],
 
-    [Type.R0007]: [
+    [LangTextType.R0007]: [
         [
             `自由模式是一个多人对战模式，但与常规模式不同的是，您可以以任意战局局面为战局起点。`,
             `常见的应用场景包括：`,
@@ -4392,7 +4258,7 @@ const _LANG_DATA: { [type: number]: string [] } = {
         ].join(`\n`),
     ],
 
-    [Type.R0008]: [
+    [LangTextType.R0008]: [
         [
             `合作模式是一个多人游戏模式。`,
             `与常规模式不同的是，AI会参与游戏。您可以与AI和/或其他玩家组队，对抗其他AI和/或玩家。`,
@@ -4613,13 +4479,13 @@ export function setLanguageType(language: LanguageType): void {
 }
 export function getLanguageTypeName(type: LanguageType): string | undefined {
     switch (type) {
-        case LanguageType.Chinese   : return getText(Type.B0624, LanguageType.Chinese);
-        case LanguageType.English   : return getText(Type.B0625, LanguageType.English);
+        case LanguageType.Chinese   : return getText(LangTextType.B0624, LanguageType.Chinese);
+        case LanguageType.English   : return getText(LangTextType.B0625, LanguageType.English);
         default                     : return undefined;
     }
 }
 
-export function getText(t: Type, languageType = getCurrentLanguageType()): string {
+export function getText(t: LangTextType, languageType = getCurrentLanguageType()): string {
     const data = _LANG_DATA[t];
     const text = data ? data[languageType] : null;
     if (text != null) {
@@ -4630,7 +4496,7 @@ export function getText(t: Type, languageType = getCurrentLanguageType()): strin
     }
 }
 
-export function getFormattedText(t: Type, ...params: (number | string | undefined | null)[]): string {
+export function getFormattedText(t: LangTextType, ...params: (number | string | undefined | null)[]): string {
     const data = getText(t);
     return data === CommonConstants.ErrorTextForLang
         ? CommonConstants.ErrorTextForLang
@@ -4640,7 +4506,7 @@ export function getFormattedText(t: Type, ...params: (number | string | undefine
 export function getErrorText(code: ServerErrorCode | ClientErrorCode): string {
     const textList  = ERROR_TEXT[code];
     const text      = textList ? textList[_languageType] : undefined;
-    return `${getText(Type.B0452)} ${code}: ${text || getText(Type.A0153)}`;
+    return `${getText(LangTextType.B0452)} ${code}: ${text || getText(LangTextType.A0153)}`;
 }
 
 export function getPlayerForceName(playerIndex: number): string {
@@ -4649,218 +4515,218 @@ export function getPlayerForceName(playerIndex: number): string {
 
 export function getPlayerTeamName(teamIndex: number): string | undefined {
     switch (teamIndex) {
-        case 1  : return getText(Type.B0008);
-        case 2  : return getText(Type.B0009);
-        case 3  : return getText(Type.B0010);
-        case 4  : return getText(Type.B0011);
+        case 1  : return getText(LangTextType.B0008);
+        case 2  : return getText(LangTextType.B0009);
+        case 3  : return getText(LangTextType.B0010);
+        case 4  : return getText(LangTextType.B0011);
         default : return undefined;
     }
 }
 
 export function getTileName(tileType: Types.TileType): string | undefined {
     switch (tileType) {
-        case Types.TileType.Plain           : return getText(Type.B1000);
-        case Types.TileType.River           : return getText(Type.B1001);
-        case Types.TileType.Sea             : return getText(Type.B1002);
-        case Types.TileType.Beach           : return getText(Type.B1003);
-        case Types.TileType.Road            : return getText(Type.B1004);
-        case Types.TileType.BridgeOnPlain   : return getText(Type.B1005);
-        case Types.TileType.BridgeOnRiver   : return getText(Type.B1006);
-        case Types.TileType.BridgeOnBeach   : return getText(Type.B1007);
-        case Types.TileType.BridgeOnSea     : return getText(Type.B1008);
-        case Types.TileType.Wood            : return getText(Type.B1009);
-        case Types.TileType.Mountain        : return getText(Type.B1010);
-        case Types.TileType.Wasteland       : return getText(Type.B1011);
-        case Types.TileType.Ruins           : return getText(Type.B1012);
-        case Types.TileType.Fire            : return getText(Type.B1013);
-        case Types.TileType.Rough           : return getText(Type.B1014);
-        case Types.TileType.MistOnSea       : return getText(Type.B1015);
-        case Types.TileType.Reef            : return getText(Type.B1016);
-        case Types.TileType.Plasma          : return getText(Type.B1017);
-        case Types.TileType.GreenPlasma     : return getText(Type.B1018);
-        case Types.TileType.Meteor          : return getText(Type.B1019);
-        case Types.TileType.Silo            : return getText(Type.B1020);
-        case Types.TileType.EmptySilo       : return getText(Type.B1021);
-        case Types.TileType.Headquarters    : return getText(Type.B1022);
-        case Types.TileType.City            : return getText(Type.B1023);
-        case Types.TileType.CommandTower    : return getText(Type.B1024);
-        case Types.TileType.Radar           : return getText(Type.B1025);
-        case Types.TileType.Factory         : return getText(Type.B1026);
-        case Types.TileType.Airport         : return getText(Type.B1027);
-        case Types.TileType.Seaport         : return getText(Type.B1028);
-        case Types.TileType.TempAirport     : return getText(Type.B1029);
-        case Types.TileType.TempSeaport     : return getText(Type.B1030);
-        case Types.TileType.MistOnPlain     : return getText(Type.B1031);
-        case Types.TileType.MistOnRiver     : return getText(Type.B1032);
-        case Types.TileType.MistOnBeach     : return getText(Type.B1033);
+        case Types.TileType.Plain           : return getText(LangTextType.B1000);
+        case Types.TileType.River           : return getText(LangTextType.B1001);
+        case Types.TileType.Sea             : return getText(LangTextType.B1002);
+        case Types.TileType.Beach           : return getText(LangTextType.B1003);
+        case Types.TileType.Road            : return getText(LangTextType.B1004);
+        case Types.TileType.BridgeOnPlain   : return getText(LangTextType.B1005);
+        case Types.TileType.BridgeOnRiver   : return getText(LangTextType.B1006);
+        case Types.TileType.BridgeOnBeach   : return getText(LangTextType.B1007);
+        case Types.TileType.BridgeOnSea     : return getText(LangTextType.B1008);
+        case Types.TileType.Wood            : return getText(LangTextType.B1009);
+        case Types.TileType.Mountain        : return getText(LangTextType.B1010);
+        case Types.TileType.Wasteland       : return getText(LangTextType.B1011);
+        case Types.TileType.Ruins           : return getText(LangTextType.B1012);
+        case Types.TileType.Fire            : return getText(LangTextType.B1013);
+        case Types.TileType.Rough           : return getText(LangTextType.B1014);
+        case Types.TileType.MistOnSea       : return getText(LangTextType.B1015);
+        case Types.TileType.Reef            : return getText(LangTextType.B1016);
+        case Types.TileType.Plasma          : return getText(LangTextType.B1017);
+        case Types.TileType.GreenPlasma     : return getText(LangTextType.B1018);
+        case Types.TileType.Meteor          : return getText(LangTextType.B1019);
+        case Types.TileType.Silo            : return getText(LangTextType.B1020);
+        case Types.TileType.EmptySilo       : return getText(LangTextType.B1021);
+        case Types.TileType.Headquarters    : return getText(LangTextType.B1022);
+        case Types.TileType.City            : return getText(LangTextType.B1023);
+        case Types.TileType.CommandTower    : return getText(LangTextType.B1024);
+        case Types.TileType.Radar           : return getText(LangTextType.B1025);
+        case Types.TileType.Factory         : return getText(LangTextType.B1026);
+        case Types.TileType.Airport         : return getText(LangTextType.B1027);
+        case Types.TileType.Seaport         : return getText(LangTextType.B1028);
+        case Types.TileType.TempAirport     : return getText(LangTextType.B1029);
+        case Types.TileType.TempSeaport     : return getText(LangTextType.B1030);
+        case Types.TileType.MistOnPlain     : return getText(LangTextType.B1031);
+        case Types.TileType.MistOnRiver     : return getText(LangTextType.B1032);
+        case Types.TileType.MistOnBeach     : return getText(LangTextType.B1033);
         default                             : return undefined;
     }
 }
 
 export function getUnitName(unitType: Types.UnitType): string | undefined {
     switch (unitType) {
-        case Types.UnitType.Infantry        : return getText(Type.B1200);
-        case Types.UnitType.Mech            : return getText(Type.B1201);
-        case Types.UnitType.Bike            : return getText(Type.B1202);
-        case Types.UnitType.Recon           : return getText(Type.B1203);
-        case Types.UnitType.Flare           : return getText(Type.B1204);
-        case Types.UnitType.AntiAir         : return getText(Type.B1205);
-        case Types.UnitType.Tank            : return getText(Type.B1206);
-        case Types.UnitType.MediumTank      : return getText(Type.B1207);
-        case Types.UnitType.WarTank         : return getText(Type.B1208);
-        case Types.UnitType.Artillery       : return getText(Type.B1209);
-        case Types.UnitType.AntiTank        : return getText(Type.B1210);
-        case Types.UnitType.Rockets         : return getText(Type.B1211);
-        case Types.UnitType.Missiles        : return getText(Type.B1212);
-        case Types.UnitType.Rig             : return getText(Type.B1213);
-        case Types.UnitType.Fighter         : return getText(Type.B1214);
-        case Types.UnitType.Bomber          : return getText(Type.B1215);
-        case Types.UnitType.Duster          : return getText(Type.B1216);
-        case Types.UnitType.BattleCopter    : return getText(Type.B1217);
-        case Types.UnitType.TransportCopter : return getText(Type.B1218);
-        case Types.UnitType.Seaplane        : return getText(Type.B1219);
-        case Types.UnitType.Battleship      : return getText(Type.B1220);
-        case Types.UnitType.Carrier         : return getText(Type.B1221);
-        case Types.UnitType.Submarine       : return getText(Type.B1222);
-        case Types.UnitType.Cruiser         : return getText(Type.B1223);
-        case Types.UnitType.Lander          : return getText(Type.B1224);
-        case Types.UnitType.Gunboat         : return getText(Type.B1225);
+        case Types.UnitType.Infantry        : return getText(LangTextType.B1200);
+        case Types.UnitType.Mech            : return getText(LangTextType.B1201);
+        case Types.UnitType.Bike            : return getText(LangTextType.B1202);
+        case Types.UnitType.Recon           : return getText(LangTextType.B1203);
+        case Types.UnitType.Flare           : return getText(LangTextType.B1204);
+        case Types.UnitType.AntiAir         : return getText(LangTextType.B1205);
+        case Types.UnitType.Tank            : return getText(LangTextType.B1206);
+        case Types.UnitType.MediumTank      : return getText(LangTextType.B1207);
+        case Types.UnitType.WarTank         : return getText(LangTextType.B1208);
+        case Types.UnitType.Artillery       : return getText(LangTextType.B1209);
+        case Types.UnitType.AntiTank        : return getText(LangTextType.B1210);
+        case Types.UnitType.Rockets         : return getText(LangTextType.B1211);
+        case Types.UnitType.Missiles        : return getText(LangTextType.B1212);
+        case Types.UnitType.Rig             : return getText(LangTextType.B1213);
+        case Types.UnitType.Fighter         : return getText(LangTextType.B1214);
+        case Types.UnitType.Bomber          : return getText(LangTextType.B1215);
+        case Types.UnitType.Duster          : return getText(LangTextType.B1216);
+        case Types.UnitType.BattleCopter    : return getText(LangTextType.B1217);
+        case Types.UnitType.TransportCopter : return getText(LangTextType.B1218);
+        case Types.UnitType.Seaplane        : return getText(LangTextType.B1219);
+        case Types.UnitType.Battleship      : return getText(LangTextType.B1220);
+        case Types.UnitType.Carrier         : return getText(LangTextType.B1221);
+        case Types.UnitType.Submarine       : return getText(LangTextType.B1222);
+        case Types.UnitType.Cruiser         : return getText(LangTextType.B1223);
+        case Types.UnitType.Lander          : return getText(LangTextType.B1224);
+        case Types.UnitType.Gunboat         : return getText(LangTextType.B1225);
         default                             : return undefined;
     }
 }
 
 export function getUnitActionName(actionType: Types.UnitActionType): string | undefined{
     switch (actionType) {
-        case Types.UnitActionType.BeLoaded          : return getText(Type.B0037);
-        case Types.UnitActionType.Join              : return getText(Type.B0038);
-        case Types.UnitActionType.UseCoPower        : return getText(Type.B0142);
-        case Types.UnitActionType.UseCoSuperPower   : return getText(Type.B0144);
-        case Types.UnitActionType.Attack            : return getText(Type.B0039);
-        case Types.UnitActionType.Capture           : return getText(Type.B0040);
-        case Types.UnitActionType.Dive              : return getText(Type.B0041);
-        case Types.UnitActionType.Surface           : return getText(Type.B0042);
-        case Types.UnitActionType.BuildTile         : return getText(Type.B0043);
-        case Types.UnitActionType.Supply            : return getText(Type.B0044);
-        case Types.UnitActionType.LaunchUnit        : return getText(Type.B0045);
-        case Types.UnitActionType.DropUnit          : return getText(Type.B0046);
-        case Types.UnitActionType.LaunchFlare       : return getText(Type.B0047);
-        case Types.UnitActionType.LaunchSilo        : return getText(Type.B0048);
-        case Types.UnitActionType.LoadCo            : return getText(Type.B0139);
-        case Types.UnitActionType.ProduceUnit       : return getText(Type.B0049);
-        case Types.UnitActionType.Wait              : return getText(Type.B0050);
+        case Types.UnitActionType.BeLoaded          : return getText(LangTextType.B0037);
+        case Types.UnitActionType.Join              : return getText(LangTextType.B0038);
+        case Types.UnitActionType.UseCoPower        : return getText(LangTextType.B0142);
+        case Types.UnitActionType.UseCoSuperPower   : return getText(LangTextType.B0144);
+        case Types.UnitActionType.Attack            : return getText(LangTextType.B0039);
+        case Types.UnitActionType.Capture           : return getText(LangTextType.B0040);
+        case Types.UnitActionType.Dive              : return getText(LangTextType.B0041);
+        case Types.UnitActionType.Surface           : return getText(LangTextType.B0042);
+        case Types.UnitActionType.BuildTile         : return getText(LangTextType.B0043);
+        case Types.UnitActionType.Supply            : return getText(LangTextType.B0044);
+        case Types.UnitActionType.LaunchUnit        : return getText(LangTextType.B0045);
+        case Types.UnitActionType.DropUnit          : return getText(LangTextType.B0046);
+        case Types.UnitActionType.LaunchFlare       : return getText(LangTextType.B0047);
+        case Types.UnitActionType.LaunchSilo        : return getText(LangTextType.B0048);
+        case Types.UnitActionType.LoadCo            : return getText(LangTextType.B0139);
+        case Types.UnitActionType.ProduceUnit       : return getText(LangTextType.B0049);
+        case Types.UnitActionType.Wait              : return getText(LangTextType.B0050);
         default                                     : return undefined;
     }
 }
 
 export function getRankName(playerRank: number): string | undefined {
     switch (playerRank) {
-        case 0  : return getText(Type.B0061);
-        case 1  : return getText(Type.B0062);
-        case 2  : return getText(Type.B0063);
-        case 3  : return getText(Type.B0064);
-        case 4  : return getText(Type.B0065);
-        case 5  : return getText(Type.B0066);
-        case 6  : return getText(Type.B0067);
-        case 7  : return getText(Type.B0068);
-        case 8  : return getText(Type.B0069);
-        case 9  : return getText(Type.B0070);
-        case 10 : return getText(Type.B0071);
-        case 11 : return getText(Type.B0072);
-        case 12 : return getText(Type.B0073);
-        case 13 : return getText(Type.B0074);
-        case 14 : return getText(Type.B0075);
-        case 15 : return getText(Type.B0076);
+        case 0  : return getText(LangTextType.B0061);
+        case 1  : return getText(LangTextType.B0062);
+        case 2  : return getText(LangTextType.B0063);
+        case 3  : return getText(LangTextType.B0064);
+        case 4  : return getText(LangTextType.B0065);
+        case 5  : return getText(LangTextType.B0066);
+        case 6  : return getText(LangTextType.B0067);
+        case 7  : return getText(LangTextType.B0068);
+        case 8  : return getText(LangTextType.B0069);
+        case 9  : return getText(LangTextType.B0070);
+        case 10 : return getText(LangTextType.B0071);
+        case 11 : return getText(LangTextType.B0072);
+        case 12 : return getText(LangTextType.B0073);
+        case 13 : return getText(LangTextType.B0074);
+        case 14 : return getText(LangTextType.B0075);
+        case 15 : return getText(LangTextType.B0076);
         default : return undefined;
     }
 }
 
 export function getMoveTypeName(t: Types.MoveType): string | undefined {
     switch (t) {
-        case Types.MoveType.Air         : return getText(Type.B0117);
-        case Types.MoveType.Infantry    : return getText(Type.B0112);
-        case Types.MoveType.Mech        : return getText(Type.B0113);
-        case Types.MoveType.Ship        : return getText(Type.B0118);
-        case Types.MoveType.Tank        : return getText(Type.B0114);
-        case Types.MoveType.TireA       : return getText(Type.B0115);
-        case Types.MoveType.TireB       : return getText(Type.B0116);
-        case Types.MoveType.Transport   : return getText(Type.B0119);
+        case Types.MoveType.Air         : return getText(LangTextType.B0117);
+        case Types.MoveType.Infantry    : return getText(LangTextType.B0112);
+        case Types.MoveType.Mech        : return getText(LangTextType.B0113);
+        case Types.MoveType.Ship        : return getText(LangTextType.B0118);
+        case Types.MoveType.Tank        : return getText(LangTextType.B0114);
+        case Types.MoveType.TireA       : return getText(LangTextType.B0115);
+        case Types.MoveType.TireB       : return getText(LangTextType.B0116);
+        case Types.MoveType.Transport   : return getText(LangTextType.B0119);
         default                         : return undefined;
     }
 }
 
 export function getUnitCategoryName(t: Types.UnitCategory): string | undefined {
     switch (t) {
-        case Types.UnitCategory.All                 : return getText(Type.B0120);
-        case Types.UnitCategory.Ground              : return getText(Type.B0121);
-        case Types.UnitCategory.Naval               : return getText(Type.B0122);
-        case Types.UnitCategory.Air                 : return getText(Type.B0123);
-        case Types.UnitCategory.GroundOrNaval       : return getText(Type.B0124);
-        case Types.UnitCategory.GroundOrAir         : return getText(Type.B0125);
-        case Types.UnitCategory.Direct              : return getText(Type.B0126);
-        case Types.UnitCategory.Indirect            : return getText(Type.B0127);
-        case Types.UnitCategory.Foot                : return getText(Type.B0128);
-        case Types.UnitCategory.Infantry            : return getText(Type.B0129);
-        case Types.UnitCategory.Vehicle             : return getText(Type.B0130);
-        case Types.UnitCategory.DirectMachine       : return getText(Type.B0131);
-        case Types.UnitCategory.Transport           : return getText(Type.B0132);
-        case Types.UnitCategory.LargeNaval          : return getText(Type.B0133);
-        case Types.UnitCategory.Copter              : return getText(Type.B0134);
-        case Types.UnitCategory.Tank                : return getText(Type.B0135);
-        case Types.UnitCategory.AirExceptSeaplane   : return getText(Type.B0136);
+        case Types.UnitCategory.All                 : return getText(LangTextType.B0120);
+        case Types.UnitCategory.Ground              : return getText(LangTextType.B0121);
+        case Types.UnitCategory.Naval               : return getText(LangTextType.B0122);
+        case Types.UnitCategory.Air                 : return getText(LangTextType.B0123);
+        case Types.UnitCategory.GroundOrNaval       : return getText(LangTextType.B0124);
+        case Types.UnitCategory.GroundOrAir         : return getText(LangTextType.B0125);
+        case Types.UnitCategory.Direct              : return getText(LangTextType.B0126);
+        case Types.UnitCategory.Indirect            : return getText(LangTextType.B0127);
+        case Types.UnitCategory.Foot                : return getText(LangTextType.B0128);
+        case Types.UnitCategory.Infantry            : return getText(LangTextType.B0129);
+        case Types.UnitCategory.Vehicle             : return getText(LangTextType.B0130);
+        case Types.UnitCategory.DirectMachine       : return getText(LangTextType.B0131);
+        case Types.UnitCategory.Transport           : return getText(LangTextType.B0132);
+        case Types.UnitCategory.LargeNaval          : return getText(LangTextType.B0133);
+        case Types.UnitCategory.Copter              : return getText(LangTextType.B0134);
+        case Types.UnitCategory.Tank                : return getText(LangTextType.B0135);
+        case Types.UnitCategory.AirExceptSeaplane   : return getText(LangTextType.B0136);
         default                                     : return undefined;
     }
 }
 
 export function getWarTypeName(type: Types.WarType): string | undefined {
     switch (type) {
-        case Types.WarType.McwStd   : return getText(Type.B0417);
-        case Types.WarType.McwFog   : return getText(Type.B0418);
-        case Types.WarType.Me       : return getText(Type.B0419);
-        case Types.WarType.MrwStd   : return getText(Type.B0415);
-        case Types.WarType.MrwFog   : return getText(Type.B0416);
-        case Types.WarType.ScwStd   : return getText(Type.B0610);
-        case Types.WarType.ScwFog   : return getText(Type.B0611);
-        case Types.WarType.SfwStd   : return getText(Type.B0612);
-        case Types.WarType.SfwFog   : return getText(Type.B0613);
+        case Types.WarType.McwStd   : return getText(LangTextType.B0417);
+        case Types.WarType.McwFog   : return getText(LangTextType.B0418);
+        case Types.WarType.Me       : return getText(LangTextType.B0419);
+        case Types.WarType.MrwStd   : return getText(LangTextType.B0415);
+        case Types.WarType.MrwFog   : return getText(LangTextType.B0416);
+        case Types.WarType.ScwStd   : return getText(LangTextType.B0610);
+        case Types.WarType.ScwFog   : return getText(LangTextType.B0611);
+        case Types.WarType.SfwStd   : return getText(LangTextType.B0612);
+        case Types.WarType.SfwFog   : return getText(LangTextType.B0613);
         default                     : return undefined;
     }
 }
 
 export function getMapReviewStatusText(status: Types.MapReviewStatus): string | undefined{
     switch (status) {
-        case Types.MapReviewStatus.None         : return getText(Type.B0273);
-        case Types.MapReviewStatus.Reviewing    : return getText(Type.B0274);
-        case Types.MapReviewStatus.Rejected     : return getText(Type.B0275);
-        case Types.MapReviewStatus.Accepted     : return getText(Type.B0276);
+        case Types.MapReviewStatus.None         : return getText(LangTextType.B0273);
+        case Types.MapReviewStatus.Reviewing    : return getText(LangTextType.B0274);
+        case Types.MapReviewStatus.Rejected     : return getText(LangTextType.B0275);
+        case Types.MapReviewStatus.Accepted     : return getText(LangTextType.B0276);
         default                                 : return undefined;
     }
 }
 
 export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string | undefined{
     switch (mode) {
-        case Types.MapEditorDrawerMode.Preview          : return getText(Type.B0286);
-        case Types.MapEditorDrawerMode.DrawUnit         : return getText(Type.B0281);
-        case Types.MapEditorDrawerMode.DrawTileBase     : return getText(Type.B0282);
-        case Types.MapEditorDrawerMode.DrawTileObject   : return getText(Type.B0283);
-        case Types.MapEditorDrawerMode.DeleteUnit       : return getText(Type.B0284);
-        case Types.MapEditorDrawerMode.DeleteTileObject : return getText(Type.B0285);
+        case Types.MapEditorDrawerMode.Preview          : return getText(LangTextType.B0286);
+        case Types.MapEditorDrawerMode.DrawUnit         : return getText(LangTextType.B0281);
+        case Types.MapEditorDrawerMode.DrawTileBase     : return getText(LangTextType.B0282);
+        case Types.MapEditorDrawerMode.DrawTileObject   : return getText(LangTextType.B0283);
+        case Types.MapEditorDrawerMode.DeleteUnit       : return getText(LangTextType.B0284);
+        case Types.MapEditorDrawerMode.DeleteTileObject : return getText(LangTextType.B0285);
         default                                         : return undefined;
     }
 }
 
 export function getUnitActionStateText(state: Types.UnitActionState): string | undefined{
     switch (state) {
-        case Types.UnitActionState.Acted    : return getText(Type.B0368);
-        case Types.UnitActionState.Idle     : return getText(Type.B0369);
+        case Types.UnitActionState.Acted    : return getText(LangTextType.B0368);
+        case Types.UnitActionState.Idle     : return getText(LangTextType.B0369);
         default                             : return undefined;
     }
 }
 
 export function getChatChannelName(channel: Types.ChatChannel): string | undefined {
     switch (channel) {
-        case Types.ChatChannel.System   : return getText(Type.B0374);
-        case Types.ChatChannel.PublicEn : return getText(Type.B0373);
-        case Types.ChatChannel.PublicCn : return getText(Type.B0384);
+        case Types.ChatChannel.System   : return getText(LangTextType.B0374);
+        case Types.ChatChannel.PublicEn : return getText(LangTextType.B0373);
+        case Types.ChatChannel.PublicCn : return getText(LangTextType.B0384);
         default                         : return undefined;
     }
 }
@@ -4868,58 +4734,58 @@ export function getChatChannelName(channel: Types.ChatChannel): string | undefin
 export function getUnitAndTileSkinName(skinId: number): string | undefined {
     switch (skinId) {
         case 0  : return "";
-        case 1  : return getText(Type.B0004);
-        case 2  : return getText(Type.B0005);
-        case 3  : return getText(Type.B0006);
-        case 4  : return getText(Type.B0007);
+        case 1  : return getText(LangTextType.B0004);
+        case 2  : return getText(LangTextType.B0005);
+        case 3  : return getText(LangTextType.B0006);
+        case 4  : return getText(LangTextType.B0007);
         default : return undefined;
     }
 }
 
 export function getCoSkillTypeName(skillType: Types.CoSkillType): string | undefined {
     switch (skillType) {
-        case Types.CoSkillType.Passive      : return getText(Type.B0576);
-        case Types.CoSkillType.Power        : return getText(Type.B0577);
-        case Types.CoSkillType.SuperPower   : return getText(Type.B0578);
+        case Types.CoSkillType.Passive      : return getText(LangTextType.B0576);
+        case Types.CoSkillType.Power        : return getText(LangTextType.B0577);
+        case Types.CoSkillType.SuperPower   : return getText(LangTextType.B0578);
         default                             : return undefined;
     }
 }
 
 export function getPlayerAliveStateName(state: Types.PlayerAliveState): string | undefined {
     switch (state) {
-        case Types.PlayerAliveState.Alive   : return getText(Type.B0471);
-        case Types.PlayerAliveState.Dead    : return getText(Type.B0472);
-        case Types.PlayerAliveState.Dying   : return getText(Type.B0473);
+        case Types.PlayerAliveState.Alive   : return getText(LangTextType.B0471);
+        case Types.PlayerAliveState.Dead    : return getText(LangTextType.B0472);
+        case Types.PlayerAliveState.Dying   : return getText(LangTextType.B0473);
         default                             : return undefined;
     }
 }
 
 export function getTurnPhaseName(phaseCode: Types.TurnPhaseCode): string | undefined {
     switch (phaseCode) {
-        case Types.TurnPhaseCode.WaitBeginTurn  : return getText(Type.B0474);
-        case Types.TurnPhaseCode.Main           : return getText(Type.B0475);
+        case Types.TurnPhaseCode.WaitBeginTurn  : return getText(LangTextType.B0474);
+        case Types.TurnPhaseCode.Main           : return getText(LangTextType.B0475);
         default                                 : return undefined;
     }
 }
 
 export function getBgmName(code: BgmCode): string | undefined {
     switch (code) {
-        case BgmCode.None       : return getText(Type.B0001);
-        case BgmCode.Lobby01    : return getText(Type.B0632);
-        case BgmCode.MapEditor01: return getText(Type.B0633);
-        case BgmCode.War01      : return getText(Type.B0634);
-        case BgmCode.War02      : return getText(Type.B0635);
-        case BgmCode.War03      : return getText(Type.B0636);
-        case BgmCode.War04      : return getText(Type.B0637);
-        case BgmCode.War05      : return getText(Type.B0638);
-        case BgmCode.War06      : return getText(Type.B0639);
+        case BgmCode.None       : return getText(LangTextType.B0001);
+        case BgmCode.Lobby01    : return getText(LangTextType.B0632);
+        case BgmCode.MapEditor01: return getText(LangTextType.B0633);
+        case BgmCode.War01      : return getText(LangTextType.B0634);
+        case BgmCode.War02      : return getText(LangTextType.B0635);
+        case BgmCode.War03      : return getText(LangTextType.B0636);
+        case BgmCode.War04      : return getText(LangTextType.B0637);
+        case BgmCode.War05      : return getText(LangTextType.B0638);
+        case BgmCode.War06      : return getText(LangTextType.B0639);
         default                 : return undefined;
     }
 }
 
 export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined | null {
     if (warRule.ruleId == null) {
-        return getText(Type.B0321);
+        return getText(LangTextType.B0321);
     } else {
         const ruleNameArray = warRule.ruleNameArray;
         return ruleNameArray ? getLanguageText({ textArray: ruleNameArray }) : undefined;
@@ -4928,62 +4794,62 @@ export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): 
 
 export function getWarEventConditionTypeName(type: WarEventConditionType): string | undefined {
     switch (type) {
-        case WarEventConditionType.WecTurnIndexEqualTo                  : return getText(Type.B0504);
-        case WarEventConditionType.WecTurnIndexGreaterThan              : return getText(Type.B0505);
-        case WarEventConditionType.WecTurnIndexLessThan                 : return getText(Type.B0506);
-        case WarEventConditionType.WecTurnIndexRemainderEqualTo         : return getText(Type.B0507);
-        case WarEventConditionType.WecTurnPhaseEqualTo                  : return getText(Type.B0508);
-        case WarEventConditionType.WecPlayerIndexInTurnEqualTo          : return getText(Type.B0509);
-        case WarEventConditionType.WecPlayerIndexInTurnGreaterThan      : return getText(Type.B0510);
-        case WarEventConditionType.WecPlayerIndexInTurnLessThan         : return getText(Type.B0511);
-        case WarEventConditionType.WecEventCalledCountTotalEqualTo      : return getText(Type.B0512);
-        case WarEventConditionType.WecEventCalledCountTotalGreaterThan  : return getText(Type.B0513);
-        case WarEventConditionType.WecEventCalledCountTotalLessThan     : return getText(Type.B0514);
-        case WarEventConditionType.WecPlayerAliveStateEqualTo           : return getText(Type.B0515);
+        case WarEventConditionType.WecTurnIndexEqualTo                  : return getText(LangTextType.B0504);
+        case WarEventConditionType.WecTurnIndexGreaterThan              : return getText(LangTextType.B0505);
+        case WarEventConditionType.WecTurnIndexLessThan                 : return getText(LangTextType.B0506);
+        case WarEventConditionType.WecTurnIndexRemainderEqualTo         : return getText(LangTextType.B0507);
+        case WarEventConditionType.WecTurnPhaseEqualTo                  : return getText(LangTextType.B0508);
+        case WarEventConditionType.WecPlayerIndexInTurnEqualTo          : return getText(LangTextType.B0509);
+        case WarEventConditionType.WecPlayerIndexInTurnGreaterThan      : return getText(LangTextType.B0510);
+        case WarEventConditionType.WecPlayerIndexInTurnLessThan         : return getText(LangTextType.B0511);
+        case WarEventConditionType.WecEventCalledCountTotalEqualTo      : return getText(LangTextType.B0512);
+        case WarEventConditionType.WecEventCalledCountTotalGreaterThan  : return getText(LangTextType.B0513);
+        case WarEventConditionType.WecEventCalledCountTotalLessThan     : return getText(LangTextType.B0514);
+        case WarEventConditionType.WecPlayerAliveStateEqualTo           : return getText(LangTextType.B0515);
         default                                                         : return undefined;
     }
 }
 
 export function getWarEventActionTypeName(type: WarEventActionType): string | undefined {
     switch (type) {
-        case WarEventActionType.AddUnit                 : return getText(Type.B0617);
-        case WarEventActionType.SetPlayerAliveState     : return getText(Type.B0618);
+        case WarEventActionType.AddUnit                 : return getText(LangTextType.B0617);
+        case WarEventActionType.SetPlayerAliveState     : return getText(LangTextType.B0618);
         default                                         : return undefined;
     }
 }
 
 export function getPlayerRuleName(type: PlayerRuleType): string | undefined {
     switch (type) {
-        case PlayerRuleType.TeamIndex               : return getText(Type.B0019);
-        case PlayerRuleType.BannedCoIdArray         : return getText(Type.B0403);
-        case PlayerRuleType.InitialFund             : return getText(Type.B0178);
-        case PlayerRuleType.IncomeMultiplier        : return getText(Type.B0179);
-        case PlayerRuleType.EnergyAddPctOnLoadCo    : return getText(Type.B0180);
-        case PlayerRuleType.EnergyGrowthMultiplier  : return getText(Type.B0181);
-        case PlayerRuleType.MoveRangeModifier       : return getText(Type.B0182);
-        case PlayerRuleType.AttackPowerModifier     : return getText(Type.B0183);
-        case PlayerRuleType.VisionRangeModifier     : return getText(Type.B0184);
-        case PlayerRuleType.LuckLowerLimit          : return getText(Type.B0189);
-        case PlayerRuleType.LuckUpperLimit          : return getText(Type.B0190);
-        case PlayerRuleType.AiCoIdInCcw             : return getText(Type.B0641);
-        case PlayerRuleType.AiControlInCcw          : return getText(Type.B0642);
+        case PlayerRuleType.TeamIndex               : return getText(LangTextType.B0019);
+        case PlayerRuleType.BannedCoIdArray         : return getText(LangTextType.B0403);
+        case PlayerRuleType.InitialFund             : return getText(LangTextType.B0178);
+        case PlayerRuleType.IncomeMultiplier        : return getText(LangTextType.B0179);
+        case PlayerRuleType.EnergyAddPctOnLoadCo    : return getText(LangTextType.B0180);
+        case PlayerRuleType.EnergyGrowthMultiplier  : return getText(LangTextType.B0181);
+        case PlayerRuleType.MoveRangeModifier       : return getText(LangTextType.B0182);
+        case PlayerRuleType.AttackPowerModifier     : return getText(LangTextType.B0183);
+        case PlayerRuleType.VisionRangeModifier     : return getText(LangTextType.B0184);
+        case PlayerRuleType.LuckLowerLimit          : return getText(LangTextType.B0189);
+        case PlayerRuleType.LuckUpperLimit          : return getText(LangTextType.B0190);
+        case PlayerRuleType.AiCoIdInCcw             : return getText(LangTextType.B0641);
+        case PlayerRuleType.AiControlInCcw          : return getText(LangTextType.B0642);
         default                                     : return undefined;
     }
 }
 
 export function getGameVersionName(type: GameVersion): string | undefined {
     switch (type) {
-        case GameVersion.Legacy : return getText(Type.B0621);
-        case GameVersion.Test   : return getText(Type.B0622);
-        case GameVersion.Awbw   : return getText(Type.B0649);
+        case GameVersion.Legacy : return getText(LangTextType.B0621);
+        case GameVersion.Test   : return getText(LangTextType.B0622);
+        case GameVersion.Awbw   : return getText(LangTextType.B0649);
         default                 : return undefined;
     }
 }
 export function getGameVersionDesc(type: GameVersion): string | undefined {
     switch (type) {
-        case GameVersion.Legacy : return getText(Type.A0217);
-        case GameVersion.Test   : return getText(Type.A0218);
-        case GameVersion.Awbw   : return getText(Type.A0224);
+        case GameVersion.Legacy : return getText(LangTextType.A0217);
+        case GameVersion.Test   : return getText(LangTextType.A0218);
+        case GameVersion.Awbw   : return getText(LangTextType.A0224);
         default                 : return undefined;
     }
 }
@@ -5022,8 +4888,8 @@ export function concatLanguageTextList(textList: ProtoTypes.Structure.ILanguageT
 
 export function getBootTimerTypeName(type: Types.BootTimerType): string | undefined {
     switch (type) {
-        case Types.BootTimerType.Regular    : return getText(Type.B0387);
-        case Types.BootTimerType.Incremental: return getText(Type.B0388);
+        case Types.BootTimerType.Regular    : return getText(LangTextType.B0387);
+        case Types.BootTimerType.Incremental: return getText(LangTextType.B0388);
         default                             : return undefined;
     }
 }
@@ -5031,9 +4897,9 @@ export function getBootTimerDesc(params: number[]): string | undefined {
     params          = params || [];
     const timerType = params[0] as Types.BootTimerType;
     if (timerType === Types.BootTimerType.Regular) {
-        return `${getText(Type.B0387)} ${Helpers.getTimeDurationText2(params[1])}`;
+        return `${getText(LangTextType.B0387)} ${Helpers.getTimeDurationText2(params[1])}`;
     } else if (timerType === Types.BootTimerType.Incremental) {
-        return `${getText(Type.B0388)} ${Helpers.getTimeDurationText2(params[1])} + ${Helpers.getTimeDurationText2(params[2])}`;
+        return `${getText(LangTextType.B0388)} ${Helpers.getTimeDurationText2(params[1])} + ${Helpers.getTimeDurationText2(params[2])}`;
     } else {
         return undefined;
     }
@@ -5049,8 +4915,8 @@ export async function getGameStartDesc(data: ProtoTypes.NetMessage.MsgMpwCommonB
 
     const mapId = data.mapId;
     return [
-        getFormattedText(Type.F0027, mapId != null ? await WarMapModel.getMapNameInCurrentLanguage(mapId) : getText(Type.B0557)),
+        getFormattedText(LangTextType.F0027, mapId != null ? await WarMapModel.getMapNameInCurrentLanguage(mapId) : getText(LangTextType.B0557)),
         ...playerArray,
-        getText(Type.A0125)
+        getText(LangTextType.A0125)
     ].join("\n");
 }

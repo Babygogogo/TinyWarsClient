@@ -10,7 +10,9 @@ import { McrWatchDeleteWatcherDetailPanel } from "./McrWatchDeleteWatcherDetailP
 import * as ConfigManager                   from "../../../utility/ConfigManager";
 import * as FloatText                       from "../../../utility/FloatText";
 import * as Lang                            from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                      from "../../../utility/ProtoTypes";
 import * as Types                           from "../../../utility/Types";
 import * as MpwModel                        from "../../multiPlayerWar/model/MpwModel";
@@ -62,9 +64,9 @@ export class McrWatchDeleteWatcherWarsPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMpwWatchGetWatchedWarInfos,  callback: this._onNotifySMcwWatchGetWatchedWarInfos },
-            { type: Notify.Type.MsgMpwWatchDeleteWatcher,       callback: this._onNotifySMcwWatchDeleteWatcher },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMpwWatchGetWatchedWarInfos,  callback: this._onNotifySMcwWatchGetWatchedWarInfos },
+            { type: NotifyType.MsgMpwWatchDeleteWatcher,       callback: this._onNotifySMcwWatchDeleteWatcher },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -125,7 +127,7 @@ export class McrWatchDeleteWatcherWarsPanel extends UiPanel<void> {
     }
 
     private _onNotifySMcwWatchDeleteWatcher(e: egret.Event): void {
-        FloatText.show(Lang.getText(Lang.Type.A0062));
+        FloatText.show(Lang.getText(LangTextType.A0062));
         MpwProxy.reqWatchedWarInfos();
     }
 
@@ -173,7 +175,7 @@ export class McrWatchDeleteWatcherWarsPanel extends UiPanel<void> {
             const warData               = settingsForMfw.initialWarData;
             this._labelMapName.text     = undefined;
             this._labelDesigner.text    = undefined;
-            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(warData.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
+            this._labelHasFog.text      = Lang.getFormattedText(LangTextType.F0005, Lang.getText(warData.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
             this._labelWarComment.text  = settingsForMfw.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, warData.playerManager.players.length - 1));
             this._zoomMap.showMapByWarData(warData);
@@ -181,9 +183,9 @@ export class McrWatchDeleteWatcherWarsPanel extends UiPanel<void> {
             const settingsForMcw        = warInfo.settingsForMcw;
             const mapId                 = settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId;
             const mapRawData            = await WarMapModel.getRawData(mapId);
-            this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-            this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
+            this._labelMapName.text     = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+            this._labelDesigner.text    = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+            this._labelHasFog.text      = Lang.getFormattedText(LangTextType.F0005, Lang.getText(warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
             this._labelWarComment.text  = (settingsForMcw ? settingsForMcw.warComment : null) || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
             this._zoomMap.showMapByMapData(mapRawData);
@@ -196,11 +198,11 @@ export class McrWatchDeleteWatcherWarsPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0219);
-        this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
-        this._labelPlayersTitle.text    = `${Lang.getText(Lang.Type.B0031)}:`;
-        this._labelCommentTitle.text    = `${Lang.getText(Lang.Type.B0187)}:`;
-        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+        this._labelMenuTitle.text       = Lang.getText(LangTextType.B0219);
+        this._labelNoWar.text           = Lang.getText(LangTextType.B0210);
+        this._labelPlayersTitle.text    = `${Lang.getText(LangTextType.B0031)}:`;
+        this._labelCommentTitle.text    = `${Lang.getText(LangTextType.B0187)}:`;
+        this._btnBack.label             = Lang.getText(LangTextType.B0146);
     }
 }
 

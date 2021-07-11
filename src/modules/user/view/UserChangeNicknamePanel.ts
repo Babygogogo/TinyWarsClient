@@ -4,14 +4,14 @@ import { UiPanel }              from "../../../gameui/UiPanel";
 import { UiButton }             from "../../../gameui/UiButton";
 import { UiLabel }              from "../../../gameui/UiLabel";
 import { UiTextInput }          from "../../../gameui/UiTextInput";
+import { NotifyType }           from "../../../utility/NotifyType";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
-import * as Notify              from "../../../utility/Notify";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Types               from "../../../utility/Types";
 import * as UserModel           from "../../user/model/UserModel";
 import * as UserProxy           from "../../user/model/UserProxy";
-import NotifyType               = Notify.Type;
 
 export class UserChangeNicknamePanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
@@ -81,11 +81,11 @@ export class UserChangeNicknamePanel extends UiPanel<void> {
 
     private _onTouchedBtnConfirm(): void {
         if (this._isRequesting) {
-            FloatText.show(Lang.getText(Lang.Type.A0046));
+            FloatText.show(Lang.getText(LangTextType.A0046));
         } else {
             const nickname = this._inputNickname.text;
             if (!Helpers.checkIsNicknameValid(nickname)) {
-                FloatText.show(Lang.getText(Lang.Type.A0002));
+                FloatText.show(Lang.getText(LangTextType.A0002));
             } else {
                 this._isRequesting = true;
                 UserProxy.reqSetNickname(nickname);
@@ -94,7 +94,7 @@ export class UserChangeNicknamePanel extends UiPanel<void> {
     }
 
     private _onMsgUserSetNickname(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0047));
+        FloatText.show(Lang.getText(LangTextType.A0047));
         this.close();
     }
     private _onMsgUserSetNicknameFailed(): void {
@@ -109,11 +109,11 @@ export class UserChangeNicknamePanel extends UiPanel<void> {
     // Functions for view.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text       = Lang.getText(Lang.Type.B0149);
-        this._labelNickname.text    = Lang.getText(Lang.Type.B0242);
-        this._labelNote.text        = Lang.getText(Lang.Type.A0066);
-        this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
-        this._btnClose.label        = Lang.getText(Lang.Type.B0154);
+        this._labelTitle.text       = Lang.getText(LangTextType.B0149);
+        this._labelNickname.text    = Lang.getText(LangTextType.B0242);
+        this._labelNote.text        = Lang.getText(LangTextType.A0066);
+        this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+        this._btnClose.label        = Lang.getText(LangTextType.B0154);
     }
 
     private _showOpenAnimation(): void {

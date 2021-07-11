@@ -3,6 +3,7 @@ import { CommonErrorPanel }             from "../modules/common/view/CommonError
 import * as CommonConstants             from "./CommonConstants";
 import * as FloatText                   from "./FloatText";
 import * as Lang                        from "./Lang";
+import { LangTextType } from "./LangTextType";
 import * as Logger                      from "./Logger";
 import * as SoundManager                from "./SoundManager";
 import * as Types                       from "./Types";
@@ -115,7 +116,7 @@ function preventBrowserBack(): void {
 
     if (window.addEventListener) {
         window.addEventListener("popstate", (e) => {
-            FloatText.show(Lang.getText(Lang.Type.A0194));
+            FloatText.show(Lang.getText(LangTextType.A0194));
         }, false);
     }
 }

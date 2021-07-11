@@ -3,6 +3,7 @@ import { ClientErrorCode }          from "../../../utility/ClientErrorCode";
 import * as Types                   from "../../../utility/Types";
 import * as DestructionHelpers      from "../../../utility/DestructionHelpers";
 import * as Notify                  from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes              from "../../../utility/ProtoTypes";
 import * as Logger                  from "../../../utility/Logger";
 import * as ConfigManager           from "../../../utility/ConfigManager";
@@ -1309,7 +1310,7 @@ export class BwTurnManager {
     private _setTurnIndex(index: number): void {
         if (this._turnIndex !== index){
             this._turnIndex = index;
-            Notify.dispatch(Notify.Type.BwTurnIndexChanged);
+            Notify.dispatch(NotifyType.BwTurnIndexChanged);
         }
     }
 
@@ -1319,7 +1320,7 @@ export class BwTurnManager {
     private _setPlayerIndexInTurn(index: number): void {
         if (this._playerIndexInTurn !== index) {
             this._playerIndexInTurn = index;
-            Notify.dispatch(Notify.Type.BwPlayerIndexInTurnChanged);
+            Notify.dispatch(NotifyType.BwPlayerIndexInTurnChanged);
         }
     }
     public getNextPlayerIndex(playerIndex: number, includeNeutral = false): number | undefined {
@@ -1343,7 +1344,7 @@ export class BwTurnManager {
     private _setPhaseCode(code: TurnPhaseCode): void {
         if (this._phaseCode !== code) {
             this._phaseCode = code;
-            Notify.dispatch(Notify.Type.BwTurnPhaseCodeChanged);
+            Notify.dispatch(NotifyType.BwTurnPhaseCodeChanged);
         }
     }
 

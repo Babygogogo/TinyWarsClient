@@ -5,6 +5,8 @@ import { UiButton }                     from "../../../gameui/UiButton";
 import { UiComponent }                  from "../../../gameui/UiComponent";
 import { UiLabel }                      from "../../../gameui/UiLabel";
 import { CommonAlertPanel }             from "../../common/view/CommonAlertPanel";
+import { LangTextType }                 from "../../../utility/LangTextType";
+import { NotifyType }                   from "../../../utility/NotifyType";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
@@ -63,7 +65,7 @@ export class MeAvailableCoPanel extends UiPanel<OpenDataForMeAvailableCoPanel> {
             { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
 
         const bannedCoIdSet = this._bannedCoIdSet;
@@ -99,13 +101,13 @@ export class MeAvailableCoPanel extends UiPanel<OpenDataForMeAvailableCoPanel> {
         const bannedCoIdSet = this._bannedCoIdSet;
         if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0130),
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0130),
             });
         } else {
             const openData = this._getOpenData();
             BwWarRuleHelper.setBannedCoIdArray(openData.warRule, openData.playerRule.playerIndex, bannedCoIdSet);
-            Notify.dispatch(Notify.Type.MeBannedCoIdArrayChanged);
+            Notify.dispatch(NotifyType.MeBannedCoIdArrayChanged);
             this.close();
         }
     }
@@ -158,9 +160,9 @@ export class MeAvailableCoPanel extends UiPanel<OpenDataForMeAvailableCoPanel> {
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
-        this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-        this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._getOpenData().playerRule.playerIndex})`;
+        this._btnCancel.label               = Lang.getText(LangTextType.B0154);
+        this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+        this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._getOpenData().playerRule.playerIndex})`;
     }
 
     private _initGroupCoTiers(): void {
@@ -234,7 +236,7 @@ export class MeAvailableCoPanel extends UiPanel<OpenDataForMeAvailableCoPanel> {
 }
 
 // eslint-disable-next-line no-shadow
-const enum CoTierState {
+enum CoTierState {
     AllAvailable,
     PartialAvailable,
     Unavailable,

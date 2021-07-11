@@ -8,8 +8,10 @@ import { UiListItemRenderer }   from "../../../gameui/UiListItemRenderer";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger              from "../../../utility/Logger";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import GameVersion              = Types.GameVersion;
 
@@ -64,7 +66,7 @@ export class CommonChangeVersionPanel extends UiPanel<void> {
             { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._listVersion.setItemRenderer(MapNameRenderer);
 
@@ -116,10 +118,10 @@ export class CommonChangeVersionPanel extends UiPanel<void> {
     // Private functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text   = Lang.getText(Lang.Type.B0620);
-        this._btnBack.label     = Lang.getText(Lang.Type.B0154);
-        this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-        this._labelTips.text    = Lang.getText(Lang.Type.A0219);
+        this._labelTitle.text   = Lang.getText(LangTextType.B0620);
+        this._btnBack.label     = Lang.getText(LangTextType.B0154);
+        this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+        this._labelTips.text    = Lang.getText(LangTextType.A0219);
     }
 
     private _initListVersion(): void {
@@ -185,7 +187,7 @@ class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
     }
 
@@ -208,7 +210,7 @@ class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
         this._labelDesc.text    = Lang.getGameVersionDesc(gameVersion) || CommonConstants.ErrorTextForUndefined;
 
         const labelCurrent      = this._labelCurrent;
-        labelCurrent.text       = `(${Lang.getText(Lang.Type.B0623)})`;
+        labelCurrent.text       = `(${Lang.getText(LangTextType.B0623)})`;
         labelCurrent.visible    = gameVersion === CommonConstants.GameVersion;
     }
 }

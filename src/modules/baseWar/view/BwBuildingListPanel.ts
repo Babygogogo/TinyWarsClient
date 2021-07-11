@@ -9,7 +9,9 @@ import { MeTileSimpleView }     from "../../mapEditor/view/MeTileSimpleView";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as ConfigManager       from "../../../utility/ConfigManager";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 
 type OpenDataForBwBuildingListPanel = {
@@ -47,7 +49,7 @@ export class BwBuildingListPanel extends UiPanel<OpenDataForBwBuildingListPanel>
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._listTile.setItemRenderer(TileRenderer);
 
@@ -60,7 +62,7 @@ export class BwBuildingListPanel extends UiPanel<OpenDataForBwBuildingListPanel>
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text = Lang.getText(Lang.Type.B0333);
+        this._labelTitle.text = Lang.getText(LangTextType.B0333);
     }
 
     private _updateListTile(): void {
@@ -116,7 +118,7 @@ class TileRenderer extends UiListItemRenderer<DataForTileRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+            { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
         ]);
 
         const tileView = this._tileView;

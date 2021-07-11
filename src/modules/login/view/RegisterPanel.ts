@@ -7,9 +7,11 @@ import { UiTextInput }                  from "../../../gameui/UiTextInput";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as LocalStorage                from "../../../utility/LocalStorage";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as UserModel                   from "../../user/model/UserModel";
@@ -69,8 +71,8 @@ export class RegisterPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgUserRegister, callback: this._onMsgUserRegister },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgUserRegister, callback: this._onMsgUserRegister },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,    callback: this.close },
@@ -86,7 +88,7 @@ export class RegisterPanel extends UiPanel<void> {
 
     private _onMsgUserRegister(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgUserRegister.IS;
-        FloatText.show(Lang.getText(Lang.Type.A0004));
+        FloatText.show(Lang.getText(LangTextType.A0004));
 
         const account = data.account;
         if (account == null) {
@@ -110,24 +112,24 @@ export class RegisterPanel extends UiPanel<void> {
         const password = this._inputPassword.text;
         const nickname = this._inputNickname.text;
         if (!Helpers.checkIsAccountValid(account)) {
-            FloatText.show(Lang.getText(Lang.Type.A0001));
+            FloatText.show(Lang.getText(LangTextType.A0001));
         } else if (!Helpers.checkIsPasswordValid(password)) {
-            FloatText.show(Lang.getText(Lang.Type.A0003));
+            FloatText.show(Lang.getText(LangTextType.A0003));
         } else if (!Helpers.checkIsNicknameValid(nickname)) {
-            FloatText.show(Lang.getText(Lang.Type.A0002));
+            FloatText.show(Lang.getText(LangTextType.A0002));
         } else {
             UserProxy.reqUserRegister(account, password, nickname);
         }
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnRegister.label     = Lang.getText(Lang.Type.B0174);
-        this._btnClose.label        = Lang.getText(Lang.Type.B0154);
-        this._labelTitle.text       = Lang.getText(Lang.Type.B0174);
-        this._labelAccount.text     = `${Lang.getText(Lang.Type.B0170)}:`;
-        this._labelPassword.text    = `${Lang.getText(Lang.Type.B0171)}:`;
-        this._labelNickname.text    = `${Lang.getText(Lang.Type.B0175)}:`;
-        this._labelTips.setRichText(Lang.getText(Lang.Type.R0005));
+        this._btnRegister.label     = Lang.getText(LangTextType.B0174);
+        this._btnClose.label        = Lang.getText(LangTextType.B0154);
+        this._labelTitle.text       = Lang.getText(LangTextType.B0174);
+        this._labelAccount.text     = `${Lang.getText(LangTextType.B0170)}:`;
+        this._labelPassword.text    = `${Lang.getText(LangTextType.B0171)}:`;
+        this._labelNickname.text    = `${Lang.getText(LangTextType.B0175)}:`;
+        this._labelTips.setRichText(Lang.getText(LangTextType.R0005));
     }
 
     private _showOpenAnimation(): void {

@@ -9,7 +9,9 @@ import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel"
 import { MmWarRuleAvailableCoPanel }    from "./MmWarRuleAvailableCoPanel";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import IWarRule                         = ProtoTypes.WarRule.IWarRule;
@@ -73,7 +75,7 @@ export class MmWarRulePanel extends UiPanel<OpenDataForMmWarRulePanel> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,                callback: this._onTouchedBtnBack },
@@ -121,8 +123,8 @@ export class MmWarRulePanel extends UiPanel<OpenDataForMmWarRulePanel> {
 
     private _onTouchedBtnHelpHasFog(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0020),
-            content: Lang.getText(Lang.Type.R0002),
+            title  : Lang.getText(LangTextType.B0020),
+            content: Lang.getText(LangTextType.R0002),
         });
     }
 
@@ -138,15 +140,15 @@ export class MmWarRulePanel extends UiPanel<OpenDataForMmWarRulePanel> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0314);
-        this._labelAvailability.text    = Lang.getText(Lang.Type.B0406);
-        this._labelPlayerList.text      = Lang.getText(Lang.Type.B0407);
-        this._btnAvailabilityMcw.label  = Lang.getText(Lang.Type.B0137);
-        this._btnAvailabilityScw.label  = Lang.getText(Lang.Type.B0138);
-        this._btnAvailabilityMrw.label  = Lang.getText(Lang.Type.B0404);
-        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-        this._btnModifyRuleName.label   = Lang.getText(Lang.Type.B0315);
-        this._btnModifyHasFog.label     = Lang.getText(Lang.Type.B0020);
+        this._labelMenuTitle.text       = Lang.getText(LangTextType.B0314);
+        this._labelAvailability.text    = Lang.getText(LangTextType.B0406);
+        this._labelPlayerList.text      = Lang.getText(LangTextType.B0407);
+        this._btnAvailabilityMcw.label  = Lang.getText(LangTextType.B0137);
+        this._btnAvailabilityScw.label  = Lang.getText(LangTextType.B0138);
+        this._btnAvailabilityMrw.label  = Lang.getText(LangTextType.B0404);
+        this._btnBack.label             = Lang.getText(LangTextType.B0146);
+        this._btnModifyRuleName.label   = Lang.getText(LangTextType.B0315);
+        this._btnModifyHasFog.label     = Lang.getText(LangTextType.B0020);
     }
 
     private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
@@ -175,7 +177,7 @@ export class MmWarRulePanel extends UiPanel<OpenDataForMmWarRulePanel> {
     }
 
     private _updateLabelRuleName(rule: IWarRule): void {
-        this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(Lang.Type.B0001);
+        this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(LangTextType.B0001);
     }
     private _updateImgHasFog(rule: IWarRule): void {
         this._imgHasFog.visible = rule ? rule.ruleForGlobalParams.hasFogByDefault : false;
@@ -231,7 +233,7 @@ class WarRuleNameRenderer extends UiListItemRenderer<DataForWarRuleNameRenderer>
         const data              = this.data;
         const index             = data.index;
         this.currentState       = index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-        this._labelName.text    = `${Lang.getText(Lang.Type.B0318)} ${index}`;
+        this._labelName.text    = `${Lang.getText(LangTextType.B0318)} ${index}`;
     }
 
     private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
@@ -285,7 +287,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
     private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         return {
-            titleText               : Lang.getText(Lang.Type.B0018),
+            titleText               : Lang.getText(LangTextType.B0018),
             infoText                : Lang.getPlayerForceName(playerRule.playerIndex),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : null,
@@ -293,7 +295,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
     private _createDataTeamIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         return {
-            titleText               : Lang.getText(Lang.Type.B0019),
+            titleText               : Lang.getText(LangTextType.B0019),
             infoText                : Lang.getPlayerTeamName(playerRule.teamIndex),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : null,
@@ -301,7 +303,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
     private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         return {
-            titleText               : Lang.getText(Lang.Type.B0403),
+            titleText               : Lang.getText(LangTextType.B0403),
             infoText                : `${(playerRule.bannedCoIdArray || []).length}`,
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : () => {
@@ -315,7 +317,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataInitialFund(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.initialFund;
         return {
-            titleText               : Lang.getText(Lang.Type.B0178),
+            titleText               : Lang.getText(LangTextType.B0178),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
             callbackOnTouchedTitle  : null,
@@ -324,7 +326,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataIncomeMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.incomeMultiplier;
         return {
-            titleText               : Lang.getText(Lang.Type.B0179),
+            titleText               : Lang.getText(LangTextType.B0179),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
             callbackOnTouchedTitle  : null,
@@ -333,7 +335,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataEnergyAddPctOnLoadCo(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.energyAddPctOnLoadCo;
         return {
-            titleText               : Lang.getText(Lang.Type.B0180),
+            titleText               : Lang.getText(LangTextType.B0180),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
             callbackOnTouchedTitle  : null,
@@ -342,7 +344,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataEnergyGrowthMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.energyGrowthMultiplier;
         return {
-            titleText               : Lang.getText(Lang.Type.B0181),
+            titleText               : Lang.getText(LangTextType.B0181),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
             callbackOnTouchedTitle  : null,
@@ -351,7 +353,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataMoveRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.moveRangeModifier;
         return {
-            titleText               : Lang.getText(Lang.Type.B0182),
+            titleText               : Lang.getText(LangTextType.B0182),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
             callbackOnTouchedTitle  : null,
@@ -360,7 +362,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataAttackPowerModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.attackPowerModifier;
         return {
-            titleText               : Lang.getText(Lang.Type.B0183),
+            titleText               : Lang.getText(LangTextType.B0183),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
             callbackOnTouchedTitle  : null,
@@ -369,7 +371,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataVisionRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue = playerRule.visionRangeModifier;
         return {
-            titleText               : Lang.getText(Lang.Type.B0184),
+            titleText               : Lang.getText(LangTextType.B0184),
             infoText                : `${currValue}`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
             callbackOnTouchedTitle  : null,
@@ -378,7 +380,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataLuckLowerLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue     = playerRule.luckLowerLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0189),
+            titleText               : Lang.getText(LangTextType.B0189),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
             callbackOnTouchedTitle  : null,
@@ -387,7 +389,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataLuckUpperLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
         const currValue     = playerRule.luckUpperLimit;
         return {
-            titleText               : Lang.getText(Lang.Type.B0190),
+            titleText               : Lang.getText(LangTextType.B0190),
             infoText                : `${currValue}%`,
             infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
             callbackOnTouchedTitle  : null,

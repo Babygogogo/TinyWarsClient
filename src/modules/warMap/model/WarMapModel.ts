@@ -2,6 +2,7 @@
 import * as Types           from "../../../utility/Types";
 import * as ProtoTypes      from "../../../utility/ProtoTypes";
 import * as Notify          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Lang            from "../../../utility/Lang";
 import * as WarMapProxy     from "./WarMapProxy";
 import WarType              = Types.WarType;
@@ -56,8 +57,8 @@ export function getBriefData(mapId: number): Promise<IMapBriefData | undefined |
         const callbackOnSucceed = (e: egret.Event): void => {
             const data = e.data as MsgMapGetBriefDataIs;
             if (data.mapId === mapId) {
-                Notify.removeEventListener(Notify.Type.MsgMapGetBriefData,        callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgMapGetBriefDataFailed,  callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgMapGetBriefData,        callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgMapGetBriefDataFailed,  callbackOnFailed);
 
                 for (const cb of _briefDataRequests.get(mapId)) {
                     cb(data);
@@ -70,8 +71,8 @@ export function getBriefData(mapId: number): Promise<IMapBriefData | undefined |
         const callbackOnFailed = (e: egret.Event): void => {
             const data = e.data as MsgMapGetBriefDataIs;
             if (data.mapId === mapId) {
-                Notify.removeEventListener(Notify.Type.MsgMapGetBriefData,        callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgMapGetBriefDataFailed,  callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgMapGetBriefData,        callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgMapGetBriefDataFailed,  callbackOnFailed);
 
                 for (const cb of _briefDataRequests.get(mapId)) {
                     cb(data);
@@ -82,8 +83,8 @@ export function getBriefData(mapId: number): Promise<IMapBriefData | undefined |
             }
         };
 
-        Notify.addEventListener(Notify.Type.MsgMapGetBriefData,       callbackOnSucceed);
-        Notify.addEventListener(Notify.Type.MsgMapGetBriefDataFailed, callbackOnFailed);
+        Notify.addEventListener(NotifyType.MsgMapGetBriefData,       callbackOnSucceed);
+        Notify.addEventListener(NotifyType.MsgMapGetBriefDataFailed, callbackOnFailed);
 
         WarMapProxy.reqGetMapBriefData(mapId);
     });
@@ -180,8 +181,8 @@ export function getRawData(mapId: number): Promise<IMapRawData | undefined> {
         const callbackOnSucceed = (e: egret.Event): void => {
             const data = e.data as MsgMapGetRawDataIs;
             if (data.mapId === mapId) {
-                Notify.removeEventListener(Notify.Type.MsgMapGetRawData,        callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgMapGetRawDataFailed,  callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgMapGetRawData,        callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgMapGetRawDataFailed,  callbackOnFailed);
 
                 for (const cb of _rawDataRequests.get(mapId)) {
                     cb(data);
@@ -194,8 +195,8 @@ export function getRawData(mapId: number): Promise<IMapRawData | undefined> {
         const callbackOnFailed = (e: egret.Event): void => {
             const data = e.data as MsgMapGetRawDataIs;
             if (data.mapId === mapId) {
-                Notify.removeEventListener(Notify.Type.MsgMapGetRawData,        callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgMapGetRawDataFailed,  callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgMapGetRawData,        callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgMapGetRawDataFailed,  callbackOnFailed);
 
                 for (const cb of _rawDataRequests.get(mapId)) {
                     cb(data);
@@ -206,8 +207,8 @@ export function getRawData(mapId: number): Promise<IMapRawData | undefined> {
             }
         };
 
-        Notify.addEventListener(Notify.Type.MsgMapGetRawData,       callbackOnSucceed);
-        Notify.addEventListener(Notify.Type.MsgMapGetRawDataFailed, callbackOnFailed);
+        Notify.addEventListener(NotifyType.MsgMapGetRawData,       callbackOnSucceed);
+        Notify.addEventListener(NotifyType.MsgMapGetRawDataFailed, callbackOnFailed);
 
         WarMapProxy.reqGetMapRawData(mapId);
     });

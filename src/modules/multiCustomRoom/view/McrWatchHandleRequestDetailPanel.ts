@@ -6,7 +6,9 @@ import { UiButton }                     from "../../../gameui/UiButton";
 import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiScrollList }                 from "../../../gameui/UiScrollList";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as MpwProxy                    from "../../multiPlayerWar/model/MpwProxy";
@@ -54,7 +56,7 @@ export class McrWatchHandleRequestDetailPanel extends UiPanel<OpenDataForMcrWatc
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnCancel,  callback: this.close },
@@ -107,13 +109,13 @@ export class McrWatchHandleRequestDetailPanel extends UiPanel<OpenDataForMcrWatc
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelMenuTitle.text           = Lang.getText(Lang.Type.B0208);
-        this._labelYes.text                 = Lang.getText(Lang.Type.B0214);
-        this._labelNo.text                  = Lang.getText(Lang.Type.B0215);
-        this._labelIsOpponent.text          = Lang.getText(Lang.Type.B0217);
-        this._labelIsWatchingOthers.text    = Lang.getText(Lang.Type.B0218);
-        this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-        this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
+        this._labelMenuTitle.text           = Lang.getText(LangTextType.B0208);
+        this._labelYes.text                 = Lang.getText(LangTextType.B0214);
+        this._labelNo.text                  = Lang.getText(LangTextType.B0215);
+        this._labelIsOpponent.text          = Lang.getText(LangTextType.B0217);
+        this._labelIsWatchingOthers.text    = Lang.getText(LangTextType.B0218);
+        this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+        this._btnCancel.label               = Lang.getText(LangTextType.B0154);
     }
 
     private _generateDataForListPlayer(): DataForRequesterRenderer[] {
@@ -152,8 +154,8 @@ class RequesterRenderer extends UiListItemRenderer<DataForRequesterRenderer> {
 
     protected _onDataChanged(): void {
         const data                          = this.data;
-        this._labelIsOpponent.text          = data.isOpponent ? Lang.getText(Lang.Type.B0012) : "";
-        this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(Lang.Type.B0012) : "";
+        this._labelIsOpponent.text          = data.isOpponent ? Lang.getText(LangTextType.B0012) : "";
+        this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(LangTextType.B0012) : "";
         this._imgAccept.visible             = data.isAccept;
         this._imgDecline.visible            = !data.isAccept;
         UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name);

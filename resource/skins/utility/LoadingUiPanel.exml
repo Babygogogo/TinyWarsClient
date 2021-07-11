@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiLabel id="_labelProgress" text="Loading..." horizontalCenter="0" verticalCenter="200" textColor="0xffffff" />
 </e:Skin>

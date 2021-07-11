@@ -12,7 +12,9 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
@@ -37,8 +39,8 @@ export class CcwWarPlayerInfoPage extends UiTabPage<OpenDataForCcwWarPlayerInfoP
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
         ]);
 
         this.left   = 0;
@@ -137,7 +139,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             { ui: this._btnInfo,    callback: this._onTouchedBtnInfo },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -184,8 +186,8 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelRankStdTitle.text    = Lang.getText(Lang.Type.B0546);
-        this._labelRankFogTitle.text    = Lang.getText(Lang.Type.B0547);
+        this._labelRankStdTitle.text    = Lang.getText(LangTextType.B0546);
+        this._labelRankFogTitle.text    = Lang.getText(LangTextType.B0547);
     }
 
     private async _updateComponentsForSettings(): Promise<void> {
@@ -263,14 +265,14 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         } else {
             if (!playerData.isAlive) {
                 label.textColor = 0xFF0000;
-                label.text      = Lang.getText(Lang.Type.B0472);
+                label.text      = Lang.getText(LangTextType.B0472);
             } else {
                 const warId             = this.data.warId;
                 const warInfo           = warId == null ? undefined : MpwModel.getMyWarInfo(warId);
                 const playerIndexInTurn = warInfo ? warInfo.playerIndexInTurn : undefined;
                 if ((playerIndexInTurn != null) && (playerData.playerIndex === playerIndexInTurn)) {
                     label.textColor = 0xFAD804;
-                    label.text      = Lang.getText(Lang.Type.B0086);
+                    label.text      = Lang.getText(LangTextType.B0086);
                 } else {
                     label.text      = ``;
                 }

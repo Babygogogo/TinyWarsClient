@@ -15,6 +15,7 @@ import { McrMyRoomListPanel }           from "./McrMyRoomListPanel";
 import { CcrMainMenuPanel }             from "../../coopCustomRoom/view/CcrMainMenuPanel";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
 import * as McrModel                    from "../../multiCustomRoom/model/McrModel";
@@ -89,7 +90,7 @@ export class McrMainMenuPanel extends UiPanel<void> {
             { ui: this._btnFreeMode,        callback: this._onTouchedBtnFreeMode },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
+            { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
         ]);
 
         this._showOpenAnimation();

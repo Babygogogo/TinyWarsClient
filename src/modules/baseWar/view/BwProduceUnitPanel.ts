@@ -1,7 +1,9 @@
 
 
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Types               from "../../../utility/Types";
 import * as FloatText           from "../../../utility/FloatText";
 import * as CommonConstants     from "../../../utility/CommonConstants";
@@ -67,8 +69,8 @@ export class BwProduceUnitPanel extends UiPanel<OpenDataForBwProduceUnitPanel> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
@@ -80,14 +82,14 @@ export class BwProduceUnitPanel extends UiPanel<OpenDataForBwProduceUnitPanel> {
 
         this._updateView();
 
-        Notify.dispatch(Notify.Type.BwProduceUnitPanelOpened);
+        Notify.dispatch(NotifyType.BwProduceUnitPanelOpened);
     }
     protected async _onClosed(): Promise<void> {
         await this._showCloseAnimation();
 
         this._dataForList = null;
 
-        Notify.dispatch(Notify.Type.BwProduceUnitPanelClosed);
+        Notify.dispatch(NotifyType.BwProduceUnitPanelClosed);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,8 +127,8 @@ export class BwProduceUnitPanel extends UiPanel<OpenDataForBwProduceUnitPanel> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnCancel.label = Lang.getText(Lang.Type.B0154);
-        this._btnDetail.label = Lang.getText(Lang.Type.B0267);
+        this._btnCancel.label = Lang.getText(LangTextType.B0154);
+        this._btnDetail.label = Lang.getText(LangTextType.B0267);
     }
 
     private _createDataForList(): DataForUnitRenderer[] {
@@ -229,8 +231,8 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
         ]);
 
         this._imgBg.touchEnabled = true;
@@ -258,7 +260,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
     private _onTouchedImgBg(): void {
         const data = this.data;
         if (data.currentFund < data.minCost) {
-            FloatText.show(Lang.getText(Lang.Type.B0053));
+            FloatText.show(Lang.getText(LangTextType.B0053));
             return;
         }
 
@@ -293,11 +295,11 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
                     currentValue    : "" + maxHp,
                     maxChars        : 3,
                     charRestrict    : "0-9",
-                    tips            : `${Lang.getText(Lang.Type.B0319)}: [${minHp}, ${maxHp}]`,
+                    tips            : `${Lang.getText(LangTextType.B0319)}: [${minHp}, ${maxHp}]`,
                     callback        : panel => {
                         const value = Number(panel.getInputText());
                         if ((isNaN(value)) || (value > maxHp) || (value < minHp)) {
-                            FloatText.show(Lang.getText(Lang.Type.A0098));
+                            FloatText.show(Lang.getText(LangTextType.A0098));
                         } else {
                             actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, value);
                         }
@@ -315,11 +317,11 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
 
         const unitType                  = data.unitType;
         const isFundEnough              = data.currentFund >= data.minCost;
-        this._labelCost.text            = `${Lang.getText(Lang.Type.B0079)}: ${data.minCost}`;
+        this._labelCost.text            = `${Lang.getText(LangTextType.B0079)}: ${data.minCost}`;
         this._labelCost.textColor       = isFundEnough ? 0x00FF00 : 0xFF0000;
         this._labelName.text            = Lang.getUnitName(unitType);
         this._labelProduce.textColor    = isFundEnough ? 0x00FF00 : 0xFF0000;
-        this._labelProduce.text         = Lang.getText(Lang.Type.B0095);
+        this._labelProduce.text         = Lang.getText(LangTextType.B0095);
 
         this._unitView.init(data.unit).startRunningView();
     }

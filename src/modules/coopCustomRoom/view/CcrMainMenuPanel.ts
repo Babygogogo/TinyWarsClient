@@ -14,7 +14,9 @@ import { CcrCreateMapListPanel }        from "./CcrCreateMapListPanel";
 import { CcrJoinRoomListPanel }         from "./CcrJoinRoomListPanel";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
 import * as McrModel                    from "../../multiCustomRoom/model/McrModel";
@@ -86,7 +88,7 @@ export class CcrMainMenuPanel extends UiPanel<void> {
             { ui: this._btnFreeMode,        callback: this._onTouchedBtnFreeMode },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
+            { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
         ]);
 
         this._showOpenAnimation();
@@ -135,8 +137,8 @@ export class CcrMainMenuPanel extends UiPanel<void> {
     }
     private _onTouchedBtnHelp(): void {
         CommonAlertPanel.show({
-            title   : Lang.getText(Lang.Type.B0143),
-            content : Lang.getText(Lang.Type.R0008),
+            title   : Lang.getText(LangTextType.B0143),
+            content : Lang.getText(LangTextType.R0008),
         });
     }
     private _onTouchedBtnNormalMode(): void {

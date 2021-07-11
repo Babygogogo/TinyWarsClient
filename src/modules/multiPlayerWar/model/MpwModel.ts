@@ -8,8 +8,10 @@ import { MfwWar }               from "../../multiFreeWar/model/MfwWar";
 import { MrwWar }               from "../../multiRankWar/model/MrwWar";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger              from "../../../utility/Logger";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as FlowManager         from "../../../utility/FlowManager";
@@ -64,7 +66,7 @@ export function getMcwPreviewingWarId(): number | undefined {
 export function setMcwPreviewingWarId(warId: number | undefined): void {
     if (getMcwPreviewingWarId() != warId) {
         _mcwPreviewingWarId = warId;
-        Notify.dispatch(Notify.Type.McwPreviewingWarIdChanged);
+        Notify.dispatch(NotifyType.McwPreviewingWarIdChanged);
     }
 }
 
@@ -74,7 +76,7 @@ export function getMrwPreviewingWarId(): number | undefined {
 export function setMrwPreviewingWarId(warId: number | undefined): void {
     if (getMrwPreviewingWarId() != warId) {
         _mrwPreviewingWarId = warId;
-        Notify.dispatch(Notify.Type.MrwPreviewingWarIdChanged);
+        Notify.dispatch(NotifyType.MrwPreviewingWarIdChanged);
     }
 }
 
@@ -84,7 +86,7 @@ export function getMfwPreviewingWarId(): number | undefined {
 export function setMfwPreviewingWarId(warId: number | undefined): void {
     if (getMfwPreviewingWarId() != warId) {
         _mfwPreviewingWarId = warId;
-        Notify.dispatch(Notify.Type.MfwPreviewingWarIdChanged);
+        Notify.dispatch(NotifyType.MfwPreviewingWarIdChanged);
     }
 }
 
@@ -94,7 +96,7 @@ export function getCcwPreviewingWarId(): number | undefined {
 export function setCcwPreviewingWarId(warId: number | undefined): void {
     if (getCcwPreviewingWarId() != warId) {
         _ccwPreviewingWarId = warId;
-        Notify.dispatch(Notify.Type.CcwPreviewingWarIdChanged);
+        Notify.dispatch(NotifyType.CcwPreviewingWarIdChanged);
     }
 }
 
@@ -204,8 +206,8 @@ export async function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMpwCo
         if (status === Types.SyncWarStatus.Defeated) {
             war.setIsEnded(true);
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0023),
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0023),
                 callback: () => {
                     if (war instanceof MrwWar) {
                         FlowManager.gotoMrwMyWarListPanel();
@@ -222,8 +224,8 @@ export async function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMpwCo
         } else if (status === Types.SyncWarStatus.EndedOrNotExists) {
             war.setIsEnded(true);
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0035),
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0035),
                 callback: () => {
                     if (war instanceof MrwWar) {
                         FlowManager.gotoMrwMyWarListPanel();
@@ -245,7 +247,7 @@ export async function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMpwCo
                     Logger.error(`MpwModel.updateOnPlayerSyncWar() empty warData 1.`);
                 } else {
                     await FlowManager.gotoMultiPlayerWar(warData);
-                    FloatText.show(Lang.getText(Lang.Type.A0038));
+                    FloatText.show(Lang.getText(LangTextType.A0038));
                 }
 
             } else {
@@ -260,12 +262,12 @@ export async function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMpwCo
                             Logger.error(`MpwModel.updateOnPlayerSyncWar() empty warData 2.`);
                         } else {
                             await FlowManager.gotoMultiPlayerWar(warData);
-                            FloatText.show(Lang.getText(Lang.Type.A0036));
+                            FloatText.show(Lang.getText(LangTextType.A0036));
                         }
 
                     } else {
                         if (requestType === Types.SyncWarRequestType.PlayerRequest) {
-                            FloatText.show(Lang.getText(Lang.Type.A0038));
+                            FloatText.show(Lang.getText(LangTextType.A0038));
                         } else {
                             // Nothing to do.
                         }
@@ -284,15 +286,15 @@ export async function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMpwCo
             // Something wrong!!
             war.setIsEnded(true);
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0037),
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0037),
                 callback: () => FlowManager.gotoLobby(),
             });
 
         } else if (status === Types.SyncWarStatus.Synchronized) {
             const requestType = data.requestType as Types.SyncWarRequestType;
             if (requestType === Types.SyncWarRequestType.PlayerRequest) {
-                FloatText.show(Lang.getText(Lang.Type.A0038));
+                FloatText.show(Lang.getText(LangTextType.A0038));
             } else {
                 // Nothing to do.
             }
@@ -301,8 +303,8 @@ export async function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMpwCo
             // Something wrong!!
             war.setIsEnded(true);
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0037),
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0037),
                 callback: () => FlowManager.gotoLobby(),
             });
         }
@@ -366,21 +368,21 @@ async function checkAndRunFirstCachedAction(war: MpwWar, actionList: IWarActionC
     if (war.getIsEnded()) {
         if (remainingVotes === 0) {
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0030),
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0030),
                 callback: callbackForGoBack,
             });
         } else {
             if (selfPlayer == null) {
                 CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0035),
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0035),
                     callback: callbackForGoBack,
                 });
             } else {
                 CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : selfPlayer.getAliveState() === Types.PlayerAliveState.Alive ? Lang.getText(Lang.Type.A0022) : Lang.getText(Lang.Type.A0023),
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : selfPlayer.getAliveState() === Types.PlayerAliveState.Alive ? Lang.getText(LangTextType.A0022) : Lang.getText(LangTextType.A0023),
                     callback: callbackForGoBack,
                 });
             }
@@ -390,8 +392,8 @@ async function checkAndRunFirstCachedAction(war: MpwWar, actionList: IWarActionC
             if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().size) {
                 war.setIsEnded(true);
                 CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0035),
-                    content : selfPlayer ? Lang.getText(Lang.Type.A0023) : Lang.getText(Lang.Type.A0152),
+                    title   : Lang.getText(LangTextType.B0035),
+                    content : selfPlayer ? Lang.getText(LangTextType.A0023) : Lang.getText(LangTextType.A0152),
                     callback: callbackForGoBack,
                 });
             } else {

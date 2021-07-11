@@ -9,6 +9,7 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
@@ -43,8 +44,8 @@ export async function createDefaultMapRawData(slotIndex: number): Promise<IMapRa
         designerName            : await UserModel.getSelfNickname(),
         designerUserId          : UserModel.getSelfUserId(),
         mapNameArray            : [
-            { languageType: LanguageType.Chinese, text: `${Lang.getText(Lang.Type.B0279, LanguageType.Chinese)} - ${slotIndex}`},
-            { languageType: LanguageType.English, text: `${Lang.getText(Lang.Type.B0279, LanguageType.English)} - ${slotIndex}`},
+            { languageType: LanguageType.Chinese, text: `${Lang.getText(LangTextType.B0279, LanguageType.Chinese)} - ${slotIndex}`},
+            { languageType: LanguageType.English, text: `${Lang.getText(LangTextType.B0279, LanguageType.English)} - ${slotIndex}`},
         ],
         mapWidth,
         mapHeight,

@@ -11,7 +11,9 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
 import CreateModel                      = CcrModel.Create;
@@ -68,7 +70,7 @@ export class CcrCreateBanCoPanel extends UiPanel<OpenDataForCcrCreateBanCoPanel>
             { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
 
         this._showOpenAnimation();
@@ -120,14 +122,14 @@ export class CcrCreateBanCoPanel extends UiPanel<OpenDataForCcrCreateBanCoPanel>
         const bannedCoIdSet = this._bannedCoIdSet;
         if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0130),
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0130),
             });
         } else {
             const playerIndex   = this._playerIndex;
             const callback      = () => {
                 CreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
-                Notify.dispatch(Notify.Type.CcrCreateBannedCoIdArrayChanged);
+                Notify.dispatch(NotifyType.CcrCreateBannedCoIdArrayChanged);
                 this.close();
             };
             if ((playerIndex !== CreateModel.getSelfPlayerIndex()) ||
@@ -136,7 +138,7 @@ export class CcrCreateBanCoPanel extends UiPanel<OpenDataForCcrCreateBanCoPanel>
                 callback();
             } else {
                 CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0057),
+                    content : Lang.getText(LangTextType.A0057),
                     callback: () => {
                         CreateModel.setSelfCoId(CommonConstants.CoEmptyId);
                         callback();
@@ -159,8 +161,8 @@ export class CcrCreateBanCoPanel extends UiPanel<OpenDataForCcrCreateBanCoPanel>
         } else {
             if (coId === CommonConstants.CoEmptyId) {
                 CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0130),
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0130),
                 });
                 return;
             }
@@ -176,7 +178,7 @@ export class CcrCreateBanCoPanel extends UiPanel<OpenDataForCcrCreateBanCoPanel>
                 callback();
             } else {
                 CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0057),
+                    content : Lang.getText(LangTextType.A0057),
                     callback,
                 });
             }
@@ -187,9 +189,9 @@ export class CcrCreateBanCoPanel extends UiPanel<OpenDataForCcrCreateBanCoPanel>
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
-        this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-        this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._playerIndex})`;
+        this._btnCancel.label               = Lang.getText(LangTextType.B0154);
+        this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+        this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._playerIndex})`;
 
         this._updateComponentsForPreviewCoId();
     }

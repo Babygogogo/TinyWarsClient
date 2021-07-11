@@ -16,7 +16,9 @@ import { OpenDataForMrrRoomMapInfoPage, MrrRoomMapInfoPage }                    
 import { OpenDataForMrrRoomPlayerInfoPage, MrrRoomPlayerInfoPage }              from "./MrrRoomPlayerInfoPage";
 import * as Helpers                                                             from "../../../utility/Helpers";
 import * as Lang                                                                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                                                              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                                                               from "../../../utility/Types";
 import * as WarMapModel                                                         from "../../warMap/model/WarMapModel";
 import * as MrrModel                                                            from "../model/MrrModel";
@@ -65,10 +67,10 @@ export class MrrMyRoomListPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MrrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
-            { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,      callback: this._onNotifyMsgMrrGetMyRoomPublicInfoList },
-            { type: Notify.Type.MsgMrrDeleteRoomByServer,           callback: this._onNotifyMsgMrrDeleteRoomByServer },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MrrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
+            { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,      callback: this._onNotifyMsgMrrGetMyRoomPublicInfoList },
+            { type: NotifyType.MsgMrrDeleteRoomByServer,           callback: this._onNotifyMsgMrrDeleteRoomByServer },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -137,22 +139,22 @@ export class MrrMyRoomListPanel extends UiPanel<void> {
     private _initTabSettings(): void {
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : MrrRoomMapInfoPage,
                 pageData    : { roomId: null } as OpenDataForMrrRoomMapInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                tabItemData : { name: Lang.getText(LangTextType.B0224) },
                 pageClass   : MrrRoomPlayerInfoPage,
                 pageData    : { roomId: null } as OpenDataForMrrRoomPlayerInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : MrrRoomBasicSettingsPage,
                 pageData    : { roomId: null } as OpenDataForMrrRoomBasicSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData : { name: Lang.getText(LangTextType.B0003) },
                 pageClass   : MrrRoomAdvancedSettingsPage,
                 pageData    : { roomId: null } as OpenDataForMrrRoomAdvancedSettingsPage,
             },
@@ -160,12 +162,12 @@ export class MrrMyRoomListPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-        this._labelRankMatch.text       = Lang.getText(Lang.Type.B0404);
-        this._labelMyRoom.text          = Lang.getText(Lang.Type.B0410);
-        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-        this._labelNoRoom.text          = Lang.getText(Lang.Type.B0582);
-        this._btnNextStep.label         = Lang.getText(Lang.Type.B0398);
+        this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+        this._labelRankMatch.text       = Lang.getText(LangTextType.B0404);
+        this._labelMyRoom.text          = Lang.getText(LangTextType.B0410);
+        this._btnBack.label             = Lang.getText(LangTextType.B0146);
+        this._labelNoRoom.text          = Lang.getText(LangTextType.B0582);
+        this._btnNextStep.label         = Lang.getText(LangTextType.B0398);
     }
 
     private _updateGroupRoomList(): void {
@@ -305,7 +307,7 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
             { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.MrrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
+            { type: NotifyType.MrrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
         ]);
     }
 

@@ -10,7 +10,9 @@ import { CommonHelpPanel }      from "../../common/view/CommonHelpPanel";
 import { CommonInputPanel }     from "../../common/view/CommonInputPanel";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as BwHelpers           from "../../baseWar/model/BwHelpers";
@@ -63,7 +65,7 @@ export class SpmCreateSfwSaveSlotsPanel extends UiPanel<OpenDataForSpmCreateSfwS
             { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
         this._srlSaveSlot.setItemRenderer(SlotRenderer);
 
@@ -82,8 +84,8 @@ export class SpmCreateSfwSaveSlotsPanel extends UiPanel<OpenDataForSpmCreateSfwS
 
     private _onTouchedBtnHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title   : Lang.getText(Lang.Type.B0325),
-            content : Lang.getText(Lang.Type.R0006),
+            title   : Lang.getText(LangTextType.B0325),
+            content : Lang.getText(LangTextType.R0006),
         });
     }
 
@@ -103,9 +105,9 @@ export class SpmCreateSfwSaveSlotsPanel extends UiPanel<OpenDataForSpmCreateSfwS
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelPanelTitle.text  = Lang.getText(Lang.Type.B0259);
-        this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
-        this._btnHelp.label         = Lang.getText(Lang.Type.B0143);
+        this._labelPanelTitle.text  = Lang.getText(LangTextType.B0259);
+        this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+        this._btnHelp.label         = Lang.getText(LangTextType.B0143);
     }
 
     private _createDataForList(): DataForSlotRenderer[] {
@@ -143,7 +145,7 @@ class SlotRenderer extends UiListItemRenderer<DataForSlotRenderer> {
         ]);
 
         this._imgBg.touchEnabled    = true;
-        this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
+        this._labelChoose.text      = Lang.getText(LangTextType.B0258);
     }
 
     protected _onDataChanged(): void {
@@ -154,10 +156,10 @@ class SlotRenderer extends UiListItemRenderer<DataForSlotRenderer> {
         const data      = this.data;
         const callback  = () => {
             CommonInputPanel.show({
-                title       : Lang.getText(Lang.Type.B0088),
+                title       : Lang.getText(LangTextType.B0088),
                 maxChars    : CommonConstants.SpmSaveSlotCommentMaxLength,
                 currentValue: ``,
-                tips        : Lang.getText(Lang.Type.A0144),
+                tips        : Lang.getText(LangTextType.A0144),
                 charRestrict: null,
                 callback    : (panel) => {
                     SpmProxy.reqSpmCreateSfw({
@@ -173,7 +175,7 @@ class SlotRenderer extends UiListItemRenderer<DataForSlotRenderer> {
             callback();
         } else {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0070),
+                content : Lang.getText(LangTextType.A0070),
                 callback,
             });
         }
@@ -202,7 +204,7 @@ class SlotRenderer extends UiListItemRenderer<DataForSlotRenderer> {
             } else {
                 const mapId         = BwHelpers.getMapId(warData);
                 labelMapName.text   = mapId == null
-                    ? `(${Lang.getText(Lang.Type.B0321)})`
+                    ? `(${Lang.getText(LangTextType.B0321)})`
                     : await WarMapModel.getMapNameInCurrentLanguage(mapId);
             }
         }

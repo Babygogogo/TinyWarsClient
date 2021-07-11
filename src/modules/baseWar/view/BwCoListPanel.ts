@@ -17,9 +17,11 @@ import * as FloatText           from "../../../utility/FloatText";
 import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as LocalStorage        from "../../../utility/LocalStorage";
 import * as Logger              from "../../../utility/Logger";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as StageManager        from "../../../utility/StageManager";
 import * as Types               from "../../../utility/Types";
@@ -106,7 +108,7 @@ export class BwCoListPanel extends UiPanel<OpenDataForBwCoListPanel> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -123,12 +125,12 @@ export class BwCoListPanel extends UiPanel<OpenDataForBwCoListPanel> {
         this._listCo.bindData(this._dataForListCo);
         this.setSelectedIndex(this._getOpenData().selectedIndex);
 
-        Notify.dispatch(Notify.Type.BwCoListPanelOpened);
+        Notify.dispatch(NotifyType.BwCoListPanelOpened);
     }
     protected async _onClosed(): Promise<void> {
         await this._showCloseAnimation();
 
-        Notify.dispatch(Notify.Type.BwCoListPanelClosed);
+        Notify.dispatch(NotifyType.BwCoListPanelClosed);
     }
 
     public setSelectedIndex(newIndex: number): void {
@@ -228,14 +230,14 @@ export class BwCoListPanel extends UiPanel<OpenDataForBwCoListPanel> {
         } else {
             this._scrCoInfo.visible = true;
 
-            this._labelNameTitle.text                   = `${Lang.getText(Lang.Type.B0162)}: `;
-            this._labelForceTitle.text                  = `${Lang.getText(Lang.Type.B0168)}: `;
-            this._labelDesignerTitle.text               = `${Lang.getText(Lang.Type.B0163)}: `;
-            this._labelBoardCostPercentageTitle.text    = `${Lang.getText(Lang.Type.B0164)}: `;
-            this._labelZoneRadiusTitle.text             = `${Lang.getText(Lang.Type.B0165)}: `;
-            this._labelEnergyBarTitle.text              = `${Lang.getText(Lang.Type.B0166)}: `;
-            this._labelCopEnergyTitle.text              = `${Lang.getText(Lang.Type.B0167)}: `;
-            this._labelScopEnergyTitle.text             = `${Lang.getText(Lang.Type.B0167)}: `;
+            this._labelNameTitle.text                   = `${Lang.getText(LangTextType.B0162)}: `;
+            this._labelForceTitle.text                  = `${Lang.getText(LangTextType.B0168)}: `;
+            this._labelDesignerTitle.text               = `${Lang.getText(LangTextType.B0163)}: `;
+            this._labelBoardCostPercentageTitle.text    = `${Lang.getText(LangTextType.B0164)}: `;
+            this._labelZoneRadiusTitle.text             = `${Lang.getText(LangTextType.B0165)}: `;
+            this._labelEnergyBarTitle.text              = `${Lang.getText(LangTextType.B0166)}: `;
+            this._labelCopEnergyTitle.text              = `${Lang.getText(LangTextType.B0167)}: `;
+            this._labelScopEnergyTitle.text             = `${Lang.getText(LangTextType.B0167)}: `;
 
             const player    = data.player;
             const coId      = player.getCoId();
@@ -248,10 +250,10 @@ export class BwCoListPanel extends UiPanel<OpenDataForBwCoListPanel> {
                 this._labelBoardCostPercentage.text = "--";
                 this._labelZoneRadius.text          = "--";
                 this._labelEnergyBar.text           = "--";
-                this._labelNoPassiveSkill.text      = Lang.getText(Lang.Type.B0001);
-                this._labelNoCop.text               = Lang.getText(Lang.Type.B0001);
+                this._labelNoPassiveSkill.text      = Lang.getText(LangTextType.B0001);
+                this._labelNoCop.text               = Lang.getText(LangTextType.B0001);
                 this._labelCopEnergy.text           = "--";
-                this._labelNoScop.text              = Lang.getText(Lang.Type.B0001);
+                this._labelNoScop.text              = Lang.getText(LangTextType.B0001);
                 this._labelScopEnergy.text          = "--";
                 this._listPassiveSkill.clear();
                 this._listCop.clear();
@@ -268,7 +270,7 @@ export class BwCoListPanel extends UiPanel<OpenDataForBwCoListPanel> {
 
                 const passiveSkills = cfg.passiveSkills || [];
                 if (!passiveSkills.length) {
-                    this._labelNoPassiveSkill.text = Lang.getText(Lang.Type.B0001);
+                    this._labelNoPassiveSkill.text = Lang.getText(LangTextType.B0001);
                     this._listPassiveSkill.clear();
                 } else {
                     this._labelNoPassiveSkill.text = "";
@@ -284,7 +286,7 @@ export class BwCoListPanel extends UiPanel<OpenDataForBwCoListPanel> {
 
                 const copSkills = player.getCoSkills(Types.CoSkillType.Power) || [];
                 if (!copSkills.length) {
-                    this._labelNoCop.text       = Lang.getText(Lang.Type.B0001);
+                    this._labelNoCop.text       = Lang.getText(LangTextType.B0001);
                     this._labelCopEnergy.text   = "--";
                     this._listCop.clear();
                 } else {
@@ -303,7 +305,7 @@ export class BwCoListPanel extends UiPanel<OpenDataForBwCoListPanel> {
 
                 const scopSkills = player.getCoSkills(Types.CoSkillType.SuperPower) || [];
                 if (!scopSkills.length) {
-                    this._labelNoScop.text      = Lang.getText(Lang.Type.B0001);
+                    this._labelNoScop.text      = Lang.getText(LangTextType.B0001);
                     this._labelScopEnergy.text  = "--";
                     this._listScop.clear();
                 } else {
@@ -328,13 +330,13 @@ export class BwCoListPanel extends UiPanel<OpenDataForBwCoListPanel> {
             this._scrHelp.visible = false;
         } else {
             this._scrHelp.visible = true;
-            this._labelHelp.setRichText(Lang.getText(Lang.Type.R0004));
+            this._labelHelp.setRichText(Lang.getText(LangTextType.R0004));
         }
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelCommanderInfo.text   = Lang.getText(Lang.Type.B0240);
-        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+        this._labelCommanderInfo.text   = Lang.getText(LangTextType.B0240);
+        this._btnBack.label             = Lang.getText(LangTextType.B0146);
     }
 }
 
@@ -360,13 +362,13 @@ class CoNameRenderer extends UiListItemRenderer<DataForCoRenderer> {
         this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
 
         if (!player) {
-            this._labelName.text    = Lang.getText(Lang.Type.B0143);
+            this._labelName.text    = Lang.getText(LangTextType.B0143);
         } else {
             const coId              = player.getCoId();
             const cfg               = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
             this._labelName.text    = cfg
                 ? `${cfg.name}`
-                : `(${Lang.getText(Lang.Type.B0001)}CO)`;
+                : `(${Lang.getText(LangTextType.B0001)}CO)`;
         }
     }
 

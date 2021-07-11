@@ -27,6 +27,8 @@ import { MeOffsetPanel }                from "./MeOffsetPanel";
 import { WeEventListPanel }             from "../../warEvent/view/WeEventListPanel";
 import { MmAcceptMapPanel }             from "../../mapManagement/view/MmAcceptMapPanel";
 import { MmRejectMapPanel }             from "../../mapManagement/view/MmRejectMapPanel";
+import { LangTextType }                 from "../../../utility/LangTextType";
+import { NotifyType }                   from "../../../utility/NotifyType";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as FlowManager                 from "../../../utility/FlowManager";
@@ -42,7 +44,7 @@ import TileBaseType                     = Types.TileBaseType;
 import TileObjectType                   = Types.TileObjectType;
 
 // eslint-disable-next-line no-shadow
-const enum MenuType {
+enum MenuType {
     Main,
     Advanced,
 }
@@ -100,12 +102,12 @@ export class MeWarMenuPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-            { type: Notify.Type.MeMapNameChanged,                   callback: this._onNotifyMeMapNameChanged },
-            { type: Notify.Type.MsgMeSubmitMap,                     callback: this._onMsgMeSubmitMap },
-            { type: Notify.Type.MsgMmReviewMap,                     callback: this._onMsgMmReviewMap },
-            { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+            { type: NotifyType.MeMapNameChanged,                   callback: this._onNotifyMeMapNameChanged },
+            { type: NotifyType.MsgMeSubmitMap,                     callback: this._onMsgMeSubmitMap },
+            { type: NotifyType.MsgMmReviewMap,                     callback: this._onMsgMmReviewMap },
+            { type: NotifyType.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,                callback: this._onTouchedBtnBack },
@@ -123,13 +125,13 @@ export class MeWarMenuPanel extends UiPanel<void> {
 
         this._updateView();
 
-        Notify.dispatch(Notify.Type.BwWarMenuPanelOpened);
+        Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
     }
     protected async _onClosed(): Promise<void> {
         this._war           = null;
         this._dataForList   = null;
 
-        Notify.dispatch(Notify.Type.BwWarMenuPanelClosed);
+        Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,10 +140,10 @@ export class MeWarMenuPanel extends UiPanel<void> {
     private _onMsgMeSubmitMap(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgMeSubmitMap.IS;
         if (data.mapRawDataErrorCode) {
-            FloatText.show(Lang.getText(Lang.Type.A0197));
+            FloatText.show(Lang.getText(LangTextType.A0197));
             FloatText.show(Lang.getErrorText(data.mapRawDataErrorCode));
         } else {
-            FloatText.show(Lang.getText(Lang.Type.A0085));
+            FloatText.show(Lang.getText(LangTextType.A0085));
         }
         this._war.setIsMapModified(false);
     }
@@ -149,9 +151,9 @@ export class MeWarMenuPanel extends UiPanel<void> {
     private _onMsgMmReviewMap(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgMmReviewMap.IS;
         if (data.isAccept) {
-            FloatText.show(Lang.getText(Lang.Type.A0092));
+            FloatText.show(Lang.getText(LangTextType.A0092));
         } else {
-            FloatText.show(Lang.getText(Lang.Type.A0093));
+            FloatText.show(Lang.getText(LangTextType.A0093));
         }
         FlowManager.gotoLobby();
     }
@@ -159,7 +161,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
     private _onMsgSpmCreateSfw(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0107),
+            content : Lang.getText(LangTextType.A0107),
             callback: () => {
                 FlowManager.gotoSinglePlayerWar({
                     slotIndex       : data.slotIndex,
@@ -212,7 +214,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
         const war = this._war;
         if (!war.getIsReviewingMap()) {
             CommonInputPanel.show({
-                title           : Lang.getText(Lang.Type.B0163),
+                title           : Lang.getText(LangTextType.B0163),
                 tips            : null,
                 currentValue    : war.getMapDesignerName(),
                 maxChars        : CommonConstants.MapMaxDesignerLength,
@@ -258,12 +260,12 @@ export class MeWarMenuPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelMenuTitle.text                   = Lang.getText(Lang.Type.B0155);
-        this._labelMapInfoTitle.text                = Lang.getText(Lang.Type.B0298);
-        this._btnModifyMapName.label                = Lang.getText(Lang.Type.B0225);
-        this._btnModifyMapDesigner.label            = Lang.getText(Lang.Type.B0163);
-        this._btnModifyMapSize.label                = Lang.getText(Lang.Type.B0300);
-        this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
+        this._labelMenuTitle.text                   = Lang.getText(LangTextType.B0155);
+        this._labelMapInfoTitle.text                = Lang.getText(LangTextType.B0298);
+        this._btnModifyMapName.label                = Lang.getText(LangTextType.B0225);
+        this._btnModifyMapDesigner.label            = Lang.getText(LangTextType.B0163);
+        this._btnModifyMapSize.label                = Lang.getText(LangTextType.B0300);
+        this._btnBack.label                         = Lang.getText(LangTextType.B0146);
     }
 
     private _updateLabelMapName(): void {
@@ -418,7 +420,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
 
     private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
         return {
-            name    : Lang.getText(Lang.Type.B0080),
+            name    : Lang.getText(LangTextType.B0080),
             callback: () => {
                 this._menuType = MenuType.Advanced;
                 this._updateListCommand();
@@ -431,7 +433,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0287),
+                name    : Lang.getText(LangTextType.B0287),
                 callback: () => {
                     MeConfirmSaveMapPanel.show();
                 },
@@ -445,10 +447,10 @@ export class MeWarMenuPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0288),
+                name    : Lang.getText(LangTextType.B0288),
                 callback: () => {
                     CommonConfirmPanel.show({
-                        content : Lang.getText(Lang.Type.A0072),
+                        content : Lang.getText(LangTextType.A0072),
                         callback: async () => {
                             const slotIndex = war.getMapSlotIndex();
                             const data      = MeModel.getData(slotIndex);
@@ -470,7 +472,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
 
     private _createCommandWarRule(): DataForCommandRenderer | null {
         return {
-            name    : Lang.getText(Lang.Type.B0314),
+            name    : Lang.getText(LangTextType.B0314),
             callback: () => {
                 const war = this._war;
                 if (!war.getIsReviewingMap()) {
@@ -481,7 +483,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
                         MeWarRulePanel.show();
                         this.close();
                     } else {
-                        FloatText.show(Lang.getText(Lang.Type.A0100));
+                        FloatText.show(Lang.getText(LangTextType.A0100));
                     }
                 }
             },
@@ -490,7 +492,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
 
     private _createCommandWarEvent(): DataForCommandRenderer | null {
         return {
-            name    : Lang.getText(Lang.Type.B0469),
+            name    : Lang.getText(LangTextType.B0469),
             callback: () => {
                 WeEventListPanel.show({
                     war: this._war,
@@ -502,7 +504,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
 
     private _createCommandMapTag(): DataForCommandRenderer | null {
         return {
-            name    : Lang.getText(Lang.Type.B0445),
+            name    : Lang.getText(LangTextType.B0445),
             callback: () => {
                 MeMapTagPanel.show();
             },
@@ -515,7 +517,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0296),
+                name    : Lang.getText(LangTextType.B0296),
                 callback: () => {
                     MmAcceptMapPanel.show({ war });
                 },
@@ -529,7 +531,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0297),
+                name    : Lang.getText(LangTextType.B0297),
                 callback: () => {
                     MmRejectMapPanel.show({ war });
                 },
@@ -539,7 +541,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
 
     private _createCommandChat(): DataForCommandRenderer | null {
         return {
-            name    : Lang.getText(Lang.Type.B0383),
+            name    : Lang.getText(LangTextType.B0383),
             callback: () => {
                 this.close();
                 ChatPanel.show({});
@@ -549,11 +551,11 @@ export class MeWarMenuPanel extends UiPanel<void> {
 
     private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
         return {
-            name    : Lang.getText(Lang.Type.B0054),
+            name    : Lang.getText(LangTextType.B0054),
             callback: () => {
                 CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0054),
-                    content : this._war.getIsMapModified() ? Lang.getText(Lang.Type.A0143) : Lang.getText(Lang.Type.A0025),
+                    title   : Lang.getText(LangTextType.B0054),
+                    content : this._war.getIsMapModified() ? Lang.getText(LangTextType.A0143) : Lang.getText(LangTextType.A0025),
                     callback: () => FlowManager.gotoLobby(),
                 });
             },
@@ -563,7 +565,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
     private _createCommandSimulation(): DataForCommandRenderer | null {
         const war = this._war;
         return {
-            name    : Lang.getText(Lang.Type.B0325),
+            name    : Lang.getText(LangTextType.B0325),
             callback: async () => {
                 const mapRawData    = war.serializeForMap();
                 const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
@@ -582,7 +584,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
                     cb();
                 } else {
                     CommonConfirmPanel.show({
-                        content         : Lang.getText(Lang.Type.A0142),
+                        content         : Lang.getText(LangTextType.A0142),
                         callback        : () => {
                             MeConfirmSaveMapPanel.show();
                         },
@@ -598,7 +600,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
     private _createCommandCreateMfr(): DataForCommandRenderer | null {
         const war = this._war;
         return {
-            name    : Lang.getText(Lang.Type.B0557),
+            name    : Lang.getText(LangTextType.B0557),
             callback: async () => {
                 const mapRawData    = war.serializeForMap();
                 const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
@@ -617,7 +619,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
                     cb();
                 } else {
                     CommonConfirmPanel.show({
-                        content         : Lang.getText(Lang.Type.A0142),
+                        content         : Lang.getText(LangTextType.A0142),
                         callback        : () => {
                             MeConfirmSaveMapPanel.show();
                         },
@@ -631,7 +633,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
     }
     private _createCommandUserSettings(): DataForCommandRenderer | null {
         return {
-            name    : Lang.getText(Lang.Type.B0560),
+            name    : Lang.getText(LangTextType.B0560),
             callback: () => {
                 UserSettingsPanel.show();
             }
@@ -642,7 +644,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0391),
+                name    : Lang.getText(LangTextType.B0391),
                 callback: () => {
                     MeClearPanel.show();
                 },
@@ -654,7 +656,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0290),
+                name    : Lang.getText(LangTextType.B0290),
                 callback: () => {
                     MeResizePanel.show();
                 },
@@ -666,7 +668,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0293),
+                name    : Lang.getText(LangTextType.B0293),
                 callback: () => {
                     MeOffsetPanel.show();
                 },
@@ -678,7 +680,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
             return null;
         } else {
             return {
-                name    : Lang.getText(Lang.Type.B0313),
+                name    : Lang.getText(LangTextType.B0313),
                 callback: () => {
                     this.close();
                     MeImportPanel.show();
@@ -728,7 +730,7 @@ class TileRenderer extends UiListItemRenderer<DataForTileRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+            { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
         ]);
 
         const tileView = this._tileView;
@@ -769,7 +771,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
         ]);
 
         this._conUnitView.addChild(this._unitView);

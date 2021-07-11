@@ -12,7 +12,9 @@ import { MeWarMenuPanel }               from "./MeWarMenuPanel";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as FlowManager                 from "../../../utility/FlowManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as MeModel                     from "../model/MeModel";
@@ -52,18 +54,18 @@ export class MeSimSettingsPanel extends UiPanel<void> {
             { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgSpmCreateSfw,    callback: this._onMsgSpmCreateSfw },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgSpmCreateSfw,    callback: this._onMsgSpmCreateSfw },
         ]);
         this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
         this._tabSettings.bindData([
             {
-                tabItemData: { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData: { name: Lang.getText(LangTextType.B0002) },
                 pageClass  : MeSimBasicSettingsPage,
             },
             {
-                tabItemData: { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData: { name: Lang.getText(LangTextType.B0003) },
                 pageClass  : MeSimAdvancedSettingsPage,
             },
         ]);
@@ -81,14 +83,14 @@ export class MeSimSettingsPanel extends UiPanel<void> {
         if (MeModel.Sim.checkIsValidWarData()) {
             SpmCreateSfwSaveSlotsPanel.show(MeModel.Sim.getWarData());
         } else {
-            FloatText.show(Lang.getText(Lang.Type.A0146));
+            FloatText.show(Lang.getText(LangTextType.A0146));
         }
     }
 
     private _onMsgSpmCreateSfw(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0107),
+            content : Lang.getText(LangTextType.A0107),
             callback: () => {
                 FlowManager.gotoSinglePlayerWar({
                     slotIndex       : data.slotIndex,
@@ -104,9 +106,9 @@ export class MeSimSettingsPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0325);
-        this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-        this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
+        this._labelMenuTitle.text   = Lang.getText(LangTextType.B0325);
+        this._btnBack.label         = Lang.getText(LangTextType.B0146);
+        this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
     }
 }
 

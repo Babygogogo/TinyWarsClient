@@ -5,7 +5,9 @@ import { UiButton }             from "../../../gameui/UiButton";
 import { UiLabel }              from "../../../gameui/UiLabel";
 import { MmWarRulePanel }       from "./MmWarRulePanel";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import * as WarMapModel         from "../../warMap/model/WarMapModel";
 import * as WarMapProxy         from "../../warMap/model/WarMapProxy";
@@ -52,7 +54,7 @@ export class MmTagChangePanel extends UiPanel<OpenDataForMmTagChangePanel> {
 
     protected async _onOpened(): Promise<void> {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
@@ -95,10 +97,10 @@ export class MmTagChangePanel extends UiPanel<OpenDataForMmTagChangePanel> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text   = Lang.getText(Lang.Type.B0444);
-        this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
-        this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-        this._btnWarRule.label  = Lang.getText(Lang.Type.B0314);
-        this._labelFog.text     = Lang.getText(Lang.Type.B0438);
+        this._labelTitle.text   = Lang.getText(LangTextType.B0444);
+        this._btnCancel.label   = Lang.getText(LangTextType.B0154);
+        this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+        this._btnWarRule.label  = Lang.getText(LangTextType.B0314);
+        this._labelFog.text     = Lang.getText(LangTextType.B0438);
     }
 }

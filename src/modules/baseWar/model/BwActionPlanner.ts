@@ -3,6 +3,7 @@ import * as GridIndexHelpers                from "../../../utility/GridIndexHelp
 import * as Helpers                         from "../../../utility/Helpers";
 import * as Logger                          from "../../../utility/Logger";
 import * as Notify                          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as UserModel                       from "../../user/model/UserModel";
 import * as Types                           from "../../../utility/Types";
 import * as VisibilityHelpers               from "../../../utility/VisibilityHelpers";
@@ -63,9 +64,9 @@ export abstract class BwActionPlanner {
     private _areaForPreviewMove     : MovableArea;
 
     private _notifyListeners: Notify.Listener[] = [
-        { type: Notify.Type.BwCursorTapped,    callback: this._onNotifyBwCursorTapped },
-        { type: Notify.Type.BwCursorDragged,   callback: this._onNotifyBwCursorDragged },
-        { type: Notify.Type.BwCursorDragEnded, callback: this._onNotifyBwCursorDragEnded },
+        { type: NotifyType.BwCursorTapped,    callback: this._onNotifyBwCursorTapped },
+        { type: NotifyType.BwCursorDragged,   callback: this._onNotifyBwCursorDragged },
+        { type: NotifyType.BwCursorDragEnded, callback: this._onNotifyBwCursorDragEnded },
     ];
 
     public init(mapSize: Types.MapSize): ClientErrorCode {
@@ -282,7 +283,7 @@ export abstract class BwActionPlanner {
         this._prevState = this._state;
         this._state     = state;
         Logger.log(`BwActionPlanner._setState() ${state}`);
-        Notify.dispatch(Notify.Type.BwActionPlannerStateChanged);
+        Notify.dispatch(NotifyType.BwActionPlannerStateChanged);
     }
 
     public setStateIdle(): void {

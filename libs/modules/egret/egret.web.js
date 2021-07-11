@@ -174,28 +174,382 @@ var egret;
     (function (web) {
         /**
          * @private
+         * 顶点数组管理对象
+         * 用来维护顶点数组
          */
-        function getOption(key) {
-            if (window.location) {
-                var search = location.search;
-                if (search == "") {
-                    return "";
-                }
-                search = search.slice(1);
-                var searchArr = search.split("&");
-                var length_1 = searchArr.length;
-                for (var i = 0; i < length_1; i++) {
-                    var str = searchArr[i];
-                    var arr = str.split("=");
-                    if (arr[0] == key) {
-                        return arr[1];
-                    }
+        var WebGLVertexArrayObject = (function () {
+            function WebGLVertexArrayObject() {
+                /*定义顶点格式
+                * (x: 8 * 4 = 32) + (y: 8 * 4 = 32) + (u: 8 * 4 = 32) + (v: 8 * 4 = 32) + (tintcolor: 8 * 4 = 32) = (8 * 4 = 32) * (x + y + u + v + tintcolor: 5);
+                */
+                this.vertSize = 5;
+                this.vertByteSize = this.vertSize * 4;
+                /*
+                *最多单次提交maxQuadsCount这么多quad
+                */
+                this.maxQuadsCount = 2048;
+                /*
+                *quad = 4个Vertex
+                */
+                this.maxVertexCount = this.maxQuadsCount * 4;
+                /*
+                *配套的Indices = quad * 6.
+                */
+                this.maxIndicesCount = this.maxQuadsCount * 6;
+                this.vertices = null;
+                this.indices = null;
+                this.indicesForMesh = null;
+                this.vertexIndex = 0;
+                this.indexIndex = 0;
+                this.hasMesh = false;
+                /*
+                * refactor:
+                */
+                this._vertices = null;
+                this._verticesFloat32View = null;
+                this._verticesUint32View = null;
+                //old
+                // const numVerts = this.maxVertexCount * this.vertSize;
+                // this.vertices = new Float32Array(numVerts);
+                ///
+                this._vertices = new ArrayBuffer(this.maxVertexCount * this.vertByteSize);
+                this._verticesFloat32View = new Float32Array(this._vertices);
+                this._verticesUint32View = new Uint32Array(this._vertices);
+                this.vertices = this._verticesFloat32View;
+                //索引缓冲，最大索引数
+                /*
+                0-------1
+                |       |
+                |       |
+                3-------2
+                0->1->2
+                0->2->3
+                两个三角形
+                */
+                var maxIndicesCount = this.maxIndicesCount;
+                this.indices = new Uint16Array(maxIndicesCount);
+                this.indicesForMesh = new Uint16Array(maxIndicesCount);
+                for (var i = 0, j = 0; i < maxIndicesCount; i += 6, j += 4) {
+                    this.indices[i + 0] = j + 0;
+                    this.indices[i + 1] = j + 1;
+                    this.indices[i + 2] = j + 2;
+                    this.indices[i + 3] = j + 0;
+                    this.indices[i + 4] = j + 2;
+                    this.indices[i + 5] = j + 3;
                 }
             }
-            return "";
-        }
-        web.getOption = getOption;
-        egret.getOption = getOption;
+            /**
+             * 是否达到最大缓存数量
+             */
+            WebGLVertexArrayObject.prototype.reachMaxSize = function (vertexCount, indexCount) {
+                if (vertexCount === void 0) { vertexCount = 4; }
+                if (indexCount === void 0) { indexCount = 6; }
+                return this.vertexIndex > this.maxVertexCount - vertexCount || this.indexIndex > this.maxIndicesCount - indexCount;
+            };
+            /**
+             * 获取缓存完成的顶点数组
+             */
+            WebGLVertexArrayObject.prototype.getVertices = function () {
+                var view = this.vertices.subarray(0, this.vertexIndex * this.vertSize);
+                return view;
+            };
+            /**
+             * 获取缓存完成的索引数组
+             */
+            WebGLVertexArrayObject.prototype.getIndices = function () {
+                return this.indices;
+            };
+            /**
+             * 获取缓存完成的mesh索引数组
+             */
+            WebGLVertexArrayObject.prototype.getMeshIndices = function () {
+                return this.indicesForMesh;
+            };
+            /**
+             * 切换成mesh索引缓存方式
+             */
+            WebGLVertexArrayObject.prototype.changeToMeshIndices = function () {
+                if (!this.hasMesh) {
+                    // 拷贝默认index信息到for mesh中
+                    for (var i = 0, l = this.indexIndex; i < l; ++i) {
+                        this.indicesForMesh[i] = this.indices[i];
+                    }
+                    this.hasMesh = true;
+                }
+            };
+            WebGLVertexArrayObject.prototype.isMesh = function () {
+                return this.hasMesh;
+            };
+            /**
+             * 默认构成矩形
+             */
+            // private defaultMeshVertices = [0, 0, 1, 0, 1, 1, 0, 1];
+            // private defaultMeshUvs = [
+            //     0, 0,
+            //     1, 0,
+            //     1, 1,
+            //     0, 1
+            // ];
+            // private defaultMeshIndices = [0, 1, 2, 0, 2, 3];
+            /**
+             * 缓存一组顶点
+             */
+            WebGLVertexArrayObject.prototype.cacheArrays = function (buffer, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight, textureSourceWidth, textureSourceHeight, meshUVs, meshVertices, meshIndices, rotated) {
+                var alpha = buffer.globalAlpha;
+                /*
+                * 混入tintcolor => alpha
+                */
+                alpha = Math.min(alpha, 1.0);
+                var globalTintColor = buffer.globalTintColor || 0xFFFFFF;
+                var currentTexture = buffer.currentTexture;
+                alpha = ((alpha < 1.0 && currentTexture && currentTexture[egret.UNPACK_PREMULTIPLY_ALPHA_WEBGL]) ?
+                    egret.WebGLUtils.premultiplyTint(globalTintColor, alpha)
+                    : globalTintColor + (alpha * 255 << 24));
+                /*
+                临时测试
+                */
+                //计算出绘制矩阵，之后把矩阵还原回之前的
+                var locWorldTransform = buffer.globalMatrix;
+                var a = locWorldTransform.a;
+                var b = locWorldTransform.b;
+                var c = locWorldTransform.c;
+                var d = locWorldTransform.d;
+                var tx = locWorldTransform.tx;
+                var ty = locWorldTransform.ty;
+                var offsetX = buffer.$offsetX;
+                var offsetY = buffer.$offsetY;
+                if (offsetX != 0 || offsetY != 0) {
+                    tx = offsetX * a + offsetY * c + tx;
+                    ty = offsetX * b + offsetY * d + ty;
+                }
+                if (!meshVertices) {
+                    if (destX != 0 || destY != 0) {
+                        tx = destX * a + destY * c + tx;
+                        ty = destX * b + destY * d + ty;
+                    }
+                    var a1 = destWidth / sourceWidth;
+                    if (a1 != 1) {
+                        a = a1 * a;
+                        b = a1 * b;
+                    }
+                    var d1 = destHeight / sourceHeight;
+                    if (d1 != 1) {
+                        c = d1 * c;
+                        d = d1 * d;
+                    }
+                }
+                if (meshVertices) {
+                    if (web.isIOS14Device()) {
+                        var vertData = [];
+                        // 计算索引位置与赋值
+                        var vertices = this.vertices;
+                        var verticesUint32View = this._verticesUint32View;
+                        var index = this.vertexIndex * this.vertSize;
+                        // 缓存顶点数组
+                        var i = 0, iD = 0, l = 0;
+                        var u = 0, v = 0, x = 0, y = 0;
+                        for (i = 0, l = meshUVs.length; i < l; i += 2) {
+                            iD = index + i * 5 / 2;
+                            x = meshVertices[i];
+                            y = meshVertices[i + 1];
+                            u = meshUVs[i];
+                            v = meshUVs[i + 1];
+                            if (rotated) {
+                                vertData.push([
+                                    a * x + c * y + tx,
+                                    b * x + d * y + ty,
+                                    (sourceX + (1.0 - v) * sourceHeight) / textureSourceWidth,
+                                    (sourceY + u * sourceWidth) / textureSourceHeight,
+                                ]);
+                            }
+                            else {
+                                vertData.push([
+                                    a * x + c * y + tx,
+                                    b * x + d * y + ty,
+                                    (sourceX + u * sourceWidth) / textureSourceWidth,
+                                    (sourceY + v * sourceHeight) / textureSourceHeight,
+                                ]);
+                            }
+                            verticesUint32View[iD + 4] = alpha;
+                        }
+                        for (var i_1 = 0; i_1 < meshIndices.length; i_1 += 3) {
+                            var data0 = vertData[meshIndices[i_1]];
+                            vertices[index++] = data0[0];
+                            vertices[index++] = data0[1];
+                            vertices[index++] = data0[2];
+                            vertices[index++] = data0[3];
+                            verticesUint32View[index++] = alpha;
+                            var data1 = vertData[meshIndices[i_1 + 1]];
+                            vertices[index++] = data1[0];
+                            vertices[index++] = data1[1];
+                            vertices[index++] = data1[2];
+                            vertices[index++] = data1[3];
+                            verticesUint32View[index++] = alpha;
+                            var data2 = vertData[meshIndices[i_1 + 2]];
+                            vertices[index++] = data2[0];
+                            vertices[index++] = data2[1];
+                            vertices[index++] = data2[2];
+                            vertices[index++] = data2[3];
+                            verticesUint32View[index++] = alpha;
+                            // 填充数据
+                            vertices[index++] = data2[0];
+                            vertices[index++] = data2[1];
+                            vertices[index++] = data2[2];
+                            vertices[index++] = data2[3];
+                            verticesUint32View[index++] = alpha;
+                        }
+                        var meshNum = meshIndices.length / 3;
+                        this.vertexIndex += 4 * meshNum;
+                        this.indexIndex += 6 * meshNum;
+                    }
+                    else {
+                        // 计算索引位置与赋值
+                        var vertices = this.vertices;
+                        var verticesUint32View = this._verticesUint32View;
+                        var index = this.vertexIndex * this.vertSize;
+                        // 缓存顶点数组
+                        var i = 0, iD = 0, l = 0;
+                        var u = 0, v = 0, x = 0, y = 0;
+                        for (i = 0, l = meshUVs.length; i < l; i += 2) {
+                            iD = index + i * 5 / 2;
+                            x = meshVertices[i];
+                            y = meshVertices[i + 1];
+                            u = meshUVs[i];
+                            v = meshUVs[i + 1];
+                            // xy
+                            vertices[iD + 0] = a * x + c * y + tx;
+                            vertices[iD + 1] = b * x + d * y + ty;
+                            // uv
+                            if (rotated) {
+                                vertices[iD + 2] = (sourceX + (1.0 - v) * sourceHeight) / textureSourceWidth;
+                                vertices[iD + 3] = (sourceY + u * sourceWidth) / textureSourceHeight;
+                            }
+                            else {
+                                vertices[iD + 2] = (sourceX + u * sourceWidth) / textureSourceWidth;
+                                vertices[iD + 3] = (sourceY + v * sourceHeight) / textureSourceHeight;
+                            }
+                            // alpha
+                            verticesUint32View[iD + 4] = alpha;
+                        }
+                        // 缓存索引数组
+                        if (this.hasMesh) {
+                            for (var i_2 = 0, l_1 = meshIndices.length; i_2 < l_1; ++i_2) {
+                                this.indicesForMesh[this.indexIndex + i_2] = meshIndices[i_2] + this.vertexIndex;
+                            }
+                        }
+                        this.vertexIndex += meshUVs.length / 2;
+                        this.indexIndex += meshIndices.length;
+                    }
+                }
+                else {
+                    var width = textureSourceWidth;
+                    var height = textureSourceHeight;
+                    var w = sourceWidth;
+                    var h = sourceHeight;
+                    sourceX = sourceX / width;
+                    sourceY = sourceY / height;
+                    var vertices = this.vertices;
+                    var verticesUint32View = this._verticesUint32View;
+                    var index = this.vertexIndex * this.vertSize;
+                    if (rotated) {
+                        var temp = sourceWidth;
+                        sourceWidth = sourceHeight / width;
+                        sourceHeight = temp / height;
+                        // xy
+                        vertices[index++] = tx;
+                        vertices[index++] = ty;
+                        // uv
+                        vertices[index++] = sourceWidth + sourceX;
+                        vertices[index++] = sourceY;
+                        // alpha
+                        verticesUint32View[index++] = alpha;
+                        // xy
+                        vertices[index++] = a * w + tx;
+                        vertices[index++] = b * w + ty;
+                        // uv
+                        vertices[index++] = sourceWidth + sourceX;
+                        vertices[index++] = sourceHeight + sourceY;
+                        // alpha
+                        verticesUint32View[index++] = alpha;
+                        // xy
+                        vertices[index++] = a * w + c * h + tx;
+                        vertices[index++] = d * h + b * w + ty;
+                        // uv
+                        vertices[index++] = sourceX;
+                        vertices[index++] = sourceHeight + sourceY;
+                        // alpha
+                        verticesUint32View[index++] = alpha;
+                        // xy
+                        vertices[index++] = c * h + tx;
+                        vertices[index++] = d * h + ty;
+                        // uv
+                        vertices[index++] = sourceX;
+                        vertices[index++] = sourceY;
+                        // alpha
+                        verticesUint32View[index++] = alpha;
+                    }
+                    else {
+                        sourceWidth = sourceWidth / width;
+                        sourceHeight = sourceHeight / height;
+                        // xy
+                        vertices[index++] = tx;
+                        vertices[index++] = ty;
+                        // uv
+                        vertices[index++] = sourceX;
+                        vertices[index++] = sourceY;
+                        // alpha
+                        verticesUint32View[index++] = alpha;
+                        // xy
+                        vertices[index++] = a * w + tx;
+                        vertices[index++] = b * w + ty;
+                        // uv
+                        vertices[index++] = sourceWidth + sourceX;
+                        vertices[index++] = sourceY;
+                        // alpha
+                        verticesUint32View[index++] = alpha;
+                        // xy
+                        vertices[index++] = a * w + c * h + tx;
+                        vertices[index++] = d * h + b * w + ty;
+                        // uv
+                        vertices[index++] = sourceWidth + sourceX;
+                        vertices[index++] = sourceHeight + sourceY;
+                        // alpha
+                        verticesUint32View[index++] = alpha;
+                        // xy
+                        vertices[index++] = c * h + tx;
+                        vertices[index++] = d * h + ty;
+                        // uv
+                        vertices[index++] = sourceX;
+                        vertices[index++] = sourceHeight + sourceY;
+                        // alpha
+                        verticesUint32View[index++] = alpha;
+                    }
+                    // 缓存索引数组
+                    if (this.hasMesh) {
+                        var indicesForMesh = this.indicesForMesh;
+                        indicesForMesh[this.indexIndex + 0] = 0 + this.vertexIndex;
+                        indicesForMesh[this.indexIndex + 1] = 1 + this.vertexIndex;
+                        indicesForMesh[this.indexIndex + 2] = 2 + this.vertexIndex;
+                        indicesForMesh[this.indexIndex + 3] = 0 + this.vertexIndex;
+                        indicesForMesh[this.indexIndex + 4] = 2 + this.vertexIndex;
+                        indicesForMesh[this.indexIndex + 5] = 3 + this.vertexIndex;
+                    }
+                    this.vertexIndex += 4;
+                    this.indexIndex += 6;
+                }
+            };
+            WebGLVertexArrayObject.prototype.clear = function () {
+                this.hasMesh = false;
+                this.vertexIndex = 0;
+                this.indexIndex = 0;
+            };
+            return WebGLVertexArrayObject;
+        }());
+        web.WebGLVertexArrayObject = WebGLVertexArrayObject;
+        __reflect(WebGLVertexArrayObject.prototype, "egret.web.WebGLVertexArrayObject");
+        web.isIOS14Device = function () {
+            return false;
+        };
     })(web = egret.web || (egret.web = {}));
 })(egret || (egret = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -232,141 +586,28 @@ var egret;
     (function (web) {
         /**
          * @private
-         * @inheritDoc
          */
-        var HtmlSoundChannel = (function (_super) {
-            __extends(HtmlSoundChannel, _super);
-            /**
-             * @private
-             */
-            function HtmlSoundChannel(audio) {
-                var _this = _super.call(this) || this;
-                /**
-                 * @private
-                 */
-                _this.$startTime = 0;
-                /**
-                 * @private
-                 */
-                _this.audio = null;
-                //声音是否已经播放完成
-                _this.isStopped = false;
-                _this.canPlay = function () {
-                    _this.audio.removeEventListener("canplay", _this.canPlay);
-                    try {
-                        _this.audio.currentTime = _this.$startTime;
+        function getOption(key) {
+            if (window.location) {
+                var search = location.search;
+                if (search == "") {
+                    return "";
+                }
+                search = search.slice(1);
+                var searchArr = search.split("&");
+                var length_1 = searchArr.length;
+                for (var i = 0; i < length_1; i++) {
+                    var str = searchArr[i];
+                    var arr = str.split("=");
+                    if (arr[0] == key) {
+                        return arr[1];
                     }
-                    catch (e) {
-                    }
-                    finally {
-                        _this.audio.play();
-                    }
-                };
-                /**
-                 * @private
-                 */
-                _this.onPlayEnd = function () {
-                    if (_this.$loops == 1) {
-                        _this.stop();
-                        _this.dispatchEventWith(egret.Event.SOUND_COMPLETE);
-                        return;
-                    }
-                    if (_this.$loops > 0) {
-                        _this.$loops--;
-                    }
-                    /////////////
-                    //this.audio.load();
-                    _this.$play();
-                };
-                /**
-                 * @private
-                 */
-                _this._volume = 1;
-                audio.addEventListener("ended", _this.onPlayEnd);
-                _this.audio = audio;
-                return _this;
+                }
             }
-            HtmlSoundChannel.prototype.$play = function () {
-                if (this.isStopped) {
-                    egret.$error(1036);
-                    return;
-                }
-                try {
-                    //this.audio.pause();
-                    this.audio.volume = this._volume;
-                    this.audio.currentTime = this.$startTime;
-                }
-                catch (e) {
-                    this.audio.addEventListener("canplay", this.canPlay);
-                    return;
-                }
-                this.audio.play();
-            };
-            /**
-             * @private
-             * @inheritDoc
-             */
-            HtmlSoundChannel.prototype.stop = function () {
-                if (!this.audio)
-                    return;
-                if (!this.isStopped) {
-                    egret.sys.$popSoundChannel(this);
-                }
-                this.isStopped = true;
-                var audio = this.audio;
-                audio.removeEventListener("ended", this.onPlayEnd);
-                audio.removeEventListener("canplay", this.canPlay);
-                audio.volume = 0;
-                this._volume = 0;
-                this.audio = null;
-                var url = this.$url;
-                //延迟一定时间再停止，规避chrome报错
-                window.setTimeout(function () {
-                    audio.pause();
-                    web.HtmlSound.$recycle(url, audio);
-                }, 200);
-            };
-            Object.defineProperty(HtmlSoundChannel.prototype, "volume", {
-                /**
-                 * @private
-                 * @inheritDoc
-                 */
-                get: function () {
-                    return this._volume;
-                },
-                /**
-                 * @inheritDoc
-                 */
-                set: function (value) {
-                    if (this.isStopped) {
-                        egret.$error(1036);
-                        return;
-                    }
-                    this._volume = value;
-                    if (!this.audio)
-                        return;
-                    this.audio.volume = value;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(HtmlSoundChannel.prototype, "position", {
-                /**
-                 * @private
-                 * @inheritDoc
-                 */
-                get: function () {
-                    if (!this.audio)
-                        return 0;
-                    return this.audio.currentTime;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return HtmlSoundChannel;
-        }(egret.EventDispatcher));
-        web.HtmlSoundChannel = HtmlSoundChannel;
-        __reflect(HtmlSoundChannel.prototype, "egret.web.HtmlSoundChannel", ["egret.SoundChannel", "egret.IEventDispatcher"]);
+            return "";
+        }
+        web.getOption = getOption;
+        egret.getOption = getOption;
     })(web = egret.web || (egret.web = {}));
 })(egret || (egret = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -656,14 +897,18 @@ var egret;
                  * @private
                  */
                 _this._startTime = 0;
-                if (_this.context["createGain"]) {
-                    _this.gain = _this.context["createGain"]();
-                }
-                else {
-                    _this.gain = _this.context["createGainNode"]();
-                }
+                _this.initGain();
                 return _this;
             }
+            WebAudioSoundChannel.prototype.initGain = function () {
+                this.gain = null;
+                if (this.context["createGain"]) {
+                    this.gain = this.context["createGain"]();
+                }
+                else {
+                    this.gain = this.context["createGainNode"]();
+                }
+            };
             WebAudioSoundChannel.prototype.$play = function () {
                 if (this.isStopped) {
                     egret.$error(1036);
@@ -886,9 +1131,14 @@ var egret;
                 else {
                     video = this.video;
                 }
+                if (url.indexOf("http://") != -1 || url.indexOf("HTTP://") != -1 || url.indexOf("https://") != -1 || url.indexOf("HTTPS://") != -1) {
+                    video.crossOrigin = "anonymous";
+                }
                 video.src = url;
                 video.setAttribute("autoplay", "autoplay");
                 video.setAttribute("webkit-playsinline", "true");
+                video.setAttribute("playsinline", "true");
+                video.setAttribute("x5-video-player-type", "h5-page");
                 video.addEventListener("canplay", this.onVideoLoaded);
                 video.addEventListener("error", function () { return _this.onVideoError(); });
                 video.addEventListener("ended", function () { return _this.onVideoEnded(); });
@@ -969,6 +1219,7 @@ var egret;
                 if (playFullScreen) {
                     if (video.parentElement == null) {
                         video.removeAttribute("webkit-playsinline");
+                        video.removeAttribute("playsinline");
                         document.body.appendChild(video);
                     }
                     egret.stopTick(this.markDirty, this);
@@ -979,6 +1230,7 @@ var egret;
                         video.parentElement.removeChild(video);
                     }
                     video.setAttribute("webkit-playsinline", "true");
+                    video.setAttribute("playsinline", "true");
                     this.setFullScreenMonitor(false);
                     egret.startTick(this.markDirty, this);
                     if (egret.Capabilities.isMobile) {
@@ -1040,6 +1292,10 @@ var egret;
                     document['webkitExitFullscreen']();
                 }
                 else {
+                    this.video.style.display = "none";
+                }
+                if (this.video && this.video.parentElement) {
+                    this.video.parentElement.removeChild(this.video);
                 }
             };
             /**
@@ -1049,6 +1305,9 @@ var egret;
             WebVideo.prototype.onVideoEnded = function () {
                 this.pause();
                 this.isPlayed = false;
+                if (this._fullscreen) {
+                    this.exitFullscreen();
+                }
                 this.dispatchEventWith(egret.Event.ENDED);
             };
             /**
@@ -1056,6 +1315,7 @@ var egret;
              *
              */
             WebVideo.prototype.onVideoError = function () {
+                console.error("video errorCode:", this.video.error.code);
                 this.dispatchEventWith(egret.IOErrorEvent.IO_ERROR);
             };
             /**
@@ -1964,10 +2224,16 @@ var egret;
              * @private
              *
              */
-            HTML5StageText.prototype.$show = function () {
+            HTML5StageText.prototype.$show = function (active) {
+                if (active === void 0) { active = true; }
                 if (!this.htmlInput.isCurrentStageText(this)) {
                     this.inputElement = this.htmlInput.getInputElement(this);
                     if (!this.$textfield.multiline) {
+                        if (this.inputElement.type == "password" && this.$textfield.inputType != "password") {
+                            //解决安卓手机切换到安全键盘后无法切换回普通键盘的问题
+                            this.htmlInput.initInputElement(false);
+                            this.inputElement = this.htmlInput.getInputElement(this);
+                        }
                         this.inputElement.type = this.$textfield.inputType;
                     }
                     else {
@@ -1982,6 +2248,22 @@ var egret;
                 //标记当前文本被选中
                 this._isNeedShow = true;
                 this._initElement();
+                if (active) {
+                    this.activeShowKeyboard();
+                }
+            };
+            HTML5StageText.prototype.activeShowKeyboard = function () {
+                if (this.htmlInput._needShow) {
+                    // this.htmlInput._needShow = false;
+                    this._isNeedShow = false;
+                    this.dispatchEvent(new egret.Event("focus"));
+                    this.executeShow();
+                    this.htmlInput.show();
+                }
+                else {
+                    this.htmlInput.blurInputElement();
+                    this.htmlInput.disposeInputElement();
+                }
             };
             /**
              * @private
@@ -2009,9 +2291,10 @@ var egret;
              *
              */
             HTML5StageText.prototype.executeShow = function () {
-                var self = this;
                 //打开
-                this.inputElement.value = this.$getText();
+                if (this.inputElement.value !== this.$getText()) {
+                    this.inputElement.value = this.$getText();
+                }
                 if (this.inputElement.onblur == null) {
                     this.inputElement.onblur = this.onBlurHandler.bind(this);
                 }
@@ -2020,7 +2303,7 @@ var egret;
                 }
                 this.$resetStageText();
                 if (this.$textfield.maxChars > 0) {
-                    this.inputElement.setAttribute("maxlength", this.$textfield.maxChars);
+                    this.inputElement.setAttribute("maxlength", this.$textfield.maxChars + "");
                 }
                 else {
                     this.inputElement.removeAttribute("maxlength");
@@ -2131,8 +2414,8 @@ var egret;
                     e.stopImmediatePropagation();
                     //e.preventDefault();
                     this._isNeedShow = false;
-                    this.executeShow();
                     this.dispatchEvent(new egret.Event("focus"));
+                    this.executeShow();
                 }
             };
             /**
@@ -2187,7 +2470,11 @@ var egret;
                     else {
                         tw = textfield.width;
                     }
-                    this.setElementStyle("width", tw * this._gscaleX + "px");
+                    var inputWidth = tw * this._gscaleX;
+                    var scale = (textfield.scaleX * egret.sys.DisplayList.$canvasScaleX) / (textfield.scaleY * egret.sys.DisplayList.$canvasScaleY);
+                    this.setElementStyle("width", inputWidth / scale + "px");
+                    this.setElementStyle("transform", "scale(" + scale + ",  1)");
+                    this.setElementStyle("left", (scale - 1) * inputWidth / scale / 2 + "px");
                     this.setElementStyle("verticalAlign", textfield.verticalAlign);
                     if (textfield.multiline) {
                         this.setAreaHeight();
@@ -2231,6 +2518,7 @@ var egret;
          */
         var HTMLInput = (function () {
             function HTMLInput() {
+                var _this = this;
                 /**
                  * @private
                  */
@@ -2243,6 +2531,17 @@ var egret;
                  * @private
                  */
                 this.$scaleY = 1;
+                this.stageTextClickHandler = function (e) {
+                    if (_this._needShow) {
+                        _this._needShow = false;
+                        _this._stageText._onClickHandler(e);
+                        _this.show();
+                    }
+                    else {
+                        _this.blurInputElement();
+                        _this.disposeInputElement();
+                    }
+                };
             }
             /**
              * @private
@@ -2272,6 +2571,9 @@ var egret;
                 dom.style.top = "0px";
                 dom.style.border = "none";
                 dom.style.padding = "0";
+                dom.ontouchmove = function (e) {
+                    e.preventDefault();
+                };
             };
             /**
              * @private
@@ -2314,20 +2616,31 @@ var egret;
                     self._inputDIV.style.top = "-100px";
                     self._inputDIV.style[egret.web.getPrefixStyleName("transformOrigin")] = "0% 0% 0px";
                     stageDelegateDiv.appendChild(self._inputDIV);
-                    this.canvas.addEventListener("click", function (e) {
-                        if (self._needShow) {
-                            self._needShow = false;
-                            self._stageText._onClickHandler(e);
-                            self.show();
-                        }
-                        else {
-                            if (self._inputElement) {
-                                self.clearInputElement();
-                                self._inputElement.blur();
-                                self._inputElement = null;
-                            }
-                        }
-                    });
+                    // if (egret.Capabilities.isMobile) {
+                    //     let downTime = 0;
+                    //     let screenX: number, screenY: number;
+                    //     this.canvas.addEventListener("touchstart", (e) => {
+                    //         downTime = egret.getTimer();
+                    //         for (let touch of e.touches) {
+                    //             screenX = touch.screenX;
+                    //             screenY = touch.screenY;
+                    //         }
+                    //     });
+                    //     this.canvas.addEventListener("touchend", (e) => {
+                    //         const upTime = egret.getTimer();
+                    //         const timeDelay = upTime - downTime;
+                    //         for (let touch of e.changedTouches) {
+                    //             const offset = Math.sqrt(Math.pow(touch.screenX - screenX, 2) + Math.pow(touch.screenY - screenY, 2))
+                    //             if (timeDelay < 300 && offset < 3) {
+                    //                 this.stageTextClickHandler(e);
+                    //             }
+                    //         }
+                    //         downTime = 0;
+                    //         screenX = screenY = 0;
+                    //     });
+                    // } else {
+                    this.canvas.addEventListener("click", this.stageTextClickHandler);
+                    // }
                     self.initInputElement(true);
                     self.initInputElement(false);
                 }
@@ -2338,12 +2651,20 @@ var egret;
                 //增加1个空的textarea
                 var inputElement;
                 if (multiline) {
+                    inputElement = document.getElementById("egretTextarea");
+                    if (inputElement && inputElement.parentNode) {
+                        inputElement.parentNode.removeChild(inputElement);
+                    }
                     inputElement = document.createElement("textarea");
                     inputElement.style["resize"] = "none";
                     self._multiElement = inputElement;
                     inputElement.id = "egretTextarea";
                 }
                 else {
+                    inputElement = document.getElementById("egretInput");
+                    if (inputElement && inputElement.parentNode) {
+                        inputElement.parentNode.removeChild(inputElement);
+                    }
                     inputElement = document.createElement("input");
                     self._simpleElement = inputElement;
                     inputElement.id = "egretInput";
@@ -2359,12 +2680,23 @@ var egret;
                 inputElement.style.overflow = "hidden";
                 inputElement.style.wordBreak = "break-all";
                 //隐藏输入框
-                inputElement.style.opacity = 0;
+                inputElement.style.opacity = "0";
+                var inputLock = false;
                 inputElement.oninput = function () {
-                    if (self._stageText) {
+                    if (self._stageText && !inputLock) {
                         self._stageText._onInput();
                     }
                 };
+                // 防止win10自带输入法多次触发oninput方法
+                inputElement.addEventListener('compositionstart', function () {
+                    inputLock = true;
+                });
+                inputElement.addEventListener('compositionend', function () {
+                    inputLock = false;
+                    if (self._stageText && !inputLock) {
+                        self._stageText._onInput();
+                    }
+                });
             };
             /**
              * @private
@@ -2375,7 +2707,7 @@ var egret;
                 var inputElement = self._inputElement;
                 //隐藏输入框
                 egret.$callAsync(function () {
-                    inputElement.style.opacity = 1;
+                    inputElement.style.opacity = "1";
                 }, self);
             };
             /**
@@ -2389,8 +2721,11 @@ var egret;
                         this._inputElement.blur();
                     }
                     this.clearInputElement();
+                    if (this._inputElement && this._inputDIV.contains(this._inputElement)) {
+                        this._inputDIV.removeChild(this._inputElement);
+                    }
+                    this._needShow = false;
                 }
-                this._needShow = false;
             };
             /**
              * @private
@@ -2406,7 +2741,7 @@ var egret;
                     self._inputElement.style.height = "12px";
                     self._inputElement.style.left = "0px";
                     self._inputElement.style.top = "0px";
-                    self._inputElement.style.opacity = 0;
+                    self._inputElement.style.opacity = "0";
                     var otherElement = void 0;
                     if (self._simpleElement == self._inputElement) {
                         otherElement = self._multiElement;
@@ -2419,11 +2754,15 @@ var egret;
                     self._inputDIV.style.top = "-100px";
                     self._inputDIV.style.height = 0 + "px";
                     self._inputDIV.style.width = 0 + "px";
+                    self._inputElement.blur();
                 }
                 if (self._stageText) {
                     self._stageText._onDisconnect();
                     self._stageText = null;
                     this.canvas['userTyping'] = false;
+                    if (this.finishUserTyping) {
+                        this.finishUserTyping();
+                    }
                 }
             };
             /**
@@ -2451,7 +2790,25 @@ var egret;
                     otherElement = self._simpleElement;
                 }
                 otherElement.style.display = "none";
+                if (this._inputElement && !this._inputDIV.contains(this._inputElement)) {
+                    this._inputDIV.appendChild(this._inputElement);
+                }
                 return self._inputElement;
+            };
+            /**
+             * @private
+             */
+            HTMLInput.prototype.blurInputElement = function () {
+                if (this._inputElement) {
+                    this.clearInputElement();
+                    this._inputElement.blur();
+                }
+            };
+            /**
+             * @private
+             */
+            HTMLInput.prototype.disposeInputElement = function () {
+                this._inputElement = null;
             };
             return HTMLInput;
         }());
@@ -2552,8 +2909,8 @@ var egret;
                 font += "italic ";
             if (bold)
                 font += "bold ";
-            font += (fontSize || 12) + "px ";
-            font += (fontFamily || "Arial");
+            font += ((typeof fontSize == "number" && fontSize > 0) ? fontSize : 12) + "px ";
+            font += ((typeof fontFamily == "string" && fontFamily != "") ? fontFamily : "Arial");
             context.font = font;
             return egret.sys.measureTextWith(context, text);
         }
@@ -2965,16 +3322,26 @@ var egret;
          * @private
          */
         web.WebLifeCycleHandler = function (context) {
-            var handleVisibilityChange = function () {
-                if (!document[hidden]) {
-                    context.resume();
-                }
-                else {
-                    context.pause();
+            var resume = function () {
+                context.resume();
+                /** 解决 ios13 页面切到后台再拉起，声音无法播放 */
+                if (web.Html5Capatibility._audioType == web.AudioType.WEB_AUDIO && web.WebAudioDecode.initAudioContext) {
+                    web.WebAudioDecode.initAudioContext();
                 }
             };
-            window.addEventListener("focus", context.resume, false);
-            window.addEventListener("blur", context.pause, false);
+            var pause = function () {
+                context.pause();
+            };
+            var handleVisibilityChange = function () {
+                if (!document[hidden]) {
+                    resume();
+                }
+                else {
+                    pause();
+                }
+            };
+            window.addEventListener("focus", resume, false);
+            window.addEventListener("blur", pause, false);
             var hidden, visibilityChange;
             if (typeof document.hidden !== "undefined") {
                 hidden = "hidden";
@@ -2997,8 +3364,8 @@ var egret;
                 visibilityChange = "ovisibilitychange";
             }
             if ("onpageshow" in window && "onpagehide" in window) {
-                window.addEventListener("pageshow", context.resume, false);
-                window.addEventListener("pagehide", context.pause, false);
+                window.addEventListener("pageshow", resume, false);
+                window.addEventListener("pagehide", pause, false);
             }
             if (hidden && visibilityChange) {
                 document.addEventListener(visibilityChange, handleVisibilityChange, false);
@@ -3016,10 +3383,10 @@ var egret;
                 browser.execWebFn.postX5GamePlayerMessage = function (event) {
                     var eventType = event.type;
                     if (eventType == "app_enter_background") {
-                        context.pause();
+                        pause();
                     }
                     else if (eventType == "app_enter_foreground") {
-                        context.resume();
+                        resume();
                     }
                 };
                 window["browser"] = browser;
@@ -3102,7 +3469,26 @@ var egret;
                 if (canUseWebAudio) {
                     try {
                         //防止某些chrome版本创建异常问题
-                        web.WebAudioDecode.ctx = new (window["AudioContext"] || window["webkitAudioContext"] || window["mozAudioContext"])();
+                        web.WebAudioDecode.initAudioContext = function () {
+                            if (web.WebAudioDecode.ctx) {
+                                try {
+                                    web.WebAudioDecode.ctx.close();
+                                }
+                                catch (e) {
+                                }
+                            }
+                            web.WebAudioDecode.ctx = new (window["AudioContext"] || window["webkitAudioContext"] || window["mozAudioContext"])();
+                            var useingChannel = egret.sys.usingChannel;
+                            for (var _i = 0, useingChannel_1 = useingChannel; _i < useingChannel_1.length; _i++) {
+                                var channel = useingChannel_1[_i];
+                                var webSoundChannel = channel;
+                                webSoundChannel.context = web.WebAudioDecode.ctx;
+                                webSoundChannel.initGain();
+                                webSoundChannel.$startTime = webSoundChannel.position;
+                                webSoundChannel.$play();
+                            }
+                        };
+                        web.WebAudioDecode.initAudioContext();
                     }
                     catch (e) {
                         canUseWebAudio = false;
@@ -3263,7 +3649,11 @@ var egret;
          * 创建一个canvas。
          */
         function mainCanvas(width, height) {
-            return createCanvas(width, height);
+            var canvas = createCanvas(width, height);
+            if (egret.pro.egret2dDriveMode) {
+                egret.pro.mainCanvas = canvas;
+            }
+            return canvas;
         }
         egret.sys.mainCanvas = mainCanvas;
         function createCanvas(width, height) {
@@ -3462,6 +3852,49 @@ var egret;
         egret.sys.resizeCanvasRenderBuffer = resizeCanvasRenderBuffer;
         egret.Geolocation = egret.web.WebGeolocation;
         egret.Motion = egret.web.WebMotion;
+        /**
+         *
+         * @param name
+         * @param path
+         */
+        function registerFontMapping(name, path) {
+            if (window.FontFace) {
+                return loadFontByFontFace(name, path);
+            }
+            else {
+                return loadFontByWebStyle(name, path);
+            }
+        }
+        egret.sys.registerFontMapping = registerFontMapping;
+        function loadFontByFontFace(name, path) {
+            var fontResCache = egret.sys.fontResourceCache;
+            if (!fontResCache || !fontResCache[path]) {
+                console.warn("registerFontMapping_WARN: Can not find TTF file:" + path + ", please load file first.");
+                return;
+            }
+            var resCache = fontResCache[path];
+            var fontFace = new window.FontFace(name, resCache);
+            document.fonts.add(fontFace);
+            fontFace.load().catch(function (err) {
+                console.error("loadFontError:", err);
+            });
+        }
+        ;
+        function loadFontByWebStyle(name, path) {
+            var styleElement = document.createElement("style");
+            styleElement.type = "text/css";
+            styleElement.textContent = "\n            @font-face\n            {\n                font-family:\"" + name + "\";\n                src:url(\"" + path + "\");\n            }";
+            styleElement.onerror = function (err) {
+                console.error("loadFontError:", err);
+            };
+            document.body.appendChild(styleElement);
+        }
+        web.isIOS14Device = function () {
+            return egret.Capabilities.runtimeType == egret.RuntimeType.WEB
+                && egret.Capabilities.os == "iOS"
+                && egret.Capabilities.isMobile
+                && /iPhone OS 14/.test(window.navigator.userAgent);
+        };
     })(web = egret.web || (egret.web = {}));
 })(egret || (egret = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -3529,6 +3962,21 @@ var egret;
             var ua = navigator.userAgent.toLowerCase();
             if (ua.indexOf("egretnative") >= 0 && ua.indexOf("egretwebview") == -1) {
                 egret.Capabilities["runtimeType" + ""] = egret.RuntimeType.RUNTIME2;
+            }
+            // 是否启动3d环境
+            if (options.pro) {
+                egret.pro.egret2dDriveMode = true;
+                try {
+                    if (window['startup']) {
+                        window['startup']();
+                    }
+                    else {
+                        console.error("EgretPro.js don't has function:window.startup");
+                    }
+                }
+                catch (e) {
+                    console.error(e);
+                }
             }
             if (ua.indexOf("egretnative") >= 0 && egret.nativeRender) {
                 egret_native.addModuleCallback(function () {
@@ -3656,6 +4104,7 @@ var egret;
                 egret.Capabilities["renderMode" + ""] = "canvas";
             }
         }
+        egret.sys.setRenderMode = setRenderMode;
         /**
          * @private
          * 启动心跳计时器。
@@ -4184,11 +4633,13 @@ var egret;
             __extends(WebPlayer, _super);
             function WebPlayer(container, options) {
                 var _this = _super.call(this) || this;
+                _this.updateAfterTyping = false;
                 _this.init(container, options);
                 _this.initOrientation();
                 return _this;
             }
             WebPlayer.prototype.init = function (container, options) {
+                var _this = this;
                 console.log("Egret Engine Version:", egret.Capabilities.engineVersion);
                 var option = this.readOption(container, options);
                 var stage = new egret.Stage();
@@ -4218,6 +4669,14 @@ var egret;
                 this.player = player;
                 this.webTouchHandler = webTouch;
                 this.webInput = webInput;
+                webInput.finishUserTyping = function () {
+                    if (_this.updateAfterTyping) {
+                        setTimeout(function () {
+                            _this.updateScreenSize();
+                            _this.updateAfterTyping = false;
+                        }, 300);
+                    }
+                };
                 egret.web.$cacheTextAdapter(webInput, stage, container, canvas);
                 this.updateScreenSize();
                 this.updateMaxTouches();
@@ -4280,8 +4739,10 @@ var egret;
              */
             WebPlayer.prototype.updateScreenSize = function () {
                 var canvas = this.canvas;
-                if (canvas['userTyping'])
+                if (canvas['userTyping']) {
+                    this.updateAfterTyping = true;
                     return;
+                }
                 var option = this.playerOption;
                 var screenRect = this.container.getBoundingClientRect();
                 var top = 0;
@@ -4336,10 +4797,10 @@ var egret;
                 var scalex = displayWidth / stageWidth, scaley = displayHeight / stageHeight;
                 var canvasScaleX = scalex * egret.sys.DisplayList.$canvasScaleFactor;
                 var canvasScaleY = scaley * egret.sys.DisplayList.$canvasScaleFactor;
-                if (egret.Capabilities.renderMode == "canvas") {
-                    canvasScaleX = Math.ceil(canvasScaleX);
-                    canvasScaleY = Math.ceil(canvasScaleY);
-                }
+                // if (egret.Capabilities.renderMode == "canvas") {
+                canvasScaleX = Math.ceil(canvasScaleX);
+                canvasScaleY = Math.ceil(canvasScaleY);
+                // }
                 var m = egret.Matrix.create();
                 m.identity();
                 m.scale(scalex / canvasScaleX, scaley / canvasScaleY);
@@ -4442,6 +4903,9 @@ var egret;
                 var renderTexture = void 0;
                 //webgl下非RenderTexture纹理先画到RenderTexture
                 if (!texture.$renderBuffer) {
+                    if (egret.sys.systemRenderer.renderClear) {
+                        egret.sys.systemRenderer.renderClear();
+                    }
                     renderTexture = new egret.RenderTexture();
                     renderTexture.drawToTexture(new egret.Bitmap(texture));
                 }
@@ -4968,11 +5432,13 @@ var egret;
                     document.body.appendChild(audio);
                 }
                 audio.load();
+                HtmlSound.loadingSoundMap[url] = audio;
                 this.originAudio = audio;
                 if (HtmlSound.clearAudios[this.url]) {
                     delete HtmlSound.clearAudios[this.url];
                 }
                 function onAudioLoaded() {
+                    delete HtmlSound.loadingSoundMap[url];
                     HtmlSound.$recycle(self.url, audio);
                     removeListeners();
                     if (ua.indexOf("firefox") >= 0) {
@@ -5084,6 +5550,7 @@ var egret;
              * @language zh_CN
              */
             HtmlSound.EFFECT = "effect";
+            HtmlSound.loadingSoundMap = {};
             /**
              * @private
              */
@@ -5477,314 +5944,141 @@ var egret;
     (function (web) {
         /**
          * @private
-         * 顶点数组管理对象
-         * 用来维护顶点数组
+         * @inheritDoc
          */
-        var WebGLVertexArrayObject = (function () {
-            function WebGLVertexArrayObject() {
-                /*定义顶点格式
-                * (x: 8 * 4 = 32) + (y: 8 * 4 = 32) + (u: 8 * 4 = 32) + (v: 8 * 4 = 32) + (tintcolor: 8 * 4 = 32) = (8 * 4 = 32) * (x + y + u + v + tintcolor: 5);
-                */
-                this.vertSize = 5;
-                this.vertByteSize = this.vertSize * 4;
-                /*
-                *最多单次提交maxQuadsCount这么多quad
-                */
-                this.maxQuadsCount = 2048;
-                /*
-                *quad = 4个Vertex
-                */
-                this.maxVertexCount = this.maxQuadsCount * 4;
-                /*
-                *配套的Indices = quad * 6.
-                */
-                this.maxIndicesCount = this.maxQuadsCount * 6;
-                this.vertices = null;
-                this.indices = null;
-                this.indicesForMesh = null;
-                this.vertexIndex = 0;
-                this.indexIndex = 0;
-                this.hasMesh = false;
-                /*
-                * refactor:
-                */
-                this._vertices = null;
-                this._verticesFloat32View = null;
-                this._verticesUint32View = null;
-                //old
-                var numVerts = this.maxVertexCount * this.vertSize;
-                this.vertices = new Float32Array(numVerts);
-                ///
-                this._vertices = new ArrayBuffer(this.maxVertexCount * this.vertByteSize);
-                this._verticesFloat32View = new Float32Array(this._vertices);
-                this._verticesUint32View = new Uint32Array(this._vertices);
-                this.vertices = this._verticesFloat32View;
-                //索引缓冲，最大索引数
-                /*
-                0-------1
-                |       |
-                |       |
-                3-------2
-                0->1->2
-                0->2->3
-                两个三角形
-                */
-                var maxIndicesCount = this.maxIndicesCount;
-                this.indices = new Uint16Array(maxIndicesCount);
-                this.indicesForMesh = new Uint16Array(maxIndicesCount);
-                for (var i = 0, j = 0; i < maxIndicesCount; i += 6, j += 4) {
-                    this.indices[i + 0] = j + 0;
-                    this.indices[i + 1] = j + 1;
-                    this.indices[i + 2] = j + 2;
-                    this.indices[i + 3] = j + 0;
-                    this.indices[i + 4] = j + 2;
-                    this.indices[i + 5] = j + 3;
-                }
+        var HtmlSoundChannel = (function (_super) {
+            __extends(HtmlSoundChannel, _super);
+            /**
+             * @private
+             */
+            function HtmlSoundChannel(audio) {
+                var _this = _super.call(this) || this;
+                /**
+                 * @private
+                 */
+                _this.$startTime = 0;
+                /**
+                 * @private
+                 */
+                _this.audio = null;
+                //声音是否已经播放完成
+                _this.isStopped = false;
+                _this.canPlay = function () {
+                    _this.audio.removeEventListener("canplay", _this.canPlay);
+                    try {
+                        _this.audio.currentTime = _this.$startTime;
+                    }
+                    catch (e) {
+                    }
+                    finally {
+                        _this.audio.play();
+                    }
+                };
+                /**
+                 * @private
+                 */
+                _this.onPlayEnd = function () {
+                    if (_this.$loops == 1) {
+                        _this.stop();
+                        _this.dispatchEventWith(egret.Event.SOUND_COMPLETE);
+                        return;
+                    }
+                    if (_this.$loops > 0) {
+                        _this.$loops--;
+                    }
+                    /////////////
+                    //this.audio.load();
+                    _this.$play();
+                };
+                /**
+                 * @private
+                 */
+                _this._volume = 1;
+                audio.addEventListener("ended", _this.onPlayEnd);
+                _this.audio = audio;
+                return _this;
             }
-            /**
-             * 是否达到最大缓存数量
-             */
-            WebGLVertexArrayObject.prototype.reachMaxSize = function (vertexCount, indexCount) {
-                if (vertexCount === void 0) { vertexCount = 4; }
-                if (indexCount === void 0) { indexCount = 6; }
-                return this.vertexIndex > this.maxVertexCount - vertexCount || this.indexIndex > this.maxIndicesCount - indexCount;
-            };
-            /**
-             * 获取缓存完成的顶点数组
-             */
-            WebGLVertexArrayObject.prototype.getVertices = function () {
-                var view = this.vertices.subarray(0, this.vertexIndex * this.vertSize);
-                return view;
-            };
-            /**
-             * 获取缓存完成的索引数组
-             */
-            WebGLVertexArrayObject.prototype.getIndices = function () {
-                return this.indices;
-            };
-            /**
-             * 获取缓存完成的mesh索引数组
-             */
-            WebGLVertexArrayObject.prototype.getMeshIndices = function () {
-                return this.indicesForMesh;
-            };
-            /**
-             * 切换成mesh索引缓存方式
-             */
-            WebGLVertexArrayObject.prototype.changeToMeshIndices = function () {
-                if (!this.hasMesh) {
-                    // 拷贝默认index信息到for mesh中
-                    for (var i = 0, l = this.indexIndex; i < l; ++i) {
-                        this.indicesForMesh[i] = this.indices[i];
-                    }
-                    this.hasMesh = true;
+            HtmlSoundChannel.prototype.$play = function () {
+                if (this.isStopped) {
+                    egret.$error(1036);
+                    return;
                 }
-            };
-            WebGLVertexArrayObject.prototype.isMesh = function () {
-                return this.hasMesh;
+                try {
+                    //this.audio.pause();
+                    this.audio.volume = this._volume;
+                    this.audio.currentTime = this.$startTime;
+                }
+                catch (e) {
+                    this.audio.addEventListener("canplay", this.canPlay);
+                    return;
+                }
+                this.audio.play();
             };
             /**
-             * 默认构成矩形
+             * @private
+             * @inheritDoc
              */
-            // private defaultMeshVertices = [0, 0, 1, 0, 1, 1, 0, 1];
-            // private defaultMeshUvs = [
-            //     0, 0,
-            //     1, 0,
-            //     1, 1,
-            //     0, 1
-            // ];
-            // private defaultMeshIndices = [0, 1, 2, 0, 2, 3];
-            /**
-             * 缓存一组顶点
-             */
-            WebGLVertexArrayObject.prototype.cacheArrays = function (buffer, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight, textureSourceWidth, textureSourceHeight, meshUVs, meshVertices, meshIndices, rotated) {
-                var alpha = buffer.globalAlpha;
-                /*
-                * 混入tintcolor => alpha
-                */
-                alpha = Math.min(alpha, 1.0);
-                var globalTintColor = buffer.globalTintColor || 0xFFFFFF;
-                var currentTexture = buffer.currentTexture;
-                alpha = ((alpha < 1.0 && currentTexture && currentTexture[egret.UNPACK_PREMULTIPLY_ALPHA_WEBGL]) ?
-                    egret.WebGLUtils.premultiplyTint(globalTintColor, alpha)
-                    : globalTintColor + (alpha * 255 << 24));
-                /*
-                临时测试
-                */
-                //计算出绘制矩阵，之后把矩阵还原回之前的
-                var locWorldTransform = buffer.globalMatrix;
-                var a = locWorldTransform.a;
-                var b = locWorldTransform.b;
-                var c = locWorldTransform.c;
-                var d = locWorldTransform.d;
-                var tx = locWorldTransform.tx;
-                var ty = locWorldTransform.ty;
-                var offsetX = buffer.$offsetX;
-                var offsetY = buffer.$offsetY;
-                if (offsetX != 0 || offsetY != 0) {
-                    tx = offsetX * a + offsetY * c + tx;
-                    ty = offsetX * b + offsetY * d + ty;
+            HtmlSoundChannel.prototype.stop = function () {
+                if (!this.audio)
+                    return;
+                if (!this.isStopped) {
+                    egret.sys.$popSoundChannel(this);
                 }
-                if (!meshVertices) {
-                    if (destX != 0 || destY != 0) {
-                        tx = destX * a + destY * c + tx;
-                        ty = destX * b + destY * d + ty;
-                    }
-                    var a1 = destWidth / sourceWidth;
-                    if (a1 != 1) {
-                        a = a1 * a;
-                        b = a1 * b;
-                    }
-                    var d1 = destHeight / sourceHeight;
-                    if (d1 != 1) {
-                        c = d1 * c;
-                        d = d1 * d;
-                    }
-                }
-                if (meshVertices) {
-                    // 计算索引位置与赋值
-                    var vertices = this.vertices;
-                    var verticesUint32View = this._verticesUint32View;
-                    var index = this.vertexIndex * this.vertSize;
-                    // 缓存顶点数组
-                    var i = 0, iD = 0, l = 0;
-                    var u = 0, v = 0, x = 0, y = 0;
-                    for (i = 0, l = meshUVs.length; i < l; i += 2) {
-                        iD = index + i * 5 / 2;
-                        x = meshVertices[i];
-                        y = meshVertices[i + 1];
-                        u = meshUVs[i];
-                        v = meshUVs[i + 1];
-                        // xy
-                        vertices[iD + 0] = a * x + c * y + tx;
-                        vertices[iD + 1] = b * x + d * y + ty;
-                        // uv
-                        if (rotated) {
-                            vertices[iD + 2] = (sourceX + (1.0 - v) * sourceHeight) / textureSourceWidth;
-                            vertices[iD + 3] = (sourceY + u * sourceWidth) / textureSourceHeight;
-                        }
-                        else {
-                            vertices[iD + 2] = (sourceX + u * sourceWidth) / textureSourceWidth;
-                            vertices[iD + 3] = (sourceY + v * sourceHeight) / textureSourceHeight;
-                        }
-                        // alpha
-                        verticesUint32View[iD + 4] = alpha;
-                    }
-                    // 缓存索引数组
-                    if (this.hasMesh) {
-                        for (var i_1 = 0, l_1 = meshIndices.length; i_1 < l_1; ++i_1) {
-                            this.indicesForMesh[this.indexIndex + i_1] = meshIndices[i_1] + this.vertexIndex;
-                        }
-                    }
-                    this.vertexIndex += meshUVs.length / 2;
-                    this.indexIndex += meshIndices.length;
-                }
-                else {
-                    var width = textureSourceWidth;
-                    var height = textureSourceHeight;
-                    var w = sourceWidth;
-                    var h = sourceHeight;
-                    sourceX = sourceX / width;
-                    sourceY = sourceY / height;
-                    var vertices = this.vertices;
-                    var verticesUint32View = this._verticesUint32View;
-                    var index = this.vertexIndex * this.vertSize;
-                    if (rotated) {
-                        var temp = sourceWidth;
-                        sourceWidth = sourceHeight / width;
-                        sourceHeight = temp / height;
-                        // xy
-                        vertices[index++] = tx;
-                        vertices[index++] = ty;
-                        // uv
-                        vertices[index++] = sourceWidth + sourceX;
-                        vertices[index++] = sourceY;
-                        // alpha
-                        verticesUint32View[index++] = alpha;
-                        // xy
-                        vertices[index++] = a * w + tx;
-                        vertices[index++] = b * w + ty;
-                        // uv
-                        vertices[index++] = sourceWidth + sourceX;
-                        vertices[index++] = sourceHeight + sourceY;
-                        // alpha
-                        verticesUint32View[index++] = alpha;
-                        // xy
-                        vertices[index++] = a * w + c * h + tx;
-                        vertices[index++] = d * h + b * w + ty;
-                        // uv
-                        vertices[index++] = sourceX;
-                        vertices[index++] = sourceHeight + sourceY;
-                        // alpha
-                        verticesUint32View[index++] = alpha;
-                        // xy
-                        vertices[index++] = c * h + tx;
-                        vertices[index++] = d * h + ty;
-                        // uv
-                        vertices[index++] = sourceX;
-                        vertices[index++] = sourceY;
-                        // alpha
-                        verticesUint32View[index++] = alpha;
-                    }
-                    else {
-                        sourceWidth = sourceWidth / width;
-                        sourceHeight = sourceHeight / height;
-                        // xy
-                        vertices[index++] = tx;
-                        vertices[index++] = ty;
-                        // uv
-                        vertices[index++] = sourceX;
-                        vertices[index++] = sourceY;
-                        // alpha
-                        verticesUint32View[index++] = alpha;
-                        // xy
-                        vertices[index++] = a * w + tx;
-                        vertices[index++] = b * w + ty;
-                        // uv
-                        vertices[index++] = sourceWidth + sourceX;
-                        vertices[index++] = sourceY;
-                        // alpha
-                        verticesUint32View[index++] = alpha;
-                        // xy
-                        vertices[index++] = a * w + c * h + tx;
-                        vertices[index++] = d * h + b * w + ty;
-                        // uv
-                        vertices[index++] = sourceWidth + sourceX;
-                        vertices[index++] = sourceHeight + sourceY;
-                        // alpha
-                        verticesUint32View[index++] = alpha;
-                        // xy
-                        vertices[index++] = c * h + tx;
-                        vertices[index++] = d * h + ty;
-                        // uv
-                        vertices[index++] = sourceX;
-                        vertices[index++] = sourceHeight + sourceY;
-                        // alpha
-                        verticesUint32View[index++] = alpha;
-                    }
-                    // 缓存索引数组
-                    if (this.hasMesh) {
-                        var indicesForMesh = this.indicesForMesh;
-                        indicesForMesh[this.indexIndex + 0] = 0 + this.vertexIndex;
-                        indicesForMesh[this.indexIndex + 1] = 1 + this.vertexIndex;
-                        indicesForMesh[this.indexIndex + 2] = 2 + this.vertexIndex;
-                        indicesForMesh[this.indexIndex + 3] = 0 + this.vertexIndex;
-                        indicesForMesh[this.indexIndex + 4] = 2 + this.vertexIndex;
-                        indicesForMesh[this.indexIndex + 5] = 3 + this.vertexIndex;
-                    }
-                    this.vertexIndex += 4;
-                    this.indexIndex += 6;
-                }
+                this.isStopped = true;
+                var audio = this.audio;
+                audio.removeEventListener("ended", this.onPlayEnd);
+                audio.removeEventListener("canplay", this.canPlay);
+                audio.volume = 0;
+                this._volume = 0;
+                this.audio = null;
+                var url = this.$url;
+                //延迟一定时间再停止，规避chrome报错
+                window.setTimeout(function () {
+                    audio.pause();
+                    web.HtmlSound.$recycle(url, audio);
+                }, 200);
             };
-            WebGLVertexArrayObject.prototype.clear = function () {
-                this.hasMesh = false;
-                this.vertexIndex = 0;
-                this.indexIndex = 0;
-            };
-            return WebGLVertexArrayObject;
-        }());
-        web.WebGLVertexArrayObject = WebGLVertexArrayObject;
-        __reflect(WebGLVertexArrayObject.prototype, "egret.web.WebGLVertexArrayObject");
+            Object.defineProperty(HtmlSoundChannel.prototype, "volume", {
+                /**
+                 * @private
+                 * @inheritDoc
+                 */
+                get: function () {
+                    return this._volume;
+                },
+                /**
+                 * @inheritDoc
+                 */
+                set: function (value) {
+                    if (this.isStopped) {
+                        egret.$error(1036);
+                        return;
+                    }
+                    this._volume = value;
+                    if (!this.audio)
+                        return;
+                    this.audio.volume = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(HtmlSoundChannel.prototype, "position", {
+                /**
+                 * @private
+                 * @inheritDoc
+                 */
+                get: function () {
+                    if (!this.audio)
+                        return 0;
+                    return this.audio.currentTime;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return HtmlSoundChannel;
+        }(egret.EventDispatcher));
+        web.HtmlSoundChannel = HtmlSoundChannel;
+        __reflect(HtmlSoundChannel.prototype, "egret.web.HtmlSoundChannel", ["egret.SoundChannel", "egret.IEventDispatcher"]);
     })(web = egret.web || (egret.web = {}));
 })(egret || (egret = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -5976,7 +6270,8 @@ var egret;
          * 抽象出此类，以实现共用一个context
          */
         var WebGLRenderContext = (function () {
-            function WebGLRenderContext(width, height) {
+            //for 3D&2D
+            function WebGLRenderContext(width, height, context) {
                 //
                 this._defaultEmptyTexture = null;
                 this.glID = null;
@@ -5986,12 +6281,35 @@ var egret;
                 //refactor
                 this._supportedCompressedTextureInfo = [];
                 this.$scissorState = false;
+                this.vertexCountPerTriangle = 3;
+                this.triangleCountPerQuad = 2;
+                this.dataCountPerVertex = 5;
                 this.vertSize = 5;
+                //for 3D&2D
+                /**
+                 * @private
+                 */
+                this.$beforeRender = function () {
+                    var gl = this.context;
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+                    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
+                    gl.disable(gl.DEPTH_TEST);
+                    gl.disable(gl.CULL_FACE);
+                    gl.enable(gl.BLEND);
+                    gl.disable(gl.STENCIL_TEST);
+                    gl.colorMask(true, true, true, true);
+                    this.setBlendMode("source-over");
+                    // 目前只使用0号材质单元，默认开启
+                    gl.activeTexture(gl.TEXTURE0);
+                    this.currentProgram = null;
+                };
                 this.surface = egret.sys.mainCanvas(width, height);
                 if (egret.nativeRender) {
                     return;
                 }
-                this.initWebGL();
+                //for 3D&2D
+                this.initWebGL(context);
+                this.getSupportedCompressedTexture();
                 this.$bufferStack = [];
                 var gl = this.context;
                 this.vertexBuffer = gl.createBuffer();
@@ -6002,11 +6320,13 @@ var egret;
                 this.vao = new web.WebGLVertexArrayObject();
                 this.setGlobalCompositeOperation("source-over");
             }
-            WebGLRenderContext.getInstance = function (width, height) {
+            //for 3D&2D
+            WebGLRenderContext.getInstance = function (width, height, context) {
                 if (this.instance) {
                     return this.instance;
                 }
-                this.instance = new WebGLRenderContext(width, height);
+                //for 3D&2D
+                this.instance = new WebGLRenderContext(width, height, context);
                 return this.instance;
             };
             /**
@@ -6149,11 +6469,12 @@ var egret;
                 }
                 return returnValue;
             };
-            WebGLRenderContext.prototype.initWebGL = function () {
+            //for 3D&2D
+            WebGLRenderContext.prototype.initWebGL = function (context) {
                 this.onResize();
                 this.surface.addEventListener("webglcontextlost", this.handleContextLost.bind(this), false);
                 this.surface.addEventListener("webglcontextrestored", this.handleContextRestored.bind(this), false);
-                this.getWebGLContext();
+                context ? this.setContext(context) : this.getWebGLContext();
                 var gl = this.context;
                 this.$maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
                 //refactor
@@ -6171,6 +6492,9 @@ var egret;
                 //     'WEBGL_compressed_texture_s3tc', 'WEBKIT_WEBGL_compressed_texture_s3tc',
                 //     'WEBGL_compressed_texture_es3_0'];
                 //
+            };
+            WebGLRenderContext.prototype.getSupportedCompressedTexture = function () {
+                var gl = this.context ? this.context : egret.sys.getContextWebGL(this.surface);
                 this.pvrtc = gl.getExtension('WEBGL_compressed_texture_pvrtc') || gl.getExtension('WEBKIT_WEBGL_compressed_texture_pvrtc');
                 if (this.pvrtc) {
                     this.pvrtc.name = 'WEBGL_compressed_texture_pvrtc';
@@ -6181,9 +6505,16 @@ var egret;
                     this.etc1.name = 'WEBGL_compressed_texture_etc1';
                 }
                 //
-                egret.Capabilities.supportedCompressedTexture = egret.Capabilities.supportedCompressedTexture || {};
-                egret.Capabilities.supportedCompressedTexture.pvrtc = !!this.pvrtc;
-                egret.Capabilities.supportedCompressedTexture.etc1 = !!this.etc1;
+                if (egret.Capabilities._supportedCompressedTexture) {
+                    egret.Capabilities._supportedCompressedTexture = egret.Capabilities._supportedCompressedTexture || {};
+                    egret.Capabilities._supportedCompressedTexture.pvrtc = !!this.pvrtc;
+                    egret.Capabilities._supportedCompressedTexture.etc1 = !!this.etc1;
+                }
+                else {
+                    egret.Capabilities['supportedCompressedTexture'] = egret.Capabilities._supportedCompressedTexture || {};
+                    egret.Capabilities['supportedCompressedTexture'].pvrtc = !!this.pvrtc;
+                    egret.Capabilities['supportedCompressedTexture'].etc1 = !!this.etc1;
+                }
                 //
                 this._supportedCompressedTextureInfo = this._buildSupportedCompressedTextureInfo(/*this.context, compressedTextureExNames,*/ [this.etc1, this.pvrtc]);
             };
@@ -6219,6 +6550,7 @@ var egret;
                 */
                 var gl = egret.sys.getContextWebGL(this.surface);
                 this.setContext(gl);
+                return gl;
             };
             WebGLRenderContext.prototype.setContext = function (gl) {
                 this.context = gl;
@@ -6347,6 +6679,7 @@ var egret;
             WebGLRenderContext.prototype.updateTexture = function (texture, bitmapData) {
                 var gl = this.context;
                 gl.bindTexture(gl.TEXTURE_2D, texture);
+                gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
                 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bitmapData);
             };
             Object.defineProperty(WebGLRenderContext.prototype, "defaultEmptyTexture", {
@@ -6516,23 +6849,43 @@ var egret;
                 if (this.contextLost || !texture || !buffer) {
                     return;
                 }
-                if (meshVertices && meshIndices) {
-                    if (this.vao.reachMaxSize(meshVertices.length / 2, meshIndices.length)) {
-                        this.$drawWebGL();
+                var count;
+                if (web.isIOS14Device()) {
+                    var meshNum = meshIndices && (meshIndices.length / 3) || 0;
+                    if (meshIndices) {
+                        if (this.vao.reachMaxSize(meshNum * 4, meshNum * 6)) {
+                            this.$drawWebGL();
+                        }
                     }
+                    else {
+                        if (this.vao.reachMaxSize()) {
+                            this.$drawWebGL();
+                        }
+                    }
+                    if (smoothing != undefined && texture["smoothing"] != smoothing) {
+                        this.drawCmdManager.pushChangeSmoothing(texture, smoothing);
+                    }
+                    count = meshIndices ? meshNum * 2 : 2;
                 }
                 else {
-                    if (this.vao.reachMaxSize()) {
-                        this.$drawWebGL();
+                    if (meshVertices && meshIndices) {
+                        if (this.vao.reachMaxSize(meshVertices.length / 2, meshIndices.length)) {
+                            this.$drawWebGL();
+                        }
                     }
+                    else {
+                        if (this.vao.reachMaxSize()) {
+                            this.$drawWebGL();
+                        }
+                    }
+                    if (smoothing != undefined && texture["smoothing"] != smoothing) {
+                        this.drawCmdManager.pushChangeSmoothing(texture, smoothing);
+                    }
+                    if (meshUVs) {
+                        this.vao.changeToMeshIndices();
+                    }
+                    count = meshIndices ? meshIndices.length / 3 : 2;
                 }
-                if (smoothing != undefined && texture["smoothing"] != smoothing) {
-                    this.drawCmdManager.pushChangeSmoothing(texture, smoothing);
-                }
-                if (meshUVs) {
-                    this.vao.changeToMeshIndices();
-                }
-                var count = meshIndices ? meshIndices.length / 3 : 2;
                 // 应用$filter，因为只可能是colorMatrixFilter，最后两个参数可不传
                 this.drawCmdManager.pushDrawTexture(texture, count, this.$filter, textureWidth, textureHeight);
                 buffer.currentTexture = texture;
@@ -6611,7 +6964,11 @@ var egret;
                 if (this.drawCmdManager.drawDataLen == 0 || this.contextLost) {
                     return;
                 }
-                this.uploadVerticesArray(this.vao.getVertices());
+                var indices = this.vao.getIndices();
+                var vertices = this.vao.getVertices();
+                if (!web.isIOS14Device()) {
+                    this.uploadVerticesArray(vertices);
+                }
                 // 有mesh，则使用indicesForMesh
                 if (this.vao.isMesh()) {
                     this.uploadIndicesArray(this.vao.getMeshIndices());
@@ -6620,12 +6977,21 @@ var egret;
                 var offset = 0;
                 for (var i = 0; i < length; i++) {
                     var data = this.drawCmdManager.drawData[i];
-                    offset = this.drawData(data, offset);
+                    var isDrawCall = data.type == 0 /* TEXTURE */ || data.type == 1 /* RECT */ || data.type == 2 /* PUSH_MASK */ || data.type == 3 /* POP_MASK */;
+                    if (web.isIOS14Device() && !this.vao.isMesh() && isDrawCall) {
+                        this.uploadIndicesArray(indices.subarray(0, data.count * this.vertexCountPerTriangle));
+                        this.uploadVerticesArray(this.vao.vertices.subarray(offset / this.vertexCountPerTriangle * this.triangleCountPerQuad * this.dataCountPerVertex, (offset + data.count * this.vertexCountPerTriangle) / this.vertexCountPerTriangle * this.triangleCountPerQuad * this.dataCountPerVertex));
+                        this.drawData(data, 0);
+                        offset += data.count * this.vertexCountPerTriangle;
+                    }
+                    else {
+                        offset = this.drawData(data, offset);
+                    }
                     // 计算draw call
                     if (data.type == 7 /* ACT_BUFFER */) {
                         this.activatedBuffer = data.buffer;
                     }
-                    if (data.type == 0 /* TEXTURE */ || data.type == 1 /* RECT */ || data.type == 2 /* PUSH_MASK */ || data.type == 3 /* POP_MASK */) {
+                    if (isDrawCall) {
                         if (this.activatedBuffer && this.activatedBuffer.$computeDrawCall) {
                             this.activatedBuffer.$drawCalls++;
                         }
@@ -6759,7 +7125,7 @@ var egret;
                 return offset;
             };
             WebGLRenderContext.prototype.activeProgram = function (gl, program) {
-                if (program != this.currentProgram) {
+                if (egret.pro.egret2dDriveMode || program != this.currentProgram) {
                     gl.useProgram(program.id);
                     // 目前所有attribute buffer的绑定方法都是一致的
                     var attribute = program.attributes;
@@ -6784,6 +7150,9 @@ var egret;
                 var uniforms = program.uniforms;
                 var isCustomFilter = filter && filter.type === "custom";
                 for (var key in uniforms) {
+                    if (key == "$filterScale") {
+                        continue;
+                    }
                     if (key === "projectionVector") {
                         uniforms[key].setValue({ x: this.projectionX, y: this.projectionY });
                     }
@@ -6799,6 +7168,18 @@ var egret;
                     else {
                         var value = filter.$uniforms[key];
                         if (value !== undefined) {
+                            if ((filter.type == "glow" || filter.type.indexOf("blur") == 0)) {
+                                if ((key == "blurX" || key == "blurY" || key == "dist")) {
+                                    value = value * (filter.$uniforms.$filterScale || 1);
+                                }
+                                else if (key == "blur" && value.x != undefined && value.y != undefined) {
+                                    var newValue = { x: 0, y: 0 };
+                                    newValue.x = value.x * (filter.$uniforms.$filterScale != undefined ? filter.$uniforms.$filterScale : 1);
+                                    newValue.y = value.y * (filter.$uniforms.$filterScale != undefined ? filter.$uniforms.$filterScale : 1);
+                                    uniforms[key].setValue(newValue);
+                                    continue;
+                                }
+                            }
                             uniforms[key].setValue(value);
                         }
                         else {
@@ -6909,7 +7290,8 @@ var egret;
                         var width = input.rootRenderTarget.width;
                         var height = input.rootRenderTarget.height;
                         output = web.WebGLRenderBuffer.create(width, height);
-                        output.setTransform(1, 0, 0, 1, 0, 0);
+                        var scale = Math.max(egret.sys.DisplayList.$canvasScaleFactor, 2);
+                        output.setTransform(scale, 0, 0, scale, 0, 0);
                         output.globalAlpha = 1;
                         this.drawToRenderTarget(filter_1, input, output);
                         if (input != originInput) {
@@ -6944,7 +7326,9 @@ var egret;
                     var blurYFilter = filter.blurYFilter;
                     if (blurXFilter.blurX != 0 && blurYFilter.blurY != 0) {
                         temp = web.WebGLRenderBuffer.create(width, height);
+                        var scale_1 = Math.max(egret.sys.DisplayList.$canvasScaleFactor, 2);
                         temp.setTransform(1, 0, 0, 1, 0, 0);
+                        temp.transform(scale_1, 0, 0, scale_1, 0, 0);
                         temp.globalAlpha = 1;
                         this.drawToRenderTarget(filter.blurXFilter, input, temp);
                         if (input != originInput) {
@@ -6959,6 +7343,8 @@ var egret;
                 }
                 // 绘制input结果到舞台
                 output.saveTransform();
+                var scale = Math.max(egret.sys.DisplayList.$canvasScaleFactor, 2);
+                output.transform(1 / scale, 0, 0, 1 / scale, 0, 0);
                 output.transform(1, 0, 0, -1, 0, height);
                 output.currentTexture = input.rootRenderTarget.texture;
                 this.vao.cacheArrays(output, 0, 0, width, height, 0, 0, width, height, width, height);
@@ -7002,6 +7388,7 @@ var egret;
         web.WebGLRenderContext = WebGLRenderContext;
         __reflect(WebGLRenderContext.prototype, "egret.web.WebGLRenderContext", ["egret.sys.RenderContext"]);
         WebGLRenderContext.initBlendMode();
+        egret.sys.WebGLRenderContext = WebGLRenderContext;
     })(web = egret.web || (egret.web = {}));
 })(egret || (egret = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -7223,7 +7610,7 @@ var egret;
                     var useFrameBuffer = this.rootRenderTarget.useFrameBuffer;
                     this.rootRenderTarget.useFrameBuffer = true;
                     this.rootRenderTarget.activate();
-                    this.context.getPixels(x, y, width, height, pixels);
+                    this.context.getPixels(x, this.height - y - height, width, height, pixels);
                     this.rootRenderTarget.useFrameBuffer = useFrameBuffer;
                     this.rootRenderTarget.activate();
                 }
@@ -7672,7 +8059,20 @@ var egret;
                     }
                 }
                 // 为显示对象创建一个新的buffer
-                var displayBuffer = this.createRenderBuffer(displayBoundsWidth, displayBoundsHeight);
+                var scale = Math.max(egret.sys.DisplayList.$canvasScaleFactor, 2);
+                filters.forEach(function (filter) {
+                    if (filter instanceof egret.GlowFilter || filter instanceof egret.BlurFilter) {
+                        filter.$uniforms.$filterScale = scale;
+                        if (filter.type == 'blur') {
+                            var blurFilter = filter;
+                            blurFilter.blurXFilter.$uniforms.$filterScale = scale;
+                            blurFilter.blurYFilter.$uniforms.$filterScale = scale;
+                        }
+                    }
+                });
+                var displayBuffer = this.createRenderBuffer(scale * displayBoundsWidth, scale * displayBoundsHeight);
+                displayBuffer.saveTransform();
+                displayBuffer.transform(scale, 0, 0, scale, 0, 0);
                 displayBuffer.context.pushBuffer(displayBuffer);
                 //todo 可以优化减少draw次数
                 if (displayObject.$mask) {
@@ -7685,6 +8085,7 @@ var egret;
                     drawCalls += this.drawDisplayObject(displayObject, displayBuffer, -displayBoundsX, -displayBoundsY);
                 }
                 displayBuffer.context.popBuffer();
+                displayBuffer.restoreTransform();
                 //绘制结果到屏幕
                 if (drawCalls > 0) {
                     if (hasBlendMode) {
@@ -8533,12 +8934,21 @@ var egret;
                 var buffer = renderBufferPool.pop();
                 if (buffer) {
                     buffer.resize(width, height);
+                    buffer.setTransform(1, 0, 0, 1, 0, 0);
                 }
                 else {
                     buffer = new web.WebGLRenderBuffer(width, height);
                     buffer.$computeDrawCall = false;
                 }
                 return buffer;
+            };
+            WebGLRenderer.prototype.renderClear = function () {
+                var renderContext = web.WebGLRenderContext.getInstance();
+                var gl = renderContext.context;
+                renderContext.$beforeRender();
+                var width = renderContext.surface.width;
+                var height = renderContext.surface.height;
+                gl.viewport(0, 0, width, height);
             };
             return WebGLRenderer;
         }());

@@ -10,7 +10,9 @@ import { McrMainMenuPanel }             from "../../multiCustomRoom/view/McrMain
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import Tween                            = egret.Tween;
 
@@ -58,7 +60,7 @@ export class SpmMainMenuPanel extends UiPanel<void> {
             { ui: this._btnContinueWar,     callback: this._onTouchedBtnContinueWar },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
+            { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
         ]);
 
         this._showOpenAnimation();
@@ -84,7 +86,7 @@ export class SpmMainMenuPanel extends UiPanel<void> {
         MrrMainMenuPanel.show();
     }
     private _onTouchedBtnCampaign(e: egret.TouchEvent): void {
-        FloatText.show(Lang.getText(Lang.Type.A0053));
+        FloatText.show(Lang.getText(LangTextType.A0053));
     }
     private _onTouchedBtnCreateCustomWar(e: egret.TouchEvent): void {
         this.close();

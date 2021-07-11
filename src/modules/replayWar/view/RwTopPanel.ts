@@ -12,7 +12,9 @@ import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as ChatModel                   from "../../chat/model/ChatModel";
 import * as RwModel                     from "../model/RwModel";
@@ -66,17 +68,17 @@ export class RwTopPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
-            { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
-            { type: Notify.Type.RwNextActionIdChanged,          callback: this._onNotifyBwNextActionIdChanged },
-            { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
-            { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
-            { type: Notify.Type.ReplayAutoReplayChanged,        callback: this._onNotifyReplayAutoReplayChanged },
-            { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatUpdateReadProgressList },
-            { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
-            { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
-            { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
+            { type: NotifyType.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
+            { type: NotifyType.RwNextActionIdChanged,          callback: this._onNotifyBwNextActionIdChanged },
+            { type: NotifyType.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
+            { type: NotifyType.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
+            { type: NotifyType.ReplayAutoReplayChanged,        callback: this._onNotifyReplayAutoReplayChanged },
+            { type: NotifyType.MsgChatGetAllReadProgressList,  callback: this._onMsgChatUpdateReadProgressList },
+            { type: NotifyType.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
+            { type: NotifyType.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
+            { type: NotifyType.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
         ]);
         this._setUiListenerArray([
             { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
@@ -156,11 +158,11 @@ export class RwTopPanel extends UiPanel<void> {
         war.setIsAutoReplay(false);
 
         if (!war.getIsRunning()) {
-            FloatText.show(Lang.getText(Lang.Type.A0040));
+            FloatText.show(Lang.getText(LangTextType.A0040));
         } else if (war.getIsExecutingAction()) {
-            FloatText.show(Lang.getText(Lang.Type.A0044));
+            FloatText.show(Lang.getText(LangTextType.A0044));
         } else if (war.checkIsInBeginning()) {
-            FloatText.show(Lang.getText(Lang.Type.A0042));
+            FloatText.show(Lang.getText(LangTextType.A0042));
         } else {
             await Helpers.checkAndCallLater();
             await war.loadPreviousCheckPoint();
@@ -173,11 +175,11 @@ export class RwTopPanel extends UiPanel<void> {
         war.setIsAutoReplay(false);
 
         if (!war.getIsRunning()) {
-            FloatText.show(Lang.getText(Lang.Type.A0040));
+            FloatText.show(Lang.getText(LangTextType.A0040));
         } else if (war.getIsExecutingAction()) {
-            FloatText.show(Lang.getText(Lang.Type.A0044));
+            FloatText.show(Lang.getText(LangTextType.A0044));
         } else if (war.checkIsInEnd()) {
-            FloatText.show(Lang.getText(Lang.Type.A0043));
+            FloatText.show(Lang.getText(LangTextType.A0043));
         } else {
             await Helpers.checkAndCallLater();
             await war.loadNextCheckPoint();
@@ -188,7 +190,7 @@ export class RwTopPanel extends UiPanel<void> {
     private _onTouchedBtnPlay(e: egret.TouchEvent): void {
         const war = this._war;
         if (war.checkIsInEnd()) {
-            FloatText.show(Lang.getText(Lang.Type.A0041));
+            FloatText.show(Lang.getText(LangTextType.A0041));
         } else {
             this._war.setIsAutoReplay(true);
         }
@@ -225,8 +227,8 @@ export class RwTopPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTurnTitle.text   = Lang.getText(Lang.Type.B0091);
-        this._labelActionTitle.text = Lang.getText(Lang.Type.B0090);
+        this._labelTurnTitle.text   = Lang.getText(LangTextType.B0091);
+        this._labelActionTitle.text = Lang.getText(LangTextType.B0090);
     }
 
     private _updateLabelTurn(): void {

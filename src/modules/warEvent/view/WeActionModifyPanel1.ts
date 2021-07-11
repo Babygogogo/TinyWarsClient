@@ -16,7 +16,9 @@ import * as FloatText                   from "../../../utility/FloatText";
 import * as GridIndexHelpers            from "../../../utility/GridIndexHelpers";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
@@ -70,8 +72,8 @@ export class WeActionModifyPanel1 extends UiPanel<OpenDataForWeActionModifyPanel
             { ui: this._btnBack,        callback: this.close },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
         ]);
         this._listUnit.setItemRenderer(UnitRenderer);
 
@@ -92,20 +94,20 @@ export class WeActionModifyPanel1 extends UiPanel<OpenDataForWeActionModifyPanel
     private _onTouchedBtnAddUnit(e: egret.TouchEvent): void {
         const unitArray = this._getOpenData().action.WeaAddUnit.unitArray;
         if (unitArray.length > CommonConstants.WarEventActionAddUnitMaxCount) {
-            FloatText.show(Lang.getText(Lang.Type.A0189));
+            FloatText.show(Lang.getText(LangTextType.A0189));
         } else {
             unitArray.push(WarEventHelper.getDefaultAddUnitData());
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
 
     private _onTouchedBtnClear(e: egret.TouchEvent): void {
         const openData = this._getOpenData();
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0190),
+            content : Lang.getText(LangTextType.A0190),
             callback: () => {
                 openData.action.WeaAddUnit.unitArray.length = 0;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         });
     }
@@ -129,11 +131,11 @@ export class WeActionModifyPanel1 extends UiPanel<OpenDataForWeActionModifyPanel
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text   = `${Lang.getText(Lang.Type.B0533)} A${this._getOpenData().action.WeaCommonData.actionId}`;
-        this._btnType.label     = Lang.getText(Lang.Type.B0516);
-        this._btnAddUnit.label  = Lang.getText(Lang.Type.B0535);
-        this._btnClear.label    = Lang.getText(Lang.Type.B0391);
-        this._btnBack.label     = Lang.getText(Lang.Type.B0146);
+        this._labelTitle.text   = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData.actionId}`;
+        this._btnType.label     = Lang.getText(LangTextType.B0516);
+        this._btnAddUnit.label  = Lang.getText(LangTextType.B0535);
+        this._btnClear.label    = Lang.getText(LangTextType.B0391);
+        this._btnBack.label     = Lang.getText(LangTextType.B0146);
     }
 
     private _updateComponentsForUnits(): void {
@@ -154,7 +156,7 @@ export class WeActionModifyPanel1 extends UiPanel<OpenDataForWeActionModifyPanel
         const label     = this._labelUnitsCount;
         const maxCount  = CommonConstants.WarEventActionAddUnitMaxCount;
         const currCount = dataArray.length;
-        label.text      = `${Lang.getText(Lang.Type.B0524)}: ${currCount} / ${maxCount}`;
+        label.text      = `${Lang.getText(LangTextType.B0524)}: ${currCount} / ${maxCount}`;
         label.textColor = ((currCount <= maxCount) && (currCount > 0)) ? ColorValue.White : ColorValue.Red;
     }
 }
@@ -243,7 +245,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
             { ui: this._inputProduceMaterial,       callback: this._onFocusOutInputProduceMaterial,     eventType: FocusEvent.FOCUS_OUT },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
         this._updateComponentsForLanguage();
     }
@@ -252,10 +254,10 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         const data = this.data;
         if (data) {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0029),
+                content : Lang.getText(LangTextType.A0029),
                 callback: () => {
                     Helpers.deleteElementFromArray(data.action.WeaAddUnit.unitArray, data.dataForAddUnit);
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -264,14 +266,14 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         const data = this.data;
         if (data) {
             data.dataForAddUnit.canBeBlockedByUnit = !data.dataForAddUnit.canBeBlockedByUnit;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onTouchedGroupNeedMovableTile(e: egret.TouchEvent): void {
         const data = this.data;
         if (data) {
             data.dataForAddUnit.needMovableTile = !data.dataForAddUnit.needMovableTile;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onTouchedGroupIsDiving(e: egret.TouchEvent): void {
@@ -279,7 +281,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         if (data) {
             const unitData      = data.dataForAddUnit.unitData;
             unitData.isDiving   = unitData.isDiving ? undefined : true;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onTouchedGroupHasLoadedCo(e: egret.TouchEvent): void {
@@ -287,7 +289,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         if (data) {
             const unitData          = data.dataForAddUnit.unitData;
             unitData.hasLoadedCo    = unitData.hasLoadedCo ? undefined : true;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onTouchedBtnActionState(e: egret.TouchEvent): void {
@@ -299,7 +301,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
             } else {
                 unitData.actionState = Types.UnitActionState.Acted;
             }
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onTouchedBtnUnitType(e: egret.TouchEvent): void {
@@ -319,7 +321,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         const newGridX  = Math.max(0, Math.min(parseInt(this._inputGridX.text) || 0, data.war.getTileMap().getMapSize().width - 1));
         if (newGridX !== gridIndex.x) {
             gridIndex.x = newGridX;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onFocusOutInputGridY(e: FocusEvent): void {
@@ -332,7 +334,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         const newGridY  = Math.max(0, Math.min(parseInt(this._inputGridY.text) || 0, data.war.getTileMap().getMapSize().height - 1));
         if (newGridY !== gridIndex.y) {
             gridIndex.y = newGridY;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onFocusOutInputPlayerIndex(e: FocusEvent): void {
@@ -348,7 +350,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         );
         if (newPlayerIndex !== unitData.playerIndex) {
             unitData.playerIndex = newPlayerIndex;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onFocusOutInputHp(e: FocusEvent): void {
@@ -363,7 +365,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         const newHp     = Math.max(0, Math.min(parseInt(this._inputHp.text) || 0, maxHp));
         if (newHp !== currentHp) {
             unitData.currentHp = newHp === maxHp ? undefined : newHp;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onFocusOutInputFuel(e: FocusEvent): void {
@@ -378,7 +380,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         const newFuel       = Math.max(0, Math.min(parseInt(this._inputFuel.text) || 0, maxFuel));
         if (newFuel !== currentFuel) {
             unitData.currentFuel = newFuel === maxFuel ? undefined : newFuel;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onFocusOutInputPromotion(e: FocusEvent): void {
@@ -393,7 +395,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         const newPromotion      = Math.max(0, Math.min(parseInt(this._inputPromotion.text) || 0, maxPromotion));
         if (newPromotion !== currentPromotion) {
             unitData.currentPromotion = newPromotion === 0 ? undefined : newPromotion;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onFocusOutInputPrimaryAmmo(e: FocusEvent): void {
@@ -408,7 +410,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         const newAmmo       = Math.max(0, Math.min(parseInt(this._inputPrimaryAmmo.text) || 0, maxAmmo));
         if (newAmmo !== currentAmmo) {
             unitData.primaryWeaponCurrentAmmo = newAmmo === maxAmmo ? undefined : newAmmo;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onFocusOutInputFlareAmmo(e: FocusEvent): void {
@@ -423,7 +425,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         const newAmmo       = Math.max(0, Math.min(parseInt(this._inputFlareAmmo.text) || 0, maxAmmo));
         if (newAmmo !== currentAmmo) {
             unitData.flareCurrentAmmo = newAmmo === maxAmmo ? undefined : newAmmo;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onFocusOutInputBuildMaterial(e: FocusEvent): void {
@@ -438,7 +440,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         const newMaterial       = Math.max(0, Math.min(parseInt(this._inputBuildMaterial.text) || 0, maxMaterial));
         if (newMaterial !== currentMaterial) {
             unitData.currentBuildMaterial = newMaterial === maxMaterial ? undefined : newMaterial;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onFocusOutInputProduceMaterial(e: FocusEvent): void {
@@ -453,7 +455,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
         const newMaterial       = Math.max(0, Math.min(parseInt(this._inputProduceMaterial.text) || 0, maxMaterial));
         if (newMaterial !== currentMaterial) {
             unitData.currentProduceMaterial = newMaterial === maxMaterial ? undefined : newMaterial;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
 
@@ -468,22 +470,22 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnDelete.label               = Lang.getText(Lang.Type.B0220);
-        this._labelCanBeBlockedByUnit.text  = Lang.getText(Lang.Type.B0532);
-        this._labelNeedMovableTile.text     = Lang.getText(Lang.Type.B0534);
-        this._labelIsDiving.text            = Lang.getText(Lang.Type.B0371);
-        this._labelHasLoadedCo.text         = Lang.getText(Lang.Type.B0421);
-        this._labelGridIndex.text           = Lang.getText(Lang.Type.B0531);
-        this._labelPlayerIndex.text         = Lang.getText(Lang.Type.B0521);
-        this._labelHp.text                  = Lang.getText(Lang.Type.B0339);
-        this._labelFuel.text                = Lang.getText(Lang.Type.B0342);
-        this._labelPromotion.text           = Lang.getText(Lang.Type.B0370);
-        this._labelPrimaryAmmo.text         = Lang.getText(Lang.Type.B0350);
-        this._labelFlareAmmo.text           = Lang.getText(Lang.Type.B0349);
-        this._labelBuildMaterial.text       = Lang.getText(Lang.Type.B0347);
-        this._labelProduceMaterial.text     = Lang.getText(Lang.Type.B0348);
-        this._btnActionState.label          = Lang.getText(Lang.Type.B0526);
-        this._btnUnitType.label             = Lang.getText(Lang.Type.B0525);
+        this._btnDelete.label               = Lang.getText(LangTextType.B0220);
+        this._labelCanBeBlockedByUnit.text  = Lang.getText(LangTextType.B0532);
+        this._labelNeedMovableTile.text     = Lang.getText(LangTextType.B0534);
+        this._labelIsDiving.text            = Lang.getText(LangTextType.B0371);
+        this._labelHasLoadedCo.text         = Lang.getText(LangTextType.B0421);
+        this._labelGridIndex.text           = Lang.getText(LangTextType.B0531);
+        this._labelPlayerIndex.text         = Lang.getText(LangTextType.B0521);
+        this._labelHp.text                  = Lang.getText(LangTextType.B0339);
+        this._labelFuel.text                = Lang.getText(LangTextType.B0342);
+        this._labelPromotion.text           = Lang.getText(LangTextType.B0370);
+        this._labelPrimaryAmmo.text         = Lang.getText(LangTextType.B0350);
+        this._labelFlareAmmo.text           = Lang.getText(LangTextType.B0349);
+        this._labelBuildMaterial.text       = Lang.getText(LangTextType.B0347);
+        this._labelProduceMaterial.text     = Lang.getText(LangTextType.B0348);
+        this._btnActionState.label          = Lang.getText(LangTextType.B0526);
+        this._btnUnitType.label             = Lang.getText(LangTextType.B0525);
     }
     private _updateComponentsForData(): void {
         this._updateLabelError();
@@ -516,7 +518,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
             dataForAddUnit,
             war             : data.war,
         });
-        label.text      = `${data.action.WeaAddUnit.unitArray.indexOf(dataForAddUnit) + 1}. ${errorTips || Lang.getText(Lang.Type.B0493)}`;
+        label.text      = `${data.action.WeaAddUnit.unitArray.indexOf(dataForAddUnit) + 1}. ${errorTips || Lang.getText(LangTextType.B0493)}`;
         label.textColor = errorTips ? ColorValue.Red : ColorValue.Green;
     }
     private _updateComponentsForCanBeBlockedByUnit(): void {
@@ -698,22 +700,22 @@ function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
     war             : BwWar;
 }): string | undefined {
     if (dataForAddUnit.canBeBlockedByUnit == null) {
-        return Lang.getText(Lang.Type.A0192);
+        return Lang.getText(LangTextType.A0192);
     }
 
     if (dataForAddUnit.needMovableTile == null) {
-        return Lang.getText(Lang.Type.A0193);
+        return Lang.getText(LangTextType.A0193);
     }
 
     const configVersion = war.getConfigVersion();
     const unitData      = dataForAddUnit.unitData;
     const unitCfg       = ConfigManager.getUnitTemplateCfg(configVersion, unitData.unitType);
     if (unitCfg == null) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0525));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0525));
     }
 
     if (!GridIndexHelpers.checkIsInsideMap(unitData.gridIndex, war.getTileMap().getMapSize())) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0531));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0531));
     }
 
     const playerIndex = unitData.playerIndex;
@@ -721,7 +723,7 @@ function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
         (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
         (playerIndex < CommonConstants.WarFirstPlayerIndex)
     ) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0521));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0521));
     }
 
     const actionState = unitData.actionState;
@@ -729,28 +731,28 @@ function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
         (actionState !== Types.UnitActionState.Acted)   &&
         (actionState !== Types.UnitActionState.Idle)
     ) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0526));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0526));
     }
 
     const currentFuel = unitData.currentFuel;
     if ((currentFuel < 0) || (currentFuel > unitCfg.maxFuel)) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0342));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0342));
     }
 
     const currentHp = unitData.currentHp;
     if ((currentHp < 0) || (currentHp > unitCfg.maxHp)) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0339));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0339));
     }
 
     const currentBuildMaterial  = unitData.currentBuildMaterial;
     const maxBuildMaterial      = unitCfg.maxBuildMaterial;
     if (maxBuildMaterial == null) {
         if (currentBuildMaterial != null) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0347));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0347));
         }
     } else {
         if ((currentBuildMaterial < 0) || (currentBuildMaterial > maxBuildMaterial)) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0347));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0347));
         }
     }
 
@@ -758,28 +760,28 @@ function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
     const maxProduceMaterial      = unitCfg.maxProduceMaterial;
     if (maxProduceMaterial == null) {
         if (currentProduceMaterial != null) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0348));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0348));
         }
     } else {
         if ((currentProduceMaterial < 0) || (currentProduceMaterial > maxProduceMaterial)) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0348));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0348));
         }
     }
 
     const currentPromotion = unitData.currentPromotion;
     if ((currentPromotion < 0) || (currentPromotion > ConfigManager.getUnitMaxPromotion(configVersion))) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0370));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0370));
     }
 
     const flareCurrentAmmo  = unitData.flareCurrentAmmo;
     const flareMaxAmmo      = unitCfg.flareMaxAmmo;
     if (flareMaxAmmo == null) {
         if (flareCurrentAmmo != null) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0349));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0349));
         }
     } else {
         if ((flareCurrentAmmo < 0) || (flareCurrentAmmo > flareMaxAmmo)) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0349));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0349));
         }
     }
 
@@ -787,32 +789,32 @@ function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
     const primaryMaxAmmo      = unitCfg.primaryWeaponMaxAmmo;
     if (primaryMaxAmmo == null) {
         if (primaryCurrentAmmo != null) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0350));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0350));
         }
     } else {
         if ((primaryCurrentAmmo < 0) || (primaryCurrentAmmo > primaryMaxAmmo)) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0350));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0350));
         }
     }
 
     if (unitData.unitId != null) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0527));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0527));
     }
 
     if (unitData.loaderUnitId != null) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0528));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0528));
     }
 
     if ((unitData.isDiving) && (!unitCfg.diveCfgs)) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0371));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0371));
     }
 
     if (unitData.isBuildingTile) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0529));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0529));
     }
 
     if (unitData.isCapturingTile) {
-        return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0530));
+        return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0530));
     }
 
     // unitData.hasLoadedCo的值不需要检查

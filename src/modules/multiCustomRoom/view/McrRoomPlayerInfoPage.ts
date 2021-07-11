@@ -13,7 +13,9 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
@@ -37,7 +39,7 @@ export class McrRoomPlayerInfoPage extends UiTabPage<OpenDataForMcrRoomPlayerInf
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onNotifyMsgMcrGetRoomInfo },
+            { type: NotifyType.MsgMcrGetRoomInfo,  callback: this._onNotifyMsgMcrGetRoomInfo },
         ]);
 
         this.left   = 0;
@@ -111,13 +113,13 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             { ui: this._btnDelete,  callback: this._onTouchedBtnDelete },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMcrSetSelfSettings,      callback: this._onNotifyMsgMcrSetSelfSettings },
-            { type: Notify.Type.MsgMcrSetReady,             callback: this._onNotifyMsgMcrSetReady },
-            { type: Notify.Type.MsgMcrJoinRoom,             callback: this._onNotifyMsgMcrJoinRoom },
-            { type: Notify.Type.MsgMcrExitRoom,             callback: this._onNotifyMsgMcrExitRoom },
-            { type: Notify.Type.MsgMcrDeletePlayer,         callback: this._onNotifyMsgMcrDeletePlayer },
-            { type: Notify.Type.MsgMcrGetOwnerPlayerIndex,  callback: this._onNotifyMsgMcrGetOwnerPlayerIndex },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMcrSetSelfSettings,      callback: this._onNotifyMsgMcrSetSelfSettings },
+            { type: NotifyType.MsgMcrSetReady,             callback: this._onNotifyMsgMcrSetReady },
+            { type: NotifyType.MsgMcrJoinRoom,             callback: this._onNotifyMsgMcrJoinRoom },
+            { type: NotifyType.MsgMcrExitRoom,             callback: this._onNotifyMsgMcrExitRoom },
+            { type: NotifyType.MsgMcrDeletePlayer,         callback: this._onNotifyMsgMcrDeletePlayer },
+            { type: NotifyType.MsgMcrGetOwnerPlayerIndex,  callback: this._onNotifyMsgMcrGetOwnerPlayerIndex },
         ]);
 
         this._updateComponentsForLanguage();
@@ -160,14 +162,14 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             const userId = playerData.userId;
             if (userId === UserModel.getSelfUserId()) {
                 CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0126),
+                    content : Lang.getText(LangTextType.A0126),
                     callback: () => {
                         McrProxy.reqMcrExitRoom(roomId);
                     },
                 });
             } else {
                 CommonConfirmPanel.show({
-                    content : Lang.getFormattedText(Lang.Type.F0029, await UserModel.getUserNickname(userId)),
+                    content : Lang.getFormattedText(LangTextType.F0029, await UserModel.getUserNickname(userId)),
                     callback: () => {
                         McrProxy.reqMcrDeletePlayer(roomId, data.playerIndex);
                     },
@@ -249,8 +251,8 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelRankStdTitle.text    = Lang.getText(Lang.Type.B0546);
-        this._labelRankFogTitle.text    = Lang.getText(Lang.Type.B0547);
+        this._labelRankStdTitle.text    = Lang.getText(LangTextType.B0546);
+        this._labelRankFogTitle.text    = Lang.getText(LangTextType.B0547);
     }
 
     private async _updateComponentsForSettings(): Promise<void> {

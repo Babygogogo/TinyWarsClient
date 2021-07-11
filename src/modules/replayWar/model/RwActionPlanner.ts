@@ -6,6 +6,7 @@ import { BwActionPlanner, DataForUnitAction }   from "../../baseWar/model/BwActi
 import * as FloatText                           from "../../../utility/FloatText";
 import * as GridIndexHelpers                    from "../../../utility/GridIndexHelpers";
 import * as Lang                                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Types                               from "../../../utility/Types";
 import TurnPhaseCode                            = Types.TurnPhaseCode;
 import UnitState                                = Types.UnitActionState;
@@ -369,21 +370,21 @@ export class RwActionPlanner extends BwActionPlanner {
                 if (focusUnit.getCurrentProduceMaterial() < 1) {
                     return [{
                         actionType      : UnitActionType.ProduceUnit,
-                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0051)),
+                        callback        : () => FloatText.show(Lang.getText(LangTextType.B0051)),
                         canProduceUnit  : false,
                         produceUnitType,
                     }];
                 } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
                     return [{
                         actionType      : UnitActionType.ProduceUnit,
-                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0052)),
+                        callback        : () => FloatText.show(Lang.getText(LangTextType.B0052)),
                         canProduceUnit  : false,
                         produceUnitType,
                     }];
                 } else if (this._getWar().getPlayerInTurn().getFund() < focusUnit.getProduceUnitCost()) {
                     return [{
                         actionType      : UnitActionType.ProduceUnit,
-                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0053)),
+                        callback        : () => FloatText.show(Lang.getText(LangTextType.B0053)),
                         canProduceUnit  : false,
                         produceUnitType,
                     }];

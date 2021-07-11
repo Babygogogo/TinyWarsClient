@@ -11,7 +11,9 @@ import { MmMainMenuPanel }      from "./MmMainMenuPanel";
 import { MmTagChangePanel }     from "./MmTagChangePanel";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import * as WarMapModel         from "../../warMap/model/WarMapModel";
 
@@ -63,8 +65,8 @@ export class MmTagListPanel extends UiPanel<FiltersForMapList> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMmSetMapTag,     callback: this._onMsgMmSetMapTag },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMmSetMapTag,     callback: this._onMsgMmSetMapTag },
         ]);
         this._setUiListenerArray([
             { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
@@ -115,7 +117,7 @@ export class MmTagListPanel extends UiPanel<FiltersForMapList> {
     // Callbacks.
     ////////////////////////////////////////////////////////////////////////////////
     private _onMsgMmSetMapTag(e: egret.Event): void {
-        FloatText.show(Lang.getText(Lang.Type.A0151));
+        FloatText.show(Lang.getText(LangTextType.A0151));
         this.setMapFilters(this._mapFilters);
     }
 
@@ -136,9 +138,9 @@ export class MmTagListPanel extends UiPanel<FiltersForMapList> {
     // Private functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0227);
-        this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-        this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
+        this._labelMenuTitle.text   = Lang.getText(LangTextType.B0227);
+        this._btnBack.label         = Lang.getText(LangTextType.B0146);
+        this._btnSearch.label       = Lang.getText(LangTextType.B0228);
     }
 
     private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
@@ -173,11 +175,11 @@ export class MmTagListPanel extends UiPanel<FiltersForMapList> {
     private async _showMap(mapId: number): Promise<void> {
         const mapRawData                = await WarMapModel.getRawData(mapId);
         const rating                    = await WarMapModel.getAverageRating(mapId);
-        this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-        this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-        this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCountUnneutral);
-        this._labelRating.text          = Lang.getFormattedText(Lang.Type.F0003, rating != null ? rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
-        this._labelPlayedTimes.text     = Lang.getFormattedText(Lang.Type.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
+        this._labelMapName.text         = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+        this._labelDesigner.text        = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+        this._labelPlayersCount.text    = Lang.getFormattedText(LangTextType.F0002, mapRawData.playersCountUnneutral);
+        this._labelRating.text          = Lang.getFormattedText(LangTextType.F0003, rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001));
+        this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
         this._groupInfo.visible         = true;
         this._groupInfo.alpha           = 1;
         egret.Tween.removeTweens(this._groupInfo);

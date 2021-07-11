@@ -5,7 +5,9 @@ import { UiButton }                     from "../../../gameui/UiButton";
 import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiScrollList }                 from "../../../gameui/UiScrollList";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
@@ -50,7 +52,7 @@ export class WeConditionReplacePanel extends UiPanel<OpenDataForWeConditionRepla
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,       callback: this.close },
@@ -72,9 +74,9 @@ export class WeConditionReplacePanel extends UiPanel<OpenDataForWeConditionRepla
 
     private _updateComponentsForLanguage(): void {
         const openData              = this._getOpenData();
-        this._labelTitle.text       = `${Lang.getText(Lang.Type.B0500)} C${openData.conditionId}`;
-        this._labelNoCondition.text = Lang.getText(Lang.Type.B0278);
-        this._btnClose.label        = Lang.getText(Lang.Type.B0146);
+        this._labelTitle.text       = `${Lang.getText(LangTextType.B0500)} C${openData.conditionId}`;
+        this._labelNoCondition.text = Lang.getText(LangTextType.B0278);
+        this._btnClose.label        = Lang.getText(LangTextType.B0146);
     }
     private _updateListConditionAndLabelNoCondition(): void {
         const openData          = this._getOpenData();
@@ -115,7 +117,7 @@ class ConditionRenderer extends UiListItemRenderer<DataForConditionRenderer> {
             { ui: this._btnSelect,  callback: this._onTouchedBtnSelect },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -139,7 +141,7 @@ class ConditionRenderer extends UiListItemRenderer<DataForConditionRenderer> {
             conditionIdForDelete    : data.srcConditionId,
             conditionIdForClone     : data.candidateConditionId,
         }) != null) {
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
             WeConditionReplacePanel.hide();
         }
     }
@@ -155,7 +157,7 @@ class ConditionRenderer extends UiListItemRenderer<DataForConditionRenderer> {
             oldConditionId  : data.srcConditionId,
             newConditionId  : data.candidateConditionId,
         })) {
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
             WeConditionReplacePanel.hide();
         }
     }
@@ -164,8 +166,8 @@ class ConditionRenderer extends UiListItemRenderer<DataForConditionRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnCopy.label     = Lang.getText(Lang.Type.B0487);
-        this._btnSelect.label   = Lang.getText(Lang.Type.B0492);
+        this._btnCopy.label     = Lang.getText(LangTextType.B0487);
+        this._btnSelect.label   = Lang.getText(LangTextType.B0492);
 
         this._updateLabelConditionId();
         this._updateLabelCondition();
@@ -174,7 +176,7 @@ class ConditionRenderer extends UiListItemRenderer<DataForConditionRenderer> {
     private _updateLabelConditionId(): void {
         const data = this.data;
         if (data) {
-            this._labelConditionId.text  = `${Lang.getText(Lang.Type.B0502)}: C${data.candidateConditionId}`;
+            this._labelConditionId.text  = `${Lang.getText(LangTextType.B0502)}: C${data.candidateConditionId}`;
         }
     }
     private _updateLabelCondition(): void {
@@ -186,7 +188,7 @@ class ConditionRenderer extends UiListItemRenderer<DataForConditionRenderer> {
         const condition = (data.fullData.conditionArray || []).find(v => v.WecCommonData.conditionId === data.candidateConditionId);
         const label     = this._labelCondition;
         if (condition == null) {
-            label.text = Lang.getText(Lang.Type.A0160);
+            label.text = Lang.getText(LangTextType.A0160);
         } else {
             label.text = WarEventHelper.getDescForCondition(condition);
         }

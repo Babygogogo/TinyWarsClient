@@ -15,7 +15,9 @@ import { OpenDataForMfwWarAdvancedSettingsPage, MfwWarAdvancedSettingsPage }    
 import { OpenDataForMfwWarMapInfoPage, MfwWarMapInfoPage }                      from "./MfwWarMapInfoPage";
 import * as Helpers                                                             from "../../../utility/Helpers";
 import * as Lang                                                                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                                                              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                                                               from "../../../utility/Types";
 import * as MpwModel                                                            from "../../multiPlayerWar/model/MpwModel";
 import * as MpwProxy                                                            from "../../multiPlayerWar/model/MpwProxy";
@@ -64,9 +66,9 @@ export class MfwMyWarListPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MfwPreviewingWarIdChanged,      callback: this._onNotifyMfwPreviewingWarIdChanged },
-            { type: Notify.Type.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MfwPreviewingWarIdChanged,      callback: this._onNotifyMfwPreviewingWarIdChanged },
+            { type: NotifyType.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -127,22 +129,22 @@ export class MfwMyWarListPanel extends UiPanel<void> {
     private _initTabSettings(): void {
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : MfwWarMapInfoPage,
                 pageData    : { warId: null } as OpenDataForMfwWarMapInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                tabItemData : { name: Lang.getText(LangTextType.B0224) },
                 pageClass   : MfwWarPlayerInfoPage,
                 pageData    : { warId: null } as OpenDataForMfwWarPlayerInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : MfwWarBasicSettingsPage,
                 pageData    : { warId: null } as OpenDataForMfwWarBasicSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData : { name: Lang.getText(LangTextType.B0003) },
                 pageClass   : MfwWarAdvancedSettingsPage,
                 pageData    : { warId: null } as OpenDataForMfwWarAdvancedSettingsPage,
             },
@@ -150,13 +152,13 @@ export class MfwMyWarListPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-        this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0137);
-        this._labelFreeMode.text        = Lang.getText(Lang.Type.B0557);
-        this._labelMyWar.text           = Lang.getText(Lang.Type.B0588);
-        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-        this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
-        this._btnNextStep.label         = Lang.getText(Lang.Type.B0024);
+        this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+        this._labelMultiPlayer.text     = Lang.getText(LangTextType.B0137);
+        this._labelFreeMode.text        = Lang.getText(LangTextType.B0557);
+        this._labelMyWar.text           = Lang.getText(LangTextType.B0588);
+        this._btnBack.label             = Lang.getText(LangTextType.B0146);
+        this._labelNoWar.text           = Lang.getText(LangTextType.B0210);
+        this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
     }
 
     private _updateGroupWarList(): void {
@@ -297,7 +299,7 @@ class WarRenderer extends UiListItemRenderer<DataForWarRenderer> {
             { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.MfwPreviewingWarIdChanged,  callback: this._onNotifyMfwPreviewingWarIdChanged },
+            { type: NotifyType.MfwPreviewingWarIdChanged,  callback: this._onNotifyMfwPreviewingWarIdChanged },
         ]);
     }
 

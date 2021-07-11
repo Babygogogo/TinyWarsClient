@@ -5,6 +5,7 @@ import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
@@ -54,8 +55,8 @@ export function getRoomInfo(roomId: number): Promise<ICcrRoomInfo | undefined | 
         const callbackOnSucceed = (e: egret.Event): void => {
             const data = e.data as NetMessage.MsgCcrGetRoomInfo.IS;
             if (data.roomId === roomId) {
-                Notify.removeEventListener(Notify.Type.MsgCcrGetRoomInfo,         callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgCcrGetRoomInfoFailed,   callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfo,         callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfoFailed,   callbackOnFailed);
 
                 for (const cb of _roomInfoRequests.get(roomId)) {
                     cb(data);
@@ -68,8 +69,8 @@ export function getRoomInfo(roomId: number): Promise<ICcrRoomInfo | undefined | 
         const callbackOnFailed = (e: egret.Event): void => {
             const data = e.data as NetMessage.MsgCcrGetRoomInfo.IS;
             if (data.roomId === roomId) {
-                Notify.removeEventListener(Notify.Type.MsgCcrGetRoomInfo,         callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgCcrGetRoomInfoFailed,   callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfo,         callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfoFailed,   callbackOnFailed);
 
                 for (const cb of _roomInfoRequests.get(roomId)) {
                     cb(data);
@@ -80,8 +81,8 @@ export function getRoomInfo(roomId: number): Promise<ICcrRoomInfo | undefined | 
             }
         };
 
-        Notify.addEventListener(Notify.Type.MsgCcrGetRoomInfo,        callbackOnSucceed);
-        Notify.addEventListener(Notify.Type.MsgCcrGetRoomInfoFailed,  callbackOnFailed);
+        Notify.addEventListener(NotifyType.MsgCcrGetRoomInfo,        callbackOnSucceed);
+        Notify.addEventListener(NotifyType.MsgCcrGetRoomInfoFailed,  callbackOnFailed);
 
         CcrProxy.reqCcrGetRoomInfo(roomId);
     });
@@ -359,14 +360,14 @@ export namespace Create {
             setSelfCoId(coId);
         }
 
-        Notify.dispatch(Notify.Type.CcrCreateTeamIndexChanged);
+        Notify.dispatch(NotifyType.CcrCreateTeamIndexChanged);
         return ClientErrorCode.NoError;
     }
     function setPresetWarRuleId(ruleId: number | null | undefined): void {
         const settingsForCommon             = getData().settingsForCommon;
         settingsForCommon.warRule.ruleId    = ruleId;
         settingsForCommon.presetWarRuleId   = ruleId;
-        Notify.dispatch(Notify.Type.CcrCreatePresetWarRuleIdChanged);
+        Notify.dispatch(NotifyType.CcrCreatePresetWarRuleIdChanged);
     }
     export function setCustomWarRuleId(): void {
         setPresetWarRuleId(null);
@@ -425,7 +426,7 @@ export namespace Create {
     export function setSelfPlayerIndex(playerIndex: number): void {
         if (playerIndex !== getSelfPlayerIndex()) {
             getData().selfPlayerIndex = playerIndex;
-            Notify.dispatch(Notify.Type.CcrCreateSelfPlayerIndexChanged);
+            Notify.dispatch(NotifyType.CcrCreateSelfPlayerIndexChanged);
         }
     }
     // export async function tickSelfPlayerIndex(): Promise<void> {
@@ -438,7 +439,7 @@ export namespace Create {
     export function setSelfCoId(coId: number): void {
         if (getSelfCoId() !== coId) {
             getData().selfCoId = coId;
-            Notify.dispatch(Notify.Type.CcrCreateSelfCoIdChanged);
+            Notify.dispatch(NotifyType.CcrCreateSelfCoIdChanged);
         }
     }
     export function getSelfCoId(): number | null {
@@ -448,7 +449,7 @@ export namespace Create {
     export function setSelfUnitAndTileSkinId(skinId: number): void {
         if (skinId !== getSelfUnitAndTileSkinId()) {
             getData().selfUnitAndTileSkinId = skinId;
-            Notify.dispatch(Notify.Type.CcrCreateSelfSkinIdChanged);
+            Notify.dispatch(NotifyType.CcrCreateSelfSkinIdChanged);
         }
     }
     export function getSelfUnitAndTileSkinId(): number {
@@ -521,7 +522,7 @@ export namespace Create {
         }
 
         infoArray.splice(infoArray.findIndex(v => v.playerIndex === playerIndex), 1);
-        Notify.dispatch(Notify.Type.CcrCreateAiCoIdChanged);
+        Notify.dispatch(NotifyType.CcrCreateAiCoIdChanged);
     }
 
     export function setAiCoId(playerIndex: number, coId: number | null | undefined): void {
@@ -532,7 +533,7 @@ export namespace Create {
         }
 
         BwWarRuleHelper.setFixedCoIdInCcw(warRule, playerIndex, coId);
-        Notify.dispatch(Notify.Type.CcrCreateAiCoIdChanged);
+        Notify.dispatch(NotifyType.CcrCreateAiCoIdChanged);
     }
     export function getAiCoId(playerIndex: number): number | null | undefined {
         const warRule = getWarRule();
@@ -588,7 +589,7 @@ export namespace Create {
 
     export function tickTeamIndex(playerIndex: number): void {
         BwWarRuleHelper.tickTeamIndex(getWarRule(), playerIndex);
-        Notify.dispatch(Notify.Type.CcrCreateTeamIndexChanged);
+        Notify.dispatch(NotifyType.CcrCreateTeamIndexChanged);
     }
     export function getTeamIndex(playerIndex: number): number {
         return BwWarRuleHelper.getTeamIndex(getWarRule(), playerIndex);
@@ -699,7 +700,7 @@ export namespace Join {
     export function setTargetRoomId(roomId: number | null): void {
         if (getTargetRoomId() !== roomId) {
             _targetRoomId = roomId;
-            Notify.dispatch(Notify.Type.CcrJoinTargetRoomIdChanged);
+            Notify.dispatch(NotifyType.CcrJoinTargetRoomIdChanged);
         }
     }
     export async function getTargetRoomInfo(): Promise<ICcrRoomInfo | null> {
@@ -720,7 +721,7 @@ export namespace Joined {
     export function setPreviewingRoomId(roomId: number | null): void {
         if (getPreviewingRoomId() != roomId) {
             _previewingRoomId = roomId;
-            Notify.dispatch(Notify.Type.CcrJoinedPreviewingRoomIdChanged);
+            Notify.dispatch(NotifyType.CcrJoinedPreviewingRoomIdChanged);
         }
     }
 }

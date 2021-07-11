@@ -3,6 +3,7 @@ import { UiComponent }          from "../gameui/UiComponent";
 import { UiImage }              from "../gameui/UiImage";
 import * as Helpers             from "../utility/Helpers";
 import * as Notify              from "../utility/Notify";
+import { NotifyType } from "../utility/NotifyType";
 import * as StageManager        from "../utility/StageManager";
 import * as Types               from "../utility/Types";
 import Point                    = Types.Point;
@@ -65,9 +66,9 @@ export class UiZoomableComponent extends UiComponent {
 
     public setMouseWheelListenerEnabled(enabled: boolean): void {
         if ((enabled) && (!this._isMouseWheelListenerEnabled)) {
-            Notify.addEventListener(Notify.Type.MouseWheel, this._onNotifyMouseWheel, this);
+            Notify.addEventListener(NotifyType.MouseWheel, this._onNotifyMouseWheel, this);
         } else if ((!enabled) && (this._isMouseWheelListenerEnabled)) {
-            Notify.removeEventListener(Notify.Type.MouseWheel, this._onNotifyMouseWheel, this);
+            Notify.removeEventListener(NotifyType.MouseWheel, this._onNotifyMouseWheel, this);
         }
     }
 
@@ -133,7 +134,7 @@ export class UiZoomableComponent extends UiComponent {
         const newX      = needRevise ? this.getRevisedContentX(x) : x;
         if (newX !== contents.x) {
             contents.x = newX;
-            Notify.dispatch(Notify.Type.ZoomableContentsMoved);
+            Notify.dispatch(NotifyType.ZoomableContentsMoved);
         }
     }
     private set _contentX(x: number) {
@@ -150,7 +151,7 @@ export class UiZoomableComponent extends UiComponent {
         const newY      = needRevise ? this.getRevisedContentY(y) : y;
         if (newY !== contents.y) {
             contents.y = newY;
-            Notify.dispatch(Notify.Type.ZoomableContentsMoved);
+            Notify.dispatch(NotifyType.ZoomableContentsMoved);
         }
     }
     private set _contentY(y: number) {

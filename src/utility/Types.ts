@@ -161,7 +161,7 @@ export type TurnAndPlayerIndex = {
 };
 
 // eslint-disable-next-line no-shadow
-export const enum Visibility {
+export enum Visibility {
     OutsideVision   = 0,
     InsideVision    = 1,
     TrueVision      = 2,
@@ -203,7 +203,7 @@ export type SpmWarSaveSlotData = {
 // Enums.
 ////////////////////////////////////////////////////////////////////////////////
 // eslint-disable-next-line no-shadow
-export const enum LayerType {
+export enum LayerType {
     Top,
     Notify2,    // FloatText
     Notify1,    // CommonAlertPanel, ...
@@ -217,7 +217,7 @@ export const enum LayerType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum ColorType {
+export enum ColorType {
     Origin,
     Gray,
     Dark,
@@ -227,20 +227,20 @@ export const enum ColorType {
     White,
 }
 // eslint-disable-next-line no-shadow
-export const enum ColorValue {
+export enum ColorValue {
     Red     = 0xFF0000,
     White   = 0xFFFFFF,
     Green   = 0x00FF00,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum SoundType {
+export enum SoundType {
     Bgm,
     Effect,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum BgmCode {
+export enum BgmCode {
     None        = 0,
     Lobby01,
     MapEditor01,
@@ -258,21 +258,21 @@ export const UiState = {
 };
 
 // eslint-disable-next-line no-shadow
-export const enum LogoutType {
+export enum LogoutType {
     SelfRequest,
     LoginCollision,
     NetworkFailure,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum SyncWarRequestType {
+export enum SyncWarRequestType {
     PlayerRequest,
     PlayerForce,
     ReconnectionRequest,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum SyncWarStatus {
+export enum SyncWarStatus {
     NoError,
     NotJoined,
     Synchronized,
@@ -281,19 +281,19 @@ export const enum SyncWarStatus {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum MoveType {
+export enum MoveType {
     Infantry,  /* 0 */            Mech,      /* 1 */            TireA,     /* 2 */            TireB,     /* 3 */
     Tank,      /* 4 */            Air,       /* 5 */            Ship,      /* 6 */            Transport, /* 7 */
 }
 
 // eslint-disable-next-line no-shadow
-export const enum TileBaseType {
+export enum TileBaseType {
     Empty,  /* 0 */            Plain,  /* 1 */            River,  /* 2 */            Sea,    /* 3 */
     Beach,  /* 4 */
 }
 
 // eslint-disable-next-line no-shadow
-export const enum TileObjectType {
+export enum TileObjectType {
     Empty,        /* 0 */             Road,         /* 1 */             Bridge,       /* 2 */             Wood,         /* 3 */
     Mountain,     /* 4 */             Wasteland,    /* 5 */             Ruins,        /* 6 */             Fire,         /* 7 */
     Rough,        /* 8 */             Mist,         /* 9 */             Reef,         /* 10 */            Plasma,       /* 11 */
@@ -304,7 +304,7 @@ export const enum TileObjectType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum TileType {
+export enum TileType {
     Plain,         /* 0 */      River,         /* 1 */      Sea,           /* 2 */      Beach,         /* 3 */
     Road,          /* 4 */      BridgeOnPlain, /* 5 */      BridgeOnRiver, /* 6 */      BridgeOnBeach, /* 7 */
     BridgeOnSea,   /* 8 */      Wood,          /* 9 */      Mountain,      /* 10 */     Wasteland,     /* 11 */
@@ -317,7 +317,7 @@ export const enum TileType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum UnitType {
+export enum UnitType {
     Infantry,        /* 0 */            Mech,            /* 1 */            Bike,            /* 2 */            Recon,           /* 3 */
     Flare,           /* 4 */            AntiAir,         /* 5 */            Tank,            /* 6 */            MediumTank,      /* 7 */
     WarTank,         /* 8 */            Artillery,       /* 9 */            AntiTank,        /* 10 */           Rockets,         /* 11 */
@@ -328,7 +328,7 @@ export const enum UnitType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum UnitCategory {
+export enum UnitCategory {
     None,          /* 0 */            All,               /* 1 */            Ground,        /* 2 */            Naval,         /* 3 */
     Air,           /* 4 */            GroundOrNaval,     /* 5 */            GroundOrAir,   /* 6 */            Direct,        /* 7 */
     Indirect,      /* 8 */            Foot,              /* 9 */            Infantry,      /* 10 */           Vehicle,       /* 11 */
@@ -337,12 +337,12 @@ export const enum UnitCategory {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum TileCategory {
+export enum TileCategory {
     None,          /* 0 */              All,               /* 1 */          LoadableForSeaTransports, /* 2 */   Destroyable,    /* 3 */
 }
 
 // eslint-disable-next-line no-shadow
-export const enum ArmorType {
+export enum ArmorType {
     Infantry,        /* 0 */            Mech,            /* 1 */            Bike,            /* 2 */            Recon,           /* 3 */
     Flare,           /* 4 */            AntiAir,         /* 5 */            Tank,            /* 6 */            MediumTank,      /* 7 */
     WarTank,         /* 8 */            Artillery,       /* 9 */            AntiTank,        /* 10 */           Rockets,         /* 11 */
@@ -353,38 +353,38 @@ export const enum ArmorType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum UnitActionState {
+export enum UnitActionState {
     Idle,   /* 0 */         Acted,  /* 1 */
 }
 
 // eslint-disable-next-line no-shadow
-export const enum PlayerAliveState {
+export enum PlayerAliveState {
     Alive   = 0,
     Dying   = 1,
     Dead    = 2,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum UnitAnimationType {
+export enum UnitAnimationType {
     Stand,
     Move,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum WeaponType {
+export enum WeaponType {
     Primary     = 0,
     Secondary   = 1,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum ForceFogCode {
+export enum ForceFogCode {
     None,
     Clear,
     Fog,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum Direction {
+export enum Direction {
     Undefined,
     Left,
     Right,
@@ -393,7 +393,7 @@ export const enum Direction {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum TurnPhaseCode {
+export enum TurnPhaseCode {
     WaitBeginTurn       = 0,
     Main                = 1,
     // GetFund,
@@ -411,7 +411,7 @@ export const enum TurnPhaseCode {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum ActionPlannerState {
+export enum ActionPlannerState {
     Idle,
     ExecutingAction,
     MakingMovePath,
@@ -451,7 +451,7 @@ export const enum ActionPlannerState {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum UnitActionType {
+export enum UnitActionType {
     BeLoaded,
     Join,
     UseCoPower,
@@ -472,27 +472,27 @@ export const enum UnitActionType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum CoSkillType {
+export enum CoSkillType {
     Passive     = 0,
     Power       = 1,
     SuperPower  = 2,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum LanguageType {
+export enum LanguageType {
     Chinese = 0,
     English = 1,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum CoSkillAreaType {
+export enum CoSkillAreaType {
     Zone    = 0,
     OnMap   = 1,
     Halo    = 2,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum McwWatchRequestWatcherStatus {
+export enum McwWatchRequestWatcherStatus {
     Succeed,
     TargetPlayerLost,
     AlreadyRequested,
@@ -500,7 +500,7 @@ export const enum McwWatchRequestWatcherStatus {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum WarType {
+export enum WarType {
     Undefined   = 0,
     McwStd      = 1,
     McwFog      = 2,
@@ -521,7 +521,7 @@ export const enum WarType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum MapReviewStatus {
+export enum MapReviewStatus {
     None        = 0,
     Reviewing   = 1,
     Rejected    = 2,
@@ -529,7 +529,7 @@ export const enum MapReviewStatus {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum MapEditorDrawerMode {
+export enum MapEditorDrawerMode {
     Preview,
     DrawUnit,
     DrawTileBase,
@@ -539,7 +539,7 @@ export const enum MapEditorDrawerMode {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum SymmetryType {
+export enum SymmetryType {
     None                = -1,
     UpToDown            = 0,
     UpRightToDownLeft   = 1,
@@ -549,14 +549,14 @@ export const enum SymmetryType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum ChatChannel {
+export enum ChatChannel {
     System      = 1,
     PublicEn    = 2,
     PublicCn    = 3,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum ChatMessageToCategory {
+export enum ChatMessageToCategory {
     Private         = 1,
     WarAndTeam      = 2,
     PublicChannel   = 3,
@@ -566,20 +566,20 @@ export const enum ChatMessageToCategory {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum UnitAndTileTextureVersion {
+export enum UnitAndTileTextureVersion {
     V0  = 0,
     V1  = 1,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum BootTimerType {
+export enum BootTimerType {
     NoBoot      = 0,
     Regular     = 1,
     Incremental = 2,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum PlayerRuleType {
+export enum PlayerRuleType {
     TeamIndex,
     BannedCoIdArray,
     InitialFund,
@@ -596,7 +596,7 @@ export const enum PlayerRuleType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum WarEventDescType {
+export enum WarEventDescType {
     EventName,
     EventMaxCallCountInPlayerTurn,
     EventMaxCallCountTotal,
@@ -606,7 +606,7 @@ export const enum WarEventDescType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum WarEventConditionType {
+export enum WarEventConditionType {
     WecTurnIndexEqualTo,
     WecTurnIndexGreaterThan,
     WecTurnIndexLessThan,
@@ -626,14 +626,26 @@ export const enum WarEventConditionType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum WarEventActionType {
+export enum WarEventActionType {
     AddUnit,
     SetPlayerAliveState,
 }
 
 // eslint-disable-next-line no-shadow
-export const enum GameVersion {
+export enum GameVersion {
     Legacy,
     Test,
     Awbw,
+}
+
+// eslint-disable-next-line no-shadow
+export enum LogLevel {
+    All   = 0,
+    Trace = 1,
+    Debug = 2,
+    Log   = 3,
+    Info  = 4,
+    Warn  = 5,
+    Error = 6,
+    Off   = 0xFFFFFFFF,
 }

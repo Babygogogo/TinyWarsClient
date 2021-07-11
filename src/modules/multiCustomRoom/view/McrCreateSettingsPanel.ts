@@ -18,7 +18,9 @@ import * as FloatText                       from "../../../utility/FloatText";
 import * as FlowManager                     from "../../../utility/FlowManager";
 import * as Helpers                         from "../../../utility/Helpers";
 import * as Lang                            from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                           from "../../../utility/Types";
 import * as BwHelpers                       from "../../baseWar/model/BwHelpers";
 import * as BwWarRuleHelper                 from "../../baseWar/model/BwWarRuleHelper";
@@ -85,9 +87,9 @@ export class McrCreateSettingsPanel extends UiPanel<void> {
             { ui: this._btnChooseCo,    callback: this._onTouchedBtnChooseCo },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.McrCreateSelfCoIdChanged,   callback: this._onNotifyMcrCreateSelfCoIdChanged },
-            { type: Notify.Type.MsgMcrCreateRoom,           callback: this._onNotifyMsgMcrCreateRoom },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.McrCreateSelfCoIdChanged,   callback: this._onNotifyMcrCreateSelfCoIdChanged },
+            { type: NotifyType.MsgMcrCreateRoom,           callback: this._onNotifyMsgMcrCreateRoom },
         ]);
         this._tabSettings.setBarItemRenderer(TabItemRenderer);
         this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
@@ -95,15 +97,15 @@ export class McrCreateSettingsPanel extends UiPanel<void> {
 
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : McrCreateBasicSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData : { name: Lang.getText(LangTextType.B0003) },
                 pageClass   : McrCreateAdvancedSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : McrCreateMapInfoPage,
             },
         ]);
@@ -147,7 +149,7 @@ export class McrCreateSettingsPanel extends UiPanel<void> {
         this._updateBtnChooseCo();
     }
     private _onNotifyMsgMcrCreateRoom(e: egret.Event): void {
-        FloatText.show(Lang.getText(Lang.Type.A0015));
+        FloatText.show(Lang.getText(LangTextType.A0015));
         FlowManager.gotoLobby();
     }
 
@@ -170,15 +172,15 @@ export class McrCreateSettingsPanel extends UiPanel<void> {
     // Functions for the view.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0000);
-        this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0137);
-        this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
-        this._labelRoomSettings.text        = Lang.getText(Lang.Type.B0571);
-        this._labelChooseCo.text            = Lang.getText(Lang.Type.B0145);
-        this._labelChoosePlayerIndex.text   = Lang.getText(Lang.Type.B0572);
-        this._labelChooseSkinId.text        = Lang.getText(Lang.Type.B0573);
-        this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-        this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
+        this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
+        this._labelMultiPlayer.text         = Lang.getText(LangTextType.B0137);
+        this._labelChooseMap.text           = Lang.getText(LangTextType.B0227);
+        this._labelRoomSettings.text        = Lang.getText(LangTextType.B0571);
+        this._labelChooseCo.text            = Lang.getText(LangTextType.B0145);
+        this._labelChoosePlayerIndex.text   = Lang.getText(LangTextType.B0572);
+        this._labelChooseSkinId.text        = Lang.getText(LangTextType.B0573);
+        this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+        this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
     }
 
     private _updateBtnChooseCo(): void {
@@ -288,9 +290,9 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.McrCreateTeamIndexChanged,          callback: this._onNotifyMcrCreateTeamIndexChanged },
-            { type: Notify.Type.McrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMcrCreateSelfPlayerIndexChanged },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.McrCreateTeamIndexChanged,          callback: this._onNotifyMcrCreateTeamIndexChanged },
+            { type: NotifyType.McrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMcrCreateSelfPlayerIndexChanged },
         ]);
     }
 
@@ -343,7 +345,7 @@ class SkinIdRenderer extends UiListItemRenderer<DataForSkinIdRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.McrCreateSelfSkinIdChanged, callback: this._onNotifyMcrCreateSelfSkinIdChanged },
+            { type: NotifyType.McrCreateSelfSkinIdChanged, callback: this._onNotifyMcrCreateSelfSkinIdChanged },
         ]);
     }
 

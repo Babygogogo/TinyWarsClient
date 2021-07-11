@@ -17,7 +17,9 @@ import { OpenDataForRwReplayPlayerInfoPage, RwReplayPlayerInfoPage }    from "./
 import * as FlowManager                                                 from "../../../utility/FlowManager";
 import * as Helpers                                                     from "../../../utility/Helpers";
 import * as Lang                                                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                                                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                                                       from "../../../utility/Types";
 import * as WarMapModel                                                 from "../../warMap/model/WarMapModel";
 import * as RwModel                                                     from "../model/RwModel";
@@ -67,11 +69,11 @@ export class RwReplayListPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.RwPreviewingReplayIdChanged,    callback: this._onNotifyRwPreviewingReplayIdChanged },
-            { type: Notify.Type.MsgReplayGetInfoList,           callback: this._onNotifyMsgReplayGetInfoList },
-            { type: Notify.Type.MsgReplayGetData,               callback: this._onNotifyMsgReplayGetData },
-            { type: Notify.Type.MsgReplayGetDataFailed,         callback: this._onNotifyMsgReplayGetDataFailed },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.RwPreviewingReplayIdChanged,    callback: this._onNotifyRwPreviewingReplayIdChanged },
+            { type: NotifyType.MsgReplayGetInfoList,           callback: this._onNotifyMsgReplayGetInfoList },
+            { type: NotifyType.MsgReplayGetData,               callback: this._onNotifyMsgReplayGetData },
+            { type: NotifyType.MsgReplayGetDataFailed,         callback: this._onNotifyMsgReplayGetDataFailed },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -135,8 +137,8 @@ export class RwReplayListPanel extends UiPanel<void> {
         const replayId = RwModel.getPreviewingReplayId();
         if (replayId != null) {
             CommonBlockPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0040),
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0040),
             });
             RwProxy.reqReplayGetData(replayId);
         }
@@ -148,17 +150,17 @@ export class RwReplayListPanel extends UiPanel<void> {
     private _initTabSettings(): void {
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : RwReplayMapInfoPage,
                 pageData    : { replayId: null } as OpenDataForRwReplayMapInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                tabItemData : { name: Lang.getText(LangTextType.B0224) },
                 pageClass   : RwReplayPlayerInfoPage,
                 pageData    : { replayId: null } as OpenDataForRwReplayPlayerInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : RwReplayWarInfoPage,
                 pageData    : { replayId: null } as OpenDataForRwReplayWarInfoPage,
             },
@@ -166,13 +168,13 @@ export class RwReplayListPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-        this._labelReplay.text          = Lang.getText(Lang.Type.B0092);
-        this._labelChooseReplay.text    = Lang.getText(Lang.Type.B0598);
-        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-        this._labelNoReplay.text        = Lang.getText(Lang.Type.B0241);
-        this._btnNextStep.label         = Lang.getText(Lang.Type.B0024);
-        this._btnSearch.label           = Lang.getText(Lang.Type.B0228);
+        this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+        this._labelReplay.text          = Lang.getText(LangTextType.B0092);
+        this._labelChooseReplay.text    = Lang.getText(LangTextType.B0598);
+        this._btnBack.label             = Lang.getText(LangTextType.B0146);
+        this._labelNoReplay.text        = Lang.getText(LangTextType.B0241);
+        this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
+        this._btnSearch.label           = Lang.getText(LangTextType.B0228);
     }
 
     private _updateGroupReplayList(): void {
@@ -322,7 +324,7 @@ class ReplayRenderer extends UiListItemRenderer<DataForReplayRenderer> {
             { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.RwPreviewingReplayIdChanged,  callback: this._onNotifyRwPreviewingReplayIdChanged },
+            { type: NotifyType.RwPreviewingReplayIdChanged,  callback: this._onNotifyRwPreviewingReplayIdChanged },
         ]);
     }
 
@@ -355,8 +357,8 @@ class ReplayRenderer extends UiListItemRenderer<DataForReplayRenderer> {
 
     private _onTouchTapBtnNext(e: egret.TouchEvent): void {
         CommonBlockPanel.show({
-            title   : Lang.getText(Lang.Type.B0088),
-            content : Lang.getText(Lang.Type.A0040),
+            title   : Lang.getText(LangTextType.B0088),
+            content : Lang.getText(LangTextType.A0040),
         });
         RwProxy.reqReplayGetData(this.data.replayId);
     }

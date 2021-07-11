@@ -9,7 +9,9 @@ import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as ConfigManager       from "../../../utility/ConfigManager";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import * as BwHelpers           from "../../baseWar/model/BwHelpers";
 import * as MfrModel            from "../../multiFreeRoom/model/MfrModel";
@@ -29,7 +31,7 @@ export class MfrCreatePlayerInfoPage extends UiTabPage<void> {
 
     protected async _onOpened(): Promise<void> {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this.left   = 0;
@@ -97,8 +99,8 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             { ui: this._groupCo,    callback: this._onTouchedGroupCo },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MfrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MfrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -128,8 +130,8 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelRankStdTitle.text    = Lang.getText(Lang.Type.B0546);
-        this._labelRankFogTitle.text    = Lang.getText(Lang.Type.B0547);
+        this._labelRankStdTitle.text    = Lang.getText(LangTextType.B0546);
+        this._labelRankFogTitle.text    = Lang.getText(LangTextType.B0547);
     }
 
     private async _updateComponentsForSettings(): Promise<void> {
@@ -153,7 +155,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         if (userInfo) {
             labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
         } else {
-            labelNickname.text = playerData.userId == null ? Lang.getText(Lang.Type.B0607) : `??`;
+            labelNickname.text = playerData.userId == null ? Lang.getText(LangTextType.B0607) : `??`;
         }
 
         const rankScoreArray        = userInfo ? userInfo.userMrwRankInfoArray : undefined;

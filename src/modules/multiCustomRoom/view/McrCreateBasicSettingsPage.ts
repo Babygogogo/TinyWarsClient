@@ -10,7 +10,9 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as McrModel                    from "../../multiCustomRoom/model/McrModel";
@@ -80,7 +82,7 @@ export class McrCreateBasicSettingsPage extends UiTabPage<void> {
             { ui: this._btnTimerIncremental2,   callback: this._onTouchedBtnTimerIncremental2 },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
         this.left                       = 0;
         this.right                      = 0;
@@ -138,7 +140,7 @@ export class McrCreateBasicSettingsPage extends UiTabPage<void> {
             callback();
         } else {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0129),
+                content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     McrModel.Create.setCustomWarRuleId();
                     callback();
@@ -149,8 +151,8 @@ export class McrCreateBasicSettingsPage extends UiTabPage<void> {
 
     private _onTouchedBtnHasFogHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0020),
-            content: Lang.getText(Lang.Type.R0002),
+            title  : Lang.getText(LangTextType.B0020),
+            content: Lang.getText(LangTextType.R0002),
         });
     }
 
@@ -161,8 +163,8 @@ export class McrCreateBasicSettingsPage extends UiTabPage<void> {
 
     private _onTouchedBtnTimerTypeHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0574),
-            content: Lang.getText(Lang.Type.R0003),
+            title  : Lang.getText(LangTextType.B0574),
+            content: Lang.getText(LangTextType.R0003),
         });
     }
 
@@ -175,16 +177,16 @@ export class McrCreateBasicSettingsPage extends UiTabPage<void> {
         const minValue = 1;
         const maxValue = CommonConstants.WarBootTimerIncrementalMaxLimit;
         CommonInputPanel.show({
-            title           : Lang.getText(Lang.Type.B0389),
+            title           : Lang.getText(LangTextType.B0389),
             currentValue    : "" + McrModel.Create.getBootTimerParams()[1],
             maxChars        : 5,
             charRestrict    : "0-9",
-            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(Lang.Type.B0017)})`,
+            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
             callback        : panel => {
                 const text  = panel.getInputText();
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     McrModel.Create.setTimerIncrementalInitialTime(value);
                     this._updateGroupTimer();
@@ -197,16 +199,16 @@ export class McrCreateBasicSettingsPage extends UiTabPage<void> {
         const minValue = 0;
         const maxValue = CommonConstants.WarBootTimerIncrementalMaxLimit;
         CommonInputPanel.show({
-            title           : Lang.getText(Lang.Type.B0390),
+            title           : Lang.getText(LangTextType.B0390),
             currentValue    : "" + McrModel.Create.getBootTimerParams()[2],
             maxChars        : 5,
             charRestrict    : "0-9",
-            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(Lang.Type.B0017)})`,
+            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
             callback        : panel => {
                 const text  = panel.getInputText();
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     McrModel.Create.setTimerIncrementalIncrementalValue(value);
                     this._updateGroupTimer();
@@ -219,16 +221,16 @@ export class McrCreateBasicSettingsPage extends UiTabPage<void> {
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelMapNameTitle.text            = Lang.getText(Lang.Type.B0225);
-        this._labelWarNameTitle.text            = Lang.getText(Lang.Type.B0185);
-        this._labelWarPasswordTitle.text        = Lang.getText(Lang.Type.B0186);
-        this._labelWarCommentTitle.text         = Lang.getText(Lang.Type.B0187);
-        this._labelWarRuleTitle.text            = Lang.getText(Lang.Type.B0318);
-        this._labelHasFogTitle.text             = Lang.getText(Lang.Type.B0020);
-        this._labelTimerTypeTitle.text          = Lang.getText(Lang.Type.B0574);
-        this._labelTimerRegularTitle.text       = Lang.getText(Lang.Type.B0021);
-        this._labelTimerIncrementalTitle1.text  = Lang.getText(Lang.Type.B0389);
-        this._labelTimerIncrementalTitle2.text  = Lang.getText(Lang.Type.B0390);
+        this._labelMapNameTitle.text            = Lang.getText(LangTextType.B0225);
+        this._labelWarNameTitle.text            = Lang.getText(LangTextType.B0185);
+        this._labelWarPasswordTitle.text        = Lang.getText(LangTextType.B0186);
+        this._labelWarCommentTitle.text         = Lang.getText(LangTextType.B0187);
+        this._labelWarRuleTitle.text            = Lang.getText(LangTextType.B0318);
+        this._labelHasFogTitle.text             = Lang.getText(LangTextType.B0020);
+        this._labelTimerTypeTitle.text          = Lang.getText(LangTextType.B0574);
+        this._labelTimerRegularTitle.text       = Lang.getText(LangTextType.B0021);
+        this._labelTimerIncrementalTitle1.text  = Lang.getText(LangTextType.B0389);
+        this._labelTimerIncrementalTitle2.text  = Lang.getText(LangTextType.B0390);
     }
 
     private _updateComponentsForWarRule(): void {
@@ -261,7 +263,7 @@ export class McrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _updateLabelHasFog(): void {
-        this._labelHasFog.text = Lang.getText(McrModel.Create.getHasFog() ? Lang.Type.B0012 : Lang.Type.B0013);
+        this._labelHasFog.text = Lang.getText(McrModel.Create.getHasFog() ? LangTextType.B0012 : LangTextType.B0013);
     }
 
     private _updateGroupTimer(): void {

@@ -1,6 +1,8 @@
 
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import * as Helpers             from "../../../utility/Helpers";
 import { UiPanel }              from "../../../gameui/UiPanel";
@@ -53,7 +55,7 @@ export class CommonInputPanel extends UiPanel<OpenData> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnCancel,  callback: this._onTouchedBtnCancel, },
@@ -128,7 +130,7 @@ export class CommonInputPanel extends UiPanel<OpenData> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-        this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
+        this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+        this._btnCancel.label   = Lang.getText(LangTextType.B0154);
     }
 }

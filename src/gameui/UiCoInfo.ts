@@ -6,7 +6,9 @@ import { UiLabel }              from "../gameui/UiLabel";
 import { UiScrollList }         from "../gameui/UiScrollList";
 import * as ConfigManager       from "../utility/ConfigManager";
 import * as Lang                from "../utility/Lang";
+import { LangTextType } from "../utility/LangTextType";
 import * as Notify              from "../utility/Notify";
+import { NotifyType } from "../utility/NotifyType";
 import * as Types               from "../utility/Types";
 import CoSkillType              = Types.CoSkillType;
 
@@ -40,7 +42,7 @@ export class UiCoInfo extends UiComponent {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._listSkillDesc.setItemRenderer(SkillDescRenderer);
         this._listSkillType.setItemRenderer(SkillTypeRenderer);
@@ -101,11 +103,11 @@ export class UiCoInfo extends UiComponent {
             return;
         }
 
-        this._labelDesignerTitle.text               = `${Lang.getText(Lang.Type.B0163)}:`;
-        this._labelBoardCostPercentageTitle.text    = `${Lang.getText(Lang.Type.B0164)}:`;
-        this._labelZoneRadiusTitle.text             = `${Lang.getText(Lang.Type.B0165)}:`;
-        this._labelEnergyBarTitle.text              = `${Lang.getText(Lang.Type.B0166)}:`;
-        this._labelEnergyCostTitle.text             = `${Lang.getText(Lang.Type.B0167)}:`;
+        this._labelDesignerTitle.text               = `${Lang.getText(LangTextType.B0163)}:`;
+        this._labelBoardCostPercentageTitle.text    = `${Lang.getText(LangTextType.B0164)}:`;
+        this._labelZoneRadiusTitle.text             = `${Lang.getText(LangTextType.B0165)}:`;
+        this._labelEnergyBarTitle.text              = `${Lang.getText(LangTextType.B0166)}:`;
+        this._labelEnergyCostTitle.text             = `${Lang.getText(LangTextType.B0167)}:`;
     }
 
     private _updateComponentsForCoInfo(): void {
@@ -150,7 +152,7 @@ export class UiCoInfo extends UiComponent {
         const skillIdArray              = ConfigManager.getCoSkillArray(configVersion, coId, skillType) || [];
         const hasSkill                  = !!skillIdArray.length;
         this._labelSkillType.text       = `${Lang.getCoSkillTypeName(skillType)}:`;
-        this._labelSkillName.text       = hasSkill ? undefined : Lang.getText(Lang.Type.B0001);
+        this._labelSkillName.text       = hasSkill ? undefined : Lang.getText(LangTextType.B0001);
 
         const groupEnergyCost = this._groupEnergyCost;
         if (!hasSkill) {

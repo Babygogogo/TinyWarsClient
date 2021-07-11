@@ -7,7 +7,9 @@ import { MeWarMenuPanel }               from "./MeWarMenuPanel";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as MeModel                     from "../model/MeModel";
 import * as MeUtility                   from "../model/MeUtility";
@@ -55,7 +57,7 @@ export class MeClearPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnCancel,          callback: this._onTouchedBtnCancel, },
@@ -85,7 +87,7 @@ export class MeClearPanel extends UiPanel<void> {
         const height        = this._newHeight;
         const gridsCount    = width * height;
         if ((!gridsCount) || (gridsCount <= 0)) {
-            FloatText.show(Lang.getText(Lang.Type.A0087));
+            FloatText.show(Lang.getText(LangTextType.A0087));
         } else {
             const war = MeModel.getWar();
             war.stopRunning();
@@ -127,12 +129,12 @@ export class MeClearPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnConfirm.label          = Lang.getText(Lang.Type.B0026);
-        this._btnCancel.label           = Lang.getText(Lang.Type.B0154);
-        this._labelTitle.text           = Lang.getText(Lang.Type.B0391);
-        this._labelCurrSizeTitle.text   = Lang.getText(Lang.Type.B0291);
-        this._labelNewSizeTitle.text    = Lang.getText(Lang.Type.B0292);
-        this._labelTips1.text           = Lang.getText(Lang.Type.A0117);
-        this._labelTips2.text           = Lang.getFormattedText(Lang.Type.F0023, CommonConstants.MapMaxGridsCount);
+        this._btnConfirm.label          = Lang.getText(LangTextType.B0026);
+        this._btnCancel.label           = Lang.getText(LangTextType.B0154);
+        this._labelTitle.text           = Lang.getText(LangTextType.B0391);
+        this._labelCurrSizeTitle.text   = Lang.getText(LangTextType.B0291);
+        this._labelNewSizeTitle.text    = Lang.getText(LangTextType.B0292);
+        this._labelTips1.text           = Lang.getText(LangTextType.A0117);
+        this._labelTips2.text           = Lang.getFormattedText(LangTextType.F0023, CommonConstants.MapMaxGridsCount);
     }
 }

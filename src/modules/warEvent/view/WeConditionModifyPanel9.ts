@@ -6,7 +6,9 @@ import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiTextInput }                  from "../../../gameui/UiTextInput";
 import { WeConditionTypeListPanel }     from "./WeConditionTypeListPanel";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
@@ -60,7 +62,7 @@ export class WeConditionModifyPanel9 extends UiPanel<OpenDataForWeConditionModif
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,           callback: this.close },
@@ -89,7 +91,7 @@ export class WeConditionModifyPanel9 extends UiPanel<OpenDataForWeConditionModif
         data.isNot  = !data.isNot;
         this._updateImgIsNot();
         this._updateLabelDescAndLabelError();
-        Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+        Notify.dispatch(NotifyType.WarEventFullDataChanged);
     }
     private _onTouchedBtnTurnEvent(e: egret.TouchEvent): void {
         const openData              = this._getOpenData();
@@ -100,7 +102,7 @@ export class WeConditionModifyPanel9 extends UiPanel<OpenDataForWeConditionModif
 
         this._updateLabelDescAndLabelError();
         this._updateLabelEvent();
-        Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+        Notify.dispatch(NotifyType.WarEventFullDataChanged);
     }
     private _onFocusOutInputCalledCount(e: egret.FocusEvent): void {
         const value = parseInt(this._inputCalledCount.text);
@@ -111,7 +113,7 @@ export class WeConditionModifyPanel9 extends UiPanel<OpenDataForWeConditionModif
             data.countEqualTo = value;
             this._updateLabelDescAndLabelError();
             this._updateInputCalledCount();
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
 
@@ -125,12 +127,12 @@ export class WeConditionModifyPanel9 extends UiPanel<OpenDataForWeConditionModif
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text       = `${Lang.getText(Lang.Type.B0501)} C${this._getCondition().WecCommonData.conditionId}`;
-        this._btnClose.label        = Lang.getText(Lang.Type.B0146);
-        this._btnType.label         = Lang.getText(Lang.Type.B0516);
-        this._labelIsNot.text       = Lang.getText(Lang.Type.B0517);
-        this._btnEvent.label        = Lang.getText(Lang.Type.B0469);
-        this._labelCalledCount.text = Lang.getText(Lang.Type.B0522);
+        this._labelTitle.text       = `${Lang.getText(LangTextType.B0501)} C${this._getCondition().WecCommonData.conditionId}`;
+        this._btnClose.label        = Lang.getText(LangTextType.B0146);
+        this._btnType.label         = Lang.getText(LangTextType.B0516);
+        this._labelIsNot.text       = Lang.getText(LangTextType.B0517);
+        this._btnEvent.label        = Lang.getText(LangTextType.B0469);
+        this._labelCalledCount.text = Lang.getText(LangTextType.B0522);
 
         this._updateLabelDescAndLabelError();
         this._updateLabelEvent();
@@ -142,7 +144,7 @@ export class WeConditionModifyPanel9 extends UiPanel<OpenDataForWeConditionModif
         const condition         = openData.condition;
         const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition);
         const labelError        = this._labelError;
-        labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+        labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
         labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
         this._labelDesc.text    = WarEventHelper.getDescForCondition(condition);
     }

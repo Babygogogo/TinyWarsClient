@@ -6,7 +6,9 @@ import { UiPanel }              from "../../../gameui/UiPanel";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as CommonProxy         from "../../common/model/CommonProxy";
@@ -66,7 +68,7 @@ export class CommonServerStatusPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
+            { type: NotifyType.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,   callback: this.close },
@@ -98,11 +100,11 @@ export class CommonServerStatusPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text               = Lang.getText(Lang.Type.B0327);
-        this._labelAccountsTitle.text       = `${Lang.getText(Lang.Type.B0328)}:`;
-        this._labelOnlineTimeTitle.text     = `${Lang.getText(Lang.Type.B0329)}:`;
-        this._labelNewAccountsTitle.text    = `${Lang.getText(Lang.Type.B0330)}:`;
-        this._labelActiveAccountsTitle.text = `${Lang.getText(Lang.Type.B0331)}:`;
+        this._labelTitle.text               = Lang.getText(LangTextType.B0327);
+        this._labelAccountsTitle.text       = `${Lang.getText(LangTextType.B0328)}:`;
+        this._labelOnlineTimeTitle.text     = `${Lang.getText(LangTextType.B0329)}:`;
+        this._labelNewAccountsTitle.text    = `${Lang.getText(LangTextType.B0330)}:`;
+        this._labelActiveAccountsTitle.text = `${Lang.getText(LangTextType.B0331)}:`;
     }
 
     private _showOpenAnimation(): void {

@@ -286,11 +286,15 @@ declare module 'built-in' {
         /**
          * 其他传递的消息参数
          */
-        info?:any
+        info?: any
         /**
          * use wechat engine plugin
          */
         useWxPlugin?: boolean
+        /**
+         * use QQgame engine plugin
+         */
+        qqPlugin?: { use: boolean, pluginList: string[] }
     }
 
     /** 
@@ -444,5 +448,29 @@ declare module 'built-in' {
     export class MergeEuiJsonPlugin implements plugins.Command {
 
         constructor(option?: MergeEuiJsonPluginOptions);
+    }
+    type StartServerPluginOptions = {
+        /**
+         * 发布平台
+         * Platform
+         */
+        target?: string;
+        /**
+         * 监听文件变更.默认为 true
+         * Watch files and directories change.Default value is true.
+         */
+        watch?: boolean;
+        /**
+         * 端口号。默认值3000
+         * Server port. Default value is 3000
+         */
+        port?: number;
+
+        serverOnly?: boolean;
+    }
+    export class StartServerPlugin implements plugins.Command {
+
+        constructor(option?: StartServerPluginOptions);
+
     }
 }

@@ -6,7 +6,9 @@ import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel"
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as WarMapModel                 from "../../warMap/model/WarMapModel";
 
@@ -52,8 +54,8 @@ export class MrrPreviewBasicSettingsPage extends UiTabPage<OpenDataForMrrPreview
             { ui: this._btnTimerTypeHelp,       callback: this._onTouchedBtnTimerTypeHelp, },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMapGetRawData,   callback: this._onNotifyMsgMapGetRawData },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMapGetRawData,   callback: this._onNotifyMsgMapGetRawData },
         ]);
         this.left       = 0;
         this.right      = 0;
@@ -77,15 +79,15 @@ export class MrrPreviewBasicSettingsPage extends UiTabPage<OpenDataForMrrPreview
 
     private _onTouchedBtnHasFogHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0020),
-            content: Lang.getText(Lang.Type.R0002),
+            title  : Lang.getText(LangTextType.B0020),
+            content: Lang.getText(LangTextType.R0002),
         });
     }
 
     private _onTouchedBtnTimerTypeHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0574),
-            content: Lang.getText(Lang.Type.R0003),
+            title  : Lang.getText(LangTextType.B0574),
+            content: Lang.getText(LangTextType.R0003),
         });
     }
 
@@ -93,13 +95,13 @@ export class MrrPreviewBasicSettingsPage extends UiTabPage<OpenDataForMrrPreview
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelMapNameTitle.text            = Lang.getText(Lang.Type.B0225);
-        this._labelWarRuleTitle.text            = Lang.getText(Lang.Type.B0318);
-        this._labelHasFogTitle.text             = Lang.getText(Lang.Type.B0020);
-        this._labelTimerTypeTitle.text          = Lang.getText(Lang.Type.B0574);
-        this._labelTimerRegularTitle.text       = Lang.getText(Lang.Type.B0021);
-        this._labelTimerIncrementalTitle1.text  = Lang.getText(Lang.Type.B0389);
-        this._labelTimerIncrementalTitle2.text  = Lang.getText(Lang.Type.B0390);
+        this._labelMapNameTitle.text            = Lang.getText(LangTextType.B0225);
+        this._labelWarRuleTitle.text            = Lang.getText(LangTextType.B0318);
+        this._labelHasFogTitle.text             = Lang.getText(LangTextType.B0020);
+        this._labelTimerTypeTitle.text          = Lang.getText(LangTextType.B0574);
+        this._labelTimerRegularTitle.text       = Lang.getText(LangTextType.B0021);
+        this._labelTimerIncrementalTitle1.text  = Lang.getText(LangTextType.B0389);
+        this._labelTimerIncrementalTitle2.text  = Lang.getText(LangTextType.B0390);
     }
 
     private _updateComponentsForMapInfo(): void {
@@ -123,7 +125,7 @@ export class MrrPreviewBasicSettingsPage extends UiTabPage<OpenDataForMrrPreview
     private async _updateLabelHasFog(): Promise<void> {
         const hasFog            = this._getOpenData().hasFog;
         const labelHasFog       = this._labelHasFog;
-        labelHasFog.text        = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
+        labelHasFog.text        = Lang.getText(hasFog ? LangTextType.B0012 : LangTextType.B0013);
         labelHasFog.textColor   = hasFog ? 0xFFFF00 : 0xFFFFFF;
     }
 

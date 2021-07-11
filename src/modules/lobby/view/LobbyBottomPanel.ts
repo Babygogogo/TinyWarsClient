@@ -9,6 +9,7 @@ import { LobbyTopPanel }                from "./LobbyTopPanel";
 import { MeMapListPanel }               from "../../mapEditor/view/MeMapListPanel";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as ChatModel                   from "../../chat/model/ChatModel";
 import * as UserModel                   from "../../user/model/UserModel";
@@ -54,11 +55,11 @@ export class LobbyBottomPanel extends UiPanel<void> {
             { ui: this._groupGameData,      callback: this._onTouchedGroupGameData },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
-            { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
-            { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
-            { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
-            { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessages },
+            { type: NotifyType.MsgUserLogout,                  callback: this._onMsgUserLogout },
+            { type: NotifyType.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
+            { type: NotifyType.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
+            { type: NotifyType.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
+            { type: NotifyType.MsgChatAddMessage,              callback: this._onMsgChatAddMessages },
         ]);
 
         this._showOpenAnimation();

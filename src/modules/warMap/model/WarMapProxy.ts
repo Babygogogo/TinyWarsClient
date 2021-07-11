@@ -2,6 +2,7 @@
 import * as WarMapModel     from "./WarMapModel";
 import * as ProtoTypes      from "../../../utility/ProtoTypes";
 import * as Notify          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as NetManager      from "../../../network/NetManager";
 import { NetMessageCodes }  from "../../../network/NetMessageCodes";
 import NetMessage           = ProtoTypes.NetMessage;
@@ -24,7 +25,7 @@ function _onMsgMapGetEnabledBriefDataList(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMapGetEnabledBriefDataList.IS;
     if (!data.errorCode) {
         WarMapModel.resetBriefDataDict(data.dataList);
-        Notify.dispatch(Notify.Type.MsgMapGetEnabledBriefDataList, data);
+        Notify.dispatch(NotifyType.MsgMapGetEnabledBriefDataList, data);
     }
 }
 
@@ -32,7 +33,7 @@ function _onMsgMapGetEnabledRawDataList(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMapGetEnabledRawDataList.IS;
     if (!data.errorCode) {
         WarMapModel.updateRawDataDict(data.dataList);
-        Notify.dispatch(Notify.Type.MsgMapGetEnabledRawDataList, data);
+        Notify.dispatch(NotifyType.MsgMapGetEnabledRawDataList, data);
     }
 }
 
@@ -46,10 +47,10 @@ export function reqGetMapBriefData(mapId: number): void {
 function _onMsgMapGetBriefData(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMapGetBriefData.IS;
     if (data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMapGetBriefDataFailed, data);
+        Notify.dispatch(NotifyType.MsgMapGetBriefDataFailed, data);
     } else {
         WarMapModel.setBriefData(data.mapBriefData);
-        Notify.dispatch(Notify.Type.MsgMapGetBriefData, data);
+        Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
     }
 }
 
@@ -63,10 +64,10 @@ export function reqGetMapRawData(mapId: number): void {
 function _onMsgMapGetRawData(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMapGetRawData.IS;
     if (data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMapGetRawDataFailed, data);
+        Notify.dispatch(NotifyType.MsgMapGetRawDataFailed, data);
     } else {
         WarMapModel.setRawData(data.mapId, data.mapRawData);
-        Notify.dispatch(Notify.Type.MsgMapGetRawData, data);
+        Notify.dispatch(NotifyType.MsgMapGetRawData, data);
     }
 }
 
@@ -81,7 +82,7 @@ export function reqMmSetMapAvailability(mapId: number, availability: ProtoTypes.
 function _onMsgMmSetMapAvailability(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMmSetMapAvailability.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMmSetMapAvailability);
+        Notify.dispatch(NotifyType.MsgMmSetMapAvailability);
     }
 }
 
@@ -97,7 +98,7 @@ function _onMsgMmSetMapEnabled(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMmSetMapEnabled.IS;
     if (!data.errorCode) {
         WarMapModel.updateOnSetMapEnabled(data);
-        Notify.dispatch(Notify.Type.MsgMmSetMapEnabled, data);
+        Notify.dispatch(NotifyType.MsgMmSetMapEnabled, data);
     }
 }
 
@@ -110,7 +111,7 @@ function _onMsgMmGetReviewingMaps(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMmGetReviewingMaps.IS;
     if (!data.errorCode) {
         WarMapModel.setMmReviewingMaps(data.maps);
-        Notify.dispatch(Notify.Type.MsgMmGetReviewingMaps, data);
+        Notify.dispatch(NotifyType.MsgMmGetReviewingMaps, data);
     }
 }
 
@@ -138,7 +139,7 @@ export function reqMmReviewMap(
 function _onMsgMmReviewMap(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMmReviewMap.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMmReviewMap, data);
+        Notify.dispatch(NotifyType.MsgMmReviewMap, data);
     }
 }
 
@@ -151,6 +152,6 @@ export function reqMmSetMapTag(mapId: number, mapTag: ProtoTypes.Map.IDataForMap
 function _onMsgMmSetMapTag(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMmSetMapTag.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMmSetMapTag, data);
+        Notify.dispatch(NotifyType.MsgMmSetMapTag, data);
     }
 }

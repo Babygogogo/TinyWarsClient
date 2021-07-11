@@ -5,7 +5,9 @@ import { UiLabel }              from "../../../gameui/UiLabel";
 import { UiTextInput }          from "../../../gameui/UiTextInput";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as MfrModel            from "../../multiFreeRoom/model/MfrModel";
@@ -54,7 +56,7 @@ export class MfrJoinPasswordPanel extends UiPanel<OpenDataForMfrJoinPasswordPane
             { ui: this._btnConfirm,       callback: this._onTouchedBtnConfirm },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -72,7 +74,7 @@ export class MfrJoinPasswordPanel extends UiPanel<OpenDataForMfrJoinPasswordPane
     private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
         const roomInfo = this._getOpenData().roomInfo;
         if (this._inputWarPassword.text !== roomInfo.settingsForMfw.warPassword) {
-            FloatText.show(Lang.getText(Lang.Type.A0017));
+            FloatText.show(Lang.getText(LangTextType.A0017));
         } else {
             this.close();
 
@@ -80,7 +82,7 @@ export class MfrJoinPasswordPanel extends UiPanel<OpenDataForMfrJoinPasswordPane
             if (joinData) {
                 MfrProxy.reqMfrJoinRoom(joinData);
             } else {
-                FloatText.show(Lang.getText(Lang.Type.A0145));
+                FloatText.show(Lang.getText(LangTextType.A0145));
                 MfrProxy.reqMfrGetJoinableRoomInfoList();
             }
         }
@@ -88,11 +90,11 @@ export class MfrJoinPasswordPanel extends UiPanel<OpenDataForMfrJoinPasswordPane
 
     private _updateComponentsForLanguage(): void {
         const info                      = this._getOpenData().roomInfo;
-        this._labelWarName.text         = info.settingsForMfw.warName || Lang.getText(Lang.Type.B0555);
-        this._labelTitle.text           = Lang.getText(Lang.Type.B0449);
-        this._labelRoomTitle.text       = `${Lang.getText(Lang.Type.B0405)}:`;
-        this._labelPasswordTitle.text   = `${Lang.getText(Lang.Type.B0171)}:`;
-        this._btnCancel.label           = Lang.getText(Lang.Type.B0154);
-        this._btnConfirm.label          = Lang.getText(Lang.Type.B0026);
+        this._labelWarName.text         = info.settingsForMfw.warName || Lang.getText(LangTextType.B0555);
+        this._labelTitle.text           = Lang.getText(LangTextType.B0449);
+        this._labelRoomTitle.text       = `${Lang.getText(LangTextType.B0405)}:`;
+        this._labelPasswordTitle.text   = `${Lang.getText(LangTextType.B0171)}:`;
+        this._btnCancel.label           = Lang.getText(LangTextType.B0154);
+        this._btnConfirm.label          = Lang.getText(LangTextType.B0026);
     }
 }

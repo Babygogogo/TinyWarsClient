@@ -5,7 +5,9 @@ import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiTextInput }                  from "../../../gameui/UiTextInput";
 import { MeWarMenuPanel }               from "./MeWarMenuPanel";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as MeModel                     from "../model/MeModel";
 import * as MeUtility                   from "../model/MeUtility";
@@ -48,7 +50,7 @@ export class MeOffsetPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnCancel,      callback: this._onTouchedBtnCancel, },
@@ -113,9 +115,9 @@ export class MeOffsetPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-        this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
-        this._labelTitle.text   = Lang.getText(Lang.Type.B0293);
-        this._labelTips.text    = Lang.getText(Lang.Type.A0088);
+        this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+        this._btnCancel.label   = Lang.getText(LangTextType.B0154);
+        this._labelTitle.text   = Lang.getText(LangTextType.B0293);
+        this._labelTips.text    = Lang.getText(LangTextType.A0088);
     }
 }

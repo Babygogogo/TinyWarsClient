@@ -1,6 +1,7 @@
 import { ClientErrorCode }  from "../../../utility/ClientErrorCode";
 import * as Helpers         from "../../../utility/Helpers";
 import * as Notify          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types           from "../../../utility/Types";
 import { BwCursorView }     from "../view/BwCursorView";
 import { BwWar }            from "./BwWar";
@@ -16,9 +17,9 @@ export class BwCursor {
     private _war    : BwWar;
 
     private _notifyListeners: Notify.Listener[] = [
-        { type: Notify.Type.BwCursorTapped,                 callback: this._onNotifyBwCursorTapped },
-        { type: Notify.Type.BwCursorDragged,                callback: this._onNotifyBwCursorDragged },
-        { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+        { type: NotifyType.BwCursorTapped,                 callback: this._onNotifyBwCursorTapped },
+        { type: NotifyType.BwCursorDragged,                callback: this._onNotifyBwCursorDragged },
+        { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
     ];
 
     public init(mapSize: Types.MapSize): ClientErrorCode {
@@ -112,7 +113,7 @@ export class BwCursor {
 
         this._gridX = gridIndex.x;
         this._gridY = gridIndex.y;
-        Notify.dispatch(Notify.Type.BwCursorGridIndexChanged);
+        Notify.dispatch(NotifyType.BwCursorGridIndexChanged);
     }
     public getGridIndex(): Types.GridIndex {
         return { x: this.getGridX(), y: this.getGridY() };

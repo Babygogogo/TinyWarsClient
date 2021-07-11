@@ -11,6 +11,7 @@ import { MrrPreviewMapListPanel }           from "./MrrPreviewMapListPanel";
 import { McrMainMenuPanel }                 from "../../multiCustomRoom/view/McrMainMenuPanel";
 import * as Helpers                         from "../../../utility/Helpers";
 import * as Notify                          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                           from "../../../utility/Types";
 import * as MpwModel                        from "../../multiPlayerWar/model/MpwModel";
 import * as MrrModel                        from "../model/MrrModel";
@@ -64,9 +65,9 @@ export class MrrMainMenuPanel extends UiPanel<void> {
             { ui: this._btnPreviewFogMaps,  callback: this._onTouchedBtnPreviewFogMaps },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
-            { type: Notify.Type.MsgMrrGetRoomPublicInfo,        callback: this._onMsgMrrGetRoomPublicInfo },
-            { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
+            { type: NotifyType.MsgUserLogout,                  callback: this._onMsgUserLogout },
+            { type: NotifyType.MsgMrrGetRoomPublicInfo,        callback: this._onMsgMrrGetRoomPublicInfo },
+            { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
         ]);
 
         this._showOpenAnimation();

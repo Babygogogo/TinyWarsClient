@@ -7,7 +7,9 @@ import { MeTileSimpleView }     from "../modules/mapEditor/view/MeTileSimpleView
 import * as CommonConstants     from "../utility/CommonConstants";
 import * as ConfigManager       from "../utility/ConfigManager";
 import * as Lang                from "../utility/Lang";
+import { LangTextType } from "../utility/LangTextType";
 import * as Notify              from "../utility/Notify";
+import { NotifyType } from "../utility/NotifyType";
 import * as ProtoTypes          from "../utility/ProtoTypes";
 import * as Types               from "../utility/Types";
 import * as BwHelpers           from "../modules/baseWar/model/BwHelpers";
@@ -43,7 +45,7 @@ export class UiMapInfo extends UiComponent {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._listTile.setItemRenderer(TileRenderer);
 
@@ -63,11 +65,11 @@ export class UiMapInfo extends UiComponent {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelDesignerTitle.text       = `${Lang.getText(Lang.Type.B0163)}:`;
-        this._labelPlayersCountTitle.text   = Lang.getText(Lang.Type.B0229);
-        this._labelPlayedTimesTitle.text    = Lang.getText(Lang.Type.B0565);
-        this._labelMapSizeTitle.text        = Lang.getText(Lang.Type.B0300);
-        this._labelRatingTitle.text         = Lang.getText(Lang.Type.B0253);
+        this._labelDesignerTitle.text       = `${Lang.getText(LangTextType.B0163)}:`;
+        this._labelPlayersCountTitle.text   = Lang.getText(LangTextType.B0229);
+        this._labelPlayedTimesTitle.text    = Lang.getText(LangTextType.B0565);
+        this._labelMapSizeTitle.text        = Lang.getText(LangTextType.B0300);
+        this._labelRatingTitle.text         = Lang.getText(LangTextType.B0253);
     }
 
     private async _updateComponentsForMapInfo(): Promise<void> {
@@ -91,7 +93,7 @@ export class UiMapInfo extends UiComponent {
             labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId);
             labelDesigner.text      = mapRawData.designerName;
             labelPlayersCount.text  = `${mapRawData.playersCountUnneutral}`;
-            labelRating.text        = rating != null ? rating.toFixed(2) : Lang.getText(Lang.Type.B0001);
+            labelRating.text        = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
             labelPlayedTimes.text   = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)}`;
             labelMapSize.text       = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
             this._listTile.bindData(generateDataForListTile(mapRawData.tileDataArray, mapInfo.configVersion));
@@ -160,7 +162,7 @@ class TileRenderer extends UiListItemRenderer<DataForTileRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+            { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
         ]);
 
         const tileView = this._tileView;

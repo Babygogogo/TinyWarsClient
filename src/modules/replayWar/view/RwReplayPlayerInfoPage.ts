@@ -12,7 +12,9 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as UserModel                   from "../../user/model/UserModel";
@@ -34,8 +36,8 @@ export class RwReplayPlayerInfoPage extends UiTabPage<OpenDataForRwReplayPlayerI
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgReplayGetInfoList,   callback: this._onNotifyMsgReplayGetInfoList },
+            { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgReplayGetInfoList,   callback: this._onNotifyMsgReplayGetInfoList },
         ]);
 
         this.left   = 0;
@@ -119,7 +121,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             { ui: this._btnInfo,    callback: this._onTouchedBtnInfo },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -165,8 +167,8 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelRankStdTitle.text    = Lang.getText(Lang.Type.B0546);
-        this._labelRankFogTitle.text    = Lang.getText(Lang.Type.B0547);
+        this._labelRankStdTitle.text    = Lang.getText(LangTextType.B0546);
+        this._labelRankFogTitle.text    = Lang.getText(LangTextType.B0547);
     }
 
     private async _updateComponentsForSettings(): Promise<void> {
@@ -227,7 +229,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         if (!playerData) {
             label.text = null;
         } else {
-            label.text = playerData.isAlive ? Lang.getText(Lang.Type.B0471) : null;
+            label.text = playerData.isAlive ? Lang.getText(LangTextType.B0471) : null;
         }
     }
 

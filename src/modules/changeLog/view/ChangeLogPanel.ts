@@ -11,7 +11,9 @@ import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as UserModel           from "../../user/model/UserModel";
@@ -63,10 +65,10 @@ export class ChangeLogPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgChangeLogGetMessageList, callback: this._onMsgChangeLogGetMessageList },
-            { type: Notify.Type.MsgChangeLogAddMessage,     callback: this._onMsgChangeLogAddMessage },
-            { type: Notify.Type.MsgChangeLogModifyMessage,  callback: this._onMsgChangeLogModifyMessage },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgChangeLogGetMessageList, callback: this._onMsgChangeLogGetMessageList },
+            { type: NotifyType.MsgChangeLogAddMessage,     callback: this._onMsgChangeLogAddMessage },
+            { type: NotifyType.MsgChangeLogModifyMessage,  callback: this._onMsgChangeLogModifyMessage },
         ]);
         this._setUiListenerArray([
             { ui: this._btnAddMessage,  callback: this._onTouchedBtnAddMessage },
@@ -92,11 +94,11 @@ export class ChangeLogPanel extends UiPanel<void> {
         this._updateListMessageAndLabelNoMessage();
     }
     private _onMsgChangeLogAddMessage(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0154));
+        FloatText.show(Lang.getText(LangTextType.A0154));
         ChangeLogProxy.reqChangeLogGetMessageList();
     }
     private _onMsgChangeLogModifyMessage(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0154));
+        FloatText.show(Lang.getText(LangTextType.A0154));
         ChangeLogProxy.reqChangeLogGetMessageList();
     }
 
@@ -112,9 +114,9 @@ export class ChangeLogPanel extends UiPanel<void> {
 
     private _updateComponentsForLanguage(): void {
         this._updateListMessageAndLabelNoMessage();
-        this._labelTitle.text       = Lang.getText(Lang.Type.B0457);
-        this._labelNoMessage.text   = Lang.getText(Lang.Type.B0278);
-        this._btnAddMessage.label   = Lang.getText(Lang.Type.B0454);
+        this._labelTitle.text       = Lang.getText(LangTextType.B0457);
+        this._labelNoMessage.text   = Lang.getText(LangTextType.B0278);
+        this._btnAddMessage.label   = Lang.getText(LangTextType.B0454);
     }
     private _updateListMessageAndLabelNoMessage(): void {
         const messageList               = ChangeLogModel.getAllMessageList() || [];
@@ -183,7 +185,7 @@ class MessageRenderer extends UiListItemRenderer<DataForMessageRenderer> {
             : (Lang.getLanguageText({ textArray }) || CommonConstants.ErrorTextForUndefined);
 
         const btnModify     = this._btnModify;
-        btnModify.label     = Lang.getText(Lang.Type.B0317);
+        btnModify.label     = Lang.getText(LangTextType.B0317);
         btnModify.visible   = false;
         btnModify.visible   = UserModel.checkCanSelfEditChangeLog();
     }

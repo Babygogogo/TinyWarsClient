@@ -5,7 +5,9 @@ import { UiButton }                     from "../../../gameui/UiButton";
 import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiScrollList }                 from "../../../gameui/UiScrollList";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
@@ -50,7 +52,7 @@ export class WeActionReplacePanel extends UiPanel<OpenDataForWeActionReplacePane
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,       callback: this.close },
@@ -72,9 +74,9 @@ export class WeActionReplacePanel extends UiPanel<OpenDataForWeActionReplacePane
 
     private _updateComponentsForLanguage(): void {
         const openData              = this._getOpenData();
-        this._labelTitle.text       = `${Lang.getText(Lang.Type.B0615)} A${openData.actionId}`;
-        this._labelNoAction.text    = Lang.getText(Lang.Type.B0278);
-        this._btnClose.label        = Lang.getText(Lang.Type.B0146);
+        this._labelTitle.text       = `${Lang.getText(LangTextType.B0615)} A${openData.actionId}`;
+        this._labelNoAction.text    = Lang.getText(LangTextType.B0278);
+        this._btnClose.label        = Lang.getText(LangTextType.B0146);
     }
     private _updateComponentsForAction(): void {
         const openData      = this._getOpenData();
@@ -115,7 +117,7 @@ class ActionRenderer extends UiListItemRenderer<DataForActionRenderer> {
             { ui: this._btnSelect,  callback: this._onTouchedBtnSelect },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -139,7 +141,7 @@ class ActionRenderer extends UiListItemRenderer<DataForActionRenderer> {
             actionIdForDelete   : data.srcActionId,
             actionIdForClone    : data.candidateActionId,
         }) != null) {
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
             WeActionReplacePanel.hide();
         }
     }
@@ -155,7 +157,7 @@ class ActionRenderer extends UiListItemRenderer<DataForActionRenderer> {
             oldActionId : data.srcActionId,
             newActionId : data.candidateActionId,
         })) {
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
             WeActionReplacePanel.hide();
         }
     }
@@ -164,8 +166,8 @@ class ActionRenderer extends UiListItemRenderer<DataForActionRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnCopy.label     = Lang.getText(Lang.Type.B0487);
-        this._btnSelect.label   = Lang.getText(Lang.Type.B0492);
+        this._btnCopy.label     = Lang.getText(LangTextType.B0487);
+        this._btnSelect.label   = Lang.getText(LangTextType.B0492);
 
         this._updateLabelActionId();
         this._updateLabelAction();
@@ -174,7 +176,7 @@ class ActionRenderer extends UiListItemRenderer<DataForActionRenderer> {
     private _updateLabelActionId(): void {
         const data = this.data;
         if (data) {
-            this._labelActionId.text  = `${Lang.getText(Lang.Type.B0616)}: A${data.candidateActionId}`;
+            this._labelActionId.text  = `${Lang.getText(LangTextType.B0616)}: A${data.candidateActionId}`;
         }
     }
     private _updateLabelAction(): void {
@@ -186,7 +188,7 @@ class ActionRenderer extends UiListItemRenderer<DataForActionRenderer> {
         const action    = (data.fullData.actionArray || []).find(v => v.WeaCommonData.actionId === data.candidateActionId);
         const label     = this._labelAction;
         if (action == null) {
-            label.text = Lang.getText(Lang.Type.A0168);
+            label.text = Lang.getText(LangTextType.A0168);
         } else {
             label.text = WarEventHelper.getDescForAction(action);
         }

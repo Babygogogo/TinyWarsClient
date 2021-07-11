@@ -6,7 +6,9 @@ import { UiTextInput }          from "../../../gameui/UiTextInput";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as ChangeLogModel      from "../../changeLog/model/ChangeLogModel";
@@ -55,7 +57,7 @@ export class ChangeLogModifyPanel extends UiPanel<OpenDataForChangeLogModifyPane
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,   callback: this.close },
@@ -80,9 +82,9 @@ export class ChangeLogModifyPanel extends UiPanel<OpenDataForChangeLogModifyPane
             { languageType: Types.LanguageType.English, text: englishText || chineseText },
         ];
         if (textList.every(v => v.text.length <= 0)) {
-            FloatText.show(Lang.getText(Lang.Type.A0155));
+            FloatText.show(Lang.getText(LangTextType.A0155));
         } else if (textList.some(v => v.text.length > CommonConstants.ChangeLogTextMaxLength)) {
-            FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.ChangeLogTextMaxLength));
+            FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.ChangeLogTextMaxLength));
         } else {
             ChangeLogProxy.reqChangeLogModifyMessage(this._getOpenData().messageId, textList);
             this.close();
@@ -98,11 +100,11 @@ export class ChangeLogModifyPanel extends UiPanel<OpenDataForChangeLogModifyPane
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnClose.label    = Lang.getText(Lang.Type.B0146);
-        this._btnModify.label   = Lang.getText(Lang.Type.B0317);
-        this._labelChinese.text = Lang.getText(Lang.Type.B0455);
-        this._labelEnglish.text = Lang.getText(Lang.Type.B0456);
-        this._labelTip.text     = Lang.getText(Lang.Type.A0156);
-        this._labelTitle.text   = `${Lang.getText(Lang.Type.B0317)} #${this._getOpenData().messageId}`;
+        this._btnClose.label    = Lang.getText(LangTextType.B0146);
+        this._btnModify.label   = Lang.getText(LangTextType.B0317);
+        this._labelChinese.text = Lang.getText(LangTextType.B0455);
+        this._labelEnglish.text = Lang.getText(LangTextType.B0456);
+        this._labelTip.text     = Lang.getText(LangTextType.A0156);
+        this._labelTitle.text   = `${Lang.getText(LangTextType.B0317)} #${this._getOpenData().messageId}`;
     }
 }

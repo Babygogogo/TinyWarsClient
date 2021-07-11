@@ -9,7 +9,9 @@ import { UiTabItemRenderer }                                                    
 import * as FlowManager                                                         from "../../../utility/FlowManager";
 import * as Helpers                                                             from "../../../utility/Helpers";
 import * as Lang                                                                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                                                              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                                                               from "../../../utility/Types";
 import * as BwHelpers                                                           from "../../baseWar/model/BwHelpers";
 import * as WarMapModel                                                         from "../../warMap/model/WarMapModel";
@@ -64,9 +66,9 @@ export class SpmWarListPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.SpmPreviewingWarSaveSlotChanged,    callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
-            { type: Notify.Type.MsgSpmGetWarSaveSlotFullDataArray,  callback: this._onNotifyMsgSpmGetWarSaveSlotFullDataArray },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.SpmPreviewingWarSaveSlotChanged,    callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
+            { type: NotifyType.MsgSpmGetWarSaveSlotFullDataArray,  callback: this._onNotifyMsgSpmGetWarSaveSlotFullDataArray },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -127,22 +129,22 @@ export class SpmWarListPanel extends UiPanel<void> {
     private _initTabSettings(): void {
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : SpmWarMapInfoPage,
                 pageData    : { slotIndex: null } as OpenDataForSpmWarMapInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                tabItemData : { name: Lang.getText(LangTextType.B0224) },
                 pageClass   : SpmWarPlayerInfoPage,
                 pageData    : { slotIndex: null } as OpenDataForSpmWarPlayerInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : SpmWarBasicSettingsPage,
                 pageData    : { slotIndex: null } as OpenDataForSpmWarBasicSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData : { name: Lang.getText(LangTextType.B0003) },
                 pageClass   : SpmWarAdvancedSettingsPage,
                 pageData    : { slotIndex: null } as OpenDataForSpmWarAdvancedSettingsPage,
             },
@@ -150,13 +152,13 @@ export class SpmWarListPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-        this._labelSinglePlayer.text    = Lang.getText(Lang.Type.B0138);
-        this._labelContinue.text        = Lang.getText(Lang.Type.B0024);
-        this._labelChooseWar.text       = Lang.getText(Lang.Type.B0589);
-        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-        this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
-        this._btnNextStep.label         = Lang.getText(Lang.Type.B0024);
+        this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+        this._labelSinglePlayer.text    = Lang.getText(LangTextType.B0138);
+        this._labelContinue.text        = Lang.getText(LangTextType.B0024);
+        this._labelChooseWar.text       = Lang.getText(LangTextType.B0589);
+        this._btnBack.label             = Lang.getText(LangTextType.B0146);
+        this._labelNoWar.text           = Lang.getText(LangTextType.B0210);
+        this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
     }
 
     private _updateGroupWarList(): void {
@@ -296,7 +298,7 @@ class WarRenderer extends UiListItemRenderer<DataForWarRenderer> {
             { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.SpmPreviewingWarSaveSlotChanged,  callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
+            { type: NotifyType.SpmPreviewingWarSaveSlotChanged,  callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
         ]);
     }
 
@@ -320,7 +322,7 @@ class WarRenderer extends UiListItemRenderer<DataForWarRenderer> {
             } else {
                 const mapId     = BwHelpers.getMapId(warData);
                 labelName.text  = mapId == null
-                    ? `(${Lang.getText(Lang.Type.B0321)})`
+                    ? `(${Lang.getText(LangTextType.B0321)})`
                     : await WarMapModel.getMapNameInCurrentLanguage(mapId);
             }
         }

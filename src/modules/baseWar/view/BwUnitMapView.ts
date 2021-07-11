@@ -1,5 +1,6 @@
 
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import * as VisibilityHelpers   from "../../../utility/VisibilityHelpers";
 import * as CommonConstants     from "../../../utility/CommonConstants";
@@ -16,8 +17,8 @@ export class BwUnitMapView extends egret.DisplayObjectContainer {
     private readonly _layerForGround    = new egret.DisplayObjectContainer();
     private readonly _layerForAir       = new egret.DisplayObjectContainer();
     private readonly _notifyListeners   = [
-        { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-        { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+        { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+        { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
     ];
 
     private _unitMap                    : BwUnitMap;

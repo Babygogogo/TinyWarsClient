@@ -10,8 +10,10 @@ import { WeCommandPanel }               from "./WeCommandPanel";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
 import ColorValue                       = Types.ColorValue;
@@ -58,8 +60,8 @@ export class WeEventListPanel extends UiPanel<OpenDataForWeEventListPanel> {
             { ui: this._btnBack,        callback: this.close },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.WarEventFullDataChanged,    callback: this._onNotifyMeWarEventFullDataChanged },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyMeWarEventFullDataChanged },
         ]);
         this._listWarEvent.setItemRenderer(WarEventDescRenderer);
 
@@ -80,18 +82,18 @@ export class WeEventListPanel extends UiPanel<OpenDataForWeEventListPanel> {
     private _onTouchedBtnAddEvent(e: egret.TouchEvent): void {
         const openData = this._getOpenData();
         if (WarEventHelper.addEvent(openData.war.getWarEventManager().getWarEventFullData()) != null) {
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
 
     private _onTouchedBtnClear(e: egret.TouchEvent): void {
         const openData = this._getOpenData();
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0188),
+            content : Lang.getText(LangTextType.A0188),
             callback: () => {
                 const result = WarEventHelper.checkAndDeleteUnusedComponents(openData.war.getWarEventManager().getWarEventFullData());
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0063, result.deletedNodesCount, result.deletedConditionsCount, result.deletedActionsCount));
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                FloatText.show(Lang.getFormattedText(LangTextType.F0063, result.deletedNodesCount, result.deletedConditionsCount, result.deletedActionsCount));
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             },
         });
     }
@@ -106,11 +108,11 @@ export class WeEventListPanel extends UiPanel<OpenDataForWeEventListPanel> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelNoEvent.text = Lang.getText(Lang.Type.B0278);
-        this._labelTitle.text   = Lang.getText(Lang.Type.B0469);
-        this._btnAddEvent.label = Lang.getText(Lang.Type.B0497);
-        this._btnClear.label    = Lang.getText(Lang.Type.B0498);
-        this._btnBack.label     = Lang.getText(Lang.Type.B0146);
+        this._labelNoEvent.text = Lang.getText(LangTextType.B0278);
+        this._labelTitle.text   = Lang.getText(LangTextType.B0469);
+        this._btnAddEvent.label = Lang.getText(LangTextType.B0497);
+        this._btnClear.label    = Lang.getText(LangTextType.B0498);
+        this._btnBack.label     = Lang.getText(LangTextType.B0146);
     }
 
     private _updateListWarEventAndLabelNoEvent(): void {
@@ -249,7 +251,7 @@ class WarEventDescRenderer extends UiListItemRenderer<DataForWarEventDescRendere
             { ui: this._btnModify, callback: this._onTouchedBtnModify },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._updateComponentsForLanguage();
     }
@@ -278,7 +280,7 @@ class WarEventDescRenderer extends UiListItemRenderer<DataForWarEventDescRendere
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnModify.label = Lang.getText(Lang.Type.B0317);
+        this._btnModify.label = Lang.getText(LangTextType.B0317);
 
         this._updateLabelDescAndError();
     }
@@ -305,7 +307,7 @@ class WarEventDescRenderer extends UiListItemRenderer<DataForWarEventDescRendere
                 // const prefix        = prefixArray.join(`.`);
                 this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
                 labelDesc.textColor = ColorValue.Red;
-                labelDesc.text      = `${Lang.getText(Lang.Type.A0166)}`;
+                labelDesc.text      = `${Lang.getText(LangTextType.A0166)}`;
             }
         }
     }
@@ -322,7 +324,7 @@ class WarEventDescRenderer extends UiListItemRenderer<DataForWarEventDescRendere
         const prefixArray       = data.prefixArray;
         const errorTip          = WarEventHelper.getErrorTipForEvent(fullData, event);
         const labelError        = this._labelError;
-        labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+        labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
         labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
         this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
         this._labelDesc.text    = `${Lang.getLanguageText({ textArray: event.eventNameArray })}`;
@@ -340,10 +342,10 @@ class WarEventDescRenderer extends UiListItemRenderer<DataForWarEventDescRendere
         const prefixArray       = data.prefixArray;
         const errorTip          = WarEventHelper.getErrorTipForEventCallCountInPlayerTurn(event);
         const labelError        = this._labelError;
-        labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+        labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
         labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
         this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-        this._labelDesc.text    = `${Lang.getText(Lang.Type.B0476)}: ${event.maxCallCountInPlayerTurn}`;
+        this._labelDesc.text    = `${Lang.getText(LangTextType.B0476)}: ${event.maxCallCountInPlayerTurn}`;
     }
     private _updateForEventCallCountTotal(data: DataForWarEventDescRenderer): void {        // DONE
         const fullData  = data.war.getWarEventManager().getWarEventFullData();
@@ -358,10 +360,10 @@ class WarEventDescRenderer extends UiListItemRenderer<DataForWarEventDescRendere
         const prefixArray       = data.prefixArray;
         const errorTip          = WarEventHelper.getErrorTipForEventCallCountTotal(event);
         const labelError        = this._labelError;
-        labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+        labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
         labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
         this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-        this._labelDesc.text    = `${Lang.getText(Lang.Type.B0477)}: ${event.maxCallCountTotal}`;
+        this._labelDesc.text    = `${Lang.getText(LangTextType.B0477)}: ${event.maxCallCountTotal}`;
     }
     private _updateForConditionNode(data: DataForWarEventDescRenderer): void {              // DONE
         const fullData  = data.war.getWarEventManager().getWarEventFullData();
@@ -376,10 +378,10 @@ class WarEventDescRenderer extends UiListItemRenderer<DataForWarEventDescRendere
         const prefixArray       = data.prefixArray;
         const errorTip          = WarEventHelper.getErrorTipForConditionNode(fullData, node);
         const labelError        = this._labelError;
-        labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+        labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
         labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
         this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-        this._labelDesc.text    = `${node.isAnd ? Lang.getText(Lang.Type.A0162) : Lang.getText(Lang.Type.A0163)}`;
+        this._labelDesc.text    = `${node.isAnd ? Lang.getText(LangTextType.A0162) : Lang.getText(LangTextType.A0163)}`;
     }
     private _updateForCondition(data: DataForWarEventDescRenderer): void {                  // DONE
         const fullData      = data.war.getWarEventManager().getWarEventFullData();
@@ -394,7 +396,7 @@ class WarEventDescRenderer extends UiListItemRenderer<DataForWarEventDescRendere
         const prefixArray       = data.prefixArray;
         const errorTip          = WarEventHelper.getErrorTipForCondition(fullData, condition);
         const labelError        = this._labelError;
-        labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+        labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
         labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
         this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
         this._labelDesc.text    = `${WarEventHelper.getDescForCondition(condition)}`;
@@ -412,7 +414,7 @@ class WarEventDescRenderer extends UiListItemRenderer<DataForWarEventDescRendere
         const prefixArray       = data.prefixArray;
         const errorTip          = WarEventHelper.getErrorTipForAction(fullData, action, data.war);
         const labelError        = this._labelError;
-        labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+        labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
         labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
         this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
         this._labelDesc.text    = `${WarEventHelper.getDescForAction(action)}`;

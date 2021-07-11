@@ -3,14 +3,14 @@ import { UiButton }             from "../../../gameui/UiButton";
 import { UiImage }              from "../../../gameui/UiImage";
 import { UiLabel }              from "../../../gameui/UiLabel";
 import { UiPanel }              from "../../../gameui/UiPanel";
+import { NotifyType }           from "../../../utility/NotifyType";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as LocalStorage        from "../../../utility/LocalStorage";
-import * as Notify              from "../../../utility/Notify";
 import * as StageManager        from "../../../utility/StageManager";
 import * as Types               from "../../../utility/Types";
-import NotifyType               = Notify.Type;
 import StageMinScale            = CommonConstants.StageMinScale;
 import StageMaxScale            = CommonConstants.StageMaxScale;
 
@@ -154,11 +154,11 @@ export class UserSetStageScalePanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text       = Lang.getText(Lang.Type.B0558);
-        this._labelScaleTitle.text  = Lang.getText(Lang.Type.B0559);
-        this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
-        this._btnDefault.label      = Lang.getText(Lang.Type.B0543);
-        this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
+        this._labelTitle.text       = Lang.getText(LangTextType.B0558);
+        this._labelScaleTitle.text  = Lang.getText(LangTextType.B0559);
+        this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+        this._btnDefault.label      = Lang.getText(LangTextType.B0543);
+        this._btnCancel.label       = Lang.getText(LangTextType.B0154);
     }
 
     private _updateGroupScale(): void {

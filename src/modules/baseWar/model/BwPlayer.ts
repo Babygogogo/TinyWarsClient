@@ -2,6 +2,7 @@
 import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
 import * as Types               from "../../../utility/Types";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Logger              from "../../../utility/Logger";
 import * as ConfigManager       from "../../../utility/ConfigManager";
 import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
@@ -291,7 +292,7 @@ export class BwPlayer {
     public setFund(fund: number): void {
         if (this._fund !== fund) {
             this._fund = fund;
-            Notify.dispatch(Notify.Type.BwPlayerFundChanged, this);
+            Notify.dispatch(NotifyType.BwPlayerFundChanged, this);
         }
     }
     public getFund(): number {
@@ -401,7 +402,7 @@ export class BwPlayer {
     public setCoId(coId: number | null | undefined): void {
         if (this._coId != coId) {
             this._coId = coId;
-            Notify.dispatch(Notify.Type.BwCoIdChanged);
+            Notify.dispatch(NotifyType.BwCoIdChanged);
         }
     }
     public getCoId(): number | null | undefined {
@@ -410,7 +411,7 @@ export class BwPlayer {
 
     public setCoCurrentEnergy(energy: number): void {
         this._coCurrentEnergy = energy;
-        Notify.dispatch(Notify.Type.BwCoEnergyChanged);
+        Notify.dispatch(NotifyType.BwCoEnergyChanged);
     }
     public getCoCurrentEnergy(): number {
         return this._coCurrentEnergy;
@@ -493,7 +494,7 @@ export class BwPlayer {
     }
     public setCoUsingSkillType(skillType: Types.CoSkillType): void {
         this._coUsingSkillType = skillType;
-        Notify.dispatch(Notify.Type.BwCoUsingSkillTypeChanged);
+        Notify.dispatch(NotifyType.BwCoUsingSkillTypeChanged);
     }
     public getCoCurrentSkills(): number[] | null {
         return this.getCoSkills(this.getCoUsingSkillType());

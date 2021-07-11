@@ -10,7 +10,9 @@ import { DataForDrawUnit }              from "../model/MeDrawer";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as MeModel                     from "../model/MeModel";
 
@@ -51,7 +53,7 @@ export class MeChooseUnitPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnCancel,  callback: this.close },
@@ -98,8 +100,8 @@ export class MeChooseUnitPanel extends UiPanel<void> {
     // Private functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
-        this._labelRecentTitle.text = `${Lang.getText(Lang.Type.B0372)}:`;
+        this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+        this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
     }
 
     private _createDataForListUnit(): DataForCategoryRenderer[] {
@@ -181,7 +183,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
         ]);
 
         this._conUnitView.addChild(this._unitView);

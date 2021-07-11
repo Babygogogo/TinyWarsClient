@@ -7,7 +7,9 @@ import { UiTabPage }                    from "../../../gameui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
@@ -31,8 +33,8 @@ export class MrrPreviewAdvancedSettingsPage extends UiTabPage<OpenDataForMrrPrev
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMapGetRawData,   callback: this._onNotifyMsgMapGetRawData },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMapGetRawData,   callback: this._onNotifyMsgMapGetRawData },
         ]);
         this._listSetting.setItemRenderer(SettingRenderer);
         this._listPlayer.setItemRenderer(PlayerRenderer);
@@ -129,7 +131,7 @@ class SettingRenderer extends UiListItemRenderer<DataForSettingRenderer> {
         if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
             CommonHelpPanel.show({
                 title   : `CO`,
-                content : Lang.getText(Lang.Type.R0004),
+                content : Lang.getText(LangTextType.R0004),
             });
         }
     }

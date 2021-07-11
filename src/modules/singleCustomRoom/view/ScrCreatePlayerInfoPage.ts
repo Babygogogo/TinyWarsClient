@@ -10,7 +10,9 @@ import { ScrCreateChooseCoPanel }       from "./ScrCreateChooseCoPanel";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
 import * as ScrModel                    from "../model/ScrModel";
@@ -27,7 +29,7 @@ export class ScrCreatePlayerInfoPage extends UiTabPage<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this.left   = 0;
@@ -96,8 +98,8 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             { ui: this._btnChangeSkinId,        callback: this._onTouchedBtnChangeSkinId },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.ScrCreatePlayerInfoChanged,     callback: this._onNotifyScrCreatePlayerInfoChanged },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.ScrCreatePlayerInfoChanged,     callback: this._onNotifyScrCreatePlayerInfoChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -142,9 +144,9 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnChangeCo.label         = Lang.getText(Lang.Type.B0230);
-        this._btnChangeController.label = Lang.getText(Lang.Type.B0608);
-        this._btnChangeSkinId.label     = Lang.getText(Lang.Type.B0609);
+        this._btnChangeCo.label         = Lang.getText(LangTextType.B0230);
+        this._btnChangeController.label = Lang.getText(LangTextType.B0608);
+        this._btnChangeSkinId.label     = Lang.getText(LangTextType.B0609);
     }
 
     private async _updateComponentsForSettings(): Promise<void> {
@@ -161,8 +163,8 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const playerData            = this._getPlayerData();
         this._imgSkin.source        = getSourceForImgSkin(playerData ? playerData.unitAndTileSkinId : null);
         this._labelPlayerType.text  = playerData.userId == null
-            ? Lang.getText(Lang.Type.B0607)
-            : Lang.getText(Lang.Type.B0031);
+            ? Lang.getText(LangTextType.B0607)
+            : Lang.getText(LangTextType.B0031);
 
         const coId                  = playerData ? playerData.coId : null;
         const coCfg                 = ConfigManager.getCoBasicCfg(settingsForCommon.configVersion, coId);

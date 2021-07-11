@@ -13,7 +13,9 @@ import * as FloatText                       from "../../../utility/FloatText";
 import * as FlowManager                     from "../../../utility/FlowManager";
 import * as Helpers                         from "../../../utility/Helpers";
 import * as Lang                            from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                           from "../../../utility/Types";
 import * as CcrModel                        from "../../coopCustomRoom/model/CcrModel";
 import * as CcrProxy                        from "../model/CcrProxy";
@@ -64,26 +66,26 @@ export class CcrCreateSettingsPanel extends UiPanel<void> {
             { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgCcrCreateRoom,           callback: this._onNotifyMsgCcrCreateRoom },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgCcrCreateRoom,           callback: this._onNotifyMsgCcrCreateRoom },
         ]);
         this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : CcrCreateBasicSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData : { name: Lang.getText(LangTextType.B0003) },
                 pageClass   : CcrCreateAdvancedSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                tabItemData : { name: Lang.getText(LangTextType.B0224) },
                 pageClass   : CcrCreatePlayerInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : CcrCreateMapInfoPage,
             },
         ]);
@@ -118,7 +120,7 @@ export class CcrCreateSettingsPanel extends UiPanel<void> {
         this._updateComponentsForLanguage();
     }
     private _onNotifyMsgCcrCreateRoom(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0015));
+        FloatText.show(Lang.getText(LangTextType.A0015));
         FlowManager.gotoLobby();
     }
 
@@ -141,12 +143,12 @@ export class CcrCreateSettingsPanel extends UiPanel<void> {
     // Functions for the view.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0000);
-        this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0646);
-        this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
-        this._labelRoomSettings.text        = Lang.getText(Lang.Type.B0571);
-        this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-        this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
+        this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
+        this._labelMultiPlayer.text         = Lang.getText(LangTextType.B0646);
+        this._labelChooseMap.text           = Lang.getText(LangTextType.B0227);
+        this._labelRoomSettings.text        = Lang.getText(LangTextType.B0571);
+        this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+        this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

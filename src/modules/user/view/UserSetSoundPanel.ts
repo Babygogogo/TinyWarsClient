@@ -3,13 +3,13 @@ import { UiLabel }              from "../../../gameui/UiLabel";
 import { UiImage }              from "../../../gameui/UiImage";
 import { UiButton }             from "../../../gameui/UiButton";
 import { UiPanel }              from "../../../gameui/UiPanel";
+import { NotifyType }           from "../../../utility/NotifyType";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
-import * as Notify              from "../../../utility/Notify";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as SoundManager        from "../../../utility/SoundManager";
 import * as Types               from "../../../utility/Types";
-import NotifyType               = Notify.Type;
 
 export class UserSetSoundPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -226,13 +226,13 @@ export class UserSetSoundPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text       = Lang.getText(Lang.Type.B0540);
-        this._labelBgmTitle.text    = Lang.getText(Lang.Type.B0541);
-        this._labelEffectTitle.text = Lang.getText(Lang.Type.B0542);
-        this._labelSwitchBgm.text   = Lang.getText(Lang.Type.B0631);
-        this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
-        this._btnDefault.label      = Lang.getText(Lang.Type.B0543);
-        this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
+        this._labelTitle.text       = Lang.getText(LangTextType.B0540);
+        this._labelBgmTitle.text    = Lang.getText(LangTextType.B0541);
+        this._labelEffectTitle.text = Lang.getText(LangTextType.B0542);
+        this._labelSwitchBgm.text   = Lang.getText(LangTextType.B0631);
+        this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+        this._btnDefault.label      = Lang.getText(LangTextType.B0543);
+        this._btnCancel.label       = Lang.getText(LangTextType.B0154);
         this._updateLabelBgmName();
     }
 

@@ -2,6 +2,7 @@
 import { NetMessageCodes }              from "../../../network/NetMessageCodes";
 import * as NetManager                  from "../../../network/NetManager";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as MeModel                     from "./MeModel";
 import NetMessage                       = ProtoTypes.NetMessage;
@@ -23,7 +24,7 @@ async function _onMsgMeGetMapDataList(e: egret.Event): Promise<void> {
     const data = e.data as NetMessage.MsgMeGetMapDataList.IS;
     if (!data.errorCode) {
         await MeModel.resetDataList(data.dataList);
-        Notify.dispatch(Notify.Type.MsgMeGetDataList, data);
+        Notify.dispatch(NotifyType.MsgMeGetDataList, data);
     }
 }
 
@@ -38,7 +39,7 @@ function _onMsgMeGetMapData(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMeGetMapData.IS;
     if (!data.errorCode) {
         MeModel.updateData(data.slotIndex, data.data);
-        Notify.dispatch(Notify.Type.MsgMeGetData, data);
+        Notify.dispatch(NotifyType.MsgMeGetData, data);
     }
 }
 
@@ -54,6 +55,6 @@ export function reqMeSubmitMap(slotIndex: number, mapRawData: ProtoTypes.Map.IMa
 function _onMsgMeSubmitMap(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMeSubmitMap.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMeSubmitMap, data);
+        Notify.dispatch(NotifyType.MsgMeSubmitMap, data);
     }
 }

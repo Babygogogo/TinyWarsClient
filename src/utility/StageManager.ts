@@ -2,6 +2,7 @@
 import * as Types           from "./Types";
 import * as CommonConstants from "./CommonConstants";
 import * as Notify          from "./Notify";
+import { NotifyType } from "./NotifyType";
 import * as Logger          from "./Logger";
 import * as UiPanel         from "../gameui/UiPanel";
 import LayerType            = Types.LayerType;
@@ -110,14 +111,14 @@ function _onMouseMove(e: egret.TouchEvent): void {
     _mouseY = e.stageY;
 }
 function _onMouseWheel(e: egret.Event): void {
-    Notify.dispatch(Notify.Type.MouseWheel, e.data);
+    Notify.dispatch(NotifyType.MouseWheel, e.data);
 }
 
 function _onTouchBegin(e: egret.TouchEvent): void {
-    Notify.dispatch(Notify.Type.GlobalTouchBegin, e);
+    Notify.dispatch(NotifyType.GlobalTouchBegin, e);
 }
 function _onTouchMove(e: egret.TouchEvent): void {
-    Notify.dispatch(Notify.Type.GlobalTouchMove, e);
+    Notify.dispatch(NotifyType.GlobalTouchMove, e);
 }
 
 class UiLayer extends eui.UILayer {

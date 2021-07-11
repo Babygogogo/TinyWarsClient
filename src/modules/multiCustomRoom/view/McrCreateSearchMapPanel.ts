@@ -7,7 +7,9 @@ import { UiTextInput }                  from "../../../gameui/UiTextInput";
 import { McrCreateMapListPanel }        from "./McrCreateMapListPanel";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 
@@ -70,7 +72,7 @@ export class McrCreateSearchMapPanel extends UiPanel<void> {
             { ui: this._btnTagFog,  callback: this._onTouchedBtnTagFog },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._showOpenAnimation();
@@ -119,16 +121,16 @@ export class McrCreateSearchMapPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelName.text                = Lang.getText(Lang.Type.B0447);
-        this._labelMapNameTitle.text        = Lang.getText(Lang.Type.B0225);
-        this._labelDesignerTitle.text       = Lang.getText(Lang.Type.B0251);
-        this._labelPlayersCountTitle.text   = Lang.getText(Lang.Type.B0229);
-        this._labelPlayedTimesTitle.text    = Lang.getText(Lang.Type.B0568);
-        this._labelMinRatingTitle.text      = Lang.getText(Lang.Type.B0569);
-        this._labelTagFogTitle.text         = Lang.getText(Lang.Type.B0570);
-        this._labelDesc.text                = Lang.getText(Lang.Type.A0063);
-        this._btnReset.label                = Lang.getText(Lang.Type.B0567);
-        this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
+        this._labelName.text                = Lang.getText(LangTextType.B0447);
+        this._labelMapNameTitle.text        = Lang.getText(LangTextType.B0225);
+        this._labelDesignerTitle.text       = Lang.getText(LangTextType.B0251);
+        this._labelPlayersCountTitle.text   = Lang.getText(LangTextType.B0229);
+        this._labelPlayedTimesTitle.text    = Lang.getText(LangTextType.B0568);
+        this._labelMinRatingTitle.text      = Lang.getText(LangTextType.B0569);
+        this._labelTagFogTitle.text         = Lang.getText(LangTextType.B0570);
+        this._labelDesc.text                = Lang.getText(LangTextType.A0063);
+        this._btnReset.label                = Lang.getText(LangTextType.B0567);
+        this._btnSearch.label               = Lang.getText(LangTextType.B0228);
         this._updateLabelTagFog();
     }
 
@@ -136,9 +138,9 @@ export class McrCreateSearchMapPanel extends UiPanel<void> {
         const hasFog    = this._mapTag.fog;
         const label     = this._labelTagFog;
         if (hasFog == true) {
-            label.text = Lang.getText(Lang.Type.B0012);
+            label.text = Lang.getText(LangTextType.B0012);
         } else if (hasFog == false) {
-            label.text = Lang.getText(Lang.Type.B0013);
+            label.text = Lang.getText(LangTextType.B0013);
         } else {
             label.text = undefined;
         }

@@ -4,6 +4,7 @@ import { UiPanel }              from "../../../gameui/UiPanel";
 import { UiCoInfo }             from "../../../gameui/UiCoInfo";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 
 type OpenDataForCommonCoInfoPanel = {
@@ -43,7 +44,7 @@ export class CommonCoInfoPanel extends UiPanel<OpenDataForCommonCoInfoPanel> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
 
         this._showOpenAnimation();

@@ -6,7 +6,9 @@ import { UiLabel }                      from "../../../gameui/UiLabel";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as MrrModel                    from "../model/MrrModel";
 import * as MrrProxy                    from "../model/MrrProxy";
@@ -66,9 +68,9 @@ export class MrrSetMaxConcurrentCountPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMrrGetMaxConcurrentCount,    callback: this._onMsgMrrGetMaxConcurrentCount },
-            { type: Notify.Type.MsgMrrSetMaxConcurrentCount,    callback: this._onMsgMrrSetMaxConcurrentCount },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMrrGetMaxConcurrentCount,    callback: this._onMsgMrrGetMaxConcurrentCount },
+            { type: NotifyType.MsgMrrSetMaxConcurrentCount,    callback: this._onMsgMrrSetMaxConcurrentCount },
         ]);
         this._setUiListenerArray([
             { ui: this._groupStd,       callback: this._onTouchedGroupStd },
@@ -164,12 +166,12 @@ export class MrrSetMaxConcurrentCountPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
-        this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
-        this._labelTitle.text       = Lang.getText(Lang.Type.B0413);
-        this._labelTips.text        = Lang.getText(Lang.Type.A0132);
-        this._labelStdTitle.text    = Lang.getText(Lang.Type.B0548);
-        this._labelFogTitle.text    = Lang.getText(Lang.Type.B0549);
+        this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+        this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+        this._labelTitle.text       = Lang.getText(LangTextType.B0413);
+        this._labelTips.text        = Lang.getText(LangTextType.A0132);
+        this._labelStdTitle.text    = Lang.getText(LangTextType.B0548);
+        this._labelFogTitle.text    = Lang.getText(LangTextType.B0549);
     }
 
     private _updateGroupStd(): void {

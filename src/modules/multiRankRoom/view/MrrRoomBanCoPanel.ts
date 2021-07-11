@@ -11,7 +11,9 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as MrrProxy                    from "../model/MrrProxy";
 
@@ -64,7 +66,7 @@ export class MrrRoomBanCoPanel extends UiPanel<OpenDataForMrrRoomBanCoPanel> {
             { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
 
         this._showOpenAnimation();
@@ -107,8 +109,8 @@ export class MrrRoomBanCoPanel extends UiPanel<OpenDataForMrrRoomBanCoPanel> {
         const bannedCoIdSet = this._bannedCoIdSet;
         if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0130),
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0130),
             });
             return;
         }
@@ -117,8 +119,8 @@ export class MrrRoomBanCoPanel extends UiPanel<OpenDataForMrrRoomBanCoPanel> {
         const maxCount      = CommonConstants.RankMaxBanCoCount;
         if (bannedCoCount > maxCount) {
             CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content: Lang.getFormattedText(Lang.Type.F0031, maxCount),
+                title   : Lang.getText(LangTextType.B0088),
+                content: Lang.getFormattedText(LangTextType.F0031, maxCount),
             });
             return;
         }
@@ -129,12 +131,12 @@ export class MrrRoomBanCoPanel extends UiPanel<OpenDataForMrrRoomBanCoPanel> {
         };
         if (bannedCoCount > 0) {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0138),
+                content : Lang.getText(LangTextType.A0138),
                 callback,
             });
         } else {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0139),
+                content : Lang.getText(LangTextType.A0139),
                 callback,
             });
         }
@@ -153,8 +155,8 @@ export class MrrRoomBanCoPanel extends UiPanel<OpenDataForMrrRoomBanCoPanel> {
         } else {
             if (coId === CommonConstants.CoEmptyId) {
                 CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0130),
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0130),
                 });
                 return;
             }
@@ -168,9 +170,9 @@ export class MrrRoomBanCoPanel extends UiPanel<OpenDataForMrrRoomBanCoPanel> {
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
-        this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-        this._labelAvailableCoTitle.text    = Lang.getText(Lang.Type.B0238);
+        this._btnCancel.label               = Lang.getText(LangTextType.B0154);
+        this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+        this._labelAvailableCoTitle.text    = Lang.getText(LangTextType.B0238);
 
         this._updateComponentsForPreviewCoId();
     }

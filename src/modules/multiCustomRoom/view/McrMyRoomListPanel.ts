@@ -16,7 +16,9 @@ import { OpenDataForMcrRoomMapInfoPage, McrRoomMapInfoPage }                    
 import { OpenDataForMcrRoomPlayerInfoPage, McrRoomPlayerInfoPage }              from "./McrRoomPlayerInfoPage";
 import * as Helpers                                                             from "../../../utility/Helpers";
 import * as Lang                                                                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                                                              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                                                               from "../../../utility/Types";
 import * as McrModel                                                            from "../../multiCustomRoom/model/McrModel";
 import * as McrProxy                                                            from "../../multiCustomRoom/model/McrProxy";
@@ -65,14 +67,14 @@ export class McrMyRoomListPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.McrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMcrJoinedPreviewingRoomIdChanged },
-            { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,        callback: this._onNotifyMsgMcrGetJoinedRoomInfoList },
-            { type: Notify.Type.MsgMcrCreateRoom,                   callback: this._onNotifyMsgCreateRoom },
-            { type: Notify.Type.MsgMcrDeleteRoomByServer,           callback: this._onNotifyMsgMcrDeleteRoomByServer },
-            { type: Notify.Type.MsgMcrJoinRoom,                     callback: this._onNotifyMsgMcrJoinRoom },
-            { type: Notify.Type.MsgMcrDeletePlayer,                 callback: this._onNotifyMsgMcrDeletePlayer },
-            { type: Notify.Type.MsgMcrExitRoom,                     callback: this._onNotifyMsgMcrExitRoom },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.McrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMcrJoinedPreviewingRoomIdChanged },
+            { type: NotifyType.MsgMcrGetJoinedRoomInfoList,        callback: this._onNotifyMsgMcrGetJoinedRoomInfoList },
+            { type: NotifyType.MsgMcrCreateRoom,                   callback: this._onNotifyMsgCreateRoom },
+            { type: NotifyType.MsgMcrDeleteRoomByServer,           callback: this._onNotifyMsgMcrDeleteRoomByServer },
+            { type: NotifyType.MsgMcrJoinRoom,                     callback: this._onNotifyMsgMcrJoinRoom },
+            { type: NotifyType.MsgMcrDeletePlayer,                 callback: this._onNotifyMsgMcrDeletePlayer },
+            { type: NotifyType.MsgMcrExitRoom,                     callback: this._onNotifyMsgMcrExitRoom },
         ]);
         this._setUiListenerArray([
             { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -156,22 +158,22 @@ export class McrMyRoomListPanel extends UiPanel<void> {
     private _initTabSettings(): void {
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : McrRoomMapInfoPage,
                 pageData    : { roomId: null } as OpenDataForMcrRoomMapInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                tabItemData : { name: Lang.getText(LangTextType.B0224) },
                 pageClass   : McrRoomPlayerInfoPage,
                 pageData    : { roomId: null } as OpenDataForMcrRoomPlayerInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : McrRoomBasicSettingsPage,
                 pageData    : { roomId: null } as OpenDataForMcrRoomBasicSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData : { name: Lang.getText(LangTextType.B0003) },
                 pageClass   : McrRoomAdvancedSettingsPage,
                 pageData    : { roomId: null } as OpenDataForMcrRoomAdvancedSettingsPage,
             },
@@ -179,12 +181,12 @@ export class McrMyRoomListPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-        this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0137);
-        this._labelMyRoom.text          = Lang.getText(Lang.Type.B0410);
-        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-        this._labelNoRoom.text          = Lang.getText(Lang.Type.B0582);
-        this._btnNextStep.label         = Lang.getText(Lang.Type.B0398);
+        this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+        this._labelMultiPlayer.text     = Lang.getText(LangTextType.B0137);
+        this._labelMyRoom.text          = Lang.getText(LangTextType.B0410);
+        this._btnBack.label             = Lang.getText(LangTextType.B0146);
+        this._labelNoRoom.text          = Lang.getText(LangTextType.B0582);
+        this._btnNextStep.label         = Lang.getText(LangTextType.B0398);
     }
 
     private _updateGroupRoomList(): void {
@@ -324,7 +326,7 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
             { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.McrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMcrJoinedPreviewingRoomIdChanged },
+            { type: NotifyType.McrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMcrJoinedPreviewingRoomIdChanged },
         ]);
     }
 

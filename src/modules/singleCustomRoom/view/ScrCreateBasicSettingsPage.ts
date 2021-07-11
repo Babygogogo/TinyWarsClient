@@ -8,7 +8,9 @@ import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel"
 import { ScrCreateSaveSlotsPanel }      from "./ScrCreateSaveSlotsPanel";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as WarMapModel                 from "../../warMap/model/WarMapModel";
 import * as ScrModel                    from "../model/ScrModel";
@@ -50,8 +52,8 @@ export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
             { ui: this._btnSaveSlot,        callback: this._onTouchedBtnSaveSlot, },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.ScrCreateWarSaveSlotChanged,    callback: this._onNotifyScrCreateWarSaveSlotChanged },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.ScrCreateWarSaveSlotChanged,    callback: this._onNotifyScrCreateWarSaveSlotChanged },
         ]);
         this.left                       = 0;
         this.right                      = 0;
@@ -98,7 +100,7 @@ export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
             callback();
         } else {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0129),
+                content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     ScrModel.Create.setCustomWarRuleId();
                     callback();
@@ -109,8 +111,8 @@ export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
 
     private _onTouchedBtnHasFogHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0020),
-            content: Lang.getText(Lang.Type.R0002),
+            title  : Lang.getText(LangTextType.B0020),
+            content: Lang.getText(LangTextType.R0002),
         });
     }
 
@@ -122,11 +124,11 @@ export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelMapNameTitle.text        = Lang.getText(Lang.Type.B0225);
-        this._labelSaveSlotTitle.text       = Lang.getText(Lang.Type.B0606);
-        this._labelSlotCommentTitle.text    = Lang.getText(Lang.Type.B0605);
-        this._labelWarRuleTitle.text        = Lang.getText(Lang.Type.B0318);
-        this._labelHasFogTitle.text         = Lang.getText(Lang.Type.B0020);
+        this._labelMapNameTitle.text        = Lang.getText(LangTextType.B0225);
+        this._labelSaveSlotTitle.text       = Lang.getText(LangTextType.B0606);
+        this._labelSlotCommentTitle.text    = Lang.getText(LangTextType.B0605);
+        this._labelWarRuleTitle.text        = Lang.getText(LangTextType.B0318);
+        this._labelHasFogTitle.text         = Lang.getText(LangTextType.B0020);
     }
 
     private _updateComponentsForWarRule(): void {
@@ -154,6 +156,6 @@ export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _updateLabelHasFog(): void {
-        this._labelHasFog.text = Lang.getText(ScrModel.Create.getHasFog() ? Lang.Type.B0012 : Lang.Type.B0013);
+        this._labelHasFog.text = Lang.getText(ScrModel.Create.getHasFog() ? LangTextType.B0012 : LangTextType.B0013);
     }
 }

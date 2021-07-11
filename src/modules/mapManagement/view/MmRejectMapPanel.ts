@@ -5,6 +5,7 @@ import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiTextInput }                  from "../../../gameui/UiTextInput";
 import { MeWar }                        from "../../mapEditor/model/MeWar";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Types                       from "../../../utility/Types";
 import * as WarMapProxy                 from "../../warMap/model/WarMapProxy";
 
@@ -54,10 +55,10 @@ export class MmRejectMapPanel extends UiPanel<OpenData> {
             { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
         ]);
 
-        this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-        this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
-        this._labelTitle.text   = Lang.getText(Lang.Type.B0297);
-        this._labelTips.text    = Lang.getText(Lang.Type.A0094);
+        this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+        this._btnCancel.label   = Lang.getText(LangTextType.B0154);
+        this._labelTitle.text   = Lang.getText(LangTextType.B0297);
+        this._labelTips.text    = Lang.getText(LangTextType.A0094);
     }
 
     private _onTouchedBtnCancel(): void {

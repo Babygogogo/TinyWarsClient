@@ -14,7 +14,9 @@ import { CcrMainMenuPanel }     from "../../coopCustomRoom/view/CcrMainMenuPanel
 import * as FloatText           from "../../../utility/FloatText";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 import * as McrModel            from "../../multiCustomRoom/model/McrModel";
 import * as MfrModel            from "../../multiFreeRoom/model/MfrModel";
@@ -86,7 +88,7 @@ export class MfrMainMenuPanel extends UiPanel<void> {
             { ui: this._btnCoopMode,        callback: this._onTouchedBtnCoopMode },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
+            { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
         ]);
 
         this._showOpenAnimation();
@@ -110,8 +112,8 @@ export class MfrMainMenuPanel extends UiPanel<void> {
         SpmMainMenuPanel.show();
     }
     private _onTouchedBtnCreateRoom(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0053));
-        FloatText.show(Lang.getText(Lang.Type.A0198));
+        FloatText.show(Lang.getText(LangTextType.A0053));
+        FloatText.show(Lang.getText(LangTextType.A0198));
         // this.close();
         // Lobby.LobbyTopPanel.hide();
         // Lobby.LobbyBottomPanel.hide();
@@ -137,8 +139,8 @@ export class MfrMainMenuPanel extends UiPanel<void> {
     }
     private _onTouchedBtnHelp(): void {
         CommonAlertPanel.show({
-            title   : Lang.getText(Lang.Type.B0143),
-            content : Lang.getText(Lang.Type.R0007),
+            title   : Lang.getText(LangTextType.B0143),
+            content : Lang.getText(LangTextType.R0007),
         });
     }
     private _onTouchedBtnNormalMode(): void {

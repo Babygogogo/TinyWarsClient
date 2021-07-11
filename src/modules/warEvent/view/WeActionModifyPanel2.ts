@@ -6,7 +6,9 @@ import { BwWar }                        from "../../baseWar/model/BwWar";
 import { WeActionTypeListPanel }        from "./WeActionTypeListPanel";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import PlayerAliveState                 = Types.PlayerAliveState;
@@ -61,8 +63,8 @@ export class WeActionModifyPanel2 extends UiPanel<OpenDataForWeActionModifyPanel
             { ui: this._btnBack,                callback: this.close },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
         ]);
 
         this._updateView();
@@ -85,7 +87,7 @@ export class WeActionModifyPanel2 extends UiPanel<OpenDataForWeActionModifyPanel
         const action        = this._getOpenData().action.WeaSetPlayerAliveState;
         action.playerIndex  = ((action.playerIndex || 0) % CommonConstants.WarMaxPlayerIndex) + 1;
 
-        Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+        Notify.dispatch(NotifyType.WarEventFullDataChanged);
     }
 
     private _onTouchedBtnSwitchPlayerState(e: egret.TouchEvent): void {
@@ -99,7 +101,7 @@ export class WeActionModifyPanel2 extends UiPanel<OpenDataForWeActionModifyPanel
             action.playerAliveState = PlayerAliveState.Alive;
         }
 
-        Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+        Notify.dispatch(NotifyType.WarEventFullDataChanged);
     }
 
     private _onTouchedBtnType(e: egret.TouchEvent): void {
@@ -123,13 +125,13 @@ export class WeActionModifyPanel2 extends UiPanel<OpenDataForWeActionModifyPanel
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text               = `${Lang.getText(Lang.Type.B0533)} A${this._getOpenData().action.WeaCommonData.actionId}`;
-        this._btnType.label                 = Lang.getText(Lang.Type.B0516);
-        this._btnSwitchPlayerIndex.label    = Lang.getText(Lang.Type.B0520);
-        this._btnSwitchPlayerState.label    = Lang.getText(Lang.Type.B0520);
-        this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-        this._labelPlayerIndexTitle.text    = Lang.getText(Lang.Type.B0521);
-        this._labelPlayerStateTitle.text    = Lang.getText(Lang.Type.B0523);
+        this._labelTitle.text               = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData.actionId}`;
+        this._btnType.label                 = Lang.getText(LangTextType.B0516);
+        this._btnSwitchPlayerIndex.label    = Lang.getText(LangTextType.B0520);
+        this._btnSwitchPlayerState.label    = Lang.getText(LangTextType.B0520);
+        this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+        this._labelPlayerIndexTitle.text    = Lang.getText(LangTextType.B0521);
+        this._labelPlayerStateTitle.text    = Lang.getText(LangTextType.B0523);
 
         this._updateLabelPlayerState();
         this._updateLabelTips();
@@ -150,9 +152,9 @@ export class WeActionModifyPanel2 extends UiPanel<OpenDataForWeActionModifyPanel
 
 function getTipsForPlayerAliveState(playerAliveState: PlayerAliveState): string {
     switch (playerAliveState) {
-        case PlayerAliveState.Alive : return Lang.getText(Lang.Type.A0214);
-        case PlayerAliveState.Dying : return Lang.getText(Lang.Type.A0215);
-        case PlayerAliveState.Dead  : return Lang.getText(Lang.Type.A0216);
+        case PlayerAliveState.Alive : return Lang.getText(LangTextType.A0214);
+        case PlayerAliveState.Dying : return Lang.getText(LangTextType.A0215);
+        case PlayerAliveState.Dead  : return Lang.getText(LangTextType.A0216);
         default                     : return undefined;
     }
 }

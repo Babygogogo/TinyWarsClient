@@ -8,7 +8,9 @@ import { UiButton }             from "../../../gameui/UiButton";
 import { UserPanel }            from "../../user/view/UserPanel";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as UserProxy           from "../../user/model/UserProxy";
@@ -72,8 +74,8 @@ export class UserOnlineUsersPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgUserGetOnlineUsers,  callback: this._onNotifySUserGetOnlineUsers },
+            { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgUserGetOnlineUsers,  callback: this._onNotifySUserGetOnlineUsers },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,   callback: this.close },
@@ -113,7 +115,7 @@ export class UserOnlineUsersPanel extends UiPanel<void> {
         const msg = this._msg;
         if (!msg) {
             this._labelLoading.visible  = true;
-            this._labelUsersCount.text  = Lang.getText(Lang.Type.B0029);
+            this._labelUsersCount.text  = Lang.getText(LangTextType.B0029);
             this._listUser.clear();
         } else {
             this._labelLoading.visible  = false;
@@ -162,12 +164,12 @@ export class UserOnlineUsersPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text           = Lang.getText(Lang.Type.B0236);
-        this._labelTips.text            = Lang.getText(Lang.Type.A0064);
-        this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-        this._labelUsersCountTitle.text = `${Lang.getText(Lang.Type.B0237)}:`;
-        this._labelNameTitle1.text      = Lang.getText(Lang.Type.B0175);
-        this._labelNameTitle2.text      = Lang.getText(Lang.Type.B0175);
+        this._labelTitle.text           = Lang.getText(LangTextType.B0236);
+        this._labelTips.text            = Lang.getText(LangTextType.A0064);
+        this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+        this._labelUsersCountTitle.text = `${Lang.getText(LangTextType.B0237)}:`;
+        this._labelNameTitle1.text      = Lang.getText(LangTextType.B0175);
+        this._labelNameTitle2.text      = Lang.getText(LangTextType.B0175);
     }
 
     private _showOpenAnimation(): void {

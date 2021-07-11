@@ -2,6 +2,7 @@
 import * as NetManager          from "../../../network/NetManager";
 import { NetMessageCodes }      from "../../../network/NetMessageCodes";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as TimeModel           from "../../time/model/TimeModel";
@@ -32,7 +33,7 @@ function _onMsgChatAddMessage(e: egret.Event): void {
     const data = e.data as NetMessage.MsgChatAddMessage.IS;
     if (!data.errorCode) {
         ChatModel.updateOnAddMessage(data.message, true);
-        Notify.dispatch(Notify.Type.MsgChatAddMessage, data);
+        Notify.dispatch(NotifyType.MsgChatAddMessage, data);
     }
 }
 
@@ -43,7 +44,7 @@ function _onMsgChatGetAllMessages(e: egret.Event): void {
     const data = e.data as NetMessage.MsgChatGetAllMessages.IS;
     if (!data.errorCode) {
         ChatModel.setAllMessages(data.messageList);
-        Notify.dispatch(Notify.Type.MsgChatGetAllMessages, data);
+        Notify.dispatch(NotifyType.MsgChatGetAllMessages, data);
     }
 }
 
@@ -64,7 +65,7 @@ function _onMsgChatUpdateReadProgress(e: egret.Event): void {
     const data = e.data as NetMessage.MsgChatUpdateReadProgress.IS;
     if (!data.errorCode) {
         ChatModel.setReadProgress(data.progress);
-        Notify.dispatch(Notify.Type.MsgChatUpdateReadProgress, data);
+        Notify.dispatch(NotifyType.MsgChatUpdateReadProgress, data);
     }
 }
 
@@ -75,6 +76,6 @@ function _onMsgChatGetAllReadProgressList(e: egret.Event): void {
     const data = e.data as NetMessage.MsgChatGetAllReadProgressList.IS;
     if (!data.errorCode) {
         ChatModel.resetAllReadProgress(data.list);
-        Notify.dispatch(Notify.Type.MsgChatGetAllReadProgressList, data);
+        Notify.dispatch(NotifyType.MsgChatGetAllReadProgressList, data);
     }
 }

@@ -6,7 +6,9 @@ import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiScrollList }                 from "../../../gameui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as WarMapModel                 from "../../warMap/model/WarMapModel";
 import * as MeModel                     from "../model/MeModel";
@@ -43,7 +45,7 @@ export class MeImportPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnCancel,  callback: this.close },
@@ -67,7 +69,7 @@ export class MeImportPanel extends UiPanel<void> {
     // Private functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
+        this._btnCancel.label   = Lang.getText(LangTextType.B0154);
     }
 
     private async _createDataForListMap(): Promise<DataForMapRenderer[]> {
@@ -105,7 +107,7 @@ class MapRenderer extends UiListItemRenderer<DataForMapRenderer> {
     public onItemTapEvent(): void {
         const data = this.data;
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0095) + `\n"${data.mapName}"`,
+            content : Lang.getText(LangTextType.A0095) + `\n"${data.mapName}"`,
             callback: async () => {
                 const war = MeModel.getWar();
                 war.stopRunning();

@@ -11,7 +11,9 @@ import { BwCursor }                     from "../model/BwCursor";
 import { BwUnitMap }                    from "../model/BwUnitMap";
 import { BwUnitView }                   from "./BwUnitView";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as CommonModel                 from "../../common/model/CommonModel";
 
@@ -58,11 +60,11 @@ export class BwUnitListPanel extends UiPanel<OpenDataForBwUnitListPanel> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
-            { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-            { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-            { type: Notify.Type.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
+            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
+            { type: NotifyType.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
+            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
+            { type: NotifyType.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
         ]);
         this._setUiListenerArray([
             { ui: this._btnSwitch, callback: this._onTouchedBtnSwitch },
@@ -109,10 +111,10 @@ export class BwUnitListPanel extends UiPanel<OpenDataForBwUnitListPanel> {
     // Functions for view.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelCountName.text   = `${Lang.getText(Lang.Type.B0160)}:`;
-        this._labelValueName.text   = `${Lang.getText(Lang.Type.B0161)}:`;
-        this._labelName.text        = Lang.getText(Lang.Type.B0152);
-        this._btnSwitch.label       = Lang.getText(Lang.Type.B0244);
+        this._labelCountName.text   = `${Lang.getText(LangTextType.B0160)}:`;
+        this._labelValueName.text   = `${Lang.getText(LangTextType.B0161)}:`;
+        this._labelName.text        = Lang.getText(LangTextType.B0152);
+        this._btnSwitch.label       = Lang.getText(LangTextType.B0244);
     }
 
     private _updateView(): void {
@@ -188,7 +190,7 @@ class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
         ]);
 
         this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;

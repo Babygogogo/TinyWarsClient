@@ -7,7 +7,9 @@ import { UiTextInput }                  from "../../../gameui/UiTextInput";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as McrModel                    from "../../multiCustomRoom/model/McrModel";
@@ -59,7 +61,7 @@ export class McrJoinPasswordPanel extends UiPanel<OpenData> {
             { ui: this._btnConfirm,       callback: this._onTouchedBtnConfirm },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._showOpenAnimation();
@@ -81,7 +83,7 @@ export class McrJoinPasswordPanel extends UiPanel<OpenData> {
     private async _onTouchedBtnConfirm(): Promise<void> {
         const roomInfo = this._getOpenData().roomInfo;
         if (this._inputWarPassword.text !== roomInfo.settingsForMcw.warPassword) {
-            FloatText.show(Lang.getText(Lang.Type.A0017));
+            FloatText.show(Lang.getText(LangTextType.A0017));
         } else {
             this.close();
 
@@ -89,7 +91,7 @@ export class McrJoinPasswordPanel extends UiPanel<OpenData> {
             if (joinData) {
                 McrProxy.reqMcrJoinRoom(joinData);
             } else {
-                FloatText.show(Lang.getText(Lang.Type.A0145));
+                FloatText.show(Lang.getText(LangTextType.A0145));
                 McrProxy.reqMcrGetJoinableRoomInfoList();
             }
         }
@@ -106,11 +108,11 @@ export class McrJoinPasswordPanel extends UiPanel<OpenData> {
             WarMapModel.getMapNameInCurrentLanguage(info.settingsForMcw.mapId).then(v => labelWarName.text = v);
         }
 
-        this._labelTitle.text           = Lang.getText(Lang.Type.B0449);
-        this._labelRoomTitle.text       = `${Lang.getText(Lang.Type.B0405)}:`;
-        this._labelPasswordTitle.text   = `${Lang.getText(Lang.Type.B0171)}:`;
-        this._btnCancel.label           = Lang.getText(Lang.Type.B0154);
-        this._btnConfirm.label          = Lang.getText(Lang.Type.B0026);
+        this._labelTitle.text           = Lang.getText(LangTextType.B0449);
+        this._labelRoomTitle.text       = `${Lang.getText(LangTextType.B0405)}:`;
+        this._labelPasswordTitle.text   = `${Lang.getText(LangTextType.B0171)}:`;
+        this._btnCancel.label           = Lang.getText(LangTextType.B0154);
+        this._btnConfirm.label          = Lang.getText(LangTextType.B0026);
     }
 
     private _showOpenAnimation(): void {

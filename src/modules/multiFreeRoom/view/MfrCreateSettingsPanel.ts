@@ -19,7 +19,9 @@ import * as FloatText                       from "../../../utility/FloatText";
 import * as FlowManager                     from "../../../utility/FlowManager";
 import * as Helpers                         from "../../../utility/Helpers";
 import * as Lang                            from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                           from "../../../utility/Types";
 import * as BwHelpers                       from "../../baseWar/model/BwHelpers";
 import * as BwWarRuleHelper                 from "../../baseWar/model/BwWarRuleHelper";
@@ -81,8 +83,8 @@ export class MfrCreateSettingsPanel extends UiPanel<void> {
             { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMfrCreateRoom,           callback: this._onNotifyMsgMfrCreateRoom },
+            { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMfrCreateRoom,           callback: this._onNotifyMsgMfrCreateRoom },
         ]);
         this._tabSettings.setBarItemRenderer(TabItemRenderer);
         this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
@@ -90,19 +92,19 @@ export class MfrCreateSettingsPanel extends UiPanel<void> {
 
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : MfrCreateBasicSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData : { name: Lang.getText(LangTextType.B0003) },
                 pageClass   : MfrCreateAdvancedSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                tabItemData : { name: Lang.getText(LangTextType.B0224) },
                 pageClass   : MfrCreatePlayerInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : MfrCreateMapInfoPage,
             },
         ]);
@@ -141,7 +143,7 @@ export class MfrCreateSettingsPanel extends UiPanel<void> {
         this._updateComponentsForLanguage();
     }
     private _onNotifyMsgMfrCreateRoom(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0015));
+        FloatText.show(Lang.getText(LangTextType.A0015));
         FlowManager.gotoLobby();
     }
 
@@ -164,14 +166,14 @@ export class MfrCreateSettingsPanel extends UiPanel<void> {
     // Functions for the view.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0137);
-        this._labelFreeMode.text            = Lang.getText(Lang.Type.B0557);
-        this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0000);
-        this._labelRoomSettings.text        = Lang.getText(Lang.Type.B0571);
-        this._labelChoosePlayerIndex.text   = Lang.getText(Lang.Type.B0572);
-        this._labelChooseSkinId.text        = Lang.getText(Lang.Type.B0586);
-        this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-        this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
+        this._labelMultiPlayer.text         = Lang.getText(LangTextType.B0137);
+        this._labelFreeMode.text            = Lang.getText(LangTextType.B0557);
+        this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
+        this._labelRoomSettings.text        = Lang.getText(LangTextType.B0571);
+        this._labelChoosePlayerIndex.text   = Lang.getText(LangTextType.B0572);
+        this._labelChooseSkinId.text        = Lang.getText(LangTextType.B0586);
+        this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+        this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
     }
 
     private async _initSclPlayerIndex(): Promise<void> {
@@ -276,9 +278,9 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MfrCreateTeamIndexChanged,          callback: this._onNotifyMfrCreateTeamIndexChanged },
-            { type: Notify.Type.MfrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
+            { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MfrCreateTeamIndexChanged,          callback: this._onNotifyMfrCreateTeamIndexChanged },
+            { type: NotifyType.MfrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
         ]);
     }
 
@@ -297,7 +299,7 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
                 (playerData.aliveState === Types.PlayerAliveState.Dead) ||
                 (playerData.userId == null)
             ) {
-                FloatText.show(Lang.getText(Lang.Type.A0204));
+                FloatText.show(Lang.getText(LangTextType.A0204));
             } else {
                 creator.setSelfPlayerIndex(playerIndex);
             }
@@ -334,7 +336,7 @@ class SkinIdRenderer extends UiListItemRenderer<DataForSkinIdRenderer> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.MfrCreateSelfPlayerIndexChanged, callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
+            { type: NotifyType.MfrCreateSelfPlayerIndexChanged, callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
         ]);
     }
 

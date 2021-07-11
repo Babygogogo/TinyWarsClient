@@ -13,7 +13,9 @@ import { ScrCreatePlayerInfoPage }          from "./ScrCreatePlayerInfoPage";
 import * as FlowManager                     from "../../../utility/FlowManager";
 import * as Helpers                         from "../../../utility/Helpers";
 import * as Lang                            from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                          from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                      from "../../../utility/ProtoTypes";
 import * as Types                           from "../../../utility/Types";
 import * as SpmModel                        from "../../singlePlayerMode/model/SpmModel";
@@ -65,26 +67,26 @@ export class ScrCreateSettingsPanel extends UiPanel<void> {
             { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgSpmCreateScw,    callback: this._onNotifyMsgSpmCreateScw },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgSpmCreateScw,    callback: this._onNotifyMsgSpmCreateScw },
         ]);
         this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
         this._tabSettings.bindData([
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData : { name: Lang.getText(LangTextType.B0002) },
                 pageClass   : ScrCreateBasicSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData : { name: Lang.getText(LangTextType.B0003) },
                 pageClass   : ScrCreateAdvancedSettingsPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                tabItemData : { name: Lang.getText(LangTextType.B0298) },
                 pageClass   : ScrCreateMapInfoPage,
             },
             {
-                tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                tabItemData : { name: Lang.getText(LangTextType.B0224) },
                 pageClass   : ScrCreatePlayerInfoPage,
             },
         ]);
@@ -119,7 +121,7 @@ export class ScrCreateSettingsPanel extends UiPanel<void> {
             callback();
         } else {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0070),
+                content : Lang.getText(LangTextType.A0070),
                 callback,
             });
         }
@@ -156,12 +158,12 @@ export class ScrCreateSettingsPanel extends UiPanel<void> {
     // Functions for the view.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelSinglePlayer.text        = Lang.getText(Lang.Type.B0138);
-        this._labelCustomMode.text          = Lang.getText(Lang.Type.B0603);
-        this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
-        this._labelGameSettings.text        = Lang.getText(Lang.Type.B0604);
-        this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-        this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
+        this._labelSinglePlayer.text        = Lang.getText(LangTextType.B0138);
+        this._labelCustomMode.text          = Lang.getText(LangTextType.B0603);
+        this._labelChooseMap.text           = Lang.getText(LangTextType.B0227);
+        this._labelGameSettings.text        = Lang.getText(LangTextType.B0604);
+        this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+        this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

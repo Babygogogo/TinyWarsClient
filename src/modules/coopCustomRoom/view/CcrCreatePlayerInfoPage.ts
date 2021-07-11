@@ -12,8 +12,10 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
 import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
 import CreateModel                      = CcrModel.Create;
@@ -93,7 +95,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             { ui: this._btnChangeSkinId,        callback: this._onTouchedBtnChangeSkinId },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -133,7 +135,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
 
         if (playerIndex === CreateModel.getSelfPlayerIndex()) {
             if (humanPlayerIndexSet.size < 2) {
-                FloatText.show(Lang.getText(Lang.Type.A0222));
+                FloatText.show(Lang.getText(LangTextType.A0222));
             } else {
                 const callback = () => {
                     for (const p of humanPlayerIndexSet) {
@@ -151,7 +153,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     callback();
                 } else {
                     CommonConfirmPanel.show({
-                        content : Lang.getText(Lang.Type.A0129),
+                        content : Lang.getText(LangTextType.A0129),
                         callback: () => {
                             CreateModel.setCustomWarRuleId();
                             callback();
@@ -175,7 +177,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     callback();
                 } else {
                     CommonConfirmPanel.show({
-                        content : Lang.getText(Lang.Type.A0129),
+                        content : Lang.getText(LangTextType.A0129),
                         callback: () => {
                             CreateModel.setCustomWarRuleId();
                             callback();
@@ -240,7 +242,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     callback();
                 } else {
                     CommonConfirmPanel.show({
-                        content : Lang.getText(Lang.Type.A0129),
+                        content : Lang.getText(LangTextType.A0129),
                         callback: () => {
                             CreateModel.setCustomWarRuleId();
                             callback();
@@ -260,9 +262,9 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnChangeCo.label         = Lang.getText(Lang.Type.B0230);
-        this._btnChangeController.label = Lang.getText(Lang.Type.B0608);
-        this._btnChangeSkinId.label     = Lang.getText(Lang.Type.B0609);
+        this._btnChangeCo.label         = Lang.getText(LangTextType.B0230);
+        this._btnChangeController.label = Lang.getText(LangTextType.B0608);
+        this._btnChangeSkinId.label     = Lang.getText(LangTextType.B0609);
     }
 
     private async _updateComponentsForSettings(): Promise<void> {
@@ -292,10 +294,10 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         );
 
         this._labelPlayerType.text  = isSelfPlayer
-            ? Lang.getText(Lang.Type.B0647)
+            ? Lang.getText(LangTextType.B0647)
             : (isHumanPlayer
-                ? Lang.getText(Lang.Type.B0648)
-                : Lang.getText(Lang.Type.B0607));
+                ? Lang.getText(LangTextType.B0648)
+                : Lang.getText(LangTextType.B0607));
 
         const coId                      = isSelfPlayer ? CreateModel.getSelfCoId() : playerRule.fixedCoIdInCcw;
         const coCfg                     = ConfigManager.getCoBasicCfg(settingsForCommon.configVersion, coId);

@@ -4,6 +4,7 @@ import { BwTileMap }            from "../model/BwTileMap";
 import { UiImage }              from "../../../gameui/UiImage";
 import * as UserModel           from "../../user/model/UserModel";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Helpers             from "../../../utility/Helpers";
 import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
 import * as VisibilityHelpers   from "../../../utility/VisibilityHelpers";
@@ -20,8 +21,8 @@ export class BwTileMapView extends egret.DisplayObjectContainer {
     private readonly _coZoneImageDict   = new Map<number, UiImage[][]>();
 
     private readonly _notifyListeners   = [
-        { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
-        { type: Notify.Type.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
+        { type: NotifyType.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+        { type: NotifyType.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
     ];
 
     private _tileMap: BwTileMap;

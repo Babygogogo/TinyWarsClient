@@ -6,7 +6,9 @@ import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiScrollList }                 from "../../../gameui/UiScrollList";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
@@ -52,7 +54,7 @@ export class WeActionTypeListPanel extends UiPanel<OpenDataForWeActionTypeListPa
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,       callback: this.close },
@@ -73,8 +75,8 @@ export class WeActionTypeListPanel extends UiPanel<OpenDataForWeActionTypeListPa
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text       = Lang.getText(Lang.Type.B0516);
-        this._btnClose.label        = Lang.getText(Lang.Type.B0146);
+        this._labelTitle.text       = Lang.getText(LangTextType.B0516);
+        this._btnClose.label        = Lang.getText(LangTextType.B0146);
     }
     private _updateListType(): void {
         const openData  = this._getOpenData();
@@ -111,7 +113,7 @@ class TypeRenderer extends UiListItemRenderer<DataForTypeRenderer> {
             { ui: this, callback: this._onTouchedSelf },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -135,7 +137,7 @@ class TypeRenderer extends UiListItemRenderer<DataForTypeRenderer> {
             WarEventHelper.openActionModifyPanel(data.war, data.fullData, action);
             WeActionTypeListPanel.hide();
 
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
     }
     private _onNotifyLanguageChanged(e: egret.Event): void {        // DONE
@@ -143,8 +145,8 @@ class TypeRenderer extends UiListItemRenderer<DataForTypeRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelUsing.text   = Lang.getText(Lang.Type.B0503);
-        this._labelSwitch.text  = Lang.getText(Lang.Type.B0520);
+        this._labelUsing.text   = Lang.getText(LangTextType.B0503);
+        this._labelSwitch.text  = Lang.getText(LangTextType.B0520);
 
         this._updateLabelType();
     }

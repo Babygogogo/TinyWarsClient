@@ -3,6 +3,7 @@ import { NetMessageCodes }      from "../../../network/NetMessageCodes";
 import * as NetManager          from "../../../network/NetManager";
 import * as BroadcastModel      from "./BroadcastModel";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import ILanguageText            = ProtoTypes.Structure.ILanguageText;
 
@@ -27,7 +28,7 @@ export function reqBroadcastAddMessage(textList: ILanguageText[], startTime: num
 function _onMsgBroadcastAddMessage(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgBroadcastAddMessage.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgBroadcastAddMessage, data);
+        Notify.dispatch(NotifyType.MsgBroadcastAddMessage, data);
     }
 }
 
@@ -41,7 +42,7 @@ export function reqBroadcastDeleteMessage(messageId: number): void {
 function _onMsgBroadcastDeleteMessage(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgBroadcastDeleteMessage.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgBroadcastDeleteMessage, data);
+        Notify.dispatch(NotifyType.MsgBroadcastDeleteMessage, data);
     }
 }
 
@@ -54,7 +55,7 @@ export function reqBroadcastDoBroadcast(): void {
 function _onMsgBroadcastDoBroadcast(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgBroadcastDoBroadcast.IS;
     if (!data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgBroadcastDoBroadcast, data);
+        Notify.dispatch(NotifyType.MsgBroadcastDoBroadcast, data);
     }
 }
 
@@ -66,6 +67,6 @@ function _onMsgBroadcastGetMessageList(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgBroadcastGetMessageList.IS;
     if (!data.errorCode) {
         BroadcastModel.setAllMessageList(data.messageList);
-        Notify.dispatch(Notify.Type.MsgBroadcastGetMessageList, data);
+        Notify.dispatch(NotifyType.MsgBroadcastGetMessageList, data);
     }
 }

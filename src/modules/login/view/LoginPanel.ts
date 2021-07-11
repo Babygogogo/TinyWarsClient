@@ -8,9 +8,11 @@ import { RegisterPanel }                from "./RegisterPanel";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as LocalStorage                from "../../../utility/LocalStorage";
 import * as NoSleepManager              from "../../../utility/NoSleepManager";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as SoundManager                from "../../../utility/SoundManager";
 import * as Types                       from "../../../utility/Types";
 import * as UserModel                   from "../../user/model/UserModel";
@@ -78,8 +80,8 @@ export class LoginPanel extends UiPanel<void> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgUserLogin,    callback: this._onMsgUserLogin },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
         ]);
         this._setUiListenerArray([
             { ui: this,                         callback: this._onTouchedSelf },
@@ -103,7 +105,7 @@ export class LoginPanel extends UiPanel<void> {
     }
 
     private _onMsgUserLogin(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0000));
+        FloatText.show(Lang.getText(LangTextType.A0000));
         this._btnLogin.enabled = false;
     }
     private _onNotifyLanguageChanged(): void {
@@ -120,10 +122,10 @@ export class LoginPanel extends UiPanel<void> {
         const account  = this._inputAccount.text;
         const password = this._inputPassword.text;
         if (!Helpers.checkIsAccountValid(account)) {
-            FloatText.show(Lang.getText(Lang.Type.A0001));
+            FloatText.show(Lang.getText(LangTextType.A0001));
         } else {
             if (!Helpers.checkIsPasswordValid(password)) {
-                FloatText.show(Lang.getText(Lang.Type.A0003));
+                FloatText.show(Lang.getText(LangTextType.A0003));
             } else {
                 LocalStorage.setAccount(account);
                 LocalStorage.setPassword(password);
@@ -141,7 +143,7 @@ export class LoginPanel extends UiPanel<void> {
     }
 
     private _onTouchedBtnForgetPassword(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0115));
+        FloatText.show(Lang.getText(LangTextType.A0115));
     }
 
     private _onTouchedGroupRememberPassword(): void {
@@ -151,12 +153,12 @@ export class LoginPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnLogin.label                = Lang.getText(Lang.Type.B0173);
-        this._btnRegister.label             = `${Lang.getText(Lang.Type.B0174)}*`;
-        this._btnForgetPassword.label       = Lang.getText(Lang.Type.B0626);
-        this._labelRememberPassword.text    = Lang.getText(Lang.Type.B0172);
-        this._labelAccount.text             = `${Lang.getText(Lang.Type.B0170)}:`;
-        this._labelPassword.text            = `${Lang.getText(Lang.Type.B0171)}:`;
+        this._btnLogin.label                = Lang.getText(LangTextType.B0173);
+        this._btnRegister.label             = `${Lang.getText(LangTextType.B0174)}*`;
+        this._btnForgetPassword.label       = Lang.getText(LangTextType.B0626);
+        this._labelRememberPassword.text    = Lang.getText(LangTextType.B0172);
+        this._labelAccount.text             = `${Lang.getText(LangTextType.B0170)}:`;
+        this._labelPassword.text            = `${Lang.getText(LangTextType.B0171)}:`;
     }
 
     private _showOpenAnimation(): void {

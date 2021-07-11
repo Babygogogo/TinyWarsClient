@@ -4,6 +4,7 @@ import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
@@ -53,8 +54,8 @@ export function getRoomInfo(roomId: number): Promise<IMcrRoomInfo | undefined | 
         const callbackOnSucceed = (e: egret.Event): void => {
             const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
             if (data.roomId === roomId) {
-                Notify.removeEventListener(Notify.Type.MsgMcrGetRoomInfo,         callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgMcrGetRoomInfoFailed,   callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfo,         callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfoFailed,   callbackOnFailed);
 
                 for (const cb of _roomInfoRequests.get(roomId)) {
                     cb(data);
@@ -67,8 +68,8 @@ export function getRoomInfo(roomId: number): Promise<IMcrRoomInfo | undefined | 
         const callbackOnFailed = (e: egret.Event): void => {
             const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
             if (data.roomId === roomId) {
-                Notify.removeEventListener(Notify.Type.MsgMcrGetRoomInfo,         callbackOnSucceed);
-                Notify.removeEventListener(Notify.Type.MsgMcrGetRoomInfoFailed,   callbackOnFailed);
+                Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfo,         callbackOnSucceed);
+                Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfoFailed,   callbackOnFailed);
 
                 for (const cb of _roomInfoRequests.get(roomId)) {
                     cb(data);
@@ -79,8 +80,8 @@ export function getRoomInfo(roomId: number): Promise<IMcrRoomInfo | undefined | 
             }
         };
 
-        Notify.addEventListener(Notify.Type.MsgMcrGetRoomInfo,        callbackOnSucceed);
-        Notify.addEventListener(Notify.Type.MsgMcrGetRoomInfoFailed,  callbackOnFailed);
+        Notify.addEventListener(NotifyType.MsgMcrGetRoomInfo,        callbackOnSucceed);
+        Notify.addEventListener(NotifyType.MsgMcrGetRoomInfoFailed,  callbackOnFailed);
 
         McrProxy.reqMcrGetRoomInfo(roomId);
     });
@@ -307,7 +308,7 @@ export namespace Create {
             setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdArray));
         }
 
-        Notify.dispatch(Notify.Type.McrCreateTeamIndexChanged);
+        Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
     }
     async function resetDataByPresetWarRuleId(ruleId: number): Promise<void> {
         if (ruleId == null) {
@@ -330,13 +331,13 @@ export namespace Create {
             setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdArray));
         }
 
-        Notify.dispatch(Notify.Type.McrCreateTeamIndexChanged);
+        Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
     }
     function setPresetWarRuleId(ruleId: number | null | undefined): void {
         const settingsForCommon             = getData().settingsForCommon;
         settingsForCommon.warRule.ruleId    = ruleId;
         settingsForCommon.presetWarRuleId   = ruleId;
-        Notify.dispatch(Notify.Type.McrCreatePresetWarRuleIdChanged);
+        Notify.dispatch(NotifyType.McrCreatePresetWarRuleIdChanged);
     }
     export function setCustomWarRuleId(): void {
         setPresetWarRuleId(null);
@@ -391,7 +392,7 @@ export namespace Create {
     export function setSelfPlayerIndex(playerIndex: number): void {
         if (playerIndex !== getSelfPlayerIndex()) {
             getData().selfPlayerIndex = playerIndex;
-            Notify.dispatch(Notify.Type.McrCreateSelfPlayerIndexChanged);
+            Notify.dispatch(NotifyType.McrCreateSelfPlayerIndexChanged);
         }
     }
     // export async function tickSelfPlayerIndex(): Promise<void> {
@@ -404,7 +405,7 @@ export namespace Create {
     export function setSelfCoId(coId: number): void {
         if (getSelfCoId() !== coId) {
             getData().selfCoId = coId;
-            Notify.dispatch(Notify.Type.McrCreateSelfCoIdChanged);
+            Notify.dispatch(NotifyType.McrCreateSelfCoIdChanged);
         }
     }
     export function getSelfCoId(): number | null {
@@ -414,7 +415,7 @@ export namespace Create {
     export function setSelfUnitAndTileSkinId(skinId: number): void {
         if (skinId !== getSelfUnitAndTileSkinId()) {
             getData().selfUnitAndTileSkinId = skinId;
-            Notify.dispatch(Notify.Type.McrCreateSelfSkinIdChanged);
+            Notify.dispatch(NotifyType.McrCreateSelfSkinIdChanged);
         }
     }
     export function tickSelfUnitAndTileSkinId(): void {
@@ -468,7 +469,7 @@ export namespace Create {
 
     export function tickTeamIndex(playerIndex: number): void {
         BwWarRuleHelper.tickTeamIndex(getWarRule(), playerIndex);
-        Notify.dispatch(Notify.Type.McrCreateTeamIndexChanged);
+        Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
     }
     export function getTeamIndex(playerIndex: number): number {
         return BwWarRuleHelper.getTeamIndex(getWarRule(), playerIndex);
@@ -579,7 +580,7 @@ export namespace Join {
     export function setTargetRoomId(roomId: number | null): void {
         if (getTargetRoomId() !== roomId) {
             _targetRoomId = roomId;
-            Notify.dispatch(Notify.Type.McrJoinTargetRoomIdChanged);
+            Notify.dispatch(NotifyType.McrJoinTargetRoomIdChanged);
         }
     }
     export async function getTargetRoomInfo(): Promise<IMcrRoomInfo | null> {
@@ -600,7 +601,7 @@ export namespace Joined {
     export function setPreviewingRoomId(roomId: number | null): void {
         if (getPreviewingRoomId() != roomId) {
             _previewingRoomId = roomId;
-            Notify.dispatch(Notify.Type.McrJoinedPreviewingRoomIdChanged);
+            Notify.dispatch(NotifyType.McrJoinedPreviewingRoomIdChanged);
         }
     }
 }

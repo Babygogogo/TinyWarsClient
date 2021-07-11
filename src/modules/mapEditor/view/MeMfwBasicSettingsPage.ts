@@ -7,7 +7,9 @@ import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPan
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { WarMapBuildingListPanel }      from "../../warMap/view/WarMapBuildingListPanel";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as MeModel                     from "../model/MeModel";
 
 export class MeMfwBasicSettingsPage extends UiTabPage<void> {
@@ -36,7 +38,7 @@ export class MeMfwBasicSettingsPage extends UiTabPage<void> {
             { ui: this._btnBuildings,               callback: this._onTouchedBtnBuildings },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
 
         this._btnModifyHasFog.setTextColor(0x00FF00);
@@ -69,7 +71,7 @@ export class MeMfwBasicSettingsPage extends UiTabPage<void> {
             callback();
         } else {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0129),
+                content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     MeModel.Mfw.setPresetWarRuleId(null);
                     callback();
@@ -80,8 +82,8 @@ export class MeMfwBasicSettingsPage extends UiTabPage<void> {
 
     private _onTouchedBtnHelpHasFog(): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0020),
-            content: Lang.getText(Lang.Type.R0002),
+            title  : Lang.getText(LangTextType.B0020),
+            content: Lang.getText(LangTextType.R0002),
         });
     }
 
@@ -98,10 +100,10 @@ export class MeMfwBasicSettingsPage extends UiTabPage<void> {
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._btnMapNameTitle.label         = Lang.getText(Lang.Type.B0225);
-        this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
-        this._btnModifyWarRule.label        = Lang.getText(Lang.Type.B0318);
-        this._btnBuildings.label            = Lang.getText(Lang.Type.B0333);
+        this._btnMapNameTitle.label         = Lang.getText(LangTextType.B0225);
+        this._btnModifyHasFog.label         = Lang.getText(LangTextType.B0020);
+        this._btnModifyWarRule.label        = Lang.getText(LangTextType.B0318);
+        this._btnBuildings.label            = Lang.getText(LangTextType.B0333);
     }
 
     private _updateComponentsForWarRule(): void {

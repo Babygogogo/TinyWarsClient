@@ -4,16 +4,16 @@ import { UiPanel }              from "../../../gameui/UiPanel";
 import { UiButton }             from "../../../gameui/UiButton";
 import { UiTextInput }          from "../../../gameui/UiTextInput";
 import { UiLabel }              from "../../../gameui/UiLabel";
+import { NotifyType }           from "../../../utility/NotifyType";
 import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as FloatText           from "../../../utility/FloatText";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
-import * as Notify              from "../../../utility/Notify";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Types               from "../../../utility/Types";
 import * as UserModel           from "../../user/model/UserModel";
 import * as UserProxy           from "../../user/model/UserProxy";
-import NotifyType               = Notify.Type;
 
 export class UserChangeDiscordIdPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
@@ -94,11 +94,11 @@ export class UserChangeDiscordIdPanel extends UiPanel<void> {
 
     private _onTouchedBtnConfirm(): void {
         if (this._isRequesting) {
-            FloatText.show(Lang.getText(Lang.Type.A0046));
+            FloatText.show(Lang.getText(LangTextType.A0046));
         } else {
             const discordId = this._inputDiscordId.text;
             if (!Helpers.checkIsDiscordIdValid(discordId)) {
-                FloatText.show(Lang.getText(Lang.Type.A0048));
+                FloatText.show(Lang.getText(LangTextType.A0048));
             } else {
                 this._isRequesting = true;
                 UserProxy.reqSetDiscordId(discordId);
@@ -109,7 +109,7 @@ export class UserChangeDiscordIdPanel extends UiPanel<void> {
     private _onTouchedLabelUrl(): void {
         if ((window) && (window.open)) {
             CommonConfirmPanel.show({
-                content : Lang.getFormattedText(Lang.Type.F0065, `Discord`),
+                content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                 callback: () => {
                     window.open(CommonConstants.DiscordUrl);
                 },
@@ -118,7 +118,7 @@ export class UserChangeDiscordIdPanel extends UiPanel<void> {
     }
 
     private _onMsgUserSetDiscordId(): void {
-        FloatText.show(Lang.getText(Lang.Type.A0049));
+        FloatText.show(Lang.getText(LangTextType.A0049));
         this.close();
     }
     private _onMsgUserSetDiscordIdFailed(): void {
@@ -133,11 +133,11 @@ export class UserChangeDiscordIdPanel extends UiPanel<void> {
     // Functions for view.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text       = Lang.getText(Lang.Type.B0150);
-        this._labelDiscordId.text   = Lang.getText(Lang.Type.B0243);
-        this._labelNote.text        = Lang.getText(Lang.Type.A0067);
-        this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
-        this._btnClose.label        = Lang.getText(Lang.Type.B0154);
+        this._labelTitle.text       = Lang.getText(LangTextType.B0150);
+        this._labelDiscordId.text   = Lang.getText(LangTextType.B0243);
+        this._labelNote.text        = Lang.getText(LangTextType.A0067);
+        this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+        this._btnClose.label        = Lang.getText(LangTextType.B0154);
     }
 
     private _showOpenAnimation(): void {

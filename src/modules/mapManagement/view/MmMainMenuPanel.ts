@@ -10,7 +10,9 @@ import { MmTagListPanel }           from "./MmTagListPanel";
 import * as FloatText               from "../../../utility/FloatText";
 import * as FlowManager             from "../../../utility/FlowManager";
 import * as Lang                    from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                  from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                   from "../../../utility/Types";
 
 export class MmMainMenuPanel extends UiPanel<void> {
@@ -47,9 +49,9 @@ export class MmMainMenuPanel extends UiPanel<void> {
             { ui: this._btnBack, callback: this._onTouchedBtnBack },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
-            { type: Notify.Type.MsgMmReloadAllMaps, callback: this._onMsgMmReloadAllMaps },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
+            { type: NotifyType.MsgMmReloadAllMaps, callback: this._onMsgMmReloadAllMaps },
         ]);
         this._listCommand.setItemRenderer(CommandRenderer);
 
@@ -68,7 +70,7 @@ export class MmMainMenuPanel extends UiPanel<void> {
         this.close();
     }
     private _onMsgMmReloadAllMaps(e: egret.Event): void {
-        FloatText.show(Lang.getText(Lang.Type.A0075));
+        FloatText.show(Lang.getText(LangTextType.A0075));
     }
     private _onNotifyLanguageChanged(e: egret.Event): void {
         this._updateView();
@@ -78,29 +80,29 @@ export class MmMainMenuPanel extends UiPanel<void> {
     // Private functions.
     ////////////////////////////////////////////////////////////////////////////////
     private async _updateView(): Promise<void> {
-        this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0192);
-        this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+        this._labelMenuTitle.text   = Lang.getText(LangTextType.B0192);
+        this._btnBack.label         = Lang.getText(LangTextType.B0146);
         this._listCommand.bindData(await this._createDataForListCommand());
     }
 
     private async _createDataForListCommand(): Promise<DataForCommandRenderer[]> {
         const dataList: DataForCommandRenderer[] = [
             {
-                name    : Lang.getText(Lang.Type.B0295),
+                name    : Lang.getText(LangTextType.B0295),
                 callback: (): void => {
                     this.close();
                     MmReviewListPanel.show();
                 },
             },
             {
-                name    : Lang.getText(Lang.Type.B0193),
+                name    : Lang.getText(LangTextType.B0193),
                 callback: (): void => {
                     this.close();
                     MmAvailabilityListPanel.show({});
                 },
             },
             {
-                name    : Lang.getText(Lang.Type.B0444),
+                name    : Lang.getText(LangTextType.B0444),
                 callback: (): void => {
                     this.close();
                     MmTagListPanel.show();

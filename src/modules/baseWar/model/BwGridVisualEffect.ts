@@ -3,6 +3,7 @@ import { ClientErrorCode }          from "../../../utility/ClientErrorCode";
 import { BwGridVisualEffectView }   from "../view/BwGridVisualEffectView";
 import { BwWar }                    from "./BwWar";
 import * as Notify                  from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                   from "../../../utility/Types";
 import GridIndex                    = Types.GridIndex;
 
@@ -12,13 +13,13 @@ export class BwGridVisualEffect {
     private _war: BwWar;
 
     private _notifyListeners: Notify.Listener[] = [
-        { type: Notify.Type.BwUnitBeAttacked,   callback: this._onNotifyBwUnitBeAttacked },
-        { type: Notify.Type.BwUnitBeDestroyed,  callback: this._onNotifyBwUnitBeDestroyed },
-        { type: Notify.Type.BwUnitBeRepaired,   callback: this._onNotifyBwUnitBeRepaired },
-        { type: Notify.Type.BwUnitBeSupplied,   callback: this._onNotifyBwUnitBeSupplied },
-        { type: Notify.Type.BwTileBeDestroyed,  callback: this._onNotifyBwTileBeDestroyed },
-        { type: Notify.Type.BwTileBeAttacked,   callback: this._onNotifyBwTileBeAttacked },
-        { type: Notify.Type.BwSiloExploded,     callback: this._onNotifyBwSiloExploded },
+        { type: NotifyType.BwUnitBeAttacked,   callback: this._onNotifyBwUnitBeAttacked },
+        { type: NotifyType.BwUnitBeDestroyed,  callback: this._onNotifyBwUnitBeDestroyed },
+        { type: NotifyType.BwUnitBeRepaired,   callback: this._onNotifyBwUnitBeRepaired },
+        { type: NotifyType.BwUnitBeSupplied,   callback: this._onNotifyBwUnitBeSupplied },
+        { type: NotifyType.BwTileBeDestroyed,  callback: this._onNotifyBwTileBeDestroyed },
+        { type: NotifyType.BwTileBeAttacked,   callback: this._onNotifyBwTileBeAttacked },
+        { type: NotifyType.BwSiloExploded,     callback: this._onNotifyBwSiloExploded },
     ];
 
     public init(): ClientErrorCode {

@@ -4,7 +4,9 @@ import { UiZoomableMap }        from "../../../gameui/UiZoomableMap";
 import { UiTabPage }            from "../../../gameui/UiTabPage";
 import { UiMapInfo }            from "../../../gameui/UiMapInfo";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as MfrModel            from "../../multiFreeRoom/model/MfrModel";
 
@@ -24,8 +26,8 @@ export class MfrRoomMapInfoPage extends UiTabPage<OpenDataForMfrRoomMapInfoPage>
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMfrGetRoomInfo,  callback: this._onNotifyMsgMfrGetRoomInfo },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMfrGetRoomInfo,  callback: this._onNotifyMsgMfrGetRoomInfo },
         ]);
 
         this.left   = 0;
@@ -48,7 +50,7 @@ export class MfrRoomMapInfoPage extends UiTabPage<OpenDataForMfrRoomMapInfoPage>
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text = Lang.getText(Lang.Type.A0150);
+        this._labelLoading.text = Lang.getText(LangTextType.A0150);
     }
     private async _updateComponentsForRoomInfo(): Promise<void> {
         const roomId    = this._getOpenData().roomId;

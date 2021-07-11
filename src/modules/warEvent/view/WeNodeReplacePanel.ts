@@ -6,8 +6,10 @@ import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiScrollList }                 from "../../../gameui/UiScrollList";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Logger                      from "../../../utility/Logger";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as Types                       from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
@@ -53,7 +55,7 @@ export class WeNodeReplacePanel extends UiPanel<OpenDataForWeNodeReplacePanel> {
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
         this._setUiListenerArray([
             { ui: this._btnClose,       callback: this.close },
@@ -74,9 +76,9 @@ export class WeNodeReplacePanel extends UiPanel<OpenDataForWeNodeReplacePanel> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelTitle.text   = Lang.getText(Lang.Type.B0491);
-        this._labelNoNode.text  = Lang.getText(Lang.Type.B0278);
-        this._btnClose.label    = Lang.getText(Lang.Type.B0146);
+        this._labelTitle.text   = Lang.getText(LangTextType.B0491);
+        this._labelNoNode.text  = Lang.getText(LangTextType.B0278);
+        this._btnClose.label    = Lang.getText(LangTextType.B0146);
     }
     private _updateListNodeAndLabelNoNode(): void {
         const openData      = this._getOpenData();
@@ -121,7 +123,7 @@ class NodeRenderer extends UiListItemRenderer<DataForNodeRenderer> {
             { ui: this._btnSelect,  callback: this._onTouchedBtnSelect },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
         ]);
 
         this._updateComponentsForLanguage();
@@ -160,11 +162,11 @@ class NodeRenderer extends UiListItemRenderer<DataForNodeRenderer> {
                 conditionIdArray,
                 subNodeIdArray,
             }) != null) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         } else {
             if (WarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
-                FloatText.show(Lang.getText(Lang.Type.A0179));
+                FloatText.show(Lang.getText(LangTextType.A0179));
                 return;
             }
 
@@ -174,7 +176,7 @@ class NodeRenderer extends UiListItemRenderer<DataForNodeRenderer> {
                 nodeIdForClone  : candidateNodeId,
                 nodeIdForDelete : data.srcNodeId,
             }) != null) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
     }
@@ -193,11 +195,11 @@ class NodeRenderer extends UiListItemRenderer<DataForNodeRenderer> {
                 eventId     : data.eventId,
                 newNodeId,
             })) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         } else {
             if (WarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: newNodeId }).nodeIdSet.has(parentNodeId)) {
-                FloatText.show(Lang.getText(Lang.Type.A0179));
+                FloatText.show(Lang.getText(LangTextType.A0179));
                 return;
             }
 
@@ -207,7 +209,7 @@ class NodeRenderer extends UiListItemRenderer<DataForNodeRenderer> {
                 oldNodeId   : data.srcNodeId,
                 newNodeId,
             })) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
     }
@@ -216,8 +218,8 @@ class NodeRenderer extends UiListItemRenderer<DataForNodeRenderer> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnCopy.label     = Lang.getText(Lang.Type.B0487);
-        this._btnSelect.label   = Lang.getText(Lang.Type.B0492);
+        this._btnCopy.label     = Lang.getText(LangTextType.B0487);
+        this._btnSelect.label   = Lang.getText(LangTextType.B0492);
 
         this._updateLabelNodeId();
         this._updateLabelSubNode();
@@ -227,7 +229,7 @@ class NodeRenderer extends UiListItemRenderer<DataForNodeRenderer> {
     private _updateLabelNodeId(): void {
         const data = this.data;
         if (data) {
-            this._labelNodeId.text  = `${Lang.getText(Lang.Type.B0488)}: N${data.candidateNodeId}`;
+            this._labelNodeId.text  = `${Lang.getText(LangTextType.B0488)}: N${data.candidateNodeId}`;
         }
     }
     private _updateLabelSubNode(): void {
@@ -239,14 +241,14 @@ class NodeRenderer extends UiListItemRenderer<DataForNodeRenderer> {
         const node  = (data.fullData.conditionNodeArray || []).find(v => v.nodeId === data.candidateNodeId);
         const label = this._labelSubNode;
         if (node == null) {
-            label.text = Lang.getText(Lang.Type.A0160);
+            label.text = Lang.getText(LangTextType.A0160);
         } else {
             const textArray: string[] = [];
             for (const subNodeId of (node.subNodeIdArray || []).sort((v1, v2) => v1 - v2)) {
                 textArray.push(`N${subNodeId}`);
             }
 
-            label.text = `${Lang.getText(Lang.Type.B0489)}: ${textArray.length ? textArray.join(`, `) : Lang.getText(Lang.Type.B0001)}`;
+            label.text = `${Lang.getText(LangTextType.B0489)}: ${textArray.length ? textArray.join(`, `) : Lang.getText(LangTextType.B0001)}`;
         }
     }
     private _updateLabelSubCondition(): void {
@@ -265,7 +267,7 @@ class NodeRenderer extends UiListItemRenderer<DataForNodeRenderer> {
                 textArray.push(`C${conditionId}`);
             }
 
-            label.text = `${Lang.getText(Lang.Type.B0490)}: ${textArray.length ? textArray.join(`, `) : Lang.getText(Lang.Type.B0001)}`;
+            label.text = `${Lang.getText(LangTextType.B0490)}: ${textArray.length ? textArray.join(`, `) : Lang.getText(LangTextType.B0001)}`;
         }
     }
 }

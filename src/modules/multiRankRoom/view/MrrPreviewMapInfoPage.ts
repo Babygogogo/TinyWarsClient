@@ -5,7 +5,9 @@ import { UiTabPage }                    from "../../../gameui/UiTabPage";
 import { UiMapInfo }                    from "../../../gameui/UiMapInfo";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as WarMapModel                 from "../../warMap/model/WarMapModel";
 
@@ -25,8 +27,8 @@ export class MrrPreviewMapInfoPage extends UiTabPage<OpenDataForMrrPreviewMapInf
 
     protected async _onOpened(): Promise<void> {
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMapGetRawData,   callback: this._onNotifyMsgMapGetRawData },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMapGetRawData,   callback: this._onNotifyMsgMapGetRawData },
         ]);
 
         this.left   = 0;
@@ -49,7 +51,7 @@ export class MrrPreviewMapInfoPage extends UiTabPage<OpenDataForMrrPreviewMapInf
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelLoading.text = Lang.getText(Lang.Type.A0150);
+        this._labelLoading.text = Lang.getText(LangTextType.A0150);
     }
     private async _updateComponentsForMapInfo(): Promise<void> {
         const mapRawData    = await WarMapModel.getRawData(this._getOpenData().mapId);

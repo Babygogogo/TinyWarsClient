@@ -5,7 +5,9 @@ import { UiTabPage }            from "../../../gameui/UiTabPage";
 import { CommonHelpPanel }      from "../../common/view/CommonHelpPanel";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Types               from "../../../utility/Types";
 import * as MfrModel            from "../../multiFreeRoom/model/MfrModel";
@@ -60,8 +62,8 @@ export class MfrRoomBasicSettingsPage extends UiTabPage<OpenDataForMfrRoomBasicS
             { ui: this._btnTimerTypeHelp,       callback: this._onTouchedBtnTimerTypeHelp, },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgMfrGetRoomInfo,  callback: this._onNotifyMsgMfrGetRoomInfo },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgMfrGetRoomInfo,  callback: this._onNotifyMsgMfrGetRoomInfo },
         ]);
         this.left       = 0;
         this.right      = 0;
@@ -85,15 +87,15 @@ export class MfrRoomBasicSettingsPage extends UiTabPage<OpenDataForMfrRoomBasicS
 
     private _onTouchedBtnHasFogHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0020),
-            content: Lang.getText(Lang.Type.R0002),
+            title  : Lang.getText(LangTextType.B0020),
+            content: Lang.getText(LangTextType.R0002),
         });
     }
 
     private _onTouchedBtnTimerTypeHelp(e: egret.TouchEvent): void {
         CommonHelpPanel.show({
-            title  : Lang.getText(Lang.Type.B0574),
-            content: Lang.getText(Lang.Type.R0003),
+            title  : Lang.getText(LangTextType.B0574),
+            content: Lang.getText(LangTextType.R0003),
         });
     }
 
@@ -101,16 +103,16 @@ export class MfrRoomBasicSettingsPage extends UiTabPage<OpenDataForMfrRoomBasicS
     // View functions.
     ////////////////////////////////////////////////////////////////////////////////
     private _updateComponentsForLanguage(): void {
-        this._labelMapNameTitle.text            = Lang.getText(Lang.Type.B0225);
-        this._labelWarNameTitle.text            = Lang.getText(Lang.Type.B0185);
-        this._labelWarPasswordTitle.text        = Lang.getText(Lang.Type.B0186);
-        this._labelWarCommentTitle.text         = Lang.getText(Lang.Type.B0187);
-        this._labelWarRuleTitle.text            = Lang.getText(Lang.Type.B0318);
-        this._labelHasFogTitle.text             = Lang.getText(Lang.Type.B0020);
-        this._labelTimerTypeTitle.text          = Lang.getText(Lang.Type.B0574);
-        this._labelTimerRegularTitle.text       = Lang.getText(Lang.Type.B0021);
-        this._labelTimerIncrementalTitle1.text  = Lang.getText(Lang.Type.B0389);
-        this._labelTimerIncrementalTitle2.text  = Lang.getText(Lang.Type.B0390);
+        this._labelMapNameTitle.text            = Lang.getText(LangTextType.B0225);
+        this._labelWarNameTitle.text            = Lang.getText(LangTextType.B0185);
+        this._labelWarPasswordTitle.text        = Lang.getText(LangTextType.B0186);
+        this._labelWarCommentTitle.text         = Lang.getText(LangTextType.B0187);
+        this._labelWarRuleTitle.text            = Lang.getText(LangTextType.B0318);
+        this._labelHasFogTitle.text             = Lang.getText(LangTextType.B0020);
+        this._labelTimerTypeTitle.text          = Lang.getText(LangTextType.B0574);
+        this._labelTimerRegularTitle.text       = Lang.getText(LangTextType.B0021);
+        this._labelTimerIncrementalTitle1.text  = Lang.getText(LangTextType.B0389);
+        this._labelTimerIncrementalTitle2.text  = Lang.getText(LangTextType.B0390);
     }
 
     private _updateComponentsForRoomInfo(): void {
@@ -153,7 +155,7 @@ export class MfrRoomBasicSettingsPage extends UiTabPage<OpenDataForMfrRoomBasicS
             labelHasFog.text = undefined;
         } else {
             const hasFog            = !!roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
-            labelHasFog.text        = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
+            labelHasFog.text        = Lang.getText(hasFog ? LangTextType.B0012 : LangTextType.B0013);
             labelHasFog.textColor   = hasFog ? 0xFFFF00 : 0xFFFFFF;
         }
     }

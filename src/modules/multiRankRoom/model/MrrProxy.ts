@@ -2,6 +2,7 @@
 import { NetMessageCodes }              from "../../../network/NetMessageCodes";
 import * as NetManager                  from "../../../network/NetManager";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as MrrModel                    from "./MrrModel";
 import NetMessage                       = ProtoTypes.NetMessage;
@@ -26,7 +27,7 @@ function _onMsgMrrGetMaxConcurrentCount(e: egret.Event): void {
     if (!data.errorCode) {
         MrrModel.setMaxConcurrentCount(false, data.maxCountForStd);
         MrrModel.setMaxConcurrentCount(true, data.maxCountForFog);
-        Notify.dispatch(Notify.Type.MsgMrrGetMaxConcurrentCount, data);
+        Notify.dispatch(NotifyType.MsgMrrGetMaxConcurrentCount, data);
     }
 }
 
@@ -38,10 +39,10 @@ export function reqMrrGetRoomPublicInfo(roomId: number): void {
 async function _onMsgMrrGetRoomPublicInfo(e: egret.Event): Promise<void> {
     const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
     if (data.errorCode) {
-        Notify.dispatch(Notify.Type.MsgMrrGetRoomPublicInfoFailed, data);
+        Notify.dispatch(NotifyType.MsgMrrGetRoomPublicInfoFailed, data);
     } else {
         await MrrModel.updateOnMsgMrrGetRoomPublicInfo(data);
-        Notify.dispatch(Notify.Type.MsgMrrGetRoomPublicInfo, data);
+        Notify.dispatch(NotifyType.MsgMrrGetRoomPublicInfo, data);
     }
 }
 
@@ -53,7 +54,7 @@ function _onMsgMrrGetMyRoomPublicInfoList(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMrrGetMyRoomPublicInfoList.IS;
     if (!data.errorCode) {
         MrrModel.updateWithMyRoomInfoList(data.roomInfoList);
-        Notify.dispatch(Notify.Type.MsgMrrGetMyRoomPublicInfoList, data);
+        Notify.dispatch(NotifyType.MsgMrrGetMyRoomPublicInfoList, data);
     }
 }
 
@@ -67,7 +68,7 @@ async function _onMsgMrrSetBannedCoIdList(e: egret.Event): Promise<void> {
     const data = e.data as NetMessage.MsgMrrSetBannedCoIdList.IS;
     if (!data.errorCode) {
         await MrrModel.updateOnMsgMrrSetBannedCoIdList(data);
-        Notify.dispatch(Notify.Type.MsgMrrSetBannedCoIdList, data);
+        Notify.dispatch(NotifyType.MsgMrrSetBannedCoIdList, data);
     }
 }
 
@@ -82,7 +83,7 @@ function _onMsgMrrSetMaxConcurrentCount(e: egret.Event): void {
     if (!data.errorCode) {
         MrrModel.setMaxConcurrentCount(false, data.maxCountForStd);
         MrrModel.setMaxConcurrentCount(true, data.maxCountForFog);
-        Notify.dispatch(Notify.Type.MsgMrrSetMaxConcurrentCount, data);
+        Notify.dispatch(NotifyType.MsgMrrSetMaxConcurrentCount, data);
     }
 }
 
@@ -97,12 +98,12 @@ async function _onMsgMrrSetSelfSettings(e: egret.Event): Promise<void> {
     const data = e.data as NetMessage.MsgMrrSetSelfSettings.IS;
     if (!data.errorCode) {
         await MrrModel.updateOnMsgMrrSetSelfSettings(data);
-        Notify.dispatch(Notify.Type.MsgMrrSetSelfSettings, data);
+        Notify.dispatch(NotifyType.MsgMrrSetSelfSettings, data);
     }
 }
 
 function _onMsgMrrDeleteRoomByServer(e: egret.Event): void {
     const data = e.data as NetMessage.MsgMrrDeleteRoomByServer.IS;
     MrrModel.deleteRoomInfo(data.roomId);
-    Notify.dispatch(Notify.Type.MsgMrrDeleteRoomByServer, data);
+    Notify.dispatch(NotifyType.MsgMrrDeleteRoomByServer, data);
 }

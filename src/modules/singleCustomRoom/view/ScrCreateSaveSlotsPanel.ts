@@ -7,7 +7,9 @@ import { UiLabel }                      from "../../../gameui/UiLabel";
 import { UiScrollList }                 from "../../../gameui/UiScrollList";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types                       from "../../../utility/Types";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
 import * as WarMapModel                 from "../../warMap/model/WarMapModel";
@@ -53,7 +55,7 @@ export class ScrCreateSaveSlotsPanel extends UiPanel<void> {
             { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
         this._srlSaveSlot.setItemRenderer(SlotRenderer);
 
@@ -86,8 +88,8 @@ export class ScrCreateSaveSlotsPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelPanelTitle.text  = Lang.getText(Lang.Type.B0259);
-        this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
+        this._labelPanelTitle.text  = Lang.getText(LangTextType.B0259);
+        this._btnCancel.label       = Lang.getText(LangTextType.B0154);
     }
 
     private _createDataForList(): DataForSlotRenderer[] {
@@ -122,7 +124,7 @@ class SlotRenderer extends UiListItemRenderer<DataForSlotRenderer> {
         ]);
 
         this._imgBg.touchEnabled    = true;
-        this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
+        this._labelChoose.text      = Lang.getText(LangTextType.B0258);
     }
 
     protected _onDataChanged(): void {
@@ -157,7 +159,7 @@ class SlotRenderer extends UiListItemRenderer<DataForSlotRenderer> {
             } else {
                 const mapId         = BwHelpers.getMapId(warData);
                 labelMapName.text   = mapId == null
-                    ? `(${Lang.getText(Lang.Type.B0321)})`
+                    ? `(${Lang.getText(LangTextType.B0321)})`
                     : await WarMapModel.getMapNameInCurrentLanguage(mapId);
             }
         }

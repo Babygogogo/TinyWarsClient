@@ -4,6 +4,7 @@ import { SrwWar }                       from "../../singleRankWar/model/SrwWar";
 import { NetMessageCodes }              from "../../../network/NetMessageCodes";
 import * as NetManager                  from "../../../network/NetManager";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as ScrModel                    from "../../singleCustomRoom/model/ScrModel";
 import * as SpmModel                    from "./SpmModel";
@@ -32,7 +33,7 @@ function _onMsgSpmGetWarSaveSlotFullDataArray(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS;
     if (!data.errorCode) {
         SpmModel.SaveSlot.updateOnMsgSpmGetWarSaveSlotFullDataArray(data);
-        Notify.dispatch(Notify.Type.MsgSpmGetWarSaveSlotFullDataArray, data);
+        Notify.dispatch(NotifyType.MsgSpmGetWarSaveSlotFullDataArray, data);
     }
 }
 
@@ -45,7 +46,7 @@ function _onMsgSpmCreateScw(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateScw.IS;
     if (!data.errorCode) {
         SpmModel.SaveSlot.updateOnMsgSpmCreateScw(data);
-        Notify.dispatch(Notify.Type.MsgSpmCreateScw, data);
+        Notify.dispatch(NotifyType.MsgSpmCreateScw, data);
     }
 }
 
@@ -66,7 +67,7 @@ function _onMsgSpmCreateSfw(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
     if (!data.errorCode) {
         SpmModel.SaveSlot.updateOnMsgSpmCreateSfw(data);
-        Notify.dispatch(Notify.Type.MsgSpmCreateSfw, data);
+        Notify.dispatch(NotifyType.MsgSpmCreateSfw, data);
     }
 }
 
@@ -79,7 +80,7 @@ function _onMsgSpmCreateSrw(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSrw.IS;
     if (!data.errorCode) {
         SpmModel.SaveSlot.updateOnMsgSpmCreateSrw(data);
-        Notify.dispatch(Notify.Type.MsgSpmCreateSrw, data);
+        Notify.dispatch(NotifyType.MsgSpmCreateSrw, data);
     }
 }
 
@@ -96,7 +97,7 @@ function _onMsgSpmSaveScw(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgSpmSaveScw.IS;
     if (!data.errorCode) {
         SpmModel.SaveSlot.updateOnMsgSpmSaveScw(data);
-        Notify.dispatch(Notify.Type.MsgSpmSaveScw, data);
+        Notify.dispatch(NotifyType.MsgSpmSaveScw, data);
     }
 }
 
@@ -113,7 +114,7 @@ function _onMsgSpmSaveSfw(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgSpmSaveSfw.IS;
     if (!data.errorCode) {
         SpmModel.SaveSlot.updateOnMsgSpmSaveSfw(data);
-        Notify.dispatch(Notify.Type.MsgSpmSaveSfw, data);
+        Notify.dispatch(NotifyType.MsgSpmSaveSfw, data);
     }
 }
 
@@ -130,7 +131,7 @@ function _onMsgSpmSaveSrw(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgSpmSaveSrw.IS;
     if (!data.errorCode) {
         SpmModel.SaveSlot.updateOnMsgSpmSaveSrw(data);
-        Notify.dispatch(Notify.Type.MsgSpmSaveSrw, data);
+        Notify.dispatch(NotifyType.MsgSpmSaveSrw, data);
     }
 }
 
@@ -145,7 +146,7 @@ function _onMsgSpmDeleteWarSaveSlot(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgSpmDeleteWarSaveSlot.IS;
     if (!data.errorCode) {
         SpmModel.SaveSlot.updateOnMsgSpmDeleteWarSaveSlot(data.slotIndex);
-        Notify.dispatch(Notify.Type.MsgSpmDeleteWarSaveSlot, data);
+        Notify.dispatch(NotifyType.MsgSpmDeleteWarSaveSlot, data);
     }
 }
 
@@ -160,7 +161,7 @@ function _onMsgSpmGetSrwRankInfo(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgSpmGetSrwRankInfo.IS;
     if (!data.errorCode) {
         SpmModel.SrwRank.updateOnMsgSpmGetSrwRankInfo(data);
-        Notify.dispatch(Notify.Type.MsgSpmGetSrwRankInfo, data);
+        Notify.dispatch(NotifyType.MsgSpmGetSrwRankInfo, data);
     }
 }
 
@@ -176,6 +177,6 @@ function _onMsgSpmValidateSrw(e: egret.Event): void {
     const data = e.data as ProtoTypes.NetMessage.MsgSpmValidateSrw.IS;
     if (!data.errorCode) {
         SpmModel.SaveSlot.updateOnMsgSpmValidateSrw(data);
-        Notify.dispatch(Notify.Type.MsgSpmValidateSrw, data);
+        Notify.dispatch(NotifyType.MsgSpmValidateSrw, data);
     }
 }

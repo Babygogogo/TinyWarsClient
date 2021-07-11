@@ -15,7 +15,9 @@ import { TwWar }                        from "../../testWar/model/TwWar";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as FlowManager                 from "../../../utility/FlowManager";
 import * as Lang                        from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify                      from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as StageManager                from "../../../utility/StageManager";
 import * as Types                       from "../../../utility/Types";
@@ -57,18 +59,18 @@ export class MeMfwSettingsPanel extends UiPanel<void> {
             { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: Notify.Type.MsgSpmCreateSfw,    callback: this._onMsgSpmCreateSfw },
+            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.MsgSpmCreateSfw,    callback: this._onMsgSpmCreateSfw },
         ]);
         this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
         this._tabSettings.bindData([
             {
-                tabItemData: { name: Lang.getText(Lang.Type.B0002) },
+                tabItemData: { name: Lang.getText(LangTextType.B0002) },
                 pageClass  : MeMfwBasicSettingsPage,
             },
             {
-                tabItemData: { name: Lang.getText(Lang.Type.B0003) },
+                tabItemData: { name: Lang.getText(LangTextType.B0003) },
                 pageClass  : MeMfwAdvancedSettingsPage,
             },
         ]);
@@ -89,7 +91,7 @@ export class MeMfwSettingsPanel extends UiPanel<void> {
             FloatText.show(Lang.getErrorText(errorCode));
         } else {
             CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0201),
+                content : Lang.getText(LangTextType.A0201),
                 callback: () => {
                     MfrModel.Create.resetDataByInitialWarData(warData);
                     MeModel.unloadWar();
@@ -105,7 +107,7 @@ export class MeMfwSettingsPanel extends UiPanel<void> {
     private _onMsgSpmCreateSfw(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
         CommonConfirmPanel.show({
-            content : Lang.getText(Lang.Type.A0107),
+            content : Lang.getText(LangTextType.A0107),
             callback: () => {
                 FlowManager.gotoSinglePlayerWar({
                     slotIndex       : data.slotIndex,
@@ -121,9 +123,9 @@ export class MeMfwSettingsPanel extends UiPanel<void> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0557);
-        this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-        this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
+        this._labelMenuTitle.text   = Lang.getText(LangTextType.B0557);
+        this._btnBack.label         = Lang.getText(LangTextType.B0146);
+        this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
     }
 }
 

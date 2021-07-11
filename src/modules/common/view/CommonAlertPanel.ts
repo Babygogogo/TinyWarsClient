@@ -5,7 +5,9 @@ import { UiButton }             from "../../../gameui/UiButton";
 import { UiLabel }              from "../../../gameui/UiLabel";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
+import { LangTextType } from "../../../utility/LangTextType";
 import * as Notify              from "../../../utility/Notify";
+import { NotifyType } from "../../../utility/NotifyType";
 import * as Types               from "../../../utility/Types";
 
 type OpenDataForCommonAlertPanel = {
@@ -52,7 +54,7 @@ export class CommonAlertPanel extends UiPanel<OpenDataForCommonAlertPanel> {
             { ui: this._btnConfirm, callback: this._onTouchedBtnClose },
         ]);
         this._setNotifyListenerArray([
-            { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
         ]);
 
         this._showOpenAnimation();
@@ -81,7 +83,7 @@ export class CommonAlertPanel extends UiPanel<OpenDataForCommonAlertPanel> {
     }
 
     private _updateComponentsForLanguage(): void {
-        this._btnConfirm.label = Lang.getText(Lang.Type.B0026);
+        this._btnConfirm.label = Lang.getText(LangTextType.B0026);
     }
 
     private _showOpenAnimation(): void {
