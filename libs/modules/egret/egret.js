@@ -2629,14 +2629,14 @@ var egret;
                 return this._tint;
             },
             set: function (value) {
-                this._tint = value;
+                this._tint = (typeof value == "number" && value >= 0 && value <= 0xffffff) ? value : 0xffffff;
                 if (egret.nativeRender) {
                     if (this.$nativeDisplayObject.setTint) {
-                        this.$nativeDisplayObject.setTint(value);
+                        this.$nativeDisplayObject.setTint(this._tint);
                     }
                 }
                 else {
-                    this.$tintRGB = (value >> 16) + (value & 0xff00) + ((value & 0xff) << 16);
+                    this.$tintRGB = (this._tint >> 16) + (this._tint & 0xff00) + ((this._tint & 0xff) << 16);
                 }
             },
             enumerable: true,
@@ -5482,6 +5482,9 @@ var egret;
                         maskedObject.$cacheDirty = true;
                         maskedObject.$cacheDirtyUp();
                     }
+                }
+                else if (self.$nativeDisplayObject.setSmoothing) {
+                    self.$nativeDisplayObject.setSmoothing(value);
                 }
             },
             enumerable: true,
@@ -19184,6 +19187,9 @@ var egret;
                         maskedObject.$cacheDirtyUp();
                     }
                 }
+                else if (self.$nativeDisplayObject.setSmoothing) {
+                    self.$nativeDisplayObject.setSmoothing(value);
+                }
             },
             enumerable: true,
             configurable: true
@@ -20340,6 +20346,10 @@ var egret;
             this.tempStage.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onStageDownHandler, this);
             this.stageText.removeEventListener("blur", this.blurHandler, this);
             this.stageText.removeEventListener("focus", this.focusHandler, this);
+            if (this._isFocus) {
+                this._isFocus = false;
+                this._text.$setIsTyping(false);
+            }
             this.stageTextAdded = false;
         };
         /**
@@ -26440,7 +26450,7 @@ var egret;
      * @language zh_CN
      */
     function toColorString(value) {
-        if (value < 0)
+        if (!value || value < 0)
             value = 0;
         if (value > 16777215)
             value = 16777215;
