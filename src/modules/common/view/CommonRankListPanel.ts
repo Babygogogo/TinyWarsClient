@@ -1,22 +1,24 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { UiButton }             from "../../../gameui/UiButton";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { UiScrollList }         from "../../../gameui/UiScrollList";
-import { UiListItemRenderer }   from "../../../gameui/UiListItemRenderer";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
 import { UserPanel }            from "../../user/view/UserPanel";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Logger }               from "../../../utility/Logger";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                from "../../../utility/Types";
-import * as CommonModel         from "../../common/model/CommonModel";
-import * as CommonProxy         from "../../common/model/CommonProxy";
-import * as UserModel           from "../../user/model/UserModel";
+import { CommonModel }          from "../../common/model/CommonModel";
+import { CommonProxy }          from "../../common/model/CommonProxy";
+import { UserModel }            from "../../user/model/UserModel";
 
 export class CommonRankListPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;

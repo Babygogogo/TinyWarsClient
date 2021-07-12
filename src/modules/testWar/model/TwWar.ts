@@ -1,21 +1,22 @@
 
-import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { BwCommonSettingManager }       from "../../baseWar/model/BwCommonSettingManager";
 import { BwWarEventManager }            from "../../baseWar/model/BwWarEventManager";
 import { TwPlayerManager }              from "./TwPlayerManager";
 import { TwField }                      from "./TwField";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
 import { Logger }                       from "../../../utility/Logger";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
-import * as TimeModel                   from "../../time/model/TimeModel";
+import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import { TimeModel }                    from "../../time/model/TimeModel";
 import * as WarEventHelper              from "../../warEvent/model/WarEventHelper";
 import WarSerialization                 = ProtoTypes.WarSerialization;
 import ISerialWar                       = WarSerialization.ISerialWar;
 import IMapRawData                      = ProtoTypes.Map.IMapRawData;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class TwWar extends BwWar {
     private readonly _playerManager         = new TwPlayerManager();
@@ -267,7 +268,7 @@ async function _createInitialPlayerManagerDataForTw(mapRawData: IMapRawData): Pr
         return undefined;
     }
 
-    if ((BwWarRuleHelper.getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability })) ||
+    if ((BwWarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability })) ||
         ((ruleForPlayers.playerRuleDataArray || []).length !== playersCountUnneutral)
     ) {
         Logger.error(`TwWar._createInitialPlayerManagerDataForTw() invalid ruleForPlayers! ${JSON.stringify(bootTimerParams)}`);
@@ -275,7 +276,7 @@ async function _createInitialPlayerManagerDataForTw(mapRawData: IMapRawData): Pr
     }
 
     for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
-        const teamIndex = BwWarRuleHelper.getTeamIndexByRuleForPlayers(ruleForPlayers, playerIndex);
+        const teamIndex = BwWarRuleHelpers.getTeamIndexByRuleForPlayers(ruleForPlayers, playerIndex);
         if (teamIndex == null) {
             Logger.error(`TwWar._createInitialPlayerManagerDataForTw() invalid teamIndex!`);
             return undefined;

@@ -3,10 +3,11 @@ import { BwProduceUnitPanel }                   from "../../baseWar/view/BwProdu
 import { BwUnitActionsPanel }                   from "../../baseWar/view/BwUnitActionsPanel";
 import { BwUnit }                               from "../../baseWar/model/BwUnit";
 import { BwActionPlanner, DataForUnitAction }   from "../../baseWar/model/BwActionPlanner";
-import * as FloatText                           from "../../../utility/FloatText";
-import * as GridIndexHelpers                    from "../../../utility/GridIndexHelpers";
-import * as Lang                                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { FloatText }                            from "../../../utility/FloatText";
+import { GridIndexHelpers }                     from "../../../utility/GridIndexHelpers";
+import { Lang }                                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Types }                                from "../../../utility/Types";
 import TurnPhaseCode                            = Types.TurnPhaseCode;
 import UnitState                                = Types.UnitActionState;

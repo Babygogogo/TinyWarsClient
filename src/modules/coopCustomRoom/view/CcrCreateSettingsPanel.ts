@@ -1,24 +1,25 @@
 
-import { UiPanel }                          from "../../../gameui/UiPanel";
-import { UiButton }                         from "../../../gameui/UiButton";
-import { UiLabel }                          from "../../../gameui/UiLabel";
-import { UiTab }                            from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                from "../../../gameui/UiTabItemRenderer";
+import { UiPanel }                          from "../../../utility/ui/UiPanel";
+import { UiButton }                         from "../../../utility/ui/UiButton";
+import { UiLabel }                          from "../../../utility/ui/UiLabel";
+import { UiTab }                            from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
 import { CcrCreateMapListPanel }            from "./CcrCreateMapListPanel";
 import { CcrCreateAdvancedSettingsPage }    from "./CcrCreateAdvancedSettingsPage";
 import { CcrCreateBasicSettingsPage }       from "./CcrCreateBasicSettingsPage";
 import { CcrCreateMapInfoPage }             from "./CcrCreateMapInfoPage";
 import { CcrCreatePlayerInfoPage }          from "./CcrCreatePlayerInfoPage";
-import * as FloatText                       from "../../../utility/FloatText";
+import { FloatText }                        from "../../../utility/FloatText";
 import { FlowManager }                      from "../../../utility/FlowManager";
-import * as Helpers                         from "../../../utility/Helpers";
-import * as Lang                            from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                           from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Helpers }                          from "../../../utility/Helpers";
+import { Lang }                             from "../../../utility/lang/Lang";
+import { TwnsLangTextType }                 from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }                   from "../../../utility/notify/NotifyType";
 import { Types }                            from "../../../utility/Types";
-import * as CcrModel                        from "../../coopCustomRoom/model/CcrModel";
-import * as CcrProxy                        from "../model/CcrProxy";
+import { CcrCreateModel }                   from "../model/CcrCreateModel";
+import { CcrProxy }                         from "../model/CcrProxy";
+import LangTextType                         = TwnsLangTextType.LangTextType;
+import NotifyType                           = TwnsNotifyType.NotifyType;
 
 const CONFIRM_INTERVAL_MS = 5000;
 
@@ -109,7 +110,7 @@ export class CcrCreateSettingsPanel extends UiPanel<void> {
         CcrCreateMapListPanel.show();
     }
     private _onTouchedBtnConfirm(): void {
-        const data = CcrModel.Create.getData();
+        const data = CcrCreateModel.getData();
         CcrProxy.reqCreateRoom(data);
 
         this._btnConfirm.enabled = false;

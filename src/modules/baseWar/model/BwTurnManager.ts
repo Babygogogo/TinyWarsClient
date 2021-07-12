@@ -1,17 +1,18 @@
 
-import { ClientErrorCode }          from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }          from "../../../utility/ClientErrorCode";
 import { Types }                    from "../../../utility/Types";
-import * as DestructionHelpers      from "../../../utility/DestructionHelpers";
-import { Notify }                   from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes              from "../../../utility/ProtoTypes";
+import { BwDestructionHelpers }       from "./BwDestructionHelpers";
+import { Notify }                   from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }               from "../../../utility/proto/ProtoTypes";
 import { Logger }                   from "../../../utility/Logger";
-import * as ConfigManager           from "../../../utility/ConfigManager";
-import * as CommonConstants         from "../../../utility/CommonConstants";
-import * as GridIndexHelpers        from "../../../utility/GridIndexHelpers";
-import * as VisibilityHelpers       from "../../../utility/VisibilityHelpers";
-import * as TimeModel               from "../../time/model/TimeModel";
-import * as BwHelpers               from "./BwHelpers";
+import { ConfigManager }            from "../../../utility/ConfigManager";
+import { CommonConstants }          from "../../../utility/CommonConstants";
+import { GridIndexHelpers }         from "../../../utility/GridIndexHelpers";
+import { BwVisibilityHelpers }        from "./BwVisibilityHelpers";
+import { TimeModel }                from "../../time/model/TimeModel";
+import { BwHelpers }                from "./BwHelpers";
 import { BwUnit }                   from "./BwUnit";
 import { BwWar }                    from "./BwWar";
 import TurnPhaseCode                = Types.TurnPhaseCode;
@@ -20,6 +21,7 @@ import ISerialTurnManager           = ProtoTypes.WarSerialization.ISerialTurnMan
 import WarAction                    = ProtoTypes.WarAction;
 import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
 import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwTurnManager {
     private _turnIndex          : number | undefined;
@@ -439,7 +441,7 @@ export class BwTurnManager {
             return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_01;
         }
 
-        const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+        const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
         if (visibleUnits == null) {
             return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_02;
         }
@@ -486,7 +488,7 @@ export class BwTurnManager {
                 (unit.getPlayerIndex() === playerIndex) && (allUnitsOnMap.push(unit));
             }
 
-            const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             if (visibleUnits == null) {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_03;
             }
@@ -565,7 +567,7 @@ export class BwTurnManager {
                     }
 
                     fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
-                    DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+                    BwDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
                 }
             }
         }
@@ -584,7 +586,7 @@ export class BwTurnManager {
             return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_01;
         }
 
-        const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+        const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
         if (visibleUnits == null) {
             return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_02;
         }
@@ -632,7 +634,7 @@ export class BwTurnManager {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_03;
             }
 
-            const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             if (visibleUnits == null) {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_04;
             }
@@ -766,7 +768,7 @@ export class BwTurnManager {
             return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithExtraData_01;
         }
 
-        const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+        const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
         if (visibleUnits == null) {
             return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithExtraData_02;
         }
@@ -823,7 +825,7 @@ export class BwTurnManager {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_05;
             }
 
-            const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             if (visibleUnits == null) {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_06;
             }

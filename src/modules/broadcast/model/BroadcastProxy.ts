@@ -1,13 +1,16 @@
 
-import { NetMessageCodes }      from "../../../network/NetMessageCodes";
-import { NotifyType }           from "../../../utility/NotifyType";
-import { Notify }               from "../../../utility/Notify";
-import * as NetManager          from "../../../network/NetManager";
-import * as BroadcastModel      from "./BroadcastModel";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import ILanguageText            = ProtoTypes.Structure.ILanguageText;
+import { TwnsNetMessageCodes }  from "../../../utility/network/NetMessageCodes";
+import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
+import { Notify }               from "../../../utility/notify/Notify";
+import { NetManager }           from "../../../utility/network/NetManager";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import { BroadcastModel }       from "./BroadcastModel";
 
 export namespace BroadcastProxy {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+
     export function init(): void {
         NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgBroadcastAddMessage,         callback: _onMsgBroadcastAddMessage },

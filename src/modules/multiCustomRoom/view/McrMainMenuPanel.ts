@@ -1,9 +1,9 @@
 
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { LobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
-import { McwMyWarListPanel }            from "../../multiCustomWar/view/McwMyWarListPanel";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { TwnsLobbyBottomPanel }         from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }            from "../../lobby/view/LobbyTopPanel";
+import { TwnsMcwMyWarListPanel }        from "../../multiCustomWar/view/McwMyWarListPanel";
 import { MfrMainMenuPanel }             from "../../multiFreeRoom/view/MfrMainMenuPanel";
 import { MrrMainMenuPanel }             from "../../multiRankRoom/view/MrrMainMenuPanel";
 import { RwReplayListPanel }            from "../../replayWar/view/RwReplayListPanel";
@@ -13,14 +13,14 @@ import { McrCreateMapListPanel }        from "./McrCreateMapListPanel";
 import { McrJoinRoomListPanel }         from "./McrJoinRoomListPanel";
 import { McrMyRoomListPanel }           from "./McrMyRoomListPanel";
 import { CcrMainMenuPanel }             from "../../coopCustomRoom/view/CcrMainMenuPanel";
-import * as Helpers                     from "../../../utility/Helpers";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
 import { Types }                        from "../../../utility/Types";
-import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
-import * as McrModel                    from "../../multiCustomRoom/model/McrModel";
-import * as MfrModel                    from "../../multiFreeRoom/model/MfrModel";
-import * as MpwModel                    from "../../multiPlayerWar/model/MpwModel";
+import { Helpers }                      from "../../../utility/Helpers";
+import { CcrModel }                     from "../../coopCustomRoom/model/CcrModel";
+import { McrModel }                     from "../../multiCustomRoom/model/McrModel";
+import { MfrModel }                     from "../../multiFreeRoom/model/MfrModel";
+import { MpwModel }                     from "../../multiPlayerWar/model/MpwModel";
+import NotifyType                       = TwnsNotifyType.NotifyType;
 import Tween                            = egret.Tween;
 
 export class McrMainMenuPanel extends UiPanel<void> {
@@ -115,38 +115,38 @@ export class McrMainMenuPanel extends UiPanel<void> {
     }
     private _onTouchedBtnCreateRoom(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         McrCreateMapListPanel.show({});
     }
     private _onTouchedBtnJoinRoom(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         McrJoinRoomListPanel.show();
     }
     private _onTouchedBtnMyRoom(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         McrMyRoomListPanel.show();
     }
     private _onTouchedBtnContinueWar(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
-        McwMyWarListPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+        TwnsMcwMyWarListPanel.McwMyWarListPanel.show();
     }
     private _onTouchedBtnWatchWar(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         McrWatchMainMenuPanel.show();
     }
     private _onTouchedBtnReplayWar(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         RwReplayListPanel.show();
     }
     private _onTouchedBtnCoopMode(): void {

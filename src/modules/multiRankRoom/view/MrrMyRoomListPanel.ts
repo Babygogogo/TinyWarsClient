@@ -1,28 +1,30 @@
 
-import { UiListItemRenderer }                                                   from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                                                              from "../../../gameui/UiPanel";
-import { UiButton }                                                             from "../../../gameui/UiButton";
-import { UiLabel }                                                              from "../../../gameui/UiLabel";
-import { UiScrollList }                                                         from "../../../gameui/UiScrollList";
-import { UiTab }                                                                from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                                                    from "../../../gameui/UiTabItemRenderer";
-import { LobbyBottomPanel }                                                     from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
+import { UiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                                                              from "../../../utility/ui/UiPanel";
+import { UiButton }                                                             from "../../../utility/ui/UiButton";
+import { UiLabel }                                                              from "../../../utility/ui/UiLabel";
+import { UiScrollList }                                                         from "../../../utility/ui/UiScrollList";
+import { UiTab }                                                                from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
+import { TwnsLobbyBottomPanel }                                                 from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
 import { MrrMainMenuPanel }                                                     from "./MrrMainMenuPanel";
 import { MrrRoomInfoPanel }                                                     from "./MrrRoomInfoPanel";
 import { OpenDataForMrrRoomAdvancedSettingsPage, MrrRoomAdvancedSettingsPage }  from "./MrrRoomAdvancedSettingsPage";
 import { OpenDataForMrrRoomBasicSettingsPage, MrrRoomBasicSettingsPage }        from "./MrrRoomBasicSettingsPage";
 import { OpenDataForMrrRoomMapInfoPage, MrrRoomMapInfoPage }                    from "./MrrRoomMapInfoPage";
 import { OpenDataForMrrRoomPlayerInfoPage, MrrRoomPlayerInfoPage }              from "./MrrRoomPlayerInfoPage";
-import * as Helpers                                                             from "../../../utility/Helpers";
-import * as Lang                                                                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                                                               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Helpers }                                                              from "../../../utility/Helpers";
+import { Lang }                                                                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType }                                                     from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }                                                       from "../../../utility/notify/NotifyType";
 import { Types }                                                                from "../../../utility/Types";
-import * as WarMapModel                                                         from "../../warMap/model/WarMapModel";
-import * as MrrModel                                                            from "../model/MrrModel";
-import * as MrrProxy                                                            from "../model/MrrProxy";
+import { WarMapModel }                                                          from "../../warMap/model/WarMapModel";
+import { MrrModel }                                                             from "../model/MrrModel";
+import { MrrProxy }                                                             from "../model/MrrProxy";
+import { MrrSelfSettingsModel }                                                 from "../model/MrrSelfSettingsModel";
+import LangTextType                                                             = TwnsLangTextType.LangTextType;
+import NotifyType                                                               = TwnsNotifyType.NotifyType;
 
 export class MrrMyRoomListPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -118,15 +120,15 @@ export class MrrMyRoomListPanel extends UiPanel<void> {
     private _onTouchTapBtnBack(e: egret.TouchEvent): void {
         this.close();
         MrrMainMenuPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
 
     private async _onTouchedBtnNextStep(e: egret.TouchEvent): Promise<void> {
-        const roomId = MrrModel.Joined.getPreviewingRoomId();
+        const roomId = MrrModel.getPreviewingRoomId();
         if (roomId != null) {
             this.close();
-            await MrrModel.SelfSettings.resetData(roomId);
+            await MrrSelfSettingsModel.resetData(roomId);
             MrrRoomInfoPanel.show({
                 roomId,
             });
@@ -185,9 +187,9 @@ export class MrrMyRoomListPanel extends UiPanel<void> {
             labelNoRoom.visible     = !dataArray.length;
             listRoom.bindData(dataArray);
 
-            const roomId = MrrModel.Joined.getPreviewingRoomId();
+            const roomId = MrrModel.getPreviewingRoomId();
             if (dataArray.every(v => v.roomId != roomId)) {
-                MrrModel.Joined.setPreviewingRoomId(dataArray.length ? dataArray[0].roomId : null);
+                MrrModel.setPreviewingRoomId(dataArray.length ? dataArray[0].roomId : null);
             }
         }
     }
@@ -195,7 +197,7 @@ export class MrrMyRoomListPanel extends UiPanel<void> {
     private _updateComponentsForPreviewingRoomInfo(): void {
         const groupTab      = this._groupTab;
         const btnNextStep   = this._btnNextStep;
-        const roomId        = MrrModel.Joined.getPreviewingRoomId();
+        const roomId        = MrrModel.getPreviewingRoomId();
         if ((!this._hasReceivedData) || (roomId == null)) {
             groupTab.visible    = false;
             btnNextStep.visible = false;
@@ -326,14 +328,14 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
     }
 
     private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-        MrrModel.Joined.setPreviewingRoomId(this.data.roomId);
+        MrrModel.setPreviewingRoomId(this.data.roomId);
     }
 
     private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
         const roomId = this.data.roomId;
         if (roomId != null) {
             MrrMyRoomListPanel.hide();
-            await MrrModel.SelfSettings.resetData(roomId);
+            await MrrSelfSettingsModel.resetData(roomId);
             MrrRoomInfoPanel.show({
                 roomId,
             });
@@ -341,6 +343,6 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
     }
 
     private _updateState(): void {
-        this.currentState = this.data.roomId === MrrModel.Joined.getPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
+        this.currentState = this.data.roomId === MrrModel.getPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
     }
 }

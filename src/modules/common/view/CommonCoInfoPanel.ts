@@ -1,10 +1,11 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { UiCoInfo }             from "../../../gameui/UiCoInfo";
-import * as Helpers             from "../../../utility/Helpers";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { UiCoInfo }             from "../../../utility/ui/UiCoInfo";
+import { Helpers }              from "../../../utility/Helpers";
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                from "../../../utility/Types";
 
 type OpenDataForCommonCoInfoPanel = {

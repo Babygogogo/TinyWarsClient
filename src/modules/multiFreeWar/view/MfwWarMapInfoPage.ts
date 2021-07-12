@@ -1,14 +1,16 @@
 
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { UiZoomableMap }        from "../../../gameui/UiZoomableMap";
-import { UiTabPage }            from "../../../gameui/UiTabPage";
-import { UiMapInfo }            from "../../../gameui/UiMapInfo";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import * as MpwModel            from "../../multiPlayerWar/model/MpwModel";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { UiZoomableMap }        from "../../../utility/ui/UiZoomableMap";
+import { UiTabPage }            from "../../../utility/ui/UiTabPage";
+import { UiMapInfo }            from "../../../utility/ui/UiMapInfo";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import { MpwModel }             from "../../multiPlayerWar/model/MpwModel";
 
 export type OpenDataForMfwWarMapInfoPage = {
     warId   : number;

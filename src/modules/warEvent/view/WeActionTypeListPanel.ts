@@ -1,20 +1,22 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { BwWar }                        from "../../baseWar/model/BwWar";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
 import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
 import IWarEventAction                  = ProtoTypes.WarEvent.IWarEventAction;
 import ActionType                       = Types.WarEventActionType;
+import LangTextType         = TwnsLangTextType.LangTextType;
 
 type OpenDataForWeActionTypeListPanel = {
     war         : BwWar;

@@ -1,20 +1,21 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
 import { CommonChooseCoPanel }          from "../../common/view/CommonChooseCoPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
-import * as MeModel                     from "../model/MeModel";
+import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
+import { MeMfwModel }                   from "../model/MeMfwModel";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import NotifyType                       = TwnsNotifyType.NotifyType;
+import LangTextType                     = TwnsLangTextType.LangTextType;
 
 export class MeMfwAdvancedSettingsPage extends UiTabPage<void> {
     private _labelMapNameTitle      : UiLabel;
@@ -59,15 +60,15 @@ export class MeMfwAdvancedSettingsPage extends UiTabPage<void> {
     }
 
     private _updateLabelMapName(): void {
-        this._labelMapName.text = Lang.getLanguageText({ textArray: MeModel.Mfw.getMapRawData().mapNameArray });
+        this._labelMapName.text = Lang.getLanguageText({ textArray: MeMfwModel.getMapRawData().mapNameArray });
     }
 
     private _updateLabelPlayersCount(): void {
-        this._labelPlayersCount.text = "" + MeModel.Mfw.getMapRawData().playersCountUnneutral;
+        this._labelPlayersCount.text = "" + MeMfwModel.getMapRawData().playersCountUnneutral;
     }
 
     private _updateListPlayer(): void {
-        const playersCount  = MeModel.Mfw.getMapRawData().playersCountUnneutral;
+        const playersCount  = MeMfwModel.getMapRawData().playersCountUnneutral;
         const dataList      : DataForPlayerRenderer[] = [];
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
             dataList.push({ playerIndex });
@@ -115,15 +116,15 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         ];
     }
     private _createDataController(playerIndex: number): DataForInfoRenderer {
-        const isControlledByPlayer = MeModel.Mfw.getIsControlledByHuman(playerIndex);
+        const isControlledByPlayer = MeMfwModel.getIsControlledByHuman(playerIndex);
         return {
             titleText               : Lang.getText(LangTextType.B0424),
             infoText                : isControlledByPlayer ? Lang.getText(LangTextType.B0031) : Lang.getText(LangTextType.B0256),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : () => {
                 this._confirmUseCustomRule(() => {
-                    MeModel.Mfw.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
-                    MeModel.Mfw.setCoId(playerIndex, CommonConstants.CoEmptyId);
+                    MeMfwModel.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
+                    MeMfwModel.setCoId(playerIndex, CommonConstants.CoEmptyId);
                     this._updateView();
                 });
             },
@@ -132,19 +133,19 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
         return {
             titleText               : Lang.getText(LangTextType.B0019),
-            infoText                : Lang.getPlayerTeamName(MeModel.Mfw.getTeamIndex(playerIndex)),
+            infoText                : Lang.getPlayerTeamName(MeMfwModel.getTeamIndex(playerIndex)),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : () => {
                 this._confirmUseCustomRule(() => {
-                    MeModel.Mfw.tickTeamIndex(playerIndex);
+                    MeMfwModel.tickTeamIndex(playerIndex);
                     this._updateView();
                 });
             },
         };
     }
     private _createDataCo(playerIndex: number): DataForInfoRenderer {
-        const coId          = MeModel.Mfw.getCoId(playerIndex);
-        const configVersion = MeModel.Mfw.getWarData().settingsForCommon.configVersion;
+        const coId          = MeMfwModel.getCoId(playerIndex);
+        const configVersion = MeMfwModel.getWarData().settingsForCommon.configVersion;
         return {
             titleText               : Lang.getText(LangTextType.B0425),
             infoText                : ConfigManager.getCoNameAndTierText(configVersion, coId),
@@ -152,12 +153,12 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             callbackOnTouchedTitle  : () => {
                 CommonChooseCoPanel.show({
                     currentCoId         : coId,
-                    availableCoIdArray  : MeModel.Mfw.getIsControlledByHuman(playerIndex)
-                        ? BwWarRuleHelper.getAvailableCoIdArrayForPlayer(MeModel.Mfw.getWarRule(), playerIndex, configVersion)
+                    availableCoIdArray  : MeMfwModel.getIsControlledByHuman(playerIndex)
+                        ? BwWarRuleHelpers.getAvailableCoIdArrayForPlayer(MeMfwModel.getWarRule(), playerIndex, configVersion)
                         : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                     callbackOnConfirm   : newCoId => {
                         if (newCoId !== coId) {
-                            MeModel.Mfw.setCoId(playerIndex, newCoId);
+                            MeMfwModel.setCoId(playerIndex, newCoId);
                             this._updateView();
                         }
                     },
@@ -168,16 +169,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataSkinId(playerIndex: number): DataForInfoRenderer {
         return {
             titleText               : Lang.getText(LangTextType.B0397),
-            infoText                : Lang.getUnitAndTileSkinName(MeModel.Mfw.getUnitAndTileSkinId(playerIndex)),
+            infoText                : Lang.getUnitAndTileSkinName(MeMfwModel.getUnitAndTileSkinId(playerIndex)),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : () => {
-                MeModel.Mfw.tickUnitAndTileSkinId(playerIndex);
+                MeMfwModel.tickUnitAndTileSkinId(playerIndex);
                 this._updateView();
             },
         };
     }
     private _createDataInitialFund(playerIndex: number): DataForInfoRenderer {
-        const currValue = MeModel.Mfw.getInitialFund(playerIndex);
+        const currValue = MeMfwModel.getInitialFund(playerIndex);
         return {
             titleText               : Lang.getText(LangTextType.B0178),
             infoText                : `${currValue}`,
@@ -198,7 +199,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Mfw.setInitialFund(playerIndex, value);
+                                MeMfwModel.setInitialFund(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -208,7 +209,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataIncomeMultiplier(playerIndex: number): DataForInfoRenderer {
-        const currValue = MeModel.Mfw.getIncomeMultiplier(playerIndex);
+        const currValue = MeMfwModel.getIncomeMultiplier(playerIndex);
         const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
         const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
         return {
@@ -229,7 +230,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Mfw.setIncomeMultiplier(playerIndex, value);
+                                MeMfwModel.setIncomeMultiplier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -239,7 +240,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataEnergyAddPctOnLoadCo(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Mfw.getEnergyAddPctOnLoadCo(playerIndex);
+        const currValue     = MeMfwModel.getEnergyAddPctOnLoadCo(playerIndex);
         const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
         const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
         return {
@@ -260,7 +261,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Mfw.setEnergyAddPctOnLoadCo(playerIndex, value);
+                                MeMfwModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -270,7 +271,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataEnergyGrowthMultiplier(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Mfw.getEnergyGrowthMultiplier(playerIndex);
+        const currValue     = MeMfwModel.getEnergyGrowthMultiplier(playerIndex);
         const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
         const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
         return {
@@ -291,7 +292,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Mfw.setEnergyGrowthMultiplier(playerIndex, value);
+                                MeMfwModel.setEnergyGrowthMultiplier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -301,7 +302,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataMoveRangeModifier(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Mfw.getMoveRangeModifier(playerIndex);
+        const currValue     = MeMfwModel.getMoveRangeModifier(playerIndex);
         const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
         const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
         return {
@@ -322,7 +323,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Mfw.setMoveRangeModifier(playerIndex, value);
+                                MeMfwModel.setMoveRangeModifier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -332,7 +333,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataAttackPowerModifier(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Mfw.getAttackPowerModifier(playerIndex);
+        const currValue     = MeMfwModel.getAttackPowerModifier(playerIndex);
         const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
         const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
         return {
@@ -353,7 +354,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Mfw.setAttackPowerModifier(playerIndex, value);
+                                MeMfwModel.setAttackPowerModifier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -363,7 +364,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataVisionRangeModifier(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Mfw.getVisionRangeModifier(playerIndex);
+        const currValue     = MeMfwModel.getVisionRangeModifier(playerIndex);
         const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
         const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
         return {
@@ -384,7 +385,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Mfw.setVisionRangeModifier(playerIndex, value);
+                                MeMfwModel.setVisionRangeModifier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -394,7 +395,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataLuckLowerLimit(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Mfw.getLuckLowerLimit(playerIndex);
+        const currValue     = MeMfwModel.getLuckLowerLimit(playerIndex);
         const minValue      = CommonConstants.WarRuleLuckMinLimit;
         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
         return {
@@ -415,12 +416,12 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                const upperLimit = MeModel.Mfw.getLuckUpperLimit(playerIndex);
+                                const upperLimit = MeMfwModel.getLuckUpperLimit(playerIndex);
                                 if (value <= upperLimit) {
-                                    MeModel.Mfw.setLuckLowerLimit(playerIndex, value);
+                                    MeMfwModel.setLuckLowerLimit(playerIndex, value);
                                 } else {
-                                    MeModel.Mfw.setLuckUpperLimit(playerIndex, value);
-                                    MeModel.Mfw.setLuckLowerLimit(playerIndex, upperLimit);
+                                    MeMfwModel.setLuckUpperLimit(playerIndex, value);
+                                    MeMfwModel.setLuckLowerLimit(playerIndex, upperLimit);
                                 }
                                 this._updateView();
                             }
@@ -431,7 +432,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataLuckUpperLimit(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Mfw.getLuckUpperLimit(playerIndex);
+        const currValue     = MeMfwModel.getLuckUpperLimit(playerIndex);
         const minValue      = CommonConstants.WarRuleLuckMinLimit;
         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
         return {
@@ -452,12 +453,12 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                const lowerLimit = MeModel.Mfw.getLuckLowerLimit(playerIndex);
+                                const lowerLimit = MeMfwModel.getLuckLowerLimit(playerIndex);
                                 if (value >= lowerLimit) {
-                                    MeModel.Mfw.setLuckUpperLimit(playerIndex, value);
+                                    MeMfwModel.setLuckUpperLimit(playerIndex, value);
                                 } else {
-                                    MeModel.Mfw.setLuckLowerLimit(playerIndex, value);
-                                    MeModel.Mfw.setLuckUpperLimit(playerIndex, lowerLimit);
+                                    MeMfwModel.setLuckLowerLimit(playerIndex, value);
+                                    MeMfwModel.setLuckUpperLimit(playerIndex, lowerLimit);
                                 }
                                 this._updateView();
                             }
@@ -469,13 +470,13 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private _confirmUseCustomRule(callback: () => void): void {
-        // if (MeModel.Mfw.getPresetWarRuleId() == null) {
+        // if (MeMfwModel.getPresetWarRuleId() == null) {
         //     callback();
         // } else {
         //     CommonConfirmPanel.show({
         //         content : Lang.getText(Lang.Type.A0129),
         //         callback: () => {
-        //             MeModel.Mfw.setPresetWarRuleId(null);
+        //             MeMfwModel.setPresetWarRuleId(null);
         //             callback();
         //         },
         //     });

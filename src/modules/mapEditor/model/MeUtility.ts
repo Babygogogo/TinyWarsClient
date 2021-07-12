@@ -1,21 +1,22 @@
 
-import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { BwUnit }                       from "../../baseWar/model/BwUnit";
 import { BwTile }                       from "../../baseWar/model/BwTile";
 import { BwUnitMap }                    from "../../baseWar/model/BwUnitMap";
 import { MeWar }                        from "./MeWar";
 import { TwWar }                        from "../../testWar/model/TwWar";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
-import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
-import * as TimeModel                   from "../../time/model/TimeModel";
-import * as UserModel                   from "../../user/model/UserModel";
+import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import { TimeModel }                    from "../../time/model/TimeModel";
+import { UserModel }                    from "../../user/model/UserModel";
 import * as WarEventHelper              from "../../warEvent/model/WarEventHelper";
 import GridIndex                        = Types.GridIndex;
 import TileObjectType                   = Types.TileObjectType;
@@ -27,6 +28,7 @@ import WarSerialization                 = ProtoTypes.WarSerialization;
 import ISerialTile                      = WarSerialization.ISerialTile;
 import ISerialUnit                      = WarSerialization.ISerialUnit;
 import ISerialPlayer                    = WarSerialization.ISerialPlayer;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export type AsymmetricalCounters = {
     UpToDown            : number | null;
@@ -84,15 +86,15 @@ export function createISerialWar(data: ProtoTypes.Map.IMapEditorData): WarSerial
     const mapRawData        = data.mapRawData;
     const warRuleArray      = mapRawData.warRuleArray;
     const unitDataArray     = mapRawData.unitDataArray || [];
-    const warRule           = (warRuleArray ? warRuleArray[0] : null) || BwWarRuleHelper.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
+    const warRule           = (warRuleArray ? warRuleArray[0] : null) || BwWarRuleHelpers.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
     const ruleForPlayers    = warRule.ruleForPlayers;
     if (ruleForPlayers.playerRuleDataArray == null) {
-        ruleForPlayers.playerRuleDataArray = BwWarRuleHelper.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex);
+        ruleForPlayers.playerRuleDataArray = BwWarRuleHelpers.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex);
     } else {
         const playerRules = ruleForPlayers.playerRuleDataArray;
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
             if (playerRules.find(v => v.playerIndex === playerIndex) == null) {
-                playerRules.push(BwWarRuleHelper.createDefaultPlayerRule(playerIndex));
+                playerRules.push(BwWarRuleHelpers.createDefaultPlayerRule(playerIndex));
             }
         }
     }
@@ -458,7 +460,7 @@ export async function getErrorCodeForMapRawData(mapRawData: IMapRawData): Promis
         return playersCountUnneutralError;
     }
 
-    const warRuleError = BwWarRuleHelper.getErrorCodeForWarRuleArray({
+    const warRuleError = BwWarRuleHelpers.getErrorCodeForWarRuleArray({
         ruleList                : mapRawData.warRuleArray,
         playersCountUnneutral   : mapRawData.playersCountUnneutral!,
         allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(mapRawData.warEventFullData),

@@ -1,15 +1,16 @@
 
 import { BwPlayer }             from "./BwPlayer";
 import { BwWar }                from "./BwWar";
-import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
-import * as CommonConstants     from "../../../utility/CommonConstants";
+import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
+import { CommonConstants }      from "../../../utility/CommonConstants";
 import { Logger }               from "../../../utility/Logger";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
 import { Types }                from "../../../utility/Types";
 import WarSerialization         = ProtoTypes.WarSerialization;
 import ISerialPlayerManager     = WarSerialization.ISerialPlayerManager;
 import ISerialPlayer            = WarSerialization.ISerialPlayer;
 import PlayerAliveState         = Types.PlayerAliveState;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export abstract class BwPlayerManager {
     private _players        = new Map<number, BwPlayer>();

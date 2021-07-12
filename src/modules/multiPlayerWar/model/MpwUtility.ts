@@ -1,6 +1,6 @@
 
 import { BwTile }               from "../../baseWar/model/BwTile";
-import * as CommonConstants     from "../../../utility/CommonConstants";
+import { CommonConstants }      from "../../../utility/CommonConstants";
 import { Types }                from "../../../utility/Types";
 
 export function resetTileDataAsHasFog(tile: BwTile): void {

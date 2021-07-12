@@ -1,8 +1,8 @@
 
 import { BwWar }                        from "../../baseWar/model/BwWar";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as SpwModel                    from "./SpwModel";
+import { SpwModel }                     from "./SpwModel";
 import GridIndex                        = Types.GridIndex;
 import UnitType                         = Types.UnitType;
 import IMovePath                        = ProtoTypes.Structure.IMovePath;

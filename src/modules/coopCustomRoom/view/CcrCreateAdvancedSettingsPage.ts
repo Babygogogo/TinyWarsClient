@@ -1,26 +1,26 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTextInput }                  from "../../../gameui/UiTextInput";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonChooseCoPanel }          from "../../common/view/CommonChooseCoPanel";
 import { CcrCreateBanCoPanel }          from "./CcrCreateBanCoPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
-import CreateModel                      = CcrModel.Create;
 import PlayerRuleType                   = Types.PlayerRuleType;
+import { CcrCreateModel } from "../model/CcrCreateModel";
 
 export class CcrCreateAdvancedSettingsPage extends UiTabPage<void> {
     private readonly _scroller      : eui.Scroller;
@@ -55,8 +55,8 @@ export class CcrCreateAdvancedSettingsPage extends UiTabPage<void> {
         this.top    = 0;
         this.bottom = 0;
 
-        this._initialWarRuleId  = CreateModel.getPresetWarRuleId();
-        this._mapRawData        = await CreateModel.getMapRawData();
+        this._initialWarRuleId  = CcrCreateModel.getPresetWarRuleId();
+        this._mapRawData        = await CcrCreateModel.getMapRawData();
 
         this._updateComponentsForLanguage();
         this._initListSetting();
@@ -76,13 +76,13 @@ export class CcrCreateAdvancedSettingsPage extends UiTabPage<void> {
         this._updateBtnCustomize();
     }
     private _onTouchedBtnReset(): void {
-        CreateModel.resetDataByWarRuleId(this._initialWarRuleId);
+        CcrCreateModel.resetDataByWarRuleId(this._initialWarRuleId);
     }
     private _onTouchedBtnCustomize(): void {
         CommonConfirmPanel.show({
             content : Lang.getText(LangTextType.A0129),
             callback: () => {
-                CreateModel.setCustomWarRuleId();
+                CcrCreateModel.setCustomWarRuleId();
             },
         });
     }
@@ -96,10 +96,10 @@ export class CcrCreateAdvancedSettingsPage extends UiTabPage<void> {
     }
 
     private _updateBtnReset(): void {
-        this._btnReset.visible = (this._initialWarRuleId != null) && (CreateModel.getPresetWarRuleId() == null);
+        this._btnReset.visible = (this._initialWarRuleId != null) && (CcrCreateModel.getPresetWarRuleId() == null);
     }
     private _updateBtnCustomize(): void {
-        this._btnCustomize.visible = CreateModel.getPresetWarRuleId() != null;
+        this._btnCustomize.visible = CcrCreateModel.getPresetWarRuleId() != null;
     }
 
     private _initListSetting(): void {
@@ -258,7 +258,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         CommonConfirmPanel.show({
             content : Lang.getText(LangTextType.A0129),
             callback: () => {
-                CreateModel.setCustomWarRuleId();
+                CcrCreateModel.setCustomWarRuleId();
             },
         });
     }
@@ -288,7 +288,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
 
     private _updateBtnCustom(): void {
-        this._btnCustom.visible = CreateModel.getPresetWarRuleId() != null;
+        this._btnCustom.visible = CcrCreateModel.getPresetWarRuleId() != null;
     }
     private _updateComponentsForValue(): void {
         const data = this.data;
@@ -318,16 +318,16 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
 
         const labelValue                    = this._labelValue;
         labelValue.visible                  = true;
-        labelValue.text                     = Lang.getPlayerTeamName(CreateModel.getTeamIndex(playerIndex));
+        labelValue.text                     = Lang.getPlayerTeamName(CcrCreateModel.getTeamIndex(playerIndex));
         labelValue.textColor                = 0xFFFFFF;
-        this._callbackForTouchLabelValue    = () => CreateModel.tickTeamIndex(playerIndex);
+        this._callbackForTouchLabelValue    = () => CcrCreateModel.tickTeamIndex(playerIndex);
     }
     private _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): void {
         this._inputValue.visible            = false;
         this._callbackForFocusOutInputValue = null;
 
         const labelValue                    = this._labelValue;
-        const currValue                     = (CreateModel.getBannedCoIdArray(playerIndex) || []).length;
+        const currValue                     = (CcrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
         labelValue.visible                  = true;
         labelValue.text                     = `${currValue}`;
         labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
@@ -338,7 +338,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = CreateModel.getInitialFund(playerIndex);
+        const currValue                     = CcrCreateModel.getInitialFund(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
@@ -353,7 +353,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                CreateModel.setInitialFund(playerIndex, value);
+                CcrCreateModel.setInitialFund(playerIndex, value);
             }
         };
     }
@@ -362,7 +362,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = CreateModel.getIncomeMultiplier(playerIndex);
+        const currValue                     = CcrCreateModel.getIncomeMultiplier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
@@ -377,7 +377,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                CreateModel.setIncomeMultiplier(playerIndex, value);
+                CcrCreateModel.setIncomeMultiplier(playerIndex, value);
             }
         };
     }
@@ -386,7 +386,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = CreateModel.getEnergyAddPctOnLoadCo(playerIndex);
+        const currValue                     = CcrCreateModel.getEnergyAddPctOnLoadCo(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
@@ -401,7 +401,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                CreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
+                CcrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
             }
         };
     }
@@ -410,7 +410,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = CreateModel.getEnergyGrowthMultiplier(playerIndex);
+        const currValue                     = CcrCreateModel.getEnergyGrowthMultiplier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
@@ -425,7 +425,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                CreateModel.setEnergyGrowthMultiplier(playerIndex, value);
+                CcrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
             }
         };
     }
@@ -434,7 +434,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = CreateModel.getMoveRangeModifier(playerIndex);
+        const currValue                     = CcrCreateModel.getMoveRangeModifier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
@@ -449,7 +449,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                CreateModel.setMoveRangeModifier(playerIndex, value);
+                CcrCreateModel.setMoveRangeModifier(playerIndex, value);
             }
         };
     }
@@ -458,7 +458,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = CreateModel.getAttackPowerModifier(playerIndex);
+        const currValue                     = CcrCreateModel.getAttackPowerModifier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
@@ -473,7 +473,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                CreateModel.setAttackPowerModifier(playerIndex, value);
+                CcrCreateModel.setAttackPowerModifier(playerIndex, value);
             }
         };
     }
@@ -482,7 +482,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = CreateModel.getVisionRangeModifier(playerIndex);
+        const currValue                     = CcrCreateModel.getVisionRangeModifier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
@@ -497,7 +497,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                CreateModel.setVisionRangeModifier(playerIndex, value);
+                CcrCreateModel.setVisionRangeModifier(playerIndex, value);
             }
         };
     }
@@ -506,7 +506,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = CreateModel.getLuckLowerLimit(playerIndex);
+        const currValue                     = CcrCreateModel.getLuckLowerLimit(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
@@ -518,11 +518,11 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             if ((isNaN(value))                                          ||
                 (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                 (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                (value > CreateModel.getLuckUpperLimit(playerIndex))
+                (value > CcrCreateModel.getLuckUpperLimit(playerIndex))
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                CreateModel.setLuckLowerLimit(playerIndex, value);
+                CcrCreateModel.setLuckLowerLimit(playerIndex, value);
             }
         };
     }
@@ -531,7 +531,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = CreateModel.getLuckUpperLimit(playerIndex);
+        const currValue                     = CcrCreateModel.getLuckUpperLimit(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
@@ -543,11 +543,11 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             if ((isNaN(value))                                          ||
                 (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                 (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                (value < CreateModel.getLuckLowerLimit(playerIndex))
+                (value < CcrCreateModel.getLuckLowerLimit(playerIndex))
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                CreateModel.setLuckUpperLimit(playerIndex, value);
+                CcrCreateModel.setLuckUpperLimit(playerIndex, value);
             }
         };
     }
@@ -556,20 +556,20 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForFocusOutInputValue = null;
 
         const labelValue    = this._labelValue;
-        const isAiControl   = CreateModel.getAiCoId(playerIndex) != null;
+        const isAiControl   = CcrCreateModel.getAiCoId(playerIndex) != null;
         labelValue.visible  = true;
         labelValue.text     = Lang.getText(isAiControl ? LangTextType.B0012 : LangTextType.B0013);
 
         this._callbackForTouchLabelValue = () => {
             if (isAiControl) {
-                CreateModel.setAiCoId(playerIndex, null);
-                CreateModel.deleteAiSkinId(playerIndex);
+                CcrCreateModel.setAiCoId(playerIndex, null);
+                CcrCreateModel.deleteAiSkinId(playerIndex);
             } else {
-                if (playerIndex === CreateModel.getSelfPlayerIndex()) {
+                if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
                     FloatText.show(Lang.getText(LangTextType.A0220));
                 } else {
-                    CreateModel.setAiCoId(playerIndex, CommonConstants.CoEmptyId);
-                    CreateModel.setAiSkinId(playerIndex, playerIndex);
+                    CcrCreateModel.setAiCoId(playerIndex, CommonConstants.CoEmptyId);
+                    CcrCreateModel.setAiSkinId(playerIndex, playerIndex);
                 }
             }
         };
@@ -579,13 +579,13 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForFocusOutInputValue = null;
 
         const labelValue    = this._labelValue;
-        const coId          = CreateModel.getAiCoId(playerIndex);
-        const configVersion = CreateModel.getData().settingsForCommon.configVersion;
+        const coId          = CcrCreateModel.getAiCoId(playerIndex);
+        const configVersion = CcrCreateModel.getData().settingsForCommon.configVersion;
         labelValue.visible  = true;
         labelValue.text     = coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId);
 
         this._callbackForTouchLabelValue = () => {
-            if (playerIndex === CreateModel.getSelfPlayerIndex()) {
+            if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
                 FloatText.show(Lang.getText(LangTextType.A0220));
             } else {
                 CommonChooseCoPanel.show({
@@ -593,7 +593,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
                     availableCoIdArray  : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                     callbackOnConfirm   : (newCoId) => {
                         if (newCoId !== coId) {
-                            CreateModel.setAiCoId(playerIndex, newCoId);
+                            CcrCreateModel.setAiCoId(playerIndex, newCoId);
                         }
                     },
                 });

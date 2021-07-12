@@ -1,19 +1,21 @@
 
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTextInput }                  from "../../../gameui/UiTextInput";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { ScrCreateSaveSlotsPanel }      from "./ScrCreateSaveSlotsPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as WarMapModel                 from "../../warMap/model/WarMapModel";
-import * as ScrModel                    from "../model/ScrModel";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import { ScrCreateModel }                     from "../model/ScrCreateModel";
 
 export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
     private readonly _labelMapNameTitle             : UiLabel;
@@ -61,7 +63,7 @@ export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
         this.bottom                     = 0;
         this._inputSlotComment.maxChars = CommonConstants.SpmSaveSlotCommentMaxLength;
 
-        this._mapRawData = await ScrModel.Create.getMapRawData();
+        this._mapRawData = await ScrCreateModel.getMapRawData();
 
         this._updateComponentsForLanguage();
         this._updateComponentsForWarRule();
@@ -81,28 +83,28 @@ export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _onFocusOutInputSlotComment(e: egret.Event): void {
-        ScrModel.Create.setSlotComment(this._inputSlotComment.text || undefined);
+        ScrCreateModel.setSlotComment(this._inputSlotComment.text || undefined);
         this._updateInputSlotComment();
     }
 
     private async _onTouchedBtnWarRule(e: egret.TouchEvent): Promise<void> {
-        await ScrModel.Create.tickPresetWarRuleId();
+        await ScrCreateModel.tickPresetWarRuleId();
         this._updateComponentsForWarRule();
     }
 
     private _onTouchedBtnHasFog(e: egret.TouchEvent): void {
         const callback = () => {
-            ScrModel.Create.setHasFog(!ScrModel.Create.getHasFog());
+            ScrCreateModel.setHasFog(!ScrCreateModel.getHasFog());
             this._updateLabelHasFog();
             this._updateLabelWarRule();
         };
-        if (ScrModel.Create.getPresetWarRuleId() == null) {
+        if (ScrCreateModel.getPresetWarRuleId() == null) {
             callback();
         } else {
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    ScrModel.Create.setCustomWarRuleId();
+                    ScrCreateModel.setCustomWarRuleId();
                     callback();
                 },
             });
@@ -137,7 +139,7 @@ export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _updateInputSlotComment(): void {
-        this._inputSlotComment.text = ScrModel.Create.getSlotComment();
+        this._inputSlotComment.text = ScrCreateModel.getSlotComment();
     }
 
     private async _updateLabelMapName(): Promise<void> {
@@ -145,17 +147,17 @@ export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _updateLabelSaveSlot(): void {
-        this._labelSaveSlot.text = `${ScrModel.Create.getSaveSlotIndex()}`;
+        this._labelSaveSlot.text = `${ScrCreateModel.getSaveSlotIndex()}`;
     }
 
     private _updateLabelWarRule(): void {
         const label             = this._labelWarRule;
-        const settingsForCommon = ScrModel.Create.getData().settingsForCommon;
+        const settingsForCommon = ScrCreateModel.getData().settingsForCommon;
         label.text              = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
         label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFFFF00 : 0xFFFFFF;
     }
 
     private _updateLabelHasFog(): void {
-        this._labelHasFog.text = Lang.getText(ScrModel.Create.getHasFog() ? LangTextType.B0012 : LangTextType.B0013);
+        this._labelHasFog.text = Lang.getText(ScrCreateModel.getHasFog() ? LangTextType.B0012 : LangTextType.B0013);
     }
 }

@@ -1,31 +1,33 @@
 
-import { UiListItemRenderer }                                                   from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                                                              from "../../../gameui/UiPanel";
-import { UiButton }                                                             from "../../../gameui/UiButton";
-import { UiLabel }                                                              from "../../../gameui/UiLabel";
-import { UiScrollList }                                                         from "../../../gameui/UiScrollList";
-import { UiTab }                                                                from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                                                    from "../../../gameui/UiTabItemRenderer";
+import { UiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                                                              from "../../../utility/ui/UiPanel";
+import { UiButton }                                                             from "../../../utility/ui/UiButton";
+import { UiLabel }                                                              from "../../../utility/ui/UiLabel";
+import { UiScrollList }                                                         from "../../../utility/ui/UiScrollList";
+import { UiTab }                                                                from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
 import { MfrMainMenuPanel }                                                     from "./MfrMainMenuPanel";
 import { MfrRoomInfoPanel }                                                     from "./MfrRoomInfoPanel";
 import { MfrJoinPasswordPanel }                                                 from "./MfrJoinPasswordPanel";
-import { LobbyBottomPanel }                                                     from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
+import { TwnsLobbyBottomPanel }                                                 from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                                                    from "../../lobby/view/LobbyTopPanel";
 import { OpenDataForMfrRoomAdvancedSettingsPage, MfrRoomAdvancedSettingsPage }  from "./MfrRoomAdvancedSettingsPage";
 import { OpenDataForMfrRoomBasicSettingsPage, MfrRoomBasicSettingsPage }        from "./MfrRoomBasicSettingsPage";
 import { OpenDataForMfrRoomMapInfoPage, MfrRoomMapInfoPage }                    from "./MfrRoomMapInfoPage";
 import { OpenDataForMfrRoomPlayerInfoPage, MfrRoomPlayerInfoPage }              from "./MfrRoomPlayerInfoPage";
-import * as FloatText                                                           from "../../../utility/FloatText";
-import * as Helpers                                                             from "../../../utility/Helpers";
-import * as Lang                                                                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                                                               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                                                          from "../../../utility/ProtoTypes";
+import { FloatText }                                                            from "../../../utility/FloatText";
+import { Helpers }                                                              from "../../../utility/Helpers";
+import { Lang }                                                                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType }                                                     from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }                                                       from "../../../utility/notify/NotifyType";
+import { ProtoTypes }                                                           from "../../../utility/proto/ProtoTypes";
 import { Types }                                                                from "../../../utility/Types";
-import * as MfrModel                                                            from "../../multiFreeRoom/model/MfrModel";
-import * as MfrProxy                                                            from "../../multiFreeRoom/model/MfrProxy";
-import * as UserModel                                                           from "../../user/model/UserModel";
+import { MfrModel }                                                             from "../../multiFreeRoom/model/MfrModel";
+import { MfrProxy }                                                             from "../../multiFreeRoom/model/MfrProxy";
+import { UserModel }                                                            from "../../user/model/UserModel";
+import { MfrJoinModel }                                                         from "../model/MfrJoinModel";
+import LangTextType                                                             = TwnsLangTextType.LangTextType;
+import NotifyType                                                               = TwnsNotifyType.NotifyType;
 
 export class MfrJoinRoomListPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -146,17 +148,17 @@ export class MfrJoinRoomListPanel extends UiPanel<void> {
     private _onTouchTapBtnBack(e: egret.TouchEvent): void {
         this.close();
         MfrMainMenuPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
 
     private async _onTouchedBtnNextStep(e: egret.TouchEvent): Promise<void> {
-        const roomInfo = await MfrModel.getRoomInfo(MfrModel.Join.getTargetRoomId());
+        const roomInfo = await MfrModel.getRoomInfo(MfrJoinModel.getTargetRoomId());
         if (roomInfo) {
             if (roomInfo.settingsForMfw.warPassword) {
                 MfrJoinPasswordPanel.show({ roomInfo });
             } else {
-                const joinData = MfrModel.Join.getFastJoinData(roomInfo);
+                const joinData = MfrJoinModel.getFastJoinData(roomInfo);
                 if (joinData) {
                     MfrProxy.reqMfrJoinRoom(joinData);
                 } else {
@@ -220,9 +222,9 @@ export class MfrJoinRoomListPanel extends UiPanel<void> {
             labelNoRoom.visible     = !dataArray.length;
             listRoom.bindData(dataArray);
 
-            const roomId = MfrModel.Join.getTargetRoomId();
+            const roomId = MfrJoinModel.getTargetRoomId();
             if (dataArray.every(v => v.roomId != roomId)) {
-                MfrModel.Join.setTargetRoomId(dataArray.length ? dataArray[0].roomId : null);
+                MfrJoinModel.setTargetRoomId(dataArray.length ? dataArray[0].roomId : null);
             }
         }
     }
@@ -230,7 +232,7 @@ export class MfrJoinRoomListPanel extends UiPanel<void> {
     private async _updateComponentsForTargetRoomInfo(): Promise<void> {
         const groupTab      = this._groupTab;
         const btnNextStep   = this._btnNextStep;
-        const roomId        = MfrModel.Join.getTargetRoomId();
+        const roomId        = MfrJoinModel.getTargetRoomId();
         if ((!this._hasReceivedData) || (roomId == null)) {
             groupTab.visible    = false;
             btnNextStep.visible = false;
@@ -364,7 +366,7 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
     }
 
     private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-        MfrModel.Join.setTargetRoomId(this.data.roomId);
+        MfrJoinModel.setTargetRoomId(this.data.roomId);
     }
 
     private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
@@ -376,7 +378,7 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
         if (roomInfo.settingsForMfw.warPassword) {
             MfrJoinPasswordPanel.show({ roomInfo });
         } else {
-            const joinData = MfrModel.Join.getFastJoinData(roomInfo);
+            const joinData = MfrJoinModel.getFastJoinData(roomInfo);
             if (joinData) {
                 MfrProxy.reqMfrJoinRoom(joinData);
             } else {
@@ -387,6 +389,6 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
     }
 
     private _updateState(): void {
-        this.currentState = this.data.roomId === MfrModel.Join.getTargetRoomId() ? Types.UiState.Down : Types.UiState.Up;
+        this.currentState = this.data.roomId === MfrJoinModel.getTargetRoomId() ? Types.UiState.Down : Types.UiState.Up;
     }
 }

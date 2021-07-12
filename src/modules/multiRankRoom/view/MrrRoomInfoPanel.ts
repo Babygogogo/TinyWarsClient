@@ -1,12 +1,12 @@
 
-import { UiImage }                                                              from "../../../gameui/UiImage";
-import { UiListItemRenderer }                                                   from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                                                              from "../../../gameui/UiPanel";
-import { UiButton }                                                             from "../../../gameui/UiButton";
-import { UiLabel }                                                              from "../../../gameui/UiLabel";
-import { UiScrollList }                                                         from "../../../gameui/UiScrollList";
-import { UiTab }                                                                from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                                                    from "../../../gameui/UiTabItemRenderer";
+import { UiImage }                                                              from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                                                              from "../../../utility/ui/UiPanel";
+import { UiButton }                                                             from "../../../utility/ui/UiButton";
+import { UiLabel }                                                              from "../../../utility/ui/UiLabel";
+import { UiScrollList }                                                         from "../../../utility/ui/UiScrollList";
+import { UiTab }                                                                from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
 import { CommonConfirmPanel }                                                   from "../../common/view/CommonConfirmPanel";
 import { MrrMyRoomListPanel }                                                   from "./MrrMyRoomListPanel";
 import { MrrRoomBanCoPanel }                                                    from "./MrrRoomBanCoPanel";
@@ -15,23 +15,25 @@ import { OpenDataForMrrRoomBasicSettingsPage, MrrRoomBasicSettingsPage }        
 import { OpenDataForMrrRoomMapInfoPage, MrrRoomMapInfoPage }                    from "./MrrRoomMapInfoPage";
 import { OpenDataForMrrRoomPlayerInfoPage, MrrRoomPlayerInfoPage }              from "./MrrRoomPlayerInfoPage";
 import { OpenDataForMrrRoomAdvancedSettingsPage, MrrRoomAdvancedSettingsPage }  from "./MrrRoomAdvancedSettingsPage";
-import * as CommonConstants                                                     from "../../../utility/CommonConstants";
-import * as ConfigManager                                                       from "../../../utility/ConfigManager";
-import * as FloatText                                                           from "../../../utility/FloatText";
-import * as Helpers                                                             from "../../../utility/Helpers";
-import * as Lang                                                                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                                                               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                                                          from "../../../utility/ProtoTypes";
+import { CommonConstants }                                                      from "../../../utility/CommonConstants";
+import { ConfigManager }                                                        from "../../../utility/ConfigManager";
+import { FloatText }                                                            from "../../../utility/FloatText";
+import { Helpers }                                                              from "../../../utility/Helpers";
+import { Lang }                                                                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType }                                                     from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }                                                       from "../../../utility/notify/NotifyType";
+import { ProtoTypes }                                                           from "../../../utility/proto/ProtoTypes";
 import { Types }                                                                from "../../../utility/Types";
-import * as BwHelpers                                                           from "../../baseWar/model/BwHelpers";
-import * as BwWarRuleHelper                                                     from "../../baseWar/model/BwWarRuleHelper";
-import * as TimeModel                                                           from "../../time/model/TimeModel";
-import * as UserModel                                                           from "../../user/model/UserModel";
-import * as WarMapModel                                                         from "../../warMap/model/WarMapModel";
-import * as MrrModel                                                            from "../model/MrrModel";
-import * as MrrProxy                                                            from "../model/MrrProxy";
+import { BwWarRuleHelpers }                                                     from "../../baseWar/model/BwWarRuleHelpers";
+import { TimeModel }                                                            from "../../time/model/TimeModel";
+import { UserModel }                                                            from "../../user/model/UserModel";
+import { WarMapModel }                                                          from "../../warMap/model/WarMapModel";
+import { MrrModel }                                                             from "../model/MrrModel";
+import { MrrProxy }                                                             from "../model/MrrProxy";
+import { MrrSelfSettingsModel }                                                 from "../model/MrrSelfSettingsModel";
+import { BwHelpers }                                                            from "../../baseWar/model/BwHelpers";
+import LangTextType                                                             = TwnsLangTextType.LangTextType;
+import NotifyType                                                               = TwnsNotifyType.NotifyType;
 import NetMessage                                                               = ProtoTypes.NetMessage;
 
 type OpenDataForMrrRoomInfoPanel = {
@@ -194,7 +196,7 @@ export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
                 FloatText.show(Lang.getText(LangTextType.A0207));
             } else {
                 MrrRoomChooseCoPanel.show({
-                    coId: MrrModel.SelfSettings.getCoId(),
+                    coId: MrrSelfSettingsModel.getCoId(),
                 });
             }
         }
@@ -348,7 +350,7 @@ export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
     private async _updateBtnChooseCo(): Promise<void> {
         const roomInfo          = await MrrModel.getRoomInfo(this._getOpenData().roomId);
         this._btnChooseCo.label = roomInfo
-            ? ConfigManager.getCoBasicCfg(roomInfo.settingsForCommon.configVersion, MrrModel.SelfSettings.getCoId()).name
+            ? ConfigManager.getCoBasicCfg(roomInfo.settingsForCommon.configVersion, MrrSelfSettingsModel.getCoId()).name
             : null;
     }
 
@@ -526,7 +528,7 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
         const data = this.data;
         if (data) {
             const playerIndex       = data.playerIndex;
-            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelper.getTeamIndex((await MrrModel.getRoomInfo(data.roomId)).settingsForCommon.warRule, playerIndex))})`;
+            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelpers.getTeamIndex((await MrrModel.getRoomInfo(data.roomId)).settingsForCommon.warRule, playerIndex))})`;
         }
     }
     private async _updateState(): Promise<void> {
@@ -575,7 +577,7 @@ class SkinIdRenderer extends UiListItemRenderer<DataForSkinIdRenderer> {
         if ((currPlayerData) && (currPlayerData !== selfPlayerData)) {
             FloatText.show(Lang.getText(LangTextType.A0203));
         } else {
-            MrrModel.SelfSettings.setUnitAndTileSkinId(newSkinId);
+            MrrSelfSettingsModel.setUnitAndTileSkinId(newSkinId);
         }
     }
     private _onNotifyMrrSelfSettingsSkinIdChanged(e: egret.Event): void {
@@ -586,7 +588,7 @@ class SkinIdRenderer extends UiListItemRenderer<DataForSkinIdRenderer> {
         const data = this.data;
         if (data) {
             const skinId            = data.skinId;
-            this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, MrrModel.SelfSettings.getUnitAndTileSkinId() === skinId);
+            this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, MrrSelfSettingsModel.getUnitAndTileSkinId() === skinId);
         }
     }
 }
@@ -624,17 +626,17 @@ class ReadyRenderer extends UiListItemRenderer<DataForReadyRenderer> {
             if (!isReady) {
                 FloatText.show(Lang.getText(LangTextType.A0205));
             } else {
-                const coId      = MrrModel.SelfSettings.getCoId();
+                const coId      = MrrSelfSettingsModel.getCoId();
                 const callback  = () => {
                     CommonConfirmPanel.show({
                         content : Lang.getText(LangTextType.A0206),
                         callback: () => {
-                            MrrProxy.reqMrrSetSelfSettings(roomId, coId, MrrModel.SelfSettings.getUnitAndTileSkinId());
+                            MrrProxy.reqMrrSetSelfSettings(roomId, coId, MrrSelfSettingsModel.getUnitAndTileSkinId());
                         },
                     });
                 };
                 if ((coId == CommonConstants.CoEmptyId)                                                             &&
-                    ((MrrModel.SelfSettings.getAvailableCoIdArray() || []).some(v => v !== CommonConstants.CoEmptyId))
+                    ((MrrSelfSettingsModel.getAvailableCoIdArray() || []).some(v => v !== CommonConstants.CoEmptyId))
                 ) {
                     CommonConfirmPanel.show({
                         content : Lang.getText(LangTextType.A0208),

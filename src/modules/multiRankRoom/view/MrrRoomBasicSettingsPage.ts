@@ -1,18 +1,20 @@
 
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as WarMapModel                 from "../../warMap/model/WarMapModel";
-import * as MrrModel                    from "../model/MrrModel";
+import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import { MrrModel }                     from "../model/MrrModel";
 
 export type OpenDataForMrrRoomBasicSettingsPage = {
     roomId  : number | null;

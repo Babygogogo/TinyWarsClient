@@ -1,11 +1,12 @@
 
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { UiButton }             from "../../../gameui/UiButton";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { UiImage }              from "../../../gameui/UiImage";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Types }                from "../../../utility/Types";
 
 type OpenDataForCommonConfirmPanel = {

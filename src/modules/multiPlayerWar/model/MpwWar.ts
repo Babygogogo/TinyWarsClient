@@ -6,13 +6,14 @@ import { MpwPlayerManager }         from "./MpwPlayerManager";
 import { MpwField }                 from "./MpwField";
 import { BwCommonSettingManager }   from "../../baseWar/model/BwCommonSettingManager";
 import { MpwWarMenuPanel }          from "../view/MpwWarMenuPanel";
-import * as CommonConstants         from "../../../utility/CommonConstants";
-import * as DestructionHelpers      from "../../../utility/DestructionHelpers";
-import * as Lang                    from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import * as ProtoTypes              from "../../../utility/ProtoTypes";
-import * as VisibilityHelpers       from "../../../utility/VisibilityHelpers";
-import * as TimeModel               from "../../time/model/TimeModel";
+import { CommonConstants }          from "../../../utility/CommonConstants";
+import { BwDestructionHelpers }       from "../../baseWar/model/BwDestructionHelpers";
+import { Lang }                     from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { ProtoTypes }               from "../../../utility/proto/ProtoTypes";
+import { BwVisibilityHelpers }        from "../../baseWar/model/BwVisibilityHelpers";
+import { TimeModel }                from "../../time/model/TimeModel";
 import * as MpwUtility              from "./MpwUtility";
 import WarAction                    = ProtoTypes.WarAction;
 
@@ -40,17 +41,17 @@ export abstract class MpwWar extends BwWar {
 
     public updateTilesAndUnitsOnVisibilityChanged(): void {
         const watcherTeamIndexes    = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-        const visibleUnitsOnMap     = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
+        const visibleUnitsOnMap     = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
         for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
             if (visibleUnitsOnMap.has(unit)) {
                 unit.setViewVisible(true);
             } else {
-                DestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
+                BwDestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
             }
         }
-        DestructionHelpers.removeInvisibleLoadedUnits(this, watcherTeamIndexes);
+        BwDestructionHelpers.removeInvisibleLoadedUnits(this, watcherTeamIndexes);
 
-        const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(this, watcherTeamIndexes);
+        const visibleTiles  = BwVisibilityHelpers.getAllTilesVisibleToTeams(this, watcherTeamIndexes);
         const tileMap       = this.getTileMap();
         for (const tile of tileMap.getAllTiles()) {
             if (visibleTiles.has(tile)) {

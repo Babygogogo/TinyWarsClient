@@ -3,15 +3,15 @@ import { BwWar }                from "./BwWar";
 import { BwTile }               from "./BwTile";
 import { BwPlayer }             from "./BwPlayer";
 import { BwUnitView }           from "../view/BwUnitView";
-import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
-import * as BwHelpers           from "./BwHelpers";
+import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
+import { BwHelpers }            from "./BwHelpers";
 import { Types }                from "../../../utility/Types";
 import { Logger }               from "../../../utility/Logger";
-import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import * as ConfigManager       from "../../../utility/ConfigManager";
-import * as VisibilityHelpers   from "../../../utility/VisibilityHelpers";
-import * as CommonConstants     from "../../../utility/CommonConstants";
+import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import { ConfigManager }        from "../../../utility/ConfigManager";
+import { BwVisibilityHelpers }    from "./BwVisibilityHelpers";
+import { CommonConstants }      from "../../../utility/CommonConstants";
 import UnitActionState          = Types.UnitActionState;
 import ArmorType                = Types.ArmorType;
 import TileType                 = Types.TileType;
@@ -24,6 +24,7 @@ import UnitTemplateCfg          = Types.UnitTemplateCfg;
 import ISerialUnit              = ProtoTypes.WarSerialization.ISerialUnit;
 import IWarUnitRepairData       = ProtoTypes.Structure.IDataForModifyUnit;
 import Config                   = ProtoTypes.Config;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwUnit {
     private _templateCfg                : UnitTemplateCfg;
@@ -740,7 +741,7 @@ export class BwUnit {
                 return undefined;
             }
 
-            if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+            if (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                 war,
                 observerTeamIndex   : teamIndex,
                 gridIndex           : destination,

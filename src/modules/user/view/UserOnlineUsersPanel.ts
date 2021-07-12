@@ -1,19 +1,21 @@
 
-import { UiScrollList }         from "../../../gameui/UiScrollList";
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { UiListItemRenderer }   from "../../../gameui/UiListItemRenderer";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { UiButton }             from "../../../gameui/UiButton";
+import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { UiButton }             from "../../../utility/ui/UiButton";
 import { UserPanel }            from "../../user/view/UserPanel";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
 import { Types }                from "../../../utility/Types";
-import * as UserProxy           from "../../user/model/UserProxy";
+import { UserProxy }            from "../../user/model/UserProxy";
 
 export class UserOnlineUsersPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;

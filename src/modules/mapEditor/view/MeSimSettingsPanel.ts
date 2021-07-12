@@ -1,23 +1,24 @@
 
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTab }                        from "../../../gameui/UiTab";
-import { UiTabItemRenderer }            from "../../../gameui/UiTabItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTab }                        from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }            from "../../../utility/ui/UiTabItemRenderer";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { SpmCreateSfwSaveSlotsPanel }   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import { MeSimAdvancedSettingsPage }    from "./MeSimAdvancedSettingsPage";
 import { MeSimBasicSettingsPage }       from "./MeSimBasicSettingsPage";
 import { MeWarMenuPanel }               from "./MeWarMenuPanel";
-import * as FloatText                   from "../../../utility/FloatText";
 import { FlowManager }                  from "../../../utility/FlowManager";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
+import { MeSimModel }                   from "../model/MeSimModel";
+import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
 import { Types }                        from "../../../utility/Types";
-import * as MeModel                     from "../model/MeModel";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import LangTextType                     = TwnsLangTextType.LangTextType;
+import NotifyType                       = TwnsNotifyType.NotifyType;
 
 export class MeSimSettingsPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -80,8 +81,8 @@ export class MeSimSettingsPanel extends UiPanel<void> {
     }
 
     private _onTouchedBtnConfirm(): void {
-        if (MeModel.Sim.checkIsValidWarData()) {
-            SpmCreateSfwSaveSlotsPanel.show(MeModel.Sim.getWarData());
+        if (MeSimModel.checkIsValidWarData()) {
+            SpmCreateSfwSaveSlotsPanel.show(MeSimModel.getWarData());
         } else {
             FloatText.show(Lang.getText(LangTextType.A0146));
         }

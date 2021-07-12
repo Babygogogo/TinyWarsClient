@@ -1,14 +1,15 @@
 
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiZoomableMap }                from "../../../gameui/UiZoomableMap";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
-import { UiMapInfo }                    from "../../../gameui/UiMapInfo";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { UiMapInfo }                    from "../../../utility/ui/UiMapInfo";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
+import { CcrCreateModel }               from "../model/CcrCreateModel";
+import LangTextType                     = TwnsLangTextType.LangTextType;
+import NotifyType                       = TwnsNotifyType.NotifyType;
 
 export class CcrCreateMapInfoPage extends UiTabPage<void> {
     private readonly _zoomMap       : UiZoomableMap;
@@ -31,7 +32,7 @@ export class CcrCreateMapInfoPage extends UiTabPage<void> {
         this.top    = 0;
         this.bottom = 0;
 
-        const mapRawData = await CcrModel.Create.getMapRawData();
+        const mapRawData = await CcrCreateModel.getMapRawData();
         this._zoomMap.showMapByMapData(mapRawData);
         this._uiMapInfo.setData({
             mapInfo: {

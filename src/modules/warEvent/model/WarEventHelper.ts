@@ -1,5 +1,5 @@
 
-import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { MeWar }                        from "../../mapEditor/model/MeWar";
 import { WeConditionModifyPanel1 }      from "../view/WeConditionModifyPanel1";
@@ -16,15 +16,16 @@ import { WeConditionModifyPanel8 }      from "../view/WeConditionModifyPanel8";
 import { WeConditionModifyPanel9 }      from "../view/WeConditionModifyPanel9";
 import { WeActionModifyPanel1 }         from "../view/WeActionModifyPanel1";
 import { WeActionModifyPanel2 }         from "../view/WeActionModifyPanel2";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Logger }                       from "../../../utility/Logger";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
+import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
 import LanguageType                     = Types.LanguageType;
 import ConditionType                    = Types.WarEventConditionType;
 import ActionType                       = Types.WarEventActionType;
@@ -36,6 +37,7 @@ import IWarEvent                        = WarEvent.IWarEvent;
 import IWarEventAction                  = WarEvent.IWarEventAction;
 import IWarEventCondition               = WarEvent.IWarEventCondition;
 import IWarEventConditionNode           = WarEvent.IWarEventConditionNode;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 const CONDITION_TYPE_ARRAY = [
     ConditionType.WecTurnIndexEqualTo,

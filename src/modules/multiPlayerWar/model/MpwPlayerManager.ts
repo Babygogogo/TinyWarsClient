@@ -1,7 +1,7 @@
 
 import { BwPlayer }         from "../../baseWar/model/BwPlayer";
 import { BwPlayerManager }  from "../../baseWar/model/BwPlayerManager";
-import * as UserModel       from "../../user/model/UserModel";
+import { UserModel }        from "../../user/model/UserModel";
 
 export class MpwPlayerManager extends BwPlayerManager {
     private _loggedInPlayer : BwPlayer;

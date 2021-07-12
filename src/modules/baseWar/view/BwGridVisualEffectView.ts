@@ -1,9 +1,9 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
+import { UiImage }              from "../../../utility/ui/UiImage";
 import { BwGridVisualEffect }   from "../model/BwGridVisualEffect";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
-import * as Helpers             from "../../../utility/Helpers";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
+import { Helpers }              from "../../../utility/Helpers";
 import { Types }                from "../../../utility/Types";
 import GridIndex                = Types.GridIndex;
 

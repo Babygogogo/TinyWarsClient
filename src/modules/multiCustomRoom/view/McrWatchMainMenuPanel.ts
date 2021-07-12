@@ -1,18 +1,20 @@
 
-import { UiImage }                          from "../../../gameui/UiImage";
-import { UiListItemRenderer }               from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                          from "../../../gameui/UiPanel";
-import { UiButton }                         from "../../../gameui/UiButton";
-import { UiLabel }                          from "../../../gameui/UiLabel";
-import { UiScrollList }                     from "../../../gameui/UiScrollList";
-import * as Lang                            from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                           from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { UiImage }                          from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }               from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                          from "../../../utility/ui/UiPanel";
+import { UiButton }                         from "../../../utility/ui/UiButton";
+import { UiLabel }                          from "../../../utility/ui/UiLabel";
+import { UiScrollList }                     from "../../../utility/ui/UiScrollList";
+import { Lang }                             from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                           from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                            from "../../../utility/Types";
-import * as MpwModel                        from "../../multiPlayerWar/model/MpwModel";
-import { LobbyBottomPanel }                 from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                    from "../../lobby/view/LobbyTopPanel";
+import { MpwModel }                         from "../../multiPlayerWar/model/MpwModel";
+import { TwnsLobbyBottomPanel }                 from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                    from "../../lobby/view/LobbyTopPanel";
 import { McrWatchOngoingWarsPanel }         from "./McrWatchOngoingWarsPanel";
 import { McrMainMenuPanel }                 from "./McrMainMenuPanel";
 import { McrWatchMakeRequestWarsPanel }     from "./McrWatchMakeRequestWarsPanel";
@@ -67,8 +69,8 @@ export class McrWatchMainMenuPanel extends UiPanel<void> {
     private _onTouchedBtnBack(e: egret.TouchEvent): void {
         this.close();
         McrMainMenuPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
 
     private _onMsgUserLogout(e: egret.Event): void {

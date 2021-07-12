@@ -1,16 +1,18 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { MeTileSimpleView }             from "../../mapEditor/view/MeTileSimpleView";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
 
 type OpenDataForBuildingListPanel = {

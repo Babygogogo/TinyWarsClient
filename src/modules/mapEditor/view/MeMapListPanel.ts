@@ -1,24 +1,25 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiZoomableMap }                from "../../../gameui/UiZoomableMap";
-import { CommonAlertPanel }             from "../../common/view/CommonAlertPanel";
-import { LobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
-import { LobbyPanel }                   from "../../lobby/view/LobbyPanel";
-import { LobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
+import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyPanel }                   from "../../lobby/view/LobbyPanel";
+import { TwnsLobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
 import { FlowManager }                  from "../../../utility/FlowManager";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }                   from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
-import * as MeModel                     from "../model/MeModel";
-import * as MeProxy                     from "../model/MeProxy";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import { MeModel }                      from "../model/MeModel";
+import { MeProxy }                      from "../model/MeProxy";
 import IMapEditorData                   = ProtoTypes.Map.IMapEditorData;
+import LangTextType                     = TwnsLangTextType.LangTextType;
 
 export class MeMapListPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -112,9 +113,9 @@ export class MeMapListPanel extends UiPanel<void> {
 
     private _onTouchTapBtnBack(e: egret.TouchEvent): void {
         this.close();
-        LobbyPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyPanel.LobbyPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +197,7 @@ class MapRenderer extends UiListItemRenderer<DataForMapRenderer> {
         const reviewStatus  = mapData.reviewStatus;
 
         if (reviewStatus === Types.MapReviewStatus.Rejected) {
-            CommonAlertPanel.show({
+            TwnsCommonAlertPanel.CommonAlertPanel.show({
                 title   : Lang.getText(LangTextType.B0305),
                 content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                 callback: () => {
@@ -204,7 +205,7 @@ class MapRenderer extends UiListItemRenderer<DataForMapRenderer> {
                 },
             });
         } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
-            CommonAlertPanel.show({
+            TwnsCommonAlertPanel.CommonAlertPanel.show({
                 title   : Lang.getText(LangTextType.B0326),
                 content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                 callback: () => {

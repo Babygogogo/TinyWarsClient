@@ -1,22 +1,23 @@
 
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTextInput }                  from "../../../gameui/UiTextInput";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
-import * as WarMapModel                 from "../../warMap/model/WarMapModel";
+import { CcrCreateModel }               from "../model/CcrCreateModel";
+import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import LangTextType                     = TwnsLangTextType.LangTextType;
+import NotifyType                       = TwnsNotifyType.NotifyType;
 
 export class CcrCreateBasicSettingsPage extends UiTabPage<void> {
     private readonly _labelMapNameTitle             : UiLabel;
@@ -93,7 +94,7 @@ export class CcrCreateBasicSettingsPage extends UiTabPage<void> {
         this._inputWarPassword.maxChars = CommonConstants.WarPasswordMaxLength;
         this._inputWarComment.maxChars  = CommonConstants.WarCommentMaxLength;
 
-        this._mapRawData = await CcrModel.Create.getMapRawData();
+        this._mapRawData = await CcrCreateModel.getMapRawData();
 
         this._updateComponentsForLanguage();
         this._updateComponentsForWarRule();
@@ -111,38 +112,38 @@ export class CcrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _onFocusOutInputWarName(): void {
-        CcrModel.Create.setWarName(this._inputWarName.text || undefined);
+        CcrCreateModel.setWarName(this._inputWarName.text || undefined);
         this._updateInputWarName();
     }
 
     private _onFocusOutInputWarPassword(): void {
-        CcrModel.Create.setWarPassword(this._inputWarPassword.text || undefined);
+        CcrCreateModel.setWarPassword(this._inputWarPassword.text || undefined);
         this._updateInputWarPassword();
     }
 
     private _onFocusOutInputWarComment(): void {
-        CcrModel.Create.setWarComment(this._inputWarComment.text || undefined);
+        CcrCreateModel.setWarComment(this._inputWarComment.text || undefined);
         this._updateInputWarComment();
     }
 
     private async _onTouchedBtnWarRule(): Promise<void> {
-        await CcrModel.Create.tickPresetWarRuleId();
+        await CcrCreateModel.tickPresetWarRuleId();
         this._updateComponentsForWarRule();
     }
 
     private _onTouchedBtnHasFog(): void {
         const callback = () => {
-            CcrModel.Create.setHasFog(!CcrModel.Create.getHasFog());
+            CcrCreateModel.setHasFog(!CcrCreateModel.getHasFog());
             this._updateLabelHasFog();
             this._updateLabelWarRule();
         };
-        if (CcrModel.Create.getPresetWarRuleId() == null) {
+        if (CcrCreateModel.getPresetWarRuleId() == null) {
             callback();
         } else {
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    CcrModel.Create.setCustomWarRuleId();
+                    CcrCreateModel.setCustomWarRuleId();
                     callback();
                 },
             });
@@ -157,7 +158,7 @@ export class CcrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _onTouchedBtnTimerType(): void {
-        CcrModel.Create.tickBootTimerType();
+        CcrCreateModel.tickBootTimerType();
         this._updateGroupTimer();
     }
 
@@ -169,7 +170,7 @@ export class CcrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _onTouchedBtnTimerRegular(): void {
-        CcrModel.Create.tickTimerRegularTime();
+        CcrCreateModel.tickTimerRegularTime();
         this._updateGroupTimer();
     }
 
@@ -178,7 +179,7 @@ export class CcrCreateBasicSettingsPage extends UiTabPage<void> {
         const maxValue = CommonConstants.WarBootTimerIncrementalMaxLimit;
         CommonInputPanel.show({
             title           : Lang.getText(LangTextType.B0389),
-            currentValue    : "" + CcrModel.Create.getBootTimerParams()[1],
+            currentValue    : "" + CcrCreateModel.getBootTimerParams()[1],
             maxChars        : 5,
             charRestrict    : "0-9",
             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
@@ -188,7 +189,7 @@ export class CcrCreateBasicSettingsPage extends UiTabPage<void> {
                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    CcrModel.Create.setTimerIncrementalInitialTime(value);
+                    CcrCreateModel.setTimerIncrementalInitialTime(value);
                     this._updateGroupTimer();
                 }
             },
@@ -200,7 +201,7 @@ export class CcrCreateBasicSettingsPage extends UiTabPage<void> {
         const maxValue = CommonConstants.WarBootTimerIncrementalMaxLimit;
         CommonInputPanel.show({
             title           : Lang.getText(LangTextType.B0390),
-            currentValue    : "" + CcrModel.Create.getBootTimerParams()[2],
+            currentValue    : "" + CcrCreateModel.getBootTimerParams()[2],
             maxChars        : 5,
             charRestrict    : "0-9",
             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
@@ -210,7 +211,7 @@ export class CcrCreateBasicSettingsPage extends UiTabPage<void> {
                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    CcrModel.Create.setTimerIncrementalIncrementalValue(value);
+                    CcrCreateModel.setTimerIncrementalIncrementalValue(value);
                     this._updateGroupTimer();
                 }
             },
@@ -240,15 +241,15 @@ export class CcrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _updateInputWarName(): void {
-        this._inputWarName.text = CcrModel.Create.getWarName();
+        this._inputWarName.text = CcrCreateModel.getWarName();
     }
 
     private _updateInputWarPassword(): void {
-        this._inputWarPassword.text = CcrModel.Create.getWarPassword();
+        this._inputWarPassword.text = CcrCreateModel.getWarPassword();
     }
 
     private _updateInputWarComment(): void {
-        this._inputWarComment.text = CcrModel.Create.getWarComment();
+        this._inputWarComment.text = CcrCreateModel.getWarComment();
     }
 
     private async _updateLabelMapName(): Promise<void> {
@@ -257,17 +258,17 @@ export class CcrCreateBasicSettingsPage extends UiTabPage<void> {
 
     private _updateLabelWarRule(): void {
         const label             = this._labelWarRule;
-        const settingsForCommon = CcrModel.Create.getData().settingsForCommon;
+        const settingsForCommon = CcrCreateModel.getData().settingsForCommon;
         label.text              = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
         label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFFFF00 : 0xFFFFFF;
     }
 
     private _updateLabelHasFog(): void {
-        this._labelHasFog.text = Lang.getText(CcrModel.Create.getHasFog() ? LangTextType.B0012 : LangTextType.B0013);
+        this._labelHasFog.text = Lang.getText(CcrCreateModel.getHasFog() ? LangTextType.B0012 : LangTextType.B0013);
     }
 
     private _updateGroupTimer(): void {
-        const params                = CcrModel.Create.getBootTimerParams();
+        const params                = CcrCreateModel.getBootTimerParams();
         const timerType             : Types.BootTimerType = params[0];
         this._labelTimerType.text   = Lang.getBootTimerTypeName(timerType);
 

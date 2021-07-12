@@ -1,26 +1,27 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiZoomableMap }                from "../../../gameui/UiZoomableMap";
-import { UiMapInfo }                    from "../../../gameui/UiMapInfo";
-import { LobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import { UiMapInfo }                    from "../../../utility/ui/UiMapInfo";
+import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
 import { McrCreateSearchMapPanel }      from "./McrCreateSearchMapPanel";
 import { McrMainMenuPanel }             from "./McrMainMenuPanel";
 import { McrCreateSettingsPanel }       from "./McrCreateSettingsPanel";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as McrModel                    from "../../multiCustomRoom/model/McrModel";
-import * as WarMapModel                 from "../../warMap/model/WarMapModel";
+import { McrCreateModel }               from "../model/McrCreateModel";
+import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import NotifyType       = TwnsNotifyType.NotifyType;
 import IDataForMapTag                   = ProtoTypes.Map.IDataForMapTag;
 
 type FiltersForMapList = {
@@ -149,15 +150,15 @@ export class McrCreateMapListPanel extends UiPanel<FiltersForMapList> {
     private _onTouchTapBtnBack(): void {
         this.close();
         McrMainMenuPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
 
     private async _onTouchedBtnNextStep(): Promise<void> {
         const selectedMapId = this.getSelectedMapId();
         if (selectedMapId != null) {
             this.close();
-            await McrModel.Create.resetDataByMapId(selectedMapId);
+            await McrCreateModel.resetDataByMapId(selectedMapId);
             McrCreateSettingsPanel.show();
         }
     }
@@ -338,7 +339,7 @@ class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
     private async _onTouchTapBtnNext(): Promise<void> {
         const data = this.data;
         data.panel.close();
-        await McrModel.Create.resetDataByMapId(data.mapId);
+        await McrCreateModel.resetDataByMapId(data.mapId);
         McrCreateSettingsPanel.show();
     }
 }

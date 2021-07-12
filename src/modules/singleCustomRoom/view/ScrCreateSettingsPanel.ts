@@ -1,9 +1,9 @@
 
-import { UiPanel }                          from "../../../gameui/UiPanel";
-import { UiButton }                         from "../../../gameui/UiButton";
-import { UiLabel }                          from "../../../gameui/UiLabel";
-import { UiTab }                            from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                from "../../../gameui/UiTabItemRenderer";
+import { UiPanel }                          from "../../../utility/ui/UiPanel";
+import { UiButton }                         from "../../../utility/ui/UiButton";
+import { UiLabel }                          from "../../../utility/ui/UiLabel";
+import { UiTab }                            from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
 import { CommonConfirmPanel }               from "../../common/view/CommonConfirmPanel";
 import { ScrCreateBasicSettingsPage }       from "./ScrCreateBasicSettingsPage";
 import { ScrCreateMapListPanel }            from "./ScrCreateMapListPanel";
@@ -11,16 +11,18 @@ import { ScrCreateAdvancedSettingsPage }    from "./ScrCreateAdvancedSettingsPag
 import { ScrCreateMapInfoPage }             from "./ScrCreateMapInfoPage";
 import { ScrCreatePlayerInfoPage }          from "./ScrCreatePlayerInfoPage";
 import { FlowManager }                      from "../../../utility/FlowManager";
-import * as Helpers                         from "../../../utility/Helpers";
-import * as Lang                            from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                           from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                      from "../../../utility/ProtoTypes";
+import { Helpers }                          from "../../../utility/Helpers";
+import { Lang }                             from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                           from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                       from "../../../utility/proto/ProtoTypes";
 import { Types }                            from "../../../utility/Types";
-import * as SpmModel                        from "../../singlePlayerMode/model/SpmModel";
-import * as SpmProxy                        from "../../singlePlayerMode/model/SpmProxy";
-import * as ScrModel                        from "../model/ScrModel";
+import { SpmModel }                         from "../../singlePlayerMode/model/SpmModel";
+import { SpmProxy }                         from "../../singlePlayerMode/model/SpmProxy";
+import { ScrCreateModel }                         from "../model/ScrCreateModel";
 const CONFIRM_INTERVAL_MS = 5000;
 
 export class ScrCreateSettingsPanel extends UiPanel<void> {
@@ -110,14 +112,14 @@ export class ScrCreateSettingsPanel extends UiPanel<void> {
         ScrCreateMapListPanel.show();
     }
     private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-        const data      = ScrModel.Create.getData();
+        const data      = ScrCreateModel.getData();
         const callback  = () => {
             SpmProxy.reqSpmCreateScw(data);
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
         };
 
-        if (SpmModel.SaveSlot.checkIsEmpty(data.slotIndex)) {
+        if (SpmModel.checkIsEmpty(data.slotIndex)) {
             callback();
         } else {
             CommonConfirmPanel.show({

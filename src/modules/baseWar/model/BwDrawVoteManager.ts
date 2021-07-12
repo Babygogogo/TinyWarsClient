@@ -1,10 +1,11 @@
 
-import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { Logger }                       from "../../../utility/Logger";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
 import ISerialPlayerManager             = ProtoTypes.WarSerialization.ISerialPlayerManager;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwDrawVoteManager {
     private _remainingVotes : number | null | undefined;

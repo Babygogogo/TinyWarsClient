@@ -1,15 +1,17 @@
 
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiZoomableMap }                from "../../../gameui/UiZoomableMap";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
-import { UiMapInfo }                    from "../../../gameui/UiMapInfo";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
-import * as WarMapModel                 from "../../warMap/model/WarMapModel";
-import * as SpmModel                    from "../model/SpmModel";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { UiMapInfo }                    from "../../../utility/ui/UiMapInfo";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import { SpmModel }                     from "../model/SpmModel";
 
 export type OpenDataForSpmWarMapInfoPage = {
     slotIndex   : number;
@@ -52,7 +54,7 @@ export class SpmWarMapInfoPage extends UiTabPage<OpenDataForSpmWarMapInfoPage> {
         this._labelLoading.text = Lang.getText(LangTextType.A0150);
     }
     private async _updateComponentsForWarInfo(): Promise<void> {
-        const slotData      = SpmModel.SaveSlot.getSlotDict().get(this._getOpenData().slotIndex);
+        const slotData      = SpmModel.getSlotDict().get(this._getOpenData().slotIndex);
         const warData       = slotData ? slotData.warData : null;
         const zoomMap       = this._zoomMap;
         const uiMapInfo     = this._uiMapInfo;

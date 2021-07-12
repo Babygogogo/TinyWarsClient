@@ -1,5 +1,5 @@
 
-import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
 import { BwCursor }             from "./BwCursor";
 import { BwGridVisualEffect }   from "./BwGridVisualEffect";
 import { BwActionPlanner }      from "./BwActionPlanner";
@@ -8,9 +8,10 @@ import { BwTileMap }            from "./BwTileMap";
 import { BwUnitMap }            from "./BwUnitMap";
 import { BwWar }                from "./BwWar";
 import { BwFieldView }          from "../view/BwFieldView";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import * as BwHelpers           from "../../baseWar/model/BwHelpers";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import { BwHelpers }            from "../../baseWar/model/BwHelpers";
 import ISerialField             = ProtoTypes.WarSerialization.ISerialField;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export abstract class BwField {
     private readonly _cursor            = new BwCursor();

@@ -5,11 +5,12 @@ import { BwPlayer }                     from "../../baseWar/model/BwPlayer";
 import { BwWarEventManager }            from "../../baseWar/model/BwWarEventManager";
 import { SpwPlayerManager }             from "./SpwPlayerManager";
 import { SpwField }                     from "./SpwField";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as VisibilityHelpers           from "../../../utility/VisibilityHelpers";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import { BwVisibilityHelpers }            from "../../baseWar/model/BwVisibilityHelpers";
 import WarAction                        = ProtoTypes.WarAction;
 import ISpmWarSaveSlotExtraData         = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
 
@@ -26,12 +27,12 @@ export abstract class SpwWar extends BwWar {
 
     public updateTilesAndUnitsOnVisibilityChanged(): void {
         const teamIndexes   = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-        const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
+        const visibleUnits  = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
         for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
             unit.setViewVisible(visibleUnits.has(unit));
         }
 
-        const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
+        const visibleTiles  = BwVisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
         const tileMap       = this.getTileMap();
         for (const tile of tileMap.getAllTiles()) {
             tile.setHasFog(!visibleTiles.has(tile));

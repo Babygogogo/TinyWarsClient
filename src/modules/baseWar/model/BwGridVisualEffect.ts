@@ -1,11 +1,13 @@
 
-import { ClientErrorCode }          from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }          from "../../../utility/ClientErrorCode";
 import { BwGridVisualEffectView }   from "../view/BwGridVisualEffectView";
 import { BwWar }                    from "./BwWar";
-import { Notify }                   from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Notify }                   from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                    from "../../../utility/Types";
 import GridIndex                    = Types.GridIndex;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwGridVisualEffect {
     private readonly _view = new BwGridVisualEffectView();

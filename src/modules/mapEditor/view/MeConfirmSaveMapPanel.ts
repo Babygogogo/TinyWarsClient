@@ -1,17 +1,19 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as MeModel                     from "../model/MeModel";
-import * as MeProxy                     from "../model/MeProxy";
+import { MeModel }                      from "../model/MeModel";
+import { MeProxy }                      from "../model/MeProxy";
 import * as MeUtility                   from "../model/MeUtility";
 
 export class MeConfirmSaveMapPanel extends UiPanel<void> {

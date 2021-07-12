@@ -1,17 +1,19 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { UiButton }             from "../../../gameui/UiButton";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
 import { Types }                from "../../../utility/Types";
-import * as CommonProxy         from "../../common/model/CommonProxy";
+import { CommonProxy }          from "../../common/model/CommonProxy";
 
 export class CommonServerStatusPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;

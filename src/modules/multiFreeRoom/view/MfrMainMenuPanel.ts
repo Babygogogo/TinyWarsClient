@@ -1,28 +1,29 @@
 
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { UiButton }             from "../../../gameui/UiButton";
-import { CommonAlertPanel }     from "../../common/view/CommonAlertPanel";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { TwnsCommonAlertPanel }     from "../../common/view/CommonAlertPanel";
 import { MfrJoinRoomListPanel } from "./MfrJoinRoomListPanel";
 import { MfrMyRoomListPanel }   from "./MfrMyRoomListPanel";
-import { MfwMyWarListPanel }    from "../../multiFreeWar/view/MfwMyWarListPanel";
+import { TwnsMfwMyWarListPanel }    from "../../multiFreeWar/view/MfwMyWarListPanel";
 import { MrrMainMenuPanel }     from "../../multiRankRoom/view/MrrMainMenuPanel";
 import { SpmMainMenuPanel }     from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import { LobbyBottomPanel }     from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }        from "../../lobby/view/LobbyTopPanel";
+import { TwnsLobbyBottomPanel }     from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }        from "../../lobby/view/LobbyTopPanel";
 import { McrMainMenuPanel }     from "../../multiCustomRoom/view/McrMainMenuPanel";
 import { CcrMainMenuPanel }     from "../../coopCustomRoom/view/CcrMainMenuPanel";
-import * as FloatText           from "../../../utility/FloatText";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { TwnsLangTextType }         from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                from "../../../utility/Types";
-import * as McrModel            from "../../multiCustomRoom/model/McrModel";
-import * as MfrModel            from "../../multiFreeRoom/model/MfrModel";
-import * as MpwModel            from "../../multiPlayerWar/model/MpwModel";
-import * as CcrModel            from "../../coopCustomRoom/model/CcrModel";
+import { FloatText }            from "../../../utility/FloatText";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { McrModel }             from "../../multiCustomRoom/model/McrModel";
+import { MfrModel }             from "../../multiFreeRoom/model/MfrModel";
+import { MpwModel }             from "../../multiPlayerWar/model/MpwModel";
+import { CcrModel }             from "../../coopCustomRoom/model/CcrModel";
 import Tween                    = egret.Tween;
+import LangTextType     = TwnsLangTextType.LangTextType;
 
 export class MfrMainMenuPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -121,24 +122,24 @@ export class MfrMainMenuPanel extends UiPanel<void> {
     }
     private _onTouchedBtnJoinRoom(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         MfrJoinRoomListPanel.show();
     }
     private _onTouchedBtnMyRoom(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         MfrMyRoomListPanel.show();
     }
     private _onTouchedBtnContinueWar(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
-        MfwMyWarListPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+        TwnsMfwMyWarListPanel.MfwMyWarListPanel.show();
     }
     private _onTouchedBtnHelp(): void {
-        CommonAlertPanel.show({
+        TwnsCommonAlertPanel.CommonAlertPanel.show({
             title   : Lang.getText(LangTextType.B0143),
             content : Lang.getText(LangTextType.R0007),
         });

@@ -1,19 +1,21 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTextInput }                  from "../../../gameui/UiTextInput";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { WeConditionTypeListPanel }     from "./WeConditionTypeListPanel";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
 import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
 import IWarEventCondition               = ProtoTypes.WarEvent.IWarEventCondition;
+import LangTextType         = TwnsLangTextType.LangTextType;
 
 type OpenDataForWeConditionModifyPanel10 = {
     fullData    : IWarEventFullData;

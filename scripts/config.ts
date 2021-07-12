@@ -32,7 +32,7 @@ const config: ResourceManagerConfig = {
                     new WebpackBundlePlugin({ //新的 Webpack 编译器
                         libraryType: "debug",
                         defines: { DEBUG: true, RELEASE: false },
-                        typescript: { mode: 'modern' },
+                        typescript: { mode: 'legacy' },
                         html: {
                             templateFilePath: "template/web/index.html"
                         }
@@ -51,7 +51,7 @@ const config: ResourceManagerConfig = {
                     new WebpackBundlePlugin({ //新的 Webpack 编译器
                         libraryType: "release",
                         defines: { DEBUG: false, RELEASE: true },
-                        typescript: { mode: 'modern' },
+                        typescript: { mode: 'legacy' },
                         html: {
                             templateFilePath: "template/web/index.html"
                         },
@@ -88,7 +88,7 @@ const config: ResourceManagerConfig = {
                     new WebpackDevServerPlugin({ //新的 Webpack 编译器
                         libraryType: "debug",
                         defines: { DEBUG: true, RELEASE: false },
-                        typescript: { mode: 'modern' },
+                        typescript: { mode: 'legacy' },
                         html: {
                             templateFilePath: "template/web/index.html"
                         },

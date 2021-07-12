@@ -1,12 +1,12 @@
 
-import { UiImage }          from "../../../gameui/UiImage";
-import * as CommonModel     from "../../common/model/CommonModel";
-import * as TimeModel       from "../../time/model/TimeModel";
-import * as UserModel       from "../../user/model/UserModel";
+import { UiImage }          from "../../../utility/ui/UiImage";
+import { CommonModel }      from "../../common/model/CommonModel";
+import { TimeModel }        from "../../time/model/TimeModel";
+import { UserModel }        from "../../user/model/UserModel";
 import { Types }            from "../../../utility/Types";
 import { Logger }           from "../../../utility/Logger";
-import * as CommonConstants from "../../../utility/CommonConstants";
-import * as ProtoTypes      from "../../../utility/ProtoTypes";
+import { CommonConstants }  from "../../../utility/CommonConstants";
+import { ProtoTypes }       from "../../../utility/proto/ProtoTypes";
 import TileObjectType       = Types.TileObjectType;
 import TileBaseType         = Types.TileBaseType;
 import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;

@@ -1,19 +1,20 @@
 
-import { UiButton }             from "../../../gameui/UiButton";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { UiTextInput }          from "../../../gameui/UiTextInput";
-import { UiTabPage }            from "../../../gameui/UiTabPage";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { UiTextInput }          from "../../../utility/ui/UiTextInput";
+import { UiTabPage }            from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }      from "../../common/view/CommonHelpPanel";
 import { CommonInputPanel }     from "../../common/view/CommonInputPanel";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as FloatText           from "../../../utility/FloatText";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { FloatText }            from "../../../utility/FloatText";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { Types }                from "../../../utility/Types";
-import * as MfrModel            from "../../multiFreeRoom/model/MfrModel";
+import { MfrCreateModel }       from "../model/MfrCreateModel";
+import LangTextType             = TwnsLangTextType.LangTextType;
+import NotifyType               = TwnsNotifyType.NotifyType;
 
 export class MfrCreateBasicSettingsPage extends UiTabPage<void> {
     private readonly _labelMapNameTitle             : UiLabel;
@@ -102,17 +103,17 @@ export class MfrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _onFocusOutInputWarName(e: egret.TouchEvent): void {
-        MfrModel.Create.setWarName(this._inputWarName.text || undefined);
+        MfrCreateModel.setWarName(this._inputWarName.text || undefined);
         this._updateInputWarName();
     }
 
     private _onFocusOutInputWarPassword(e: egret.Event): void {
-        MfrModel.Create.setWarPassword(this._inputWarPassword.text || undefined);
+        MfrCreateModel.setWarPassword(this._inputWarPassword.text || undefined);
         this._updateInputWarPassword();
     }
 
     private _onFocusOutInputWarComment(e: egret.Event): void {
-        MfrModel.Create.setWarComment(this._inputWarComment.text || undefined);
+        MfrCreateModel.setWarComment(this._inputWarComment.text || undefined);
         this._updateInputWarComment();
     }
 
@@ -124,7 +125,7 @@ export class MfrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _onTouchedBtnTimerType(e: egret.TouchEvent): void {
-        MfrModel.Create.tickBootTimerType();
+        MfrCreateModel.tickBootTimerType();
         this._updateGroupTimer();
     }
 
@@ -136,7 +137,7 @@ export class MfrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _onTouchedBtnTimerRegular(e: egret.TouchEvent): void {
-        MfrModel.Create.tickTimerRegularTime();
+        MfrCreateModel.tickTimerRegularTime();
         this._updateGroupTimer();
     }
 
@@ -145,7 +146,7 @@ export class MfrCreateBasicSettingsPage extends UiTabPage<void> {
         const maxValue = CommonConstants.WarBootTimerIncrementalMaxLimit;
         CommonInputPanel.show({
             title           : Lang.getText(LangTextType.B0389),
-            currentValue    : "" + MfrModel.Create.getBootTimerParams()[1],
+            currentValue    : "" + MfrCreateModel.getBootTimerParams()[1],
             maxChars        : 5,
             charRestrict    : "0-9",
             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
@@ -155,7 +156,7 @@ export class MfrCreateBasicSettingsPage extends UiTabPage<void> {
                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    MfrModel.Create.setTimerIncrementalInitialTime(value);
+                    MfrCreateModel.setTimerIncrementalInitialTime(value);
                     this._updateGroupTimer();
                 }
             },
@@ -167,7 +168,7 @@ export class MfrCreateBasicSettingsPage extends UiTabPage<void> {
         const maxValue = CommonConstants.WarBootTimerIncrementalMaxLimit;
         CommonInputPanel.show({
             title           : Lang.getText(LangTextType.B0390),
-            currentValue    : "" + MfrModel.Create.getBootTimerParams()[2],
+            currentValue    : "" + MfrCreateModel.getBootTimerParams()[2],
             maxChars        : 5,
             charRestrict    : "0-9",
             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
@@ -177,7 +178,7 @@ export class MfrCreateBasicSettingsPage extends UiTabPage<void> {
                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    MfrModel.Create.setTimerIncrementalIncrementalValue(value);
+                    MfrCreateModel.setTimerIncrementalIncrementalValue(value);
                     this._updateGroupTimer();
                 }
             },
@@ -207,15 +208,15 @@ export class MfrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _updateInputWarName(): void {
-        this._inputWarName.text = MfrModel.Create.getWarName();
+        this._inputWarName.text = MfrCreateModel.getWarName();
     }
 
     private _updateInputWarPassword(): void {
-        this._inputWarPassword.text = MfrModel.Create.getWarPassword();
+        this._inputWarPassword.text = MfrCreateModel.getWarPassword();
     }
 
     private _updateInputWarComment(): void {
-        this._inputWarComment.text = MfrModel.Create.getWarComment();
+        this._inputWarComment.text = MfrCreateModel.getWarComment();
     }
 
     private async _updateLabelMapName(): Promise<void> {
@@ -227,11 +228,11 @@ export class MfrCreateBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _updateLabelHasFog(): void {
-        this._labelHasFog.text = Lang.getText(MfrModel.Create.getHasFog() ? LangTextType.B0012 : LangTextType.B0013);
+        this._labelHasFog.text = Lang.getText(MfrCreateModel.getHasFog() ? LangTextType.B0012 : LangTextType.B0013);
     }
 
     private _updateGroupTimer(): void {
-        const params                = MfrModel.Create.getBootTimerParams();
+        const params                = MfrCreateModel.getBootTimerParams();
         const timerType             : Types.BootTimerType = params[0];
         this._labelTimerType.text   = Lang.getBootTimerTypeName(timerType);
 

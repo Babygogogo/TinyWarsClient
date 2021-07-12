@@ -1,5 +1,5 @@
 
-import * as VisibilityHelpers           from "../../../utility/VisibilityHelpers";
+import { BwVisibilityHelpers }            from "../../baseWar/model/BwVisibilityHelpers";
 import { BwFogMap }                     from "../../baseWar/model/BwFogMap";
 import { SpwWar }                       from "./SpwWar";
 
@@ -8,12 +8,12 @@ export class SpwFogMap extends BwFogMap {
         this._setWar(war);
 
         const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-        const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
+        const visibleUnits  = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
         for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
             unit.setViewVisible(visibleUnits.has(unit));
         }
 
-        const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
+        const visibleTiles = BwVisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
         for (const tile of war.getTileMap().getAllTiles()) {
             tile.setHasFog(!visibleTiles.has(tile));
             tile.flushDataToView();

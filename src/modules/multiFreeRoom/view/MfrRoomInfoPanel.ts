@@ -1,12 +1,12 @@
 
-import { UiImage }                                                              from "../../../gameui/UiImage";
-import { UiListItemRenderer }                                                   from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                                                              from "../../../gameui/UiPanel";
-import { UiButton }                                                             from "../../../gameui/UiButton";
-import { UiLabel }                                                              from "../../../gameui/UiLabel";
-import { UiScrollList }                                                         from "../../../gameui/UiScrollList";
-import { UiTab }                                                                from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                                                    from "../../../gameui/UiTabItemRenderer";
+import { UiImage }                                                              from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                                                              from "../../../utility/ui/UiPanel";
+import { UiButton }                                                             from "../../../utility/ui/UiButton";
+import { UiLabel }                                                              from "../../../utility/ui/UiLabel";
+import { UiScrollList }                                                         from "../../../utility/ui/UiScrollList";
+import { UiTab }                                                                from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
 import { ChatPanel }                                                            from "../../chat/view/ChatPanel";
 import { CommonConfirmPanel }                                                   from "../../common/view/CommonConfirmPanel";
 import { MfrMyRoomListPanel }                                                   from "./MfrMyRoomListPanel";
@@ -14,21 +14,23 @@ import { OpenDataForMfrRoomMapInfoPage, MfrRoomMapInfoPage }                    
 import { OpenDataForMfrRoomPlayerInfoPage, MfrRoomPlayerInfoPage }              from "./MfrRoomPlayerInfoPage";
 import { OpenDataForMfrRoomBasicSettingsPage, MfrRoomBasicSettingsPage }        from "./MfrRoomBasicSettingsPage";
 import { OpenDataForMfrRoomAdvancedSettingsPage, MfrRoomAdvancedSettingsPage }  from "./MfrRoomAdvancedSettingsPage";
-import * as CommonConstants                                                     from "../../../utility/CommonConstants";
-import * as ConfigManager                                                       from "../../../utility/ConfigManager";
-import * as FloatText                                                           from "../../../utility/FloatText";
-import * as Helpers                                                             from "../../../utility/Helpers";
-import * as Lang                                                                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                                                               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                                                          from "../../../utility/ProtoTypes";
+import { CommonConstants }                                                      from "../../../utility/CommonConstants";
+import { ConfigManager }                                                        from "../../../utility/ConfigManager";
+import { FloatText }                                                            from "../../../utility/FloatText";
+import { Helpers }                                                              from "../../../utility/Helpers";
+import { Lang }                                                                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                                                               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                                                           from "../../../utility/proto/ProtoTypes";
 import { Types }                                                                from "../../../utility/Types";
-import * as BwHelpers                                                           from "../../baseWar/model/BwHelpers";
-import * as BwWarRuleHelper                                                     from "../../baseWar/model/BwWarRuleHelper";
-import * as MfrModel                                                            from "../../multiFreeRoom/model/MfrModel";
-import * as MfrProxy                                                            from "../../multiFreeRoom/model/MfrProxy";
-import * as UserModel                                                           from "../../user/model/UserModel";
+import { BwHelpers }                                                            from "../../baseWar/model/BwHelpers";
+import { BwWarRuleHelpers }                                                      from "../../baseWar/model/BwWarRuleHelpers";
+import { MfrModel }                                                             from "../../multiFreeRoom/model/MfrModel";
+import { MfrProxy }                                                             from "../../multiFreeRoom/model/MfrProxy";
+import { UserModel }                                                            from "../../user/model/UserModel";
 import NetMessage                                                               = ProtoTypes.NetMessage;
 
 type OpenDataForMfrRoomInfoPanel = {
@@ -504,7 +506,7 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
         if (data) {
             const playerIndex       = data.playerIndex;
             const roomInfo          = await MfrModel.getRoomInfo(data.roomId);
-            const teamIndex         = roomInfo ? BwWarRuleHelper.getTeamIndex(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule, playerIndex) : null;
+            const teamIndex         = roomInfo ? BwWarRuleHelpers.getTeamIndex(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule, playerIndex) : null;
             this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(teamIndex)})`;
         }
     }

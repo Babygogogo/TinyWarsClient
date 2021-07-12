@@ -1,18 +1,20 @@
 
-import { UiListItemRenderer }       from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                  from "../../../gameui/UiPanel";
-import { UiButton }                 from "../../../gameui/UiButton";
-import { UiLabel }                  from "../../../gameui/UiLabel";
-import { UiScrollList }             from "../../../gameui/UiScrollList";
+import { UiListItemRenderer }       from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                  from "../../../utility/ui/UiPanel";
+import { UiButton }                 from "../../../utility/ui/UiButton";
+import { UiLabel }                  from "../../../utility/ui/UiLabel";
+import { UiScrollList }             from "../../../utility/ui/UiScrollList";
 import { MmReviewListPanel }        from "./MmReviewListPanel";
 import { MmAvailabilityListPanel }  from "./MmAvailabilityListPanel";
 import { MmTagListPanel }           from "./MmTagListPanel";
-import * as FloatText               from "../../../utility/FloatText";
+import { FloatText }                from "../../../utility/FloatText";
 import { FlowManager }              from "../../../utility/FlowManager";
-import * as Lang                    from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                   from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Lang }                     from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                   from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                    from "../../../utility/Types";
 
 export class MmMainMenuPanel extends UiPanel<void> {

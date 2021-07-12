@@ -1,19 +1,21 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
-import * as MpwModel                    from "../../multiPlayerWar/model/MpwModel";
+import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import { MpwModel }                     from "../../multiPlayerWar/model/MpwModel";
 import PlayerRuleType                   = Types.PlayerRuleType;
 
 export type OpenDataForMrwWarAdvancedSettingsPage = {
@@ -227,77 +229,77 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
     private async _updateComponentsForValueAsTeamIndex(playerIndex: number): Promise<void> {
         const warInfo           = await this._getWarInfo();
-        const teamIndex         = warInfo ? BwWarRuleHelper.getTeamIndex(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+        const teamIndex         = warInfo ? BwWarRuleHelpers.getTeamIndex(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = teamIndex == null ? null : Lang.getPlayerTeamName(teamIndex);
         labelValue.textColor    = 0xFFFFFF;
     }
     private async _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): Promise<void> {
         const warInfo           = await this._getWarInfo();
-        const currValue         = warInfo ? (BwWarRuleHelper.getBannedCoIdArray(warInfo.settingsForCommon.warRule, playerIndex) || []).length : 0;
+        const currValue         = warInfo ? (BwWarRuleHelpers.getBannedCoIdArray(warInfo.settingsForCommon.warRule, playerIndex) || []).length : 0;
         const labelValue        = this._labelValue;
         labelValue.text         = `${currValue}`;
         labelValue.textColor    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
     }
     private async _updateComponentsForValueAsInitialFund(playerIndex: number): Promise<void> {
         const warInfo           = await this._getWarInfo();
-        const currValue         = warInfo ? BwWarRuleHelper.getInitialFund(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+        const currValue         = warInfo ? BwWarRuleHelpers.getInitialFund(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
     }
     private async _updateComponentsForValueAsIncomeMultiplier(playerIndex: number): Promise<void> {
         const warInfo           = await this._getWarInfo();
-        const currValue         = warInfo ? BwWarRuleHelper.getIncomeMultiplier(warInfo.settingsForCommon.warRule, playerIndex): undefined;
+        const currValue         = warInfo ? BwWarRuleHelpers.getIncomeMultiplier(warInfo.settingsForCommon.warRule, playerIndex): undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
     }
     private async _updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex: number): Promise<void> {
         const warInfo           = await this._getWarInfo();
-        const currValue         = warInfo ? BwWarRuleHelper.getEnergyAddPctOnLoadCo(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+        const currValue         = warInfo ? BwWarRuleHelpers.getEnergyAddPctOnLoadCo(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
     }
     private async _updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex: number): Promise<void> {
         const warInfo           = await this._getWarInfo();
-        const currValue         = warInfo ? BwWarRuleHelper.getEnergyGrowthMultiplier(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+        const currValue         = warInfo ? BwWarRuleHelpers.getEnergyGrowthMultiplier(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
     }
     private async _updateComponentsForValueAsMoveRangeModifier(playerIndex: number): Promise<void> {
         const warInfo           = await this._getWarInfo();
-        const currValue         = warInfo ? BwWarRuleHelper.getMoveRangeModifier(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+        const currValue         = warInfo ? BwWarRuleHelpers.getMoveRangeModifier(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
     }
     private async _updateComponentsForValueAsAttackPowerModifier(playerIndex: number): Promise<void> {
         const warInfo           = await this._getWarInfo();
-        const currValue         = warInfo ? BwWarRuleHelper.getAttackPowerModifier(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+        const currValue         = warInfo ? BwWarRuleHelpers.getAttackPowerModifier(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
     }
     private async _updateComponentsForValueAsVisionRangeModifier(playerIndex: number): Promise<void> {
         const warInfo           = await this._getWarInfo();
-        const currValue         = warInfo ? BwWarRuleHelper.getVisionRangeModifier(warInfo.settingsForCommon.warRule, playerIndex): undefined;
+        const currValue         = warInfo ? BwWarRuleHelpers.getVisionRangeModifier(warInfo.settingsForCommon.warRule, playerIndex): undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
     }
     private async _updateComponentsForValueAsLuckLowerLimit(playerIndex: number): Promise<void> {
         const warInfo           = await this._getWarInfo();
-        const currValue         = warInfo ? BwWarRuleHelper.getLuckLowerLimit(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+        const currValue         = warInfo ? BwWarRuleHelpers.getLuckLowerLimit(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
     }
     private async _updateComponentsForValueAsLuckUpperLimit(playerIndex: number): Promise<void> {
         const warInfo           = await this._getWarInfo();
-        const currValue         = warInfo ? BwWarRuleHelper.getLuckUpperLimit(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+        const currValue         = warInfo ? BwWarRuleHelpers.getLuckUpperLimit(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);

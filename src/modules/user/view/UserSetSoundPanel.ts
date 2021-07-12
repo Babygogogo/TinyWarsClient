@@ -1,14 +1,16 @@
 
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiButton }             from "../../../gameui/UiButton";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { NotifyType }           from "../../../utility/NotifyType";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import * as SoundManager        from "../../../utility/SoundManager";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { SoundManager }         from "../../../utility/SoundManager";
 import { Types }                from "../../../utility/Types";
 
 export class UserSetSoundPanel extends UiPanel<void> {

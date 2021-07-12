@@ -1,6 +1,6 @@
 
 import * as MeUtility                   from "./MeUtility";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { BwPlayerManager }              from "../../baseWar/model/BwPlayerManager";
 import { MeField }                      from "./MeField";
 import WarSerialization                 = ProtoTypes.WarSerialization;

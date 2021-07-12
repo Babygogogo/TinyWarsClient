@@ -1,31 +1,32 @@
 
-import { UiImage }                          from "../../../gameui/UiImage";
-import { UiListItemRenderer }               from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                          from "../../../gameui/UiPanel";
-import { UiButton }                         from "../../../gameui/UiButton";
-import { UiLabel }                          from "../../../gameui/UiLabel";
-import { UiScrollList }                     from "../../../gameui/UiScrollList";
-import { UiTab }                            from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                from "../../../gameui/UiTabItemRenderer";
+import { UiImage }                          from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }               from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                          from "../../../utility/ui/UiPanel";
+import { UiButton }                         from "../../../utility/ui/UiButton";
+import { UiLabel }                          from "../../../utility/ui/UiLabel";
+import { UiScrollList }                     from "../../../utility/ui/UiScrollList";
+import { UiTab }                            from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
 import { McrCreateAdvancedSettingsPage }    from "./McrCreateAdvancedSettingsPage";
 import { McrCreateBasicSettingsPage }       from "./McrCreateBasicSettingsPage";
 import { McrCreateMapListPanel }            from "./McrCreateMapListPanel";
 import { McrCreateMapInfoPage }             from "./McrCreateMapInfoPage";
 import { McrCreateChooseCoPanel }           from "./McrCreateChooseCoPanel";
-import * as CommonConstants                 from "../../../utility/CommonConstants";
-import * as ConfigManager                   from "../../../utility/ConfigManager";
-import * as FloatText                       from "../../../utility/FloatText";
+import { CommonConstants }                  from "../../../utility/CommonConstants";
+import { ConfigManager }                    from "../../../utility/ConfigManager";
+import { FloatText }                        from "../../../utility/FloatText";
 import { FlowManager }                      from "../../../utility/FlowManager";
-import * as Helpers                         from "../../../utility/Helpers";
-import * as Lang                            from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                           from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Helpers }                          from "../../../utility/Helpers";
+import { Lang }                             from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import { Types }                            from "../../../utility/Types";
-import * as BwHelpers                       from "../../baseWar/model/BwHelpers";
-import * as BwWarRuleHelper                 from "../../baseWar/model/BwWarRuleHelper";
-import * as McrModel                        from "../../multiCustomRoom/model/McrModel";
-import * as McrProxy                        from "../../multiCustomRoom/model/McrProxy";
+import { BwHelpers }                        from "../../baseWar/model/BwHelpers";
+import { BwWarRuleHelpers }                  from "../../baseWar/model/BwWarRuleHelpers";
+import { McrCreateModel }                   from "../model/McrCreateModel";
+import { McrProxy }                         from "../../multiCustomRoom/model/McrProxy";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import NotifyType       = TwnsNotifyType.NotifyType;
 
 const CONFIRM_INTERVAL_MS = 5000;
 
@@ -132,14 +133,14 @@ export class McrCreateSettingsPanel extends UiPanel<void> {
         McrCreateMapListPanel.show();
     }
     private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-        const data = McrModel.Create.getData();
+        const data = McrCreateModel.getData();
         McrProxy.reqCreateRoom(data);
 
         this._btnConfirm.enabled = false;
         this._resetTimeoutForBtnConfirm();
     }
     private _onTouchedBtnChooseCo(e: egret.TouchEvent): void {
-        McrCreateChooseCoPanel.show({ coId: McrModel.Create.getSelfCoId() });
+        McrCreateChooseCoPanel.show({ coId: McrCreateModel.getSelfCoId() });
     }
 
     private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -184,12 +185,12 @@ export class McrCreateSettingsPanel extends UiPanel<void> {
     }
 
     private _updateBtnChooseCo(): void {
-        const cfg               = ConfigManager.getCoBasicCfg(McrModel.Create.getData().settingsForCommon.configVersion, McrModel.Create.getSelfCoId());
+        const cfg               = ConfigManager.getCoBasicCfg(McrCreateModel.getData().settingsForCommon.configVersion, McrCreateModel.getSelfCoId());
         this._btnChooseCo.label = cfg.name;
     }
 
     private async _initSclPlayerIndex(): Promise<void> {
-        const playersCountUnneutral = (await McrModel.Create.getMapRawData()).playersCountUnneutral;
+        const playersCountUnneutral = (await McrCreateModel.getMapRawData()).playersCountUnneutral;
         const dataArray             : DataForPlayerIndexRenderer[] = [];
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             dataArray.push({
@@ -304,13 +305,13 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
     public onItemTapEvent(e: eui.ItemTapEvent): void {
         const data = this.data;
         if (data) {
-            const creator       = McrModel.Create;
+            const creator       = McrCreateModel;
             const playerIndex   = data.playerIndex;
             creator.setSelfPlayerIndex(playerIndex);
 
-            const availableCoIdArray = BwWarRuleHelper.getAvailableCoIdArrayForPlayer(creator.getWarRule(), playerIndex, ConfigManager.getLatestFormalVersion());
+            const availableCoIdArray = BwWarRuleHelpers.getAvailableCoIdArrayForPlayer(creator.getWarRule(), playerIndex, ConfigManager.getLatestFormalVersion());
             if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
-                creator.setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdArray));
+                creator.setSelfCoId(BwWarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
             }
         }
     }
@@ -328,12 +329,12 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
         const data = this.data;
         if (data) {
             const playerIndex       = data.playerIndex;
-            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelper.getTeamIndex(McrModel.Create.getWarRule(), playerIndex))})`;
+            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelpers.getTeamIndex(McrCreateModel.getWarRule(), playerIndex))})`;
         }
     }
     private _updateState(): void {
         const data          = this.data;
-        this.currentState   = ((data) && (data.playerIndex === McrModel.Create.getSelfPlayerIndex())) ? `down` : `up`;
+        this.currentState   = ((data) && (data.playerIndex === McrCreateModel.getSelfPlayerIndex())) ? `down` : `up`;
     }
 }
 
@@ -356,7 +357,7 @@ class SkinIdRenderer extends UiListItemRenderer<DataForSkinIdRenderer> {
     public onItemTapEvent(e: eui.ItemTapEvent): void {
         const data = this.data;
         if (data) {
-            McrModel.Create.setSelfUnitAndTileSkinId(data.skinId);
+            McrCreateModel.setSelfUnitAndTileSkinId(data.skinId);
         }
     }
     private _onNotifyMcrCreateSelfSkinIdChanged(e: egret.Event): void {
@@ -367,7 +368,7 @@ class SkinIdRenderer extends UiListItemRenderer<DataForSkinIdRenderer> {
         const data = this.data;
         if (data) {
             const skinId            = data.skinId;
-            this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, McrModel.Create.getSelfUnitAndTileSkinId() === skinId);
+            this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, McrCreateModel.getSelfUnitAndTileSkinId() === skinId);
         }
     }
 }

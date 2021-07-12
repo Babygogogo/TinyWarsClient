@@ -1,12 +1,12 @@
 
-import "./gameui/UiScrollList";
-import "./gameui/UiButton";
-import "./gameui/UiTextInput";
-import "./gameui/UiZoomableMap";
-import "./gameui/UiTab";
-import "./gameui/UiCoInfo";
-import "./gameui/UiMapInfo";
-import "./gameui/UiRadioButton";
+import "./utility/ui/UiScrollList";
+import "./utility/ui/UiButton";
+import "./utility/ui/UiTextInput";
+import "./utility/ui/UiZoomableMap";
+import "./utility/ui/UiTab";
+import "./utility/ui/UiCoInfo";
+import "./utility/ui/UiMapInfo";
+import "./utility/ui/UiRadioButton";
 import { FlowManager }  from "./utility/FlowManager";
 
 // export declare interface Window {

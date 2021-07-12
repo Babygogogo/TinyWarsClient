@@ -1,26 +1,29 @@
 
-import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { BwCommonSettingManager }       from "../../baseWar/model/BwCommonSettingManager";
 import { BwWarEventManager }            from "../../baseWar/model/BwWarEventManager";
 import { RwWarMenuPanel }               from "../view/RwWarMenuPanel";
 import { RwPlayerManager }              from "./RwPlayerManager";
 import { RwField }                      from "./RwField";
-import * as BwWarActionExecutor         from "../../baseWar/model/BwWarActionExecutor";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { BwWarActionExecutor }          from "../../baseWar/model/BwWarActionExecutor";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as VisibilityHelpers           from "../../../utility/VisibilityHelpers";
+import { BwVisibilityHelpers }            from "../../baseWar/model/BwVisibilityHelpers";
 import WarType                          = Types.WarType;
 import WarAction                        = ProtoTypes.WarAction;
 import IWarActionContainer              = WarAction.IWarActionContainer;
 import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 type CheckPointData = {
     warData     : ISerialWar;
@@ -87,7 +90,7 @@ export class RwWar extends BwWar {
         // No need to update units.
 
         const tileMap       = this.getTileMap();
-        const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeam(this, this.getPlayerInTurn().getTeamIndex());
+        const visibleTiles  = BwVisibilityHelpers.getAllTilesVisibleToTeam(this, this.getPlayerInTurn().getTeamIndex());
         for (const tile of tileMap.getAllTiles()) {
             tile.setHasFog(!visibleTiles.has(tile));
             tile.flushDataToView();

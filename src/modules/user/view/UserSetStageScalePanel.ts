@@ -1,15 +1,17 @@
 
-import { UiButton }             from "../../../gameui/UiButton";
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { NotifyType }           from "../../../utility/NotifyType";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import * as LocalStorage        from "../../../utility/LocalStorage";
-import * as StageManager        from "../../../utility/StageManager";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { LocalStorage }         from "../../../utility/LocalStorage";
+import { StageManager }         from "../../../utility/StageManager";
 import { Types }                from "../../../utility/Types";
 import StageMinScale            = CommonConstants.StageMinScale;
 import StageMaxScale            = CommonConstants.StageMaxScale;

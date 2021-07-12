@@ -1,16 +1,17 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { BwWar }                        from "../../baseWar/model/BwWar";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
 
 type OpenDataForSpwChooseCoPanel = {

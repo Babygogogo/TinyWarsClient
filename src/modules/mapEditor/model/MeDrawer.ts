@@ -3,15 +3,18 @@ import { BwUnit }                       from "../../baseWar/model/BwUnit";
 import { BwTileMap }                    from "../../baseWar/model/BwTileMap";
 import { BwUnitMap }                    from "../../baseWar/model/BwUnitMap";
 import { MeWar }                        from "./MeWar";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as DestructionHelpers          from "../../../utility/DestructionHelpers";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as GridIndexHelpers            from "../../../utility/GridIndexHelpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { BwDestructionHelpers }           from "../../baseWar/model/BwDestructionHelpers";
+import { FloatText }                    from "../../../utility/FloatText";
+import { GridIndexHelpers }             from "../../../utility/GridIndexHelpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { NotifyData }                   from "../../../utility/notify/NotifyData";
 import { Types }                        from "../../../utility/Types";
 import * as MeUtility                   from "./MeUtility";
 import DrawerMode                       = Types.MapEditorDrawerMode;
@@ -72,12 +75,12 @@ export class MeDrawer {
     }
 
     private _onNotifyBwCursorTapped(e: egret.Event): void {
-        const data      = e.data as Notify.Data.BwCursorTapped;
+        const data      = e.data as NotifyData.BwCursorTapped;
         const gridIndex = data.tappedOn;
         this._handleAction(gridIndex);
     }
     private _onNotifyBwCursorDragged(e: egret.Event): void {
-        const data = e.data as Notify.Data.BwCursorDragged;
+        const data = e.data as NotifyData.BwCursorDragged;
         this._handleAction(data.draggedTo);
     }
 
@@ -193,7 +196,7 @@ export class MeDrawer {
         tile.startRunning(this._getWar());
         tile.flushDataToView();
 
-        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
+        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
 
         const symmetryType = this.getSymmetricalDrawType();
         const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -210,7 +213,7 @@ export class MeDrawer {
             t2.startRunning(this._getWar());
             t2.flushDataToView();
 
-            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
         }
     }
     private _handleDrawTileObject(gridIndex: GridIndex): void {
@@ -231,7 +234,7 @@ export class MeDrawer {
         tile.startRunning(this._getWar());
         tile.flushDataToView();
 
-        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
+        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
 
         const symmetryType = this.getSymmetricalDrawType();
         const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -248,7 +251,7 @@ export class MeDrawer {
             t2.startRunning(this._getWar());
             t2.flushDataToView();
 
-            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
         }
     }
     private _handleDrawUnit(gridIndex: GridIndex): void {
@@ -280,7 +283,7 @@ export class MeDrawer {
         unitMap.setUnitOnMap(unit);
         unitMap.setNextUnitId(unitId + 1);
 
-        Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as Notify.Data.MeUnitChanged);
+        Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as NotifyData.MeUnitChanged);
     }
     private _handleDeleteTileObject(gridIndex: GridIndex): void {
         const tileMap   = this._tileMap;
@@ -288,7 +291,7 @@ export class MeDrawer {
         tile.destroyTileObject();
         tile.flushDataToView();
 
-        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
+        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
 
         const symmetryType = this.getSymmetricalDrawType();
         const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -297,13 +300,13 @@ export class MeDrawer {
             t2.destroyTileObject();
             t2.flushDataToView();
 
-            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
         }
     }
     private _handleDeleteUnit(gridIndex: GridIndex): void {
         if (this._unitMap.getUnitOnMap(gridIndex)) {
-            DestructionHelpers.destroyUnitOnMap(this._getWar(), gridIndex, true);
-            Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as Notify.Data.MeUnitChanged);
+            BwDestructionHelpers.destroyUnitOnMap(this._getWar(), gridIndex, true);
+            Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as NotifyData.MeUnitChanged);
         }
     }
 }

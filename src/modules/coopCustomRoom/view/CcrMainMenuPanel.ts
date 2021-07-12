@@ -1,10 +1,10 @@
 
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { CommonAlertPanel }             from "../../common/view/CommonAlertPanel";
-import { CcwMyWarListPanel }            from "../../coopCustomWar/view/CcwMyWarListPanel";
-import { LobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
+import { TwnsCcwMyWarListPanel }            from "../../coopCustomWar/view/CcwMyWarListPanel";
+import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
 import { MrrMainMenuPanel }             from "../../multiRankRoom/view/MrrMainMenuPanel";
 import { SpmMainMenuPanel }             from "../../singlePlayerMode/view/SpmMainMenuPanel";
 import { CcrMyRoomListPanel }           from "./CcrMyRoomListPanel";
@@ -12,17 +12,18 @@ import { McrMainMenuPanel }             from "../../multiCustomRoom/view/McrMain
 import { MfrMainMenuPanel }             from "../../multiFreeRoom/view/MfrMainMenuPanel";
 import { CcrCreateMapListPanel }        from "./CcrCreateMapListPanel";
 import { CcrJoinRoomListPanel }         from "./CcrJoinRoomListPanel";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { TwnsLangTextType }                 from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }                   from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
-import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
-import * as McrModel                    from "../../multiCustomRoom/model/McrModel";
-import * as MfrModel                    from "../../multiFreeRoom/model/MfrModel";
-import * as MpwModel                    from "../../multiPlayerWar/model/MpwModel";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { CcrModel }                     from "../../coopCustomRoom/model/CcrModel";
+import { McrModel }                     from "../../multiCustomRoom/model/McrModel";
+import { MfrModel }                     from "../../multiFreeRoom/model/MfrModel";
+import { MpwModel }                     from "../../multiPlayerWar/model/MpwModel";
 import Tween                            = egret.Tween;
+import LangTextType     = TwnsLangTextType.LangTextType;
 
 export class CcrMainMenuPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -113,30 +114,30 @@ export class CcrMainMenuPanel extends UiPanel<void> {
     }
     private _onTouchedBtnCreateRoom(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         CcrCreateMapListPanel.show({});
     }
     private _onTouchedBtnJoinRoom(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         CcrJoinRoomListPanel.show();
     }
     private _onTouchedBtnMyRoom(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         CcrMyRoomListPanel.show();
     }
     private _onTouchedBtnContinueWar(): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
-        CcwMyWarListPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+        TwnsCcwMyWarListPanel.CcwMyWarListPanel.show();
     }
     private _onTouchedBtnHelp(): void {
-        CommonAlertPanel.show({
+        TwnsCommonAlertPanel.CommonAlertPanel.show({
             title   : Lang.getText(LangTextType.B0143),
             content : Lang.getText(LangTextType.R0008),
         });

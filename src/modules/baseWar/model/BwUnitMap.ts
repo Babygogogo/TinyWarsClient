@@ -2,19 +2,20 @@
 import { BwWar }                from "./BwWar";
 import { BwUnit }               from "./BwUnit";
 import { BwUnitMapView }        from "../view/BwUnitMapView";
-import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
-import * as BwHelpers           from "./BwHelpers";
+import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
+import { BwHelpers }            from "./BwHelpers";
 import { Types }                from "../../../utility/Types";
-import * as Helpers             from "../../../utility/Helpers";
-import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
+import { Helpers }              from "../../../utility/Helpers";
+import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
 import { Logger }               from "../../../utility/Logger";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import * as VisibilityHelpers   from "../../../utility/VisibilityHelpers";
-import * as ConfigManager       from "../../../utility/ConfigManager";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import { BwVisibilityHelpers }    from "./BwVisibilityHelpers";
+import { ConfigManager }        from "../../../utility/ConfigManager";
 import GridIndex                = Types.GridIndex;
 import WarSerialization         = ProtoTypes.WarSerialization;
 import ISerialUnitMap           = WarSerialization.ISerialUnitMap;
 import ISerialUnit              = WarSerialization.ISerialUnit;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwUnitMap {
     private _war            : BwWar | undefined;
@@ -197,7 +198,7 @@ export class BwUnitMap {
         const war           = this.getWar();
         const units         : ISerialUnit[] = [];
         const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-        for (const unit of VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+        for (const unit of BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
             units.push(unit.serializeForCreateSfw());
 
             if (teamIndexes.has(unit.getTeamIndex())) {
@@ -222,7 +223,7 @@ export class BwUnitMap {
         const war           = this.getWar();
         const units         : ISerialUnit[] = [];
         const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-        for (const unit of VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+        for (const unit of BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
             units.push(unit.serializeForCreateMfr());
 
             if (teamIndexes.has(unit.getTeamIndex())) {
@@ -351,7 +352,7 @@ export class BwUnitMap {
             return undefined;
         }
 
-        return (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+        return (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
             war,
             unitType,
             isDiving,

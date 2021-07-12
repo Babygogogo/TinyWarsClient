@@ -1,16 +1,18 @@
 
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
-import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
-import * as WarMapModel                 from "../../warMap/model/WarMapModel";
-import * as SpmModel                    from "../model/SpmModel";
+import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import { SpmModel }                     from "../model/SpmModel";
 
 export type OpenDataForSpmWarBasicSettingsPage = {
     slotIndex   : number | null;
@@ -137,6 +139,6 @@ export class SpmWarBasicSettingsPage extends UiTabPage<OpenDataForSpmWarBasicSet
     }
 
     private _getSlotData(): Types.SpmWarSaveSlotData {
-        return SpmModel.SaveSlot.getSlotDict().get(this._getOpenData().slotIndex);
+        return SpmModel.getSlotDict().get(this._getOpenData().slotIndex);
     }
 }

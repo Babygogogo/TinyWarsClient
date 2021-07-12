@@ -1,16 +1,18 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { UiButton }             from "../../../gameui/UiButton";
-import { UiComponent }          from "../../../gameui/UiComponent";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import * as ConfigManager       from "../../../utility/ConfigManager";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { UiComponent }          from "../../../utility/ui/UiComponent";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { ConfigManager }        from "../../../utility/ConfigManager";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
 import { Types }                from "../../../utility/Types";
 import WarRule                  = ProtoTypes.WarRule;
 

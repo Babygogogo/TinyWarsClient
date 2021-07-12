@@ -1,20 +1,22 @@
 
-import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
 import { Types }                from "../../../utility/Types";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Logger }               from "../../../utility/Logger";
-import * as ConfigManager       from "../../../utility/ConfigManager";
-import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as UserModel           from "../../user/model/UserModel";
-import * as BwHelpers           from "./BwHelpers";
+import { ConfigManager }        from "../../../utility/ConfigManager";
+import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { UserModel }            from "../../user/model/UserModel";
+import { BwHelpers }            from "./BwHelpers";
 import { BwWar }                from "./BwWar";
 import GridIndex                = Types.GridIndex;
 import PlayerAliveState         = Types.PlayerAliveState;
 import CoSkillType              = Types.CoSkillType;
 import ISerialPlayer            = ProtoTypes.WarSerialization.ISerialPlayer;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwPlayer {
     private _playerIndex            : number;

@@ -1,13 +1,13 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
+import { UiImage }              from "../../../utility/ui/UiImage";
 import { Types }                from "../../../utility/Types";
-import * as Helpers             from "../../../utility/Helpers";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as ConfigManager       from "../../../utility/ConfigManager";
-import * as BwHelpers           from "../../baseWar/model/BwHelpers";
-import * as TimeModel           from "../../time/model/TimeModel";
-import * as CommonModel         from "../../common/model/CommonModel";
-import * as UserModel           from "../../user/model/UserModel";
+import { Helpers }              from "../../../utility/Helpers";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { ConfigManager }        from "../../../utility/ConfigManager";
+import { BwHelpers }            from "../../baseWar/model/BwHelpers";
+import { TimeModel }            from "../../time/model/TimeModel";
+import { CommonModel }          from "../../common/model/CommonModel";
+import { UserModel }            from "../../user/model/UserModel";
 
 const { width: GRID_WIDTH, height: GRID_HEIGHT }    = CommonConstants.GridSize;
 const IMG_UNIT_STATE_WIDTH                          = 28;

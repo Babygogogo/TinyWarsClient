@@ -1,28 +1,30 @@
 
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTab }                        from "../../../gameui/UiTab";
-import { UiTabItemRenderer }            from "../../../gameui/UiTabItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTab }                        from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }            from "../../../utility/ui/UiTabItemRenderer";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { MfrCreateSettingsPanel }       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import { MeMfwAdvancedSettingsPage }    from "./MeMfwAdvancedSettingsPage";
 import { MeMfwBasicSettingsPage }       from "./MeMfwBasicSettingsPage";
 import { MeWarMenuPanel }               from "./MeWarMenuPanel";
-import { BroadcastPanel }               from "../../broadcast/view/BroadcastPanel";
-import { LobbyBackgroundPanel }         from "../../lobby/view/LobbyBackgroundPanel";
+import { TwnsBroadcastPanel }           from "../../broadcast/view/BroadcastPanel";
+import { TwnsLobbyBackgroundPanel }     from "../../lobby/view/LobbyBackgroundPanel";
 import { TwWar }                        from "../../testWar/model/TwWar";
-import * as FloatText                   from "../../../utility/FloatText";
 import { FlowManager }                  from "../../../utility/FlowManager";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as StageManager                from "../../../utility/StageManager";
+import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
 import { Types }                        from "../../../utility/Types";
-import * as MfrModel                    from "../../multiFreeRoom/model/MfrModel";
-import * as MeModel                     from "../model/MeModel";
+import { MeModel }                      from "../model/MeModel";
+import { MeMfwModel }                   from "../model/MeMfwModel";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import { StageManager }                 from "../../../utility/StageManager";
+import { MfrCreateModel }               from "../../multiFreeRoom/model/MfrCreateModel";
+import NotifyType                       = TwnsNotifyType.NotifyType;
+import LangTextType                     = TwnsLangTextType.LangTextType;
 
 export class MeMfwSettingsPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -84,8 +86,8 @@ export class MeMfwSettingsPanel extends UiPanel<void> {
     }
 
     private async _onTouchedBtnConfirm(): Promise<void> {
-        MeModel.Mfw.reviseWarRuleForAi();
-        const warData   = MeModel.Mfw.getWarData();
+        MeMfwModel.reviseWarRuleForAi();
+        const warData   = MeMfwModel.getWarData();
         const errorCode = await (new TwWar().init(warData));
         if (errorCode) {
             FloatText.show(Lang.getErrorText(errorCode));
@@ -93,11 +95,11 @@ export class MeMfwSettingsPanel extends UiPanel<void> {
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0201),
                 callback: () => {
-                    MfrModel.Create.resetDataByInitialWarData(warData);
+                    MfrCreateModel.resetDataByInitialWarData(warData);
                     MeModel.unloadWar();
                     StageManager.closeAllPanels();
-                    LobbyBackgroundPanel.show();
-                    BroadcastPanel.show();
+                    TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+                    TwnsBroadcastPanel.BroadcastPanel.show();
                     MfrCreateSettingsPanel.show();
                 },
             });

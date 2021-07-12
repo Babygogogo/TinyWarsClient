@@ -1,23 +1,25 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
-import * as UserModel                   from "../../user/model/UserModel";
-import * as WarMapModel                 from "../../warMap/model/WarMapModel";
-import * as MrrModel                    from "../model/MrrModel";
+import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import { UserModel }                    from "../../user/model/UserModel";
+import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import { MrrModel }                     from "../model/MrrModel";
 
 export type OpenDataForMrrRoomPlayerInfoPage = {
     roomId  : number;

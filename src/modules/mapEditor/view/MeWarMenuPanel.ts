@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
@@ -27,21 +27,25 @@ import { MeOffsetPanel }                from "./MeOffsetPanel";
 import { WeEventListPanel }             from "../../warEvent/view/WeEventListPanel";
 import { MmAcceptMapPanel }             from "../../mapManagement/view/MmAcceptMapPanel";
 import { MmRejectMapPanel }             from "../../mapManagement/view/MmRejectMapPanel";
-import { LangTextType }                 from "../../../utility/LangTextType";
-import { NotifyType }                   from "../../../utility/NotifyType";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as FloatText                   from "../../../utility/FloatText";
+import { TwnsLangTextType }                 from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }                   from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { FloatText }                    from "../../../utility/FloatText";
 import { FlowManager }                  from "../../../utility/FlowManager";
-import * as Lang                        from "../../../utility/Lang";
+import { Lang }                         from "../../../utility/lang/Lang";
 import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/Notify";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { Notify }                       from "../../../utility/notify/Notify";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as MeModel                     from "../model/MeModel";
+import { MeModel }                      from "../model/MeModel";
+import { MeSimModel }                   from "../model/MeSimModel";
+import { MeMfwModel }                   from "../model/MeMfwModel";
 import * as MeUtility                   from "../model/MeUtility";
 import UnitType                         = Types.UnitType;
 import TileBaseType                     = Types.TileBaseType;
 import TileObjectType                   = Types.TileObjectType;
+import LangTextType         = TwnsLangTextType.LangTextType;
 
 // eslint-disable-next-line no-shadow
 enum MenuType {
@@ -575,7 +579,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
                 }
 
                 const cb = () => {
-                    MeModel.Sim.resetData(mapRawData, war.serializeForCreateSfw());
+                    MeSimModel.resetData(mapRawData, war.serializeForCreateSfw());
                     MeSimSettingsPanel.show();
                     this.close();
                 };
@@ -610,7 +614,7 @@ export class MeWarMenuPanel extends UiPanel<void> {
                 }
 
                 const cb = () => {
-                    MeModel.Mfw.resetData(mapRawData, war.serializeForCreateMfr());
+                    MeMfwModel.resetData(mapRawData, war.serializeForCreateMfr());
                     MeMfwSettingsPanel.show();
                     this.close();
                 };

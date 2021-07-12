@@ -1,21 +1,23 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiComponent }                  from "../../../gameui/UiComponent";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiCoInfo }                     from "../../../gameui/UiCoInfo";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiComponent }                  from "../../../utility/ui/UiComponent";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiCoInfo }                     from "../../../utility/ui/UiCoInfo";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
-import { CommonAlertPanel }             from "../../common/view/CommonAlertPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
-import * as MrrProxy                    from "../model/MrrProxy";
+import { MrrProxy }                     from "../model/MrrProxy";
 
 type OpenDataForMrrRoomBanCoPanel = {
     roomId: number;
@@ -108,7 +110,7 @@ export class MrrRoomBanCoPanel extends UiPanel<OpenDataForMrrRoomBanCoPanel> {
     private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
         const bannedCoIdSet = this._bannedCoIdSet;
         if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-            CommonAlertPanel.show({
+            TwnsCommonAlertPanel.CommonAlertPanel.show({
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0130),
             });
@@ -118,7 +120,7 @@ export class MrrRoomBanCoPanel extends UiPanel<OpenDataForMrrRoomBanCoPanel> {
         const bannedCoCount = bannedCoIdSet.size;
         const maxCount      = CommonConstants.RankMaxBanCoCount;
         if (bannedCoCount > maxCount) {
-            CommonAlertPanel.show({
+            TwnsCommonAlertPanel.CommonAlertPanel.show({
                 title   : Lang.getText(LangTextType.B0088),
                 content: Lang.getFormattedText(LangTextType.F0031, maxCount),
             });
@@ -154,7 +156,7 @@ export class MrrRoomBanCoPanel extends UiPanel<OpenDataForMrrRoomBanCoPanel> {
 
         } else {
             if (coId === CommonConstants.CoEmptyId) {
-                CommonAlertPanel.show({
+                TwnsCommonAlertPanel.CommonAlertPanel.show({
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
                 });

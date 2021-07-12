@@ -1,21 +1,23 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPanel";
 import { ScrCreateChooseCoPanel }       from "./ScrCreateChooseCoPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
-import * as ScrModel                    from "../model/ScrModel";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
+import { NotifyData }                   from "../../../utility/notify/NotifyData";
+import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import { ScrCreateModel }                     from "../model/ScrCreateModel";
+import LangTextType                     = TwnsLangTextType.LangTextType;
+import NotifyType                       = TwnsNotifyType.NotifyType;
 
 export class ScrCreatePlayerInfoPage extends UiTabPage<void> {
     private readonly _groupInfo     : eui.Group;
@@ -51,7 +53,7 @@ export class ScrCreatePlayerInfoPage extends UiTabPage<void> {
         // nothing to do
     }
     private async _updateComponentsForPlayerInfo(): Promise<void> {
-        const mapRawData    = await ScrModel.Create.getMapRawData();
+        const mapRawData    = await ScrCreateModel.getMapRawData();
         const listPlayer    = this._listPlayer;
         if (mapRawData) {
             listPlayer.bindData(this._createDataForListPlayer(mapRawData.playersCountUnneutral));
@@ -110,18 +112,18 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const coId          = playerData ? playerData.coId : null;
         if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
             CommonCoInfoPanel.show({
-                configVersion   : ScrModel.Create.getConfigVersion(),
+                configVersion   : ScrCreateModel.getConfigVersion(),
                 coId,
             });
         }
     }
 
     private async _onTouchedBtnChangeController(e: egret.TouchEvent): Promise<void> {
-        ScrModel.Create.tickUserId(this.data.playerIndex);
+        ScrCreateModel.tickUserId(this.data.playerIndex);
     }
 
     private async _onTouchedBtnChangeSkinId(e: egret.TouchEvent): Promise<void> {
-        ScrModel.Create.tickUnitAndTileSkinId(this.data.playerIndex);
+        ScrCreateModel.tickUnitAndTileSkinId(this.data.playerIndex);
     }
 
     private async _onTouchedBtnChangeCo(e: egret.TouchEvent): Promise<void> {
@@ -133,7 +135,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private _onNotifyScrCreatePlayerInfoChanged(e: egret.Event): void {
-        const eventData = e.data as Notify.Data.ScrCreatePlayerInfoChanged;
+        const eventData = e.data as NotifyData.ScrCreatePlayerInfoChanged;
         if (eventData.playerIndex === this.data.playerIndex) {
             this._updateComponentsForSettings();
         }
@@ -150,7 +152,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private async _updateComponentsForSettings(): Promise<void> {
-        const roomInfo  = ScrModel.Create.getData();
+        const roomInfo  = ScrCreateModel.getData();
         if (!roomInfo) {
             return;
         }
@@ -174,7 +176,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private _getPlayerData(): ProtoTypes.Structure.IDataForPlayerInRoom {
-        return ScrModel.Create.getPlayerInfo(this.data.playerIndex);
+        return ScrCreateModel.getPlayerInfo(this.data.playerIndex);
     }
 }
 

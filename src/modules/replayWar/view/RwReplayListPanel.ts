@@ -1,29 +1,31 @@
 
-import { UiListItemRenderer }                                           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                                                      from "../../../gameui/UiPanel";
-import { UiButton }                                                     from "../../../gameui/UiButton";
-import { UiLabel }                                                      from "../../../gameui/UiLabel";
-import { UiScrollList }                                                 from "../../../gameui/UiScrollList";
-import { UiTab }                                                        from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                                            from "../../../gameui/UiTabItemRenderer";
+import { UiListItemRenderer }                                           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                                                      from "../../../utility/ui/UiPanel";
+import { UiButton }                                                     from "../../../utility/ui/UiButton";
+import { UiLabel }                                                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                                                 from "../../../utility/ui/UiScrollList";
+import { UiTab }                                                        from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                                            from "../../../utility/ui/UiTabItemRenderer";
 import { McrMainMenuPanel }                                             from "../../multiCustomRoom/view/McrMainMenuPanel";
 import { CommonBlockPanel }                                             from "../../common/view/CommonBlockPanel";
 import { OpenDataForRwReplayWarInfoPage, RwReplayWarInfoPage }          from "./RwReplayWarInfoPage";
 import { RwSearchReplayPanel }                                          from "./RwSearchReplayPanel";
-import { LobbyBottomPanel }                                             from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                                                from "../../lobby/view/LobbyTopPanel";
+import { TwnsLobbyBottomPanel }                                             from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                                                from "../../lobby/view/LobbyTopPanel";
 import { OpenDataForRwReplayMapInfoPage, RwReplayMapInfoPage }          from "./RwReplayMapInfoPage";
 import { OpenDataForRwReplayPlayerInfoPage, RwReplayPlayerInfoPage }    from "./RwReplayPlayerInfoPage";
 import { FlowManager }                                                  from "../../../utility/FlowManager";
-import * as Helpers                                                     from "../../../utility/Helpers";
-import * as Lang                                                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                                                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Helpers }                                                      from "../../../utility/Helpers";
+import { Lang }                                                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                                                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                                                        from "../../../utility/Types";
-import * as WarMapModel                                                 from "../../warMap/model/WarMapModel";
-import * as RwModel                                                     from "../model/RwModel";
-import * as RwProxy                                                     from "../model/RwProxy";
+import { WarMapModel }                                                  from "../../warMap/model/WarMapModel";
+import { RwModel }                                                      from "../model/RwModel";
+import { RwProxy }                                                      from "../model/RwProxy";
 
 export class RwReplayListPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -127,8 +129,8 @@ export class RwReplayListPanel extends UiPanel<void> {
     private _onTouchTapBtnBack(e: egret.TouchEvent): void {
         this.close();
         McrMainMenuPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
     private _onTouchedBtnSearch(e: egret.TouchEvent): void {
         RwSearchReplayPanel.show();

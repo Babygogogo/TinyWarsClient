@@ -1,68 +1,73 @@
 
-import { NetMessageCodes }          from "../network/NetMessageCodes";
-import { CommonAlertPanel }         from "../modules/common/view/CommonAlertPanel";
-import { CcwMyWarListPanel }        from "../modules/coopCustomWar/view/CcwMyWarListPanel";
-import { LobbyBackgroundPanel }     from "../modules/lobby/view/LobbyBackgroundPanel";
-import { LobbyBottomPanel }         from "../modules/lobby/view/LobbyBottomPanel";
-import { LobbyPanel }               from "../modules/lobby/view/LobbyPanel";
-import { LobbyTopPanel }            from "../modules/lobby/view/LobbyTopPanel";
-import { LoginBackgroundPanel }     from "../modules/login/view/LoginBackgroundPanel";
-import { LoginPanel }               from "../modules/login/view/LoginPanel";
-import { BwBackgroundPanel }        from "../modules/baseWar/view/BwBackgroundPanel";
+import { TwnsBwBackgroundPanel }    from "../modules/baseWar/view/BwBackgroundPanel";
 import { BwTileBriefPanel }         from "../modules/baseWar/view/BwTileBriefPanel";
 import { BwUnitBriefPanel }         from "../modules/baseWar/view/BwUnitBriefPanel";
 import { BwWarPanel }               from "../modules/baseWar/view/BwWarPanel";
-import { BroadcastPanel }           from "../modules/broadcast/view/BroadcastPanel";
-import { MeTopPanel }               from "../modules/mapEditor/view/MeTopPanel";
-import { McwMyWarListPanel }        from "../modules/multiCustomWar/view/McwMyWarListPanel";
-import { MfwMyWarListPanel }        from "../modules/multiFreeWar/view/MfwMyWarListPanel";
-import { MrwMyWarListPanel }        from "../modules/multiRankWar/view/MrwMyWarListPanel";
-import { MpwTopPanel }              from "../modules/multiPlayerWar/view/MpwTopPanel";
-import { RwTopPanel }               from "../modules/replayWar/view/RwTopPanel";
-import { SpwTopPanel }              from "../modules/singlePlayerWar/view/SpwTopPanel";
-import { ClientErrorCode }          from "./ClientErrorCode";
-import { LangTextType }             from "./LangTextType";
-import { Notify }                   from "./Notify";
-import { NotifyType }               from "./NotifyType";
 import { BroadcastProxy }           from "../modules/broadcast/model/BroadcastProxy";
-import { Types }                    from "./Types";
+import { TwnsBroadcastPanel }       from "../modules/broadcast/view/BroadcastPanel";
+import { ChangeLogProxy }           from "../modules/changeLog/model/ChangeLogProxy";
+import { ChatProxy }                from "../modules/chat/model/ChatProxy";
+import { CommonModel }              from "../modules/common/model/CommonModel";
+import { CommonProxy }              from "../modules/common/model/CommonProxy";
+import { TwnsCommonAlertPanel }     from "../modules/common/view/CommonAlertPanel";
+import { CcrProxy }                 from "../modules/coopCustomRoom/model/CcrProxy";
+import { TwnsCcwMyWarListPanel }    from "../modules/coopCustomWar/view/CcwMyWarListPanel";
+import { TwnsLobbyBackgroundPanel } from "../modules/lobby/view/LobbyBackgroundPanel";
+import { TwnsLobbyBottomPanel }     from "../modules/lobby/view/LobbyBottomPanel";
+import { TwnsLobbyPanel }           from "../modules/lobby/view/LobbyPanel";
+import { TwnsLobbyTopPanel }        from "../modules/lobby/view/LobbyTopPanel";
+import { TwnsLoginBackgroundPanel } from "../modules/login/view/LoginBackgroundPanel";
+import { TwnsLoginPanel }           from "../modules/login/view/LoginPanel";
+import { MeModel }                  from "../modules/mapEditor/model/MeModel";
+import { MeProxy }                  from "../modules/mapEditor/model/MeProxy";
+import { TwnsMeTopPanel }           from "../modules/mapEditor/view/MeTopPanel";
+import { McrProxy }                 from "../modules/multiCustomRoom/model/McrProxy";
+import { TwnsMcwMyWarListPanel }    from "../modules/multiCustomWar/view/McwMyWarListPanel";
+import { MfrProxy }                 from "../modules/multiFreeRoom/model/MfrProxy";
+import { TwnsMfwMyWarListPanel }    from "../modules/multiFreeWar/view/MfwMyWarListPanel";
+import { MpwModel }                 from "../modules/multiPlayerWar/model/MpwModel";
+import { MpwProxy }                 from "../modules/multiPlayerWar/model/MpwProxy";
+import { TwnsMpwTopPanel }          from "../modules/multiPlayerWar/view/MpwTopPanel";
+import { MrrProxy }                 from "../modules/multiRankRoom/model/MrrProxy";
+import { TwnsMrwMyWarListPanel }    from "../modules/multiRankWar/view/MrwMyWarListPanel";
+import { RwModel }                  from "../modules/replayWar/model/RwModel";
+import { RwProxy }                  from "../modules/replayWar/model/RwProxy";
+import { TwnsRwTopPanel }           from "../modules/replayWar/view/RwTopPanel";
+import { ScrCreateModel }           from "../modules/singleCustomRoom/model/ScrCreateModel";
+import { SpmModel }                 from "../modules/singlePlayerMode/model/SpmModel";
+import { SpmProxy }                 from "../modules/singlePlayerMode/model/SpmProxy";
+import { SpwModel }                 from "../modules/singlePlayerWar/model/SpwModel";
+import { TwnsSpwTopPanel }          from "../modules/singlePlayerWar/view/SpwTopPanel";
+import { TimeModel }                from "../modules/time/model/TimeModel";
+import { UserModel }                from "../modules/user/model/UserModel";
+import { UserProxy }                from "../modules/user/model/UserProxy";
+import { WarMapModel }              from "../modules/warMap/model/WarMapModel";
+import { WarMapProxy }              from "../modules/warMap/model/WarMapProxy";
+import { NetManager }               from "./network/NetManager";
+import { TwnsNetMessageCodes }      from "./network/NetMessageCodes";
+import { TwnsClientErrorCode }      from "./ClientErrorCode";
+import { CompatibilityHelpers }     from "./CompatibilityHelpers";
+import { ConfigManager }            from "./ConfigManager";
+import { Lang }                     from "./lang/Lang";
+import { TwnsLangTextType }         from "./lang/LangTextType";
+import { LocalStorage }             from "./LocalStorage";
 import { Logger }                   from "./Logger";
-import * as ChangeLogProxy          from "../modules/changeLog/model/ChangeLogProxy";
-import * as ChatProxy               from "../modules/chat/model/ChatProxy";
-import * as CommonModel             from "../modules/common/model/CommonModel";
-import * as CommonProxy             from "../modules/common/model/CommonProxy";
-import * as CcrProxy                from "../modules/coopCustomRoom/model/CcrProxy";
-import * as MeModel                 from "../modules/mapEditor/model/MeModel";
-import * as MeProxy                 from "../modules/mapEditor/model/MeProxy";
-import * as McrProxy                from "../modules/multiCustomRoom/model/McrProxy";
-import * as MfrProxy                from "../modules/multiFreeRoom/model/MfrProxy";
-import * as MpwModel                from "../modules/multiPlayerWar/model/MpwModel";
-import * as MpwProxy                from "../modules/multiPlayerWar/model/MpwProxy";
-import * as MrrProxy                from "../modules/multiRankRoom/model/MrrProxy";
-import * as RwModel                 from "../modules/replayWar/model/RwModel";
-import * as RwProxy                 from "../modules/replayWar/model/RwProxy";
-import * as ScrModel                from "../modules/singleCustomRoom/model/ScrModel";
-import * as SpmModel                from "../modules/singlePlayerMode/model/SpmModel";
-import * as SpmProxy                from "../modules/singlePlayerMode/model/SpmProxy";
-import * as SpwModel                from "../modules/singlePlayerWar/model/SpwModel";
-import * as TimeModel               from "../modules/time/model/TimeModel";
-import * as UserModel               from "../modules/user/model/UserModel";
-import * as UserProxy               from "../modules/user/model/UserProxy";
-import * as WarMapModel             from "../modules/warMap/model/WarMapModel";
-import * as WarMapProxy             from "../modules/warMap/model/WarMapProxy";
-import * as NetManager              from "../network/NetManager";
-import * as CompatibilityHelper     from "./CompatibilityHelper";
-import * as ConfigManager           from "./ConfigManager";
-import * as Lang                    from "./Lang";
-import * as LocalStorage            from "./LocalStorage";
-import * as NoSleepManager          from "./NoSleepManager";
-import * as ProtoManager            from "./ProtoManager";
-import * as ProtoTypes              from "./ProtoTypes";
-import * as ResManager              from "./ResManager";
-import * as SoundManager            from "./SoundManager";
-import * as StageManager            from "./StageManager";
+import { NoSleepManager }           from "./NoSleepManager";
+import { Notify }                   from "./notify/Notify";
+import { TwnsNotifyType }           from "./notify/NotifyType";
+import { ResManager }               from "./res/ResManager";
+import { ProtoManager }             from "./proto/ProtoManager";
+import { SoundManager }             from "./SoundManager";
+import { StageManager }             from "./StageManager";
+import { Types }                    from "./Types";
+import { ProtoTypes }               from "./proto/ProtoTypes";
 
 export namespace FlowManager {
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+
     const _NET_EVENTS = [
         { msgCode: NetMessageCodes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
     ];
@@ -77,7 +82,7 @@ export namespace FlowManager {
     let _hasOnceWentToLobby = false;
 
     export async function startGame(stage: egret.Stage): Promise<void> {
-        CompatibilityHelper.init();
+        CompatibilityHelpers.init();
         NetManager.addListeners(_NET_EVENTS, undefined);
         Notify.addEventListeners(_NOTIFY_EVENTS, undefined);
         StageManager.init(stage);
@@ -103,7 +108,7 @@ export namespace FlowManager {
         RwModel.init();
         SpmProxy.init();
         SpmModel.init();
-        ScrModel.init();
+        ScrCreateModel.init();
         SpwModel.init();
         MeProxy.init();
         MeModel.init();
@@ -126,9 +131,9 @@ export namespace FlowManager {
         SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
-        LoginBackgroundPanel.show();
-        LoginPanel.show();
-        BroadcastPanel.show();
+        TwnsLoginBackgroundPanel.LoginBackgroundPanel.show();
+        TwnsLoginPanel.LoginPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
@@ -140,11 +145,11 @@ export namespace FlowManager {
         SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
-        LobbyBackgroundPanel.show();
-        LobbyPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
-        BroadcastPanel.show();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsLobbyPanel.LobbyPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
@@ -161,12 +166,12 @@ export namespace FlowManager {
         }
 
         StageManager.closeAllPanels();
-        BwBackgroundPanel.show();
-        MpwTopPanel.show();
-        BwWarPanel.show({ war });
-        BwTileBriefPanel.show({ war });
-        BwUnitBriefPanel.show({ war });
-        BroadcastPanel.show();
+        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
+        TwnsMpwTopPanel.MpwTopPanel.show();
+        BwWarPanel.BwWarPanel.show({ war });
+        BwTileBriefPanel.BwTileBriefPanel.show({ war });
+        BwUnitBriefPanel.BwUnitBriefPanel.show({ war });
+        TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
 
@@ -179,12 +184,12 @@ export namespace FlowManager {
         const war = await RwModel.loadWar(warData, replayId);
 
         StageManager.closeAllPanels();
-        BwBackgroundPanel.show();
-        RwTopPanel.show();
-        BwWarPanel.show({ war });
-        BwTileBriefPanel.show({ war });
-        BwUnitBriefPanel.show({ war });
-        BroadcastPanel.show();
+        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
+        TwnsRwTopPanel.RwTopPanel.show();
+        BwWarPanel.BwWarPanel.show({ war });
+        BwTileBriefPanel.BwTileBriefPanel.show({ war });
+        BwUnitBriefPanel.BwUnitBriefPanel.show({ war });
+        TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
     }
@@ -199,12 +204,12 @@ export namespace FlowManager {
         const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData });
 
         StageManager.closeAllPanels();
-        BwBackgroundPanel.show();
-        SpwTopPanel.show({ war });
-        BwWarPanel.show({ war });
-        BwTileBriefPanel.show({ war });
-        BwUnitBriefPanel.show({ war });
-        BroadcastPanel.show();
+        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
+        TwnsSpwTopPanel.SpwTopPanel.show({ war });
+        BwWarPanel.BwWarPanel.show({ war });
+        BwTileBriefPanel.BwTileBriefPanel.show({ war });
+        BwUnitBriefPanel.BwUnitBriefPanel.show({ war });
+        TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
 
@@ -217,12 +222,12 @@ export namespace FlowManager {
         const war = await MeModel.loadWar(mapRawData, slotIndex, isReview);
 
         StageManager.closeAllPanels();
-        BwBackgroundPanel.show();
-        MeTopPanel.show();
-        BwWarPanel.show({ war });
-        BwTileBriefPanel.show({ war });
-        BwUnitBriefPanel.show({ war });
-        BroadcastPanel.show();
+        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
+        TwnsMeTopPanel.MeTopPanel.show();
+        BwWarPanel.BwWarPanel.show({ war });
+        BwTileBriefPanel.BwTileBriefPanel.show({ war });
+        BwUnitBriefPanel.BwUnitBriefPanel.show({ war });
+        TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playBgm(Types.BgmCode.MapEditor01);
     }
@@ -233,9 +238,9 @@ export namespace FlowManager {
         SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
-        LobbyBackgroundPanel.show();
-        MrwMyWarListPanel.show();
-        BroadcastPanel.show();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsMrwMyWarListPanel.MrwMyWarListPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
@@ -245,9 +250,9 @@ export namespace FlowManager {
         SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
-        LobbyBackgroundPanel.show();
-        McwMyWarListPanel.show();
-        BroadcastPanel.show();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsMcwMyWarListPanel.McwMyWarListPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
@@ -257,9 +262,9 @@ export namespace FlowManager {
         SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
-        LobbyBackgroundPanel.show();
-        MfwMyWarListPanel.show();
-        BroadcastPanel.show();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsMfwMyWarListPanel.MfwMyWarListPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
@@ -269,9 +274,9 @@ export namespace FlowManager {
         SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
-        LobbyBackgroundPanel.show();
-        CcwMyWarListPanel.show();
-        BroadcastPanel.show();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsCcwMyWarListPanel.CcwMyWarListPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
@@ -307,7 +312,7 @@ export namespace FlowManager {
             Logger.error(`FlowManager._onMsgCommonServerDisconnect() empty title/content.`);
             return;
         }
-        CommonAlertPanel.show({
+        TwnsCommonAlertPanel.CommonAlertPanel.show({
             title,
             content,
         });

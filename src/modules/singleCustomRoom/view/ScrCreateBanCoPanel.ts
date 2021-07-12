@@ -1,21 +1,23 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiComponent }                  from "../../../gameui/UiComponent";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiCoInfo }                     from "../../../gameui/UiCoInfo";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiComponent }                  from "../../../utility/ui/UiComponent";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiCoInfo }                     from "../../../utility/ui/UiCoInfo";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
-import { CommonAlertPanel }             from "../../common/view/CommonAlertPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
-import * as ScrModel                    from "../model/ScrModel";
+import { ScrCreateModel }                     from "../model/ScrCreateModel";
 
 type OpenDataForScrCreateBanCoPanel = {
     playerIndex : number;
@@ -77,7 +79,7 @@ export class ScrCreateBanCoPanel extends UiPanel<OpenDataForScrCreateBanCoPanel>
 
         const bannedCoIdSet = this._bannedCoIdSet;
         bannedCoIdSet.clear();
-        for (const coId of ScrModel.Create.getBannedCoIdArray(playerIndex) || []) {
+        for (const coId of ScrCreateModel.getBannedCoIdArray(playerIndex) || []) {
             bannedCoIdSet.add(coId);
         }
 
@@ -116,25 +118,25 @@ export class ScrCreateBanCoPanel extends UiPanel<OpenDataForScrCreateBanCoPanel>
     private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
         const bannedCoIdSet = this._bannedCoIdSet;
         if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-            CommonAlertPanel.show({
+            TwnsCommonAlertPanel.CommonAlertPanel.show({
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0130),
             });
         } else {
             const playerIndex   = this._playerIndex;
             const callback      = () => {
-                ScrModel.Create.setBannedCoIdArray(playerIndex, bannedCoIdSet);
+                ScrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
                 Notify.dispatch(NotifyType.ScrCreateBannedCoIdArrayChanged);
                 this.close();
             };
 
-            if (!bannedCoIdSet.has(ScrModel.Create.getCoId(playerIndex))) {
+            if (!bannedCoIdSet.has(ScrCreateModel.getCoId(playerIndex))) {
                 callback();
             } else {
                 CommonConfirmPanel.show({
                     content : Lang.getText(LangTextType.A0057),
                     callback: () => {
-                        ScrModel.Create.setCoId(playerIndex, CommonConstants.CoEmptyId);
+                        ScrCreateModel.setCoId(playerIndex, CommonConstants.CoEmptyId);
                         callback();
                     },
                 });
@@ -154,7 +156,7 @@ export class ScrCreateBanCoPanel extends UiPanel<OpenDataForScrCreateBanCoPanel>
 
         } else {
             if (coId === CommonConstants.CoEmptyId) {
-                CommonAlertPanel.show({
+                TwnsCommonAlertPanel.CommonAlertPanel.show({
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
                 });
@@ -166,7 +168,7 @@ export class ScrCreateBanCoPanel extends UiPanel<OpenDataForScrCreateBanCoPanel>
                 this._updateGroupCoNames();
             };
 
-            if (coId !== ScrModel.Create.getCoId(this._playerIndex)) {
+            if (coId !== ScrCreateModel.getCoId(this._playerIndex)) {
                 callback();
             } else {
                 CommonConfirmPanel.show({

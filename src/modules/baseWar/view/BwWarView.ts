@@ -1,10 +1,12 @@
 
-import { UiZoomableComponent }          from "../../../gameui/UiZoomableComponent";
+import { UiZoomableComponent }          from "../../../utility/ui/UiZoomableComponent";
 import { BwWar }                        from "../../baseWar/model/BwWar";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as StageManager                from "../../../utility/StageManager";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
+import { NotifyData }                   from "../../../utility/notify/NotifyData";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { StageManager }                 from "../../../utility/StageManager";
 import { Types }                        from "../../../utility/Types";
 import GridIndex                        = Types.GridIndex;
 import Point                            = Types.Point;
@@ -152,11 +154,11 @@ export class BwWarView extends eui.Group {
     // Callbacks.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     private _onNotifyBwFieldZoomed(e: egret.Event): void {
-        const data = e.data as Notify.Data.BwFieldZoomed;
+        const data = e.data as NotifyData.BwFieldZoomed;
         this._fieldContainer.setZoomByTouches(data.current, data.previous);
     }
     private _onNotifyBwFieldDragged(e: egret.Event): void {
-        const data = e.data as Notify.Data.BwFieldDragged;
+        const data = e.data as NotifyData.BwFieldDragged;
         this._fieldContainer.setDragByTouches(data.current, data.previous);
     }
 

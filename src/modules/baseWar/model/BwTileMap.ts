@@ -2,18 +2,19 @@
 import { BwWar }                from "./BwWar";
 import { BwTileMapView }        from "../view/BwTileMapView";
 import { BwTile }               from "./BwTile";
-import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
-import * as BwHelpers           from "./BwHelpers";
+import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
+import { BwHelpers }            from "./BwHelpers";
 import { Logger }               from "../../../utility/Logger";
 import { Types }                from "../../../utility/Types";
-import * as Helpers             from "../../../utility/Helpers";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
-import * as CommonConstants     from "../../../utility/CommonConstants";
+import { Helpers }              from "../../../utility/Helpers";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
+import { CommonConstants }      from "../../../utility/CommonConstants";
 import MapSize                  = Types.MapSize;
 import WarSerialization         = ProtoTypes.WarSerialization;
 import ISerialTileMap           = WarSerialization.ISerialTileMap;
 import ISerialTile              = WarSerialization.ISerialTile;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwTileMap {
     private _map        : BwTile[][];

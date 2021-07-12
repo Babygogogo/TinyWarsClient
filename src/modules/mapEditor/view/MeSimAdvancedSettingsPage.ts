@@ -1,20 +1,21 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
 import { CommonChooseCoPanel }          from "../../common/view/CommonChooseCoPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as MeModel                     from "../model/MeModel";
+import { MeSimModel }                   from "../model/MeSimModel";
+import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Lang }                         from "../../../utility/lang/Lang";
+import LangTextType                     = TwnsLangTextType.LangTextType;
+import NotifyType                       = TwnsNotifyType.NotifyType;
 
 export class MeSimAdvancedSettingsPage extends UiTabPage<void> {
     private _labelMapNameTitle      : UiLabel;
@@ -59,15 +60,15 @@ export class MeSimAdvancedSettingsPage extends UiTabPage<void> {
     }
 
     private _updateLabelMapName(): void {
-        this._labelMapName.text = Lang.getLanguageText({ textArray: MeModel.Sim.getMapRawData().mapNameArray });
+        this._labelMapName.text = Lang.getLanguageText({ textArray: MeSimModel.getMapRawData().mapNameArray });
     }
 
     private _updateLabelPlayersCount(): void {
-        this._labelPlayersCount.text = "" + MeModel.Sim.getMapRawData().playersCountUnneutral;
+        this._labelPlayersCount.text = "" + MeSimModel.getMapRawData().playersCountUnneutral;
     }
 
     private _updateListPlayer(): void {
-        const playersCount  = MeModel.Sim.getMapRawData().playersCountUnneutral;
+        const playersCount  = MeSimModel.getMapRawData().playersCountUnneutral;
         const dataList      : DataForPlayerRenderer[] = [];
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
             dataList.push({ playerIndex });
@@ -115,13 +116,13 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         ];
     }
     private _createDataController(playerIndex: number): DataForInfoRenderer {
-        const isControlledByPlayer = MeModel.Sim.getIsControlledByPlayer(playerIndex);
+        const isControlledByPlayer = MeSimModel.getIsControlledByPlayer(playerIndex);
         return {
             titleText               : Lang.getText(LangTextType.B0424),
             infoText                : isControlledByPlayer ? Lang.getText(LangTextType.B0031) : Lang.getText(LangTextType.B0256),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : () => {
-                MeModel.Sim.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
+                MeSimModel.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
                 this._updateView();
             },
         };
@@ -129,19 +130,19 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
         return {
             titleText               : Lang.getText(LangTextType.B0019),
-            infoText                : Lang.getPlayerTeamName(MeModel.Sim.getTeamIndex(playerIndex)),
+            infoText                : Lang.getPlayerTeamName(MeSimModel.getTeamIndex(playerIndex)),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : () => {
                 this._confirmUseCustomRule(() => {
-                    MeModel.Sim.tickTeamIndex(playerIndex);
+                    MeSimModel.tickTeamIndex(playerIndex);
                     this._updateView();
                 });
             },
         };
     }
     private _createDataCo(playerIndex: number): DataForInfoRenderer {
-        const coId          = MeModel.Sim.getCoId(playerIndex);
-        const configVersion = MeModel.Sim.getWarData().settingsForCommon.configVersion;
+        const coId          = MeSimModel.getCoId(playerIndex);
+        const configVersion = MeSimModel.getWarData().settingsForCommon.configVersion;
         return {
             titleText               : Lang.getText(LangTextType.B0425),
             infoText                : ConfigManager.getCoNameAndTierText(configVersion, coId),
@@ -152,7 +153,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     availableCoIdArray  : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                     callbackOnConfirm   : newCoId => {
                         if (newCoId !== coId) {
-                            MeModel.Sim.setCoId(playerIndex, newCoId);
+                            MeSimModel.setCoId(playerIndex, newCoId);
                             this._updateView();
                         }
                     },
@@ -163,16 +164,16 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     private _createDataSkinId(playerIndex: number): DataForInfoRenderer {
         return {
             titleText               : Lang.getText(LangTextType.B0397),
-            infoText                : Lang.getUnitAndTileSkinName(MeModel.Sim.getUnitAndTileSkinId(playerIndex)),
+            infoText                : Lang.getUnitAndTileSkinName(MeSimModel.getUnitAndTileSkinId(playerIndex)),
             infoColor               : 0xFFFFFF,
             callbackOnTouchedTitle  : () => {
-                MeModel.Sim.tickUnitAndTileSkinId(playerIndex);
+                MeSimModel.tickUnitAndTileSkinId(playerIndex);
                 this._updateView();
             },
         };
     }
     private _createDataInitialFund(playerIndex: number): DataForInfoRenderer {
-        const currValue = MeModel.Sim.getInitialFund(playerIndex);
+        const currValue = MeSimModel.getInitialFund(playerIndex);
         return {
             titleText               : Lang.getText(LangTextType.B0178),
             infoText                : `${currValue}`,
@@ -193,7 +194,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Sim.setInitialFund(playerIndex, value);
+                                MeSimModel.setInitialFund(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -203,7 +204,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataIncomeMultiplier(playerIndex: number): DataForInfoRenderer {
-        const currValue = MeModel.Sim.getIncomeMultiplier(playerIndex);
+        const currValue = MeSimModel.getIncomeMultiplier(playerIndex);
         const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
         const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
         return {
@@ -224,7 +225,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Sim.setIncomeMultiplier(playerIndex, value);
+                                MeSimModel.setIncomeMultiplier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -234,7 +235,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataEnergyAddPctOnLoadCo(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Sim.getEnergyAddPctOnLoadCo(playerIndex);
+        const currValue     = MeSimModel.getEnergyAddPctOnLoadCo(playerIndex);
         const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
         const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
         return {
@@ -255,7 +256,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Sim.setEnergyAddPctOnLoadCo(playerIndex, value);
+                                MeSimModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -265,7 +266,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataEnergyGrowthMultiplier(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Sim.getEnergyGrowthMultiplier(playerIndex);
+        const currValue     = MeSimModel.getEnergyGrowthMultiplier(playerIndex);
         const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
         const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
         return {
@@ -286,7 +287,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Sim.setEnergyGrowthMultiplier(playerIndex, value);
+                                MeSimModel.setEnergyGrowthMultiplier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -296,7 +297,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataMoveRangeModifier(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Sim.getMoveRangeModifier(playerIndex);
+        const currValue     = MeSimModel.getMoveRangeModifier(playerIndex);
         const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
         const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
         return {
@@ -317,7 +318,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Sim.setMoveRangeModifier(playerIndex, value);
+                                MeSimModel.setMoveRangeModifier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -327,7 +328,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataAttackPowerModifier(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Sim.getAttackPowerModifier(playerIndex);
+        const currValue     = MeSimModel.getAttackPowerModifier(playerIndex);
         const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
         const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
         return {
@@ -348,7 +349,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Sim.setAttackPowerModifier(playerIndex, value);
+                                MeSimModel.setAttackPowerModifier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -358,7 +359,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataVisionRangeModifier(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Sim.getVisionRangeModifier(playerIndex);
+        const currValue     = MeSimModel.getVisionRangeModifier(playerIndex);
         const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
         const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
         return {
@@ -379,7 +380,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                MeModel.Sim.setVisionRangeModifier(playerIndex, value);
+                                MeSimModel.setVisionRangeModifier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -389,7 +390,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataLuckLowerLimit(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Sim.getLuckLowerLimit(playerIndex);
+        const currValue     = MeSimModel.getLuckLowerLimit(playerIndex);
         const minValue      = CommonConstants.WarRuleLuckMinLimit;
         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
         return {
@@ -410,12 +411,12 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                const upperLimit = MeModel.Sim.getLuckUpperLimit(playerIndex);
+                                const upperLimit = MeSimModel.getLuckUpperLimit(playerIndex);
                                 if (value <= upperLimit) {
-                                    MeModel.Sim.setLuckLowerLimit(playerIndex, value);
+                                    MeSimModel.setLuckLowerLimit(playerIndex, value);
                                 } else {
-                                    MeModel.Sim.setLuckUpperLimit(playerIndex, value);
-                                    MeModel.Sim.setLuckLowerLimit(playerIndex, upperLimit);
+                                    MeSimModel.setLuckUpperLimit(playerIndex, value);
+                                    MeSimModel.setLuckLowerLimit(playerIndex, upperLimit);
                                 }
                                 this._updateView();
                             }
@@ -426,7 +427,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         };
     }
     private _createDataLuckUpperLimit(playerIndex: number): DataForInfoRenderer {
-        const currValue     = MeModel.Sim.getLuckUpperLimit(playerIndex);
+        const currValue     = MeSimModel.getLuckUpperLimit(playerIndex);
         const minValue      = CommonConstants.WarRuleLuckMinLimit;
         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
         return {
@@ -447,12 +448,12 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                const lowerLimit = MeModel.Sim.getLuckLowerLimit(playerIndex);
+                                const lowerLimit = MeSimModel.getLuckLowerLimit(playerIndex);
                                 if (value >= lowerLimit) {
-                                    MeModel.Sim.setLuckUpperLimit(playerIndex, value);
+                                    MeSimModel.setLuckUpperLimit(playerIndex, value);
                                 } else {
-                                    MeModel.Sim.setLuckLowerLimit(playerIndex, value);
-                                    MeModel.Sim.setLuckUpperLimit(playerIndex, lowerLimit);
+                                    MeSimModel.setLuckLowerLimit(playerIndex, value);
+                                    MeSimModel.setLuckUpperLimit(playerIndex, lowerLimit);
                                 }
                                 this._updateView();
                             }
@@ -464,13 +465,13 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private _confirmUseCustomRule(callback: () => void): void {
-        if (MeModel.Sim.getPresetWarRuleId() == null) {
+        if (MeSimModel.getPresetWarRuleId() == null) {
             callback();
         } else {
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    MeModel.Sim.setPresetWarRuleId(null);
+                    MeSimModel.setPresetWarRuleId(null);
                     callback();
                 },
             });

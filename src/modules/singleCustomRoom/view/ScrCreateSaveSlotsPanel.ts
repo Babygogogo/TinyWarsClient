@@ -1,20 +1,22 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
-import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
-import * as WarMapModel                 from "../../warMap/model/WarMapModel";
-import * as SpmModel                    from "../../singlePlayerMode/model/SpmModel";
-import * as ScrModel                    from "../model/ScrModel";
+import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import { SpmModel }                     from "../../singlePlayerMode/model/SpmModel";
+import { ScrCreateModel }                     from "../model/ScrCreateModel";
 
 export class ScrCreateSaveSlotsPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
@@ -84,7 +86,7 @@ export class ScrCreateSaveSlotsPanel extends UiPanel<void> {
 
         this._dataForList = this._createDataForList();
         this._srlSaveSlot.bindData(this._dataForList);
-        this._listSaveSlot.selectedIndex = ScrModel.Create.getSaveSlotIndex();
+        this._listSaveSlot.selectedIndex = ScrCreateModel.getSaveSlotIndex();
     }
 
     private _updateComponentsForLanguage(): void {
@@ -94,7 +96,7 @@ export class ScrCreateSaveSlotsPanel extends UiPanel<void> {
 
     private _createDataForList(): DataForSlotRenderer[] {
         const dataList  : DataForSlotRenderer[] = [];
-        const slotDict  = SpmModel.SaveSlot.getSlotDict();
+        const slotDict  = SpmModel.getSlotDict();
         for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
             dataList.push({
                 slotIndex,
@@ -132,7 +134,7 @@ class SlotRenderer extends UiListItemRenderer<DataForSlotRenderer> {
     }
 
     private _onTouchedImgBg(e: egret.TouchEvent): void {
-        ScrModel.Create.setSaveSlotIndex(this.data.slotIndex);
+        ScrCreateModel.setSaveSlotIndex(this.data.slotIndex);
         ScrCreateSaveSlotsPanel.hide();
     }
 

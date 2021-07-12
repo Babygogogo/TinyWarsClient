@@ -1,21 +1,23 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { BwUnit }                       from "../../baseWar/model/BwUnit";
 import { BwCursor }                     from "../model/BwCursor";
 import { BwUnitMap }                    from "../model/BwUnitMap";
 import { BwUnitView }                   from "./BwUnitView";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
-import * as CommonModel                 from "../../common/model/CommonModel";
+import { CommonModel }                  from "../../common/model/CommonModel";
 
 type OpenDataForBwUnitListPanel = {
     war : BwWar;

@@ -1,22 +1,23 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTextInput }                  from "../../../gameui/UiTextInput";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { McrCreateBanCoPanel }          from "./McrCreateBanCoPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as McrModel                    from "../../multiCustomRoom/model/McrModel";
+import { McrCreateModel }               from "../model/McrCreateModel";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import NotifyType       = TwnsNotifyType.NotifyType;
 import PlayerRuleType                   = Types.PlayerRuleType;
 
 export class McrCreateAdvancedSettingsPage extends UiTabPage<void> {
@@ -52,8 +53,8 @@ export class McrCreateAdvancedSettingsPage extends UiTabPage<void> {
         this.top    = 0;
         this.bottom = 0;
 
-        this._initialWarRuleId  = McrModel.Create.getPresetWarRuleId();
-        this._mapRawData        = await McrModel.Create.getMapRawData();
+        this._initialWarRuleId  = McrCreateModel.getPresetWarRuleId();
+        this._mapRawData        = await McrCreateModel.getMapRawData();
 
         this._updateComponentsForLanguage();
         this._initListSetting();
@@ -73,13 +74,13 @@ export class McrCreateAdvancedSettingsPage extends UiTabPage<void> {
         this._updateBtnCustomize();
     }
     private _onTouchedBtnReset(e: egret.TouchEvent): void {
-        McrModel.Create.resetDataByWarRuleId(this._initialWarRuleId);
+        McrCreateModel.resetDataByWarRuleId(this._initialWarRuleId);
     }
     private _onTouchedBtnCustomize(e: egret.TouchEvent): void {
         CommonConfirmPanel.show({
             content : Lang.getText(LangTextType.A0129),
             callback: () => {
-                McrModel.Create.setCustomWarRuleId();
+                McrCreateModel.setCustomWarRuleId();
             },
         });
     }
@@ -93,10 +94,10 @@ export class McrCreateAdvancedSettingsPage extends UiTabPage<void> {
     }
 
     private _updateBtnReset(): void {
-        this._btnReset.visible = (this._initialWarRuleId != null) && (McrModel.Create.getPresetWarRuleId() == null);
+        this._btnReset.visible = (this._initialWarRuleId != null) && (McrCreateModel.getPresetWarRuleId() == null);
     }
     private _updateBtnCustomize(): void {
-        this._btnCustomize.visible = McrModel.Create.getPresetWarRuleId() != null;
+        this._btnCustomize.visible = McrCreateModel.getPresetWarRuleId() != null;
     }
 
     private _initListSetting(): void {
@@ -250,7 +251,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         CommonConfirmPanel.show({
             content : Lang.getText(LangTextType.A0129),
             callback: () => {
-                McrModel.Create.setCustomWarRuleId();
+                McrCreateModel.setCustomWarRuleId();
             },
         });
     }
@@ -277,7 +278,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
 
     private _updateBtnCustom(): void {
-        this._btnCustom.visible = McrModel.Create.getPresetWarRuleId() != null;
+        this._btnCustom.visible = McrCreateModel.getPresetWarRuleId() != null;
     }
     private _updateComponentsForValue(): void {
         const data = this.data;
@@ -305,16 +306,16 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
 
         const labelValue                    = this._labelValue;
         labelValue.visible                  = true;
-        labelValue.text                     = Lang.getPlayerTeamName(McrModel.Create.getTeamIndex(playerIndex));
+        labelValue.text                     = Lang.getPlayerTeamName(McrCreateModel.getTeamIndex(playerIndex));
         labelValue.textColor                = 0xFFFFFF;
-        this._callbackForTouchLabelValue    = () => McrModel.Create.tickTeamIndex(playerIndex);
+        this._callbackForTouchLabelValue    = () => McrCreateModel.tickTeamIndex(playerIndex);
     }
     private _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): void {
         this._inputValue.visible            = false;
         this._callbackForFocusOutInputValue = null;
 
         const labelValue                    = this._labelValue;
-        const currValue                     = (McrModel.Create.getBannedCoIdArray(playerIndex) || []).length;
+        const currValue                     = (McrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
         labelValue.visible                  = true;
         labelValue.text                     = `${currValue}`;
         labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
@@ -325,7 +326,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = McrModel.Create.getInitialFund(playerIndex);
+        const currValue                     = McrCreateModel.getInitialFund(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
@@ -340,7 +341,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                McrModel.Create.setInitialFund(playerIndex, value);
+                McrCreateModel.setInitialFund(playerIndex, value);
             }
         };
     }
@@ -349,7 +350,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = McrModel.Create.getIncomeMultiplier(playerIndex);
+        const currValue                     = McrCreateModel.getIncomeMultiplier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
@@ -364,7 +365,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                McrModel.Create.setIncomeMultiplier(playerIndex, value);
+                McrCreateModel.setIncomeMultiplier(playerIndex, value);
             }
         };
     }
@@ -373,7 +374,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = McrModel.Create.getEnergyAddPctOnLoadCo(playerIndex);
+        const currValue                     = McrCreateModel.getEnergyAddPctOnLoadCo(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
@@ -388,7 +389,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                McrModel.Create.setEnergyAddPctOnLoadCo(playerIndex, value);
+                McrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
             }
         };
     }
@@ -397,7 +398,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = McrModel.Create.getEnergyGrowthMultiplier(playerIndex);
+        const currValue                     = McrCreateModel.getEnergyGrowthMultiplier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
@@ -412,7 +413,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                McrModel.Create.setEnergyGrowthMultiplier(playerIndex, value);
+                McrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
             }
         };
     }
@@ -421,7 +422,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = McrModel.Create.getMoveRangeModifier(playerIndex);
+        const currValue                     = McrCreateModel.getMoveRangeModifier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
@@ -436,7 +437,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                McrModel.Create.setMoveRangeModifier(playerIndex, value);
+                McrCreateModel.setMoveRangeModifier(playerIndex, value);
             }
         };
     }
@@ -445,7 +446,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = McrModel.Create.getAttackPowerModifier(playerIndex);
+        const currValue                     = McrCreateModel.getAttackPowerModifier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
@@ -460,7 +461,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                McrModel.Create.setAttackPowerModifier(playerIndex, value);
+                McrCreateModel.setAttackPowerModifier(playerIndex, value);
             }
         };
     }
@@ -469,7 +470,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = McrModel.Create.getVisionRangeModifier(playerIndex);
+        const currValue                     = McrCreateModel.getVisionRangeModifier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
@@ -484,7 +485,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                McrModel.Create.setVisionRangeModifier(playerIndex, value);
+                McrCreateModel.setVisionRangeModifier(playerIndex, value);
             }
         };
     }
@@ -493,7 +494,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = McrModel.Create.getLuckLowerLimit(playerIndex);
+        const currValue                     = McrCreateModel.getLuckLowerLimit(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
@@ -505,11 +506,11 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             if ((isNaN(value))                                          ||
                 (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                 (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                (value > McrModel.Create.getLuckUpperLimit(playerIndex))
+                (value > McrCreateModel.getLuckUpperLimit(playerIndex))
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                McrModel.Create.setLuckLowerLimit(playerIndex, value);
+                McrCreateModel.setLuckLowerLimit(playerIndex, value);
             }
         };
     }
@@ -518,7 +519,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = McrModel.Create.getLuckUpperLimit(playerIndex);
+        const currValue                     = McrCreateModel.getLuckUpperLimit(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
@@ -530,11 +531,11 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             if ((isNaN(value))                                          ||
                 (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                 (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                (value < McrModel.Create.getLuckLowerLimit(playerIndex))
+                (value < McrCreateModel.getLuckLowerLimit(playerIndex))
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                McrModel.Create.setLuckUpperLimit(playerIndex, value);
+                McrCreateModel.setLuckUpperLimit(playerIndex, value);
             }
         };
     }

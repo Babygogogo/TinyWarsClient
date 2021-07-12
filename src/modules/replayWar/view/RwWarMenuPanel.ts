@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
@@ -14,23 +14,25 @@ import { BwPlayer }                     from "../../baseWar/model/BwPlayer";
 import { BwUnitMap }                    from "../../baseWar/model/BwUnitMap";
 import { RwWar }                        from "../model/RwWar";
 import { TwWar }                        from "../../testWar/model/TwWar";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as FloatText                   from "../../../utility/FloatText";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { FloatText }                    from "../../../utility/FloatText";
 import { FlowManager }                  from "../../../utility/FlowManager";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
 import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as MfrModel                    from "../../multiFreeRoom/model/MfrModel";
-import * as UserModel                   from "../../user/model/UserModel";
-import * as UserProxy                   from "../../user/model/UserProxy";
-import * as WarMapModel                 from "../../warMap/model/WarMapModel";
-import * as RwModel                     from "../model/RwModel";
-import * as RwProxy                     from "../model/RwProxy";
+import { MfrCreateModel }               from "../../multiFreeRoom/model/MfrCreateModel";
+import { UserModel }                    from "../../user/model/UserModel";
+import { UserProxy }                    from "../../user/model/UserProxy";
+import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import { RwModel }                      from "../model/RwModel";
+import { RwProxy }                      from "../model/RwProxy";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import LangTextType         = TwnsLangTextType.LangTextType;
 
 // eslint-disable-next-line no-shadow
 enum MenuType {
@@ -353,7 +355,7 @@ export class RwWarMenuPanel extends UiPanel<void> {
                 CommonConfirmPanel.show({
                     content : Lang.getText(LangTextType.A0201),
                     callback: () => {
-                        MfrModel.Create.resetDataByInitialWarData(warData);
+                        MfrCreateModel.resetDataByInitialWarData(warData);
                         MfrCreateSettingsPanel.show();
                         this.close();
                     }

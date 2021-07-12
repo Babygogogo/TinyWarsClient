@@ -1,12 +1,13 @@
 
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
-import * as Helpers             from "../../../utility/Helpers";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
+import { Helpers }              from "../../../utility/Helpers";
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                from "../../../utility/Types";
-import * as TimeModel           from "../../time/model/TimeModel";
-import { UiImage }              from "../../../gameui/UiImage";
+import { TimeModel }            from "../../time/model/TimeModel";
+import { UiImage }              from "../../../utility/ui/UiImage";
 import { BwActionPlanner }      from "../model/BwActionPlanner";
 import { BwUnit }               from "../model/BwUnit";
 import { BwUnitView }           from "./BwUnitView";

@@ -1,5 +1,5 @@
 
-import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { BwActionPlanner }              from "./BwActionPlanner";
 import { BwCommonSettingManager }       from "./BwCommonSettingManager";
 import { BwCursor }                     from "./BwCursor";
@@ -16,15 +16,16 @@ import { BwExecutedActionManager }      from "./BwExecutedActionManager";
 import { BwRandomNumberManager }        from "./BwRandomNumberManager";
 import { BwDrawVoteManager }            from "./BwDrawVoteManager";
 import { BwWarView }                    from "../view/BwWarView";
-import * as ConfigManager               from "../../../utility/ConfigManager";
+import { ConfigManager }                from "../../../utility/ConfigManager";
 import { Logger }                       from "../../../utility/Logger";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
-import * as TimeModel                   from "../../time/model/TimeModel";
+import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import { TimeModel }                    from "../../time/model/TimeModel";
 import * as WarEventHelper              from "../../warEvent/model/WarEventHelper";
 import WarAction                        = ProtoTypes.WarAction;
 import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export abstract class BwWar {
     private readonly _turnManager           = new BwTurnManager();

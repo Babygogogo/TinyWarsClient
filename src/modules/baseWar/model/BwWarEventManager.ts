@@ -3,20 +3,21 @@ import { BwTileMap }                    from "./BwTileMap";
 import { BwUnit }                       from "./BwUnit";
 import { BwUnitMap }                    from "./BwUnitMap";
 import { BwWar }                        from "./BwWar";
-import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as GridIndexHelpers            from "../../../utility/GridIndexHelpers";
-import * as Helpers                     from "../../../utility/Helpers";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { GridIndexHelpers }             from "../../../utility/GridIndexHelpers";
+import { Helpers }                      from "../../../utility/Helpers";
 import { Logger }                       from "../../../utility/Logger";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
+import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
 import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;
 import IDataForWarEventCalledCount      = ProtoTypes.WarSerialization.IDataForWarEventCalledCount;
 import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
 import WarEvent                         = ProtoTypes.WarEvent;
 import IExtraDataForSystemCallWarEvent  = ProtoTypes.WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwWarEventManager {
     private _war?               : BwWar;

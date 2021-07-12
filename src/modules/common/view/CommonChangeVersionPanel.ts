@@ -1,17 +1,19 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { UiButton }             from "../../../gameui/UiButton";
-import { UiScrollList }         from "../../../gameui/UiScrollList";
-import { UiListItemRenderer }   from "../../../gameui/UiListItemRenderer";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Logger }               from "../../../utility/Logger";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                from "../../../utility/Types";
 import GameVersion              = Types.GameVersion;
 

@@ -1,18 +1,20 @@
 
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { LobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
 import { SpmWarListPanel }              from "./SpmWarListPanel";
 import { ScrCreateMapListPanel }        from "../../singleCustomRoom/view/ScrCreateMapListPanel";
 import { MrrMainMenuPanel }             from "../../multiRankRoom/view/MrrMainMenuPanel";
 import { McrMainMenuPanel }             from "../../multiCustomRoom/view/McrMainMenuPanel";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
 import Tween                            = egret.Tween;
 
@@ -90,14 +92,14 @@ export class SpmMainMenuPanel extends UiPanel<void> {
     }
     private _onTouchedBtnCreateCustomWar(e: egret.TouchEvent): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         ScrCreateMapListPanel.show();
     }
     private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         SpmWarListPanel.show();
     }
 

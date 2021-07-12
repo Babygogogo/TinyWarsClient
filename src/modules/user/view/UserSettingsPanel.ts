@@ -1,9 +1,9 @@
 
-import { UiImage }                  from "../../../gameui/UiImage";
-import { UiPanel }                  from "../../../gameui/UiPanel";
-import { UiRadioButton }            from "../../../gameui/UiRadioButton";
-import { UiButton }                 from "../../../gameui/UiButton";
-import { UiLabel }                  from "../../../gameui/UiLabel";
+import { UiImage }                  from "../../../utility/ui/UiImage";
+import { UiPanel }                  from "../../../utility/ui/UiPanel";
+import { UiRadioButton }            from "../../../utility/ui/UiRadioButton";
+import { UiButton }                 from "../../../utility/ui/UiButton";
+import { UiLabel }                  from "../../../utility/ui/UiLabel";
 import { UserChangeNicknamePanel }  from "./UserChangeNicknamePanel";
 import { UserSetPasswordPanel }     from "./UserSetPasswordPanel";
 import { UserChangeDiscordIdPanel } from "./UserChangeDiscordIdPanel";
@@ -17,21 +17,23 @@ import { CommonChangeVersionPanel } from "../../common/view/CommonChangeVersionP
 import { CommonRankListPanel }      from "../../common/view/CommonRankListPanel";
 import { CommonServerStatusPanel }  from "../../common/view/CommonServerStatusPanel";
 import { ChangeLogPanel }           from "../../changeLog/view/ChangeLogPanel";
-import { LobbyBackgroundPanel }     from "../../lobby/view/LobbyBackgroundPanel";
+import { TwnsLobbyBackgroundPanel }     from "../../lobby/view/LobbyBackgroundPanel";
 import { MmMainMenuPanel }          from "../../mapManagement/view/MmMainMenuPanel";
-import * as CommonConstants         from "../../../utility/CommonConstants";
-import * as Helpers                 from "../../../utility/Helpers";
-import * as Lang                    from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import * as LocalStorage            from "../../../utility/LocalStorage";
+import { CommonConstants }          from "../../../utility/CommonConstants";
+import { Helpers }                  from "../../../utility/Helpers";
+import { Lang }                     from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { LocalStorage }             from "../../../utility/LocalStorage";
 import { Logger }                   from "../../../utility/Logger";
-import { Notify }                   from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as StageManager            from "../../../utility/StageManager";
+import { Notify }                   from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { StageManager }             from "../../../utility/StageManager";
 import { Types }                    from "../../../utility/Types";
-import * as TimeModel               from "../../time/model/TimeModel";
-import * as UserModel               from "../../user/model/UserModel";
-import * as UserProxy               from "../../user/model/UserProxy";
+import { TimeModel }                from "../../time/model/TimeModel";
+import { UserModel }                from "../../user/model/UserModel";
+import { UserProxy }                from "../../user/model/UserProxy";
 
 export class UserSettingsPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -324,7 +326,7 @@ export class UserSettingsPanel extends UiPanel<void> {
     }
     private _onTouchedBtnMapManagement(): void {
         StageManager.closeAllPanels();
-        LobbyBackgroundPanel.show();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
         MmMainMenuPanel.show();
     }
 

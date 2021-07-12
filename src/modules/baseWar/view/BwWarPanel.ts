@@ -1,41 +1,44 @@
 
-import { UiPanel }  from "../../../gameui/UiPanel";
+import { UiPanel }  from "../../../utility/ui/UiPanel";
 import { BwWar }    from "../model/BwWar";
 import { Types }    from "../../../utility/Types";
 
-type OpenDataForBwWarPanel = {
-    war: BwWar;
-};
-export class BwWarPanel extends UiPanel<OpenDataForBwWarPanel> {
-    protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-    protected readonly _IS_EXCLUSIVE = true;
+export namespace BwWarPanel {
+    type OpenDataForBwWarPanel = {
+        war: BwWar;
+    };
+    // eslint-disable-next-line no-shadow
+    export class BwWarPanel extends UiPanel<OpenDataForBwWarPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
+        protected readonly _IS_EXCLUSIVE = true;
 
-    private static _instance: BwWarPanel;
+        private static _instance: BwWarPanel;
 
-    public static show(openData: OpenDataForBwWarPanel): void {
-        if (!BwWarPanel._instance) {
-            BwWarPanel._instance = new BwWarPanel();
+        public static show(openData: OpenDataForBwWarPanel): void {
+            if (!BwWarPanel._instance) {
+                BwWarPanel._instance = new BwWarPanel();
+            }
+            BwWarPanel._instance.open(openData);
         }
-        BwWarPanel._instance.open(openData);
-    }
 
-    public static async hide(): Promise<void> {
-        if (BwWarPanel._instance) {
-            await BwWarPanel._instance.close();
+        public static async hide(): Promise<void> {
+            if (BwWarPanel._instance) {
+                await BwWarPanel._instance.close();
+            }
         }
-    }
 
-    private constructor() {
-        super();
+        private constructor() {
+            super();
 
-        this.skinName = "resource/skins/baseWar/BwWarPanel.exml";
-    }
+            this.skinName = "resource/skins/baseWar/BwWarPanel.exml";
+        }
 
-    protected _onOpened(): void {
-        this.addChild(this._getOpenData().war.getView());
-    }
+        protected _onOpened(): void {
+            this.addChild(this._getOpenData().war.getView());
+        }
 
-    protected async _onClosed(): Promise<void> {
-        this.removeChildren();
+        protected async _onClosed(): Promise<void> {
+            this.removeChildren();
+        }
     }
 }

@@ -1,19 +1,21 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { UiButton }             from "../../../gameui/UiButton";
-import { UiTextInput }          from "../../../gameui/UiTextInput";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { NotifyType }           from "../../../utility/NotifyType";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { UiTextInput }          from "../../../utility/ui/UiTextInput";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as FloatText           from "../../../utility/FloatText";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { FloatText }            from "../../../utility/FloatText";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Types }                from "../../../utility/Types";
-import * as UserModel           from "../../user/model/UserModel";
-import * as UserProxy           from "../../user/model/UserProxy";
+import { UserModel }            from "../../user/model/UserModel";
+import { UserProxy }            from "../../user/model/UserProxy";
 
 export class UserChangeDiscordIdPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;

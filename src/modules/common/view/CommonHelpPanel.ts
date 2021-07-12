@@ -1,9 +1,9 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { UiButton }             from "../../../gameui/UiButton";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import * as Helpers             from "../../../utility/Helpers";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { Helpers }              from "../../../utility/Helpers";
 import { Types }                from "../../../utility/Types";
 
 type OpenData = {

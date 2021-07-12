@@ -1,15 +1,16 @@
 
-import * as GridIndexHelpers                from "../../../utility/GridIndexHelpers";
-import * as Helpers                         from "../../../utility/Helpers";
+import { GridIndexHelpers }                 from "../../../utility/GridIndexHelpers";
+import { Helpers }                          from "../../../utility/Helpers";
 import { Logger }                           from "../../../utility/Logger";
-import { Notify }                           from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as UserModel                       from "../../user/model/UserModel";
+import { Notify }                           from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { UserModel }                        from "../../user/model/UserModel";
 import { Types }                            from "../../../utility/Types";
-import * as VisibilityHelpers               from "../../../utility/VisibilityHelpers";
-import * as BwHelpers                       from "./BwHelpers";
-import { ClientErrorCode }                  from "../../../utility/ClientErrorCode";
-import { User }                             from "../../../utility/ProtoTypes";
+import { BwVisibilityHelpers }                from "./BwVisibilityHelpers";
+import { BwHelpers }                        from "./BwHelpers";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { NotifyData }                       from "../../../utility/notify/NotifyData";
 import { BwActionPlannerView }              from "../view/BwActionPlannerView";
 import { BwTileMap }                        from "./BwTileMap";
 import { BwTurnManager }                    from "./BwTurnManager";
@@ -25,6 +26,7 @@ import MovableArea                          = Types.MovableArea;
 import AttackableArea                       = Types.AttackableArea;
 import MovePathNode                         = Types.MovePathNode;
 import UnitActionType                       = Types.UnitActionType;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 type ChosenUnitForDrop = {
     unit        : BwUnit;
@@ -211,7 +213,7 @@ export abstract class BwActionPlanner {
     private _onNotifyBwCursorDragged(e: egret.Event): void {
         const gridIndex = this.getCursor().getGridIndex();
         const nextState = this._getNextStateOnDrag(gridIndex);
-        this._getWar().getView().tweenGridToCentralArea((e.data as Notify.Data.BwCursorDragged).draggedTo);
+        this._getWar().getView().tweenGridToCentralArea((e.data as NotifyData.BwCursorDragged).draggedTo);
 
         if ((nextState === this.getState())                                                 &&
             ((nextState === State.ExecutingAction) || (BwHelpers.checkIsStateRequesting(nextState)))
@@ -1739,7 +1741,7 @@ export abstract class BwActionPlanner {
             const teamIndex     = movingUnit.getTeamIndex();
             if ((existingUnit)                                      &&
                 (existingUnit.getTeamIndex() !== teamIndex)         &&
-                (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war                 : this._war,
                     gridIndex           : targetGridIndex,
                     unitType            : existingUnit.getUnitType(),

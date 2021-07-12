@@ -1,20 +1,21 @@
 
-import { UiPanel }                          from "../../../gameui/UiPanel";
-import { UiButton }                         from "../../../gameui/UiButton";
+import { UiPanel }                          from "../../../utility/ui/UiPanel";
+import { UiButton }                         from "../../../utility/ui/UiButton";
 import { SpmMainMenuPanel }                 from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import { MrwMyWarListPanel }                from "../../multiRankWar/view/MrwMyWarListPanel";
+import { TwnsMrwMyWarListPanel }                from "../../multiRankWar/view/MrwMyWarListPanel";
 import { MrrMyRoomListPanel }               from "./MrrMyRoomListPanel";
 import { MrrSetMaxConcurrentCountPanel }    from "./MrrSetMaxConcurrentCountPanel";
-import { LobbyBottomPanel }                 from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                    from "../../lobby/view/LobbyTopPanel";
+import { TwnsLobbyBottomPanel }                 from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                    from "../../lobby/view/LobbyTopPanel";
 import { MrrPreviewMapListPanel }           from "./MrrPreviewMapListPanel";
 import { McrMainMenuPanel }                 from "../../multiCustomRoom/view/McrMainMenuPanel";
-import * as Helpers                         from "../../../utility/Helpers";
-import { Notify }                           from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Helpers }                          from "../../../utility/Helpers";
+import { Notify }                           from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                            from "../../../utility/Types";
-import * as MpwModel                        from "../../multiPlayerWar/model/MpwModel";
-import * as MrrModel                        from "../model/MrrModel";
+import { MpwModel }                         from "../../multiPlayerWar/model/MpwModel";
+import { MrrModel }                         from "../model/MrrModel";
 import Tween                                = egret.Tween;
 
 export class MrrMainMenuPanel extends UiPanel<void> {
@@ -95,26 +96,26 @@ export class MrrMainMenuPanel extends UiPanel<void> {
     }
     private _onTouchedBtnMyRoom(e: egret.TouchEvent): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         MrrMyRoomListPanel.show();
     }
     private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
-        MrwMyWarListPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+        TwnsMrwMyWarListPanel.MrwMyWarListPanel.show();
     }
     private _onTouchedBtnPreviewStdMaps(e: egret.TouchEvent): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         MrrPreviewMapListPanel.show({ hasFog: false });
     }
     private _onTouchedBtnPreviewFogMaps(e: egret.TouchEvent): void {
         this.close();
-        LobbyTopPanel.hide();
-        LobbyBottomPanel.hide();
+        TwnsLobbyTopPanel.LobbyTopPanel.hide();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
         MrrPreviewMapListPanel.show({ hasFog: true });
     }
 

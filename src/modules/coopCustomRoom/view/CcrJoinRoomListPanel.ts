@@ -1,32 +1,34 @@
 
-import { UiListItemRenderer }                                                   from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                                                              from "../../../gameui/UiPanel";
-import { UiButton }                                                             from "../../../gameui/UiButton";
-import { UiLabel }                                                              from "../../../gameui/UiLabel";
-import { UiScrollList }                                                         from "../../../gameui/UiScrollList";
-import { UiTab }                                                                from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                                                    from "../../../gameui/UiTabItemRenderer";
+import { UiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                                                              from "../../../utility/ui/UiPanel";
+import { UiButton }                                                             from "../../../utility/ui/UiButton";
+import { UiLabel }                                                              from "../../../utility/ui/UiLabel";
+import { UiScrollList }                                                         from "../../../utility/ui/UiScrollList";
+import { UiTab }                                                                from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
 import { CcrJoinPasswordPanel }                                                 from "./CcrJoinPasswordPanel";
 import { CcrMainMenuPanel }                                                     from "./CcrMainMenuPanel";
 import { CcrRoomInfoPanel }                                                     from "./CcrRoomInfoPanel";
-import { LobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
-import { LobbyBottomPanel }                                                     from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
+import { TwnsLobbyBottomPanel }                                                     from "../../lobby/view/LobbyBottomPanel";
 import { OpenDataForCcrRoomAdvancedSettingsPage, CcrRoomAdvancedSettingsPage }  from "./CcrRoomAdvancedSettingsPage";
 import { OpenDataForCcrRoomBasicSettingsPage, CcrRoomBasicSettingsPage }        from "./CcrRoomBasicSettingsPage";
 import { OpenDataForCcrRoomMapInfoPage, CcrRoomMapInfoPage }                    from "./CcrRoomMapInfoPage";
 import { OpenDataForCcrRoomPlayerInfoPage, CcrRoomPlayerInfoPage }              from "./CcrRoomPlayerInfoPage";
-import * as FloatText                                                           from "../../../utility/FloatText";
-import * as Helpers                                                             from "../../../utility/Helpers";
-import * as Lang                                                                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                                                               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                                                          from "../../../utility/ProtoTypes";
+import { FloatText }                                                            from "../../../utility/FloatText";
+import { Helpers }                                                              from "../../../utility/Helpers";
+import { Lang }                                                                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import { ProtoTypes }                                                           from "../../../utility/proto/ProtoTypes";
 import { Types }                                                                from "../../../utility/Types";
-import * as CcrModel                                                            from "../../coopCustomRoom/model/CcrModel";
-import * as UserModel                                                           from "../../user/model/UserModel";
-import * as WarMapModel                                                         from "../../warMap/model/WarMapModel";
-import * as CcrProxy                                                            from "../model/CcrProxy";
+import { CcrModel }                                                             from "../../coopCustomRoom/model/CcrModel";
+import { UserModel }                                                            from "../../user/model/UserModel";
+import { WarMapModel }                                                          from "../../warMap/model/WarMapModel";
+import { CcrProxy }                                                             from "../model/CcrProxy";
+import { CcrJoinModel }                                                         from "../model/CcrJoinModel";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import NotifyType       = TwnsNotifyType.NotifyType;
 
 export class CcrJoinRoomListPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -147,17 +149,17 @@ export class CcrJoinRoomListPanel extends UiPanel<void> {
     private _onTouchTapBtnBack(): void {
         this.close();
         CcrMainMenuPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
 
     private async _onTouchedBtnNextStep(): Promise<void> {
-        const roomInfo = await CcrModel.getRoomInfo(CcrModel.Join.getTargetRoomId());
+        const roomInfo = await CcrModel.getRoomInfo(CcrJoinModel.getTargetRoomId());
         if (roomInfo) {
             if (roomInfo.settingsForCcw.warPassword) {
                 CcrJoinPasswordPanel.show({ roomInfo });
             } else {
-                const joinData = CcrModel.Join.getFastJoinData(roomInfo);
+                const joinData = CcrJoinModel.getFastJoinData(roomInfo);
                 if (joinData) {
                     CcrProxy.reqCcrJoinRoom(joinData);
                 } else {
@@ -221,9 +223,9 @@ export class CcrJoinRoomListPanel extends UiPanel<void> {
             labelNoRoom.visible     = !dataArray.length;
             listRoom.bindData(dataArray);
 
-            const roomId = CcrModel.Join.getTargetRoomId();
+            const roomId = CcrJoinModel.getTargetRoomId();
             if (dataArray.every(v => v.roomId != roomId)) {
-                CcrModel.Join.setTargetRoomId(dataArray.length ? dataArray[0].roomId : null);
+                CcrJoinModel.setTargetRoomId(dataArray.length ? dataArray[0].roomId : null);
             }
         }
     }
@@ -231,7 +233,7 @@ export class CcrJoinRoomListPanel extends UiPanel<void> {
     private async _updateComponentsForTargetRoomInfo(): Promise<void> {
         const groupTab      = this._groupTab;
         const btnNextStep   = this._btnNextStep;
-        const roomId        = CcrModel.Join.getTargetRoomId();
+        const roomId        = CcrJoinModel.getTargetRoomId();
         if ((!this._hasReceivedData) || (roomId == null)) {
             groupTab.visible    = false;
             btnNextStep.visible = false;
@@ -371,7 +373,7 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
     }
 
     private _onTouchTapBtnChoose(): void {
-        CcrModel.Join.setTargetRoomId(this.data.roomId);
+        CcrJoinModel.setTargetRoomId(this.data.roomId);
     }
 
     private async _onTouchTapBtnNext(): Promise<void> {
@@ -383,7 +385,7 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
         if (roomInfo.settingsForCcw.warPassword) {
             CcrJoinPasswordPanel.show({ roomInfo });
         } else {
-            const joinData = CcrModel.Join.getFastJoinData(roomInfo);
+            const joinData = CcrJoinModel.getFastJoinData(roomInfo);
             if (joinData) {
                 CcrProxy.reqCcrJoinRoom(joinData);
             } else {
@@ -394,6 +396,6 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
     }
 
     private _updateState(): void {
-        this.currentState = this.data.roomId === CcrModel.Join.getTargetRoomId() ? Types.UiState.Down : Types.UiState.Up;
+        this.currentState = this.data.roomId === CcrJoinModel.getTargetRoomId() ? Types.UiState.Down : Types.UiState.Up;
     }
 }

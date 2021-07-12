@@ -1,14 +1,14 @@
 
-import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
 import { BwUnit }               from "./BwUnit";
 import { BwWar }                from "./BwWar";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
-import * as Helpers             from "../../../utility/Helpers";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
+import { Helpers }              from "../../../utility/Helpers";
 import { Logger }               from "../../../utility/Logger";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
 import { Types }                from "../../../utility/Types";
-import * as BwHelpers           from "../../baseWar/model/BwHelpers";
+import { BwHelpers }            from "../../baseWar/model/BwHelpers";
 import ForceFogCode             = Types.ForceFogCode;
 import GridIndex                = Types.GridIndex;
 import MapSize                  = Types.MapSize;
@@ -16,6 +16,7 @@ import Visibility               = Types.Visibility;
 import WarSerialization         = ProtoTypes.WarSerialization;
 import ISerialFogMap            = WarSerialization.ISerialFogMap;
 import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export abstract class BwFogMap {
     private _forceFogCode           : ForceFogCode;

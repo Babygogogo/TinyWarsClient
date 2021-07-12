@@ -1,15 +1,18 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as DamageCalculator    from "../../../utility/DamageCalculator";
-import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { BwDamageCalculator }     from "../model/BwDamageCalculator";
+import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { NotifyData }           from "../../../utility/notify/NotifyData";
+import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Logger }               from "../../../utility/Logger";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                from "../../../utility/Types";
 import { BwActionPlanner }      from "../model/BwActionPlanner";
 import { BwCursor }             from "../model/BwCursor";
@@ -162,7 +165,7 @@ export class BwCursorView extends eui.Group {
                 Notify.dispatch(NotifyType.BwCursorDragged, {
                     current     : currGridIndex,
                     draggedTo   : gridIndex,
-                } as Notify.Data.BwCursorDragged);
+                } as NotifyData.BwCursorDragged);
             }
         }
     }
@@ -207,7 +210,7 @@ export class BwCursorView extends eui.Group {
                 Notify.dispatch(NotifyType.BwFieldZoomed, {
                     current : currGlobalTouchPoints,
                     previous: this._prevGlobalTouchPoints,
-                } as Notify.Data.BwFieldZoomed);
+                } as NotifyData.BwFieldZoomed);
             } else {
                 if (this._touchIdForTouchingCursor != null) {
                     const gridIndex     = this._getGridIndexByLocalXY(e.localX, e.localY);
@@ -217,14 +220,14 @@ export class BwCursorView extends eui.Group {
                         Notify.dispatch(NotifyType.BwCursorDragged, {
                             current     : currGridIndex,
                             draggedTo   : gridIndex,
-                        } as Notify.Data.BwCursorDragged);
+                        } as NotifyData.BwCursorDragged);
                     }
                 } else {
                     if (this._isTouchMovedOrMultiple) {
                         Notify.dispatch(NotifyType.BwFieldDragged, {
                             current : currGlobalTouchPoints.values().next().value,
                             previous: this._prevGlobalTouchPoints.values().next().value,
-                        } as Notify.Data.BwFieldDragged);
+                        } as NotifyData.BwFieldDragged);
                     }
                 }
             }
@@ -249,7 +252,7 @@ export class BwCursorView extends eui.Group {
                     Notify.dispatch(NotifyType.BwCursorTapped, {
                         current : this._cursor.getGridIndex(),
                         tappedOn: this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y),
-                    } as Notify.Data.BwCursorTapped);
+                    } as NotifyData.BwCursorTapped);
                 } else {
                     if (hasTouchedCursor) {
                         Notify.dispatch(NotifyType.BwCursorDragEnded);
@@ -425,7 +428,7 @@ export class BwCursorView extends eui.Group {
                     con.visible = false;
                 } else {
                     const attackerUnitId                        = attackerUnit.getUnitId();
-                    const { errorCode, battleDamageInfoArray }  = DamageCalculator.getEstimatedBattleDamage({
+                    const { errorCode, battleDamageInfoArray }  = BwDamageCalculator.getEstimatedBattleDamage({
                         war,
                         attackerMovePath: movePath,
                         launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
@@ -440,7 +443,7 @@ export class BwCursorView extends eui.Group {
                     } else {
                         con.visible = true;
 
-                        const { errorCode: errorCodeForDamages, damages } = DamageCalculator.getAttackAndCounterDamage({
+                        const { errorCode: errorCodeForDamages, damages } = BwDamageCalculator.getAttackAndCounterDamage({
                             battleDamageInfoArray,
                             attackerUnitId,
                             targetGridIndex     : gridIndex,
@@ -473,7 +476,7 @@ export class BwCursorView extends eui.Group {
                     con.visible = false;
                 } else {
                     const attackerUnitId                        = attackerUnit.getUnitId();
-                    const { errorCode, battleDamageInfoArray }  = DamageCalculator.getEstimatedBattleDamage({
+                    const { errorCode, battleDamageInfoArray }  = BwDamageCalculator.getEstimatedBattleDamage({
                         war,
                         attackerMovePath: movePath,
                         launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
@@ -488,7 +491,7 @@ export class BwCursorView extends eui.Group {
                     } else {
                         con.visible = true;
 
-                        const { errorCode: errorCodeForDamages, damages } = DamageCalculator.getAttackAndCounterDamage({
+                        const { errorCode: errorCodeForDamages, damages } = BwDamageCalculator.getAttackAndCounterDamage({
                             battleDamageInfoArray,
                             attackerUnitId,
                             targetGridIndex     : gridIndex,

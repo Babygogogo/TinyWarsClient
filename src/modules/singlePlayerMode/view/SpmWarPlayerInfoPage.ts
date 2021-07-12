@@ -1,19 +1,21 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
-import * as SpmModel                    from "../model/SpmModel";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import { SpmModel }                     from "../model/SpmModel";
 
 export type OpenDataForSpmWarPlayerInfoPage = {
     slotIndex   : number;
@@ -61,7 +63,7 @@ export class SpmWarPlayerInfoPage extends UiTabPage<OpenDataForSpmWarPlayerInfoP
 
     private _createDataForListPlayer(): DataForPlayerRenderer[] {
         const slotIndex             = this._getOpenData().slotIndex;
-        const slotData              = SpmModel.SaveSlot.getSlotDict().get(slotIndex);
+        const slotData              = SpmModel.getSlotDict().get(slotIndex);
         const playersCountUnneutral = slotData ? slotData.warData.playerManager.players.length - 1 : null;
         const dataList              : DataForPlayerRenderer[] = [];
         for (let playerIndex = 1; playerIndex <= playersCountUnneutral; ++playerIndex) {
@@ -107,7 +109,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         const coId          = playerData ? playerData.coId : null;
         if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
             CommonCoInfoPanel.show({
-                configVersion   : SpmModel.SaveSlot.getSlotDict().get(this.data.slotIndex).warData.settingsForCommon.configVersion,
+                configVersion   : SpmModel.getSlotDict().get(this.data.slotIndex).warData.settingsForCommon.configVersion,
                 coId,
             });
         }
@@ -127,7 +129,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
 
     private async _updateComponentsForSettings(): Promise<void> {
         const data      = this.data;
-        const slotData  = SpmModel.SaveSlot.getSlotDict().get(data.slotIndex);
+        const slotData  = SpmModel.getSlotDict().get(data.slotIndex);
         if (!slotData) {
             return;
         }
@@ -152,7 +154,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
 
     private _getPlayerData(): ProtoTypes.WarSerialization.ISerialPlayer {
         const data      = this.data;
-        const slotData  = SpmModel.SaveSlot.getSlotDict().get(data.slotIndex);
+        const slotData  = SpmModel.getSlotDict().get(data.slotIndex);
         return slotData ? slotData.warData.playerManager.players.find(v => v.playerIndex === data.playerIndex) : null;
     }
 }

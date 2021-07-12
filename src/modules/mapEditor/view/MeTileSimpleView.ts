@@ -1,11 +1,11 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
-import * as CommonConstants     from "../../../utility/CommonConstants";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { CommonConstants }      from "../../../utility/CommonConstants";
 import { Logger }               from "../../../utility/Logger";
 import { Types }                from "../../../utility/Types";
-import * as CommonModel         from "../../common/model/CommonModel";
-import * as TimeModel           from "../../time/model/TimeModel";
-import * as UserModel           from "../../user/model/UserModel";
+import { CommonModel }          from "../../common/model/CommonModel";
+import { TimeModel }            from "../../time/model/TimeModel";
+import { UserModel }            from "../../user/model/UserModel";
 import TileObjectType           = Types.TileObjectType;
 import TileBaseType             = Types.TileBaseType;
 

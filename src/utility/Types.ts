@@ -1,5 +1,5 @@
 
-import * as ProtoTypes from "./ProtoTypes";
+import { ProtoTypes }  from "./proto/ProtoTypes";
 
 export namespace Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -640,7 +640,7 @@ export namespace Types {
     }
 
     // eslint-disable-next-line no-shadow
-    export const enum LogLevel {
+    export enum LogLevel {
         All   = 0,
         Trace = 1,
         Debug = 2,

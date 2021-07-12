@@ -1,28 +1,30 @@
 
-import { UiListItemRenderer }                                                   from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                                                              from "../../../gameui/UiPanel";
-import { UiButton }                                                             from "../../../gameui/UiButton";
-import { UiLabel }                                                              from "../../../gameui/UiLabel";
-import { UiScrollList }                                                         from "../../../gameui/UiScrollList";
-import { UiTab }                                                                from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                                                    from "../../../gameui/UiTabItemRenderer";
-import { LobbyBottomPanel }                                                     from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
+import { UiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                                                              from "../../../utility/ui/UiPanel";
+import { UiButton }                                                             from "../../../utility/ui/UiButton";
+import { UiLabel }                                                              from "../../../utility/ui/UiLabel";
+import { UiScrollList }                                                         from "../../../utility/ui/UiScrollList";
+import { UiTab }                                                                from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
+import { TwnsLobbyBottomPanel }                                                     from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
 import { McrMainMenuPanel }                                                     from "./McrMainMenuPanel";
 import { OpenDataForMcrRoomAdvancedSettingsPage, McrRoomAdvancedSettingsPage }  from "./McrRoomAdvancedSettingsPage";
 import { OpenDataForMcrRoomBasicSettingsPage, McrRoomBasicSettingsPage }        from "./McrRoomBasicSettingsPage";
 import { McrRoomInfoPanel }                                                     from "./McrRoomInfoPanel";
 import { OpenDataForMcrRoomMapInfoPage, McrRoomMapInfoPage }                    from "./McrRoomMapInfoPage";
 import { OpenDataForMcrRoomPlayerInfoPage, McrRoomPlayerInfoPage }              from "./McrRoomPlayerInfoPage";
-import * as Helpers                                                             from "../../../utility/Helpers";
-import * as Lang                                                                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                                                               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Helpers }                                                              from "../../../utility/Helpers";
+import { Lang }                                                                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import { Types }                                                                from "../../../utility/Types";
-import * as McrModel                                                            from "../../multiCustomRoom/model/McrModel";
-import * as McrProxy                                                            from "../../multiCustomRoom/model/McrProxy";
-import * as WarMapModel                                                         from "../../warMap/model/WarMapModel";
+import { McrModel }                                                             from "../../multiCustomRoom/model/McrModel";
+import { McrProxy }                                                             from "../../multiCustomRoom/model/McrProxy";
+import { WarMapModel }                                                          from "../../warMap/model/WarMapModel";
+import { McrJoinModel }                                                         from "../model/McrJoinModel";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import NotifyType       = TwnsNotifyType.NotifyType;
 
 export class McrMyRoomListPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -138,12 +140,12 @@ export class McrMyRoomListPanel extends UiPanel<void> {
     private _onTouchTapBtnBack(e: egret.TouchEvent): void {
         this.close();
         McrMainMenuPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
 
     private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
-        const roomId = McrModel.Joined.getPreviewingRoomId();
+        const roomId = McrJoinModel.getJoinedPreviewingRoomId();
         if (roomId != null) {
             this.close();
             McrRoomInfoPanel.show({
@@ -204,9 +206,9 @@ export class McrMyRoomListPanel extends UiPanel<void> {
             labelNoRoom.visible     = !dataArray.length;
             listRoom.bindData(dataArray);
 
-            const roomId = McrModel.Joined.getPreviewingRoomId();
+            const roomId = McrJoinModel.getJoinedPreviewingRoomId();
             if (dataArray.every(v => v.roomId != roomId)) {
-                McrModel.Joined.setPreviewingRoomId(dataArray.length ? dataArray[0].roomId : null);
+                McrJoinModel.setJoinedPreviewingRoomId(dataArray.length ? dataArray[0].roomId : null);
             }
         }
     }
@@ -214,7 +216,7 @@ export class McrMyRoomListPanel extends UiPanel<void> {
     private _updateComponentsForPreviewingRoomInfo(): void {
         const groupTab      = this._groupTab;
         const btnNextStep   = this._btnNextStep;
-        const roomId        = McrModel.Joined.getPreviewingRoomId();
+        const roomId        = McrJoinModel.getJoinedPreviewingRoomId();
         if ((!this._hasReceivedData) || (roomId == null)) {
             groupTab.visible    = false;
             btnNextStep.visible = false;
@@ -350,7 +352,7 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
     }
 
     private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-        McrModel.Joined.setPreviewingRoomId(this.data.roomId);
+        McrJoinModel.setJoinedPreviewingRoomId(this.data.roomId);
     }
 
     private _onTouchTapBtnNext(e: egret.TouchEvent): void {
@@ -361,6 +363,6 @@ class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
     }
 
     private _updateState(): void {
-        this.currentState = this.data.roomId === McrModel.Joined.getPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
+        this.currentState = this.data.roomId === McrJoinModel.getJoinedPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
     }
 }

@@ -1,10 +1,13 @@
-import { ClientErrorCode }  from "../../../utility/ClientErrorCode";
-import * as Helpers         from "../../../utility/Helpers";
-import { Notify }           from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { TwnsClientErrorCode }  from "../../../utility/ClientErrorCode";
+import { Helpers }          from "../../../utility/Helpers";
+import { Notify }           from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }            from "../../../utility/Types";
 import { BwCursorView }     from "../view/BwCursorView";
 import { BwWar }            from "./BwWar";
+import { NotifyData }       from "../../../utility/notify/NotifyData";
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwCursor {
     private _gridX              = 0;
@@ -55,14 +58,14 @@ export class BwCursor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     private _onNotifyBwCursorTapped(e: egret.Event): void {
         if (this.getIsMovableByTouches()) {
-            const data = e.data as Notify.Data.BwCursorTapped;
+            const data = e.data as NotifyData.BwCursorTapped;
             this.setGridIndex(data.tappedOn);
             this.updateView();
         }
     }
     private _onNotifyBwCursorDragged(e: egret.Event): void {
         if (this.getIsMovableByTouches()) {
-            const data = e.data as Notify.Data.BwCursorDragged;
+            const data = e.data as NotifyData.BwCursorDragged;
             this.setGridIndex(data.draggedTo);
             this.updateView();
         }

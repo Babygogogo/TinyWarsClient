@@ -1,32 +1,33 @@
 
-import { UiImage }                          from "../../../gameui/UiImage";
-import { UiListItemRenderer }               from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                          from "../../../gameui/UiPanel";
-import { UiButton }                         from "../../../gameui/UiButton";
-import { UiLabel }                          from "../../../gameui/UiLabel";
-import { UiScrollList }                     from "../../../gameui/UiScrollList";
-import { UiTab }                            from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                from "../../../gameui/UiTabItemRenderer";
+import { UiImage }                          from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }               from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                          from "../../../utility/ui/UiPanel";
+import { UiButton }                         from "../../../utility/ui/UiButton";
+import { UiLabel }                          from "../../../utility/ui/UiLabel";
+import { UiScrollList }                     from "../../../utility/ui/UiScrollList";
+import { UiTab }                            from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
 import { MfrMainMenuPanel }                 from "./MfrMainMenuPanel";
 import { MfrCreateAdvancedSettingsPage }    from "./MfrCreateAdvancedSettingsPage";
 import { MfrCreateBasicSettingsPage }       from "./MfrCreateBasicSettingsPage";
 import { MfrCreateMapInfoPage }             from "./MfrCreateMapInfoPage";
 import { MfrCreatePlayerInfoPage }          from "./MfrCreatePlayerInfoPage";
-import { LobbyBottomPanel }                 from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                    from "../../lobby/view/LobbyTopPanel";
-import * as CommonConstants                 from "../../../utility/CommonConstants";
-import * as FloatText                       from "../../../utility/FloatText";
+import { TwnsLobbyBottomPanel }                 from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                    from "../../lobby/view/LobbyTopPanel";
+import { CommonConstants }                  from "../../../utility/CommonConstants";
+import { FloatText }                        from "../../../utility/FloatText";
 import { FlowManager }                      from "../../../utility/FlowManager";
-import * as Helpers                         from "../../../utility/Helpers";
-import * as Lang                            from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                           from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Helpers }                          from "../../../utility/Helpers";
+import { Lang }                             from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import { Types }                            from "../../../utility/Types";
-import * as BwHelpers                       from "../../baseWar/model/BwHelpers";
-import * as BwWarRuleHelper                 from "../../baseWar/model/BwWarRuleHelper";
-import * as MfrModel                        from "../../multiFreeRoom/model/MfrModel";
-import * as MfrProxy                        from "../../multiFreeRoom/model/MfrProxy";
+import { BwHelpers }                        from "../../baseWar/model/BwHelpers";
+import { BwWarRuleHelpers }                  from "../../baseWar/model/BwWarRuleHelpers";
+import { MfrCreateModel }                   from "../model/MfrCreateModel";
+import { MfrProxy }                         from "../../multiFreeRoom/model/MfrProxy";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import NotifyType       = TwnsNotifyType.NotifyType;
 
 const CONFIRM_INTERVAL_MS = 5000;
 
@@ -128,11 +129,11 @@ export class MfrCreateSettingsPanel extends UiPanel<void> {
     private _onTouchedBtnBack(): void {
         this.close();
         MfrMainMenuPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
     private _onTouchedBtnConfirm(): void {
-        const data = MfrModel.Create.getData();
+        const data = MfrCreateModel.getData();
         MfrProxy.reqCreateRoom(data);
 
         this._btnConfirm.enabled = false;
@@ -177,7 +178,7 @@ export class MfrCreateSettingsPanel extends UiPanel<void> {
     }
 
     private async _initSclPlayerIndex(): Promise<void> {
-        const playersCountUnneutral = MfrModel.Create.getInitialWarData().playerManager.players.length - 1;
+        const playersCountUnneutral = MfrCreateModel.getInitialWarData().playerManager.players.length - 1;
         const dataArray             : DataForPlayerIndexRenderer[] = [];
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             dataArray.push({
@@ -292,7 +293,7 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
     public onItemTapEvent(): void {
         const data = this.data;
         if (data) {
-            const creator       = MfrModel.Create;
+            const creator       = MfrCreateModel;
             const playerIndex   = data.playerIndex;
             const playerData    = creator.getInitialWarData().playerManager.players.find(v => v.playerIndex === playerIndex);
             if ((playerData == null)                                    ||
@@ -319,12 +320,12 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
         const data = this.data;
         if (data) {
             const playerIndex       = data.playerIndex;
-            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelper.getTeamIndex(MfrModel.Create.getWarRule(), playerIndex))})`;
+            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelpers.getTeamIndex(MfrCreateModel.getWarRule(), playerIndex))})`;
         }
     }
     private _updateState(): void {
         const data          = this.data;
-        this.currentState   = ((data) && (data.playerIndex === MfrModel.Create.getSelfPlayerIndex())) ? `down` : `up`;
+        this.currentState   = ((data) && (data.playerIndex === MfrCreateModel.getSelfPlayerIndex())) ? `down` : `up`;
     }
 }
 
@@ -352,7 +353,7 @@ class SkinIdRenderer extends UiListItemRenderer<DataForSkinIdRenderer> {
         const data = this.data;
         if (data) {
             const skinId            = data.skinId;
-            this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, MfrModel.Create.getSelfPlayerData().unitAndTileSkinId === skinId);
+            this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, MfrCreateModel.getSelfPlayerData().unitAndTileSkinId === skinId);
         }
     }
 }

@@ -1,22 +1,24 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTextInput }                  from "../../../gameui/UiTextInput";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { ScrCreateBanCoPanel }          from "./ScrCreateBanCoPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as ScrModel                    from "../model/ScrModel";
+import { ScrCreateModel }                     from "../model/ScrCreateModel";
 import PlayerRuleType                   = Types.PlayerRuleType;
 
 export class ScrCreateAdvancedSettingsPage extends UiTabPage<void> {
@@ -52,8 +54,8 @@ export class ScrCreateAdvancedSettingsPage extends UiTabPage<void> {
         this.top    = 0;
         this.bottom = 0;
 
-        this._initialWarRuleId  = ScrModel.Create.getPresetWarRuleId();
-        this._mapRawData        = await ScrModel.Create.getMapRawData();
+        this._initialWarRuleId  = ScrCreateModel.getPresetWarRuleId();
+        this._mapRawData        = await ScrCreateModel.getMapRawData();
 
         this._updateComponentsForLanguage();
         this._initListSetting();
@@ -73,13 +75,13 @@ export class ScrCreateAdvancedSettingsPage extends UiTabPage<void> {
         this._updateBtnCustomize();
     }
     private _onTouchedBtnReset(e: egret.TouchEvent): void {
-        ScrModel.Create.resetDataByWarRuleId(this._initialWarRuleId);
+        ScrCreateModel.resetDataByWarRuleId(this._initialWarRuleId);
     }
     private _onTouchedBtnCustomize(e: egret.TouchEvent): void {
         CommonConfirmPanel.show({
             content : Lang.getText(LangTextType.A0129),
             callback: () => {
-                ScrModel.Create.setCustomWarRuleId();
+                ScrCreateModel.setCustomWarRuleId();
             },
         });
     }
@@ -93,10 +95,10 @@ export class ScrCreateAdvancedSettingsPage extends UiTabPage<void> {
     }
 
     private _updateBtnReset(): void {
-        this._btnReset.visible = (this._initialWarRuleId != null) && (ScrModel.Create.getPresetWarRuleId() == null);
+        this._btnReset.visible = (this._initialWarRuleId != null) && (ScrCreateModel.getPresetWarRuleId() == null);
     }
     private _updateBtnCustomize(): void {
-        this._btnCustomize.visible = ScrModel.Create.getPresetWarRuleId() != null;
+        this._btnCustomize.visible = ScrCreateModel.getPresetWarRuleId() != null;
     }
 
     private _initListSetting(): void {
@@ -250,7 +252,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         CommonConfirmPanel.show({
             content : Lang.getText(LangTextType.A0129),
             callback: () => {
-                ScrModel.Create.setCustomWarRuleId();
+                ScrCreateModel.setCustomWarRuleId();
             },
         });
     }
@@ -277,7 +279,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
 
     private _updateBtnCustom(): void {
-        this._btnCustom.visible = ScrModel.Create.getPresetWarRuleId() != null;
+        this._btnCustom.visible = ScrCreateModel.getPresetWarRuleId() != null;
     }
     private _updateComponentsForValue(): void {
         const data = this.data;
@@ -305,16 +307,16 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
 
         const labelValue                    = this._labelValue;
         labelValue.visible                  = true;
-        labelValue.text                     = Lang.getPlayerTeamName(ScrModel.Create.getTeamIndex(playerIndex));
+        labelValue.text                     = Lang.getPlayerTeamName(ScrCreateModel.getTeamIndex(playerIndex));
         labelValue.textColor                = 0xFFFFFF;
-        this._callbackForTouchLabelValue    = () => ScrModel.Create.tickTeamIndex(playerIndex);
+        this._callbackForTouchLabelValue    = () => ScrCreateModel.tickTeamIndex(playerIndex);
     }
     private _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): void {
         this._inputValue.visible            = false;
         this._callbackForFocusOutInputValue = null;
 
         const labelValue                    = this._labelValue;
-        const currValue                     = (ScrModel.Create.getBannedCoIdArray(playerIndex) || []).length;
+        const currValue                     = (ScrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
         labelValue.visible                  = true;
         labelValue.text                     = `${currValue}`;
         labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
@@ -325,7 +327,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = ScrModel.Create.getInitialFund(playerIndex);
+        const currValue                     = ScrCreateModel.getInitialFund(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
@@ -340,7 +342,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                ScrModel.Create.setInitialFund(playerIndex, value);
+                ScrCreateModel.setInitialFund(playerIndex, value);
             }
         };
     }
@@ -349,7 +351,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = ScrModel.Create.getIncomeMultiplier(playerIndex);
+        const currValue                     = ScrCreateModel.getIncomeMultiplier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
@@ -364,7 +366,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                ScrModel.Create.setIncomeMultiplier(playerIndex, value);
+                ScrCreateModel.setIncomeMultiplier(playerIndex, value);
             }
         };
     }
@@ -373,7 +375,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = ScrModel.Create.getEnergyAddPctOnLoadCo(playerIndex);
+        const currValue                     = ScrCreateModel.getEnergyAddPctOnLoadCo(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
@@ -388,7 +390,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                ScrModel.Create.setEnergyAddPctOnLoadCo(playerIndex, value);
+                ScrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
             }
         };
     }
@@ -397,7 +399,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = ScrModel.Create.getEnergyGrowthMultiplier(playerIndex);
+        const currValue                     = ScrCreateModel.getEnergyGrowthMultiplier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
@@ -412,7 +414,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                ScrModel.Create.setEnergyGrowthMultiplier(playerIndex, value);
+                ScrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
             }
         };
     }
@@ -421,7 +423,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = ScrModel.Create.getMoveRangeModifier(playerIndex);
+        const currValue                     = ScrCreateModel.getMoveRangeModifier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
@@ -436,7 +438,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                ScrModel.Create.setMoveRangeModifier(playerIndex, value);
+                ScrCreateModel.setMoveRangeModifier(playerIndex, value);
             }
         };
     }
@@ -445,7 +447,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = ScrModel.Create.getAttackPowerModifier(playerIndex);
+        const currValue                     = ScrCreateModel.getAttackPowerModifier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
@@ -460,7 +462,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                ScrModel.Create.setAttackPowerModifier(playerIndex, value);
+                ScrCreateModel.setAttackPowerModifier(playerIndex, value);
             }
         };
     }
@@ -469,7 +471,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = ScrModel.Create.getVisionRangeModifier(playerIndex);
+        const currValue                     = ScrCreateModel.getVisionRangeModifier(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
@@ -484,7 +486,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                ScrModel.Create.setVisionRangeModifier(playerIndex, value);
+                ScrCreateModel.setVisionRangeModifier(playerIndex, value);
             }
         };
     }
@@ -493,7 +495,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = ScrModel.Create.getLuckLowerLimit(playerIndex);
+        const currValue                     = ScrCreateModel.getLuckLowerLimit(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
@@ -505,11 +507,11 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             if ((isNaN(value))                                          ||
                 (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                 (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                (value > ScrModel.Create.getLuckUpperLimit(playerIndex))
+                (value > ScrCreateModel.getLuckUpperLimit(playerIndex))
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                ScrModel.Create.setLuckLowerLimit(playerIndex, value);
+                ScrCreateModel.setLuckLowerLimit(playerIndex, value);
             }
         };
     }
@@ -518,7 +520,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
         this._callbackForTouchLabelValue    = null;
 
         const inputValue                    = this._inputValue;
-        const currValue                     = ScrModel.Create.getLuckUpperLimit(playerIndex);
+        const currValue                     = ScrCreateModel.getLuckUpperLimit(playerIndex);
         inputValue.visible                  = true;
         inputValue.text                     = `${currValue}`;
         inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
@@ -530,11 +532,11 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
             if ((isNaN(value))                                          ||
                 (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                 (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                (value < ScrModel.Create.getLuckLowerLimit(playerIndex))
+                (value < ScrCreateModel.getLuckLowerLimit(playerIndex))
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0098));
             } else {
-                ScrModel.Create.setLuckUpperLimit(playerIndex, value);
+                ScrCreateModel.setLuckUpperLimit(playerIndex, value);
             }
         };
     }

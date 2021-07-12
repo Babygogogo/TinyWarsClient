@@ -1,16 +1,17 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { WarMapBuildingListPanel }      from "../../warMap/view/WarMapBuildingListPanel";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as MeModel                     from "../model/MeModel";
+import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
+import { MeSimModel }                   from "../model/MeSimModel";
+import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
+import { Lang }                         from "../../../utility/lang/Lang";
+import LangTextType                     = TwnsLangTextType.LangTextType;
+import NotifyType                       = TwnsNotifyType.NotifyType;
 
 export class MeSimBasicSettingsPage extends UiTabPage<void> {
     private _btnMapNameTitle            : UiButton;
@@ -57,23 +58,23 @@ export class MeSimBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _onTouchedBtnModifyWarRule(): void {
-        MeModel.Sim.tickPresetWarRuleId();
+        MeSimModel.tickPresetWarRuleId();
         this._updateComponentsForWarRule();
     }
 
     private _onTouchedBtnModifyHasFog(): void {
         const callback = () => {
-            MeModel.Sim.setHasFog(!MeModel.Sim.getHasFog());
+            MeSimModel.setHasFog(!MeSimModel.getHasFog());
             this._updateImgHasFog();
             this._updateLabelWarRule();
         };
-        if (MeModel.Sim.getPresetWarRuleId() == null) {
+        if (MeSimModel.getPresetWarRuleId() == null) {
             callback();
         } else {
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    MeModel.Sim.setPresetWarRuleId(null);
+                    MeSimModel.setPresetWarRuleId(null);
                     callback();
                 },
             });
@@ -88,9 +89,9 @@ export class MeSimBasicSettingsPage extends UiTabPage<void> {
     }
 
     private async _onTouchedBtnBuildings(): Promise<void> {
-        const mapRawData = MeModel.Sim.getMapRawData();
+        const mapRawData = MeSimModel.getMapRawData();
         WarMapBuildingListPanel.show({
-            configVersion           : MeModel.Sim.getWarData().settingsForCommon.configVersion,
+            configVersion           : MeSimModel.getWarData().settingsForCommon.configVersion,
             tileDataArray           : mapRawData.tileDataArray,
             playersCountUnneutral   : mapRawData.playersCountUnneutral,
         });
@@ -112,17 +113,17 @@ export class MeSimBasicSettingsPage extends UiTabPage<void> {
     }
 
     private _updateLabelMapName(): void {
-        this._labelMapName.text = Lang.getLanguageText({ textArray: MeModel.Sim.getMapRawData().mapNameArray });
+        this._labelMapName.text = Lang.getLanguageText({ textArray: MeSimModel.getMapRawData().mapNameArray });
     }
 
     private async _updateLabelWarRule(): Promise<void> {
         const label             = this._labelWarRule;
-        const settingsForCommon = MeModel.Sim.getWarData().settingsForCommon;
+        const settingsForCommon = MeSimModel.getWarData().settingsForCommon;
         label.text              = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
         label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFF0000 : 0x00FF00;
     }
 
     private _updateImgHasFog(): void {
-        this._imgHasFog.visible = MeModel.Sim.getHasFog();
+        this._imgHasFog.visible = MeSimModel.getHasFog();
     }
 }

@@ -1,25 +1,27 @@
 
-import { UiListItemRenderer }                                                   from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                                                              from "../../../gameui/UiPanel";
-import { UiButton }                                                             from "../../../gameui/UiButton";
-import { UiLabel }                                                              from "../../../gameui/UiLabel";
-import { UiScrollList }                                                         from "../../../gameui/UiScrollList";
-import { UiTab }                                                                from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                                                    from "../../../gameui/UiTabItemRenderer";
+import { UiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                                                              from "../../../utility/ui/UiPanel";
+import { UiButton }                                                             from "../../../utility/ui/UiButton";
+import { UiLabel }                                                              from "../../../utility/ui/UiLabel";
+import { UiScrollList }                                                         from "../../../utility/ui/UiScrollList";
+import { UiTab }                                                                from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
 import { FlowManager }                                                          from "../../../utility/FlowManager";
-import * as Helpers                                                             from "../../../utility/Helpers";
-import * as Lang                                                                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                                                               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Helpers }                                                              from "../../../utility/Helpers";
+import { Lang }                                                                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                                                               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                                                                from "../../../utility/Types";
-import * as BwHelpers                                                           from "../../baseWar/model/BwHelpers";
-import * as WarMapModel                                                         from "../../warMap/model/WarMapModel";
-import * as SpmModel                                                            from "../model/SpmModel";
+import { BwHelpers }                                                            from "../../baseWar/model/BwHelpers";
+import { WarMapModel }                                                          from "../../warMap/model/WarMapModel";
+import { SpmModel }                                                             from "../model/SpmModel";
 import { OpenDataForSpmWarMapInfoPage, SpmWarMapInfoPage }                      from "./SpmWarMapInfoPage";
 import { OpenDataForSpmWarPlayerInfoPage, SpmWarPlayerInfoPage }                from "./SpmWarPlayerInfoPage";
-import { LobbyBottomPanel }                                                     from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
+import { TwnsLobbyBottomPanel }                                                     from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
 import { SpmMainMenuPanel }                                                     from "./SpmMainMenuPanel";
 import { OpenDataForSpmWarAdvancedSettingsPage, SpmWarAdvancedSettingsPage }    from "./SpmWarAdvancedSettingsPage";
 import { OpenDataForSpmWarBasicSettingsPage, SpmWarBasicSettingsPage }          from "./SpmWarBasicSettingsPage";
@@ -108,12 +110,12 @@ export class SpmWarListPanel extends UiPanel<void> {
     private _onTouchTapBtnBack(e: egret.TouchEvent): void {
         this.close();
         SpmMainMenuPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
 
     private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
-        const slotData = SpmModel.SaveSlot.getSlotDict().get(SpmModel.SaveSlot.getPreviewingSlotIndex());
+        const slotData = SpmModel.getSlotDict().get(SpmModel.getPreviewingSlotIndex());
         if (slotData != null) {
             FlowManager.gotoSinglePlayerWar({
                 slotIndex       : slotData.slotIndex,
@@ -165,7 +167,7 @@ export class SpmWarListPanel extends UiPanel<void> {
         const labelLoading  = this._labelLoading;
         const labelNoWar    = this._labelNoWar;
         const listWar       = this._listWar;
-        if (!SpmModel.SaveSlot.getHasReceivedSlotArray()) {
+        if (!SpmModel.getHasReceivedSlotArray()) {
             labelLoading.visible    = true;
             labelNoWar.visible     = false;
             listWar.clear();
@@ -176,9 +178,9 @@ export class SpmWarListPanel extends UiPanel<void> {
             labelNoWar.visible      = !dataArray.length;
             listWar.bindData(dataArray);
 
-            const slotIndex = SpmModel.SaveSlot.getPreviewingSlotIndex();
+            const slotIndex = SpmModel.getPreviewingSlotIndex();
             if (dataArray.every(v => v.slotIndex != slotIndex)) {
-                SpmModel.SaveSlot.setPreviewingSlotIndex(dataArray.length ? dataArray[0].slotIndex : null);
+                SpmModel.setPreviewingSlotIndex(dataArray.length ? dataArray[0].slotIndex : null);
             }
         }
     }
@@ -186,8 +188,8 @@ export class SpmWarListPanel extends UiPanel<void> {
     private _updateComponentsForPreviewingWarInfo(): void {
         const groupTab      = this._groupTab;
         const btnNextStep   = this._btnNextStep;
-        const slotIndex     = SpmModel.SaveSlot.getPreviewingSlotIndex();
-        if ((!SpmModel.SaveSlot.getHasReceivedSlotArray()) || (slotIndex == null)) {
+        const slotIndex     = SpmModel.getPreviewingSlotIndex();
+        if ((!SpmModel.getHasReceivedSlotArray()) || (slotIndex == null)) {
             groupTab.visible    = false;
             btnNextStep.visible = false;
         } else {
@@ -204,7 +206,7 @@ export class SpmWarListPanel extends UiPanel<void> {
 
     private _createDataForListWar(): DataForWarRenderer[] {
         const dataArray: DataForWarRenderer[] = [];
-        for (const [slotIndex] of SpmModel.SaveSlot.getSlotDict()) {
+        for (const [slotIndex] of SpmModel.getSlotDict()) {
             dataArray.push({
                 slotIndex,
             });
@@ -306,7 +308,7 @@ class WarRenderer extends UiListItemRenderer<DataForWarRenderer> {
         this._updateState();
 
         const slotIndex = this.data.slotIndex;
-        const slotData  = SpmModel.SaveSlot.getSlotDict().get(slotIndex);
+        const slotData  = SpmModel.getSlotDict().get(slotIndex);
         const labelType = this._labelType;
         const labelName = this._labelName;
         if (!slotData) {
@@ -333,12 +335,12 @@ class WarRenderer extends UiListItemRenderer<DataForWarRenderer> {
     }
 
     private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-        SpmModel.SaveSlot.setPreviewingSlotIndex(this.data.slotIndex);
+        SpmModel.setPreviewingSlotIndex(this.data.slotIndex);
     }
 
     private _onTouchTapBtnNext(e: egret.TouchEvent): void {
         const slotIndex = this.data.slotIndex;
-        const slotData  = SpmModel.SaveSlot.getSlotDict().get(slotIndex);
+        const slotData  = SpmModel.getSlotDict().get(slotIndex);
         if (slotData != null) {
             FlowManager.gotoSinglePlayerWar({
                 slotIndex,
@@ -349,6 +351,6 @@ class WarRenderer extends UiListItemRenderer<DataForWarRenderer> {
     }
 
     private _updateState(): void {
-        this.currentState = this.data.slotIndex === SpmModel.SaveSlot.getPreviewingSlotIndex() ? Types.UiState.Down : Types.UiState.Up;
+        this.currentState = this.data.slotIndex === SpmModel.getPreviewingSlotIndex() ? Types.UiState.Down : Types.UiState.Up;
     }
 }

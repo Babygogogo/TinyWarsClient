@@ -1,13 +1,14 @@
 
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { UiZoomableMap }        from "../../../gameui/UiZoomableMap";
-import { UiTabPage }            from "../../../gameui/UiTabPage";
-import { UiMapInfo }            from "../../../gameui/UiMapInfo";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as MfrModel            from "../../multiFreeRoom/model/MfrModel";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { UiZoomableMap }        from "../../../utility/ui/UiZoomableMap";
+import { UiTabPage }            from "../../../utility/ui/UiTabPage";
+import { UiMapInfo }            from "../../../utility/ui/UiMapInfo";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
+import { MfrCreateModel }       from "../model/MfrCreateModel";
+import LangTextType             = TwnsLangTextType.LangTextType;
+import NotifyType               = TwnsNotifyType.NotifyType;
 
 export class MfrCreateMapInfoPage extends UiTabPage<void> {
     private readonly _zoomMap       : UiZoomableMap;
@@ -30,7 +31,7 @@ export class MfrCreateMapInfoPage extends UiTabPage<void> {
         this.top    = 0;
         this.bottom = 0;
 
-        const warData = MfrModel.Create.getInitialWarData();
+        const warData = MfrCreateModel.getInitialWarData();
         this._zoomMap.showMapByWarData(warData);
         this._uiMapInfo.setData({
             warData,

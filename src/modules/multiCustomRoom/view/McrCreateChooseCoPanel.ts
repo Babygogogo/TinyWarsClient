@@ -1,21 +1,22 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiCoInfo }                     from "../../../gameui/UiCoInfo";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiCoInfo }                     from "../../../utility/ui/UiCoInfo";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
-import * as McrModel                    from "../../multiCustomRoom/model/McrModel";
+import { McrCreateModel }               from "../model/McrCreateModel";
+import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import NotifyType       = TwnsNotifyType.NotifyType;
 
 type OpenDataForMcrCreateChooseCoPanel = {
     coId    : number | undefined | null;
@@ -107,7 +108,7 @@ export class McrCreateChooseCoPanel extends UiPanel<OpenDataForMcrCreateChooseCo
     private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
         const coId = this._getSelectedCoId();
         if (coId != null) {
-            McrModel.Create.setSelfCoId(coId);
+            McrCreateModel.setSelfCoId(coId);
             this.close();
         }
     }
@@ -144,11 +145,11 @@ export class McrCreateChooseCoPanel extends UiPanel<OpenDataForMcrCreateChooseCo
     }
 
     private _createDataForListCo(): DataForCoRenderer[] {
-        const creator       = McrModel.Create;
+        const creator       = McrCreateModel;
         const configVersion = ConfigManager.getLatestFormalVersion();
         const dataArray     : DataForCoRenderer[] = [];
         let index           = 0;
-        for (const coId of BwWarRuleHelper.getAvailableCoIdArrayForPlayer(creator.getWarRule(), creator.getSelfPlayerIndex(), configVersion)) {
+        for (const coId of BwWarRuleHelpers.getAvailableCoIdArrayForPlayer(creator.getWarRule(), creator.getSelfPlayerIndex(), configVersion)) {
             dataArray.push({
                 coBasicCfg  : ConfigManager.getCoBasicCfg(configVersion, coId),
                 index,

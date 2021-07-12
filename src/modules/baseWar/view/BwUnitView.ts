@@ -1,14 +1,14 @@
 
 import { BwUnit }               from "../model/BwUnit";
-import { UiImage }              from "../../../gameui/UiImage";
-import * as TimeModel           from "../../time/model/TimeModel";
-import * as CommonModel         from "../../common/model/CommonModel";
-import * as UserModel           from "../../user/model/UserModel";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { TimeModel }            from "../../time/model/TimeModel";
+import { CommonModel }          from "../../common/model/CommonModel";
+import { UserModel }            from "../../user/model/UserModel";
 import { Types }                from "../../../utility/Types";
-import * as VisibilityHelpers   from "../../../utility/VisibilityHelpers";
-import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
-import * as Helpers             from "../../../utility/Helpers";
-import * as CommonConstants     from "../../../utility/CommonConstants";
+import { BwVisibilityHelpers }    from "../model/BwVisibilityHelpers";
+import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
+import { Helpers }              from "../../../utility/Helpers";
+import { CommonConstants }      from "../../../utility/CommonConstants";
 import UnitAnimationType        = Types.UnitAnimationType;
 import GridIndex                = Types.GridIndex;
 
@@ -164,7 +164,7 @@ export class BwUnitView extends egret.DisplayObjectContainer {
                 if (isDiving) {
                     tween.call(() => {
                         this.visible = (i === path.length - 1)
-                            && (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            && (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex,
                                 unitType,
@@ -175,7 +175,7 @@ export class BwUnitView extends egret.DisplayObjectContainer {
                     });
                 } else {
                     tween.call(() => {
-                        this.visible = (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                        this.visible = (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                             war,
                             gridIndex           : path[i - 1],
                             unitType,
@@ -183,7 +183,7 @@ export class BwUnitView extends egret.DisplayObjectContainer {
                             unitPlayerIndex     : playerIndex,
                             observerTeamIndexes : watcherTeamIndexes,
                         }))
-                        || (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                        || (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                             war,
                             gridIndex,
                             unitType,
@@ -204,7 +204,7 @@ export class BwUnitView extends egret.DisplayObjectContainer {
                 tween.call(() => {
                     this._setImgUnitFlippedX(false);
                     if ((isBlocked)                                         &&
-                        (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                        (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                             war,
                             unitType,
                             isDiving,
@@ -233,7 +233,7 @@ export class BwUnitView extends egret.DisplayObjectContainer {
                     cursor.updateView();
                     this._setImgUnitFlippedX(false);
                     if ((isBlocked)                                         &&
-                        (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                        (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                             war,
                             unitType,
                             isDiving,

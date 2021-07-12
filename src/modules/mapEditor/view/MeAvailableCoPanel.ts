@@ -1,21 +1,23 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiComponent }                  from "../../../gameui/UiComponent";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { CommonAlertPanel }             from "../../common/view/CommonAlertPanel";
-import { LangTextType }                 from "../../../utility/LangTextType";
-import { NotifyType }                   from "../../../utility/NotifyType";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { Notify }                       from "../../../utility/Notify";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiComponent }                  from "../../../utility/ui/UiComponent";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
+import { TwnsLangTextType }                 from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }                   from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
-import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
+import { Notify }                       from "../../../utility/notify/Notify";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
 import WarRule                          = ProtoTypes.WarRule;
+import LangTextType     = TwnsLangTextType.LangTextType;
 
 type OpenDataForMeAvailableCoPanel = {
     playerRule      : WarRule.IDataForPlayerRule;
@@ -100,13 +102,13 @@ export class MeAvailableCoPanel extends UiPanel<OpenDataForMeAvailableCoPanel> {
     private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
         const bannedCoIdSet = this._bannedCoIdSet;
         if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-            CommonAlertPanel.show({
+            TwnsCommonAlertPanel.CommonAlertPanel.show({
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0130),
             });
         } else {
             const openData = this._getOpenData();
-            BwWarRuleHelper.setBannedCoIdArray(openData.warRule, openData.playerRule.playerIndex, bannedCoIdSet);
+            BwWarRuleHelpers.setBannedCoIdArray(openData.warRule, openData.playerRule.playerIndex, bannedCoIdSet);
             Notify.dispatch(NotifyType.MeBannedCoIdArrayChanged);
             this.close();
         }

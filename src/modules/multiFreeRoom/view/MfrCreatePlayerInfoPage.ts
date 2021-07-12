@@ -1,21 +1,22 @@
 
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiListItemRenderer }   from "../../../gameui/UiListItemRenderer";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { UiScrollList }         from "../../../gameui/UiScrollList";
-import { UiTabPage }            from "../../../gameui/UiTabPage";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { UiTabPage }            from "../../../utility/ui/UiTabPage";
 import { CommonCoInfoPanel }    from "../../common/view/CommonCoInfoPanel";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as ConfigManager       from "../../../utility/ConfigManager";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { ConfigManager }        from "../../../utility/ConfigManager";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { Types }                from "../../../utility/Types";
-import * as BwHelpers           from "../../baseWar/model/BwHelpers";
-import * as MfrModel            from "../../multiFreeRoom/model/MfrModel";
-import * as UserModel           from "../../user/model/UserModel";
+import { UserModel }            from "../../user/model/UserModel";
+import { MfrCreateModel }       from "../model/MfrCreateModel";
+import { BwHelpers }            from "../../baseWar/model/BwHelpers";
+import LangTextType             = TwnsLangTextType.LangTextType;
+import NotifyType               = TwnsNotifyType.NotifyType;
 
 export class MfrCreatePlayerInfoPage extends UiTabPage<void> {
     // @ts-ignore
@@ -54,7 +55,7 @@ export class MfrCreatePlayerInfoPage extends UiTabPage<void> {
     }
     private _updateComponentsForRoomInfo(): void {
         const dataArray         : DataForPlayerRenderer[] = [];
-        const maxPlayerIndex    = MfrModel.Create.getInitialWarData().playerManager.players.length - 1;
+        const maxPlayerIndex    = MfrCreateModel.getInitialWarData().playerManager.players.length - 1;
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
             dataArray.push({
                 playerIndex,
@@ -108,7 +109,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
 
     private async _onTouchedGroupCo(): Promise<void> {
         const playerIndex       = this.data.playerIndex;
-        const initialWarData    = MfrModel.Create.getInitialWarData();
+        const initialWarData    = MfrCreateModel.getInitialWarData();
         const coId              = initialWarData.playerManager.players.find(v => v.playerIndex === playerIndex).coId;
         if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
             CommonCoInfoPanel.show({
@@ -136,7 +137,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
 
     private async _updateComponentsForSettings(): Promise<void> {
         const playerIndex           = this.data.playerIndex;
-        const initialWarData        = MfrModel.Create.getInitialWarData();
+        const initialWarData        = MfrCreateModel.getInitialWarData();
         const settingsForCommon     = initialWarData.settingsForCommon;
         this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
         this._labelTeamIndex.text   = Lang.getPlayerTeamName(BwHelpers.getTeamIndexByRuleForPlayers(settingsForCommon.warRule.ruleForPlayers, playerIndex));
@@ -150,7 +151,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
         this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
         this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
-        const userInfo              = MfrModel.Create.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(UserModel.getSelfUserId()) : null;
+        const userInfo              = MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(UserModel.getSelfUserId()) : null;
         const labelNickname         = this._labelNickname;
         if (userInfo) {
             labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;

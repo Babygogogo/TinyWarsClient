@@ -1,20 +1,22 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
-import * as MpwModel                    from "../../multiPlayerWar/model/MpwModel";
+import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import { MpwModel }                     from "../../multiPlayerWar/model/MpwModel";
 import PlayerRuleType                   = Types.PlayerRuleType;
 
 export type OpenDataForCcwWarAdvancedSettingsPage = {
@@ -101,7 +103,7 @@ export class CcwWarAdvancedSettingsPage extends UiTabPage<OpenDataForCcwWarAdvan
         const warInfo               = MpwModel.getMyWarInfo(warId);
         const settingsForCommon     = warInfo ? warInfo.settingsForCommon : null;
         const warRule               = settingsForCommon ? settingsForCommon.warRule : null;
-        const playersCountUnneutral = warRule ? BwWarRuleHelper.getPlayersCount(warRule) : undefined;
+        const playersCountUnneutral = warRule ? BwWarRuleHelpers.getPlayersCount(warRule) : undefined;
         if (playersCountUnneutral == null) {
             Logger.error(`CcwWarAdvancedSettingsPage._updateListPlayer() empty playersCountUnneutral.`);
             listPlayer.clear();
@@ -245,7 +247,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
     private async _updateComponentsForValueAsTeamIndex(playerIndex: number): Promise<void> {
         const warRule           = this._getWarRule();
-        const teamIndex         = warRule ? BwWarRuleHelper.getTeamIndex(warRule, playerIndex) : undefined;
+        const teamIndex         = warRule ? BwWarRuleHelpers.getTeamIndex(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.textColor    = 0xFFFFFF;
 
@@ -264,14 +266,14 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
     private async _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): Promise<void> {
         const warRule           = this._getWarRule();
-        const currValue         = warRule ? (BwWarRuleHelper.getBannedCoIdArray(warRule, playerIndex) || []).length : 0;
+        const currValue         = warRule ? (BwWarRuleHelpers.getBannedCoIdArray(warRule, playerIndex) || []).length : 0;
         const labelValue        = this._labelValue;
         labelValue.text         = `${currValue}`;
         labelValue.textColor    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
     }
     private async _updateComponentsForValueAsInitialFund(playerIndex: number): Promise<void> {
         const warRule           = this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelper.getInitialFund(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? BwWarRuleHelpers.getInitialFund(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         if (currValue == null) {
             Logger.error(`CcwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsInitialFund() empty currValue.`);
@@ -284,7 +286,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
     private async _updateComponentsForValueAsIncomeMultiplier(playerIndex: number): Promise<void> {
         const warRule           = this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelper.getIncomeMultiplier(warRule, playerIndex): undefined;
+        const currValue         = warRule ? BwWarRuleHelpers.getIncomeMultiplier(warRule, playerIndex): undefined;
         const labelValue        = this._labelValue;
         if (currValue == null) {
             Logger.error(`CcwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsIncomeMultiplier() empty currValue.`);
@@ -297,7 +299,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
     private async _updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex: number): Promise<void> {
         const warRule           = this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelper.getEnergyAddPctOnLoadCo(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? BwWarRuleHelpers.getEnergyAddPctOnLoadCo(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         if (currValue == null) {
             Logger.error(`CcwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsEnergyAddPctOnLoadCo() empty currValue.`);
@@ -310,7 +312,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
     private async _updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex: number): Promise<void> {
         const warRule           = this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelper.getEnergyGrowthMultiplier(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? BwWarRuleHelpers.getEnergyGrowthMultiplier(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         if (currValue == null) {
             Logger.error(`CcwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsEnergyGrowthMultiplier() empty currValue.`);
@@ -323,7 +325,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
     private async _updateComponentsForValueAsMoveRangeModifier(playerIndex: number): Promise<void> {
         const warRule           = this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelper.getMoveRangeModifier(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? BwWarRuleHelpers.getMoveRangeModifier(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         if (currValue == null) {
             Logger.error(`CcwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsMoveRangeModifier() empty currValue.`);
@@ -336,7 +338,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
     private async _updateComponentsForValueAsAttackPowerModifier(playerIndex: number): Promise<void> {
         const warRule           = this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelper.getAttackPowerModifier(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? BwWarRuleHelpers.getAttackPowerModifier(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         if (currValue == null) {
             Logger.error(`CcwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsAttackPowerModifier() empty currValue.`);
@@ -349,7 +351,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
     private async _updateComponentsForValueAsVisionRangeModifier(playerIndex: number): Promise<void> {
         const warRule           = this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelper.getVisionRangeModifier(warRule, playerIndex): undefined;
+        const currValue         = warRule ? BwWarRuleHelpers.getVisionRangeModifier(warRule, playerIndex): undefined;
         const labelValue        = this._labelValue;
         if (currValue == null) {
             Logger.error(`CcwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsVisionRangeModifier() empty currValue.`);
@@ -362,7 +364,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
     private async _updateComponentsForValueAsLuckLowerLimit(playerIndex: number): Promise<void> {
         const warRule           = this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelper.getLuckLowerLimit(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? BwWarRuleHelpers.getLuckLowerLimit(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         if (currValue == null) {
             Logger.error(`CcwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsLuckLowerLimit() empty currValue.`);
@@ -375,7 +377,7 @@ class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
     }
     private async _updateComponentsForValueAsLuckUpperLimit(playerIndex: number): Promise<void> {
         const warRule           = this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelper.getLuckUpperLimit(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? BwWarRuleHelpers.getLuckUpperLimit(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         if (currValue == null) {
             Logger.error(`CcwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsLuckUpperLimit() empty currValue.`);

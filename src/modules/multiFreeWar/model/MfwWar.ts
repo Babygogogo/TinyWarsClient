@@ -1,11 +1,12 @@
 
-import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { MpwWar }                       from "../../multiPlayerWar/model/MpwWar";
 import { Logger }                       from "../../../utility/Logger";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
 import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
 import ISettingsForMfw                  = ProtoTypes.WarSettings.ISettingsForMfw;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class MfwWar extends MpwWar {
     private _settingsForMfw?: ISettingsForMfw;

@@ -1,12 +1,13 @@
 
-import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
 import { BwWar }                from "./BwWar";
-import * as ConfigManager       from "../../../utility/ConfigManager";
-import * as Helpers             from "../../../utility/Helpers";
+import { ConfigManager }        from "../../../utility/ConfigManager";
+import { Helpers }              from "../../../utility/Helpers";
 import { Logger }               from "../../../utility/Logger";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import * as BwWarRuleHelper     from "./BwWarRuleHelper";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import { BwWarRuleHelpers }      from "./BwWarRuleHelpers";
 import ISettingsForCommon       = ProtoTypes.WarSettings.ISettingsForCommon;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwCommonSettingManager {
     private _war?               : BwWar;
@@ -31,7 +32,7 @@ export class BwCommonSettingManager {
             return ClientErrorCode.BwCommonSettingManagerInit02;
         }
 
-        const errorCodeForWarRule = BwWarRuleHelper.getErrorCodeForWarRule({
+        const errorCodeForWarRule = BwWarRuleHelpers.getErrorCodeForWarRule({
             rule                : warRule,
             allWarEventIdArray,
             configVersion,
@@ -93,7 +94,7 @@ export class BwCommonSettingManager {
             return undefined;
         }
 
-        return BwWarRuleHelper.getHasFogByDefault(warRule);
+        return BwWarRuleHelpers.getHasFogByDefault(warRule);
     }
     public getSettingsIncomeMultiplier(playerIndex: number): number | null | undefined {
         const settingsForCommon = this.getSettingsForCommon();
@@ -108,7 +109,7 @@ export class BwCommonSettingManager {
             return undefined;
         }
 
-        return BwWarRuleHelper.getIncomeMultiplier(warRule, playerIndex);
+        return BwWarRuleHelpers.getIncomeMultiplier(warRule, playerIndex);
     }
     public getSettingsEnergyGrowthMultiplier(playerIndex: number): number | null | undefined {
         const settingsForCommon = this.getSettingsForCommon();
@@ -123,7 +124,7 @@ export class BwCommonSettingManager {
             return undefined;
         }
 
-        return BwWarRuleHelper.getEnergyGrowthMultiplier(warRule, playerIndex);
+        return BwWarRuleHelpers.getEnergyGrowthMultiplier(warRule, playerIndex);
     }
     public getSettingsAttackPowerModifier(playerIndex: number): number | null | undefined {
         const settingsForCommon = this.getSettingsForCommon();
@@ -138,7 +139,7 @@ export class BwCommonSettingManager {
             return undefined;
         }
 
-        return BwWarRuleHelper.getAttackPowerModifier(warRule, playerIndex);
+        return BwWarRuleHelpers.getAttackPowerModifier(warRule, playerIndex);
     }
     public getSettingsMoveRangeModifier(playerIndex: number): number | null | undefined {
         const settingsForCommon = this.getSettingsForCommon();
@@ -153,7 +154,7 @@ export class BwCommonSettingManager {
             return undefined;
         }
 
-        return BwWarRuleHelper.getMoveRangeModifier(warRule, playerIndex);
+        return BwWarRuleHelpers.getMoveRangeModifier(warRule, playerIndex);
     }
     public getSettingsVisionRangeModifier(playerIndex: number): number | null | undefined {
         const settingsForCommon = this.getSettingsForCommon();
@@ -168,7 +169,7 @@ export class BwCommonSettingManager {
             return undefined;
         }
 
-        return BwWarRuleHelper.getVisionRangeModifier(warRule, playerIndex);
+        return BwWarRuleHelpers.getVisionRangeModifier(warRule, playerIndex);
     }
     public getSettingsInitialFund(playerIndex: number): number | null | undefined {
         const settingsForCommon = this.getSettingsForCommon();
@@ -183,7 +184,7 @@ export class BwCommonSettingManager {
             return undefined;
         }
 
-        return BwWarRuleHelper.getInitialFund(warRule, playerIndex);
+        return BwWarRuleHelpers.getInitialFund(warRule, playerIndex);
     }
     public getSettingsEnergyAddPctOnLoadCo(playerIndex: number): number | null | undefined {
         const settingsForCommon = this.getSettingsForCommon();
@@ -198,7 +199,7 @@ export class BwCommonSettingManager {
             return undefined;
         }
 
-        return BwWarRuleHelper.getEnergyAddPctOnLoadCo(warRule, playerIndex);
+        return BwWarRuleHelpers.getEnergyAddPctOnLoadCo(warRule, playerIndex);
     }
     public getSettingsLuckLowerLimit(playerIndex: number): number | null | undefined {
         const settingsForCommon = this.getSettingsForCommon();
@@ -213,7 +214,7 @@ export class BwCommonSettingManager {
             return undefined;
         }
 
-        return BwWarRuleHelper.getLuckLowerLimit(warRule, playerIndex);
+        return BwWarRuleHelpers.getLuckLowerLimit(warRule, playerIndex);
     }
     public getSettingsLuckUpperLimit(playerIndex: number): number | null | undefined {
         const settingsForCommon = this.getSettingsForCommon();
@@ -228,7 +229,7 @@ export class BwCommonSettingManager {
             return undefined;
         }
 
-        return BwWarRuleHelper.getLuckUpperLimit(warRule, playerIndex);
+        return BwWarRuleHelpers.getLuckUpperLimit(warRule, playerIndex);
     }
     public getTeamIndex(playerIndex: number): number | undefined | null {
         const settingsForCommon = this.getSettingsForCommon();
@@ -243,6 +244,6 @@ export class BwCommonSettingManager {
             return undefined;
         }
 
-        return BwWarRuleHelper.getTeamIndex(warRule, playerIndex);
+        return BwWarRuleHelpers.getTeamIndex(warRule, playerIndex);
     }
 }

@@ -1,10 +1,10 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
@@ -17,17 +17,19 @@ import { MeAvailableCoPanel }           from "./MeAvailableCoPanel";
 import { MeAddWarEventToRulePanel }     from "./MeAddWarEventToRulePanel";
 import { MeModifyRuleNamePanel }        from "./MeModifyRuleNamePanel";
 import { WeEventListPanel }             from "../../warEvent/view/WeEventListPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
-import * as MeModel                     from "../model/MeModel";
+import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import { MeModel }                      from "../model/MeModel";
 import IWarRule                         = ProtoTypes.WarRule.IWarRule;
 import IDataForPlayerRule               = ProtoTypes.WarRule.IDataForPlayerRule;
 
@@ -215,7 +217,7 @@ export class MeWarRulePanel extends UiPanel<void> {
     private _onTouchedBtnModifyHasFog(): void {
         const rule = this._selectedRule;
         if ((rule) && (!this._war.getIsReviewingMap())) {
-            BwWarRuleHelper.setHasFogByDefault(rule, !BwWarRuleHelper.getHasFogByDefault(rule));
+            BwWarRuleHelpers.setHasFogByDefault(rule, !BwWarRuleHelpers.getHasFogByDefault(rule));
             this._updateImgHasFog(rule);
         }
     }
@@ -637,7 +639,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             callbackOnTouchedTitle  : isReviewing
                 ? null
                 : () => {
-                    BwWarRuleHelper.tickTeamIndex(warRule, playerRule.playerIndex);
+                    BwWarRuleHelpers.tickTeamIndex(warRule, playerRule.playerIndex);
                     this._updateView();
                 },
         };
@@ -681,7 +683,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelper.setInitialFund(warRule, playerRule.playerIndex, value);
+                                BwWarRuleHelpers.setInitialFund(warRule, playerRule.playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -712,7 +714,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelper.setIncomeMultiplier(warRule, playerRule.playerIndex, value);
+                                BwWarRuleHelpers.setIncomeMultiplier(warRule, playerRule.playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -743,7 +745,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelper.setEnergyAddPctOnLoadCo(warRule, playerRule.playerIndex, value);
+                                BwWarRuleHelpers.setEnergyAddPctOnLoadCo(warRule, playerRule.playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -774,7 +776,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelper.setEnergyGrowthMultiplier(warRule, playerRule.playerIndex, value);
+                                BwWarRuleHelpers.setEnergyGrowthMultiplier(warRule, playerRule.playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -805,7 +807,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelper.setMoveRangeModifier(warRule, playerRule.playerIndex, value);
+                                BwWarRuleHelpers.setMoveRangeModifier(warRule, playerRule.playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -836,7 +838,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelper.setAttackPowerModifier(warRule, playerRule.playerIndex, value);
+                                BwWarRuleHelpers.setAttackPowerModifier(warRule, playerRule.playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -867,7 +869,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelper.setVisionRangeModifier(warRule, playerRule.playerIndex, value);
+                                BwWarRuleHelpers.setVisionRangeModifier(warRule, playerRule.playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -899,12 +901,12 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                const upperLimit = BwWarRuleHelper.getLuckUpperLimit(warRule, playerIndex);
+                                const upperLimit = BwWarRuleHelpers.getLuckUpperLimit(warRule, playerIndex);
                                 if (value <= upperLimit) {
-                                    BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, value);
+                                    BwWarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
                                 } else {
-                                    BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, value);
-                                    BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, upperLimit);
+                                    BwWarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
+                                    BwWarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, upperLimit);
                                 }
                                 this._updateView();
                             }
@@ -937,12 +939,12 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                const lowerLimit = BwWarRuleHelper.getLuckLowerLimit(warRule, playerIndex);
+                                const lowerLimit = BwWarRuleHelpers.getLuckLowerLimit(warRule, playerIndex);
                                 if (value >= lowerLimit) {
-                                    BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, value);
+                                    BwWarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
                                 } else {
-                                    BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, value);
-                                    BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
+                                    BwWarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
+                                    BwWarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
                                 }
                                 this._updateView();
                             }
@@ -967,9 +969,9 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
 
                     const playerIndex = playerRule.playerIndex;
                     if (isControlledByAi) {
-                        BwWarRuleHelper.setFixedCoIdInCcw(warRule, playerIndex, null);
+                        BwWarRuleHelpers.setFixedCoIdInCcw(warRule, playerIndex, null);
                     } else {
-                        BwWarRuleHelper.setFixedCoIdInCcw(warRule, playerIndex, CommonConstants.CoEmptyId);
+                        BwWarRuleHelpers.setFixedCoIdInCcw(warRule, playerIndex, CommonConstants.CoEmptyId);
                     }
                     this._updateView();
                 },
@@ -998,7 +1000,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                         currentCoId         : playerRule.fixedCoIdInCcw,
                         availableCoIdArray  : coIdArray,
                         callbackOnConfirm   : (newCoId: number) => {
-                            BwWarRuleHelper.setFixedCoIdInCcw(warRule, playerRule.playerIndex, newCoId);
+                            BwWarRuleHelpers.setFixedCoIdInCcw(warRule, playerRule.playerIndex, newCoId);
                             this._updateView();
                         },
                     });
@@ -1068,21 +1070,21 @@ class WarEventRenderer extends UiListItemRenderer<DataForWarEventRenderer> {
     private _onTouchedBtnUp(): void {
         const data = this.data;
         if (data) {
-            BwWarRuleHelper.moveWarEventId(data.warRule, data.warEventId, -1);
+            BwWarRuleHelpers.moveWarEventId(data.warRule, data.warEventId, -1);
             Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
         }
     }
     private _onTouchedBtnDown(): void {
         const data = this.data;
         if (data) {
-            BwWarRuleHelper.moveWarEventId(data.warRule, data.warEventId, 1);
+            BwWarRuleHelpers.moveWarEventId(data.warRule, data.warEventId, 1);
             Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
         }
     }
     private _onTouchedBtnDelete(): void {
         const data = this.data;
         if (data) {
-            BwWarRuleHelper.deleteWarEventId(data.warRule, data.warEventId);
+            BwWarRuleHelpers.deleteWarEventId(data.warRule, data.warEventId);
             Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
         }
     }

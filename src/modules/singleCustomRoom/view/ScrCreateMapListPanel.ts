@@ -1,26 +1,28 @@
 
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiZoomableMap }                from "../../../gameui/UiZoomableMap";
-import { UiMapInfo }                    from "../../../gameui/UiMapInfo";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import { UiMapInfo }                    from "../../../utility/ui/UiMapInfo";
 import { SpmMainMenuPanel }             from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import { LobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
+import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
 import { ScrCreateSearchMapPanel }      from "./ScrCreateSearchMapPanel";
 import { ScrCreateSettingsPanel }       from "./ScrCreateSettingsPanel";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as WarMapModel                 from "../../warMap/model/WarMapModel";
-import * as ScrModel                    from "../model/ScrModel";
+import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import { ScrCreateModel }                     from "../model/ScrCreateModel";
 import IDataForMapTag                   = ProtoTypes.Map.IDataForMapTag;
 
 type FiltersForMapList = {
@@ -149,15 +151,15 @@ export class ScrCreateMapListPanel extends UiPanel<FiltersForMapList> {
     private _onTouchTapBtnBack(): void {
         this.close();
         SpmMainMenuPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
 
     private async _onTouchedBtnNextStep(): Promise<void> {
         const selectedMapId = this.getSelectedMapId();
         if (selectedMapId != null) {
             this.close();
-            await ScrModel.Create.resetDataByMapId(selectedMapId);
+            await ScrCreateModel.resetDataByMapId(selectedMapId);
             ScrCreateSettingsPanel.show();
         }
     }
@@ -348,7 +350,7 @@ class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
     private async _onTouchTapBtnNext(): Promise<void> {
         const data = this.data;
         data.panel.close();
-        await ScrModel.Create.resetDataByMapId(data.mapId);
+        await ScrCreateModel.resetDataByMapId(data.mapId);
         ScrCreateSettingsPanel.show();
     }
 }

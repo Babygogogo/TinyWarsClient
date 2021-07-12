@@ -1,26 +1,27 @@
 
-import { UiListItemRenderer }                                                           from "../../../gameui/UiListItemRenderer";
-import { UiPanel }                                                                      from "../../../gameui/UiPanel";
-import { UiButton }                                                                     from "../../../gameui/UiButton";
-import { UiLabel }                                                                      from "../../../gameui/UiLabel";
-import { UiScrollList }                                                                 from "../../../gameui/UiScrollList";
-import { UiTab }                                                                        from "../../../gameui/UiTab";
-import { UiTabItemRenderer }                                                            from "../../../gameui/UiTabItemRenderer";
-import { LobbyBottomPanel }                                                             from "../../lobby/view/LobbyBottomPanel";
-import { LobbyTopPanel }                                                                from "../../lobby/view/LobbyTopPanel";
+import { UiListItemRenderer }                                                           from "../../../utility/ui/UiListItemRenderer";
+import { UiPanel }                                                                      from "../../../utility/ui/UiPanel";
+import { UiButton }                                                                     from "../../../utility/ui/UiButton";
+import { UiLabel }                                                                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                                                                 from "../../../utility/ui/UiScrollList";
+import { UiTab }                                                                        from "../../../utility/ui/UiTab";
+import { UiTabItemRenderer }                                                            from "../../../utility/ui/UiTabItemRenderer";
+import { TwnsLobbyBottomPanel }                                                         from "../../lobby/view/LobbyBottomPanel";
+import { TwnsLobbyTopPanel }                                                                from "../../lobby/view/LobbyTopPanel";
 import { MrrMainMenuPanel }                                                             from "./MrrMainMenuPanel";
 import { OpenDataForMrrPreviewAdvancedSettingsPage, MrrPreviewAdvancedSettingsPage }    from "./MrrPreviewAdvancedSettingsPage";
 import { OpenDataForMrrPreviewBasicSettingsPage, MrrPreviewBasicSettingsPage }          from "./MrrPreviewBasicSettingsPage";
 import { OpenDataForMrrPreviewMapInfoPage, MrrPreviewMapInfoPage }                      from "./MrrPreviewMapInfoPage";
-import * as Helpers                                                                     from "../../../utility/Helpers";
-import * as Lang                                                                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                                                                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                                                                  from "../../../utility/ProtoTypes";
+import { Helpers }                                                                      from "../../../utility/Helpers";
+import { Lang }                                                                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType }                                                             from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }                                                               from "../../../utility/notify/NotifyType";
+import { ProtoTypes }                                                                   from "../../../utility/proto/ProtoTypes";
 import { Types }                                                                        from "../../../utility/Types";
-import * as WarMapModel                                                                 from "../../warMap/model/WarMapModel";
-import * as MrrModel                                                                    from "../model/MrrModel";
+import { WarMapModel }                                                                  from "../../warMap/model/WarMapModel";
+import { MrrModel }                                                                     from "../model/MrrModel";
+import LangTextType                                                                     = TwnsLangTextType.LangTextType;
+import NotifyType                                                                       = TwnsNotifyType.NotifyType;
 
 type OpenDataForMrrPreviewMapListPanel = {
     hasFog: boolean;
@@ -103,8 +104,8 @@ export class MrrPreviewMapListPanel extends UiPanel<OpenDataForMrrPreviewMapList
     private _onTouchedBtnBack(e: egret.TouchEvent): void {
         this.close();
         MrrMainMenuPanel.show();
-        LobbyTopPanel.show();
-        LobbyBottomPanel.show();
+        TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
     }
 
     private async _onTouchedBtnSwitch(e: egret.TouchEvent): Promise<void> {
@@ -158,15 +159,15 @@ export class MrrPreviewMapListPanel extends UiPanel<OpenDataForMrrPreviewMapList
         labelNoMap.visible      = !dataArray.length;
         listMap.bindData(dataArray);
 
-        const mapId = MrrModel.PreviewMap.getPreviewingMapId();
+        const mapId = MrrModel.getPreviewingMapId();
         if (dataArray.every(v => v.mapId != mapId)) {
-            MrrModel.PreviewMap.setPreviewingMapId(dataArray.length ? dataArray[0].mapId : null);
+            MrrModel.setPreviewingMapId(dataArray.length ? dataArray[0].mapId : null);
         }
     }
 
     private async _updateComponentsForTargetMapInfo(): Promise<void> {
         const groupTab      = this._groupTab;
-        const mapId         = MrrModel.PreviewMap.getPreviewingMapId();
+        const mapId         = MrrModel.getPreviewingMapId();
         if (mapId == null) {
             groupTab.visible    = false;
         } else {
@@ -314,10 +315,10 @@ class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
     }
 
     private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-        MrrModel.PreviewMap.setPreviewingMapId(this.data.mapId);
+        MrrModel.setPreviewingMapId(this.data.mapId);
     }
 
     private _updateState(): void {
-        this.currentState = this.data.mapId === MrrModel.PreviewMap.getPreviewingMapId() ? Types.UiState.Down : Types.UiState.Up;
+        this.currentState = this.data.mapId === MrrModel.getPreviewingMapId() ? Types.UiState.Down : Types.UiState.Up;
     }
 }

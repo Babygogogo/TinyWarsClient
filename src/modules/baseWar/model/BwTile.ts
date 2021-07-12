@@ -3,21 +3,22 @@ import { BwWar }                from "./BwWar";
 import { BwUnit }               from "./BwUnit";
 import { BwPlayer }             from "./BwPlayer";
 import { BwTileView }           from "../view/BwTileView";
-import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
-import * as BwHelpers           from "./BwHelpers";
+import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
+import { BwHelpers }            from "./BwHelpers";
 import { Types }                from "../../../utility/Types";
 import { Logger }               from "../../../utility/Logger";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import * as ConfigManager       from "../../../utility/ConfigManager";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as VisibilityHelpers   from "../../../utility/VisibilityHelpers";
-import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import { ConfigManager }        from "../../../utility/ConfigManager";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { BwVisibilityHelpers }    from "./BwVisibilityHelpers";
+import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
 import TileType                 = Types.TileType;
 import TileObjectType           = Types.TileObjectType;
 import TileBaseType             = Types.TileBaseType;
 import TileTemplateCfg          = Types.TileTemplateCfg;
 import UnitCategory             = Types.UnitCategory;
 import ISerialTile              = ProtoTypes.WarSerialization.ISerialTile;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwTile {
     private _templateCfg    : TileTemplateCfg;
@@ -217,7 +218,7 @@ export class BwTile {
     }
     public serializeForCreateSfw(): ISerialTile | undefined {
         const war = this.getWar();
-        if (VisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
+        if (BwVisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
             const data = this.serialize();
             if (data == null) {
                 Logger.error(`BwTile.serializeForCreateSfw() empty data.`);

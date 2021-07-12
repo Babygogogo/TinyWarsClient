@@ -1,15 +1,17 @@
 
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as WarMapModel                 from "../../warMap/model/WarMapModel";
-import * as RwModel                     from "../model/RwModel";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import { RwModel }                      from "../model/RwModel";
 
 export type OpenDataForRwReplayWarInfoPage = {
     replayId: number | null;

@@ -1,145 +1,148 @@
 
 import { ChatPanel }            from "../view/ChatPanel";
-import * as FloatText           from "../../../utility/FloatText";
 import { Logger }               from "../../../utility/Logger";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
 import { Types }                from "../../../utility/Types";
-import * as UserModel           from "../../user/model/UserModel";
-import ChatCategory             = Types.ChatMessageToCategory;
-import IChatMessage             = ProtoTypes.Chat.IChatMessage;
+import { UserModel }            from "../../user/model/UserModel";
+import { FloatText }            from "../../../utility/FloatText";
 
-type MessageDict                    = Map<number, IChatMessage[]>;
-const _allMessageDict               = new Map<ChatCategory, MessageDict>();
-const _allProgressDict              = new Map<ChatCategory, Map<number, number>>();
-let _timestampForNextSetAllMessages = 0;
+export namespace ChatModel {
+    import ChatCategory             = Types.ChatMessageToCategory;
+    import IChatMessage             = ProtoTypes.Chat.IChatMessage;
 
-export function setAllMessages(msgList: IChatMessage[]): void {
-    _allMessageDict.clear();
+    type MessageDict                    = Map<number, IChatMessage[]>;
+    const _allMessageDict               = new Map<ChatCategory, MessageDict>();
+    const _allProgressDict              = new Map<ChatCategory, Map<number, number>>();
+    let _timestampForNextSetAllMessages = 0;
 
-    for (const msg of msgList || []) {
-        updateOnAddMessage(msg, false);
+    export function setAllMessages(msgList: IChatMessage[]): void {
+        _allMessageDict.clear();
+
+        for (const msg of msgList || []) {
+            updateOnAddMessage(msg, false);
+        }
     }
-}
 
-export function setTimestampForNextReqAllMessages(timestamp: number): void {
-    _timestampForNextSetAllMessages = timestamp;
-}
-export function getTimestampForNextReqAllMessages(): number {
-    return _timestampForNextSetAllMessages;
-}
+    export function setTimestampForNextReqAllMessages(timestamp: number): void {
+        _timestampForNextSetAllMessages = timestamp;
+    }
+    export function getTimestampForNextReqAllMessages(): number {
+        return _timestampForNextSetAllMessages;
+    }
 
-export function updateOnAddMessage(msg: IChatMessage, showFloatText: boolean): void {
-    const fromUserId = msg.fromUserId;
-    if (fromUserId == null) {
-        Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
-    } else {
-        const msgToCategory = msg.toCategory;
-        const msgToTarget   = msg.toTarget;
-        const msgContent    = msg.content;
-        const isSentBySelf  = UserModel.getSelfUserId() === fromUserId;
+    export function updateOnAddMessage(msg: IChatMessage, showFloatText: boolean): void {
+        const fromUserId = msg.fromUserId;
+        if (fromUserId == null) {
+            Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
+        } else {
+            const msgToCategory = msg.toCategory;
+            const msgToTarget   = msg.toTarget;
+            const msgContent    = msg.content;
+            const isSentBySelf  = UserModel.getSelfUserId() === fromUserId;
 
-        if (msgToCategory === ChatCategory.PublicChannel) {
-            addMessage(ChatCategory.PublicChannel, msg, msgToTarget);
+            if (msgToCategory === ChatCategory.PublicChannel) {
+                addMessage(ChatCategory.PublicChannel, msg, msgToTarget);
 
-        } else if (msgToCategory === ChatCategory.WarAndTeam) {
-            addMessage(ChatCategory.WarAndTeam, msg, msgToTarget);
-            if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
-                UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
-            }
-
-        } else if (msgToCategory === ChatCategory.Private) {
-            if (isSentBySelf) {
-                addMessage(ChatCategory.Private, msg, msgToTarget);
-            } else {
-                addMessage(ChatCategory.Private, msg, fromUserId);
-                if ((showFloatText) && (!ChatPanel.getIsOpening())) {
+            } else if (msgToCategory === ChatCategory.WarAndTeam) {
+                addMessage(ChatCategory.WarAndTeam, msg, msgToTarget);
+                if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
                     UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
-            }
 
-        } else if (msgToCategory === ChatCategory.McrRoom) {
-            addMessage(msgToCategory, msg, msgToTarget);
-            if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
-                UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
-            }
+            } else if (msgToCategory === ChatCategory.Private) {
+                if (isSentBySelf) {
+                    addMessage(ChatCategory.Private, msg, msgToTarget);
+                } else {
+                    addMessage(ChatCategory.Private, msg, fromUserId);
+                    if ((showFloatText) && (!ChatPanel.getIsOpening())) {
+                        UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    }
+                }
 
-        } else if (msgToCategory === ChatCategory.MfrRoom) {
-            addMessage(msgToCategory, msg, msgToTarget);
-            if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
-                UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
-            }
+            } else if (msgToCategory === ChatCategory.McrRoom) {
+                addMessage(msgToCategory, msg, msgToTarget);
+                if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
+                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                }
 
+            } else if (msgToCategory === ChatCategory.MfrRoom) {
+                addMessage(msgToCategory, msg, msgToTarget);
+                if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
+                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                }
+
+            } else {
+                Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
+            }
+        }
+    }
+
+    export function getMessagesForCategory(toCategory: ChatCategory): MessageDict {
+        if (!_allMessageDict.has(toCategory)) {
+            _allMessageDict.set(toCategory, new Map());
+        }
+        return _allMessageDict.get(toCategory);
+    }
+    export function getLatestMessageTimestamp(toCategory: ChatCategory, toTarget: number): number {
+        const messageList   = getMessagesForCategory(toCategory).get(toTarget) || [];
+        const message       = messageList[messageList.length - 1];
+        return message ? message.timestamp || 0 : 0;
+    }
+
+    export function resetAllReadProgress(list: ProtoTypes.Chat.IChatReadProgress[]): void {
+        _allProgressDict.clear();
+        for (const p of list || []) {
+            setReadProgress(p);
+        }
+    }
+    export function setReadProgress(progress: ProtoTypes.Chat.IChatReadProgress): void {
+        const toCategory    = progress.toCategory;
+        const toTarget      = progress.toTarget;
+        const timestamp     = progress.timestamp;
+        const subDict       = _allProgressDict.get(toCategory);
+        if (subDict) {
+            subDict.set(toTarget, timestamp);
         } else {
-            Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
+            _allProgressDict.set(toCategory, new Map<number, number>([[toTarget, timestamp]]));
         }
     }
-}
-
-export function getMessagesForCategory(toCategory: ChatCategory): MessageDict {
-    if (!_allMessageDict.has(toCategory)) {
-        _allMessageDict.set(toCategory, new Map());
+    export function getReadProgressTimestamp(toCategory: ChatCategory, toTarget: number): number {
+        const subDict = _allProgressDict.get(toCategory);
+        return subDict
+            ? subDict.get(toTarget) || 0
+            : 0;
     }
-    return _allMessageDict.get(toCategory);
-}
-export function getLatestMessageTimestamp(toCategory: ChatCategory, toTarget: number): number {
-    const messageList   = getMessagesForCategory(toCategory).get(toTarget) || [];
-    const message       = messageList[messageList.length - 1];
-    return message ? message.timestamp || 0 : 0;
-}
 
-export function resetAllReadProgress(list: ProtoTypes.Chat.IChatReadProgress[]): void {
-    _allProgressDict.clear();
-    for (const p of list || []) {
-        setReadProgress(p);
-    }
-}
-export function setReadProgress(progress: ProtoTypes.Chat.IChatReadProgress): void {
-    const toCategory    = progress.toCategory;
-    const toTarget      = progress.toTarget;
-    const timestamp     = progress.timestamp;
-    const subDict       = _allProgressDict.get(toCategory);
-    if (subDict) {
-        subDict.set(toTarget, timestamp);
-    } else {
-        _allProgressDict.set(toCategory, new Map<number, number>([[toTarget, timestamp]]));
-    }
-}
-export function getReadProgressTimestamp(toCategory: ChatCategory, toTarget: number): number {
-    const subDict = _allProgressDict.get(toCategory);
-    return subDict
-        ? subDict.get(toTarget) || 0
-        : 0;
-}
-
-export function checkHasUnreadMessage(): boolean {
-    for (const [toCategory, dict] of _allMessageDict) {
-        for (const [toTarget, _] of dict) {
-            if (checkHasUnreadMessageForTarget(toCategory, toTarget)) {
-                return true;
+    export function checkHasUnreadMessage(): boolean {
+        for (const [toCategory, dict] of _allMessageDict) {
+            for (const [toTarget, _] of dict) {
+                if (checkHasUnreadMessageForTarget(toCategory, toTarget)) {
+                    return true;
+                }
             }
         }
-    }
-    return false;
-}
-export function checkHasUnreadMessageForTarget(toCategory: ChatCategory, toTarget: number): boolean {
-    const messages  = getMessagesForCategory(toCategory).get(toTarget) || [];
-    const length    = messages.length;
-    if (!length) {
         return false;
-    } else {
-        return getReadProgressTimestamp(toCategory, toTarget) < messages[length - 1].timestamp;
     }
-}
-
-function addMessage(toCategory: ChatCategory, msg: IChatMessage, toTarget: number): void {
-    const dict = _allMessageDict.get(toCategory);
-    if (!dict) {
-        _allMessageDict.set(toCategory, new Map<number, IChatMessage[]>([[toTarget, [msg]]]));
-    } else {
-        if (dict.has(toTarget)) {
-            dict.get(toTarget).push(msg);
+    export function checkHasUnreadMessageForTarget(toCategory: ChatCategory, toTarget: number): boolean {
+        const messages  = getMessagesForCategory(toCategory).get(toTarget) || [];
+        const length    = messages.length;
+        if (!length) {
+            return false;
         } else {
-            dict.set(toTarget, [msg]);
+            return getReadProgressTimestamp(toCategory, toTarget) < messages[length - 1].timestamp;
+        }
+    }
+
+    function addMessage(toCategory: ChatCategory, msg: IChatMessage, toTarget: number): void {
+        const dict = _allMessageDict.get(toCategory);
+        if (!dict) {
+            _allMessageDict.set(toCategory, new Map<number, IChatMessage[]>([[toTarget, [msg]]]));
+        } else {
+            if (dict.has(toTarget)) {
+                dict.get(toTarget).push(msg);
+            } else {
+                dict.set(toTarget, [msg]);
+            }
         }
     }
 }

@@ -1,14 +1,15 @@
 
-import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { SpwWar }                       from "../../singlePlayerWar/model/SpwWar";
 import { SpwWarMenuPanel }              from "../../singlePlayerWar/view/SpwWarMenuPanel";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as Helpers                     from "../../../utility/Helpers";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Helpers }                      from "../../../utility/Helpers";
 import { Logger }                       from "../../../utility/Logger";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
 import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
 import ISettingsForSrw                  = ProtoTypes.WarSettings.ISettingsForSrw;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class SrwWar extends SpwWar {
     private _settingsForSrw : ISettingsForSrw;

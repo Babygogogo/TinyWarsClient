@@ -1,21 +1,23 @@
 
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import * as ProtoManager        from "../../../utility/ProtoManager";
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { Types }                from "../../../utility/Types";
-import NetMessage           = ProtoTypes.NetMessage;
-import SpmWarSaveSlotData   = Types.SpmWarSaveSlotData;
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import { ProtoManager }         from "../../../utility/proto/ProtoManager";
 
-export function init(): void {
-    // nothing to do
-}
+export namespace SpmModel {
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NetMessage           = ProtoTypes.NetMessage;
+    import SpmWarSaveSlotData   = Types.SpmWarSaveSlotData;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Functions for save slots.
-////////////////////////////////////////////////////////////////////////////////////////////////////
-export namespace SaveSlot {
+    export function init(): void {
+        // nothing to do
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for save slots.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _slotDict             = new Map<number, SpmWarSaveSlotData>();
     let _hasReceivedSlotArray   = false;
     let _previewingSlotIndex    : number;
@@ -121,22 +123,5 @@ export namespace SaveSlot {
     }
     export function updateOnMsgSpmValidateSrw(data: NetMessage.MsgSpmValidateSrw.IS): void {
         getSlotDict().delete(data.slotIndex);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Functions for srw ranking info.
-////////////////////////////////////////////////////////////////////////////////////////////////////
-export namespace SrwRank {
-    type SrwRankInfo = NetMessage.MsgSpmGetSrwRankInfo.ISrwRankInfoForRule;
-
-    const _rankInfoDict = new Map<number, SrwRankInfo[]>();
-
-    export function getRankInfo(mapId: number): SrwRankInfo[] | undefined | null {
-        return _rankInfoDict.get(mapId);
-    }
-
-    export function updateOnMsgSpmGetSrwRankInfo(data: ProtoTypes.NetMessage.MsgSpmGetSrwRankInfo.IS): void {
-        _rankInfoDict.set(data.mapId, data.infoArray || []);
     }
 }

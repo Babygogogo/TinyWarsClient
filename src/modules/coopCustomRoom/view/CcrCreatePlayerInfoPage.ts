@@ -1,24 +1,24 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiScrollList }                 from "../../../gameui/UiScrollList";
-import { UiTabPage }                    from "../../../gameui/UiTabPage";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPanel";
 import { CommonChooseCoPanel }          from "../../common/view/CommonChooseCoPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as FloatText                   from "../../../utility/FloatText";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { FloatText }                    from "../../../utility/FloatText";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
-import * as CcrModel                    from "../../coopCustomRoom/model/CcrModel";
-import CreateModel                      = CcrModel.Create;
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import { CcrCreateModel }               from "../model/CcrCreateModel";
 
 export class CcrCreatePlayerInfoPage extends UiTabPage<void> {
     private readonly _groupInfo     : eui.Group;
@@ -46,7 +46,7 @@ export class CcrCreatePlayerInfoPage extends UiTabPage<void> {
     }
 
     private async _updateComponentsForPlayerInfo(): Promise<void> {
-        const mapRawData    = await CreateModel.getMapRawData();
+        const mapRawData    = await CcrCreateModel.getMapRawData();
         const listPlayer    = this._listPlayer;
         if (mapRawData) {
             listPlayer.bindData(this._createDataForListPlayer(mapRawData.playersCountUnneutral));
@@ -103,9 +103,9 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
 
     private async _onTouchedGroupCo(): Promise<void> {
         const playerIndex       = this.data.playerIndex;
-        const settingsForCommon = CreateModel.getData().settingsForCommon;
+        const settingsForCommon = CcrCreateModel.getData().settingsForCommon;
         const playerRule        = (settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray || []).find(v => v.playerIndex === playerIndex);
-        const coId              = (CreateModel.getSelfPlayerIndex() === playerIndex) ? (CreateModel.getSelfCoId()) : (playerRule.fixedCoIdInCcw);
+        const coId              = (CcrCreateModel.getSelfPlayerIndex() === playerIndex) ? (CcrCreateModel.getSelfCoId()) : (playerRule.fixedCoIdInCcw);
         CommonCoInfoPanel.show({
             configVersion   : settingsForCommon.configVersion,
             coId,
@@ -114,7 +114,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
 
     private async _onTouchedBtnChangeController(): Promise<void> {
         const data                  = this.data;
-        const playerRuleArray       = CreateModel.getWarRule().ruleForPlayers.playerRuleDataArray || [];
+        const playerRuleArray       = CcrCreateModel.getWarRule().ruleForPlayers.playerRuleDataArray || [];
         const humanPlayerIndexSet   = new Set<number>();
         const aiPlayerIndexSet      = new Set<number>();
         for (const playerRule of playerRuleArray) {
@@ -133,29 +133,29 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
             return;
         }
 
-        if (playerIndex === CreateModel.getSelfPlayerIndex()) {
+        if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
             if (humanPlayerIndexSet.size < 2) {
                 FloatText.show(Lang.getText(LangTextType.A0222));
             } else {
                 const callback = () => {
                     for (const p of humanPlayerIndexSet) {
                         if (p !== playerIndex) {
-                            CreateModel.setSelfPlayerIndex(p);
+                            CcrCreateModel.setSelfPlayerIndex(p);
                             break;
                         }
                     }
                     playerRule.fixedCoIdInCcw = CommonConstants.CoEmptyId;
-                    CreateModel.setAiSkinId(playerIndex, playerIndex);
+                    CcrCreateModel.setAiSkinId(playerIndex, playerIndex);
                     data.page.updateView();
                 };
 
-                if (CreateModel.getPresetWarRuleId() == null) {
+                if (CcrCreateModel.getPresetWarRuleId() == null) {
                     callback();
                 } else {
                     CommonConfirmPanel.show({
                         content : Lang.getText(LangTextType.A0129),
                         callback: () => {
-                            CreateModel.setCustomWarRuleId();
+                            CcrCreateModel.setCustomWarRuleId();
                             callback();
                         },
                     });
@@ -164,22 +164,22 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
 
         } else {
             if (playerRule.fixedCoIdInCcw == null) {
-                CreateModel.setSelfPlayerIndex(playerIndex);
+                CcrCreateModel.setSelfPlayerIndex(playerIndex);
                 data.page.updateView();
             } else {
                 const callback = () => {
                     playerRule.fixedCoIdInCcw = null;
-                    CreateModel.deleteAiSkinId(playerIndex);
+                    CcrCreateModel.deleteAiSkinId(playerIndex);
                     data.page.updateView();
                 };
 
-                if (CreateModel.getPresetWarRuleId() == null) {
+                if (CcrCreateModel.getPresetWarRuleId() == null) {
                     callback();
                 } else {
                     CommonConfirmPanel.show({
                         content : Lang.getText(LangTextType.A0129),
                         callback: () => {
-                            CreateModel.setCustomWarRuleId();
+                            CcrCreateModel.setCustomWarRuleId();
                             callback();
                         },
                     });
@@ -192,27 +192,27 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private async _onTouchedBtnChangeSkinId(): Promise<void> {
-        CreateModel.tickUnitAndTileSkinId(this.data.playerIndex);
+        CcrCreateModel.tickUnitAndTileSkinId(this.data.playerIndex);
         this._updateComponentsForSettings();
     }
 
     private async _onTouchedBtnChangeCo(): Promise<void> {
         const playerIndex   = this.data.playerIndex;
-        const warRule       = CreateModel.getWarRule();
+        const warRule       = CcrCreateModel.getWarRule();
         const playerRule    = (warRule.ruleForPlayers.playerRuleDataArray || []).find(v => v.playerIndex === playerIndex);
         if (playerRule == null) {
             Logger.error(`CcrCreatePlayerInfoPage.PlayerRenderer._onTouchedBtnChangeCo() empty playerRule.`);
             return;
         }
 
-        const configVersion = CreateModel.getData().settingsForCommon.configVersion;
-        if (playerIndex === CreateModel.getSelfPlayerIndex()) {
+        const configVersion = CcrCreateModel.getData().settingsForCommon.configVersion;
+        if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
             CommonChooseCoPanel.show({
-                currentCoId         : CreateModel.getSelfCoId(),
-                availableCoIdArray  : BwWarRuleHelper.getAvailableCoIdArrayForPlayer(warRule, playerIndex, configVersion),
+                currentCoId         : CcrCreateModel.getSelfCoId(),
+                availableCoIdArray  : BwWarRuleHelpers.getAvailableCoIdArrayForPlayer(warRule, playerIndex, configVersion),
                 callbackOnConfirm   : (coId) => {
-                    if (coId !== CreateModel.getSelfCoId()) {
-                        CreateModel.setSelfCoId(coId);
+                    if (coId !== CcrCreateModel.getSelfCoId()) {
+                        CcrCreateModel.setSelfCoId(coId);
                         this._updateComponentsForSettings();
                     }
                 },
@@ -231,7 +231,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                         availableCoIdArray  : coIdArray,
                         callbackOnConfirm   : (newCoId) => {
                             if (newCoId !== coId) {
-                                CreateModel.setAiCoId(playerIndex, newCoId);
+                                CcrCreateModel.setAiCoId(playerIndex, newCoId);
                                 this._updateComponentsForSettings();
                             }
                         },
@@ -244,7 +244,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                     CommonConfirmPanel.show({
                         content : Lang.getText(LangTextType.A0129),
                         callback: () => {
-                            CreateModel.setCustomWarRuleId();
+                            CcrCreateModel.setCustomWarRuleId();
                             callback();
                         },
                     });
@@ -268,7 +268,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
     }
 
     private async _updateComponentsForSettings(): Promise<void> {
-        const roomInfo  = CreateModel.getData();
+        const roomInfo  = CcrCreateModel.getData();
         if (!roomInfo) {
             return;
         }
@@ -285,12 +285,12 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
 
         this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerRule.teamIndex);
 
-        const isSelfPlayer      = CreateModel.getSelfPlayerIndex() === playerIndex;
+        const isSelfPlayer      = CcrCreateModel.getSelfPlayerIndex() === playerIndex;
         const isHumanPlayer     = playerRule.fixedCoIdInCcw == null;
         this._imgSkin.source    = getSourceForImgSkin(
             isSelfPlayer
-                ? CreateModel.getSelfUnitAndTileSkinId()
-                : (isHumanPlayer ? null : CreateModel.getAiSkinId(playerIndex))
+                ? CcrCreateModel.getSelfUnitAndTileSkinId()
+                : (isHumanPlayer ? null : CcrCreateModel.getAiSkinId(playerIndex))
         );
 
         this._labelPlayerType.text  = isSelfPlayer
@@ -299,7 +299,7 @@ class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
                 ? Lang.getText(LangTextType.B0648)
                 : Lang.getText(LangTextType.B0607));
 
-        const coId                      = isSelfPlayer ? CreateModel.getSelfCoId() : playerRule.fixedCoIdInCcw;
+        const coId                      = isSelfPlayer ? CcrCreateModel.getSelfCoId() : playerRule.fixedCoIdInCcw;
         const coCfg                     = ConfigManager.getCoBasicCfg(settingsForCommon.configVersion, coId);
         this._labelCo.text              = coCfg ? coCfg.name : `??`;
         this._imgCoHead.source          = ConfigManager.getCoHeadImageSource(coId);

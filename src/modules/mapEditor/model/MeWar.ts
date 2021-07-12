@@ -1,5 +1,5 @@
 
-import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { MeDrawer }                     from "./MeDrawer";
 import { MeField }                      from "./MeField";
@@ -7,12 +7,12 @@ import { MePlayerManager }              from "./MePlayerManager";
 import { MeCommonSettingManager }       from "./MeCommonSettingManager";
 import { MeWarEventManager }            from "./MeWarEventManager";
 import { MeWarMenuPanel }               from "../view/MeWarMenuPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { Helpers }                      from "../../../utility/Helpers";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
-import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
-import * as TimeModel                   from "../../time/model/TimeModel";
+import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import { TimeModel }                    from "../../time/model/TimeModel";
 import * as MeUtility                   from "./MeUtility";
 import WarAction                        = ProtoTypes.WarAction;
 import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
@@ -20,6 +20,7 @@ import IWarRule                         = ProtoTypes.WarRule.IWarRule;
 import IMapRawData                      = ProtoTypes.Map.IMapRawData;
 import IDataForMapTag                   = ProtoTypes.Map.IDataForMapTag;
 import ILanguageText                    = ProtoTypes.Structure.ILanguageText;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class MeWar extends BwWar {
     private readonly _playerManager         = new MePlayerManager();
@@ -307,7 +308,7 @@ export class MeWar extends BwWar {
 
     public addWarRule(): void {
         const ruleList = this.getWarRuleArray();
-        ruleList.push(BwWarRuleHelper.createDefaultWarRule(ruleList.length, CommonConstants.WarMaxPlayerIndex));
+        ruleList.push(BwWarRuleHelpers.createDefaultWarRule(ruleList.length, CommonConstants.WarMaxPlayerIndex));
     }
     public deleteWarRule(ruleId: number): void {
         const ruleList  = this.getWarRuleArray();

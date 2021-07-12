@@ -1,14 +1,15 @@
 
 import { BwTileView }           from "./BwTileView";
 import { BwTileMap }            from "../model/BwTileMap";
-import { UiImage }              from "../../../gameui/UiImage";
-import * as UserModel           from "../../user/model/UserModel";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as Helpers             from "../../../utility/Helpers";
-import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
-import * as VisibilityHelpers   from "../../../utility/VisibilityHelpers";
-import * as CommonConstants     from "../../../utility/CommonConstants";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UserModel }            from "../../user/model/UserModel";
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { Helpers }              from "../../../utility/Helpers";
+import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
+import { BwVisibilityHelpers }    from "../model/BwVisibilityHelpers";
+import { CommonConstants }      from "../../../utility/CommonConstants";
 
 const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -190,7 +191,7 @@ export class BwTileMapView extends egret.DisplayObjectContainer {
                 : player.getCoGridIndexListOnMap().filter(gridIndex => {
                     const unit = unitMap.getUnitOnMap(gridIndex);
                     return (!!unit)
-                        && (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                        && (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                             war,
                             gridIndex,
                             unitType: unit.getUnitType(),

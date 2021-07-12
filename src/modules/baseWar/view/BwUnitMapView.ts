@@ -1,10 +1,11 @@
 
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                from "../../../utility/Types";
-import * as VisibilityHelpers   from "../../../utility/VisibilityHelpers";
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as ConfigManager       from "../../../utility/ConfigManager";
+import { BwVisibilityHelpers }    from "../model/BwVisibilityHelpers";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { ConfigManager }        from "../../../utility/ConfigManager";
 import { BwUnitMap }            from "../model/BwUnitMap";
 import { BwUnitView }           from "./BwUnitView";
 import UnitCategory             = Types.UnitCategory;
@@ -207,7 +208,7 @@ export class BwUnitMapView extends egret.DisplayObjectContainer {
     private _resetVisibleForAllUnitsOnMap(): void {
         const unitMap       = this._getUnitMap();
         const war           = unitMap.getWar();
-        const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+        const visibleUnits  = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
         for (const unit of unitMap.getAllUnitsOnMap()) {
             unit.setViewVisible(visibleUnits.has(unit));
         }

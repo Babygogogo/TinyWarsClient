@@ -1,21 +1,23 @@
 
-import { UiImage }                      from "../../../gameui/UiImage";
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiButton }                     from "../../../gameui/UiButton";
-import { UiComponent }                  from "../../../gameui/UiComponent";
-import { UiLabel }                      from "../../../gameui/UiLabel";
-import { UiCoInfo }                     from "../../../gameui/UiCoInfo";
+import { UiImage }                      from "../../../utility/ui/UiImage";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiButton }                     from "../../../utility/ui/UiButton";
+import { UiComponent }                  from "../../../utility/ui/UiComponent";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { UiCoInfo }                     from "../../../utility/ui/UiCoInfo";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
-import { CommonAlertPanel }             from "../../common/view/CommonAlertPanel";
-import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as ConfigManager               from "../../../utility/ConfigManager";
-import * as Helpers                     from "../../../utility/Helpers";
-import * as Lang                        from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import { Notify }                       from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
+import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
+import { CommonConstants }              from "../../../utility/CommonConstants";
+import { ConfigManager }                from "../../../utility/ConfigManager";
+import { Helpers }                      from "../../../utility/Helpers";
+import { Lang }                         from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { Notify }                       from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import { Types }                        from "../../../utility/Types";
-import * as McrModel                    from "../../multiCustomRoom/model/McrModel";
+import { McrCreateModel }               from "../model/McrCreateModel";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import NotifyType       = TwnsNotifyType.NotifyType;
 
 type OpenDataForMcrCreateBanCoPanel = {
     playerIndex : number;
@@ -79,7 +81,7 @@ export class McrCreateBanCoPanel extends UiPanel<OpenDataForMcrCreateBanCoPanel>
 
         const bannedCoIdSet = this._bannedCoIdSet;
         bannedCoIdSet.clear();
-        for (const coId of McrModel.Create.getBannedCoIdArray(playerIndex) || []) {
+        for (const coId of McrCreateModel.getBannedCoIdArray(playerIndex) || []) {
             bannedCoIdSet.add(coId);
         }
 
@@ -120,26 +122,26 @@ export class McrCreateBanCoPanel extends UiPanel<OpenDataForMcrCreateBanCoPanel>
     private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
         const bannedCoIdSet = this._bannedCoIdSet;
         if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-            CommonAlertPanel.show({
+            TwnsCommonAlertPanel.CommonAlertPanel.show({
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0130),
             });
         } else {
             const playerIndex   = this._playerIndex;
             const callback      = () => {
-                McrModel.Create.setBannedCoIdArray(playerIndex, bannedCoIdSet);
+                McrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
                 Notify.dispatch(NotifyType.McrCreateBannedCoIdArrayChanged);
                 this.close();
             };
-            if ((playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
-                (!bannedCoIdSet.has(McrModel.Create.getSelfCoId()))
+            if ((playerIndex !== McrCreateModel.getSelfPlayerIndex()) ||
+                (!bannedCoIdSet.has(McrCreateModel.getSelfCoId()))
             ) {
                 callback();
             } else {
                 CommonConfirmPanel.show({
                     content : Lang.getText(LangTextType.A0057),
                     callback: () => {
-                        McrModel.Create.setSelfCoId(CommonConstants.CoEmptyId);
+                        McrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
                         callback();
                     },
                 });
@@ -196,7 +198,7 @@ export class McrCreateBanCoPanel extends UiPanel<OpenDataForMcrCreateBanCoPanel>
 
         } else {
             if (coId === CommonConstants.CoEmptyId) {
-                CommonAlertPanel.show({
+                TwnsCommonAlertPanel.CommonAlertPanel.show({
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
                 });
@@ -209,8 +211,8 @@ export class McrCreateBanCoPanel extends UiPanel<OpenDataForMcrCreateBanCoPanel>
                 this._updateGroupCoNames();
             };
 
-            if ((this._playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
-                (coId !== McrModel.Create.getSelfCoId())
+            if ((this._playerIndex !== McrCreateModel.getSelfPlayerIndex()) ||
+                (coId !== McrCreateModel.getSelfCoId())
             ) {
                 callback();
             } else {

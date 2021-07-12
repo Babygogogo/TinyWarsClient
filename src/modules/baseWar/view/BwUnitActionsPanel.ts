@@ -1,20 +1,22 @@
 
-import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as Helpers             from "../../../utility/Helpers";
-import { Notify }               from "../../../utility/Notify";
-import { NotifyType } from "../../../utility/NotifyType";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
+import { CommonConstants }      from "../../../utility/CommonConstants";
+import { Helpers }              from "../../../utility/Helpers";
+import { Notify }               from "../../../utility/notify/Notify";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
 import { Types }                from "../../../utility/Types";
-import * as StageManager        from "../../../utility/StageManager";
+import { StageManager }         from "../../../utility/StageManager";
 import { BwUnitView }           from "./BwUnitView";
 import { DataForUnitAction }    from "../model/BwActionPlanner";
 import { BwWar }                from "../model/BwWar";
 import { BwUnit }               from "../model/BwUnit";
-import { UiScrollList }         from "../../../gameui/UiScrollList";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { UiListItemRenderer }   from "../../../gameui/UiListItemRenderer";
-import { UiLabel }              from "../../../gameui/UiLabel";
+import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
 import UnitActionType           = Types.UnitActionType;
 
 export type OpenDataForBwUnitActionsPanel = {

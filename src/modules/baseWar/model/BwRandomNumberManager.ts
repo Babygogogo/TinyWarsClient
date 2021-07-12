@@ -1,8 +1,9 @@
 
-import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
+import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { Logger }                       from "../../../utility/Logger";
-import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import ISeedRandomState                 = ProtoTypes.Structure.ISeedRandomState;
+import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
 export class BwRandomNumberManager {
     private _isNeedReplay?              : boolean;

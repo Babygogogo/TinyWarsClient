@@ -1,18 +1,20 @@
 
-import { UiButton }             from "../../../gameui/UiButton";
-import { UiTextInput }          from "../../../gameui/UiTextInput";
-import { UiImage }              from "../../../gameui/UiImage";
-import { UiPanel }              from "../../../gameui/UiPanel";
-import { UiLabel }              from "../../../gameui/UiLabel";
-import { NotifyType }           from "../../../utility/NotifyType";
-import * as FloatText           from "../../../utility/FloatText";
-import * as Helpers             from "../../../utility/Helpers";
-import * as Lang                from "../../../utility/Lang";
-import { LangTextType } from "../../../utility/LangTextType";
-import * as LocalStorage        from "../../../utility/LocalStorage";
+import { UiButton }             from "../../../utility/ui/UiButton";
+import { UiTextInput }          from "../../../utility/ui/UiTextInput";
+import { UiImage }              from "../../../utility/ui/UiImage";
+import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import NotifyType       = TwnsNotifyType.NotifyType;
+import { FloatText }            from "../../../utility/FloatText";
+import { Helpers }              from "../../../utility/Helpers";
+import { Lang }                 from "../../../utility/lang/Lang";
+import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import { LocalStorage }         from "../../../utility/LocalStorage";
 import { Types }                from "../../../utility/Types";
-import * as UserModel           from "../../user/model/UserModel";
-import * as UserProxy           from "../../user/model/UserProxy";
+import { UserModel }            from "../../user/model/UserModel";
+import { UserProxy }            from "../../user/model/UserProxy";
 
 export class UserSetPasswordPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;

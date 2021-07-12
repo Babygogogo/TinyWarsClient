@@ -1,6 +1,6 @@
 
-import { UiPanel }                      from "../../../gameui/UiPanel";
-import { UiLabel }                      from "../../../gameui/UiLabel";
+import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { UiLabel }                      from "../../../utility/ui/UiLabel";
 import { Types }                        from "../../../utility/Types";
 
 type OpenDataForCommonBlockPanel = {
