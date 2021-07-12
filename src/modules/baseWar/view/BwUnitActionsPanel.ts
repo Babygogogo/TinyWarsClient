@@ -13,10 +13,10 @@ import { BwUnitView }           from "./BwUnitView";
 import { DataForUnitAction }    from "../model/BwActionPlanner";
 import { BwWar }                from "../model/BwWar";
 import { BwUnit }               from "../model/BwUnit";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import UnitActionType           = Types.UnitActionType;
 
 export type OpenDataForBwUnitActionsPanel = {
@@ -24,14 +24,14 @@ export type OpenDataForBwUnitActionsPanel = {
     destination : Types.GridIndex;
     actionList  : DataForUnitAction[];
 };
-export class BwUnitActionsPanel extends UiPanel<OpenDataForBwUnitActionsPanel> {
+export class BwUnitActionsPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitActionsPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: BwUnitActionsPanel;
 
     private _group      : eui.Group;
-    private _listAction : UiScrollList<DataForUnitActionRenderer>;
+    private _listAction : TwnsUiScrollList.UiScrollList<DataForUnitActionRenderer>;
 
     public static show(openData: OpenDataForBwUnitActionsPanel): void {
         if (!BwUnitActionsPanel._instance) {
@@ -162,9 +162,9 @@ type DataForUnitActionRenderer = {
     canProduceUnit? : boolean;
 };
 
-class UnitActionRenderer extends UiListItemRenderer<DataForUnitActionRenderer> {
-    private _labelAction: UiLabel;
-    private _labelCost  : UiLabel;
+class UnitActionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitActionRenderer> {
+    private _labelAction: TwnsUiLabel.UiLabel;
+    private _labelCost  : TwnsUiLabel.UiLabel;
     private _conUnitView: eui.Group;
 
     private _unitView   : BwUnitView;

@@ -1,8 +1,8 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { WeConditionTypeListPanel }     from "./WeConditionTypeListPanel";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -22,21 +22,21 @@ type OpenDataForWeConditionModifyPanel2 = {
     condition   : IWarEventCondition;
 };
 /** WecTurnIndexGreaterThan */
-export class WeConditionModifyPanel2 extends UiPanel<OpenDataForWeConditionModifyPanel2> {
+export class WeConditionModifyPanel2 extends TwnsUiPanel.UiPanel<OpenDataForWeConditionModifyPanel2> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: WeConditionModifyPanel2;
 
-    private _labelTitle     : UiLabel;
-    private _btnClose       : UiButton;
-    private _btnType        : UiButton;
-    private _labelDesc      : UiLabel;
-    private _labelError     : UiLabel;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _btnClose       : TwnsUiButton.UiButton;
+    private _btnType        : TwnsUiButton.UiButton;
+    private _labelDesc      : TwnsUiLabel.UiLabel;
+    private _labelError     : TwnsUiLabel.UiLabel;
     private _groupIsNot     : eui.Group;
-    private _labelIsNot     : UiLabel;
-    private _imgIsNot       : UiImage;
-    private _labelTurnIndex : UiLabel;
+    private _labelIsNot     : TwnsUiLabel.UiLabel;
+    private _imgIsNot       : TwnsUiImage.UiImage;
+    private _labelTurnIndex : TwnsUiLabel.UiLabel;
     private _inputTurnIndex : UiTextInput;
 
     public static show(openData: OpenDataForWeConditionModifyPanel2): void {

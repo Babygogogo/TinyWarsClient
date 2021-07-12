@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { MeWar }                        from "../../mapEditor/model/MeWar";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -13,22 +13,22 @@ import LangTextType         = TwnsLangTextType.LangTextType;
 type OpenData = {
     war: MeWar;
 };
-export class MmRejectMapPanel extends UiPanel<OpenData> {
+export class MmRejectMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: MmRejectMapPanel;
 
     // @ts-ignore
-    private _labelTitle     : UiLabel;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _labelTips      : UiLabel;
+    private _labelTips      : TwnsUiLabel.UiLabel;
     // @ts-ignore
     private _inputReason    : UiTextInput;
     // @ts-ignore
-    private _btnCancel      : UiButton;
+    private _btnCancel      : TwnsUiButton.UiButton;
     // @ts-ignore
-    private _btnConfirm     : UiButton;
+    private _btnConfirm     : TwnsUiButton.UiButton;
 
     public static show(openData: OpenData): void {
         if (!MmRejectMapPanel._instance) {

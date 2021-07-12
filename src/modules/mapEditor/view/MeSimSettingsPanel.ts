@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTab }                        from "../../../utility/ui/UiTab";
 import { UiTabItemRenderer }            from "../../../utility/ui/UiTabItemRenderer";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
@@ -20,16 +20,16 @@ import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes"
 import LangTextType                     = TwnsLangTextType.LangTextType;
 import NotifyType                       = TwnsNotifyType.NotifyType;
 
-export class MeSimSettingsPanel extends UiPanel<void> {
+export class MeSimSettingsPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeSimSettingsPanel;
 
     private _tabSettings    : UiTab<DataForTabItemRenderer, void>;
-    private _labelMenuTitle : UiLabel;
-    private _btnBack        : UiButton;
-    private _btnConfirm     : UiButton;
+    private _labelMenuTitle : TwnsUiLabel.UiLabel;
+    private _btnBack        : TwnsUiButton.UiButton;
+    private _btnConfirm     : TwnsUiButton.UiButton;
 
     public static show(): void {
         if (!MeSimSettingsPanel._instance) {
@@ -118,7 +118,7 @@ type DataForTabItemRenderer = {
 };
 
 class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
-    private _labelName: UiLabel;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._labelName.text = this.data.name;

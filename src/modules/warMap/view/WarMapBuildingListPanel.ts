@@ -1,8 +1,8 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { MeTileSimpleView }             from "../../mapEditor/view/MeTileSimpleView";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { ConfigManager }                from "../../../utility/ConfigManager";
@@ -21,14 +21,14 @@ type OpenDataForBuildingListPanel = {
     playersCountUnneutral   : number;
 };
 
-export class WarMapBuildingListPanel extends UiPanel<OpenDataForBuildingListPanel> {
+export class WarMapBuildingListPanel extends TwnsUiPanel.UiPanel<OpenDataForBuildingListPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: WarMapBuildingListPanel;
 
-    private readonly _labelTitle    : UiLabel;
-    private readonly _listTile      : UiScrollList<DataForTileRenderer>;
+    private readonly _labelTitle    : TwnsUiLabel.UiLabel;
+    private readonly _listTile      : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
 
     public static show(openData: OpenDataForBuildingListPanel): void {
         if (!WarMapBuildingListPanel._instance) {
@@ -106,19 +106,19 @@ type DataForTileRenderer = {
     tileType        : Types.TileType;
     dict            : Map<number, number>;
 };
-class TileRenderer extends UiListItemRenderer<DataForTileRenderer> {
+class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
     private _group          : eui.Group;
     private _conTileView    : eui.Group;
-    private _labelNum0      : UiLabel;
-    private _labelNum1      : UiLabel;
-    private _labelNum2      : UiLabel;
-    private _labelNum3      : UiLabel;
-    private _labelNum4      : UiLabel;
-    private _labelTotalNum  : UiLabel;
+    private _labelNum0      : TwnsUiLabel.UiLabel;
+    private _labelNum1      : TwnsUiLabel.UiLabel;
+    private _labelNum2      : TwnsUiLabel.UiLabel;
+    private _labelNum3      : TwnsUiLabel.UiLabel;
+    private _labelNum4      : TwnsUiLabel.UiLabel;
+    private _labelTotalNum  : TwnsUiLabel.UiLabel;
 
-    private _tileView   = new MeTileSimpleView();
+    private _tileView       = new MeTileSimpleView();
 
-    private _labelNumList   : UiLabel[];
+    private _labelNumList   : TwnsUiLabel.UiLabel[];
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([

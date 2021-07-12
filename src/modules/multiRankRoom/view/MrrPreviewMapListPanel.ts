@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }                                                           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                                                                      from "../../../utility/ui/UiPanel";
-import { UiButton }                                                                     from "../../../utility/ui/UiButton";
-import { UiLabel }                                                                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                                                                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }                                                           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                                                                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                                                                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                                                                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                                                                 from "../../../utility/ui/UiScrollList";
 import { UiTab }                                                                        from "../../../utility/ui/UiTab";
 import { UiTabItemRenderer }                                                            from "../../../utility/ui/UiTabItemRenderer";
 import { TwnsLobbyBottomPanel }                                                         from "../../lobby/view/LobbyBottomPanel";
@@ -26,7 +26,7 @@ import NotifyType                                                               
 type OpenDataForMrrPreviewMapListPanel = {
     hasFog: boolean;
 };
-export class MrrPreviewMapListPanel extends UiPanel<OpenDataForMrrPreviewMapListPanel> {
+export class MrrPreviewMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrPreviewMapListPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
@@ -36,17 +36,17 @@ export class MrrPreviewMapListPanel extends UiPanel<OpenDataForMrrPreviewMapList
     private readonly _tabSettings           : UiTab<DataForTabItemRenderer, OpenDataForMrrPreviewMapInfoPage | OpenDataForMrrPreviewBasicSettingsPage | OpenDataForMrrPreviewAdvancedSettingsPage>;
 
     private readonly _groupNavigator        : eui.Group;
-    private readonly _labelRankMatch        : UiLabel;
-    private readonly _labelPreviewMap       : UiLabel;
-    private readonly _labelMapType          : UiLabel;
+    private readonly _labelRankMatch        : TwnsUiLabel.UiLabel;
+    private readonly _labelPreviewMap       : TwnsUiLabel.UiLabel;
+    private readonly _labelMapType          : TwnsUiLabel.UiLabel;
 
-    private readonly _btnBack               : UiButton;
-    private readonly _btnSwitch             : UiButton;
+    private readonly _btnBack               : TwnsUiButton.UiButton;
+    private readonly _btnSwitch             : TwnsUiButton.UiButton;
 
     private readonly _groupMapList          : eui.Group;
-    private readonly _listMap               : UiScrollList<DataForMapNameRenderer>;
-    private readonly _labelNoMap            : UiLabel;
-    private readonly _labelLoading          : UiLabel;
+    private readonly _listMap               : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
+    private readonly _labelNoMap            : TwnsUiLabel.UiLabel;
+    private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
     public static show(openData: OpenDataForMrrPreviewMapListPanel): void {
         if (!MrrPreviewMapListPanel._instance) {
@@ -280,7 +280,7 @@ type DataForTabItemRenderer = {
     name: string;
 };
 class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
-    private _labelName: UiLabel;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._labelName.text = this.data.name;
@@ -291,9 +291,9 @@ type DataForMapNameRenderer = {
     mapId   : number;
     mapName : string;
 };
-class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
-    private readonly _btnChoose     : UiButton;
-    private readonly _labelName     : UiLabel;
+class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
+    private readonly _btnChoose     : TwnsUiButton.UiButton;
+    private readonly _labelName     : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

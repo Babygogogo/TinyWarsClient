@@ -1,8 +1,8 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
@@ -26,9 +26,9 @@ export class McwWarAdvancedSettingsPage extends UiTabPage<OpenDataForMcwWarAdvan
     // @ts-ignore
     private readonly _scroller      : eui.Scroller;
     // @ts-ignore
-    private readonly _listSetting   : UiScrollList<DataForSettingRenderer>;
+    private readonly _listSetting   : TwnsUiScrollList.UiScrollList<DataForSettingRenderer>;
     // @ts-ignore
-    private readonly _listPlayer    : UiScrollList<DataForPlayerRenderer>;
+    private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
     public constructor() {
         super();
@@ -124,11 +124,11 @@ export class McwWarAdvancedSettingsPage extends UiTabPage<OpenDataForMcwWarAdvan
 type DataForSettingRenderer = {
     playerRuleType  : PlayerRuleType;
 };
-class SettingRenderer extends UiListItemRenderer<DataForSettingRenderer> {
+class SettingRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSettingRenderer> {
     // @ts-ignore
-    private readonly _labelName : UiLabel;
+    private readonly _labelName : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _btnHelp   : UiButton;
+    private readonly _btnHelp   : TwnsUiButton.UiButton;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -164,11 +164,11 @@ type DataForPlayerRenderer = {
     warId      : number;
     playerIndex : number;
 };
-class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
+class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
     // @ts-ignore
-    private _labelPlayerIndex   : UiLabel;
+    private _labelPlayerIndex   : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _listInfo           : UiScrollList<DataForInfoRenderer>;
+    private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
     protected _onOpened(): void {
         this._listInfo.setItemRenderer(InfoRenderer);
@@ -217,9 +217,9 @@ type DataForInfoRenderer = {
     infoColor?              : number;
     callbackOnTouchedTitle? : (() => void) | null;
 };
-class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
+class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
     // @ts-ignore
-    private readonly _labelValue    : UiLabel;
+    private readonly _labelValue    : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._updateComponentsForValue();

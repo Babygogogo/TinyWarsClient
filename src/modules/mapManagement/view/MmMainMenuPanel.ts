@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }       from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                  from "../../../utility/ui/UiPanel";
-import { UiButton }                 from "../../../utility/ui/UiButton";
-import { UiLabel }                  from "../../../utility/ui/UiLabel";
-import { UiScrollList }             from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }       from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                  from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                  from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                  from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }             from "../../../utility/ui/UiScrollList";
 import { MmReviewListPanel }        from "./MmReviewListPanel";
 import { MmAvailabilityListPanel }  from "./MmAvailabilityListPanel";
 import { MmTagListPanel }           from "./MmTagListPanel";
@@ -17,15 +17,15 @@ import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                    from "../../../utility/Types";
 
-export class MmMainMenuPanel extends UiPanel<void> {
+export class MmMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: MmMainMenuPanel;
 
-    private _labelMenuTitle : UiLabel;
-    private _btnBack        : UiButton;
-    private _listCommand    : UiScrollList<DataForCommandRenderer>;
+    private _labelMenuTitle : TwnsUiLabel.UiLabel;
+    private _btnBack        : TwnsUiButton.UiButton;
+    private _listCommand    : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
 
     public static show(): void {
         if (!MmMainMenuPanel._instance) {
@@ -120,8 +120,8 @@ type DataForCommandRenderer = {
     name    : string;
     callback: () => void;
 };
-class CommandRenderer extends UiListItemRenderer<DataForCommandRenderer> {
-    private _labelCommand: UiLabel;
+class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
+    private _labelCommand: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         const data = this.data;

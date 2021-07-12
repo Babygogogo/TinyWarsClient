@@ -1,10 +1,10 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiComponent }                  from "../../../utility/ui/UiComponent";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiCoInfo }                     from "../../../utility/ui/UiCoInfo";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiComponent }                  from "../../../utility/ui/UiComponent";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiCoInfo }                     from "../../../utility/ui/UiCoInfo";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
@@ -22,19 +22,19 @@ import { MrrProxy }                     from "../model/MrrProxy";
 type OpenDataForMrrRoomBanCoPanel = {
     roomId: number;
 };
-export class MrrRoomBanCoPanel extends UiPanel<OpenDataForMrrRoomBanCoPanel> {
+export class MrrRoomBanCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrRoomBanCoPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: MrrRoomBanCoPanel;
 
-    private readonly _imgMask                   : UiImage;
+    private readonly _imgMask                   : TwnsUiImage.UiImage;
     private readonly _group                     : eui.Group;
-    private readonly _labelAvailableCoTitle     : UiLabel;
+    private readonly _labelAvailableCoTitle     : TwnsUiLabel.UiLabel;
     private readonly _groupCoNames              : eui.Group;
-    private readonly _btnCancel                 : UiButton;
-    private readonly _btnConfirm                : UiButton;
-    private readonly _uiCoInfo                  : UiCoInfo;
+    private readonly _btnCancel                 : TwnsUiButton.UiButton;
+    private readonly _btnConfirm                : TwnsUiButton.UiButton;
+    private readonly _uiCoInfo                  : TwnsUiCoInfo.UiCoInfo;
 
     private readonly _renderersForCoNames       : RendererForCoName[] = [];
 
@@ -256,10 +256,10 @@ export class MrrRoomBanCoPanel extends UiPanel<OpenDataForMrrRoomBanCoPanel> {
     }
 }
 
-class RendererForCoName extends UiComponent {
-    private readonly _imgUnselected : UiImage;
-    private readonly _imgSelected   : UiImage;
-    private readonly _labelName     : UiLabel;
+class RendererForCoName extends TwnsUiComponent.UiComponent {
+    private readonly _imgUnselected : TwnsUiImage.UiImage;
+    private readonly _imgSelected   : TwnsUiImage.UiImage;
+    private readonly _labelName     : TwnsUiLabel.UiLabel;
 
     private _coId           : number;
     private _isAvailable     : boolean;

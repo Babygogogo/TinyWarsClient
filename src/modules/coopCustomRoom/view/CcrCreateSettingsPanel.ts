@@ -1,7 +1,7 @@
 
-import { UiPanel }                          from "../../../utility/ui/UiPanel";
-import { UiButton }                         from "../../../utility/ui/UiButton";
-import { UiLabel }                          from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                          from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                          from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                          from "../../../utility/ui/UiLabel";
 import { UiTab }                            from "../../../utility/ui/UiTab";
 import { UiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
 import { CcrCreateMapListPanel }            from "./CcrCreateMapListPanel";
@@ -23,23 +23,23 @@ import NotifyType                           = TwnsNotifyType.NotifyType;
 
 const CONFIRM_INTERVAL_MS = 5000;
 
-export class CcrCreateSettingsPanel extends UiPanel<void> {
+export class CcrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: CcrCreateSettingsPanel;
 
     private readonly _groupNavigator        : eui.Group;
-    private readonly _labelMultiPlayer      : UiLabel;
-    private readonly _labelCreateRoom       : UiLabel;
-    private readonly _labelChooseMap        : UiLabel;
-    private readonly _labelRoomSettings     : UiLabel;
+    private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
+    private readonly _labelCreateRoom       : TwnsUiLabel.UiLabel;
+    private readonly _labelChooseMap        : TwnsUiLabel.UiLabel;
+    private readonly _labelRoomSettings     : TwnsUiLabel.UiLabel;
 
     private readonly _groupTab              : eui.Group;
     private readonly _tabSettings           : UiTab<DataForTabItemRenderer, void>;
 
-    private readonly _btnBack               : UiButton;
-    private readonly _btnConfirm            : UiButton;
+    private readonly _btnBack               : TwnsUiButton.UiButton;
+    private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
     private _timeoutIdForBtnConfirm: number;
 
@@ -208,7 +208,7 @@ type DataForTabItemRenderer = {
     name: string;
 };
 class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
-    private _labelName: UiLabel;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._labelName.text = this.data.name;

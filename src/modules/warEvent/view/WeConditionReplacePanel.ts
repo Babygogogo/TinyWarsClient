@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
@@ -20,16 +20,16 @@ type OpenDataForWeConditionReplacePanel = {
     parentNodeId    : number;
     conditionId     : number;
 };
-export class WeConditionReplacePanel extends UiPanel<OpenDataForWeConditionReplacePanel> {
+export class WeConditionReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeConditionReplacePanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: WeConditionReplacePanel;
 
-    private _listCondition      : UiScrollList<DataForConditionRenderer>;
-    private _labelTitle         : UiLabel;
-    private _labelNoCondition   : UiLabel;
-    private _btnClose           : UiButton;
+    private _listCondition      : TwnsUiScrollList.UiScrollList<DataForConditionRenderer>;
+    private _labelTitle         : TwnsUiLabel.UiLabel;
+    private _labelNoCondition   : TwnsUiLabel.UiLabel;
+    private _btnClose           : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForWeConditionReplacePanel): void {
         if (!WeConditionReplacePanel._instance) {
@@ -107,11 +107,11 @@ type DataForConditionRenderer = {
     candidateConditionId: number;
     fullData            : IWarEventFullData;
 };
-class ConditionRenderer extends UiListItemRenderer<DataForConditionRenderer> {
-    private _labelConditionId   : UiLabel;
-    private _labelCondition     : UiLabel;
-    private _btnCopy            : UiButton;
-    private _btnSelect          : UiButton;
+class ConditionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForConditionRenderer> {
+    private _labelConditionId   : TwnsUiLabel.UiLabel;
+    private _labelCondition     : TwnsUiLabel.UiLabel;
+    private _btnCopy            : TwnsUiButton.UiButton;
+    private _btnSelect          : TwnsUiButton.UiButton;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

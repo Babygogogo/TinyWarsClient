@@ -7,10 +7,10 @@ import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                from "../../../utility/Types";
 import { Helpers }              from "../../../utility/Helpers";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { UiTextInput }          from "../../../utility/ui/UiTextInput";
 
 type OpenData = {
@@ -21,19 +21,19 @@ type OpenData = {
     charRestrict    : string | null;
     callback        : (panel: CommonInputPanel) => any;
 };
-export class CommonInputPanel extends UiPanel<OpenData> {
+export class CommonInputPanel extends TwnsUiPanel.UiPanel<OpenData> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: CommonInputPanel;
 
-    private readonly _imgMask       : UiImage;
+    private readonly _imgMask       : TwnsUiImage.UiImage;
     private readonly _group         : eui.Group;
-    private readonly _labelTitle    : UiLabel;
-    private readonly _labelTips     : UiLabel;
+    private readonly _labelTitle    : TwnsUiLabel.UiLabel;
+    private readonly _labelTips     : TwnsUiLabel.UiLabel;
     private readonly _input         : UiTextInput;
-    private readonly _btnCancel     : UiButton;
-    private readonly _btnConfirm    : UiButton;
+    private readonly _btnCancel     : TwnsUiButton.UiButton;
+    private readonly _btnConfirm    : TwnsUiButton.UiButton;
 
     public static show(openData: OpenData): void {
         if (!CommonInputPanel._instance) {

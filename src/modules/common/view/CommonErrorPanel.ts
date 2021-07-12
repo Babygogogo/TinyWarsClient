@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
@@ -11,15 +11,15 @@ type OpenDataForCommonErrorPanel = {
     content     : string;
     callback?   : () => any;
 };
-export class CommonErrorPanel extends UiPanel<OpenDataForCommonErrorPanel> {
+export class CommonErrorPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonErrorPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Top;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: CommonErrorPanel;
 
-    private _labelTitle     : UiLabel;
-    private _labelContent   : UiLabel;
-    private _btnClose       : UiButton;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _labelContent   : TwnsUiLabel.UiLabel;
+    private _btnClose       : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForCommonErrorPanel): void {
         if (!CommonErrorPanel._instance) {

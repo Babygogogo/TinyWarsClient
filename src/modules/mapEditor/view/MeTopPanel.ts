@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { BwUnit }                       from "../../baseWar/model/BwUnit";
 import { BwUnitView }                   from "../../baseWar/view/BwUnitView";
 import { MeDrawer }                     from "../model/MeDrawer";
@@ -26,27 +26,27 @@ export namespace TwnsMeTopPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     // eslint-disable-next-line no-shadow
-    export class MeTopPanel extends UiPanel<void> {
+    export class MeTopPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeTopPanel;
 
         private _groupMode          : eui.Group;
-        private _labelModeTitle     : UiLabel;
-        private _labelMode          : UiLabel;
+        private _labelModeTitle     : TwnsUiLabel.UiLabel;
+        private _labelMode          : TwnsUiLabel.UiLabel;
         private _conUnitView        : eui.Group;
         private _conTileView        : eui.Group;
 
-        private _btnModePreview         : UiButton;
-        private _btnModeDrawTileBase    : UiButton;
-        private _btnModeDrawTileObject  : UiButton;
-        private _btnModeDrawUnit        : UiButton;
-        private _btnModeDeleteTileObject: UiButton;
-        private _btnModeDeleteUnit      : UiButton;
-        private _btnVisibility          : UiButton;
-        private _btnSymmetry            : UiButton;
-        private _btnMenu                : UiButton;
+        private _btnModePreview         : TwnsUiButton.UiButton;
+        private _btnModeDrawTileBase    : TwnsUiButton.UiButton;
+        private _btnModeDrawTileObject  : TwnsUiButton.UiButton;
+        private _btnModeDrawUnit        : TwnsUiButton.UiButton;
+        private _btnModeDeleteTileObject: TwnsUiButton.UiButton;
+        private _btnModeDeleteUnit      : TwnsUiButton.UiButton;
+        private _btnVisibility          : TwnsUiButton.UiButton;
+        private _btnSymmetry            : TwnsUiButton.UiButton;
+        private _btnMenu                : TwnsUiButton.UiButton;
 
         private _unitView   = new BwUnitView();
         private _tileView   = new MeTileSimpleView();

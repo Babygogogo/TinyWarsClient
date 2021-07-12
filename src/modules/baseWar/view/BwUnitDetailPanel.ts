@@ -18,12 +18,12 @@ import { WarMapUnitView }           from "../../warMap/view/WarMapUnitView";
 import { CommonDamageChartPanel }   from "../../common/view/CommonDamageChartPanel";
 import { CommonInputPanel }         from "../../common/view/CommonInputPanel";
 import { CommonConfirmPanel }       from "../../common/view/CommonConfirmPanel";
-import { UiPanel }                  from "../../../utility/ui/UiPanel";
-import { UiScrollList }             from "../../../utility/ui/UiScrollList";
-import { UiButton }                 from "../../../utility/ui/UiButton";
-import { UiLabel }                  from "../../../utility/ui/UiLabel";
-import { UiListItemRenderer }       from "../../../utility/ui/UiListItemRenderer";
-import { UiImage }                  from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                  from "../../../utility/ui/UiPanel";
+import { TwnsUiScrollList }             from "../../../utility/ui/UiScrollList";
+import { TwnsUiButton }                  from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                  from "../../../utility/ui/UiLabel";
+import { TwnsUiListItemRenderer }       from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiImage }                  from "../../../utility/ui/UiImage";
 import UnitType                     = Types.UnitType;
 import TileType                     = Types.TileType;
 
@@ -31,7 +31,7 @@ export type OpenDataForBwUnitDetailPanel = {
     unit: BwUnit;
 };
 
-export class BwUnitDetailPanel extends UiPanel<OpenDataForBwUnitDetailPanel> {
+export class BwUnitDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitDetailPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
@@ -39,20 +39,20 @@ export class BwUnitDetailPanel extends UiPanel<OpenDataForBwUnitDetailPanel> {
 
     private _group              : eui.Group;
     private _conUnitView        : eui.Group;
-    private _labelName          : UiLabel;
-    private _btnUnitsInfo       : UiButton;
+    private _labelName          : TwnsUiLabel.UiLabel;
+    private _btnUnitsInfo       : TwnsUiButton.UiButton;
 
-    private _listInfo           : UiScrollList<DataForInfoRenderer>;
-    private _listDamageChart    : UiScrollList<DataForDamageRenderer>;
-    private _labelDamageChart   : UiLabel;
-    private _labelOffenseMain1  : UiLabel;
-    private _labelOffenseSub1   : UiLabel;
-    private _labelDefenseMain1  : UiLabel;
-    private _labelDefenseSub1   : UiLabel;
-    private _labelOffenseMain2  : UiLabel;
-    private _labelOffenseSub2   : UiLabel;
-    private _labelDefenseMain2  : UiLabel;
-    private _labelDefenseSub2   : UiLabel;
+    private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+    private _listDamageChart    : TwnsUiScrollList.UiScrollList<DataForDamageRenderer>;
+    private _labelDamageChart   : TwnsUiLabel.UiLabel;
+    private _labelOffenseMain1  : TwnsUiLabel.UiLabel;
+    private _labelOffenseSub1   : TwnsUiLabel.UiLabel;
+    private _labelDefenseMain1  : TwnsUiLabel.UiLabel;
+    private _labelDefenseSub1   : TwnsUiLabel.UiLabel;
+    private _labelOffenseMain2  : TwnsUiLabel.UiLabel;
+    private _labelOffenseSub2   : TwnsUiLabel.UiLabel;
+    private _labelDefenseMain2  : TwnsUiLabel.UiLabel;
+    private _labelDefenseSub2   : TwnsUiLabel.UiLabel;
 
     private _dataForList: DataForDamageRenderer[];
     private _unitView   = new WarMapUnitView();
@@ -609,9 +609,9 @@ type DataForInfoRenderer = {
     callbackOnTouchedTitle  : (() => void) | null;
 };
 
-class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
-    private _btnTitle   : UiButton;
-    private _labelValue : UiLabel;
+class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+    private _btnTitle   : TwnsUiButton.UiButton;
+    private _labelValue : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -641,15 +641,15 @@ type DataForDamageRenderer = {
     targetTileType? : TileType;
 };
 
-class DamageRenderer extends UiListItemRenderer<DataForDamageRenderer> {
+class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {
     private _group                  : eui.Group;
     private _conView                : eui.Group;
     private _unitView               : WarMapUnitView;
-    private _tileView               : UiImage;
-    private _labelPrimaryAttack     : UiLabel;
-    private _labelSecondaryAttack   : UiLabel;
-    private _labelPrimaryDefend     : UiLabel;
-    private _labelSecondaryDefend   : UiLabel;
+    private _tileView               : TwnsUiImage.UiImage;
+    private _labelPrimaryAttack     : TwnsUiLabel.UiLabel;
+    private _labelSecondaryAttack   : TwnsUiLabel.UiLabel;
+    private _labelPrimaryDefend     : TwnsUiLabel.UiLabel;
+    private _labelSecondaryDefend   : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([

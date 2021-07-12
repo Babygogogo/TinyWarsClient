@@ -1,15 +1,15 @@
 
 import { BwTileView }           from "./BwTileView";
 import { BwTileMap }            from "../model/BwTileMap";
-import { UiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiImage }          from "../../../utility/ui/UiImage";
 import { UserModel }            from "../../user/model/UserModel";
 import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
+import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { Helpers }              from "../../../utility/Helpers";
 import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { BwVisibilityHelpers }    from "../model/BwVisibilityHelpers";
+import { BwVisibilityHelpers }  from "../model/BwVisibilityHelpers";
 import { CommonConstants }      from "../../../utility/CommonConstants";
+import NotifyType               = TwnsNotifyType.NotifyType;
 
 const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -19,7 +19,7 @@ export class BwTileMapView extends egret.DisplayObjectContainer {
     private readonly _gridBorderLayer   = new egret.DisplayObjectContainer();
     private readonly _objectLayer       = new egret.DisplayObjectContainer();
     private readonly _coZoneContainer   = new egret.DisplayObjectContainer();
-    private readonly _coZoneImageDict   = new Map<number, UiImage[][]>();
+    private readonly _coZoneImageDict   = new Map<number, TwnsUiImage.UiImage[][]>();
 
     private readonly _notifyListeners   = [
         { type: NotifyType.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
@@ -71,14 +71,14 @@ export class BwTileMapView extends egret.DisplayObjectContainer {
         const gridBorderLayer                           = this._gridBorderLayer;
         gridBorderLayer.removeChildren();
         for (let x = 0; x <= mapWidth; ++x) {
-            const img   = new UiImage(`commonColorBlack0000`);
+            const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
             img.width   = 2;
             img.height  = borderHeight;
             img.x       = (x * GRID_WIDTH) - 1;
             gridBorderLayer.addChild(img);
         }
         for (let y = 0; y <= mapHeight; ++y) {
-            const img   = new UiImage(`commonColorBlack0000`);
+            const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
             img.width   = borderWidth;
             img.height  = 2;
             img.y       = (y * GRID_HEIGHT) - 1;
@@ -141,7 +141,7 @@ export class BwTileMapView extends egret.DisplayObjectContainer {
                 const column = matrix[x];
                 for (let y = 0; y < mapHeight; ++y) {
                     if (column[y] == null) {
-                        const img   = new UiImage(imgSource);
+                        const img   = new TwnsUiImage.UiImage(imgSource);
                         img.x       = GRID_WIDTH * x;
                         img.y       = GRID_HEIGHT * y;
                         column[y]   = img;

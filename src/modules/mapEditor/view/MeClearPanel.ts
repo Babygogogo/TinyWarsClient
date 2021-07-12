@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { MeWarMenuPanel }               from "./MeWarMenuPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
@@ -16,23 +16,23 @@ import { MeModel }                      from "../model/MeModel";
 import * as MeUtility                   from "../model/MeUtility";
 import LangTextType         = TwnsLangTextType.LangTextType;
 
-export class MeClearPanel extends UiPanel<void> {
+export class MeClearPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeClearPanel;
 
-    private _labelTitle         : UiLabel;
-    private _labelCurrSizeTitle : UiLabel;
-    private _labelCurrWidth     : UiLabel;
-    private _labelCurrHeight    : UiLabel;
-    private _labelNewSizeTitle  : UiLabel;
+    private _labelTitle         : TwnsUiLabel.UiLabel;
+    private _labelCurrSizeTitle : TwnsUiLabel.UiLabel;
+    private _labelCurrWidth     : TwnsUiLabel.UiLabel;
+    private _labelCurrHeight    : TwnsUiLabel.UiLabel;
+    private _labelNewSizeTitle  : TwnsUiLabel.UiLabel;
     private _inputNewWidth      : UiTextInput;
     private _inputNewHeight     : UiTextInput;
-    private _labelTips1         : UiLabel;
-    private _labelTips2         : UiLabel;
-    private _btnCancel          : UiButton;
-    private _btnConfirm         : UiButton;
+    private _labelTips1         : TwnsUiLabel.UiLabel;
+    private _labelTips2         : TwnsUiLabel.UiLabel;
+    private _btnCancel          : TwnsUiButton.UiButton;
+    private _btnConfirm         : TwnsUiButton.UiButton;
 
     private _newWidth   : number;
     private _newHeight  : number;

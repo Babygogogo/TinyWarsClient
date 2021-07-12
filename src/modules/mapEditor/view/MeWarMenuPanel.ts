@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
@@ -53,30 +53,30 @@ enum MenuType {
     Advanced,
 }
 
-export class MeWarMenuPanel extends UiPanel<void> {
+export class MeWarMenuPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeWarMenuPanel;
 
     private _group                  : eui.Group;
-    private _listCommand            : UiScrollList<DataForCommandRenderer>;
-    private _labelNoCommand         : UiLabel;
-    private _btnBack                : UiButton;
-    private _labelMenuTitle         : UiLabel;
-    private _labelMapInfoTitle      : UiLabel;
+    private _listCommand            : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
+    private _labelNoCommand         : TwnsUiLabel.UiLabel;
+    private _btnBack                : TwnsUiButton.UiButton;
+    private _labelMenuTitle         : TwnsUiLabel.UiLabel;
+    private _labelMapInfoTitle      : TwnsUiLabel.UiLabel;
 
-    private _btnModifyMapName       : UiButton;
-    private _labelMapName           : UiLabel;
+    private _btnModifyMapName       : TwnsUiButton.UiButton;
+    private _labelMapName           : TwnsUiLabel.UiLabel;
 
-    private _btnModifyMapDesigner   : UiButton;
-    private _labelMapDesigner       : UiLabel;
+    private _btnModifyMapDesigner   : TwnsUiButton.UiButton;
+    private _labelMapDesigner       : TwnsUiLabel.UiLabel;
 
-    private _btnModifyMapSize       : UiButton;
-    private _labelMapSize           : UiLabel;
+    private _btnModifyMapSize       : TwnsUiButton.UiButton;
+    private _labelMapSize           : TwnsUiLabel.UiLabel;
 
-    private _listTile               : UiScrollList<DataForTileRenderer>;
-    private _listUnit               : UiScrollList<DataForUnitRenderer>;
+    private _listTile               : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
+    private _listUnit               : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
 
     private _war            : MeWar;
     private _dataForList    : DataForCommandRenderer[];
@@ -699,9 +699,9 @@ type DataForCommandRenderer = {
     callback: () => void;
 };
 
-class CommandRenderer extends UiListItemRenderer<DataForCommandRenderer> {
+class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
     private _group      : eui.Group;
-    private _labelName  : UiLabel;
+    private _labelName  : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._updateView();
@@ -725,9 +725,9 @@ type DataForTileRenderer = {
     playerIndex : number;
 };
 
-class TileRenderer extends UiListItemRenderer<DataForTileRenderer> {
+class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
     private _group          : eui.Group;
-    private _labelNum       : UiLabel;
+    private _labelNum       : TwnsUiLabel.UiLabel;
     private _conTileView    : eui.Group;
 
     private _tileView   = new MeTileSimpleView();
@@ -766,9 +766,9 @@ type DataForUnitRenderer = {
     dataForDrawUnit : DataForDrawUnit;
 };
 
-class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
+class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
     private _group          : eui.Group;
-    private _labelNum       : UiLabel;
+    private _labelNum       : TwnsUiLabel.UiLabel;
     private _conUnitView    : eui.Group;
 
     private _unitView   = new BwUnitView();

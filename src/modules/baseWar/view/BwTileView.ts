@@ -1,5 +1,5 @@
 
-import { UiImage }          from "../../../utility/ui/UiImage";
+import { TwnsUiImage }      from "../../../utility/ui/UiImage";
 import { CommonModel }      from "../../common/model/CommonModel";
 import { TimeModel }        from "../../time/model/TimeModel";
 import { UserModel }        from "../../user/model/UserModel";
@@ -19,8 +19,8 @@ export type DataForTileView = {
     skinId      : number;
 };
 export class BwTileView {
-    private _imgBase    = new UiImage();
-    private _imgObject  = new UiImage();
+    private _imgBase    = new TwnsUiImage.UiImage();
+    private _imgObject  = new TwnsUiImage.UiImage();
 
     private _data       : DataForTileView;
 
@@ -103,10 +103,10 @@ export class BwTileView {
         }
     }
 
-    public getImgObject(): UiImage {
+    public getImgObject(): TwnsUiImage.UiImage {
         return this._imgObject;
     }
-    public getImgBase(): UiImage {
+    public getImgBase(): TwnsUiImage.UiImage {
         return this._imgBase;
     }
 }

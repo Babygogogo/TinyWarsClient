@@ -1,10 +1,10 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { DataForDrawTileBase }          from "../model/MeDrawer";
 import { MeTileSimpleView }             from "./MeTileSimpleView";
@@ -22,19 +22,19 @@ import { MeModel }                      from "../model/MeModel";
 
 const MAX_RECENT_COUNT = 10;
 
-export class MeChooseTileBasePanel extends UiPanel<void> {
+export class MeChooseTileBasePanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeChooseTileBasePanel;
 
-    private _listCategory       : UiScrollList<DataForCategoryRenderer>;
-    private _listRecent         : UiScrollList<DataForTileBaseRenderer>;
-    private _labelRecentTitle   : UiLabel;
-    private _btnCancel          : UiButton;
+    private _listCategory       : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+    private _listRecent         : TwnsUiScrollList.UiScrollList<DataForTileBaseRenderer>;
+    private _labelRecentTitle   : TwnsUiLabel.UiLabel;
+    private _btnCancel          : TwnsUiButton.UiButton;
     private _groupFill          : eui.Group;
-    private _imgFill            : UiImage;
-    private _labelFill          : UiLabel;
+    private _imgFill            : TwnsUiImage.UiImage;
+    private _labelFill          : TwnsUiLabel.UiLabel;
 
     private _needFill           : boolean;
     private _dataListForRecent  : DataForTileBaseRenderer[] = [];
@@ -172,9 +172,9 @@ type DataForCategoryRenderer = {
     panel                   : MeChooseTileBasePanel;
 };
 
-class CategoryRenderer extends UiListItemRenderer<DataForCategoryRenderer> {
-    private _labelCategory  : UiLabel;
-    private _listTileBase   : UiScrollList<DataForTileBaseRenderer>;
+class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
+    private _labelCategory  : TwnsUiLabel.UiLabel;
+    private _listTileBase   : TwnsUiScrollList.UiScrollList<DataForTileBaseRenderer>;
 
     protected _onOpened(): void {
         this._listTileBase.setItemRenderer(TileBaseRenderer);
@@ -202,7 +202,7 @@ type DataForTileBaseRenderer = {
     dataForDrawTileBase : DataForDrawTileBase;
     panel               : MeChooseTileBasePanel;
 };
-class TileBaseRenderer extends UiListItemRenderer<DataForTileBaseRenderer> {
+class TileBaseRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileBaseRenderer> {
     private _group          : eui.Group;
     private _conTileView    : eui.Group;
 

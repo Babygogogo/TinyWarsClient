@@ -1,7 +1,7 @@
 
-import { UiPanel }                          from "../../../utility/ui/UiPanel";
-import { UiButton }                         from "../../../utility/ui/UiButton";
-import { UiLabel }                          from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                          from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                          from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                          from "../../../utility/ui/UiLabel";
 import { UiTab }                            from "../../../utility/ui/UiTab";
 import { UiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
 import { CommonConfirmPanel }               from "../../common/view/CommonConfirmPanel";
@@ -25,23 +25,23 @@ import { SpmProxy }                         from "../../singlePlayerMode/model/S
 import { ScrCreateModel }                         from "../model/ScrCreateModel";
 const CONFIRM_INTERVAL_MS = 5000;
 
-export class ScrCreateSettingsPanel extends UiPanel<void> {
+export class ScrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: ScrCreateSettingsPanel;
 
     private readonly _groupNavigator        : eui.Group;
-    private readonly _labelSinglePlayer     : UiLabel;
-    private readonly _labelCustomMode       : UiLabel;
-    private readonly _labelChooseMap        : UiLabel;
-    private readonly _labelGameSettings     : UiLabel;
+    private readonly _labelSinglePlayer     : TwnsUiLabel.UiLabel;
+    private readonly _labelCustomMode       : TwnsUiLabel.UiLabel;
+    private readonly _labelChooseMap        : TwnsUiLabel.UiLabel;
+    private readonly _labelGameSettings     : TwnsUiLabel.UiLabel;
 
     private readonly _groupTab              : eui.Group;
     private readonly _tabSettings           : UiTab<DataForTabItemRenderer, void>;
 
-    private readonly _btnBack               : UiButton;
-    private readonly _btnConfirm            : UiButton;
+    private readonly _btnBack               : TwnsUiButton.UiButton;
+    private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
     private _timeoutIdForBtnConfirm: number;
 
@@ -224,7 +224,7 @@ type DataForTabItemRenderer = {
     name: string;
 };
 class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
-    private _labelName: UiLabel;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._labelName.text = this.data.name;

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group top="40" bottom="0" width="200" right="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelMenuTitle" text="地图管理" y="15" textColor="0xffffff" horizontalCenter="0" size="25"
+        <TwnsUiLabel:UiLabel id="_labelMenuTitle" text="地图管理" y="15" textColor="0xffffff" horizontalCenter="0" size="25"
                         bold="true" maxTextWidth="170" />
-        <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="50" top="50">
+        <TwnsUiScrollList:UiScrollList id="_listCommand" left="0" right="0" bottom="50" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40">
-                        <GameUi:UiLabel id="_labelCommand" anchorOffsetX="0" anchorOffsetY="0" text="氪金"
+                        <TwnsUiLabel:UiLabel id="_labelCommand" anchorOffsetX="0" anchorOffsetY="0" text="氪金"
                                         textAlign="center" textColor="0xffffff" horizontalCenter="0" verticalCenter="0"
                                         size="20" />
                     </e:Skin>
                 </e:itemRendererSkinName>
             </e:List>
-        </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" left="0"
-                         right="0" bottom="0"></GameUi:UiButton>
+        </TwnsUiScrollList:UiScrollList>
+        <TwnsUiButton:UiButton id="_btnBack" label="&lt;&lt;返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" left="0"
+                         right="0" bottom="0"></TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>

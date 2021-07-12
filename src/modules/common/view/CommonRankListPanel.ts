@@ -1,10 +1,10 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
 import { UserPanel }            from "../../user/view/UserPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { Helpers }              from "../../../utility/Helpers";
@@ -20,42 +20,42 @@ import { CommonModel }          from "../../common/model/CommonModel";
 import { CommonProxy }          from "../../common/model/CommonProxy";
 import { UserModel }            from "../../user/model/UserModel";
 
-export class CommonRankListPanel extends UiPanel<void> {
+export class CommonRankListPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: CommonRankListPanel;
 
     // @ts-ignore
-    private readonly _imgMask           : UiImage;
+    private readonly _imgMask           : TwnsUiImage.UiImage;
     // @ts-ignore
     private readonly _group             : eui.Group;
     // @ts-ignore
-    private readonly _labelTitle        : UiLabel;
+    private readonly _labelTitle        : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _btnClose          : UiButton;
+    private readonly _btnClose          : TwnsUiButton.UiButton;
 
     // @ts-ignore
-    private readonly _labelStdTitle     : UiLabel;
+    private readonly _labelStdTitle     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelStdNoData    : UiLabel;
+    private readonly _labelStdNoData    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelStdNickname  : UiLabel;
+    private readonly _labelStdNickname  : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelStdScore     : UiLabel;
+    private readonly _labelStdScore     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _listStd           : UiScrollList<DataForUserRenderer>;
+    private readonly _listStd           : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
 
     // @ts-ignore
-    private readonly _labelFogTitle     : UiLabel;
+    private readonly _labelFogTitle     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelFogNoData    : UiLabel;
+    private readonly _labelFogNoData    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelFogNickname  : UiLabel;
+    private readonly _labelFogNickname  : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelFogScore     : UiLabel;
+    private readonly _labelFogScore     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _listFog           : UiScrollList<DataForUserRenderer>;
+    private readonly _listFog           : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
 
     public static show(): void {
         if (!CommonRankListPanel._instance) {
@@ -216,17 +216,17 @@ type DataForUserRenderer = {
     warType     : Types.WarType;
 };
 
-class UserRenderer extends UiListItemRenderer<DataForUserRenderer> {
+class UserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUserRenderer> {
     // @ts-ignore
     private _group          : eui.Group;
     // @ts-ignore
-    private _imgBg          : UiImage;
+    private _imgBg          : TwnsUiImage.UiImage;
     // @ts-ignore
-    private _labelIndex     : UiLabel;
+    private _labelIndex     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _labelNickname  : UiLabel;
+    private _labelNickname  : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _labelScore     : UiLabel;
+    private _labelScore     : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

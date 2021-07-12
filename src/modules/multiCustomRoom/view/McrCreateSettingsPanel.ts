@@ -1,10 +1,10 @@
 
-import { UiImage }                          from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }               from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                          from "../../../utility/ui/UiPanel";
-import { UiButton }                         from "../../../utility/ui/UiButton";
-import { UiLabel }                          from "../../../utility/ui/UiLabel";
-import { UiScrollList }                     from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }                          from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }               from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                          from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                          from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                          from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                     from "../../../utility/ui/UiScrollList";
 import { UiTab }                            from "../../../utility/ui/UiTab";
 import { UiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
 import { McrCreateAdvancedSettingsPage }    from "./McrCreateAdvancedSettingsPage";
@@ -30,36 +30,36 @@ import NotifyType       = TwnsNotifyType.NotifyType;
 
 const CONFIRM_INTERVAL_MS = 5000;
 
-export class McrCreateSettingsPanel extends UiPanel<void> {
+export class McrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: McrCreateSettingsPanel;
 
     private readonly _groupNavigator        : eui.Group;
-    private readonly _labelMultiPlayer      : UiLabel;
-    private readonly _labelCreateRoom       : UiLabel;
-    private readonly _labelChooseMap        : UiLabel;
-    private readonly _labelRoomSettings     : UiLabel;
+    private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
+    private readonly _labelCreateRoom       : TwnsUiLabel.UiLabel;
+    private readonly _labelChooseMap        : TwnsUiLabel.UiLabel;
+    private readonly _labelRoomSettings     : TwnsUiLabel.UiLabel;
 
     private readonly _groupSettings         : eui.Group;
     private readonly _groupChooseCo         : eui.Group;
-    private readonly _labelChooseCo         : UiLabel;
-    private readonly _btnChooseCo           : UiButton;
+    private readonly _labelChooseCo         : TwnsUiLabel.UiLabel;
+    private readonly _btnChooseCo           : TwnsUiButton.UiButton;
 
     private readonly _groupChoosePlayerIndex: eui.Group;
-    private readonly _labelChoosePlayerIndex: UiLabel;
-    private readonly _sclPlayerIndex        : UiScrollList<DataForPlayerIndexRenderer>;
+    private readonly _labelChoosePlayerIndex: TwnsUiLabel.UiLabel;
+    private readonly _sclPlayerIndex        : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
 
     private readonly _groupChooseSkinId     : eui.Group;
-    private readonly _labelChooseSkinId     : UiLabel;
-    private readonly _sclSkinId             : UiScrollList<DataForSkinIdRenderer>;
+    private readonly _labelChooseSkinId     : TwnsUiLabel.UiLabel;
+    private readonly _sclSkinId             : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
 
     private readonly _groupTab              : eui.Group;
     private readonly _tabSettings           : UiTab<DataForTabItemRenderer, void>;
 
-    private readonly _btnBack               : UiButton;
-    private readonly _btnConfirm            : UiButton;
+    private readonly _btnBack               : TwnsUiButton.UiButton;
+    private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
     private _timeoutIdForBtnConfirm: number;
 
@@ -276,7 +276,7 @@ type DataForTabItemRenderer = {
     name: string;
 };
 class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
-    private _labelName: UiLabel;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._labelName.text = this.data.name;
@@ -286,8 +286,8 @@ class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
 type DataForPlayerIndexRenderer = {
     playerIndex: number;
 };
-class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer> {
-    private readonly _labelName : UiLabel;
+class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerIndexRenderer> {
+    private readonly _labelName : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
@@ -341,8 +341,8 @@ class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer>
 type DataForSkinIdRenderer = {
     skinId: number;
 };
-class SkinIdRenderer extends UiListItemRenderer<DataForSkinIdRenderer> {
-    private readonly _imgColor  : UiImage;
+class SkinIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkinIdRenderer> {
+    private readonly _imgColor  : TwnsUiImage.UiImage;
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([

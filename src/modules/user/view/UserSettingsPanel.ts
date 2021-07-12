@@ -1,9 +1,9 @@
 
-import { UiImage }                  from "../../../utility/ui/UiImage";
-import { UiPanel }                  from "../../../utility/ui/UiPanel";
-import { UiRadioButton }            from "../../../utility/ui/UiRadioButton";
-import { UiButton }                 from "../../../utility/ui/UiButton";
-import { UiLabel }                  from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiRadioButton }        from "../../../utility/ui/UiRadioButton";
+import { TwnsUiButton }             from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { UserChangeNicknamePanel }  from "./UserChangeNicknamePanel";
 import { UserSetPasswordPanel }     from "./UserSetPasswordPanel";
 import { UserChangeDiscordIdPanel } from "./UserChangeDiscordIdPanel";
@@ -23,76 +23,76 @@ import { CommonConstants }          from "../../../utility/CommonConstants";
 import { Helpers }                  from "../../../utility/Helpers";
 import { Lang }                     from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
 import { LocalStorage }             from "../../../utility/LocalStorage";
 import { Logger }                   from "../../../utility/Logger";
 import { Notify }                   from "../../../utility/notify/Notify";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
 import { StageManager }             from "../../../utility/StageManager";
 import { Types }                    from "../../../utility/Types";
 import { TimeModel }                from "../../time/model/TimeModel";
 import { UserModel }                from "../../user/model/UserModel";
 import { UserProxy }                from "../../user/model/UserProxy";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import NotifyType       = TwnsNotifyType.NotifyType;
 
-export class UserSettingsPanel extends UiPanel<void> {
+export class UserSettingsPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: UserSettingsPanel;
 
     // @ts-ignore
-    private readonly _imgMask               : UiImage;
+    private readonly _imgMask               : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _labelTitle            : UiLabel;
+    private readonly _labelTitle            : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _btnClose              : UiButton;
+    private readonly _btnClose              : TwnsUiButton.UiButton;
     // @ts-ignore
     private readonly _group                 : eui.Group;
     // @ts-ignore
     private readonly _scroller              : eui.Scroller;
 
     // @ts-ignore
-    private readonly _uiRadioLanguage       : UiRadioButton;
+    private readonly _uiRadioLanguage       : TwnsUiRadioButton.UiRadioButton;
     // @ts-ignore
-    private readonly _uiRadioTexture        : UiRadioButton;
+    private readonly _uiRadioTexture        : TwnsUiRadioButton.UiRadioButton;
     // @ts-ignore
-    private readonly _uiRadioUnitAnimation  : UiRadioButton;
+    private readonly _uiRadioUnitAnimation  : TwnsUiRadioButton.UiRadioButton;
     // @ts-ignore
-    private readonly _uiRadioTileAnimation  : UiRadioButton;
+    private readonly _uiRadioTileAnimation  : TwnsUiRadioButton.UiRadioButton;
     // @ts-ignore
-    private readonly _uiRadioShowGridBorder : UiRadioButton;
+    private readonly _uiRadioShowGridBorder : TwnsUiRadioButton.UiRadioButton;
 
     // @ts-ignore
     private readonly _groupButtons          : eui.Group;
     // @ts-ignore
-    private readonly _btnChangeNickname     : UiButton;
+    private readonly _btnChangeNickname     : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnChangePassword     : UiButton;
+    private readonly _btnChangePassword     : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnChangeDiscordId    : UiButton;
+    private readonly _btnChangeDiscordId    : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnChangeGameVersion  : UiButton;
+    private readonly _btnChangeGameVersion  : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnRankList           : UiButton;
+    private readonly _btnRankList           : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnShowOnlineUsers    : UiButton;
+    private readonly _btnShowOnlineUsers    : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnSetSound           : UiButton;
+    private readonly _btnSetSound           : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnSetStageScaler     : UiButton;
+    private readonly _btnSetStageScaler     : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnServerStatus       : UiButton;
+    private readonly _btnServerStatus       : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnComplaint          : UiButton;
+    private readonly _btnComplaint          : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnUnitsInfo          : UiButton;
+    private readonly _btnUnitsInfo          : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnChangeLog          : UiButton;
+    private readonly _btnChangeLog          : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnSetPrivilege       : UiButton;
+    private readonly _btnSetPrivilege       : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnMapManagement      : UiButton;
+    private readonly _btnMapManagement      : TwnsUiButton.UiButton;
 
     public static show(): void {
         if (!UserSettingsPanel._instance) {

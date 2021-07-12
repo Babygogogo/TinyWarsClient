@@ -1,11 +1,11 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { WeActionTypeListPanel }        from "./WeActionTypeListPanel";
@@ -34,19 +34,19 @@ type OpenDataForWeActionModifyPanel1 = {
     fullData    : IWarEventFullData;
     action      : IWarEventAction;
 };
-export class WeActionModifyPanel1 extends UiPanel<OpenDataForWeActionModifyPanel1> {
+export class WeActionModifyPanel1 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel1> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: WeActionModifyPanel1;
 
-    private _btnBack        : UiButton;
-    private _btnType        : UiButton;
-    private _btnAddUnit     : UiButton;
-    private _btnClear       : UiButton;
-    private _labelTitle     : UiLabel;
-    private _labelUnitsCount: UiLabel;
-    private _listUnit       : UiScrollList<DataForUnitRenderer>;
+    private _btnBack        : TwnsUiButton.UiButton;
+    private _btnType        : TwnsUiButton.UiButton;
+    private _btnAddUnit     : TwnsUiButton.UiButton;
+    private _btnClear       : TwnsUiButton.UiButton;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _labelUnitsCount: TwnsUiLabel.UiLabel;
+    private _listUnit       : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
 
     public static show(openData: OpenDataForWeActionModifyPanel1): void {
         if (!WeActionModifyPanel1._instance) {
@@ -168,62 +168,62 @@ type DataForUnitRenderer = {
     action          : IWarEventAction;
     dataForAddUnit  : ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
 };
-class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
-    private _btnDelete              : UiButton;
-    private _labelError             : UiLabel;
+class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
+    private _btnDelete              : TwnsUiButton.UiButton;
+    private _labelError             : TwnsUiLabel.UiLabel;
 
     private _groupCanBeBlockedByUnit: eui.Group;
-    private _labelCanBeBlockedByUnit: UiLabel;
-    private _imgCanBeBlockedByUnit  : UiImage;
+    private _labelCanBeBlockedByUnit: TwnsUiLabel.UiLabel;
+    private _imgCanBeBlockedByUnit  : TwnsUiImage.UiImage;
 
     private _groupNeedMovableTile   : eui.Group;
-    private _labelNeedMovableTile   : UiLabel;
-    private _imgNeedMovableTile     : UiImage;
+    private _labelNeedMovableTile   : TwnsUiLabel.UiLabel;
+    private _imgNeedMovableTile     : TwnsUiImage.UiImage;
 
-    private _labelGridIndex         : UiLabel;
+    private _labelGridIndex         : TwnsUiLabel.UiLabel;
     private _inputGridX             : UiTextInput;
     private _inputGridY             : UiTextInput;
 
-    private _labelPlayerIndex       : UiLabel;
+    private _labelPlayerIndex       : TwnsUiLabel.UiLabel;
     private _inputPlayerIndex       : UiTextInput;
 
-    private _btnUnitType            : UiButton;
-    private _labelUnitType          : UiLabel;
+    private _btnUnitType            : TwnsUiButton.UiButton;
+    private _labelUnitType          : TwnsUiLabel.UiLabel;
 
-    private _btnActionState         : UiButton;
-    private _labelActionState       : UiLabel;
+    private _btnActionState         : TwnsUiButton.UiButton;
+    private _labelActionState       : TwnsUiLabel.UiLabel;
 
-    private _labelHp                : UiLabel;
+    private _labelHp                : TwnsUiLabel.UiLabel;
     private _inputHp                : UiTextInput;
 
-    private _labelFuel              : UiLabel;
+    private _labelFuel              : TwnsUiLabel.UiLabel;
     private _inputFuel              : UiTextInput;
 
-    private _labelPromotion         : UiLabel;
+    private _labelPromotion         : TwnsUiLabel.UiLabel;
     private _inputPromotion         : UiTextInput;
 
     private _groupHasLoadedCo       : eui.Group;
-    private _labelHasLoadedCo       : UiLabel;
-    private _imgHasLoadedCo         : UiImage;
+    private _labelHasLoadedCo       : TwnsUiLabel.UiLabel;
+    private _imgHasLoadedCo         : TwnsUiImage.UiImage;
 
     private _groupPrimaryAmmo       : eui.Group;
-    private _labelPrimaryAmmo       : UiLabel;
+    private _labelPrimaryAmmo       : TwnsUiLabel.UiLabel;
     private _inputPrimaryAmmo       : UiTextInput;
 
     private _groupFlareAmmo         : eui.Group;
-    private _labelFlareAmmo         : UiLabel;
+    private _labelFlareAmmo         : TwnsUiLabel.UiLabel;
     private _inputFlareAmmo         : UiTextInput;
 
     private _groupIsDiving          : eui.Group;
-    private _labelIsDiving          : UiLabel;
-    private _imgIsDiving            : UiImage;
+    private _labelIsDiving          : TwnsUiLabel.UiLabel;
+    private _imgIsDiving            : TwnsUiImage.UiImage;
 
     private _groupBuildMaterial     : eui.Group;
-    private _labelBuildMaterial     : UiLabel;
+    private _labelBuildMaterial     : TwnsUiLabel.UiLabel;
     private _inputBuildMaterial     : UiTextInput;
 
     private _groupProduceMaterial   : eui.Group;
-    private _labelProduceMaterial   : UiLabel;
+    private _labelProduceMaterial   : TwnsUiLabel.UiLabel;
     private _inputProduceMaterial   : UiTextInput;
 
     protected _onOpened(): void {

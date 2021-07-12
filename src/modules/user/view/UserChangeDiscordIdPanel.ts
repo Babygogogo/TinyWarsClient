@@ -1,9 +1,9 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { UiTextInput }          from "../../../utility/ui/UiTextInput";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
@@ -17,28 +17,28 @@ import { Types }                from "../../../utility/Types";
 import { UserModel }            from "../../user/model/UserModel";
 import { UserProxy }            from "../../user/model/UserProxy";
 
-export class UserChangeDiscordIdPanel extends UiPanel<void> {
+export class UserChangeDiscordIdPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     // @ts-ignore
-    private readonly _imgMask           : UiImage;
+    private readonly _imgMask           : TwnsUiImage.UiImage;
     // @ts-ignore
     private readonly _group             : eui.Group;
     // @ts-ignore
-    private readonly _labelTitle        : UiLabel;
+    private readonly _labelTitle        : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelDiscordId    : UiLabel;
+    private readonly _labelDiscordId    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelNote         : UiLabel;
+    private readonly _labelNote         : TwnsUiLabel.UiLabel;
     // @ts-ignore
     private readonly _inputDiscordId    : UiTextInput;
     // @ts-ignore
-    private readonly _labelUrl          : UiLabel;
+    private readonly _labelUrl          : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _btnConfirm        : UiButton;
+    private readonly _btnConfirm        : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnClose          : UiButton;
+    private readonly _btnClose          : TwnsUiButton.UiButton;
 
     private _isRequesting   = false;
 

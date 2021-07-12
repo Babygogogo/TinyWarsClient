@@ -1,9 +1,9 @@
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
 import { WarMapUnitView }       from "../../warMap/view/WarMapUnitView";
 import { BwTile }               from "../model/BwTile";
 import { CommonInputPanel }     from "../../common/view/CommonInputPanel";
@@ -29,19 +29,19 @@ type OpenDataForBwTileDetailPanel = {
 
 const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
-export class BwTileDetailPanel extends UiPanel<OpenDataForBwTileDetailPanel> {
+export class BwTileDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForBwTileDetailPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: BwTileDetailPanel;
 
     private _group              : eui.Group;
-    private _labelName          : UiLabel;
-    private _imgTileBase        : UiImage;
-    private _imgTileObject      : UiImage;
-    private _listInfo           : UiScrollList<DataForInfoRenderer>;
-    private _labelMoveCost      : UiLabel;
-    private _listMoveCost       : UiScrollList<DataForMoveRangeRenderer>;
+    private _labelName          : TwnsUiLabel.UiLabel;
+    private _imgTileBase        : TwnsUiImage.UiImage;
+    private _imgTileObject      : TwnsUiImage.UiImage;
+    private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+    private _labelMoveCost      : TwnsUiLabel.UiLabel;
+    private _listMoveCost       : TwnsUiScrollList.UiScrollList<DataForMoveRangeRenderer>;
 
     private _dataForListMoveCost: DataForMoveRangeRenderer[];
 
@@ -347,9 +347,9 @@ type DataForInfoRenderer = {
     callbackOnTouchedTitle  : (() => void) | null;
 };
 
-class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
-    private _btnTitle   : UiButton;
-    private _labelValue : UiLabel;
+class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+    private _btnTitle   : TwnsUiButton.UiButton;
+    private _labelValue : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -378,11 +378,11 @@ type DataForMoveRangeRenderer = {
     playerIndex     : number;
 };
 
-class MoveCostRenderer extends UiListItemRenderer<DataForMoveRangeRenderer> {
+class MoveCostRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMoveRangeRenderer> {
     private _group          : eui.Group;
     private _conView        : eui.Group;
     private _unitView       : WarMapUnitView;
-    private _labelMoveCost  : UiLabel;
+    private _labelMoveCost  : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([

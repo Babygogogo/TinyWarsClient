@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                                                              from "../../../utility/ui/UiPanel";
-import { UiButton }                                                             from "../../../utility/ui/UiButton";
-import { UiLabel }                                                              from "../../../utility/ui/UiLabel";
-import { UiScrollList }                                                         from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                                                              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                                                              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                                                              from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                                                         from "../../../utility/ui/UiScrollList";
 import { UiTab }                                                                from "../../../utility/ui/UiTab";
 import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
 import { CcrRoomInfoPanel }                                                     from "./CcrRoomInfoPanel";
@@ -26,7 +26,7 @@ import { CcrProxy }                                                             
 import LangTextType                                                             = TwnsLangTextType.LangTextType;
 import NotifyType                                                               = TwnsNotifyType.NotifyType;
 
-export class CcrMyRoomListPanel extends UiPanel<void> {
+export class CcrMyRoomListPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
@@ -36,16 +36,16 @@ export class CcrMyRoomListPanel extends UiPanel<void> {
     private readonly _tabSettings           : UiTab<DataForTabItemRenderer, OpenDataForCcrRoomMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCcrRoomAdvancedSettingsPage | OpenDataForCcrRoomBasicSettingsPage>;
 
     private readonly _groupNavigator        : eui.Group;
-    private readonly _labelMultiPlayer      : UiLabel;
-    private readonly _labelMyRoom           : UiLabel;
+    private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
+    private readonly _labelMyRoom           : TwnsUiLabel.UiLabel;
 
-    private readonly _btnBack               : UiButton;
-    private readonly _btnNextStep           : UiButton;
+    private readonly _btnBack               : TwnsUiButton.UiButton;
+    private readonly _btnNextStep           : TwnsUiButton.UiButton;
 
     private readonly _groupRoomList         : eui.Group;
-    private readonly _listRoom              : UiScrollList<DataForRoomRenderer>;
-    private readonly _labelNoRoom           : UiLabel;
-    private readonly _labelLoading          : UiLabel;
+    private readonly _listRoom              : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
+    private readonly _labelNoRoom           : TwnsUiLabel.UiLabel;
+    private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
     private _hasReceivedData    = false;
 
@@ -306,7 +306,7 @@ type DataForTabItemRenderer = {
     name: string;
 };
 class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
-    private _labelName: UiLabel;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._labelName.text = this.data.name;
@@ -316,11 +316,11 @@ class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
 type DataForRoomRenderer = {
     roomId: number;
 };
-class RoomRenderer extends UiListItemRenderer<DataForRoomRenderer> {
-    private readonly _btnChoose     : UiButton;
-    private readonly _btnNext       : UiButton;
-    private readonly _labelName     : UiLabel;
-    private readonly _imgRed        : UiLabel;
+class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
+    private readonly _btnChoose     : TwnsUiButton.UiButton;
+    private readonly _btnNext       : TwnsUiButton.UiButton;
+    private readonly _labelName     : TwnsUiLabel.UiLabel;
+    private readonly _imgRed        : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

@@ -4,7 +4,7 @@ import { Notify }           from "./notify/Notify";
 import { TwnsNotifyType }   from "./notify/NotifyType";
 import { Logger }           from "./Logger";
 import { CommonConstants }  from "./CommonConstants";
-import * as UiPanel         from "./ui/UiPanel";
+import { TwnsUiPanel }      from "./ui/UiPanel";
 
 export namespace StageManager {
     import LayerType            = Types.LayerType;
@@ -132,10 +132,10 @@ export namespace StageManager {
             this.addEventListener(egret.Event.RESIZE, this._onResize, this);
         }
 
-        public closeAllPanels<T>(except?: UiPanel.UiPanel<T>): void {
+        public closeAllPanels<T>(except?: TwnsUiPanel.UiPanel<T>): void {
             for (let i = this.numChildren - 1; i >= 0; --i) {
                 const child = this.getChildAt(i);
-                if ((child instanceof UiPanel.UiPanel) && (child !== except)) {
+                if ((child instanceof TwnsUiPanel.UiPanel) && (child !== except)) {
                     child.close();
                 }
             }
@@ -146,7 +146,7 @@ export namespace StageManager {
             const width     = this.width;
             for (let i = 0; i < this.numChildren; ++i) {
                 const child = this.getChildAt(i);
-                if (child instanceof UiPanel.UiPanel) {
+                if (child instanceof TwnsUiPanel.UiPanel) {
                     child.resize(width, height);
                 }
             }

@@ -1,10 +1,10 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
@@ -33,45 +33,45 @@ import { MeModel }                      from "../model/MeModel";
 import IWarRule                         = ProtoTypes.WarRule.IWarRule;
 import IDataForPlayerRule               = ProtoTypes.WarRule.IDataForPlayerRule;
 
-export class MeWarRulePanel extends UiPanel<void> {
+export class MeWarRulePanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeWarRulePanel;
 
-    private _labelMenuTitle         : UiLabel;
-    private _listWarRule            : UiScrollList<DataForWarRuleNameRenderer>;
-    private _btnAddRule             : UiButton;
-    private _btnDelete              : UiButton;
-    private _btnBack                : UiButton;
+    private _labelMenuTitle         : TwnsUiLabel.UiLabel;
+    private _listWarRule            : TwnsUiScrollList.UiScrollList<DataForWarRuleNameRenderer>;
+    private _btnAddRule             : TwnsUiButton.UiButton;
+    private _btnDelete              : TwnsUiButton.UiButton;
+    private _btnBack                : TwnsUiButton.UiButton;
 
-    private _btnModifyRuleName      : UiButton;
-    private _labelRuleName          : UiLabel;
+    private _btnModifyRuleName      : TwnsUiButton.UiButton;
+    private _labelRuleName          : TwnsUiLabel.UiLabel;
 
-    private _btnModifyHasFog        : UiButton;
-    private _imgHasFog              : UiImage;
-    private _btnHelpHasFog          : UiButton;
+    private _btnModifyHasFog        : TwnsUiButton.UiButton;
+    private _imgHasFog              : TwnsUiImage.UiImage;
+    private _btnHelpHasFog          : TwnsUiButton.UiButton;
 
-    private _labelAvailability      : UiLabel;
-    private _btnAvailabilityMcw     : UiButton;
-    private _imgAvailabilityMcw     : UiImage;
-    private _btnAvailabilityScw     : UiButton;
-    private _imgAvailabilityScw     : UiImage;
-    private _btnAvailabilityMrw     : UiButton;
-    private _imgAvailabilityMrw     : UiImage;
-    private _btnAvailabilityCcw     : UiButton;
-    private _imgAvailabilityCcw     : UiImage;
-    private _btnAvailabilitySrw     : UiButton;
-    private _imgAvailabilitySrw     : UiImage;
+    private _labelAvailability      : TwnsUiLabel.UiLabel;
+    private _btnAvailabilityMcw     : TwnsUiButton.UiButton;
+    private _imgAvailabilityMcw     : TwnsUiImage.UiImage;
+    private _btnAvailabilityScw     : TwnsUiButton.UiButton;
+    private _imgAvailabilityScw     : TwnsUiImage.UiImage;
+    private _btnAvailabilityMrw     : TwnsUiButton.UiButton;
+    private _imgAvailabilityMrw     : TwnsUiImage.UiImage;
+    private _btnAvailabilityCcw     : TwnsUiButton.UiButton;
+    private _imgAvailabilityCcw     : TwnsUiImage.UiImage;
+    private _btnAvailabilitySrw     : TwnsUiButton.UiButton;
+    private _imgAvailabilitySrw     : TwnsUiImage.UiImage;
 
-    private _labelWarEventListTitle : UiLabel;
-    private _btnTestWarEvent        : UiButton;
-    private _btnAddWarEvent         : UiButton;
-    private _btnEditWarEvent        : UiButton;
-    private _listWarEvent           : UiScrollList<DataForWarEventRenderer>;
+    private _labelWarEventListTitle : TwnsUiLabel.UiLabel;
+    private _btnTestWarEvent        : TwnsUiButton.UiButton;
+    private _btnAddWarEvent         : TwnsUiButton.UiButton;
+    private _btnEditWarEvent        : TwnsUiButton.UiButton;
+    private _listWarEvent           : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
 
-    private _labelPlayerList        : UiLabel;
-    private _listPlayer             : UiScrollList<DataForPlayerRenderer>;
+    private _labelPlayerList        : TwnsUiLabel.UiLabel;
+    private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
     private _war                    : MeWar;
     private _dataForListWarRule     : DataForWarRuleNameRenderer[] = [];
@@ -549,9 +549,9 @@ type DataForWarRuleNameRenderer = {
     panel   : MeWarRulePanel;
 };
 
-class WarRuleNameRenderer extends UiListItemRenderer<DataForWarRuleNameRenderer> {
-    private _btnChoose: UiButton;
-    private _labelName: UiLabel;
+class WarRuleNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRuleNameRenderer> {
+    private _btnChoose: TwnsUiButton.UiButton;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -579,8 +579,8 @@ type DataForPlayerRenderer = {
     isReviewing : boolean;
     panel       : MeWarRulePanel;
 };
-class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
-    private _listInfo   : UiScrollList<DataForInfoRenderer>;
+class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
+    private _listInfo   : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
@@ -1015,9 +1015,9 @@ type DataForInfoRenderer = {
     infoColor               : number;
     callbackOnTouchedTitle  : (() => void) | null;
 };
-class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
-    private _btnTitle   : UiButton;
-    private _labelValue : UiLabel;
+class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+    private _btnTitle   : TwnsUiButton.UiButton;
+    private _labelValue : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -1046,13 +1046,13 @@ type DataForWarEventRenderer = {
     warEventId      : number;
     warRule         : IWarRule;
 };
-class WarEventRenderer extends UiListItemRenderer<DataForWarEventRenderer> {
-    private _labelWarEventIdTitle   : UiLabel;
-    private _labelWarEventId        : UiLabel;
-    private _btnUp                  : UiButton;
-    private _btnDown                : UiButton;
-    private _btnDelete              : UiButton;
-    private _labelWarEventName      : UiLabel;
+class WarEventRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventRenderer> {
+    private _labelWarEventIdTitle   : TwnsUiLabel.UiLabel;
+    private _labelWarEventId        : TwnsUiLabel.UiLabel;
+    private _btnUp                  : TwnsUiButton.UiButton;
+    private _btnDown                : TwnsUiButton.UiButton;
+    private _btnDelete              : TwnsUiButton.UiButton;
+    private _labelWarEventName      : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

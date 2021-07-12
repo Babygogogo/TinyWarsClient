@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" top="40" bottom="0" right="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" top="0" bottom="0" right="200" />
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         right="0" top="0" bottom="0" width="200" />
         <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
             <e:skinName>
@@ -16,7 +16,7 @@
                         <e:TabBar id="_bar" anchorOffsetY="0" anchorOffsetX="0">
                             <e:itemRendererSkinName>
                                 <e:Skin states="up,down,disabled" height="50" width="190">
-                                    <GameUi:UiLabel id="_labelName" size="22" anchorOffsetY="0" anchorOffsetX="0"
+                                    <TwnsUiLabel:UiLabel id="_labelName" size="22" anchorOffsetY="0" anchorOffsetX="0"
                                                     verticalAlign="middle" textAlign="center" top="0" left="0"
                                                     bottom="0" right="0" textColor="0x777777" textColor.up="0xffffff"
                                                     text="页签" textColor.down="0x00ff00" />
@@ -30,12 +30,12 @@
                 </e:Skin>
             </e:skinName>
         </GameUi:UiTab>
-        <GameUi:UiLabel id="_labelMenuTitle" text="创建战局" bold="true" size="26" top="14" textColor="0xffffff" width="200"
+        <TwnsUiLabel:UiLabel id="_labelMenuTitle" text="创建战局" bold="true" size="26" top="14" textColor="0xffffff" width="200"
                         textAlign="center" right="0" />
         <e:Group right="0" bottom="0">
-            <GameUi:UiButton id="_btnConfirm" label="确定" skinName="Skins.Component.Button.ButtonSelfAdaption001" x="119"
+            <TwnsUiButton:UiButton id="_btnConfirm" label="确定" skinName="Skins.Component.Button.ButtonSelfAdaption001" x="119"
                              y="0" width="200" />
-            <GameUi:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0"
+            <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0"
                              y="0" width="200" />
             <e:layout>
                 <e:VerticalLayout/>

@@ -1,7 +1,7 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
@@ -14,16 +14,16 @@ import NotifyType                       = TwnsNotifyType.NotifyType;
 import LangTextType                     = TwnsLangTextType.LangTextType;
 
 export class MeMfwBasicSettingsPage extends UiTabPage<void> {
-    private _btnMapNameTitle            : UiButton;
-    private _labelMapName               : UiLabel;
-    private _btnBuildings               : UiButton;
+    private _btnMapNameTitle            : TwnsUiButton.UiButton;
+    private _labelMapName               : TwnsUiLabel.UiLabel;
+    private _btnBuildings               : TwnsUiButton.UiButton;
 
-    private _btnModifyWarRule           : UiButton;
-    private _labelWarRule               : UiLabel;
+    private _btnModifyWarRule           : TwnsUiButton.UiButton;
+    private _labelWarRule               : TwnsUiLabel.UiLabel;
 
-    private _btnModifyHasFog            : UiButton;
-    private _imgHasFog                  : UiImage;
-    private _btnHelpHasFog              : UiButton;
+    private _btnModifyHasFog            : TwnsUiButton.UiButton;
+    private _imgHasFog                  : TwnsUiImage.UiImage;
+    private _btnHelpHasFog              : TwnsUiButton.UiButton;
 
     public constructor() {
         super();

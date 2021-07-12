@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <w:Config id="16ea1cd8a3e" />
-    <GameUi:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
                     scale9Grid="1,1,2,2" />
     <e:Group id="_group" width="420" height="210" horizontalCenter="0" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0">
-            <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
                             left="0" right="0" top="38" bottom="0" />
             <e:Group y="0" left="0" right="0">
-                <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
                                 source="commonColorGrey0001" y="0" left="0" right="0" />
-                <GameUi:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
             </e:Group>
         </e:Group>
         <e:Group y="60" left="30" right="30">
-            <GameUi:UiLabel id="_labelNickname" text="New Nickname" textColor="0xFFFFFF" size="20" textAlign="center"
+            <TwnsUiLabel:UiLabel id="_labelNickname" text="New Nickname" textColor="0xFFFFFF" size="20" textAlign="center"
                             x="0" verticalCenter="0" />
             <GameUi:UiTextInput id="_inputNickname" y="0" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
                                 skinName="Skins.Component.TextInput.TextInput003" left="140" right="0" />
         </e:Group>
         <e:Group y="110" horizontalCenter="0">
-            <GameUi:UiButton id="_btnConfirm" label="确认" y="0" width="100"
+            <TwnsUiButton:UiButton id="_btnConfirm" label="确认" y="0" width="100"
                              skinName="Skins.Component.Button.ButtonYellow001" x="0" />
-            <GameUi:UiButton id="_btnClose" label="确认" y="10" width="100" x="0"
+            <TwnsUiButton:UiButton id="_btnClose" label="确认" y="10" width="100" x="0"
                              skinName="Skins.Component.Button.ButtonGrey001" />
             <e:layout>
                 <e:HorizontalLayout gap="60" />
             </e:layout>
         </e:Group>
-        <GameUi:UiLabel id="_labelNote" text="注意:\n昵称可使用任意字符，长度不小于4位" textColor="0xFFFFFF" size="14" lineSpacing="3"
+        <TwnsUiLabel:UiLabel id="_labelNote" text="注意:\n昵称可使用任意字符，长度不小于4位" textColor="0xFFFFFF" size="14" lineSpacing="3"
                         anchorOffsetY="0" left="30" right="30" y="160" />
     </e:Group>
 </e:Skin>

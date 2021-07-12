@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { FloatText }                    from "../../../utility/FloatText";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -23,16 +23,16 @@ type OpenDataForWeNodeReplacePanel = {
     nodeId          : number | null | undefined;
     fullData        : IWarEventFullData;
 };
-export class WeNodeReplacePanel extends UiPanel<OpenDataForWeNodeReplacePanel> {
+export class WeNodeReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeNodeReplacePanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: WeNodeReplacePanel;
 
-    private _listNode       : UiScrollList<DataForNodeRenderer>;
-    private _labelTitle     : UiLabel;
-    private _labelNoNode    : UiLabel;
-    private _btnClose       : UiButton;
+    private _listNode       : TwnsUiScrollList.UiScrollList<DataForNodeRenderer>;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _labelNoNode    : TwnsUiLabel.UiLabel;
+    private _btnClose       : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForWeNodeReplacePanel): void {
         if (!WeNodeReplacePanel._instance) {
@@ -112,12 +112,12 @@ type DataForNodeRenderer = {
     candidateNodeId : number;
     fullData        : IWarEventFullData;
 };
-class NodeRenderer extends UiListItemRenderer<DataForNodeRenderer> {
-    private _labelNodeId        : UiLabel;
-    private _labelSubNode       : UiLabel;
-    private _labelSubCondition  : UiLabel;
-    private _btnCopy            : UiButton;
-    private _btnSelect          : UiButton;
+class NodeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForNodeRenderer> {
+    private _labelNodeId        : TwnsUiLabel.UiLabel;
+    private _labelSubNode       : TwnsUiLabel.UiLabel;
+    private _labelSubCondition  : TwnsUiLabel.UiLabel;
+    private _btnCopy            : TwnsUiButton.UiButton;
+    private _btnSelect          : TwnsUiButton.UiButton;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

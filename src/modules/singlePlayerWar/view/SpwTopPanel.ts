@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
@@ -26,27 +26,27 @@ export namespace TwnsSpwTopPanel {
         war : BwWar;
     };
     // eslint-disable-next-line no-shadow
-    export class SpwTopPanel extends UiPanel<OpenData> {
+    export class SpwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: SpwTopPanel;
 
         private _groupPlayer        : eui.Group;
-        private _labelPlayer        : UiLabel;
-        private _labelSinglePlayer  : UiLabel;
-        private _labelFund          : UiLabel;
+        private _labelPlayer        : TwnsUiLabel.UiLabel;
+        private _labelSinglePlayer  : TwnsUiLabel.UiLabel;
+        private _labelFund          : TwnsUiLabel.UiLabel;
         private _groupCo            : eui.Group;
-        private _labelCo            : UiLabel;
-        private _labelCurrEnergy    : UiLabel;
-        private _labelPowerEnergy   : UiLabel;
-        private _labelZoneEnergy    : UiLabel;
-        private _btnChat            : UiButton;
-        private _btnUnitList        : UiButton;
-        private _btnFindBuilding    : UiButton;
-        private _btnEndTurn         : UiButton;
-        private _btnCancel          : UiButton;
-        private _btnMenu            : UiButton;
+        private _labelCo            : TwnsUiLabel.UiLabel;
+        private _labelCurrEnergy    : TwnsUiLabel.UiLabel;
+        private _labelPowerEnergy   : TwnsUiLabel.UiLabel;
+        private _labelZoneEnergy    : TwnsUiLabel.UiLabel;
+        private _btnChat            : TwnsUiButton.UiButton;
+        private _btnUnitList        : TwnsUiButton.UiButton;
+        private _btnFindBuilding    : TwnsUiButton.UiButton;
+        private _btnEndTurn         : TwnsUiButton.UiButton;
+        private _btnCancel          : TwnsUiButton.UiButton;
+        private _btnMenu            : TwnsUiButton.UiButton;
 
         private _war    : BwWar;
 

@@ -1,10 +1,10 @@
 
-import { UiImage }                          from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }               from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                          from "../../../utility/ui/UiPanel";
-import { UiButton }                         from "../../../utility/ui/UiButton";
-import { UiLabel }                          from "../../../utility/ui/UiLabel";
-import { UiScrollList }                     from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }                          from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }               from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                          from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                          from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                          from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                     from "../../../utility/ui/UiScrollList";
 import { Lang }                             from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
@@ -21,15 +21,15 @@ import { McrWatchMakeRequestWarsPanel }     from "./McrWatchMakeRequestWarsPanel
 import { McrWatchDeleteWatcherWarsPanel }   from "./McrWatchDeleteWatcherWarsPanel";
 import { McrWatchHandleRequestWarsPanel }   from "./McrWatchHandleRequestWarsPanel";
 
-export class McrWatchMainMenuPanel extends UiPanel<void> {
+export class McrWatchMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: McrWatchMainMenuPanel;
 
-    private _labelMenuTitle : UiLabel;
-    private _btnBack        : UiButton;
-    private _listCommand    : UiScrollList<DataForCommandRenderer>;
+    private _labelMenuTitle : TwnsUiLabel.UiLabel;
+    private _btnBack        : TwnsUiButton.UiButton;
+    private _listCommand    : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
 
     public static show(): void {
         if (!McrWatchMainMenuPanel._instance) {
@@ -132,9 +132,9 @@ type DataForCommandRenderer = {
     callback    : () => void;
     redChecker? : () => boolean;
 };
-class CommandRenderer extends UiListItemRenderer<DataForCommandRenderer> {
-    private _labelCommand   : UiLabel;
-    private _imgRed         : UiImage;
+class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
+    private _labelCommand   : TwnsUiLabel.UiLabel;
+    private _imgRed         : TwnsUiImage.UiImage;
 
     protected _onDataChanged(): void {
         const data              = this.data;

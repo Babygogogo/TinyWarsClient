@@ -1,39 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
-        xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
-                    scale9Grid="1,1,2,2" />
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+        xmlns:TwnsUiRadioButton="TwnsUiRadioButton.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
+                         scale9Grid="1,1,2,2" />
     <e:Group id="_group" width="520" height="430" horizontalCenter="0" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0">
-            <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
-                            left="0" right="0" top="38" bottom="0" />
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+                                 left="0" right="0" top="38" bottom="0" />
             <e:Group y="0" left="0" right="0">
-                <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
-                                source="commonColorGrey0001" y="0" left="0" right="0" />
-                <GameUi:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
-                <GameUi:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001" verticalCenter="0"
-                                 right="30" />
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                     source="commonColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001"
+                                       verticalCenter="0" right="30" />
             </e:Group>
         </e:Group>
         <e:Scroller id="_scroller" left="0" right="0" top="50" bottom="10">
             <e:Group x="20" y="0">
                 <e:Group x="10">
                     <e:Group x="0" y="0">
-                        <GameUi:UiRadioButton id="_uiRadioLanguage" x="90" y="17"
-                                              skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <GameUi:UiRadioButton id="_uiRadioTexture" x="100" y="27"
-                                              skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <GameUi:UiRadioButton id="_uiRadioShowGridBorder" x="80" y="7"
-                                              skinName="Skins.Component.RadioButton.RadioButton001" />
+                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioLanguage" x="90" y="17"
+                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
+                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioTexture" x="100" y="27"
+                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
+                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioShowGridBorder" x="80" y="7"
+                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
                         <e:layout>
                             <e:HorizontalLayout gap="50" />
                         </e:layout>
                     </e:Group>
                     <e:Group x="0" y="44">
-                        <GameUi:UiRadioButton id="_uiRadioUnitAnimation" x="80" y="7"
-                                              skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <GameUi:UiRadioButton id="_uiRadioTileAnimation" x="90" y="17"
-                                              skinName="Skins.Component.RadioButton.RadioButton001" />
+                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioUnitAnimation" x="80" y="7"
+                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
+                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioTileAnimation" x="90" y="17"
+                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
                         <e:layout>
                             <e:HorizontalLayout gap="50" />
                         </e:layout>
@@ -43,36 +44,36 @@
                     </e:layout>
                 </e:Group>
                 <e:Group id="_groupButtons" y="220" horizontalCenter="0">
-                    <GameUi:UiButton id="_btnRankList" label="积分排名" y="300" x="196"
-                                     skinName="Skins.Component.Button.ButtonBlack001" width="120" height="34" />
-                    <GameUi:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnChangePassword" label="更改密码" y="290" x="186"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnChangeGameVersion" label="更改Discord ID" y="300" x="196"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnServerStatus" label="服务器状态" y="330" x="226"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnChat" label="聊天" y="340" x="236"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnComplaint" label="意见反馈" y="340" x="236"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnUnitsInfo" label="部队属性表" y="360" x="256"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnSetPrivilege" label="设置权限" y="360" x="256"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnMapManagement" label="管理地图" y="360" x="256"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnSetSound" label="声音设置" y="360" x="256"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
-                    <GameUi:UiButton id="_btnSetStageScaler" label="分辨率设置" y="360" x="256"
-                                     skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnRankList" label="积分排名" y="300" x="196"
+                                           skinName="Skins.Component.Button.ButtonBlack001" width="120" height="34" />
+                    <TwnsUiButton:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnChangePassword" label="更改密码" y="290" x="186"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnChangeGameVersion" label="更改Discord ID" y="300" x="196"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnServerStatus" label="服务器状态" y="330" x="226"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnChat" label="聊天" y="340" x="236"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnComplaint" label="意见反馈" y="340" x="236"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnUnitsInfo" label="部队属性表" y="360" x="256"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnSetPrivilege" label="设置权限" y="360" x="256"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnMapManagement" label="管理地图" y="360" x="256"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnSetSound" label="声音设置" y="360" x="256"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnSetStageScaler" label="分辨率设置" y="360" x="256"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
                     <e:layout>
                         <e:TileLayout orientation="rows" requestedColumnCount="3" horizontalGap="50" verticalGap="14" />
                     </e:layout>

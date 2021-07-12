@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" left="0" top="0" right="0">
         <e:Group id="_groupUserInfo" x="40" y="4">
-            <GameUi:UiImage source="lobbyTop0000" x="0" y="0" />
-            <GameUi:UiLabel id="_labelNickname" text="babygogogo" y="20" size="14" x="70" textColor="0xffffff"
+            <TwnsUiImage:UiImage source="lobbyTop0000" x="0" y="0" />
+            <TwnsUiLabel:UiLabel id="_labelNickname" text="babygogogo" y="20" size="14" x="70" textColor="0xffffff"
                             bold="true" />
-            <GameUi:UiLabel id="_labelUserId" text="ID: 1" y="40" size="12" x="70" textColor="0xFFFFFF" />
+            <TwnsUiLabel:UiLabel id="_labelUserId" text="ID: 1" y="40" size="12" x="70" textColor="0xFFFFFF" />
         </e:Group>
-        <GameUi:UiButton id="_btnSettings" label="" y="16" right="40" width="44" height="44">
+        <TwnsUiButton:UiButton id="_btnSettings" label="" y="16" right="40" width="44" height="44">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image source="lobbyTop0001" horizontalCenter="0" verticalCenter="0" />
@@ -16,6 +16,6 @@
                     <e:Image id="_imgRed" source="commonIcon0000" right="0" top="0" />
                 </e:Skin>
             </GameUi:skinName>
-        </GameUi:UiButton>
+        </TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>

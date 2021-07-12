@@ -1,10 +1,10 @@
 
-import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { BwPlayerManager }      from "../model/BwPlayerManager";
 import { BwWar }                from "../model/BwWar";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
 import { MeTileSimpleView }     from "../../mapEditor/view/MeTileSimpleView";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { ConfigManager }        from "../../../utility/ConfigManager";
@@ -19,14 +19,14 @@ import { Types }                from "../../../utility/Types";
 type OpenDataForBwBuildingListPanel = {
     war: BwWar;
 };
-export class BwBuildingListPanel extends UiPanel<OpenDataForBwBuildingListPanel> {
+export class BwBuildingListPanel extends TwnsUiPanel.UiPanel<OpenDataForBwBuildingListPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: BwBuildingListPanel;
 
-    public _labelTitle  : UiLabel;
-    public _listTile    : UiScrollList<DataForTileRenderer>;
+    public _labelTitle  : TwnsUiLabel.UiLabel;
+    public _listTile    : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
 
     public static show(openData: OpenDataForBwBuildingListPanel): void {
         if (!BwBuildingListPanel._instance) {
@@ -104,19 +104,19 @@ type DataForTileRenderer = {
     dict            : Map<number, number>;
 };
 
-class TileRenderer extends UiListItemRenderer<DataForTileRenderer> {
+class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
     private _group          : eui.Group;
     private _conTileView    : eui.Group;
-    private _labelNum0      : UiLabel;
-    private _labelNum1      : UiLabel;
-    private _labelNum2      : UiLabel;
-    private _labelNum3      : UiLabel;
-    private _labelNum4      : UiLabel;
-    private _labelTotalNum  : UiLabel;
+    private _labelNum0      : TwnsUiLabel.UiLabel;
+    private _labelNum1      : TwnsUiLabel.UiLabel;
+    private _labelNum2      : TwnsUiLabel.UiLabel;
+    private _labelNum3      : TwnsUiLabel.UiLabel;
+    private _labelNum4      : TwnsUiLabel.UiLabel;
+    private _labelTotalNum  : TwnsUiLabel.UiLabel;
 
     private _tileView   = new MeTileSimpleView();
 
-    private _labelNumList   : UiLabel[];
+    private _labelNumList   : TwnsUiLabel.UiLabel[];
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([

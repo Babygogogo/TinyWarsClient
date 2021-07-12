@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { WeActionTypeListPanel }        from "./WeActionTypeListPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
@@ -22,22 +22,22 @@ type OpenDataForWeActionModifyPanel2 = {
     fullData    : IWarEventFullData;
     action      : IWarEventAction;
 };
-export class WeActionModifyPanel2 extends UiPanel<OpenDataForWeActionModifyPanel2> {
+export class WeActionModifyPanel2 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel2> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: WeActionModifyPanel2;
 
-    private _labelTitle             : UiLabel;
-    private _btnType                : UiButton;
-    private _btnBack                : UiButton;
-    private _labelPlayerIndexTitle  : UiLabel;
-    private _labelPlayerIndex       : UiLabel;
-    private _btnSwitchPlayerIndex   : UiButton;
-    private _labelPlayerStateTitle  : UiLabel;
-    private _labelPlayerState       : UiLabel;
-    private _btnSwitchPlayerState   : UiButton;
-    private _labelTips              : UiLabel;
+    private _labelTitle             : TwnsUiLabel.UiLabel;
+    private _btnType                : TwnsUiButton.UiButton;
+    private _btnBack                : TwnsUiButton.UiButton;
+    private _labelPlayerIndexTitle  : TwnsUiLabel.UiLabel;
+    private _labelPlayerIndex       : TwnsUiLabel.UiLabel;
+    private _btnSwitchPlayerIndex   : TwnsUiButton.UiButton;
+    private _labelPlayerStateTitle  : TwnsUiLabel.UiLabel;
+    private _labelPlayerState       : TwnsUiLabel.UiLabel;
+    private _btnSwitchPlayerState   : TwnsUiButton.UiButton;
+    private _labelTips              : TwnsUiLabel.UiLabel;
 
     public static show(openData: OpenDataForWeActionModifyPanel2): void {
         if (!WeActionModifyPanel2._instance) {

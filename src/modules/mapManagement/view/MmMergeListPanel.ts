@@ -7,7 +7,7 @@
 //     import Helpers      = Helpers;
 //     import WarMapModel  = WarMap.WarMapModel;
 
-//     export class MmMergeListPanel extends UiPanel<void> {
+//     export class MmMergeListPanel extends TwnsUiPanel.UiPanel<void> {
 //         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
 //         protected readonly _IS_EXCLUSIVE = true;
 
@@ -15,18 +15,18 @@
 
 //         private _listMap        : UiScrollList;
 //         private _zoomMap        : UiZoomableComponent;
-//         private _labelMenuTitle : UiLabel;
-//         private _btnBack        : UiButton;
-//         private _labelNoMap     : UiLabel;
+//         private _labelMenuTitle : TwnsUiLabel.UiLabel;
+//         private _btnBack        : TwnsUiButton.UiButton;
+//         private _labelNoMap     : TwnsUiLabel.UiLabel;
 
 //         private _groupInfo          : eui.Group;
-//         private _labelMapName       : UiLabel;
-//         private _labelMapNameEnglish: UiLabel;
-//         private _labelDesigner      : UiLabel;
-//         private _labelRating        : UiLabel;
-//         private _labelPlayedTimes   : UiLabel;
-//         private _labelPlayersCount  : UiLabel;
-//         private _labelModifyTime    : UiLabel;
+//         private _labelMapName       : TwnsUiLabel.UiLabel;
+//         private _labelMapNameEnglish: TwnsUiLabel.UiLabel;
+//         private _labelDesigner      : TwnsUiLabel.UiLabel;
+//         private _labelRating        : TwnsUiLabel.UiLabel;
+//         private _labelPlayedTimes   : TwnsUiLabel.UiLabel;
+//         private _labelPlayersCount  : TwnsUiLabel.UiLabel;
+//         private _labelModifyTime    : TwnsUiLabel.UiLabel;
 
 //         private _dataForList        : DataForMapNameRenderer[] = [];
 //         private _selectedMapFileName: string;
@@ -243,10 +243,10 @@
 //         panel       : MmMergeListPanel;
 //     }
 
-//     class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
-//         private _btnChoose: UiButton;
-//         private _btnNext  : UiButton;
-//         private _labelName: UiLabel;
+//     class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
+//         private _btnChoose: TwnsUiButton.UiButton;
+//         private _btnNext  : TwnsUiButton.UiButton;
+//         private _labelName: TwnsUiLabel.UiLabel;
 
 //         protected childrenCreated(): void {
 //             super.childrenCreated();

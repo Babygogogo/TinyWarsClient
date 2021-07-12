@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { FloatText }                    from "../../../utility/FloatText";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -18,19 +18,19 @@ import NotifyType                       = TwnsNotifyType.NotifyType;
 type OpenDataForCcrJoinPasswordPanel = {
     roomInfo: ProtoTypes.CoopCustomRoom.ICcrRoomInfo;
 };
-export class CcrJoinPasswordPanel extends UiPanel<OpenDataForCcrJoinPasswordPanel> {
+export class CcrJoinPasswordPanel extends TwnsUiPanel.UiPanel<OpenDataForCcrJoinPasswordPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: CcrJoinPasswordPanel;
 
-    private readonly _labelTitle            : UiLabel;
-    private readonly _labelRoomTitle        : UiLabel;
-    private readonly _labelPasswordTitle    : UiLabel;
-    private readonly _labelWarName          : UiLabel;
+    private readonly _labelTitle            : TwnsUiLabel.UiLabel;
+    private readonly _labelRoomTitle        : TwnsUiLabel.UiLabel;
+    private readonly _labelPasswordTitle    : TwnsUiLabel.UiLabel;
+    private readonly _labelWarName          : TwnsUiLabel.UiLabel;
     private readonly _inputWarPassword      : UiTextInput;
-    private readonly _btnCancel             : UiButton;
-    private readonly _btnConfirm            : UiButton;
+    private readonly _btnCancel             : TwnsUiButton.UiButton;
+    private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForCcrJoinPasswordPanel): void {
         if (!CcrJoinPasswordPanel._instance) {

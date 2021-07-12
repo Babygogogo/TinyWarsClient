@@ -1,9 +1,9 @@
 
-import { UiButton }             from "../../../utility/ui/UiButton";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { UiTextInput }          from "../../../utility/ui/UiTextInput";
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { FloatText }            from "../../../utility/FloatText";
@@ -16,32 +16,32 @@ import { Types }                from "../../../utility/Types";
 import { UserModel }            from "../../user/model/UserModel";
 import { UserProxy }            from "../../user/model/UserProxy";
 
-export class UserSetPasswordPanel extends UiPanel<void> {
+export class UserSetPasswordPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     // @ts-ignore
-    private readonly _imgMask                   : UiImage;
+    private readonly _imgMask                   : TwnsUiImage.UiImage;
     // @ts-ignore
     private readonly _group                     : eui.Group;
     // @ts-ignore
-    private readonly _labelTitle                : UiLabel;
+    private readonly _labelTitle                : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelOldPasswordTitle     : UiLabel;
+    private readonly _labelOldPasswordTitle     : TwnsUiLabel.UiLabel;
     // @ts-ignore
     private readonly _inputOldPassword          : UiTextInput;
     // @ts-ignore
-    private readonly _labelNewPasswordTitle0    : UiLabel;
+    private readonly _labelNewPasswordTitle0    : TwnsUiLabel.UiLabel;
     // @ts-ignore
     private readonly _inputNewPassword0         : UiTextInput;
     // @ts-ignore
-    private readonly _labelNewPasswordTitle1    : UiLabel;
+    private readonly _labelNewPasswordTitle1    : TwnsUiLabel.UiLabel;
     // @ts-ignore
     private readonly _inputNewPassword1         : UiTextInput;
     // @ts-ignore
-    private readonly _btnConfirm                : UiButton;
+    private readonly _btnConfirm                : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnCancel                 : UiButton;
+    private readonly _btnCancel                 : TwnsUiButton.UiButton;
 
     private static _instance: UserSetPasswordPanel;
 

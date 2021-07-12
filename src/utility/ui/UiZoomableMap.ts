@@ -1,10 +1,10 @@
 
-import { UiComponent }          from "./UiComponent";
+import { TwnsUiComponent }          from "./UiComponent";
 import { WarMapView }           from "../../modules/warMap/view/WarMapView";
 import { UiZoomableComponent }  from "./UiZoomableComponent";
 import { ProtoTypes }           from "../proto/ProtoTypes";
 
-export class UiZoomableMap extends UiComponent {
+export class UiZoomableMap extends TwnsUiComponent.UiComponent {
     private _zoomableComponent  = new UiZoomableComponent();
     private _mapView            = new WarMapView();
 

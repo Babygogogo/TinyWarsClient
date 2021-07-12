@@ -1,7 +1,7 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { MeWar }                        from "../model/MeWar";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -12,21 +12,21 @@ import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
 import { MeModel }                      from "../model/MeModel";
 
-export class MeVisibilityPanel extends UiPanel<void> {
+export class MeVisibilityPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeVisibilityPanel;
 
     private _groupUnit          : eui.Group;
-    private _labelUnit          : UiLabel;
-    private _imgUnit            : UiImage;
+    private _labelUnit          : TwnsUiLabel.UiLabel;
+    private _imgUnit            : TwnsUiImage.UiImage;
     private _groupTileObject    : eui.Group;
-    private _imgTileObject      : UiImage;
-    private _labelTileObject    : UiLabel;
+    private _imgTileObject      : TwnsUiImage.UiImage;
+    private _labelTileObject    : TwnsUiLabel.UiLabel;
     private _groupTileBase      : eui.Group;
-    private _imgTileBase        : UiImage;
-    private _labelTileBase      : UiLabel;
+    private _imgTileBase        : TwnsUiImage.UiImage;
+    private _labelTileBase      : TwnsUiLabel.UiLabel;
 
     private _war : MeWar;
 

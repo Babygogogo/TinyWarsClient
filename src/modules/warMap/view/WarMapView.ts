@@ -1,18 +1,18 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
 import { WarMapUnitView }       from "./WarMapUnitView";
+import { TwnsUiImage }          from "../../../utility/ui/UiImage";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { ConfigManager }        from "../../../utility/ConfigManager";
 import { Helpers }              from "../../../utility/Helpers";
 import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
+import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
 import { Types }                from "../../../utility/Types";
 import { BwHelpers }            from "../../baseWar/model/BwHelpers";
 import { CommonModel }          from "../../common/model/CommonModel";
 import { TimeModel }            from "../../time/model/TimeModel";
 import { UserModel }            from "../../user/model/UserModel";
+import NotifyType               = TwnsNotifyType.NotifyType;
 import MapSize                  = Types.MapSize;
 import IMapRawData              = ProtoTypes.Map.IMapRawData;
 import WarSerialization         = ProtoTypes.WarSerialization;
@@ -120,14 +120,14 @@ class TileMapView extends egret.DisplayObjectContainer {
         const gridBorderLayer                           = this._gridBorderLayer;
         gridBorderLayer.removeChildren();
         for (let x = 0; x <= mapWidth; ++x) {
-            const img   = new UiImage(`commonColorBlack0000`);
+            const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
             img.width   = 2;
             img.height  = borderHeight;
             img.x       = (x * GRID_WIDTH) - 1;
             gridBorderLayer.addChild(img);
         }
         for (let y = 0; y <= mapHeight; ++y) {
-            const img   = new UiImage(`commonColorBlack0000`);
+            const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
             img.width   = borderWidth;
             img.height  = 2;
             img.y       = (y * GRID_HEIGHT) - 1;
@@ -142,7 +142,7 @@ class TileMapView extends egret.DisplayObjectContainer {
 
 abstract class TileLayerBase extends eui.Component {
     private readonly _tileDataMap   : Types.WarMapTileViewData[][] = [];
-    private readonly _imageMap      : UiImage[][] = [];
+    private readonly _imageMap      : TwnsUiImage.UiImage[][] = [];
 
     public updateWithTileDataList(tileDataArray: ISerialTile[], players?: ISerialPlayer[]): void {
         const mapSize = getMapSize(tileDataArray);
@@ -212,7 +212,7 @@ abstract class TileLayerBase extends eui.Component {
 
             for (let y = 0; y < height; ++y) {
                 if (column[y] == null) {
-                    const img   = new UiImage();
+                    const img   = new TwnsUiImage.UiImage();
                     img.x       = GRID_WIDTH * x;
                     img.y       = this._getImageY(y);
                     column[y]   = img;

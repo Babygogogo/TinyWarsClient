@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { MeWar }                        from "../../mapEditor/model/MeWar";
 import { WeCommandPanel }               from "./WeCommandPanel";
@@ -24,18 +24,18 @@ import WarEventDescType                 = Types.WarEventDescType;
 type OpenDataForWeEventListPanel = {
     war: MeWar;
 };
-export class WeEventListPanel extends UiPanel<OpenDataForWeEventListPanel> {
+export class WeEventListPanel extends TwnsUiPanel.UiPanel<OpenDataForWeEventListPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: WeEventListPanel;
 
-    private _btnBack        : UiButton;
-    private _btnAddEvent    : UiButton;
-    private _btnClear       : UiButton;
-    private _labelTitle     : UiLabel;
-    private _labelNoEvent   : UiLabel;
-    private _listWarEvent   : UiScrollList<DataForWarEventDescRenderer>;
+    private _btnBack        : TwnsUiButton.UiButton;
+    private _btnAddEvent    : TwnsUiButton.UiButton;
+    private _btnClear       : TwnsUiButton.UiButton;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _labelNoEvent   : TwnsUiLabel.UiLabel;
+    private _listWarEvent   : TwnsUiScrollList.UiScrollList<DataForWarEventDescRenderer>;
 
     public static show(openData: OpenDataForWeEventListPanel): void {
         if (!WeEventListPanel._instance) {
@@ -242,11 +242,11 @@ type DataForWarEventDescRenderer = {
     parentNodeId?   : number;
     nodeId?         : number;
 };
-class WarEventDescRenderer extends UiListItemRenderer<DataForWarEventDescRenderer> {
-    private _btnModify  : UiButton;
-    private _labelPrefix: UiLabel;
-    private _labelDesc  : UiLabel;
-    private _labelError : UiLabel;
+class WarEventDescRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventDescRenderer> {
+    private _btnModify  : TwnsUiButton.UiButton;
+    private _labelPrefix: TwnsUiLabel.UiLabel;
+    private _labelDesc  : TwnsUiLabel.UiLabel;
+    private _labelError : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

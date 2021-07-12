@@ -1,5 +1,5 @@
 
-import { UiPanel }  from "../../../utility/ui/UiPanel";
+import { TwnsUiPanel }  from "../../../utility/ui/UiPanel";
 import { BwWar }    from "../model/BwWar";
 import { Types }    from "../../../utility/Types";
 
@@ -8,7 +8,7 @@ export namespace BwWarPanel {
         war: BwWar;
     };
     // eslint-disable-next-line no-shadow
-    export class BwWarPanel extends UiPanel<OpenDataForBwWarPanel> {
+    export class BwWarPanel extends TwnsUiPanel.UiPanel<OpenDataForBwWarPanel> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

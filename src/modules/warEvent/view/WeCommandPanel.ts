@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
 import { MeWar }                        from "../../mapEditor/model/MeWar";
@@ -33,35 +33,35 @@ type OpenDataForWeCommandPanel = {
     parentNodeId?   : number;
     nodeId?         : number;
 };
-export class WeCommandPanel extends UiPanel<OpenDataForWeCommandPanel> {
+export class WeCommandPanel extends TwnsUiPanel.UiPanel<OpenDataForWeCommandPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: WeCommandPanel;
 
-    private _labelTitle                     : UiLabel;
-    private _labelDesc                      : UiLabel;
-    private _labelError                     : UiLabel;
-    private _btnClose                       : UiButton;
+    private _labelTitle                     : TwnsUiLabel.UiLabel;
+    private _labelDesc                      : TwnsUiLabel.UiLabel;
+    private _labelError                     : TwnsUiLabel.UiLabel;
+    private _btnClose                       : TwnsUiButton.UiButton;
 
     private _groupBtn                       : eui.Group;
-    private _btnModifyEventName             : UiButton;
-    private _btnModifyMaxCallCountPerTurn   : UiButton;
-    private _btnModifyMaxCallCountTotal     : UiButton;
-    private _btnInitSubNodeToEvent          : UiButton;
-    private _btnDeleteEvent                 : UiButton;
-    private _btnSwitchNodeAndOr             : UiButton;
-    private _btnReplaceNode                 : UiButton;
-    private _btnAddSubNodeToNode            : UiButton;
-    private _btnAddSubCondition             : UiButton;
-    private _btnDeleteNode                  : UiButton;
-    private _btnModifyCondition             : UiButton;
-    private _btnReplaceCondition            : UiButton;
-    private _btnDeleteCondition             : UiButton;
-    private _btnModifyAction                : UiButton;
-    private _btnReplaceAction               : UiButton;
-    private _btnAddAction                   : UiButton;
-    private _btnDeleteAction                : UiButton;
+    private _btnModifyEventName             : TwnsUiButton.UiButton;
+    private _btnModifyMaxCallCountPerTurn   : TwnsUiButton.UiButton;
+    private _btnModifyMaxCallCountTotal     : TwnsUiButton.UiButton;
+    private _btnInitSubNodeToEvent          : TwnsUiButton.UiButton;
+    private _btnDeleteEvent                 : TwnsUiButton.UiButton;
+    private _btnSwitchNodeAndOr             : TwnsUiButton.UiButton;
+    private _btnReplaceNode                 : TwnsUiButton.UiButton;
+    private _btnAddSubNodeToNode            : TwnsUiButton.UiButton;
+    private _btnAddSubCondition             : TwnsUiButton.UiButton;
+    private _btnDeleteNode                  : TwnsUiButton.UiButton;
+    private _btnModifyCondition             : TwnsUiButton.UiButton;
+    private _btnReplaceCondition            : TwnsUiButton.UiButton;
+    private _btnDeleteCondition             : TwnsUiButton.UiButton;
+    private _btnModifyAction                : TwnsUiButton.UiButton;
+    private _btnReplaceAction               : TwnsUiButton.UiButton;
+    private _btnAddAction                   : TwnsUiButton.UiButton;
+    private _btnDeleteAction                : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForWeCommandPanel): void {
         if (!WeCommandPanel._instance) {

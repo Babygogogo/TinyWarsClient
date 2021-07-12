@@ -1,9 +1,9 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { Types }                        from "../../../utility/Types";
 
 export namespace TwnsBwBackgroundPanel {
-    export class BwBackgroundPanel extends UiPanel<void> {
+    export class BwBackgroundPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Bottom;
         protected readonly _IS_EXCLUSIVE = true;
 

@@ -85,14 +85,14 @@ export namespace NetManager {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     export function addListeners(listeners: MsgListener[], thisObject?: any): void {
         for (const one of listeners) {
-            dispatcher.addEventListener(TwnsNetMessageCodes[one.msgCode], one.callback, one.thisObject || thisObject);
+            dispatcher.addEventListener(NetMessageCodes[one.msgCode], one.callback, one.thisObject || thisObject);
         }
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     export function removeListeners(listeners: MsgListener[], thisObject?: any): void {
         for (const one of listeners) {
-            dispatcher.removeEventListener(TwnsNetMessageCodes[one.msgCode], one.callback, one.thisObject || thisObject);
+            dispatcher.removeEventListener(NetMessageCodes[one.msgCode], one.callback, one.thisObject || thisObject);
         }
     }
 

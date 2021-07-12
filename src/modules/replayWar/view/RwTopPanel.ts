@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
 import { BwCoListPanel }                from "../../baseWar/view/BwCoListPanel";
@@ -23,31 +23,31 @@ export namespace TwnsRwTopPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     // eslint-disable-next-line no-shadow
-    export class RwTopPanel extends UiPanel<void> {
+    export class RwTopPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: RwTopPanel;
 
         private _groupPlayer        : eui.Group;
-        private _labelPlayer        : UiLabel;
-        private _labelFund          : UiLabel;
-        private _labelTurnTitle     : UiLabel;
-        private _labelTurn          : UiLabel;
-        private _labelActionTitle   : UiLabel;
-        private _labelAction        : UiLabel;
+        private _labelPlayer        : TwnsUiLabel.UiLabel;
+        private _labelFund          : TwnsUiLabel.UiLabel;
+        private _labelTurnTitle     : TwnsUiLabel.UiLabel;
+        private _labelTurn          : TwnsUiLabel.UiLabel;
+        private _labelActionTitle   : TwnsUiLabel.UiLabel;
+        private _labelAction        : TwnsUiLabel.UiLabel;
         private _groupCo            : eui.Group;
-        private _labelCo            : UiLabel;
-        private _labelCurrEnergy    : UiLabel;
-        private _labelPowerEnergy   : UiLabel;
-        private _labelZoneEnergy    : UiLabel;
-        private _btnChat            : UiButton;
-        private _btnFastRewind      : UiButton;
-        private _btnFastForward     : UiButton;
-        private _btnPlay            : UiButton;
-        private _btnPause           : UiButton;
-        private _btnUnitList        : UiButton;
-        private _btnMenu            : UiButton;
+        private _labelCo            : TwnsUiLabel.UiLabel;
+        private _labelCurrEnergy    : TwnsUiLabel.UiLabel;
+        private _labelPowerEnergy   : TwnsUiLabel.UiLabel;
+        private _labelZoneEnergy    : TwnsUiLabel.UiLabel;
+        private _btnChat            : TwnsUiButton.UiButton;
+        private _btnFastRewind      : TwnsUiButton.UiButton;
+        private _btnFastForward     : TwnsUiButton.UiButton;
+        private _btnPlay            : TwnsUiButton.UiButton;
+        private _btnPause           : TwnsUiButton.UiButton;
+        private _btnUnitList        : TwnsUiButton.UiButton;
+        private _btnMenu            : TwnsUiButton.UiButton;
 
         private _war    : RwWar;
 

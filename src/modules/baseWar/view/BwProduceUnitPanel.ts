@@ -16,12 +16,12 @@ import { BwUnit }               from "../model/BwUnit";
 import { BwWar }                from "../model/BwWar";
 import { BwUnitDetailPanel }    from "./BwUnitDetailPanel";
 import { BwUnitView }           from "./BwUnitView";
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { BwActionPlanner }      from "../model/BwActionPlanner";
 import { CommonInputPanel }     from "../../common/view/CommonInputPanel";
 import UnitType                 = Types.UnitType;
@@ -31,17 +31,17 @@ type OpenDataForBwProduceUnitPanel = {
     gridIndex   : GridIndex;
     war         : BwWar;
 };
-export class BwProduceUnitPanel extends UiPanel<OpenDataForBwProduceUnitPanel> {
+export class BwProduceUnitPanel extends TwnsUiPanel.UiPanel<OpenDataForBwProduceUnitPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: BwProduceUnitPanel;
 
-    private _imgMask    : UiImage;
+    private _imgMask    : TwnsUiImage.UiImage;
     private _group      : eui.Group;
-    private _listUnit   : UiScrollList<DataForUnitRenderer>;
-    private _btnCancel  : UiButton;
-    private _btnDetail  : UiButton;
+    private _listUnit   : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+    private _btnCancel  : TwnsUiButton.UiButton;
+    private _btnDetail  : TwnsUiButton.UiButton;
 
     private _dataForList: DataForUnitRenderer[];
 
@@ -222,13 +222,13 @@ type DataForUnitRenderer = {
     panel                   : BwProduceUnitPanel;
 };
 
-class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
+class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
     private _group          : eui.Group;
-    private _imgBg          : UiImage;
+    private _imgBg          : TwnsUiImage.UiImage;
     private _conUnitView    : eui.Group;
-    private _labelName      : UiLabel;
-    private _labelCost      : UiLabel;
-    private _labelProduce   : UiLabel;
+    private _labelName      : TwnsUiLabel.UiLabel;
+    private _labelCost      : TwnsUiLabel.UiLabel;
+    private _labelProduce   : TwnsUiLabel.UiLabel;
     private _unitView       : BwUnitView;
 
     protected _onOpened(): void {

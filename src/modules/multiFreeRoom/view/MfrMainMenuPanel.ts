@@ -1,6 +1,6 @@
 
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { TwnsCommonAlertPanel }     from "../../common/view/CommonAlertPanel";
 import { MfrJoinRoomListPanel } from "./MfrJoinRoomListPanel";
 import { MfrMyRoomListPanel }   from "./MfrMyRoomListPanel";
@@ -25,7 +25,7 @@ import { CcrModel }             from "../../coopCustomRoom/model/CcrModel";
 import Tween                    = egret.Tween;
 import LangTextType     = TwnsLangTextType.LangTextType;
 
-export class MfrMainMenuPanel extends UiPanel<void> {
+export class MfrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
@@ -34,28 +34,28 @@ export class MfrMainMenuPanel extends UiPanel<void> {
     // @ts-ignore
     private readonly _group             : eui.Group;
     // @ts-ignore
-    private readonly _btnMultiPlayer    : UiButton;
+    private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnRanking        : UiButton;
+    private readonly _btnRanking        : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnSinglePlayer   : UiButton;
+    private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
 
     // @ts-ignore
     private readonly _groupLeft         : eui.Group;
     // @ts-ignore
-    private readonly _btnCreateRoom     : UiButton;
+    private readonly _btnCreateRoom     : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnJoinRoom       : UiButton;
+    private readonly _btnJoinRoom       : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnMyRoom         : UiButton;
+    private readonly _btnMyRoom         : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnContinueWar    : UiButton;
+    private readonly _btnContinueWar    : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnHelp           : UiButton;
+    private readonly _btnHelp           : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnNormalMode     : UiButton;
+    private readonly _btnNormalMode     : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnCoopMode       : UiButton;
+    private readonly _btnCoopMode       : TwnsUiButton.UiButton;
 
     public static show(): void {
         if (!MfrMainMenuPanel._instance) {

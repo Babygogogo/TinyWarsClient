@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
                     scale9Grid="1,1,2,2" />
     <e:Group id="_group" width="760" height="420" horizontalCenter="0" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0">
-            <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
                             left="0" right="0" top="38" bottom="0" />
             <e:Group y="0" left="0" right="0">
-                <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
                                 source="commonColorGrey0001" y="0" left="0" right="0" />
-                <GameUi:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
-                <GameUi:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001" verticalCenter="0"
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001" verticalCenter="0"
                                  right="30" />
             </e:Group>
         </e:Group>
-        <GameUi:UiButton id="_btnAddMessage" label="新增日志" width="140" y="6" x="540">
+        <TwnsUiButton:UiButton id="_btnAddMessage" label="新增日志" width="140" y="6" x="540">
             <GameUi:skinName>
                 <e:Skin>
                     <e:Group left="0" right="0" top="0" bottom="0">
                         <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" left="0" right="0" top="0" bottom="0"
                                  locked="true" />
-                        <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="asdf" textAlign="center"
+                        <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="asdf" textAlign="center"
                                         verticalAlign="middle" left="8" right="8" top="8" bottom="8" wordWrap="true" />
-                        <GameUi:UiImage id="_imgRed" width="14" height="14" source="c04_t01_s01_f01" right="0" top="0"
+                        <TwnsUiImage:UiImage id="_imgRed" width="14" height="14" source="c04_t01_s01_f01" right="0" top="0"
                                         locked="true" />
                     </e:Group>
                 </e:Skin>
             </GameUi:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiLabel id="_labelNoMessage" text="无信息" bold="true" size="30" textColor="0xFFFFFF" horizontalCenter="0"
+        </TwnsUiButton:UiButton>
+        <TwnsUiLabel:UiLabel id="_labelNoMessage" text="无信息" bold="true" size="30" textColor="0xFFFFFF" horizontalCenter="0"
                         verticalCenter="0" locked="true" />
-        <GameUi:UiScrollList id="_listMessage" left="30" right="30" bottom="10" top="50">
+        <TwnsUiScrollList:UiScrollList id="_listMessage" left="30" right="30" bottom="10" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin currentState="up" states="down,up" width="700">
                         <e:Group left="0" right="0" top="0" bottom="0">
-                            <GameUi:UiLabel id="_labelIndex" text="日期" size="12" textColor="0xffffff" x="10" y="8" />
-                            <GameUi:UiLabel id="_labelContent" text="更新内容" size="16" textColor="0xFFFFFF" y="28"
+                            <TwnsUiLabel:UiLabel id="_labelIndex" text="日期" size="12" textColor="0xffffff" x="10" y="8" />
+                            <TwnsUiLabel:UiLabel id="_labelContent" text="更新内容" size="16" textColor="0xFFFFFF" y="28"
                                             wordWrap="true" left="10" right="10" />
-                            <GameUi:UiButton id="_btnModify" label="Modify" top="0" skinName="Skins.Component.Button.ButtonSelfAdaption001"
-                                             right="0" width="60"></GameUi:UiButton>
+                            <TwnsUiButton:UiButton id="_btnModify" label="Modify" top="0" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                             right="0" width="60"></TwnsUiButton:UiButton>
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>
@@ -48,6 +48,6 @@
                     <e:VerticalLayout paddingTop="4" gap="14" />
                 </e:layout>
             </e:List>
-        </GameUi:UiScrollList>
+        </TwnsUiScrollList:UiScrollList>
     </e:Group>
 </e:Skin>

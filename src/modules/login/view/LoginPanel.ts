@@ -1,8 +1,8 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { RegisterPanel }                from "./RegisterPanel";
 import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
@@ -21,24 +21,24 @@ export namespace TwnsLoginPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    export class LoginPanel extends UiPanel<void> {
+    export class LoginPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         // @ts-ignore
-        private _imgTitle                   : UiImage;
+        private _imgTitle                   : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private _groupAccount               : eui.Group;
         // @ts-ignore
-        private _labelAccount               : UiLabel;
+        private _labelAccount               : TwnsUiLabel.UiLabel;
         // @ts-ignore
         private _inputAccount               : UiTextInput;
 
         // @ts-ignore
         private _groupPassword              : eui.Group;
         // @ts-ignore
-        private _labelPassword              : UiLabel;
+        private _labelPassword              : TwnsUiLabel.UiLabel;
         // @ts-ignore
         private _inputPassword              : UiTextInput;
 
@@ -47,18 +47,18 @@ export namespace TwnsLoginPanel {
         // @ts-ignore
         private _groupRememberPassword      : eui.Group;
         // @ts-ignore
-        private _labelRememberPassword      : UiLabel;
+        private _labelRememberPassword      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgRememberPasswordCheck   : UiImage;
+        private _imgRememberPasswordCheck   : TwnsUiImage.UiImage;
         // @ts-ignore
-        private _btnForgetPassword          : UiButton;
+        private _btnForgetPassword          : TwnsUiButton.UiButton;
 
         // @ts-ignore
         private _groupButton                : eui.Group;
         // @ts-ignore
-        private _btnRegister                : UiButton;
+        private _btnRegister                : TwnsUiButton.UiButton;
         // @ts-ignore
-        private _btnLogin                   : UiButton;
+        private _btnLogin                   : TwnsUiButton.UiButton;
 
         private static _instance: LoginPanel;
 

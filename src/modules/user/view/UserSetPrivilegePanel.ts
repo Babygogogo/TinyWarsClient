@@ -1,8 +1,8 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { UiTextInput }          from "../../../utility/ui/UiTextInput";
 import { FloatText }            from "../../../utility/FloatText";
 import { Lang }                 from "../../../utility/lang/Lang";
@@ -18,32 +18,32 @@ import { UserProxy }            from "../../user/model/UserProxy";
 type OpenDataForUserSetPrivilegePanel = {
     userId  : number;
 };
-export class UserSetPrivilegePanel extends UiPanel<OpenDataForUserSetPrivilegePanel> {
+export class UserSetPrivilegePanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetPrivilegePanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: UserSetPrivilegePanel;
 
-    private _btnGetInfo             : UiButton;
+    private _btnGetInfo             : TwnsUiButton.UiButton;
     private _inputUserId            : UiTextInput;
-    private _labelUserName          : UiLabel;
+    private _labelUserName          : TwnsUiLabel.UiLabel;
     private _groupIsAdmin           : eui.Group;
-    private _imgIsAdmin             : UiImage;
-    private _labelIsAdmin           : UiLabel;
+    private _imgIsAdmin             : TwnsUiImage.UiImage;
+    private _labelIsAdmin           : TwnsUiLabel.UiLabel;
     private _groupCanLogin          : eui.Group;
-    private _imgCanLogin            : UiImage;
-    private _labelCanLogin          : UiLabel;
+    private _imgCanLogin            : TwnsUiImage.UiImage;
+    private _labelCanLogin          : TwnsUiLabel.UiLabel;
     private _groupIsMapCommittee    : eui.Group;
-    private _imgIsMapCommittee      : UiImage;
-    private _labelIsMapCommittee    : UiLabel;
+    private _imgIsMapCommittee      : TwnsUiImage.UiImage;
+    private _labelIsMapCommittee    : TwnsUiLabel.UiLabel;
     private _groupIsChangeLogEditor : eui.Group;
-    private _imgIsChangeLogEditor   : UiImage;
-    private _labelIsChangeLogEditor : UiLabel;
+    private _imgIsChangeLogEditor   : TwnsUiImage.UiImage;
+    private _labelIsChangeLogEditor : TwnsUiLabel.UiLabel;
     private _groupCanChat           : eui.Group;
-    private _imgCanChat             : UiImage;
-    private _labelCanChat           : UiLabel;
-    private _btnCancel              : UiButton;
-    private _btnConfirm             : UiButton;
+    private _imgCanChat             : TwnsUiImage.UiImage;
+    private _labelCanChat           : TwnsUiLabel.UiLabel;
+    private _btnCancel              : TwnsUiButton.UiButton;
+    private _btnConfirm             : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForUserSetPrivilegePanel): void {
         if (!UserSetPrivilegePanel._instance) {

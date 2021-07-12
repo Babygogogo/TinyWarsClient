@@ -1,8 +1,8 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
 import { MmWarRulePanel }       from "./MmWarRulePanel";
 import { Lang }                 from "../../../utility/lang/Lang";
@@ -19,7 +19,7 @@ import { WarMapProxy }          from "../../warMap/model/WarMapProxy";
 type OpenDataForMmAvailabilityChangePanel = {
     mapId   : number;
 };
-export class MmAvailabilityChangePanel extends UiPanel<OpenDataForMmAvailabilityChangePanel> {
+export class MmAvailabilityChangePanel extends TwnsUiPanel.UiPanel<OpenDataForMmAvailabilityChangePanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
@@ -28,53 +28,53 @@ export class MmAvailabilityChangePanel extends UiPanel<OpenDataForMmAvailability
     // @ts-ignore
     private _groupMcw       : eui.Group;
     // @ts-ignore
-    private _labelMcw       : UiLabel;
+    private _labelMcw       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _imgMcw         : UiImage;
+    private _imgMcw         : TwnsUiImage.UiImage;
 
     // @ts-ignore
     private _groupCcw       : eui.Group;
     // @ts-ignore
-    private _labelCcw       : UiLabel;
+    private _labelCcw       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _imgCcw         : UiImage;
+    private _imgCcw         : TwnsUiImage.UiImage;
 
     // @ts-ignore
     private _groupScw       : eui.Group;
     // @ts-ignore
-    private _labelScw       : UiLabel;
+    private _labelScw       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _imgScw         : UiImage;
+    private _imgScw         : TwnsUiImage.UiImage;
 
     // @ts-ignore
     private _groupSrw       : eui.Group;
     // @ts-ignore
-    private _labelSrw       : UiLabel;
+    private _labelSrw       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _imgSrw         : UiImage;
+    private _imgSrw         : TwnsUiImage.UiImage;
 
     // @ts-ignore
     private _groupMrwStd    : eui.Group;
     // @ts-ignore
-    private _labelMrwStd    : UiLabel;
+    private _labelMrwStd    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _imgMrwStd      : UiImage;
+    private _imgMrwStd      : TwnsUiImage.UiImage;
 
     // @ts-ignore
     private _groupMrwFog    : eui.Group;
     // @ts-ignore
-    private _labelMrwFog    : UiLabel;
+    private _labelMrwFog    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _imgMrwFog      : UiImage;
+    private _imgMrwFog      : TwnsUiImage.UiImage;
 
     // @ts-ignore
-    private _btnDelete      : UiButton;
+    private _btnDelete      : TwnsUiButton.UiButton;
     // @ts-ignore
-    private _btnWarRule     : UiButton;
+    private _btnWarRule     : TwnsUiButton.UiButton;
     // @ts-ignore
-    private _btnCancel      : UiButton;
+    private _btnCancel      : TwnsUiButton.UiButton;
     // @ts-ignore
-    private _btnConfirm     : UiButton;
+    private _btnConfirm     : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForMmAvailabilityChangePanel): void {
         if (!MmAvailabilityChangePanel._instance) {

@@ -1,9 +1,9 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
 import { UiTabPage }            from "../../../utility/ui/UiTabPage";
 import { ChatPanel }            from "../../chat/view/ChatPanel";
 import { CommonCoInfoPanel }    from "../../common/view/CommonCoInfoPanel";
@@ -28,7 +28,7 @@ export type OpenDataForMfwWarPlayerInfoPage = {
 };
 export class MfwWarPlayerInfoPage extends UiTabPage<OpenDataForMfwWarPlayerInfoPage> {
     private readonly _groupInfo     : eui.Group;
-    private readonly _listPlayer    : UiScrollList<DataForPlayerRenderer>;
+    private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
     public constructor() {
         super();
@@ -91,25 +91,25 @@ type DataForPlayerRenderer = {
     warId           : number;
     playerIndex     : number;
 };
-class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
+class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
     private readonly _groupCo           : eui.Group;
-    private readonly _imgSkin           : UiImage;
-    private readonly _imgCoInfo         : UiImage;
-    private readonly _imgCoHead         : UiImage;
-    private readonly _labelNickname     : UiLabel;
-    private readonly _labelCo           : UiLabel;
-    private readonly _labelStatus       : UiLabel;
+    private readonly _imgSkin           : TwnsUiImage.UiImage;
+    private readonly _imgCoInfo         : TwnsUiImage.UiImage;
+    private readonly _imgCoHead         : TwnsUiImage.UiImage;
+    private readonly _labelNickname     : TwnsUiLabel.UiLabel;
+    private readonly _labelCo           : TwnsUiLabel.UiLabel;
+    private readonly _labelStatus       : TwnsUiLabel.UiLabel;
 
-    private readonly _labelPlayerIndex  : UiLabel;
-    private readonly _labelTeamIndex    : UiLabel;
-    private readonly _labelRankStdTitle : UiLabel;
-    private readonly _labelRankStd      : UiLabel;
-    private readonly _labelRankFogTitle : UiLabel;
-    private readonly _labelRankFog      : UiLabel;
+    private readonly _labelPlayerIndex  : TwnsUiLabel.UiLabel;
+    private readonly _labelTeamIndex    : TwnsUiLabel.UiLabel;
+    private readonly _labelRankStdTitle : TwnsUiLabel.UiLabel;
+    private readonly _labelRankStd      : TwnsUiLabel.UiLabel;
+    private readonly _labelRankFogTitle : TwnsUiLabel.UiLabel;
+    private readonly _labelRankFog      : TwnsUiLabel.UiLabel;
 
     private readonly _groupButton       : eui.Group;
-    private readonly _btnChat           : UiButton;
-    private readonly _btnInfo           : UiButton;
+    private readonly _btnChat           : TwnsUiButton.UiButton;
+    private readonly _btnInfo           : TwnsUiButton.UiButton;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

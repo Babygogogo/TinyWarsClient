@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_groupLamp" y="40" touchChildren="false" touchThrough="true" touchEnabled="false" horizontalCenter="0"
              width="1000" height="30">
         <e:Image source="c04_t01_s02_f01" touchEnabled="false" scale9Grid="9,9,2,2" left="0" right="0" top="0"
                  bottom="0" alpha="0.8" locked="true" />
         <e:Group verticalCenter="0" width="960" horizontalCenter="0">
-            <GameUi:UiLabel id="_labelLamp" size="18" text="欢迎进入TW挨打" verticalAlign="middle" x="578" multiline="false"
+            <TwnsUiLabel:UiLabel id="_labelLamp" size="18" text="欢迎进入TW挨打" verticalAlign="middle" x="578" multiline="false"
                             touchEnabled="false" verticalCenter="0" />
         </e:Group>
     </e:Group>

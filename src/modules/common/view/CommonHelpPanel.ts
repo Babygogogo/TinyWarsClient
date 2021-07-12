@@ -1,8 +1,8 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { Helpers }              from "../../../utility/Helpers";
 import { Types }                from "../../../utility/Types";
 
@@ -10,18 +10,18 @@ type OpenData = {
     title  : string;
     content: string;
 };
-export class CommonHelpPanel extends UiPanel<OpenData> {
+export class CommonHelpPanel extends TwnsUiPanel.UiPanel<OpenData> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: CommonHelpPanel;
 
-    private readonly _imgMask       : UiImage;
+    private readonly _imgMask       : TwnsUiImage.UiImage;
     private readonly _group         : eui.Group;
-    private readonly _btnClose      : UiButton;
-    private readonly _labelTitle    : UiLabel;
+    private readonly _btnClose      : TwnsUiButton.UiButton;
+    private readonly _labelTitle    : TwnsUiLabel.UiLabel;
     private readonly _scrContent    : eui.Scroller;
-    private readonly _labelContent  : UiLabel;
+    private readonly _labelContent  : TwnsUiLabel.UiLabel;
 
     public static show(openData: OpenData): void {
         if (!CommonHelpPanel._instance) {

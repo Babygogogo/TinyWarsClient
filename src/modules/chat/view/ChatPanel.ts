@@ -1,10 +1,10 @@
 
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
 import { UiTextInput }          from "../../../utility/ui/UiTextInput";
 import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
@@ -38,24 +38,24 @@ type OpenDataForChatPanel = {
     toMfrRoomId?    : number;
     toCcrRoomId?    : number;
 };
-export class ChatPanel extends UiPanel<OpenDataForChatPanel> {
+export class ChatPanel extends TwnsUiPanel.UiPanel<OpenDataForChatPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: ChatPanel;
 
-    private readonly _imgMask           : UiImage;
+    private readonly _imgMask           : TwnsUiImage.UiImage;
 
     private readonly _groupChannel      : eui.Group;
-    private readonly _listChat          : UiScrollList<DataForChatPageRenderer>;
-    private readonly _btnClose          : UiButton;
-    private readonly _btnRefresh        : UiButton;
+    private readonly _listChat          : TwnsUiScrollList.UiScrollList<DataForChatPageRenderer>;
+    private readonly _btnClose          : TwnsUiButton.UiButton;
+    private readonly _btnRefresh        : TwnsUiButton.UiButton;
     private readonly _groupMessage      : eui.Group;
-    private readonly _labelNoMessage    : UiLabel;
-    private readonly _listMessage       : UiScrollList<DataForMessageRenderer>;
+    private readonly _labelNoMessage    : TwnsUiLabel.UiLabel;
+    private readonly _listMessage       : TwnsUiScrollList.UiScrollList<DataForMessageRenderer>;
     private readonly _groupInput        : eui.Group;
     private readonly _inputMessage      : UiTextInput;
-    private readonly _btnSend           : UiButton;
+    private readonly _btnSend           : TwnsUiButton.UiButton;
 
     private _dataForListChat: DataForChatPageRenderer[] = [];
     private _selectedIndex  : number;
@@ -553,10 +553,10 @@ type DataForChatPageRenderer = {
     toTarget    : number;
 };
 
-class ChatPageRenderer extends UiListItemRenderer<DataForChatPageRenderer> {
-    private _labelName      : UiLabel;
-    private _labelType      : UiLabel;
-    private _imgRed         : UiLabel;
+class ChatPageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForChatPageRenderer> {
+    private _labelName      : TwnsUiLabel.UiLabel;
+    private _labelType      : TwnsUiLabel.UiLabel;
+    private _imgRed         : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
@@ -659,9 +659,9 @@ class ChatPageRenderer extends UiListItemRenderer<DataForChatPageRenderer> {
 type DataForMessageRenderer = {
     message: ProtoTypes.Chat.IChatMessage;
 };
-class MessageRenderer extends UiListItemRenderer<DataForMessageRenderer> {
-    private _labelName      : UiLabel;
-    private _labelContent   : UiLabel;
+class MessageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMessageRenderer> {
+    private _labelName      : TwnsUiLabel.UiLabel;
+    private _labelContent   : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         const message               = this.data.message;

@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { MeWarMenuPanel }               from "./MeWarMenuPanel";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -14,18 +14,18 @@ import { MeModel }                      from "../model/MeModel";
 import * as MeUtility                   from "../model/MeUtility";
 import LangTextType         = TwnsLangTextType.LangTextType;
 
-export class MeOffsetPanel extends UiPanel<void> {
+export class MeOffsetPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeOffsetPanel;
 
-    private _labelTitle     : UiLabel;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
     private _inputOffsetX   : UiTextInput;
     private _inputOffsetY   : UiTextInput;
-    private _labelTips      : UiLabel;
-    private _btnCancel      : UiButton;
-    private _btnConfirm     : UiButton;
+    private _labelTips      : TwnsUiLabel.UiLabel;
+    private _btnCancel      : TwnsUiButton.UiButton;
+    private _btnConfirm     : TwnsUiButton.UiButton;
 
     private _offsetX   : number;
     private _offsetY  : number;

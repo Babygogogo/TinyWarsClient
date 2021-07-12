@@ -1,10 +1,10 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { BwUnit }                       from "../../baseWar/model/BwUnit";
 import { BwCursor }                     from "../model/BwCursor";
@@ -22,20 +22,20 @@ import { CommonModel }                  from "../../common/model/CommonModel";
 type OpenDataForBwUnitListPanel = {
     war : BwWar;
 };
-export class BwUnitListPanel extends UiPanel<OpenDataForBwUnitListPanel> {
+export class BwUnitListPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitListPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: BwUnitListPanel;
 
     private readonly _group             : eui.Group;
-    private readonly _labelName         : UiLabel;
-    private readonly _labelCountName    : UiLabel;
-    private readonly _labelValueName    : UiLabel;
-    private readonly _listUnit          : UiScrollList<DataForUnitRenderer>;
-    private readonly _labelCount        : UiLabel;
-    private readonly _labelValue        : UiLabel;
-    private readonly _btnSwitch         : UiButton;
+    private readonly _labelName         : TwnsUiLabel.UiLabel;
+    private readonly _labelCountName    : TwnsUiLabel.UiLabel;
+    private readonly _labelValueName    : TwnsUiLabel.UiLabel;
+    private readonly _listUnit          : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+    private readonly _labelCount        : TwnsUiLabel.UiLabel;
+    private readonly _labelValue        : TwnsUiLabel.UiLabel;
+    private readonly _btnSwitch         : TwnsUiButton.UiButton;
 
     private _cursor         : BwCursor;
     private _unitMap        : BwUnitMap;
@@ -177,17 +177,17 @@ type DataForUnitRenderer = {
     unit    : BwUnit;
     cursor  : BwCursor;
 };
-class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
+class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
     private _group          : eui.Group;
     private _conUnitView    : eui.Group;
-    private _labelName      : UiLabel;
-    private _labelGridIndex : UiLabel;
-    private _labelHp        : UiLabel;
-    private _labelFuel      : UiLabel;
-    private _labelState     : UiLabel;
-    private _imgHp          : UiImage;
-    private _imgFuel        : UiImage;
-    private _imgState       : UiImage;
+    private _labelName      : TwnsUiLabel.UiLabel;
+    private _labelGridIndex : TwnsUiLabel.UiLabel;
+    private _labelHp        : TwnsUiLabel.UiLabel;
+    private _labelFuel      : TwnsUiLabel.UiLabel;
+    private _labelState     : TwnsUiLabel.UiLabel;
+    private _imgHp          : TwnsUiImage.UiImage;
+    private _imgFuel        : TwnsUiImage.UiImage;
+    private _imgState       : TwnsUiImage.UiImage;
     private _unitView       : BwUnitView;
 
     protected _onOpened(): void {

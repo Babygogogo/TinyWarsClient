@@ -1,6 +1,6 @@
 
-import { UiPanel }                          from "../../../utility/ui/UiPanel";
-import { UiButton }                         from "../../../utility/ui/UiButton";
+import { TwnsUiPanel }                          from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                          from "../../../utility/ui/UiButton";
 import { SpmMainMenuPanel }                 from "../../singlePlayerMode/view/SpmMainMenuPanel";
 import { TwnsMrwMyWarListPanel }                from "../../multiRankWar/view/MrwMyWarListPanel";
 import { MrrMyRoomListPanel }               from "./MrrMyRoomListPanel";
@@ -18,23 +18,23 @@ import { MpwModel }                         from "../../multiPlayerWar/model/Mpw
 import { MrrModel }                         from "../model/MrrModel";
 import Tween                                = egret.Tween;
 
-export class MrrMainMenuPanel extends UiPanel<void> {
+export class MrrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: MrrMainMenuPanel;
 
     private readonly _group             : eui.Group;
-    private readonly _btnMultiPlayer    : UiButton;
-    private readonly _btnRanking        : UiButton;
-    private readonly _btnSinglePlayer   : UiButton;
+    private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
+    private readonly _btnRanking        : TwnsUiButton.UiButton;
+    private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
 
     private readonly _groupLeft         : eui.Group;
-    private readonly _btnSetGameNumber  : UiButton;
-    private readonly _btnMyRoom         : UiButton;
-    private readonly _btnContinueWar    : UiButton;
-    private readonly _btnPreviewStdMaps : UiButton;
-    private readonly _btnPreviewFogMaps : UiButton;
+    private readonly _btnSetGameNumber  : TwnsUiButton.UiButton;
+    private readonly _btnMyRoom         : TwnsUiButton.UiButton;
+    private readonly _btnContinueWar    : TwnsUiButton.UiButton;
+    private readonly _btnPreviewStdMaps : TwnsUiButton.UiButton;
+    private readonly _btnPreviewFogMaps : TwnsUiButton.UiButton;
 
     public static show(): void {
         if (!MrrMainMenuPanel._instance) {

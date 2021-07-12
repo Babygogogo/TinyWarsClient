@@ -1,5 +1,5 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiImage }          from "../../../utility/ui/UiImage";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { Logger }               from "../../../utility/Logger";
 import { Types }                from "../../../utility/Types";
@@ -12,8 +12,8 @@ import TileBaseType             = Types.TileBaseType;
 const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
 export class MeTileSimpleView {
-    private _imgBase    = new UiImage();
-    private _imgObject  = new UiImage();
+    private _imgBase        = new TwnsUiImage.UiImage();
+    private _imgObject      = new TwnsUiImage.UiImage();
 
     private _baseType       : TileBaseType;
     private _baseShapeId    : number;
@@ -61,10 +61,10 @@ export class MeTileSimpleView {
         this._updateImages();
     }
 
-    public getImgObject(): UiImage {
+    public getImgObject(): TwnsUiImage.UiImage {
         return this._imgObject;
     }
-    public getImgBase(): UiImage {
+    public getImgBase(): TwnsUiImage.UiImage {
         return this._imgBase;
     }
 

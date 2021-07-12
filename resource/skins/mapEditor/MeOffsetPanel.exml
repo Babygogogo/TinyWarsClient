@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" />
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" />
     <e:Group width="430" height="200" horizontalCenter="0" verticalCenter="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelTitle" text="地图偏移" textColor="0xffffff" y="12" horizontalCenter="0" size="24" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="地图偏移" textColor="0xffffff" y="12" horizontalCenter="0" size="24" />
         <e:Group x="80" y="60">
-            <GameUi:UiLabel text="x" textColor="0xFFFFFF" y="0" size="20" x="0" />
+            <TwnsUiLabel:UiLabel text="x" textColor="0xFFFFFF" y="0" size="20" x="0" />
             <GameUi:UiTextInput id="_inputOffsetX" width="60" y="0" anchorOffsetX="0" anchorOffsetY="0" restrict="0-9\-"
                                 maxChars="4" x="30">
                 <GameUi:skinName>
@@ -20,7 +20,7 @@
                     </e:Skin>
                 </GameUi:skinName>
             </GameUi:UiTextInput>
-            <GameUi:UiLabel text="y" textColor="0xFFFFFF" y="0" size="20" x="180" />
+            <TwnsUiLabel:UiLabel text="y" textColor="0xFFFFFF" y="0" size="20" x="180" />
             <GameUi:UiTextInput id="_inputOffsetY" width="60" y="0" anchorOffsetX="0" anchorOffsetY="0" restrict="0-9\-"
                                 maxChars="4" x="210">
                 <GameUi:skinName>
@@ -34,9 +34,9 @@
                 </GameUi:skinName>
             </GameUi:UiTextInput>
         </e:Group>
-        <GameUi:UiLabel id="_labelTips" text="注：若新的宽高小于当前宽高，则超出的图块会被裁剪掉（以左上角为原点）" textColor="0xFFFFFF" size="16"
+        <TwnsUiLabel:UiLabel id="_labelTips" text="注：若新的宽高小于当前宽高，则超出的图块会被裁剪掉（以左上角为原点）" textColor="0xFFFFFF" size="16"
                         bottom="50" left="10" right="10" verticalAlign="middle" textAlign="center" wordWrap="true" />
-        <GameUi:UiButton id="_btnCancel" label="取消" horizontalCenter="-80" bottom="15">
+        <TwnsUiButton:UiButton id="_btnCancel" label="取消" horizontalCenter="-80" bottom="15">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -44,8 +44,8 @@
                              textColor="0xff0000" />
                 </e:Skin>
             </GameUi:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiButton id="_btnConfirm" label="确定" horizontalCenter="80" bottom="15">
+        </TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnConfirm" label="确定" horizontalCenter="80" bottom="15">
             <e:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -53,6 +53,6 @@
                              textColor="0x00ff00" />
                 </e:Skin>
             </e:skinName>
-        </GameUi:UiButton>
+        </TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>

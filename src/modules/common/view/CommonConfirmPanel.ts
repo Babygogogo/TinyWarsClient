@@ -1,8 +1,8 @@
 
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
 import { Helpers }              from "../../../utility/Helpers";
 import { Lang }                 from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -17,27 +17,27 @@ type OpenDataForCommonConfirmPanel = {
     textForConfirm?     : string;
     textForCancel?      : string;
 };
-export class CommonConfirmPanel extends UiPanel<OpenDataForCommonConfirmPanel> {
+export class CommonConfirmPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonConfirmPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: CommonConfirmPanel;
 
     // @ts-ignore
-    private readonly _imgMask       : UiImage;
+    private readonly _imgMask       : TwnsUiImage.UiImage;
 
     // @ts-ignore
     private readonly _group         : eui.Group;
     // @ts-ignore
-    private readonly _labelTitle    : UiLabel;
+    private readonly _labelTitle    : TwnsUiLabel.UiLabel;
     // @ts-ignore
     private readonly _scrContent    : eui.Scroller;
     // @ts-ignore
-    private readonly _labelContent  : UiLabel;
+    private readonly _labelContent  : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _btnCancel     : UiButton;
+    private readonly _btnCancel     : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnConfirm    : UiButton;
+    private readonly _btnConfirm    : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForCommonConfirmPanel): void {
         if (!CommonConfirmPanel._instance) {

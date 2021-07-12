@@ -1,10 +1,10 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonChangeVersionPanel }     from "../../common/view/CommonChangeVersionPanel";
 import { WarMapUnitView }               from "../../warMap/view/WarMapUnitView";
 import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
@@ -23,20 +23,20 @@ export namespace TwnsLoginBackgroundPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     // eslint-disable-next-line no-shadow
-    export class LoginBackgroundPanel extends UiPanel<void> {
+    export class LoginBackgroundPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Bottom;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: LoginBackgroundPanel;
 
         // @ts-ignore
-        private _imgBackground      : UiImage;
+        private _imgBackground      : TwnsUiImage.UiImage;
         // @ts-ignore
-        private _btnVersion         : UiButton;
+        private _btnVersion         : TwnsUiButton.UiButton;
         // @ts-ignore
-        private _labelVersion       : UiLabel;
+        private _labelVersion       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _listLanguage       : UiScrollList<DataForLanguageRenderer>;
+        private _listLanguage       : TwnsUiScrollList.UiScrollList<DataForLanguageRenderer>;
         // @ts-ignore
         private _groupCopyright     : eui.Group;
         // @ts-ignore
@@ -216,9 +216,9 @@ export namespace TwnsLoginBackgroundPanel {
     type DataForLanguageRenderer = {
         languageType: Types.LanguageType;
     };
-    class LanguageRenderer extends UiListItemRenderer<DataForLanguageRenderer> {
+    class LanguageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForLanguageRenderer> {
         // @ts-ignore
-        private _labelLanguage  : UiLabel;
+        private _labelLanguage  : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

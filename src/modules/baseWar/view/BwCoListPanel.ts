@@ -1,84 +1,67 @@
 
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
-import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
+import { TwnsUiButton }         from "../../../utility/ui/UiButton";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
 import { BwWar }                from "../model/BwWar";
 import { BwPlayer }             from "../model/BwPlayer";
-import { NetManager }           from "../../../utility/network/NetManager";
-import * as NetMessageCodes     from "../../../utility/network/NetMessageCodes";
-import { CommonConstants }      from "../../../utility/CommonConstants";
 import { ConfigManager }        from "../../../utility/ConfigManager";
-import { BwDestructionHelpers }   from "../model/BwDestructionHelpers";
-import { FloatText }            from "../../../utility/FloatText";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { Helpers }              from "../../../utility/Helpers";
 import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import { LocalStorage }         from "../../../utility/LocalStorage";
-import { Logger }               from "../../../utility/Logger";
+import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
 import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { StageManager }         from "../../../utility/StageManager";
+import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { Types }                from "../../../utility/Types";
-import { BwVisibilityHelpers }    from "../model/BwVisibilityHelpers";
-import { BwHelpers }            from "../../baseWar/model/BwHelpers";
-import { CommonModel }          from "../../common/model/CommonModel";
-import { TimeModel }            from "../../time/model/TimeModel";
-import { UserModel }            from "../../user/model/UserModel";
+import LangTextType             = TwnsLangTextType.LangTextType;
+import NotifyType               = TwnsNotifyType.NotifyType;
 
 type OpenDataForBwCoListPanel = {
     war             : BwWar;
     selectedIndex   : number;
 };
-export class BwCoListPanel extends UiPanel<OpenDataForBwCoListPanel> {
+export class BwCoListPanel extends TwnsUiPanel.UiPanel<OpenDataForBwCoListPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: BwCoListPanel;
 
     private _groupList  : eui.Group;
-    private _listCo     : UiScrollList<DataForCoRenderer>;
-    private _btnBack    : UiButton;
+    private _listCo     : TwnsUiScrollList.UiScrollList<DataForCoRenderer>;
+    private _btnBack    : TwnsUiButton.UiButton;
 
     private _groupInfo                      : eui.Group;
     private _scrCoInfo                      : eui.Scroller;
-    private _imgCoPortrait                  : UiImage;
-    private _labelCommanderInfo             : UiLabel;
-    private _labelNameTitle                 : UiLabel;
-    private _labelName                      : UiLabel;
-    private _labelForceTitle                : UiLabel;
-    private _labelForce                     : UiLabel;
-    private _labelDesignerTitle             : UiLabel;
-    private _labelDesigner                  : UiLabel;
-    private _labelBoardCostPercentageTitle  : UiLabel;
-    private _labelBoardCostPercentage       : UiLabel;
-    private _labelZoneRadiusTitle           : UiLabel;
-    private _labelZoneRadius                : UiLabel;
-    private _labelEnergyBarTitle            : UiLabel;
-    private _labelEnergyBar                 : UiLabel;
+    private _imgCoPortrait                  : TwnsUiImage.UiImage;
+    private _labelCommanderInfo             : TwnsUiLabel.UiLabel;
+    private _labelNameTitle                 : TwnsUiLabel.UiLabel;
+    private _labelName                      : TwnsUiLabel.UiLabel;
+    private _labelForceTitle                : TwnsUiLabel.UiLabel;
+    private _labelForce                     : TwnsUiLabel.UiLabel;
+    private _labelDesignerTitle             : TwnsUiLabel.UiLabel;
+    private _labelDesigner                  : TwnsUiLabel.UiLabel;
+    private _labelBoardCostPercentageTitle  : TwnsUiLabel.UiLabel;
+    private _labelBoardCostPercentage       : TwnsUiLabel.UiLabel;
+    private _labelZoneRadiusTitle           : TwnsUiLabel.UiLabel;
+    private _labelZoneRadius                : TwnsUiLabel.UiLabel;
+    private _labelEnergyBarTitle            : TwnsUiLabel.UiLabel;
+    private _labelEnergyBar                 : TwnsUiLabel.UiLabel;
 
-    private _listPassiveSkill   : UiScrollList<DataForSkillRenderer>;
-    private _labelNoPassiveSkill: UiLabel;
+    private _listPassiveSkill   : TwnsUiScrollList.UiScrollList<DataForSkillRenderer>;
+    private _labelNoPassiveSkill: TwnsUiLabel.UiLabel;
 
-    private _listCop            : UiScrollList<DataForSkillRenderer>;
-    private _labelNoCop         : UiLabel;
-    private _labelCopEnergyTitle: UiLabel;
-    private _labelCopEnergy     : UiLabel;
+    private _listCop            : TwnsUiScrollList.UiScrollList<DataForSkillRenderer>;
+    private _labelNoCop         : TwnsUiLabel.UiLabel;
+    private _labelCopEnergyTitle: TwnsUiLabel.UiLabel;
+    private _labelCopEnergy     : TwnsUiLabel.UiLabel;
 
-    private _listScop               : UiScrollList<DataForSkillRenderer>;
-    private _labelNoScop            : UiLabel;
-    private _labelScopEnergyTitle   : UiLabel;
-    private _labelScopEnergy        : UiLabel;
+    private _listScop               : TwnsUiScrollList.UiScrollList<DataForSkillRenderer>;
+    private _labelNoScop            : TwnsUiLabel.UiLabel;
+    private _labelScopEnergyTitle   : TwnsUiLabel.UiLabel;
+    private _labelScopEnergy        : TwnsUiLabel.UiLabel;
 
     private _scrHelp    : eui.Scroller;
-    private _labelHelp  : UiLabel;
+    private _labelHelp  : TwnsUiLabel.UiLabel;
 
     private _dataForListCo      : DataForCoRenderer[] = [];
     private _selectedIndex      : number;
@@ -348,9 +331,9 @@ type DataForCoRenderer = {
     index           : number;
     panel           : BwCoListPanel;
 };
-class CoNameRenderer extends UiListItemRenderer<DataForCoRenderer> {
-    private _btnChoose: UiButton;
-    private _labelName: UiLabel;
+class CoNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCoRenderer> {
+    private _btnChoose: TwnsUiButton.UiButton;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -385,9 +368,9 @@ type DataForSkillRenderer = {
     skillId : number;
 };
 
-class SkillRenderer extends UiListItemRenderer<DataForSkillRenderer> {
-    private _labelIndex : UiLabel;
-    private _labelDesc  : UiLabel;
+class SkillRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkillRenderer> {
+    private _labelIndex : TwnsUiLabel.UiLabel;
+    private _labelDesc  : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         const data              = this.data;

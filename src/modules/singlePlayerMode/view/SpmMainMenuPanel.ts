@@ -1,6 +1,6 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
 import { TwnsLobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
 import { SpmWarListPanel }              from "./SpmWarListPanel";
@@ -18,21 +18,21 @@ import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
 import Tween                            = egret.Tween;
 
-export class SpmMainMenuPanel extends UiPanel<void> {
+export class SpmMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: SpmMainMenuPanel;
 
     private readonly _groupLeft         : eui.Group;
-    private readonly _btnCampaign       : UiButton;
-    private readonly _btnCreateCustomWar: UiButton;
-    private readonly _btnContinueWar    : UiButton;
+    private readonly _btnCampaign       : TwnsUiButton.UiButton;
+    private readonly _btnCreateCustomWar: TwnsUiButton.UiButton;
+    private readonly _btnContinueWar    : TwnsUiButton.UiButton;
 
     private readonly _group             : eui.Group;
-    private readonly _btnMultiPlayer    : UiButton;
-    private readonly _btnRanking        : UiButton;
-    private readonly _btnSinglePlayer   : UiButton;
+    private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
+    private readonly _btnRanking        : TwnsUiButton.UiButton;
+    private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
 
     public static show(): void {
         if (!SpmMainMenuPanel._instance) {

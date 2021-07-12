@@ -98,13 +98,13 @@ export namespace ResManager {
         }
     }
 
-    // class LoadingUiPanel extends UiPanel implements RES.PromiseTaskReporter {
+    // class LoadingUiPanel extends TwnsUiPanel.UiPanel implements RES.PromiseTaskReporter {
     //     protected readonly _IS_EXCLUSIVE = true;
     //     protected readonly _LAYER_TYPE   = Types.LayerType.Top;
 
     //     private static _instance: LoadingUiPanel;
 
-    //     private _labelProgress: UiLabel;
+    //     private _labelProgress: TwnsUiLabel.UiLabel;
 
     //     public static create(): LoadingUiPanel {
     //         egret.assert(!LoadingUiPanel._instance);

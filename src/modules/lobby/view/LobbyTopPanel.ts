@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
 import { UserSettingsPanel }            from "../../user/view/UserSettingsPanel";
@@ -13,7 +13,7 @@ import { UserModel }                    from "../../user/model/UserModel";
 export namespace TwnsLobbyTopPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    export class LobbyTopPanel extends UiPanel<void> {
+    export class LobbyTopPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -22,10 +22,10 @@ export namespace TwnsLobbyTopPanel {
         private _group          : eui.Group;
 
         private _groupUserInfo  : eui.Group;
-        private _labelNickname  : UiLabel;
-        private _labelUserId    : UiLabel;
+        private _labelNickname  : TwnsUiLabel.UiLabel;
+        private _labelUserId    : TwnsUiLabel.UiLabel;
 
-        private _btnSettings    : UiButton;
+        private _btnSettings    : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!LobbyTopPanel._instance) {

@@ -1,8 +1,8 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
 import { CommonChooseCoPanel }          from "../../common/view/CommonChooseCoPanel";
@@ -18,12 +18,12 @@ import NotifyType                       = TwnsNotifyType.NotifyType;
 import LangTextType                     = TwnsLangTextType.LangTextType;
 
 export class MeMfwAdvancedSettingsPage extends UiTabPage<void> {
-    private _labelMapNameTitle      : UiLabel;
-    private _labelMapName           : UiLabel;
-    private _labelPlayersCountTitle : UiLabel;
-    private _labelPlayersCount      : UiLabel;
-    private _labelPlayerList        : UiLabel;
-    private _listPlayer             : UiScrollList<DataForPlayerRenderer>;
+    private _labelMapNameTitle      : TwnsUiLabel.UiLabel;
+    private _labelMapName           : TwnsUiLabel.UiLabel;
+    private _labelPlayersCountTitle : TwnsUiLabel.UiLabel;
+    private _labelPlayersCount      : TwnsUiLabel.UiLabel;
+    private _labelPlayerList        : TwnsUiLabel.UiLabel;
+    private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
     public constructor() {
         super();
@@ -80,8 +80,8 @@ export class MeMfwAdvancedSettingsPage extends UiTabPage<void> {
 type DataForPlayerRenderer = {
     playerIndex : number;
 };
-class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
-    private _listInfo   : UiScrollList<DataForInfoRenderer>;
+class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
+    private _listInfo   : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
     protected _onOpened(): void {
         this._listInfo.setItemRenderer(InfoRenderer);
@@ -492,9 +492,9 @@ type DataForInfoRenderer = {
     callbackOnTouchedTitle  : (() => void) | null;
 };
 
-class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
-    private _btnTitle   : UiButton;
-    private _labelValue : UiLabel;
+class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+    private _btnTitle   : TwnsUiButton.UiButton;
+    private _labelValue : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" right="60" verticalCenter="0" scaleX="0.9" scaleY="0.9">
         <e:Group x="168" y="43">
-            <GameUi:UiButton id="_btnMultiPlayer" label="" top="0" right="0">
+            <TwnsUiButton:UiButton id="_btnMultiPlayer" label="" top="0" right="0">
                 <GameUi:skinName>
                     <e:Skin states="up,down,disabled">
                         <e:Image source="lobby0009" />
@@ -11,10 +11,10 @@
                         <e:Image id="_imgRed" source="commonIcon0000" right="0" top="0" />
                     </e:Skin>
                 </GameUi:skinName>
-            </GameUi:UiButton>
+            </TwnsUiButton:UiButton>
         </e:Group>
         <e:Group x="142" y="211">
-            <GameUi:UiButton id="_btnRanking" label="" right="0" top="0">
+            <TwnsUiButton:UiButton id="_btnRanking" label="" right="0" top="0">
                 <GameUi:skinName>
                     <e:Skin states="up,down,disabled">
                         <e:Image source="lobby0012" source.down="lobby0011" />
@@ -22,10 +22,10 @@
                         <e:Image id="_imgRed" source="commonIcon0000" right="0" top="0" />
                     </e:Skin>
                 </GameUi:skinName>
-            </GameUi:UiButton>
+            </TwnsUiButton:UiButton>
         </e:Group>
         <e:Group x="102" y="202">
-            <GameUi:UiButton id="_btnSinglePlayer" label="" right="0" top="0">
+            <TwnsUiButton:UiButton id="_btnSinglePlayer" label="" right="0" top="0">
                 <GameUi:skinName>
                     <e:Skin states="up,down,disabled">
                         <e:Image source="lobby0008" source.down="lobby0007" />
@@ -33,7 +33,7 @@
                         <e:Image id="_imgRed" source="commonIcon0000" right="0" top="0" />
                     </e:Skin>
                 </GameUi:skinName>
-            </GameUi:UiButton>
+            </TwnsUiButton:UiButton>
         </e:Group>
         <e:layout>
             <e:VerticalLayout gap="15" horizontalAlign="right" />
@@ -41,16 +41,16 @@
     </e:Group>
     <e:Group id="_groupLeft" verticalCenter="0" scaleX="0.9" scaleY="0.9" left="0">
         <e:Group x="168" y="43">
-            <GameUi:UiButton id="_btnCreateRoom" label="" top="0" left="0">
+            <TwnsUiButton:UiButton id="_btnCreateRoom" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
                             <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
-                            <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
+                            <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="Create Rooms" textAlign="center" verticalAlign="middle"
+                                <TwnsUiLabel:UiLabel size="20" text="Create Rooms" textAlign="center" verticalAlign="middle"
                                                 wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="创建房间" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="创建房间" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
@@ -59,19 +59,19 @@
                         </e:Group>
                     </e:Skin>
                 </GameUi:skinName>
-            </GameUi:UiButton>
+            </TwnsUiButton:UiButton>
         </e:Group>
         <e:Group x="142" y="211">
-            <GameUi:UiButton id="_btnJoinRoom" label="" top="0" left="0">
+            <TwnsUiButton:UiButton id="_btnJoinRoom" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
                             <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
-                            <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
+                            <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="Join Rooms" textAlign="center" verticalAlign="middle"
+                                <TwnsUiLabel:UiLabel size="20" text="Join Rooms" textAlign="center" verticalAlign="middle"
                                                 wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="加入房间" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="加入房间" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
@@ -80,19 +80,19 @@
                         </e:Group>
                     </e:Skin>
                 </GameUi:skinName>
-            </GameUi:UiButton>
+            </TwnsUiButton:UiButton>
         </e:Group>
         <e:Group x="102" y="202">
-            <GameUi:UiButton id="_btnMyRoom" label="" top="0" left="0">
+            <TwnsUiButton:UiButton id="_btnMyRoom" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
                             <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
-                            <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
+                            <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="My Rooms" textAlign="center" verticalAlign="middle"
+                                <TwnsUiLabel:UiLabel size="20" text="My Rooms" textAlign="center" verticalAlign="middle"
                                                 wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="我的房间" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="我的房间" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
@@ -101,19 +101,19 @@
                         </e:Group>
                     </e:Skin>
                 </GameUi:skinName>
-            </GameUi:UiButton>
+            </TwnsUiButton:UiButton>
         </e:Group>
         <e:Group x="112" y="212">
-            <GameUi:UiButton id="_btnContinueWar" label="" top="0" left="0">
+            <TwnsUiButton:UiButton id="_btnContinueWar" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
                             <e:Image scale9Grid="9,9,2,2" source="common0002" />
-                            <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
+                            <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="Continue Wars" textAlign="center" verticalAlign="middle"
+                                <TwnsUiLabel:UiLabel size="20" text="Continue Wars" textAlign="center" verticalAlign="middle"
                                                 wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="继续战斗" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="继续战斗" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
@@ -122,20 +122,20 @@
                         </e:Group>
                     </e:Skin>
                 </GameUi:skinName>
-            </GameUi:UiButton>
+            </TwnsUiButton:UiButton>
         </e:Group>
         <e:Group x="168" y="43">
-            <GameUi:UiButton id="_btnHelp" label="" top="0" left="0">
+            <TwnsUiButton:UiButton id="_btnHelp" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
                             <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
-                            <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
+                            <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="Free Mode Help" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="20" text="Free Mode Help" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="2" x="-172"
                                                 textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="自由模式帮助" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="自由模式帮助" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
@@ -144,19 +144,19 @@
                         </e:Group>
                     </e:Skin>
                 </GameUi:skinName>
-            </GameUi:UiButton>
+            </TwnsUiButton:UiButton>
         </e:Group>
         <e:Group x="168" y="43">
-            <GameUi:UiButton id="_btnNormalMode" label="" top="0" left="0">
+            <TwnsUiButton:UiButton id="_btnNormalMode" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
                             <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
-                            <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
+                            <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="Normal Mode" textAlign="center" verticalAlign="middle"
+                                <TwnsUiLabel:UiLabel size="20" text="Normal Mode" textAlign="center" verticalAlign="middle"
                                                 wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="常规模式" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="常规模式" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
@@ -165,19 +165,19 @@
                         </e:Group>
                     </e:Skin>
                 </GameUi:skinName>
-            </GameUi:UiButton>
+            </TwnsUiButton:UiButton>
         </e:Group>
         <e:Group x="168" y="43">
-            <GameUi:UiButton id="_btnCoopMode" label="" top="0" left="0">
+            <TwnsUiButton:UiButton id="_btnCoopMode" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
                             <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
-                            <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
+                            <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="Coop Mode" textAlign="center" verticalAlign="middle"
+                                <TwnsUiLabel:UiLabel size="20" text="Coop Mode" textAlign="center" verticalAlign="middle"
                                                 wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="合作模式" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="合作模式" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
@@ -186,7 +186,7 @@
                         </e:Group>
                     </e:Skin>
                 </GameUi:skinName>
-            </GameUi:UiButton>
+            </TwnsUiButton:UiButton>
         </e:Group>
         <e:layout>
             <e:VerticalLayout gap="15" horizontalAlign="left" />

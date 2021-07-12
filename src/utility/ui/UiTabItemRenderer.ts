@@ -1,4 +1,4 @@
 
-import { UiListItemRenderer } from "./UiListItemRenderer";
+import { TwnsUiListItemRenderer } from "./UiListItemRenderer";
 
-export class UiTabItemRenderer<DataForTabItem> extends UiListItemRenderer<DataForTabItem> {}
+export class UiTabItemRenderer<DataForTabItem> extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTabItem> {}

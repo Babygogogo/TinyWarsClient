@@ -1,7 +1,7 @@
 
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { UiTextInput }          from "../../../utility/ui/UiTextInput";
 import { FloatText }            from "../../../utility/FloatText";
 import { Lang }                 from "../../../utility/lang/Lang";
@@ -17,19 +17,19 @@ import NotifyType               = TwnsNotifyType.NotifyType;
 type OpenDataForMfrJoinPasswordPanel = {
     roomInfo: ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
 };
-export class MfrJoinPasswordPanel extends UiPanel<OpenDataForMfrJoinPasswordPanel> {
+export class MfrJoinPasswordPanel extends TwnsUiPanel.UiPanel<OpenDataForMfrJoinPasswordPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: MfrJoinPasswordPanel;
 
-    private _labelTitle         : UiLabel;
-    private _labelRoomTitle     : UiLabel;
-    private _labelPasswordTitle : UiLabel;
-    private _labelWarName       : UiLabel;
+    private _labelTitle         : TwnsUiLabel.UiLabel;
+    private _labelRoomTitle     : TwnsUiLabel.UiLabel;
+    private _labelPasswordTitle : TwnsUiLabel.UiLabel;
+    private _labelWarName       : TwnsUiLabel.UiLabel;
     private _inputWarPassword   : UiTextInput;
-    private _btnCancel          : UiButton;
-    private _btnConfirm         : UiButton;
+    private _btnCancel          : TwnsUiButton.UiButton;
+    private _btnConfirm         : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForMfrJoinPasswordPanel): void {
         if (!MfrJoinPasswordPanel._instance) {

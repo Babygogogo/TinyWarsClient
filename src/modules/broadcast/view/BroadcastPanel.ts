@@ -1,6 +1,6 @@
 
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { Types }                from "../../../utility/Types";
 import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { BroadcastModel }       from "../model/BroadcastModel";
@@ -13,14 +13,14 @@ export namespace TwnsBroadcastPanel {
 
     const _FLOW_SPEED = 80;
 
-    export class BroadcastPanel extends UiPanel<void> {
+    export class BroadcastPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Notify0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: BroadcastPanel;
 
         private _groupLamp              : eui.Group;
-        private _labelLamp              : UiLabel;
+        private _labelLamp              : TwnsUiLabel.UiLabel;
 
         private _ongoingMessageIdSet    = new Set<number>();
 

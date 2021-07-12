@@ -1,17 +1,17 @@
 
-import { UiComponent }          from "./UiComponent";
-import { UiImage }              from "./UiImage";
+import { TwnsUiComponent }      from "./UiComponent";
+import { TwnsUiImage }          from "./UiImage";
 import { Helpers }              from "../Helpers";
 import { Notify }               from "../notify/Notify";
-import { TwnsNotifyType } from "../notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
+import { TwnsNotifyType }       from "../notify/NotifyType";
 import { StageManager }         from "../StageManager";
 import { Types }                from "../Types";
+import NotifyType               = TwnsNotifyType.NotifyType;
 import Point                    = Types.Point;
 import TouchPoints              = Types.TouchPoints;
 
-export class UiZoomableComponent extends UiComponent {
-    private _maskForContents                : UiImage;
+export class UiZoomableComponent extends TwnsUiComponent.UiComponent {
+    private _maskForContents                : TwnsUiImage.UiImage;
 
     private _contents                       = new egret.DisplayObjectContainer();
     private _contentWidth                   = 0;
@@ -46,7 +46,7 @@ export class UiZoomableComponent extends UiComponent {
     public setMaskEnabled(enabled: boolean): void {
         if (enabled) {
             if (!this._maskForContents) {
-                const mask  = new UiImage("c08_t06_s01_f01");
+                const mask  = new TwnsUiImage.UiImage("c08_t06_s01_f01");
                 mask.left   = 0;
                 mask.right  = 0;
                 mask.top    = 0;

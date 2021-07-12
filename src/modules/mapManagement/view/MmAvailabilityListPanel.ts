@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
 import { MmAvailabilitySearchPanel }    from "./MmAvailabilitySearchPanel";
 import { MmMainMenuPanel }              from "./MmMainMenuPanel";
@@ -25,25 +25,25 @@ export type FiltersForMapList = {
     playedTimes?    : number;
     minRating?      : number;
 };
-export class MmAvailabilityListPanel extends UiPanel<FiltersForMapList> {
+export class MmAvailabilityListPanel extends TwnsUiPanel.UiPanel<FiltersForMapList> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: MmAvailabilityListPanel;
 
-    private _listMap        : UiScrollList<DataForMapNameRenderer>;
+    private _listMap        : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
     private _zoomMap        : UiZoomableMap;
-    private _labelMenuTitle : UiLabel;
-    private _btnSearch      : UiButton;
-    private _btnBack        : UiButton;
-    private _labelNoMap     : UiLabel;
+    private _labelMenuTitle : TwnsUiLabel.UiLabel;
+    private _btnSearch      : TwnsUiButton.UiButton;
+    private _btnBack        : TwnsUiButton.UiButton;
+    private _labelNoMap     : TwnsUiLabel.UiLabel;
 
     private _groupInfo          : eui.Group;
-    private _labelMapName       : UiLabel;
-    private _labelDesigner      : UiLabel;
-    private _labelRating        : UiLabel;
-    private _labelPlayedTimes   : UiLabel;
-    private _labelPlayersCount  : UiLabel;
+    private _labelMapName       : TwnsUiLabel.UiLabel;
+    private _labelDesigner      : TwnsUiLabel.UiLabel;
+    private _labelRating        : TwnsUiLabel.UiLabel;
+    private _labelPlayedTimes   : TwnsUiLabel.UiLabel;
+    private _labelPlayersCount  : TwnsUiLabel.UiLabel;
 
     private _mapFilters         : FiltersForMapList = {};
     private _dataForList        : DataForMapNameRenderer[] = [];
@@ -207,11 +207,11 @@ type DataForMapNameRenderer = {
     panel   : MmAvailabilityListPanel;
 };
 
-class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
-    private _btnChoose  : UiButton;
-    private _btnNext    : UiButton;
-    private _labelId    : UiLabel;
-    private _labelName  : UiLabel;
+class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
+    private _btnChoose  : TwnsUiButton.UiButton;
+    private _btnNext    : TwnsUiButton.UiButton;
+    private _labelId    : TwnsUiLabel.UiLabel;
+    private _labelName  : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

@@ -1,7 +1,7 @@
 
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { UiTextInput }          from "../../../utility/ui/UiTextInput";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { FloatText }            from "../../../utility/FloatText";
@@ -20,7 +20,7 @@ import ILanguageText            = ProtoTypes.Structure.ILanguageText;
 type OpenDataForChangeLogModifyPanel = {
     messageId   : number;
 };
-export class ChangeLogModifyPanel extends UiPanel<OpenDataForChangeLogModifyPanel> {
+export class ChangeLogModifyPanel extends TwnsUiPanel.UiPanel<OpenDataForChangeLogModifyPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
@@ -28,12 +28,12 @@ export class ChangeLogModifyPanel extends UiPanel<OpenDataForChangeLogModifyPane
 
     private _inputChinese   : UiTextInput;
     private _inputEnglish   : UiTextInput;
-    private _labelTip       : UiLabel;
-    private _labelTitle     : UiLabel;
-    private _labelChinese   : UiLabel;
-    private _labelEnglish   : UiLabel;
-    private _btnModify      : UiButton;
-    private _btnClose       : UiButton;
+    private _labelTip       : TwnsUiLabel.UiLabel;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _labelChinese   : TwnsUiLabel.UiLabel;
+    private _labelEnglish   : TwnsUiLabel.UiLabel;
+    private _btnModify      : TwnsUiButton.UiButton;
+    private _btnClose       : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForChangeLogModifyPanel): void {
         if (!ChangeLogModifyPanel._instance) {

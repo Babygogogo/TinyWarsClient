@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { BwUnit }                       from "../../baseWar/model/BwUnit";
 import { BwUnitView }                   from "../../baseWar/view/BwUnitView";
 import { DataForDrawUnit }              from "../model/MeDrawer";
@@ -20,16 +20,16 @@ import { MeModel }                      from "../model/MeModel";
 
 const MAX_RECENT_COUNT = 10;
 
-export class MeChooseUnitPanel extends UiPanel<void> {
+export class MeChooseUnitPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeChooseUnitPanel;
 
-    private _labelRecentTitle   : UiLabel;
-    private _listRecent         : UiScrollList<DataForUnitRenderer>;
-    private _listCategory       : UiScrollList<DataForCategoryRenderer>;
-    private _btnCancel          : UiButton;
+    private _labelRecentTitle   : TwnsUiLabel.UiLabel;
+    private _listRecent         : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+    private _listCategory       : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+    private _btnCancel          : TwnsUiButton.UiButton;
 
     private _dataListForRecent   : DataForUnitRenderer[] = [];
 
@@ -148,8 +148,8 @@ type DataForCategoryRenderer = {
     dataListForDrawUnit : DataForDrawUnit[];
     panel               : MeChooseUnitPanel;
 };
-class CategoryRenderer extends UiListItemRenderer<DataForCategoryRenderer> {
-    private _listUnit: UiScrollList<DataForUnitRenderer>;
+class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
+    private _listUnit: TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
 
     protected _onOpened(): void {
         this._listUnit.setItemRenderer(UnitRenderer);
@@ -176,9 +176,9 @@ type DataForUnitRenderer = {
     panel           : MeChooseUnitPanel;
 };
 
-class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
+class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
     private _group          : eui.Group;
-    private _labelName      : UiLabel;
+    private _labelName      : TwnsUiLabel.UiLabel;
     private _conUnitView    : eui.Group;
 
     private _unitView   = new BwUnitView();

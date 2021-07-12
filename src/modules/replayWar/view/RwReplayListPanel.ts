@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }                                           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                                                      from "../../../utility/ui/UiPanel";
-import { UiButton }                                                     from "../../../utility/ui/UiButton";
-import { UiLabel }                                                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                                                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }                                           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                                                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                                                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                                                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                                                 from "../../../utility/ui/UiScrollList";
 import { UiTab }                                                        from "../../../utility/ui/UiTab";
 import { UiTabItemRenderer }                                            from "../../../utility/ui/UiTabItemRenderer";
 import { McrMainMenuPanel }                                             from "../../multiCustomRoom/view/McrMainMenuPanel";
@@ -27,7 +27,7 @@ import { WarMapModel }                                                  from "..
 import { RwModel }                                                      from "../model/RwModel";
 import { RwProxy }                                                      from "../model/RwProxy";
 
-export class RwReplayListPanel extends UiPanel<void> {
+export class RwReplayListPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
@@ -37,17 +37,17 @@ export class RwReplayListPanel extends UiPanel<void> {
     private readonly _tabSettings           : UiTab<DataForTabItemRenderer, OpenDataForRwReplayMapInfoPage | OpenDataForRwReplayPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
 
     private readonly _groupNavigator        : eui.Group;
-    private readonly _labelReplay           : UiLabel;
-    private readonly _labelChooseReplay     : UiLabel;
+    private readonly _labelReplay           : TwnsUiLabel.UiLabel;
+    private readonly _labelChooseReplay     : TwnsUiLabel.UiLabel;
 
-    private readonly _btnBack               : UiButton;
-    private readonly _btnNextStep           : UiButton;
-    private readonly _btnSearch             : UiButton;
+    private readonly _btnBack               : TwnsUiButton.UiButton;
+    private readonly _btnNextStep           : TwnsUiButton.UiButton;
+    private readonly _btnSearch             : TwnsUiButton.UiButton;
 
     private readonly _groupReplayList       : eui.Group;
-    private readonly _listReplay            : UiScrollList<DataForReplayRenderer>;
-    private readonly _labelNoReplay         : UiLabel;
-    private readonly _labelLoading          : UiLabel;
+    private readonly _listReplay            : TwnsUiScrollList.UiScrollList<DataForReplayRenderer>;
+    private readonly _labelNoReplay         : TwnsUiLabel.UiLabel;
+    private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
     private _hasReceivedData    = false;
 
@@ -303,7 +303,7 @@ type DataForTabItemRenderer = {
     name: string;
 };
 class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
-    private _labelName: UiLabel;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._labelName.text = this.data.name;
@@ -313,12 +313,12 @@ class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
 type DataForReplayRenderer = {
     replayId: number;
 };
-class ReplayRenderer extends UiListItemRenderer<DataForReplayRenderer> {
-    private readonly _btnChoose     : UiButton;
-    private readonly _btnNext       : UiButton;
-    private readonly _labelType     : UiLabel;
-    private readonly _labelId       : UiLabel;
-    private readonly _labelName     : UiLabel;
+class ReplayRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForReplayRenderer> {
+    private readonly _btnChoose     : TwnsUiButton.UiButton;
+    private readonly _btnNext       : TwnsUiButton.UiButton;
+    private readonly _labelType     : TwnsUiLabel.UiLabel;
+    private readonly _labelId       : TwnsUiLabel.UiLabel;
+    private readonly _labelName     : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

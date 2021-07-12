@@ -1,5 +1,5 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiImage }          from "../../../utility/ui/UiImage";
 import { Types }                from "../../../utility/Types";
 import { Helpers }              from "../../../utility/Helpers";
 import { CommonConstants }      from "../../../utility/CommonConstants";
@@ -14,9 +14,9 @@ const IMG_UNIT_STATE_WIDTH                          = 28;
 const IMG_UNIT_STATE_HEIGHT                         = 36;
 
 export class WarMapUnitView extends egret.DisplayObjectContainer {
-    private readonly _imgUnit                   = new UiImage();
-    private readonly _imgHp                     = new UiImage();
-    private readonly _imgState                  = new UiImage();
+    private readonly _imgUnit                   = new TwnsUiImage.UiImage();
+    private readonly _imgHp                     = new TwnsUiImage.UiImage();
+    private readonly _imgState                  = new TwnsUiImage.UiImage();
     private readonly _framesForStateAnimation   : string[] = [];
 
     private _unitData                           : Types.WarMapUnitViewData;

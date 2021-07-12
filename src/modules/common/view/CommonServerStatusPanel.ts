@@ -1,8 +1,8 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { Helpers }              from "../../../utility/Helpers";
 import { Lang }                 from "../../../utility/lang/Lang";
@@ -15,37 +15,37 @@ import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
 import { Types }                from "../../../utility/Types";
 import { CommonProxy }          from "../../common/model/CommonProxy";
 
-export class CommonServerStatusPanel extends UiPanel<void> {
+export class CommonServerStatusPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: CommonServerStatusPanel;
 
     // @ts-ignore
-    private readonly _imgMask                   : UiImage;
+    private readonly _imgMask                   : TwnsUiImage.UiImage;
     // @ts-ignore
     private readonly _group                     : eui.Group;
     // @ts-ignore
-    private readonly _labelTitle                : UiLabel;
+    private readonly _labelTitle                : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _btnClose                  : UiButton;
+    private readonly _btnClose                  : TwnsUiButton.UiButton;
 
     // @ts-ignore
-    private readonly _labelAccountsTitle        : UiLabel;
+    private readonly _labelAccountsTitle        : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelAccounts             : UiLabel;
+    private readonly _labelAccounts             : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelOnlineTimeTitle      : UiLabel;
+    private readonly _labelOnlineTimeTitle      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelOnlineTime           : UiLabel;
+    private readonly _labelOnlineTime           : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelNewAccountsTitle     : UiLabel;
+    private readonly _labelNewAccountsTitle     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelNewAccounts          : UiLabel;
+    private readonly _labelNewAccounts          : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelActiveAccountsTitle  : UiLabel;
+    private readonly _labelActiveAccountsTitle  : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelActiveAccounts       : UiLabel;
+    private readonly _labelActiveAccounts       : TwnsUiLabel.UiLabel;
 
     public static show(): void {
         if (!CommonServerStatusPanel._instance) {

@@ -1,10 +1,10 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { ConfigManager }                from "../../../utility/ConfigManager";
@@ -19,41 +19,41 @@ type OpenDataForSpwChooseCoPanel = {
     playerIndex : number;
 };
 
-export class SpwChooseCoPanel extends UiPanel<OpenDataForSpwChooseCoPanel> {
+export class SpwChooseCoPanel extends TwnsUiPanel.UiPanel<OpenDataForSpwChooseCoPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: SpwChooseCoPanel;
 
-    private _labelChooseCo  : UiLabel;
-    private _btnHelp        : UiButton;
-    private _listCo         : UiScrollList<DataForCoRenderer>;
-    private _btnBack        : UiButton;
+    private _labelChooseCo  : TwnsUiLabel.UiLabel;
+    private _btnHelp        : TwnsUiButton.UiButton;
+    private _listCo         : TwnsUiScrollList.UiScrollList<DataForCoRenderer>;
+    private _btnBack        : TwnsUiButton.UiButton;
 
-    private _imgCoPortrait                  : UiImage;
-    private _labelNameTitle                 : UiLabel;
-    private _labelName                      : UiLabel;
-    private _labelDesignerTitle             : UiLabel;
-    private _labelDesigner                  : UiLabel;
-    private _labelBoardCostPercentageTitle  : UiLabel;
-    private _labelBoardCostPercentage       : UiLabel;
-    private _labelZoneRadiusTitle           : UiLabel;
-    private _labelZoneRadius                : UiLabel;
-    private _labelEnergyBarTitle            : UiLabel;
-    private _labelEnergyBar                 : UiLabel;
+    private _imgCoPortrait                  : TwnsUiImage.UiImage;
+    private _labelNameTitle                 : TwnsUiLabel.UiLabel;
+    private _labelName                      : TwnsUiLabel.UiLabel;
+    private _labelDesignerTitle             : TwnsUiLabel.UiLabel;
+    private _labelDesigner                  : TwnsUiLabel.UiLabel;
+    private _labelBoardCostPercentageTitle  : TwnsUiLabel.UiLabel;
+    private _labelBoardCostPercentage       : TwnsUiLabel.UiLabel;
+    private _labelZoneRadiusTitle           : TwnsUiLabel.UiLabel;
+    private _labelZoneRadius                : TwnsUiLabel.UiLabel;
+    private _labelEnergyBarTitle            : TwnsUiLabel.UiLabel;
+    private _labelEnergyBar                 : TwnsUiLabel.UiLabel;
 
-    private _listPassiveSkill   : UiScrollList<DataForSkillRenderer>;
-    private _labelNoPassiveSkill: UiLabel;
+    private _listPassiveSkill   : TwnsUiScrollList.UiScrollList<DataForSkillRenderer>;
+    private _labelNoPassiveSkill: TwnsUiLabel.UiLabel;
 
-    private _listCop            : UiScrollList<DataForSkillRenderer>;
-    private _labelNoCop         : UiLabel;
-    private _labelCopEnergyTitle: UiLabel;
-    private _labelCopEnergy     : UiLabel;
+    private _listCop            : TwnsUiScrollList.UiScrollList<DataForSkillRenderer>;
+    private _labelNoCop         : TwnsUiLabel.UiLabel;
+    private _labelCopEnergyTitle: TwnsUiLabel.UiLabel;
+    private _labelCopEnergy     : TwnsUiLabel.UiLabel;
 
-    private _listScop               : UiScrollList<DataForSkillRenderer>;
-    private _labelNoScop            : UiLabel;
-    private _labelScopEnergyTitle   : UiLabel;
-    private _labelScopEnergy        : UiLabel;
+    private _listScop               : TwnsUiScrollList.UiScrollList<DataForSkillRenderer>;
+    private _labelNoScop            : TwnsUiLabel.UiLabel;
+    private _labelScopEnergyTitle   : TwnsUiLabel.UiLabel;
+    private _labelScopEnergy        : TwnsUiLabel.UiLabel;
 
     private _dataForListCo      : DataForCoRenderer[] = [];
     private _selectedIndex      : number;
@@ -261,10 +261,10 @@ type DataForCoRenderer = {
     index           : number;
     panel           : SpwChooseCoPanel;
 };
-class CoRenderer extends UiListItemRenderer<DataForCoRenderer> {
-    private _btnChoose: UiButton;
-    private _btnNext  : UiButton;
-    private _labelName: UiLabel;
+class CoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCoRenderer> {
+    private _btnChoose: TwnsUiButton.UiButton;
+    private _btnNext  : TwnsUiButton.UiButton;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -305,9 +305,9 @@ type DataForSkillRenderer = {
     skillId : number;
 };
 
-class SkillRenderer extends UiListItemRenderer<DataForSkillRenderer> {
-    private _labelIndex : UiLabel;
-    private _labelDesc  : UiLabel;
+class SkillRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkillRenderer> {
+    private _labelIndex : TwnsUiLabel.UiLabel;
+    private _labelDesc  : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         const data              = this.data;

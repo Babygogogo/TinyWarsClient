@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
@@ -46,26 +46,26 @@ enum MenuType {
     Advanced,
 }
 
-export class SpwWarMenuPanel extends UiPanel<void> {
+export class SpwWarMenuPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: SpwWarMenuPanel;
 
     private _group          : eui.Group;
-    private _listCommand    : UiScrollList<DataForCommandRenderer>;
-    private _labelNoCommand : UiLabel;
-    private _btnBack        : UiButton;
+    private _listCommand    : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
+    private _labelNoCommand : TwnsUiLabel.UiLabel;
+    private _btnBack        : TwnsUiButton.UiButton;
 
     private _groupInfo              : eui.Group;
-    private _labelMenuTitle         : UiLabel;
-    private _labelWarInfoTitle      : UiLabel;
-    private _labelPlayerInfoTitle   : UiLabel;
-    private _btnMapNameTitle        : UiButton;
-    private _labelMapName           : UiLabel;
-    private _listWarInfo            : UiScrollList<DataForInfoRenderer>;
-    private _btnBuildings           : UiButton;
-    private _listPlayer             : UiScrollList<DataForPlayerRenderer>;
+    private _labelMenuTitle         : TwnsUiLabel.UiLabel;
+    private _labelWarInfoTitle      : TwnsUiLabel.UiLabel;
+    private _labelPlayerInfoTitle   : TwnsUiLabel.UiLabel;
+    private _btnMapNameTitle        : TwnsUiButton.UiButton;
+    private _labelMapName           : TwnsUiLabel.UiLabel;
+    private _listWarInfo            : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+    private _btnBuildings           : TwnsUiButton.UiButton;
+    private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
     private _war            : SpwWar;
     private _unitMap        : BwUnitMap;
@@ -576,9 +576,9 @@ type DataForCommandRenderer = {
     callback: () => void;
 };
 
-class CommandRenderer extends UiListItemRenderer<DataForCommandRenderer> {
+class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
     private _group      : eui.Group;
-    private _labelName  : UiLabel;
+    private _labelName  : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._updateView();
@@ -600,12 +600,12 @@ type DataForPlayerRenderer = {
     panel       : SpwWarMenuPanel;
 };
 
-class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
+class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
     private _group          : eui.Group;
-    private _btnName        : UiButton;
-    private _labelForce     : UiLabel;
-    private _labelLost      : UiLabel;
-    private _listInfo       : UiScrollList<DataForInfoRenderer>;
+    private _btnName        : TwnsUiButton.UiButton;
+    private _labelForce     : TwnsUiLabel.UiLabel;
+    private _labelLost      : TwnsUiLabel.UiLabel;
+    private _listInfo       : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -1191,9 +1191,9 @@ type DataForInfoRenderer = {
     infoColor               : number;
     callbackOnTouchedTitle  : (() => void) | null;
 };
-class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
-    private _btnTitle   : UiButton;
-    private _labelValue : UiLabel;
+class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+    private _btnTitle   : TwnsUiButton.UiButton;
+    private _labelValue : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

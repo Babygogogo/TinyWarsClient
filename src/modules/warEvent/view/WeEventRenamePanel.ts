@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { CommonConstants }              from "../../../utility/CommonConstants";
@@ -20,7 +20,7 @@ type OpenDataForWeEventRenamePanel = {
     war         : BwWar;
     warEventId  : number;
 };
-export class WeEventRenamePanel extends UiPanel<OpenDataForWeEventRenamePanel> {
+export class WeEventRenamePanel extends TwnsUiPanel.UiPanel<OpenDataForWeEventRenamePanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
@@ -28,12 +28,12 @@ export class WeEventRenamePanel extends UiPanel<OpenDataForWeEventRenamePanel> {
 
     private _inputChinese   : UiTextInput;
     private _inputEnglish   : UiTextInput;
-    private _labelTip       : UiLabel;
-    private _labelTitle     : UiLabel;
-    private _labelChinese   : UiLabel;
-    private _labelEnglish   : UiLabel;
-    private _btnModify      : UiButton;
-    private _btnClose       : UiButton;
+    private _labelTip       : TwnsUiLabel.UiLabel;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _labelChinese   : TwnsUiLabel.UiLabel;
+    private _labelEnglish   : TwnsUiLabel.UiLabel;
+    private _btnModify      : TwnsUiButton.UiButton;
+    private _btnClose       : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForWeEventRenamePanel): void {
         if (!WeEventRenamePanel._instance) {

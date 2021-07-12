@@ -3,14 +3,14 @@ import { CommonConstants }      from "../../../utility/CommonConstants";
 import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
 import { Helpers }              from "../../../utility/Helpers";
 import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
+import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { Types }                from "../../../utility/Types";
 import { TimeModel }            from "../../time/model/TimeModel";
-import { UiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiImage }          from "../../../utility/ui/UiImage";
 import { BwActionPlanner }      from "../model/BwActionPlanner";
 import { BwUnit }               from "../model/BwUnit";
 import { BwUnitView }           from "./BwUnitView";
+import NotifyType               = TwnsNotifyType.NotifyType;
 import State                    = Types.ActionPlannerState;
 import GridIndex                = Types.GridIndex;
 import Direction                = Types.Direction;
@@ -90,9 +90,9 @@ export class BwActionPlannerView extends egret.DisplayObjectContainer {
     private _conForMoveDestination  = new egret.DisplayObjectContainer();
     private _conForAttackableGrids  = new egret.DisplayObjectContainer();
     private _conForMovePath         = new egret.DisplayObjectContainer();
-    private _imgsForMovableGrids    : UiImage[][];
-    private _imgsForAttackableGrids : UiImage[][];
-    private _imgForMoveDestination  : UiImage;
+    private _imgsForMovableGrids    : TwnsUiImage.UiImage[][];
+    private _imgsForAttackableGrids : TwnsUiImage.UiImage[][];
+    private _imgForMoveDestination  : TwnsUiImage.UiImage;
 
     private _conForUnits            = new egret.DisplayObjectContainer();
     private _focusUnitViews         = new Map<number, BwUnitView>();
@@ -148,10 +148,10 @@ export class BwActionPlannerView extends egret.DisplayObjectContainer {
         this._conForMovableGrids.alpha = ALPHA_FOR_MOVABLE_GRIDS;
 
         const { width, height } = this._mapSize;
-        const images            = Helpers.createEmptyMap<UiImage>(width, height);
+        const images            = Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
-                const image     = new UiImage(_MOVABLE_GRID_FRAMES[0]);
+                const image     = new TwnsUiImage.UiImage(_MOVABLE_GRID_FRAMES[0]);
                 image.x         = x * _GRID_WIDTH;
                 image.y         = y * _GRID_HEIGHT;
                 image.visible   = false;
@@ -163,7 +163,7 @@ export class BwActionPlannerView extends egret.DisplayObjectContainer {
     }
     private _initConForMoveDestination(): void {
         this._conForMoveDestination.removeChildren();
-        this._imgForMoveDestination     = new UiImage(_MOVABLE_GRID_FRAMES[0]);
+        this._imgForMoveDestination     = new TwnsUiImage.UiImage(_MOVABLE_GRID_FRAMES[0]);
         this._imgForMoveDestination.x   = 0;
         this._imgForMoveDestination.y   = 0;
         this._conForMoveDestination.addChild(this._imgForMoveDestination);
@@ -173,10 +173,10 @@ export class BwActionPlannerView extends egret.DisplayObjectContainer {
         this._conForAttackableGrids.alpha = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
         const { width, height } = this._mapSize;
-        const images            = Helpers.createEmptyMap<UiImage>(width, height);
+        const images            = Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
-                const image     = new UiImage(_ATTACKABLE_GRID_FRAMES[0]);
+                const image     = new TwnsUiImage.UiImage(_ATTACKABLE_GRID_FRAMES[0]);
                 image.x         = x * _GRID_WIDTH;
                 image.y         = y * _GRID_HEIGHT;
                 image.visible   = false;
@@ -650,12 +650,12 @@ export class BwActionPlannerView extends egret.DisplayObjectContainer {
     }
 }
 
-function _createImgForMovePathGrid(prev: GridIndex, curr: GridIndex, next: GridIndex): UiImage {
+function _createImgForMovePathGrid(prev: GridIndex, curr: GridIndex, next: GridIndex): TwnsUiImage.UiImage {
     const source = _PATH_GRID_SOURCES.get(GridIndexHelpers.getAdjacentDirection(prev, curr)).get(GridIndexHelpers.getAdjacentDirection(next, curr));
     if (!source) {
         return undefined;
     } else {
-        const image = new UiImage(source);
+        const image = new TwnsUiImage.UiImage(source);
         image.x = curr.x * _GRID_WIDTH;
         image.y = curr.y * _GRID_HEIGHT;
         return image;

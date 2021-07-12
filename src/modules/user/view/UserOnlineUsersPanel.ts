@@ -1,10 +1,10 @@
 
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { UserPanel }            from "../../user/view/UserPanel";
 import { Helpers }              from "../../../utility/Helpers";
 import { Lang }                 from "../../../utility/lang/Lang";
@@ -17,35 +17,35 @@ import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
 import { Types }                from "../../../utility/Types";
 import { UserProxy }            from "../../user/model/UserProxy";
 
-export class UserOnlineUsersPanel extends UiPanel<void> {
+export class UserOnlineUsersPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: UserOnlineUsersPanel;
 
     // @ts-ignore
-    private readonly _imgMask               : UiImage;
+    private readonly _imgMask               : TwnsUiImage.UiImage;
     // @ts-ignore
     private readonly _group                 : eui.Group;
     // @ts-ignore
-    private readonly _labelTitle            : UiLabel;
+    private readonly _labelTitle            : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _btnClose              : UiButton;
+    private readonly _btnClose              : TwnsUiButton.UiButton;
 
     // @ts-ignore
-    private readonly _labelTips             : UiLabel;
+    private readonly _labelTips             : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelUsersCountTitle  : UiLabel;
+    private readonly _labelUsersCountTitle  : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelUsersCount       : UiLabel;
+    private readonly _labelUsersCount       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelNameTitle1       : UiLabel;
+    private readonly _labelNameTitle1       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelNameTitle2       : UiLabel;
+    private readonly _labelNameTitle2       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _listUser              : UiScrollList<DataForUserRenderer>;
+    private readonly _listUser              : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
     // @ts-ignore
-    private readonly _labelLoading          : UiLabel;
+    private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
     private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUsers.IS | null | undefined;
     private _dataForList: DataForUserRenderer[] | null | undefined;
@@ -209,11 +209,11 @@ type DataForUserRenderer = {
     nickname    : string | null | undefined;
 };
 
-class UserRenderer extends UiListItemRenderer<DataForUserRenderer> {
+class UserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUserRenderer> {
     // @ts-ignore
-    private readonly _imgBg     : UiImage;
+    private readonly _imgBg     : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _labelName : UiLabel;
+    private readonly _labelName : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

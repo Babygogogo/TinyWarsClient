@@ -1,6 +1,6 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsLobbyBottomPanel }         from "../../lobby/view/LobbyBottomPanel";
 import { TwnsLobbyTopPanel }            from "../../lobby/view/LobbyTopPanel";
 import { TwnsMcwMyWarListPanel }        from "../../multiCustomWar/view/McwMyWarListPanel";
@@ -23,7 +23,7 @@ import { MpwModel }                     from "../../multiPlayerWar/model/MpwMode
 import NotifyType                       = TwnsNotifyType.NotifyType;
 import Tween                            = egret.Tween;
 
-export class McrMainMenuPanel extends UiPanel<void> {
+export class McrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
@@ -32,30 +32,30 @@ export class McrMainMenuPanel extends UiPanel<void> {
     // @ts-ignore
     private readonly _group             : eui.Group;
     // @ts-ignore
-    private readonly _btnMultiPlayer    : UiButton;
+    private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnRanking        : UiButton;
+    private readonly _btnRanking        : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnSinglePlayer   : UiButton;
+    private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
 
     // @ts-ignore
     private readonly _groupLeft         : eui.Group;
     // @ts-ignore
-    private readonly _btnCreateRoom     : UiButton;
+    private readonly _btnCreateRoom     : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnJoinRoom       : UiButton;
+    private readonly _btnJoinRoom       : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnMyRoom         : UiButton;
+    private readonly _btnMyRoom         : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnContinueWar    : UiButton;
+    private readonly _btnContinueWar    : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnWatchWar       : UiButton;
+    private readonly _btnWatchWar       : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnReplayWar      : UiButton;
+    private readonly _btnReplayWar      : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnCoopMode       : UiButton;
+    private readonly _btnCoopMode       : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnFreeMode       : UiButton;
+    private readonly _btnFreeMode       : TwnsUiButton.UiButton;
 
     public static show(): void {
         if (!McrMainMenuPanel._instance) {

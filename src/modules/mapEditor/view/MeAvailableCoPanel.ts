@@ -1,9 +1,9 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiComponent }                  from "../../../utility/ui/UiComponent";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiComponent }                  from "../../../utility/ui/UiComponent";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
 import { TwnsLangTextType }                 from "../../../utility/lang/LangTextType";
 import { TwnsNotifyType }                   from "../../../utility/notify/NotifyType";
@@ -24,17 +24,17 @@ type OpenDataForMeAvailableCoPanel = {
     warRule         : WarRule.IWarRule;
     isReviewing     : boolean;
 };
-export class MeAvailableCoPanel extends UiPanel<OpenDataForMeAvailableCoPanel> {
+export class MeAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMeAvailableCoPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeAvailableCoPanel;
 
-    private _labelAvailableCoTitle  : UiLabel;
+    private _labelAvailableCoTitle  : TwnsUiLabel.UiLabel;
     private _groupCoTiers           : eui.Group;
     private _groupCoNames           : eui.Group;
-    private _btnCancel              : UiButton;
-    private _btnConfirm             : UiButton;
+    private _btnCancel              : TwnsUiButton.UiButton;
+    private _btnConfirm             : TwnsUiButton.UiButton;
 
     private _renderersForCoTiers    : RendererForCoTier[] = [];
     private _renderersForCoNames    : RendererForCoName[] = [];
@@ -244,9 +244,9 @@ enum CoTierState {
     Unavailable,
 }
 
-class RendererForCoTier extends UiComponent {
-    private _imgSelected: UiImage;
-    private _labelName  : UiLabel;
+class RendererForCoTier extends TwnsUiComponent.UiComponent {
+    private _imgSelected: TwnsUiImage.UiImage;
+    private _labelName  : TwnsUiLabel.UiLabel;
 
     private _tier           : number;
     private _isCustomSwitch = false;
@@ -290,9 +290,9 @@ class RendererForCoTier extends UiComponent {
     }
 }
 
-class RendererForCoName extends UiComponent {
-    private _imgSelected: UiImage;
-    private _labelName  : UiLabel;
+class RendererForCoName extends TwnsUiComponent.UiComponent {
+    private _imgSelected: TwnsUiImage.UiImage;
+    private _labelName  : TwnsUiLabel.UiLabel;
 
     private _coId           : number;
     private _isSelected     : boolean;

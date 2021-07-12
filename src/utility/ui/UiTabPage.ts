@@ -1,7 +1,7 @@
 
-import { UiComponent } from "./UiComponent";
+import { TwnsUiComponent } from "./UiComponent";
 
-export abstract class UiTabPage<OpenData> extends UiComponent {
+export abstract class UiTabPage<OpenData> extends TwnsUiComponent.UiComponent {
     private _openData   : OpenData;
 
     protected constructor() {

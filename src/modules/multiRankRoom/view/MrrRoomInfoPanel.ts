@@ -1,10 +1,10 @@
 
-import { UiImage }                                                              from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                                                              from "../../../utility/ui/UiPanel";
-import { UiButton }                                                             from "../../../utility/ui/UiButton";
-import { UiLabel }                                                              from "../../../utility/ui/UiLabel";
-import { UiScrollList }                                                         from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }                                                              from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                                                              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                                                              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                                                              from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                                                         from "../../../utility/ui/UiScrollList";
 import { UiTab }                                                                from "../../../utility/ui/UiTab";
 import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
 import { CommonConfirmPanel }                                                   from "../../common/view/CommonConfirmPanel";
@@ -39,7 +39,7 @@ import NetMessage                                                               
 type OpenDataForMrrRoomInfoPanel = {
     roomId  : number;
 };
-export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
+export class MrrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrRoomInfoPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
@@ -49,38 +49,38 @@ export class MrrRoomInfoPanel extends UiPanel<OpenDataForMrrRoomInfoPanel> {
     private readonly _tabSettings       : UiTab<DataForTabItemRenderer, OpenDataForMrrRoomMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForMrrRoomBasicSettingsPage | OpenDataForMrrRoomAdvancedSettingsPage>;
 
     private readonly _groupNavigator    : eui.Group;
-    private readonly _labelRankMatch    : UiLabel;
-    private readonly _labelMyRoom       : UiLabel;
-    private readonly _labelRoomInfo     : UiLabel;
+    private readonly _labelRankMatch    : TwnsUiLabel.UiLabel;
+    private readonly _labelMyRoom       : TwnsUiLabel.UiLabel;
+    private readonly _labelRoomInfo     : TwnsUiLabel.UiLabel;
 
     private readonly _groupBanCo            : eui.Group;
-    private readonly _btnBanCo              : UiButton;
-    private readonly _btnBannedCo           : UiButton;
-    private readonly _labelBanCo            : UiLabel;
+    private readonly _btnBanCo              : TwnsUiButton.UiButton;
+    private readonly _btnBannedCo           : TwnsUiButton.UiButton;
+    private readonly _labelBanCo            : TwnsUiLabel.UiLabel;
 
     private readonly _groupSettings         : eui.Group;
     private readonly _groupChooseCo         : eui.Group;
-    private readonly _labelChooseCo         : UiLabel;
-    private readonly _btnChooseCo           : UiButton;
+    private readonly _labelChooseCo         : TwnsUiLabel.UiLabel;
+    private readonly _btnChooseCo           : TwnsUiButton.UiButton;
 
     private readonly _groupChoosePlayerIndex: eui.Group;
-    private readonly _labelChoosePlayerIndex: UiLabel;
-    private readonly _sclPlayerIndex        : UiScrollList<DataForPlayerIndexRenderer>;
+    private readonly _labelChoosePlayerIndex: TwnsUiLabel.UiLabel;
+    private readonly _sclPlayerIndex        : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
 
     private readonly _groupChooseSkinId     : eui.Group;
-    private readonly _labelChooseSkinId     : UiLabel;
-    private readonly _sclSkinId             : UiScrollList<DataForSkinIdRenderer>;
+    private readonly _labelChooseSkinId     : TwnsUiLabel.UiLabel;
+    private readonly _sclSkinId             : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
 
     private readonly _groupChooseReady      : eui.Group;
-    private readonly _labelChooseReady      : UiLabel;
-    private readonly _sclReady              : UiScrollList<DataForReadyRenderer>;
+    private readonly _labelChooseReady      : TwnsUiLabel.UiLabel;
+    private readonly _sclReady              : TwnsUiScrollList.UiScrollList<DataForReadyRenderer>;
 
     private readonly _groupState            : eui.Group;
-    private readonly _labelCountdownTitle   : UiLabel;
-    private readonly _labelCountdown        : UiLabel;
-    private readonly _labelState            : UiLabel;
+    private readonly _labelCountdownTitle   : TwnsUiLabel.UiLabel;
+    private readonly _labelCountdown        : TwnsUiLabel.UiLabel;
+    private readonly _labelState            : TwnsUiLabel.UiLabel;
 
-    private readonly _btnBack               : UiButton;
+    private readonly _btnBack               : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForMrrRoomInfoPanel): void {
         if (!MrrRoomInfoPanel._instance) {
@@ -476,7 +476,7 @@ type DataForTabItemRenderer = {
     name: string;
 };
 class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
-    private _labelName: UiLabel;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._labelName.text = this.data.name;
@@ -487,8 +487,8 @@ type DataForPlayerIndexRenderer = {
     roomId      : number;
     playerIndex : number;
 };
-class PlayerIndexRenderer extends UiListItemRenderer<DataForPlayerIndexRenderer> {
-    private readonly _labelName : UiLabel;
+class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerIndexRenderer> {
+    private readonly _labelName : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
@@ -545,8 +545,8 @@ type DataForSkinIdRenderer = {
     roomId  : number;
     skinId  : number;
 };
-class SkinIdRenderer extends UiListItemRenderer<DataForSkinIdRenderer> {
-    private readonly _imgColor  : UiImage;
+class SkinIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkinIdRenderer> {
+    private readonly _imgColor  : TwnsUiImage.UiImage;
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
@@ -597,9 +597,9 @@ type DataForReadyRenderer = {
     roomId      : number;
     isReady     : boolean;
 };
-class ReadyRenderer extends UiListItemRenderer<DataForReadyRenderer> {
-    private readonly _labelName : UiLabel;
-    private readonly _imgRed    : UiImage;
+class ReadyRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForReadyRenderer> {
+    private readonly _labelName : TwnsUiLabel.UiLabel;
+    private readonly _imgRed    : TwnsUiImage.UiImage;
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([

@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -15,15 +15,15 @@ import { WarMapModel }                  from "../../warMap/model/WarMapModel";
 import { MeModel }                      from "../model/MeModel";
 import LangTextType         = TwnsLangTextType.LangTextType;
 
-export class MeImportPanel extends UiPanel<void> {
+export class MeImportPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeImportPanel;
 
     private _group      : eui.Group;
-    private _listMap    : UiScrollList<DataForMapRenderer>;
-    private _btnCancel  : UiButton;
+    private _listMap    : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
+    private _btnCancel  : TwnsUiButton.UiButton;
 
     public static show(): void {
         if (!MeImportPanel._instance) {
@@ -97,9 +97,9 @@ type DataForMapRenderer = {
     mapName : string;
     panel   : MeImportPanel;
 };
-class MapRenderer extends UiListItemRenderer<DataForMapRenderer> {
+class MapRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapRenderer> {
     private _group          : eui.Group;
-    private _labelName      : UiLabel;
+    private _labelName      : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         const data              = this.data;

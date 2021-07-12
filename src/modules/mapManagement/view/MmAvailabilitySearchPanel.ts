@@ -1,7 +1,7 @@
 
-import { UiPanel }                  from "../../../utility/ui/UiPanel";
-import { UiButton }                 from "../../../utility/ui/UiButton";
-import { UiLabel }                  from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                  from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                  from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                  from "../../../utility/ui/UiLabel";
 import { UiTextInput }              from "../../../utility/ui/UiTextInput";
 import { MmAvailabilityListPanel }  from "./MmAvailabilityListPanel";
 import { Lang }                     from "../../../utility/lang/Lang";
@@ -12,22 +12,22 @@ import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                    from "../../../utility/Types";
 
-export class MmAvailabilitySearchPanel extends UiPanel<void> {
+export class MmAvailabilitySearchPanel extends TwnsUiPanel.UiPanel<void> {
     protected _IS_EXCLUSIVE = false;
     protected _LAYER_TYPE   = Types.LayerType.Hud2;
 
     private static _instance: MmAvailabilitySearchPanel;
 
-    private _btnClose               : UiButton;
-    private _btnReset               : UiButton;
-    private _btnSearch              : UiButton;
-    private _labelName              : UiLabel;
-    private _labelMapNameTitle      : UiLabel;
-    private _labelDesignerTitle     : UiLabel;
-    private _labelPlayersCountTitle : UiLabel;
-    private _labelPlayedTimesTitle  : UiLabel;
-    private _labelMinRatingTitle    : UiLabel;
-    private _labelDesc              : UiLabel;
+    private _btnClose               : TwnsUiButton.UiButton;
+    private _btnReset               : TwnsUiButton.UiButton;
+    private _btnSearch              : TwnsUiButton.UiButton;
+    private _labelName              : TwnsUiLabel.UiLabel;
+    private _labelMapNameTitle      : TwnsUiLabel.UiLabel;
+    private _labelDesignerTitle     : TwnsUiLabel.UiLabel;
+    private _labelPlayersCountTitle : TwnsUiLabel.UiLabel;
+    private _labelPlayedTimesTitle  : TwnsUiLabel.UiLabel;
+    private _labelMinRatingTitle    : TwnsUiLabel.UiLabel;
+    private _labelDesc              : TwnsUiLabel.UiLabel;
     private _inputMapName           : UiTextInput;
     private _inputDesigner          : UiTextInput;
     private _inputPlayersCount      : UiTextInput;

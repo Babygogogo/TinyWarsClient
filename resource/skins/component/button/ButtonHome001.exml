@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:w="http://ns.egret.com/wing"
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing"
         class="Skins.Component.Button.ButtonHome001">
     <e:Group left="0" right="0" top="0" bottom="0">
         <e:Image source="c04_t01_s02_f01" left="0" right="0" top="0" bottom="0" scale9Grid="9,9,2,2" />
         <e:Image id="_imgDisplay" source="icon_home_001" horizontalCenter="0" verticalCenter="0" scaleX="0.8"
                  scaleY="0.8" />
         <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true" textColor="0xffffff" />
-        <GameUi:UiImage id="_imgExtra" verticalCenter="0" horizontalCenter="0" />
+        <TwnsUiImage:UiImage id="_imgExtra" verticalCenter="0" horizontalCenter="0" />
     </e:Group>
 </e:Skin>

@@ -1,8 +1,8 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { MmWarRulePanel }       from "./MmWarRulePanel";
 import { Lang }                 from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -17,20 +17,20 @@ import { WarMapProxy }          from "../../warMap/model/WarMapProxy";
 type OpenDataForMmTagChangePanel = {
     mapId   : number;
 };
-export class MmTagChangePanel extends UiPanel<OpenDataForMmTagChangePanel> {
+export class MmTagChangePanel extends TwnsUiPanel.UiPanel<OpenDataForMmTagChangePanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MmTagChangePanel;
 
-    private _labelTitle     : UiLabel;
-    private _btnWarRule     : UiButton;
-    private _btnCancel      : UiButton;
-    private _btnConfirm     : UiButton;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _btnWarRule     : TwnsUiButton.UiButton;
+    private _btnCancel      : TwnsUiButton.UiButton;
+    private _btnConfirm     : TwnsUiButton.UiButton;
 
     private _groupFog       : eui.Group;
-    private _labelFog       : UiLabel;
-    private _imgFog         : UiImage;
+    private _labelFog       : TwnsUiLabel.UiLabel;
+    private _imgFog         : TwnsUiImage.UiImage;
 
     private _mapId          : number;
 

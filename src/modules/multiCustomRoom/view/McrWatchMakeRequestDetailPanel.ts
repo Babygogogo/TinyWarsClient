@@ -1,10 +1,10 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { ConfigManager }                from "../../../utility/ConfigManager";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -20,18 +20,18 @@ import { UserModel }                    from "../../user/model/UserModel";
 type OpenDataForMcrWatchMakeRequestDetailPanel = {
     watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
 };
-export class McrWatchMakeRequestDetailPanel extends UiPanel<OpenDataForMcrWatchMakeRequestDetailPanel> {
+export class McrWatchMakeRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrWatchMakeRequestDetailPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: McrWatchMakeRequestDetailPanel;
 
-    private _labelMenuTitle : UiLabel;
-    private _labelYes       : UiLabel;
-    private _labelNo        : UiLabel;
-    private _listPlayer     : UiScrollList<DataForPlayerRenderer>;
-    private _btnConfirm     : UiButton;
-    private _btnCancel      : UiButton;
+    private _labelMenuTitle : TwnsUiLabel.UiLabel;
+    private _labelYes       : TwnsUiLabel.UiLabel;
+    private _labelNo        : TwnsUiLabel.UiLabel;
+    private _listPlayer     : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+    private _btnConfirm     : TwnsUiButton.UiButton;
+    private _btnCancel      : TwnsUiButton.UiButton;
 
     private _dataForListPlayer  : DataForPlayerRenderer[];
 
@@ -151,13 +151,13 @@ type DataForPlayerRenderer = {
     isWatching      : boolean;
     isRequesting    : boolean;
 };
-class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
-    private _labelIndex     : UiLabel;
-    private _labelTeam      : UiLabel;
-    private _labelName      : UiLabel;
-    private _labelState     : UiLabel;
-    private _imgAccept      : UiImage;
-    private _imgDecline     : UiImage;
+class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
+    private _labelIndex     : TwnsUiLabel.UiLabel;
+    private _labelTeam      : TwnsUiLabel.UiLabel;
+    private _labelName      : TwnsUiLabel.UiLabel;
+    private _labelState     : TwnsUiLabel.UiLabel;
+    private _imgAccept      : TwnsUiImage.UiImage;
+    private _imgDecline     : TwnsUiImage.UiImage;
 
     protected _onDataChanged(): void {
         const data              = this.data;

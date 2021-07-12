@@ -1,5 +1,5 @@
 
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { Helpers }                      from "../../../utility/Helpers";
@@ -17,23 +17,23 @@ export type OpenDataForRwReplayWarInfoPage = {
     replayId: number | null;
 };
 export class RwReplayWarInfoPage extends UiTabPage<OpenDataForRwReplayWarInfoPage> {
-    private readonly _labelMapNameTitle             : UiLabel;
-    private readonly _labelMapName                  : UiLabel;
+    private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
+    private readonly _labelMapName                  : TwnsUiLabel.UiLabel;
 
-    private readonly _labelWarTypeTitle             : UiLabel;
-    private readonly _labelWarType                  : UiLabel;
+    private readonly _labelWarTypeTitle             : TwnsUiLabel.UiLabel;
+    private readonly _labelWarType                  : TwnsUiLabel.UiLabel;
 
-    private readonly _labelGlobalRatingTitle        : UiLabel;
-    private readonly _labelGlobalRating             : UiLabel;
+    private readonly _labelGlobalRatingTitle        : TwnsUiLabel.UiLabel;
+    private readonly _labelGlobalRating             : TwnsUiLabel.UiLabel;
 
-    private readonly _labelMyRatingTitle            : UiLabel;
-    private readonly _labelMyRating                 : UiLabel;
+    private readonly _labelMyRatingTitle            : TwnsUiLabel.UiLabel;
+    private readonly _labelMyRating                 : TwnsUiLabel.UiLabel;
 
-    private readonly _labelTurnIndexTitle           : UiLabel;
-    private readonly _labelTurnIndex                : UiLabel;
+    private readonly _labelTurnIndexTitle           : TwnsUiLabel.UiLabel;
+    private readonly _labelTurnIndex                : TwnsUiLabel.UiLabel;
 
-    private readonly _labelEndTimeTitle             : UiLabel;
-    private readonly _labelEndTime                  : UiLabel;
+    private readonly _labelEndTimeTitle             : TwnsUiLabel.UiLabel;
+    private readonly _labelEndTime                  : TwnsUiLabel.UiLabel;
 
     public constructor() {
         super();

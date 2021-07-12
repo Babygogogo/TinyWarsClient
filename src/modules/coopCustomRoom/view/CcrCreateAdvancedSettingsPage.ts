@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
@@ -24,10 +24,10 @@ import { CcrCreateModel } from "../model/CcrCreateModel";
 
 export class CcrCreateAdvancedSettingsPage extends UiTabPage<void> {
     private readonly _scroller      : eui.Scroller;
-    private readonly _btnReset      : UiButton;
-    private readonly _btnCustomize  : UiButton;
-    private readonly _listSetting   : UiScrollList<DataForSettingRenderer>;
-    private readonly _listPlayer    : UiScrollList<DataForPlayerRenderer>;
+    private readonly _btnReset      : TwnsUiButton.UiButton;
+    private readonly _btnCustomize  : TwnsUiButton.UiButton;
+    private readonly _listSetting   : TwnsUiScrollList.UiScrollList<DataForSettingRenderer>;
+    private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
     private _initialWarRuleId   : number;
     private _mapRawData         : ProtoTypes.Map.IMapRawData;
@@ -136,9 +136,9 @@ export class CcrCreateAdvancedSettingsPage extends UiTabPage<void> {
 type DataForSettingRenderer = {
     playerRuleType  : PlayerRuleType;
 };
-class SettingRenderer extends UiListItemRenderer<DataForSettingRenderer> {
-    private readonly _labelName : UiLabel;
-    private readonly _btnHelp   : UiButton;
+class SettingRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSettingRenderer> {
+    private readonly _labelName : TwnsUiLabel.UiLabel;
+    private readonly _btnHelp   : TwnsUiButton.UiButton;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -173,9 +173,9 @@ class SettingRenderer extends UiListItemRenderer<DataForSettingRenderer> {
 type DataForPlayerRenderer = {
     playerIndex : number;
 };
-class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
-    private _labelPlayerIndex   : UiLabel;
-    private _listInfo           : UiScrollList<DataForInfoRenderer>;
+class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
+    private _labelPlayerIndex   : TwnsUiLabel.UiLabel;
+    private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
     protected _onOpened(): void {
         this._listInfo.setItemRenderer(InfoRenderer);
@@ -223,10 +223,10 @@ type DataForInfoRenderer = {
     infoColor?              : number;
     callbackOnTouchedTitle? : (() => void) | null;
 };
-class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
-    private readonly _btnCustom     : UiButton;
+class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+    private readonly _btnCustom     : TwnsUiButton.UiButton;
     private readonly _inputValue    : UiTextInput;
-    private readonly _labelValue    : UiLabel;
+    private readonly _labelValue    : TwnsUiLabel.UiLabel;
 
     private _callbackForTouchLabelValue     : () => void;
     private _callbackForFocusOutInputValue  : () => void;

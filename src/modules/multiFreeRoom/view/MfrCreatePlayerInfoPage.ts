@@ -1,8 +1,8 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
 import { UiTabPage }            from "../../../utility/ui/UiTabPage";
 import { CommonCoInfoPanel }    from "../../common/view/CommonCoInfoPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
@@ -22,7 +22,7 @@ export class MfrCreatePlayerInfoPage extends UiTabPage<void> {
     // @ts-ignore
     private readonly _groupInfo     : eui.Group;
     // @ts-ignore
-    private readonly _listPlayer    : UiScrollList<DataForPlayerRenderer>;
+    private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
     public constructor() {
         super();
@@ -68,32 +68,32 @@ export class MfrCreatePlayerInfoPage extends UiTabPage<void> {
 type DataForPlayerRenderer = {
     playerIndex     : number;
 };
-class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
+class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
     // @ts-ignore
     private readonly _groupCo           : eui.Group;
     // @ts-ignore
-    private readonly _imgSkin           : UiImage;
+    private readonly _imgSkin           : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _imgCoHead         : UiImage;
+    private readonly _imgCoHead         : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _imgCoInfo         : UiImage;
+    private readonly _imgCoInfo         : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _labelNickname     : UiLabel;
+    private readonly _labelNickname     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelCo           : UiLabel;
+    private readonly _labelCo           : TwnsUiLabel.UiLabel;
 
     // @ts-ignore
-    private readonly _labelPlayerIndex  : UiLabel;
+    private readonly _labelPlayerIndex  : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelTeamIndex    : UiLabel;
+    private readonly _labelTeamIndex    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelRankStdTitle : UiLabel;
+    private readonly _labelRankStdTitle : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelRankStd      : UiLabel;
+    private readonly _labelRankStd      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelRankFogTitle : UiLabel;
+    private readonly _labelRankFogTitle : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelRankFog      : UiLabel;
+    private readonly _labelRankFog      : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

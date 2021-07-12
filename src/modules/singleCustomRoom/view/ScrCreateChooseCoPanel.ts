@@ -1,11 +1,11 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiCoInfo }                     from "../../../utility/ui/UiCoInfo";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiCoInfo }                     from "../../../utility/ui/UiCoInfo";
 import { ConfigManager }                from "../../../utility/ConfigManager";
 import { Helpers }                      from "../../../utility/Helpers";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -22,20 +22,20 @@ import { ScrCreateModel }                     from "../model/ScrCreateModel";
 type OpenDataForScrCreateChooseCoPanel = {
     playerIndex : number;
 };
-export class ScrCreateChooseCoPanel extends UiPanel<OpenDataForScrCreateChooseCoPanel> {
+export class ScrCreateChooseCoPanel extends TwnsUiPanel.UiPanel<OpenDataForScrCreateChooseCoPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: ScrCreateChooseCoPanel;
 
-    private readonly _imgMask       : UiImage;
+    private readonly _imgMask       : TwnsUiImage.UiImage;
     private readonly _group         : eui.Group;
 
-    private readonly _labelChooseCo : UiLabel;
-    private readonly _listCo        : UiScrollList<DataForCoRenderer>;
-    private readonly _btnConfirm    : UiButton;
-    private readonly _btnCancel     : UiButton;
-    private readonly _uiCoInfo      : UiCoInfo;
+    private readonly _labelChooseCo : TwnsUiLabel.UiLabel;
+    private readonly _listCo        : TwnsUiScrollList.UiScrollList<DataForCoRenderer>;
+    private readonly _btnConfirm    : TwnsUiButton.UiButton;
+    private readonly _btnCancel     : TwnsUiButton.UiButton;
+    private readonly _uiCoInfo      : TwnsUiCoInfo.UiCoInfo;
 
     private _dataForListCo          : DataForCoRenderer[] = [];
     private _selectedIndex          : number;
@@ -207,8 +207,8 @@ type DataForCoRenderer = {
     index       : number;
     panel       : ScrCreateChooseCoPanel;
 };
-class CoRenderer extends UiListItemRenderer<DataForCoRenderer> {
-    private _labelName: UiLabel;
+class CoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCoRenderer> {
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         const data              = this.data;

@@ -1,6 +1,6 @@
 
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
@@ -19,30 +19,30 @@ export type OpenDataForMrrPreviewBasicSettingsPage = {
     mapId   : number | null;
 };
 export class MrrPreviewBasicSettingsPage extends UiTabPage<OpenDataForMrrPreviewBasicSettingsPage> {
-    private readonly _labelMapNameTitle             : UiLabel;
-    private readonly _labelMapName                  : UiLabel;
+    private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
+    private readonly _labelMapName                  : TwnsUiLabel.UiLabel;
 
-    private readonly _labelWarRuleTitle             : UiLabel;
-    private readonly _labelWarRule                  : UiLabel;
+    private readonly _labelWarRuleTitle             : TwnsUiLabel.UiLabel;
+    private readonly _labelWarRule                  : TwnsUiLabel.UiLabel;
 
-    private readonly _labelHasFogTitle              : UiLabel;
-    private readonly _labelHasFog                   : UiLabel;
-    private readonly _btnHasFogHelp                 : UiButton;
+    private readonly _labelHasFogTitle              : TwnsUiLabel.UiLabel;
+    private readonly _labelHasFog                   : TwnsUiLabel.UiLabel;
+    private readonly _btnHasFogHelp                 : TwnsUiButton.UiButton;
 
     private readonly _groupTimer                    : eui.Group;
-    private readonly _labelTimerTypeTitle           : UiLabel;
-    private readonly _labelTimerType                : UiLabel;
-    private readonly _btnTimerTypeHelp              : UiButton;
+    private readonly _labelTimerTypeTitle           : TwnsUiLabel.UiLabel;
+    private readonly _labelTimerType                : TwnsUiLabel.UiLabel;
+    private readonly _btnTimerTypeHelp              : TwnsUiButton.UiButton;
 
     private readonly _groupTimerRegular             : eui.Group;
-    private readonly _labelTimerRegularTitle        : UiLabel;
-    private readonly _labelTimerRegular             : UiLabel;
+    private readonly _labelTimerRegularTitle        : TwnsUiLabel.UiLabel;
+    private readonly _labelTimerRegular             : TwnsUiLabel.UiLabel;
 
     private readonly _groupTimerIncremental         : eui.Group;
-    private readonly _labelTimerIncrementalTitle1   : UiLabel;
-    private readonly _labelTimerIncremental1        : UiLabel;
-    private readonly _labelTimerIncrementalTitle2   : UiLabel;
-    private readonly _labelTimerIncremental2        : UiLabel;
+    private readonly _labelTimerIncrementalTitle1   : TwnsUiLabel.UiLabel;
+    private readonly _labelTimerIncremental1        : TwnsUiLabel.UiLabel;
+    private readonly _labelTimerIncrementalTitle2   : TwnsUiLabel.UiLabel;
+    private readonly _labelTimerIncremental2        : TwnsUiLabel.UiLabel;
 
     public constructor() {
         super();

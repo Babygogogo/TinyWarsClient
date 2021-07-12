@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" y="40" x="830">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" locked="true" />
-        <GameUi:UiScrollList id="_listAction" left="5" right="5" top="5" bottom="5">
+        <TwnsUiScrollList:UiScrollList id="_listAction" left="5" right="5" top="5" bottom="5">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="120" height="50" currentState="withUnit" states="withUnit,withoutUnit">
                         <e:Group id="_conUnitView" width="60" height="100" x="0" y="0" scaleX="0.5" scaleY="0.5"
                                  visible.withoutUnit="false" />
-                        <GameUi:UiLabel id="_labelAction" text="Label" height="50" size="20" verticalAlign="middle"
+                        <TwnsUiLabel:UiLabel id="_labelAction" text="Label" height="50" size="20" verticalAlign="middle"
                                         width="90" textAlign="center" y="0" left.withoutUnit="0" right.withoutUnit="0"
                                         top.withoutUnit="0" bottom.withoutUnit="0" left.withUnit="30" right.withUnit="0"
                                         top.withUnit="0" bottom.withUnit="0" />
-                        <GameUi:UiLabel id="_labelCost" text="费用: 99999" size="12" horizontalCenter="15"
+                        <TwnsUiLabel:UiLabel id="_labelCost" text="费用: 99999" size="12" horizontalCenter="15"
                                         textColor="0x00ff00" />
                     </e:Skin>
                 </e:itemRendererSkinName>
@@ -22,6 +22,6 @@
                     <e:VerticalLayout gap="10" />
                 </e:layout>
             </e:List>
-        </GameUi:UiScrollList>
+        </TwnsUiScrollList:UiScrollList>
     </e:Group>
 </e:Skin>

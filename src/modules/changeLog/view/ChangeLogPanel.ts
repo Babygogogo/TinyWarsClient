@@ -1,10 +1,10 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
 import { ChangeLogAddPanel }    from "./ChangeLogAddPanel";
 import { ChangeLogModifyPanel } from "./ChangeLogModifyPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
@@ -22,27 +22,27 @@ import { UserModel }            from "../../user/model/UserModel";
 import { ChangeLogModel }       from "../../changeLog/model/ChangeLogModel";
 import { ChangeLogProxy }       from "../../changeLog/model/ChangeLogProxy";
 
-export class ChangeLogPanel extends UiPanel<void> {
+export class ChangeLogPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: ChangeLogPanel;
 
     // @ts-ignore
-    private _imgMask        : UiImage;
+    private _imgMask        : TwnsUiImage.UiImage;
     // @ts-ignore
     private _group          : eui.Group;
     // @ts-ignore
-    private _btnClose       : UiButton;
+    private _btnClose       : TwnsUiButton.UiButton;
 
     // @ts-ignore
-    private _listMessage    : UiScrollList<DataForMessageRenderer>;
+    private _listMessage    : TwnsUiScrollList.UiScrollList<DataForMessageRenderer>;
     // @ts-ignore
-    private _labelTitle     : UiLabel;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _labelNoMessage : UiLabel;
+    private _labelNoMessage : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _btnAddMessage  : UiButton;
+    private _btnAddMessage  : TwnsUiButton.UiButton;
 
     public static show(): void {
         if (!ChangeLogPanel._instance) {
@@ -161,13 +161,13 @@ export class ChangeLogPanel extends UiPanel<void> {
 }
 
 type DataForMessageRenderer = ProtoTypes.ChangeLog.IChangeLogMessage;
-class MessageRenderer extends UiListItemRenderer<DataForMessageRenderer> {
+class MessageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMessageRenderer> {
     // @ts-ignore
-    private _labelIndex     : UiLabel;
+    private _labelIndex     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _labelContent   : UiLabel;
+    private _labelContent   : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _btnModify      : UiButton;
+    private _btnModify      : TwnsUiButton.UiButton;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

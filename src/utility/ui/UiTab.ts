@@ -1,11 +1,11 @@
 
-import { UiComponent }          from "./UiComponent";
+import { TwnsUiComponent }          from "./UiComponent";
 import { UiTabItemRenderer }    from "./UiTabItemRenderer";
 import { UiTabPage }            from "./UiTabPage";
 import { Logger }               from "../Logger";
 import { SoundManager }         from "../SoundManager";
 
-export class UiTab<DataForTabItemRenderer, DataForPage> extends UiComponent {
+export class UiTab<DataForTabItemRenderer, DataForPage> extends TwnsUiComponent.UiComponent {
     private readonly _bar           : eui.TabBar;  // 页签栏
     private readonly _page          : eui.Group;   // 页面内容，仅用于占位
 

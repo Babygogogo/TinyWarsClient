@@ -1,8 +1,8 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { MeWar }                        from "../model/MeWar";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -13,19 +13,19 @@ import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
 import { MeModel }                      from "../model/MeModel";
 
-export class MeMapTagPanel extends UiPanel<void> {
+export class MeMapTagPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeMapTagPanel;
 
-    private _labelTitle     : UiLabel;
-    private _btnCancel      : UiButton;
-    private _btnConfirm     : UiButton;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _btnCancel      : TwnsUiButton.UiButton;
+    private _btnConfirm     : TwnsUiButton.UiButton;
 
     private _groupFog       : eui.Group;
-    private _labelFog       : UiLabel;
-    private _imgFog         : UiImage;
+    private _labelFog       : TwnsUiLabel.UiLabel;
+    private _imgFog         : TwnsUiImage.UiImage;
 
     private _war            : MeWar;
 

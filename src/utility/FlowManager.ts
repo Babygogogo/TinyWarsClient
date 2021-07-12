@@ -43,8 +43,6 @@ import { UserModel }                from "../modules/user/model/UserModel";
 import { UserProxy }                from "../modules/user/model/UserProxy";
 import { WarMapModel }              from "../modules/warMap/model/WarMapModel";
 import { WarMapProxy }              from "../modules/warMap/model/WarMapProxy";
-import { NetManager }               from "./network/NetManager";
-import { TwnsNetMessageCodes }      from "./network/NetMessageCodes";
 import { TwnsClientErrorCode }      from "./ClientErrorCode";
 import { CompatibilityHelpers }     from "./CompatibilityHelpers";
 import { ConfigManager }            from "./ConfigManager";
@@ -52,15 +50,17 @@ import { Lang }                     from "./lang/Lang";
 import { TwnsLangTextType }         from "./lang/LangTextType";
 import { LocalStorage }             from "./LocalStorage";
 import { Logger }                   from "./Logger";
+import { NetManager }               from "./network/NetManager";
+import { TwnsNetMessageCodes }      from "./network/NetMessageCodes";
 import { NoSleepManager }           from "./NoSleepManager";
 import { Notify }                   from "./notify/Notify";
 import { TwnsNotifyType }           from "./notify/NotifyType";
-import { ResManager }               from "./res/ResManager";
 import { ProtoManager }             from "./proto/ProtoManager";
+import { ProtoTypes }               from "./proto/ProtoTypes";
+import { ResManager }               from "./res/ResManager";
 import { SoundManager }             from "./SoundManager";
 import { StageManager }             from "./StageManager";
 import { Types }                    from "./Types";
-import { ProtoTypes }               from "./proto/ProtoTypes";
 
 export namespace FlowManager {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;

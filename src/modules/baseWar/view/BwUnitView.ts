@@ -1,11 +1,11 @@
 
 import { BwUnit }               from "../model/BwUnit";
-import { UiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiImage }          from "../../../utility/ui/UiImage";
 import { TimeModel }            from "../../time/model/TimeModel";
 import { CommonModel }          from "../../common/model/CommonModel";
 import { UserModel }            from "../../user/model/UserModel";
 import { Types }                from "../../../utility/Types";
-import { BwVisibilityHelpers }    from "../model/BwVisibilityHelpers";
+import { BwVisibilityHelpers }  from "../model/BwVisibilityHelpers";
 import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
 import { Helpers }              from "../../../utility/Helpers";
 import { CommonConstants }      from "../../../utility/CommonConstants";
@@ -20,9 +20,9 @@ const _IMG_UNIT_STATE_WIDTH                         = 28;
 const _IMG_UNIT_STATE_HEIGHT                        = 36;
 
 export class BwUnitView extends egret.DisplayObjectContainer {
-    private _imgHp      = new UiImage();
-    private _imgState   = new UiImage();
-    private _imgUnit    = new UiImage();
+    private _imgHp      = new TwnsUiImage.UiImage();
+    private _imgState   = new TwnsUiImage.UiImage();
+    private _imgUnit    = new TwnsUiImage.UiImage();
 
     private _unit                       : BwUnit;
     private _animationType              = UnitAnimationType.Stand;

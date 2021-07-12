@@ -1,7 +1,7 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
 import { Lang }                 from "../../../utility/lang/Lang";
 import { NotifyData }           from "../../../utility/notify/NotifyData";
@@ -28,7 +28,7 @@ export namespace BwUnitBriefPanel {
         war : BwWar;
     };
     // eslint-disable-next-line no-shadow
-    export class BwUnitBriefPanel extends UiPanel<OpenDataForBwUnitBriefPanel> {
+    export class BwUnitBriefPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitBriefPanel> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -281,13 +281,13 @@ export namespace BwUnitBriefPanel {
     class BwUnitBriefCell extends eui.Component {
         private _group          : eui.Group;
         private _conUnitView    : eui.Group;
-        private _labelName      : UiLabel;
-        private _labelHp        : UiLabel;
-        private _labelFuel      : UiLabel;
-        private _labelState     : UiLabel;
-        private _imgHp          : UiImage;
-        private _imgFuel        : UiImage;
-        private _imgState       : UiImage;
+        private _labelName      : TwnsUiLabel.UiLabel;
+        private _labelHp        : TwnsUiLabel.UiLabel;
+        private _labelFuel      : TwnsUiLabel.UiLabel;
+        private _labelState     : TwnsUiLabel.UiLabel;
+        private _imgHp          : TwnsUiImage.UiImage;
+        private _imgFuel        : TwnsUiImage.UiImage;
+        private _imgState       : TwnsUiImage.UiImage;
         private _unitView       : BwUnitView;
 
         private _unit               : BwUnit;

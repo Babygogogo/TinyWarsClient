@@ -1,6 +1,6 @@
 
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -18,21 +18,21 @@ export type OpenDataForSpmWarBasicSettingsPage = {
     slotIndex   : number | null;
 };
 export class SpmWarBasicSettingsPage extends UiTabPage<OpenDataForSpmWarBasicSettingsPage> {
-    private readonly _labelMapNameTitle     : UiLabel;
-    private readonly _labelMapName          : UiLabel;
+    private readonly _labelMapNameTitle     : TwnsUiLabel.UiLabel;
+    private readonly _labelMapName          : TwnsUiLabel.UiLabel;
 
-    private readonly _labelSaveSlotTitle    : UiLabel;
-    private readonly _labelSaveSlot         : UiLabel;
+    private readonly _labelSaveSlotTitle    : TwnsUiLabel.UiLabel;
+    private readonly _labelSaveSlot         : TwnsUiLabel.UiLabel;
 
-    private readonly _labelSlotCommentTitle : UiLabel;
-    private readonly _labelSlotComment      : UiLabel;
+    private readonly _labelSlotCommentTitle : TwnsUiLabel.UiLabel;
+    private readonly _labelSlotComment      : TwnsUiLabel.UiLabel;
 
-    private readonly _labelWarRuleTitle     : UiLabel;
-    private readonly _labelWarRule          : UiLabel;
+    private readonly _labelWarRuleTitle     : TwnsUiLabel.UiLabel;
+    private readonly _labelWarRule          : TwnsUiLabel.UiLabel;
 
-    private readonly _labelHasFogTitle      : UiLabel;
-    private readonly _btnHasFogHelp         : UiButton;
-    private readonly _labelHasFog           : UiLabel;
+    private readonly _labelHasFogTitle      : TwnsUiLabel.UiLabel;
+    private readonly _btnHasFogHelp         : TwnsUiButton.UiButton;
+    private readonly _labelHasFog           : TwnsUiLabel.UiLabel;
 
     public constructor() {
         super();

@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" locked="true" />
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" locked="true" />
     <e:Group width="600" horizontalCenter="0" top="80" bottom="80">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" locked="true" />
-        <GameUi:UiLabel id="_labelTitle" text="建筑统计" textColor="0xffffff" y="12" horizontalCenter="0" size="24"
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="建筑统计" textColor="0xffffff" y="12" horizontalCenter="0" size="24"
                         locked="true" />
-        <GameUi:UiScrollList id="_listTile" top="50" bottom="10" horizontalCenter="0">
+        <TwnsUiScrollList:UiScrollList id="_listTile" top="50" bottom="10" horizontalCenter="0">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="280" height="32">
                         <e:Group id="_group" left="0" right="0" top="0" bottom="0">
                             <e:Group id="_conTileView" touchChildren="false" touchEnabled="false" left="0" bottom="0"
                                      scaleX="0.4" scaleY="0.4" width="0" height="0" />
-                            <GameUi:UiLabel id="_labelNum1" text="20" size="16" verticalCenter="0" x="40"
+                            <TwnsUiLabel:UiLabel id="_labelNum1" text="20" size="16" verticalCenter="0" x="40"
                                             textColor="0xff0000" stroke="1" strokeColor="0xffffff" />
-                            <GameUi:UiLabel id="_labelNum2" text="20" size="16" verticalCenter="0" x="80" stroke="1"
+                            <TwnsUiLabel:UiLabel id="_labelNum2" text="20" size="16" verticalCenter="0" x="80" stroke="1"
                                             strokeColor="0xffffff" textColor="0x0029ff" />
-                            <GameUi:UiLabel id="_labelNum3" text="20" size="16" verticalCenter="0" x="120" stroke="1"
+                            <TwnsUiLabel:UiLabel id="_labelNum3" text="20" size="16" verticalCenter="0" x="120" stroke="1"
                                             strokeColor="0xffffff" textColor="0xffca00" />
-                            <GameUi:UiLabel id="_labelNum4" text="20" size="16" verticalCenter="0" x="160" stroke="1"
+                            <TwnsUiLabel:UiLabel id="_labelNum4" text="20" size="16" verticalCenter="0" x="160" stroke="1"
                                             strokeColor="0xffffff" textColor="0x000000" />
-                            <GameUi:UiLabel id="_labelNum0" text="20" size="16" textColor="0xFFFFFF" verticalCenter="0"
+                            <TwnsUiLabel:UiLabel id="_labelNum0" text="20" size="16" textColor="0xFFFFFF" verticalCenter="0"
                                             x="200" stroke="1" strokeColor="0x000000" />
-                            <GameUi:UiLabel id="_labelTotalNum" text="20" size="16" textColor="0xffffff"
+                            <TwnsUiLabel:UiLabel id="_labelTotalNum" text="20" size="16" textColor="0xffffff"
                                             verticalCenter="0" x="240" stroke="1" strokeColor="0x000000" />
                         </e:Group>
                     </e:Skin>
@@ -33,6 +33,6 @@
                     <e:TileLayout orientation="rows" requestedColumnCount="2" horizontalAlign="center" />
                 </e:layout>
             </e:List>
-        </GameUi:UiScrollList>
+        </TwnsUiScrollList:UiScrollList>
     </e:Group>
 </e:Skin>

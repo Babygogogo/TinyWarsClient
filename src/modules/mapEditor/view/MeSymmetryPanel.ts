@@ -1,7 +1,7 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { MeWar }                        from "../model/MeWar";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -14,46 +14,46 @@ import { MeModel }                      from "../model/MeModel";
 import * as MeUtility                   from "../model/MeUtility";
 import SymmetryType                     = Types.SymmetryType;
 
-export class MeSymmetryPanel extends UiPanel<void> {
+export class MeSymmetryPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeSymmetryPanel;
 
     private _groupLeftRight             : eui.Group;
-    private _labelLeftRightTitle        : UiLabel;
-    private _labelLeftRightRate         : UiLabel;
+    private _labelLeftRightTitle        : TwnsUiLabel.UiLabel;
+    private _labelLeftRightRate         : TwnsUiLabel.UiLabel;
     private _groupLeftRightBox          : eui.Group;
-    private _imgLeftRight               : UiImage;
-    private _labelLeftRightAuto         : UiLabel;
+    private _imgLeftRight               : TwnsUiImage.UiImage;
+    private _labelLeftRightAuto         : TwnsUiLabel.UiLabel;
 
     private _groupUpDown                : eui.Group;
-    private _labelUpDownTitle           : UiLabel;
-    private _labelUpDownRate            : UiLabel;
+    private _labelUpDownTitle           : TwnsUiLabel.UiLabel;
+    private _labelUpDownRate            : TwnsUiLabel.UiLabel;
     private _groupUpDownBox             : eui.Group;
-    private _imgUpDown                  : UiImage;
-    private _labelUpDownAuto            : UiLabel;
+    private _imgUpDown                  : TwnsUiImage.UiImage;
+    private _labelUpDownAuto            : TwnsUiLabel.UiLabel;
 
     private _groupRotational            : eui.Group;
-    private _labelRotationalTitle       : UiLabel;
-    private _labelRotationalRate        : UiLabel;
+    private _labelRotationalTitle       : TwnsUiLabel.UiLabel;
+    private _labelRotationalRate        : TwnsUiLabel.UiLabel;
     private _groupRotationalBox         : eui.Group;
-    private _imgRotational              : UiImage;
-    private _labelRotationalAuto        : UiLabel;
+    private _imgRotational              : TwnsUiImage.UiImage;
+    private _labelRotationalAuto        : TwnsUiLabel.UiLabel;
 
     private _groupUpLeftDownRight       : eui.Group;
-    private _labelUpLeftDownRightTitle  : UiLabel;
-    private _labelUpLeftDownRightRate   : UiLabel;
+    private _labelUpLeftDownRightTitle  : TwnsUiLabel.UiLabel;
+    private _labelUpLeftDownRightRate   : TwnsUiLabel.UiLabel;
     private _groupUpLeftDownRightBox    : eui.Group;
-    private _imgUpLeftDownRight         : UiImage;
-    private _labelUpLeftDownRightAuto   : UiLabel;
+    private _imgUpLeftDownRight         : TwnsUiImage.UiImage;
+    private _labelUpLeftDownRightAuto   : TwnsUiLabel.UiLabel;
 
     private _groupUpRightDownLeft       : eui.Group;
-    private _labelUpRightDownLeftTitle  : UiLabel;
-    private _labelUpRightDownLeftRate   : UiLabel;
+    private _labelUpRightDownLeftTitle  : TwnsUiLabel.UiLabel;
+    private _labelUpRightDownLeftRate   : TwnsUiLabel.UiLabel;
     private _groupUpRightDownLeftBox    : eui.Group;
-    private _imgUpRightDownLeft         : UiImage;
-    private _labelUpRightDownLeftAuto   : UiLabel;
+    private _imgUpRightDownLeft         : TwnsUiImage.UiImage;
+    private _labelUpRightDownLeftAuto   : TwnsUiLabel.UiLabel;
 
     private _war                    : MeWar;
     private _asymmetricalCounters   : MeUtility.AsymmetricalCounters;

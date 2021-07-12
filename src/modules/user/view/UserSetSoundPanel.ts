@@ -1,8 +1,8 @@
 
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { CommonConstants }      from "../../../utility/CommonConstants";
@@ -13,60 +13,60 @@ import LangTextType         = TwnsLangTextType.LangTextType;
 import { SoundManager }         from "../../../utility/SoundManager";
 import { Types }                from "../../../utility/Types";
 
-export class UserSetSoundPanel extends UiPanel<void> {
+export class UserSetSoundPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: UserSetSoundPanel;
 
     // @ts-ignore
-    private readonly _imgMask           : UiImage;
+    private readonly _imgMask           : TwnsUiImage.UiImage;
     // @ts-ignore
     private readonly _group             : eui.Group;
     // @ts-ignore
-    private readonly _labelTitle        : UiLabel;
+    private readonly _labelTitle        : TwnsUiLabel.UiLabel;
 
     // @ts-ignore
-    private readonly _labelBgmTitle     : UiLabel;
+    private readonly _labelBgmTitle     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _imgBgmMute        : UiImage;
+    private readonly _imgBgmMute        : TwnsUiImage.UiImage;
     // @ts-ignore
     private readonly _groupBgmVolume    : eui.Group;
     // @ts-ignore
-    private readonly _imgBgmBar         : UiImage;
+    private readonly _imgBgmBar         : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _imgBgmPoint       : UiImage;
+    private readonly _imgBgmPoint       : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _labelBgmVolume    : UiLabel;
+    private readonly _labelBgmVolume    : TwnsUiLabel.UiLabel;
 
     // @ts-ignore
-    private readonly _labelEffectTitle  : UiLabel;
+    private readonly _labelEffectTitle  : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _imgEffectMute     : UiImage;
+    private readonly _imgEffectMute     : TwnsUiImage.UiImage;
     // @ts-ignore
     private readonly _groupEffectVolume : eui.Group;
     // @ts-ignore
-    private readonly _imgEffectBar      : UiImage;
+    private readonly _imgEffectBar      : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _imgEffectPoint    : UiImage;
+    private readonly _imgEffectPoint    : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _labelEffectVolume : UiLabel;
+    private readonly _labelEffectVolume : TwnsUiLabel.UiLabel;
 
     // @ts-ignore
-    private readonly _labelSwitchBgm    : UiLabel;
+    private readonly _labelSwitchBgm    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelBgmName      : UiLabel;
+    private readonly _labelBgmName      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _btnPrevBgm        : UiButton;
+    private readonly _btnPrevBgm        : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnNextBgm        : UiButton;
+    private readonly _btnNextBgm        : TwnsUiButton.UiButton;
 
     // @ts-ignore
-    private readonly _btnCancel         : UiButton;
+    private readonly _btnCancel         : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnDefault        : UiButton;
+    private readonly _btnDefault        : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnConfirm        : UiButton;
+    private readonly _btnConfirm        : TwnsUiButton.UiButton;
 
     private _prevBgmMute                : boolean | undefined;
     private _prevBgmVolume              : number | undefined;

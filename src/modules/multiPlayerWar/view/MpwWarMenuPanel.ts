@@ -1,9 +1,9 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { MpwActionPlanner }             from "../model/MpwActionPlanner";
 import { MpwWar }                       from "../model/MpwWar";
@@ -41,27 +41,27 @@ enum MenuType {
     Advanced,
 }
 
-export class MpwWarMenuPanel extends UiPanel<void> {
+export class MpwWarMenuPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MpwWarMenuPanel;
 
     private _group          : eui.Group;
-    private _listCommand    : UiScrollList<DataForCommandRenderer>;
-    private _labelNoCommand : UiLabel;
-    private _btnBack        : UiButton;
-    private _btnHome        : UiButton;
+    private _listCommand    : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
+    private _labelNoCommand : TwnsUiLabel.UiLabel;
+    private _btnBack        : TwnsUiButton.UiButton;
+    private _btnHome        : TwnsUiButton.UiButton;
 
     private _groupInfo              : eui.Group;
-    private _labelMenuTitle         : UiLabel;
-    private _labelWarInfoTitle      : UiLabel;
-    private _labelPlayerInfoTitle   : UiLabel;
-    private _btnMapNameTitle        : UiButton;
-    private _labelMapName           : UiLabel;
-    private _listWarInfo            : UiScrollList<DataForInfoRenderer>;
-    private _btnBuildings           : UiButton;
-    private _listPlayer             : UiScrollList<DataForPlayerRenderer>;
+    private _labelMenuTitle         : TwnsUiLabel.UiLabel;
+    private _labelWarInfoTitle      : TwnsUiLabel.UiLabel;
+    private _labelPlayerInfoTitle   : TwnsUiLabel.UiLabel;
+    private _btnMapNameTitle        : TwnsUiButton.UiButton;
+    private _labelMapName           : TwnsUiLabel.UiLabel;
+    private _listWarInfo            : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+    private _btnBuildings           : TwnsUiButton.UiButton;
+    private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
     private _war            : MpwWar;
     private _actionPlanner  : MpwActionPlanner;
@@ -565,9 +565,9 @@ type DataForCommandRenderer = {
     name    : string;
     callback: () => void;
 };
-class CommandRenderer extends UiListItemRenderer<DataForCommandRenderer> {
+class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
     private _group      : eui.Group;
-    private _labelName  : UiLabel;
+    private _labelName  : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._updateView();
@@ -587,12 +587,12 @@ type DataForPlayerRenderer = {
     war     : MpwWar;
     player  : BwPlayer;
 };
-class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
+class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
     private _group          : eui.Group;
-    private _labelName      : UiLabel;
-    private _labelForce     : UiLabel;
-    private _labelLost      : UiLabel;
-    private _listInfo       : UiScrollList<DataForInfoRenderer>;
+    private _labelName      : TwnsUiLabel.UiLabel;
+    private _labelForce     : TwnsUiLabel.UiLabel;
+    private _labelLost      : TwnsUiLabel.UiLabel;
+    private _listInfo       : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
     protected _onOpened(): void {
         this._listInfo.setItemRenderer(InfoRenderer);
@@ -877,9 +877,9 @@ type DataForInfoRenderer = {
     infoColor   : number;
 };
 
-class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
-    private _btnTitle   : UiButton;
-    private _labelValue : UiLabel;
+class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+    private _btnTitle   : TwnsUiButton.UiButton;
+    private _labelValue : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         const data                  = this.data;

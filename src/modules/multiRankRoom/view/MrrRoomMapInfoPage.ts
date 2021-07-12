@@ -1,8 +1,8 @@
 
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
 import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
-import { UiMapInfo }                    from "../../../utility/ui/UiMapInfo";
+import { TwnsUiMapInfo }                    from "../../../utility/ui/UiMapInfo";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
@@ -18,8 +18,8 @@ export type OpenDataForMrrRoomMapInfoPage = {
 };
 export class MrrRoomMapInfoPage extends UiTabPage<OpenDataForMrrRoomMapInfoPage> {
     private readonly _zoomMap       : UiZoomableMap;
-    private readonly _uiMapInfo     : UiMapInfo;
-    private readonly _labelLoading  : UiLabel;
+    private readonly _uiMapInfo     : TwnsUiMapInfo.UiMapInfo;
+    private readonly _labelLoading  : TwnsUiLabel.UiLabel;
 
     public constructor() {
         super();

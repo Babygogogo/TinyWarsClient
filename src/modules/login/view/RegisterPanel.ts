@@ -1,8 +1,8 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { FloatText }                    from "../../../utility/FloatText";
 import { Helpers }                      from "../../../utility/Helpers";
@@ -19,34 +19,34 @@ import { Types }                        from "../../../utility/Types";
 import { UserModel }                    from "../../user/model/UserModel";
 import { UserProxy }                    from "../../user/model/UserProxy";
 
-export class RegisterPanel extends UiPanel<void> {
+export class RegisterPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     // @ts-ignore
-    private _imgMask            : UiImage;
+    private _imgMask            : TwnsUiImage.UiImage;
     // @ts-ignore
     private _group              : eui.Group;
     // @ts-ignore
-    private _labelTitle         : UiLabel;
+    private _labelTitle         : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _labelAccount       : UiLabel;
+    private _labelAccount       : TwnsUiLabel.UiLabel;
     // @ts-ignore
     private _inputAccount       : UiTextInput;
     // @ts-ignore
-    private _labelPassword      : UiLabel;
+    private _labelPassword      : TwnsUiLabel.UiLabel;
     // @ts-ignore
     private _inputPassword      : UiTextInput;
     // @ts-ignore
-    private _labelNickname      : UiLabel;
+    private _labelNickname      : TwnsUiLabel.UiLabel;
     // @ts-ignore
     private _inputNickname      : UiTextInput;
     // @ts-ignore
-    private _btnRegister        : UiButton;
+    private _btnRegister        : TwnsUiButton.UiButton;
     // @ts-ignore
-    private _btnClose           : UiButton;
+    private _btnClose           : TwnsUiButton.UiButton;
     // @ts-ignore
-    private _labelTips          : UiLabel;
+    private _labelTips          : TwnsUiLabel.UiLabel;
 
     private static _instance: RegisterPanel;
 

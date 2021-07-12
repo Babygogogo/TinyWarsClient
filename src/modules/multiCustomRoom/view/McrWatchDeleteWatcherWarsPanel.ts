@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }               from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                          from "../../../utility/ui/UiPanel";
-import { UiButton }                         from "../../../utility/ui/UiButton";
-import { UiLabel }                          from "../../../utility/ui/UiLabel";
-import { UiScrollList }                     from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }               from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                          from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                          from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                          from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                     from "../../../utility/ui/UiScrollList";
 import { UiZoomableMap }                    from "../../../utility/ui/UiZoomableMap";
 import { McrWatchMainMenuPanel }            from "./McrWatchMainMenuPanel";
 import { McrWatchDeleteWatcherDetailPanel } from "./McrWatchDeleteWatcherDetailPanel";
@@ -22,26 +22,26 @@ import { MpwProxy }                         from "../../multiPlayerWar/model/Mpw
 import { UserModel }                        from "../../user/model/UserModel";
 import { WarMapModel }                      from "../../warMap/model/WarMapModel";
 
-export class McrWatchDeleteWatcherWarsPanel extends UiPanel<void> {
+export class McrWatchDeleteWatcherWarsPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: McrWatchDeleteWatcherWarsPanel;
 
-    private _labelMenuTitle     : UiLabel;
-    private _labelPlayersTitle  : UiLabel;
-    private _labelCommentTitle  : UiLabel;
-    private _listWar            : UiScrollList<DataForWarRenderer>;
-    private _labelNoWar         : UiLabel;
+    private _labelMenuTitle     : TwnsUiLabel.UiLabel;
+    private _labelPlayersTitle  : TwnsUiLabel.UiLabel;
+    private _labelCommentTitle  : TwnsUiLabel.UiLabel;
+    private _listWar            : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
+    private _labelNoWar         : TwnsUiLabel.UiLabel;
     private _zoomMap            : UiZoomableMap;
-    private _btnBack            : UiButton;
+    private _btnBack            : TwnsUiButton.UiButton;
 
     private _groupInfo      : eui.Group;
-    private _labelMapName   : UiLabel;
-    private _labelDesigner  : UiLabel;
-    private _labelHasFog    : UiLabel;
-    private _labelWarComment: UiLabel;
-    private _listPlayer     : UiScrollList<DataForPlayerRenderer>;
+    private _labelMapName   : TwnsUiLabel.UiLabel;
+    private _labelDesigner  : TwnsUiLabel.UiLabel;
+    private _labelHasFog    : TwnsUiLabel.UiLabel;
+    private _labelWarComment: TwnsUiLabel.UiLabel;
+    private _listPlayer     : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
     private _dataForListWar     : DataForWarRenderer[] = [];
     private _selectedWarIndex   : number;
@@ -214,10 +214,10 @@ type DataForWarRenderer = {
     panel   : McrWatchDeleteWatcherWarsPanel;
 };
 
-class WarRenderer extends UiListItemRenderer<DataForWarRenderer> {
-    private _btnChoose      : UiButton;
-    private _btnNext        : UiButton;
-    private _labelName      : UiLabel;
+class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
+    private _btnChoose      : TwnsUiButton.UiButton;
+    private _btnNext        : TwnsUiButton.UiButton;
+    private _labelName      : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -261,10 +261,10 @@ type DataForPlayerRenderer = {
     playerInfo      : ProtoTypes.Structure.IWarPlayerInfo;
     configVersion   : string;
 };
-class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
-    private _labelName : UiLabel;
-    private _labelIndex: UiLabel;
-    private _labelTeam : UiLabel;
+class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
+    private _labelName : TwnsUiLabel.UiLabel;
+    private _labelIndex: TwnsUiLabel.UiLabel;
+    private _labelTeam : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         const data              = this.data;

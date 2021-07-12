@@ -12,43 +12,43 @@ import { TimeModel }            from "../../time/model/TimeModel";
 import { UserModel }            from "../../user/model/UserModel";
 import { CommonModel }          from "../../common/model/CommonModel";
 import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiButton }             from "../../../utility/ui/UiButton";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { WarMapUnitView }       from "../../warMap/view/WarMapUnitView";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
 import UnitType                 = Types.UnitType;
 import TileType                 = Types.TileType;
 import IUnitTemplateCfg         = ProtoTypes.Config.IUnitTemplateCfg;
 
-export class CommonDamageChartPanel extends UiPanel<void> {
+export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: CommonDamageChartPanel;
 
     private _groupList          : eui.Group;
-    private _labelTitle         : UiLabel;
-    private _listUnit           : UiScrollList<DataForUnitRenderer>;
-    private _btnBack            : UiButton;
+    private _labelTitle         : TwnsUiLabel.UiLabel;
+    private _listUnit           : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+    private _btnBack            : TwnsUiButton.UiButton;
 
     private _groupInfo          : eui.Group;
     private _conUnitView        : eui.Group;
-    private _labelName          : UiLabel;
+    private _labelName          : TwnsUiLabel.UiLabel;
 
-    private _listInfo           : UiScrollList<DataForInfoRenderer>;
-    private _listDamageChart    : UiScrollList<DataForDamageRenderer>;
-    private _labelDamageChart   : UiLabel;
-    private _labelOffenseMain1  : UiLabel;
-    private _labelOffenseSub1   : UiLabel;
-    private _labelDefenseMain1  : UiLabel;
-    private _labelDefenseSub1   : UiLabel;
-    private _labelOffenseMain2  : UiLabel;
-    private _labelOffenseSub2   : UiLabel;
-    private _labelDefenseMain2  : UiLabel;
-    private _labelDefenseSub2   : UiLabel;
+    private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+    private _listDamageChart    : TwnsUiScrollList.UiScrollList<DataForDamageRenderer>;
+    private _labelDamageChart   : TwnsUiLabel.UiLabel;
+    private _labelOffenseMain1  : TwnsUiLabel.UiLabel;
+    private _labelOffenseSub1   : TwnsUiLabel.UiLabel;
+    private _labelDefenseMain1  : TwnsUiLabel.UiLabel;
+    private _labelDefenseSub1   : TwnsUiLabel.UiLabel;
+    private _labelOffenseMain2  : TwnsUiLabel.UiLabel;
+    private _labelOffenseSub2   : TwnsUiLabel.UiLabel;
+    private _labelDefenseMain2  : TwnsUiLabel.UiLabel;
+    private _labelDefenseSub2   : TwnsUiLabel.UiLabel;
 
     private _selectedIndex          : number;
     private _dataForListUnit        : DataForUnitRenderer[];
@@ -400,9 +400,9 @@ type DataForUnitRenderer = {
     index           : number;
     panel           : CommonDamageChartPanel;
 };
-class UnitRenderer extends UiListItemRenderer<DataForUnitRenderer> {
+class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
     private _imgChoose  : eui.Image;
-    private _labelName  : UiLabel;
+    private _labelName  : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -426,9 +426,9 @@ type DataForInfoRenderer = {
     valueText   : string;
 };
 
-class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
-    private _btnTitle   : UiButton;
-    private _labelValue : UiLabel;
+class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+    private _btnTitle   : TwnsUiButton.UiButton;
+    private _labelValue : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         const data              = this.data;
@@ -445,15 +445,15 @@ type DataForDamageRenderer = {
     targetTileType? : TileType;
 };
 
-class DamageRenderer extends UiListItemRenderer<DataForDamageRenderer> {
+class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {
     private _group                  : eui.Group;
     private _conView                : eui.Group;
     private _unitView               : WarMapUnitView;
-    private _tileView               : UiImage;
-    private _labelPrimaryAttack     : UiLabel;
-    private _labelSecondaryAttack   : UiLabel;
-    private _labelPrimaryDefend     : UiLabel;
-    private _labelSecondaryDefend   : UiLabel;
+    private _tileView               : TwnsUiImage.UiImage;
+    private _labelPrimaryAttack     : TwnsUiLabel.UiLabel;
+    private _labelSecondaryAttack   : TwnsUiLabel.UiLabel;
+    private _labelPrimaryDefend     : TwnsUiLabel.UiLabel;
+    private _labelSecondaryDefend   : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([

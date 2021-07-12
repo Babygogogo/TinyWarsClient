@@ -1,7 +1,7 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
 import { Lang }                 from "../../../utility/lang/Lang";
 import { NotifyData }           from "../../../utility/notify/NotifyData";
@@ -31,7 +31,7 @@ export namespace BwTileBriefPanel {
         war : BwWar;
     };
     // eslint-disable-next-line no-shadow
-    export class BwTileBriefPanel extends UiPanel<OpenData> {
+    export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -40,12 +40,12 @@ export namespace BwTileBriefPanel {
         private readonly _group             : eui.Group;
         private readonly _conTileView       : eui.Group;
         private readonly _tileView          = new BwTileView();
-        private readonly _labelName         : UiLabel;
-        private readonly _labelGridIndex    : UiLabel;
-        private readonly _labelState        : UiLabel;
-        private readonly _labelDefense      : UiLabel;
-        private readonly _imgDefense        : UiImage;
-        private readonly _imgState          : UiImage;
+        private readonly _labelName         : TwnsUiLabel.UiLabel;
+        private readonly _labelGridIndex    : TwnsUiLabel.UiLabel;
+        private readonly _labelState        : TwnsUiLabel.UiLabel;
+        private readonly _labelDefense      : TwnsUiLabel.UiLabel;
+        private readonly _imgDefense        : TwnsUiImage.UiImage;
+        private readonly _imgState          : TwnsUiImage.UiImage;
 
         public static show(openData: OpenData): void {
             if (!BwTileBriefPanel._instance) {

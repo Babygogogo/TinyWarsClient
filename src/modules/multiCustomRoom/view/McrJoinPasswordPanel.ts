@@ -1,8 +1,8 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { FloatText }                    from "../../../utility/FloatText";
 import { Helpers }                      from "../../../utility/Helpers";
@@ -20,21 +20,21 @@ import NotifyType       = TwnsNotifyType.NotifyType;
 type OpenData = {
     roomInfo: ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
 };
-export class McrJoinPasswordPanel extends UiPanel<OpenData> {
+export class McrJoinPasswordPanel extends TwnsUiPanel.UiPanel<OpenData> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: McrJoinPasswordPanel;
 
-    private readonly _imgMask               : UiImage;
+    private readonly _imgMask               : TwnsUiImage.UiImage;
     private readonly _group                 : eui.Group;
-    private readonly _labelTitle            : UiLabel;
-    private readonly _labelRoomTitle        : UiLabel;
-    private readonly _labelPasswordTitle    : UiLabel;
-    private readonly _labelWarName          : UiLabel;
+    private readonly _labelTitle            : TwnsUiLabel.UiLabel;
+    private readonly _labelRoomTitle        : TwnsUiLabel.UiLabel;
+    private readonly _labelPasswordTitle    : TwnsUiLabel.UiLabel;
+    private readonly _labelWarName          : TwnsUiLabel.UiLabel;
     private readonly _inputWarPassword      : UiTextInput;
-    private readonly _btnCancel             : UiButton;
-    private readonly _btnConfirm            : UiButton;
+    private readonly _btnCancel             : TwnsUiButton.UiButton;
+    private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
     public static show(openData: OpenData): void {
         if (!McrJoinPasswordPanel._instance) {

@@ -1,6 +1,6 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
 import { CommonDamageChartPanel }       from "../../common/view/CommonDamageChartPanel";
@@ -18,7 +18,7 @@ export namespace TwnsLobbyBottomPanel {
     import Tween            = egret.Tween;
 
     // eslint-disable-next-line no-shadow
-    export class LobbyBottomPanel extends UiPanel<void> {
+    export class LobbyBottomPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -27,7 +27,7 @@ export namespace TwnsLobbyBottomPanel {
         private _groupBottom    : eui.Group;
         private _groupMyInfo    : eui.Group;
         private _groupChat      : eui.Group;
-        private _imgChatRed     : UiImage;
+        private _imgChatRed     : TwnsUiImage.UiImage;
         private _groupMapEditor : eui.Group;
         private _groupGameData  : eui.Group;
 

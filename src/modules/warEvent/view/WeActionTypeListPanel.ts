@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -23,15 +23,15 @@ type OpenDataForWeActionTypeListPanel = {
     fullData    : IWarEventFullData;
     action      : IWarEventAction;
 };
-export class WeActionTypeListPanel extends UiPanel<OpenDataForWeActionTypeListPanel> {
+export class WeActionTypeListPanel extends TwnsUiPanel.UiPanel<OpenDataForWeActionTypeListPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: WeActionTypeListPanel;
 
-    private _labelTitle : UiLabel;
-    private _btnClose   : UiButton;
-    private _listType   : UiScrollList<DataForTypeRenderer>;
+    private _labelTitle : TwnsUiLabel.UiLabel;
+    private _btnClose   : TwnsUiButton.UiButton;
+    private _listType   : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
 
     public static show(openData: OpenDataForWeActionTypeListPanel): void {
         if (!WeActionTypeListPanel._instance) {
@@ -105,10 +105,10 @@ type DataForTypeRenderer = {
     newActionType   : ActionType;
     action          : IWarEventAction;
 };
-class TypeRenderer extends UiListItemRenderer<DataForTypeRenderer> {
-    private _labelType  : UiLabel;
-    private _labelUsing : UiLabel;
-    private _labelSwitch: UiLabel;
+class TypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTypeRenderer> {
+    private _labelType  : TwnsUiLabel.UiLabel;
+    private _labelUsing : TwnsUiLabel.UiLabel;
+    private _labelSwitch: TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

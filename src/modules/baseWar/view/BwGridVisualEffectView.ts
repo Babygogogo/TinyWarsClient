@@ -1,5 +1,5 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiImage }          from "../../../utility/ui/UiImage";
 import { BwGridVisualEffect }   from "../model/BwGridVisualEffect";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
@@ -109,7 +109,7 @@ export class BwGridVisualEffectView extends egret.DisplayObjectContainer {
 }
 
 function createEffectBlock(gridIndex: GridIndex): egret.DisplayObject {
-    const img           = new UiImage(`c04_t08_s05_f01`);
+    const img           = new TwnsUiImage.UiImage(`c04_t08_s05_f01`);
     img.anchorOffsetX   = 174;
     img.anchorOffsetY   = 54;
     img.scaleX          = 2;
@@ -128,7 +128,7 @@ function createEffectBlock(gridIndex: GridIndex): egret.DisplayObject {
 }
 
 function createEffectDive(gridIndex: GridIndex): egret.DisplayObject {
-    const img   = new UiImage(`c04_t08_s07_f01`);
+    const img   = new TwnsUiImage.UiImage(`c04_t08_s07_f01`);
     const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
     img.x       = DIVE_OFFSET_X + pos.x;
     img.y       = DIVE_OFFSET_Y + pos.y;
@@ -143,7 +143,7 @@ function createEffectDive(gridIndex: GridIndex): egret.DisplayObject {
 }
 
 function createEffectExplosion(gridIndex: GridIndex): egret.DisplayObject {
-    const img   = new UiImage(`c04_t08_s01_f01`);
+    const img   = new TwnsUiImage.UiImage(`c04_t08_s01_f01`);
     const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
     img.x       = EXPLOSION_OFFSET_X + pos.x;
     img.y       = EXPLOSION_OFFSET_Y + pos.y;
@@ -162,7 +162,7 @@ function createEffectFlare(gridIndex: GridIndex): egret.DisplayObject {
 }
 
 function createEffectDamage(gridIndex: GridIndex): egret.DisplayObject {
-    const img   = new UiImage(`c04_t08_s02_f01`);
+    const img   = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
     const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
     img.x       = DAMAGE_OFFSET_X + pos.x;
     img.y       = DAMAGE_OFFSET_Y + pos.y;
@@ -177,7 +177,7 @@ function createEffectDamage(gridIndex: GridIndex): egret.DisplayObject {
 }
 
 function createEffectSupply(gridIndex: GridIndex): egret.DisplayObject {
-    const img           = new UiImage("c04_t08_s03_f01");
+    const img           = new TwnsUiImage.UiImage("c04_t08_s03_f01");
     img.anchorOffsetX   = 180;
     img.anchorOffsetY   = 54;
     img.scaleX          = 2;
@@ -196,7 +196,7 @@ function createEffectSupply(gridIndex: GridIndex): egret.DisplayObject {
 }
 
 function createEffectRepair(gridIndex: GridIndex): egret.DisplayObject {
-    const img           = new UiImage("c04_t08_s04_f01");
+    const img           = new TwnsUiImage.UiImage("c04_t08_s04_f01");
     img.anchorOffsetX   = 180;
     img.anchorOffsetY   = 54;
     img.scaleX          = 2;
@@ -215,7 +215,7 @@ function createEffectRepair(gridIndex: GridIndex): egret.DisplayObject {
 }
 
 function createEffectSiloExplosion(gridIndex: GridIndex): egret.DisplayObject {
-    const img   = new UiImage(`c04_t08_s02_f01`);
+    const img   = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
     const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
     img.x       = DAMAGE_OFFSET_X + pos.x;
     img.y       = DAMAGE_OFFSET_Y + pos.y;
@@ -236,7 +236,7 @@ function createEffectSiloExplosion(gridIndex: GridIndex): egret.DisplayObject {
 }
 
 function createEffectSkillActivation(gridIndex: GridIndex): egret.DisplayObject {
-    const img   = new UiImage(`c04_t08_s06_f01`);
+    const img   = new TwnsUiImage.UiImage(`c04_t08_s06_f01`);
     const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
     img.x       = SKILL_ACTIVATION_OFFSET_X + pos.x;
     img.y       = SKILL_ACTIVATION_OFFSET_Y + pos.y;
@@ -251,7 +251,7 @@ function createEffectSkillActivation(gridIndex: GridIndex): egret.DisplayObject 
 }
 
 function createEffectSurface(gridIndex: GridIndex): egret.DisplayObject {
-    const img   = new UiImage(`c04_t08_s08_f01`);
+    const img   = new TwnsUiImage.UiImage(`c04_t08_s08_f01`);
     const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
     img.x       = DAMAGE_OFFSET_X + pos.x;
     img.y       = DAMAGE_OFFSET_Y + pos.y;

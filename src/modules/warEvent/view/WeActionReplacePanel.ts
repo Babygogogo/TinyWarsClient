@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
@@ -20,16 +20,16 @@ type OpenDataForWeActionReplacePanel = {
     eventId     : number;
     actionId    : number;
 };
-export class WeActionReplacePanel extends UiPanel<OpenDataForWeActionReplacePanel> {
+export class WeActionReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeActionReplacePanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: WeActionReplacePanel;
 
-    private _listAction     : UiScrollList<DataForActionRenderer>;
-    private _labelTitle     : UiLabel;
-    private _labelNoAction  : UiLabel;
-    private _btnClose       : UiButton;
+    private _listAction     : TwnsUiScrollList.UiScrollList<DataForActionRenderer>;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _labelNoAction  : TwnsUiLabel.UiLabel;
+    private _btnClose       : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForWeActionReplacePanel): void {
         if (!WeActionReplacePanel._instance) {
@@ -107,11 +107,11 @@ type DataForActionRenderer = {
     candidateActionId   : number;
     fullData            : IWarEventFullData;
 };
-class ActionRenderer extends UiListItemRenderer<DataForActionRenderer> {
-    private _labelActionId  : UiLabel;
-    private _labelAction    : UiLabel;
-    private _btnCopy        : UiButton;
-    private _btnSelect      : UiButton;
+class ActionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForActionRenderer> {
+    private _labelActionId  : TwnsUiLabel.UiLabel;
+    private _labelAction    : TwnsUiLabel.UiLabel;
+    private _btnCopy        : TwnsUiButton.UiButton;
+    private _btnSelect      : TwnsUiButton.UiButton;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

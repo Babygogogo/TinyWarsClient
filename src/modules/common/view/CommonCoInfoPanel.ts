@@ -1,7 +1,7 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiCoInfo }             from "../../../utility/ui/UiCoInfo";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiCoInfo }             from "../../../utility/ui/UiCoInfo";
 import { Helpers }              from "../../../utility/Helpers";
 import { Notify }               from "../../../utility/notify/Notify";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
@@ -12,15 +12,15 @@ type OpenDataForCommonCoInfoPanel = {
     configVersion   : string;
     coId            : number;
 };
-export class CommonCoInfoPanel extends UiPanel<OpenDataForCommonCoInfoPanel> {
+export class CommonCoInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonCoInfoPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: CommonCoInfoPanel;
 
-    private readonly _imgMask       : UiImage;
+    private readonly _imgMask       : TwnsUiImage.UiImage;
     private readonly _group         : eui.Group;
-    private readonly _uiCoInfo      : UiCoInfo;
+    private readonly _uiCoInfo      : TwnsUiCoInfo.UiCoInfo;
 
     public static show(openData: OpenDataForCommonCoInfoPanel): void {
         if (!CommonCoInfoPanel._instance) {

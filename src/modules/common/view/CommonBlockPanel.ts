@@ -1,20 +1,20 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                  from "../../../utility/ui/UiPanel";
+import { TwnsUiLabel }                  from "../../../utility/ui/UiLabel";
 import { Types }                        from "../../../utility/Types";
 
 type OpenDataForCommonBlockPanel = {
     title  : string;
     content: string;
 };
-export class CommonBlockPanel extends UiPanel<OpenDataForCommonBlockPanel> {
+export class CommonBlockPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBlockPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: CommonBlockPanel;
 
-    private _labelTitle     : UiLabel;
-    private _labelContent   : UiLabel;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _labelContent   : TwnsUiLabel.UiLabel;
 
     public static show(openData: OpenDataForCommonBlockPanel): void {
         if (!CommonBlockPanel._instance) {

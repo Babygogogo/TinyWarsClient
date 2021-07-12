@@ -1,10 +1,10 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
@@ -21,18 +21,18 @@ import { SpmModel }                     from "../../singlePlayerMode/model/SpmMo
 import { WarMapModel }                  from "../../warMap/model/WarMapModel";
 import { SpwModel }                     from "../model/SpwModel";
 
-export class SpwLoadWarPanel extends UiPanel<void> {
+export class SpwLoadWarPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: SpwLoadWarPanel;
 
     private _group          : eui.Group;
-    private _labelPanelTitle: UiLabel;
-    private _srlSaveSlot    : UiScrollList<DataForSlotRenderer>;
+    private _labelPanelTitle: TwnsUiLabel.UiLabel;
+    private _srlSaveSlot    : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
     private _listSaveSlot   : eui.List;
-    private _btnHelp        : UiButton;
-    private _btnCancel      : UiButton;
+    private _btnHelp        : TwnsUiButton.UiButton;
+    private _btnCancel      : TwnsUiButton.UiButton;
 
     private _dataForList: DataForSlotRenderer[];
 
@@ -126,13 +126,13 @@ type DataForSlotRenderer = {
     slotIndex   : number;
     slotInfo    : Types.SpmWarSaveSlotData | null;
 };
-class SlotRenderer extends UiListItemRenderer<DataForSlotRenderer> {
+class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
     private _group          : eui.Group;
-    private _imgBg          : UiImage;
-    private _labelSlotIndex : UiLabel;
-    private _labelType      : UiLabel;
-    private _labelMapName   : UiLabel;
-    private _labelChoose    : UiLabel;
+    private _imgBg          : TwnsUiImage.UiImage;
+    private _labelSlotIndex : TwnsUiLabel.UiLabel;
+    private _labelType      : TwnsUiLabel.UiLabel;
+    private _labelMapName   : TwnsUiLabel.UiLabel;
+    private _labelChoose    : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

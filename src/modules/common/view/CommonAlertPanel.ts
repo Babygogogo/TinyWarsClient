@@ -1,8 +1,8 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
 import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { Types }                from "../../../utility/Types";
@@ -19,18 +19,18 @@ export namespace TwnsCommonAlertPanel {
         callback?   : () => any;
     };
     // eslint-disable-next-line no-shadow
-    export class CommonAlertPanel extends UiPanel<OpenData> {
+    export class CommonAlertPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CommonAlertPanel;
 
-        private readonly _imgMask       : UiImage;
+        private readonly _imgMask       : TwnsUiImage.UiImage;
         private readonly _group         : eui.Group;
-        private readonly _labelTitle    : UiLabel;
+        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
         private readonly _scrContent    : eui.Scroller;
-        private readonly _labelContent  : UiLabel;
-        private readonly _btnConfirm    : UiButton;
+        private readonly _labelContent  : TwnsUiLabel.UiLabel;
+        private readonly _btnConfirm    : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!CommonAlertPanel._instance) {

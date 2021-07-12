@@ -1,8 +1,8 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Helpers }                      from "../../../utility/Helpers";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -17,32 +17,32 @@ import { MrrProxy }                     from "../model/MrrProxy";
 import MaxCount                         = CommonConstants.RankMaxConcurrentCount;
 import MinCount                         = CommonConstants.RankMinConcurrentCount;
 
-export class MrrSetMaxConcurrentCountPanel extends UiPanel<void> {
+export class MrrSetMaxConcurrentCountPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: MrrSetMaxConcurrentCountPanel;
 
-    private readonly _imgMask           : UiImage;
+    private readonly _imgMask           : TwnsUiImage.UiImage;
     private readonly _group             : eui.Group;
-    private readonly _labelTitle        : UiLabel;
-    private readonly _labelTips         : UiLabel;
-    private readonly _btnCancel         : UiButton;
-    private readonly _btnConfirm        : UiButton;
+    private readonly _labelTitle        : TwnsUiLabel.UiLabel;
+    private readonly _labelTips         : TwnsUiLabel.UiLabel;
+    private readonly _btnCancel         : TwnsUiButton.UiButton;
+    private readonly _btnConfirm        : TwnsUiButton.UiButton;
 
-    private readonly _labelStdTitle     : UiLabel;
+    private readonly _labelStdTitle     : TwnsUiLabel.UiLabel;
     private readonly _groupStd          : eui.Group;
-    private readonly _imgStdBar         : UiImage;
-    private readonly _imgStdPoint       : UiImage;
-    private readonly _labelStdCount     : UiLabel;
-    private readonly _labelStdMaxCount  : UiLabel;
+    private readonly _imgStdBar         : TwnsUiImage.UiImage;
+    private readonly _imgStdPoint       : TwnsUiImage.UiImage;
+    private readonly _labelStdCount     : TwnsUiLabel.UiLabel;
+    private readonly _labelStdMaxCount  : TwnsUiLabel.UiLabel;
 
-    private readonly _labelFogTitle     : UiLabel;
+    private readonly _labelFogTitle     : TwnsUiLabel.UiLabel;
     private readonly _groupFog          : eui.Group;
-    private readonly _imgFogBar         : UiImage;
-    private readonly _imgFogPoint       : UiImage;
-    private readonly _labelFogCount     : UiLabel;
-    private readonly _labelFogMaxCount  : UiLabel;
+    private readonly _imgFogBar         : TwnsUiImage.UiImage;
+    private readonly _imgFogPoint       : TwnsUiImage.UiImage;
+    private readonly _labelFogCount     : TwnsUiLabel.UiLabel;
+    private readonly _labelFogMaxCount  : TwnsUiLabel.UiLabel;
 
     private _selectedCountForStd        : number;
     private _selectedCountForFog        : number;

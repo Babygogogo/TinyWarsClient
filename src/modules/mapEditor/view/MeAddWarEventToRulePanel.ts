@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
@@ -18,16 +18,16 @@ import { MeModel }                      from "../model/MeModel";
 type OpenDataForMeAddWarEventId = {
     warRule     : ProtoTypes.WarRule.IWarRule;
 };
-export class MeAddWarEventToRulePanel extends UiPanel<OpenDataForMeAddWarEventId>{
+export class MeAddWarEventToRulePanel extends TwnsUiPanel.UiPanel<OpenDataForMeAddWarEventId>{
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: MeAddWarEventToRulePanel;
 
-    private _listWarEvent   : UiScrollList<DataForWarEventRenderer>;
-    private _labelTitle     : UiLabel;
-    private _labelNoWarEvent: UiLabel;
-    private _btnClose       : UiButton;
+    private _listWarEvent   : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
+    private _labelTitle     : TwnsUiLabel.UiLabel;
+    private _labelNoWarEvent: TwnsUiLabel.UiLabel;
+    private _btnClose       : TwnsUiButton.UiButton;
 
     public static show(openData: OpenDataForMeAddWarEventId): void {
         if (!MeAddWarEventToRulePanel._instance) {
@@ -95,11 +95,11 @@ type DataForWarEventRenderer = {
     warEventId  : number;
     warRule     : ProtoTypes.WarRule.IWarRule;
 };
-class WarEventRenderer extends UiListItemRenderer<DataForWarEventRenderer> {
-    private _labelId    : UiLabel;
-    private _btnDelete  : UiButton;
-    private _labelName  : UiLabel;
-    private _btnAdd     : UiButton;
+class WarEventRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventRenderer> {
+    private _labelId    : TwnsUiLabel.UiLabel;
+    private _btnDelete  : TwnsUiButton.UiButton;
+    private _labelName  : TwnsUiLabel.UiLabel;
+    private _btnAdd     : TwnsUiButton.UiButton;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

@@ -1,10 +1,10 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { Helpers }              from "../../../utility/Helpers";
 import { Lang }                 from "../../../utility/lang/Lang";
@@ -17,7 +17,7 @@ import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                from "../../../utility/Types";
 import GameVersion              = Types.GameVersion;
 
-export class CommonChangeVersionPanel extends UiPanel<void> {
+export class CommonChangeVersionPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
     protected readonly _IS_EXCLUSIVE = false;
 
@@ -26,17 +26,17 @@ export class CommonChangeVersionPanel extends UiPanel<void> {
     // @ts-ignore
     private readonly _group         : eui.Group;
     // @ts-ignore
-    private readonly _imgMask       : UiImage;
+    private readonly _imgMask       : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _labelTitle    : UiLabel;
+    private readonly _labelTitle    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _btnBack       : UiButton;
+    private readonly _btnBack       : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnConfirm    : UiButton;
+    private readonly _btnConfirm    : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _listVersion   : UiScrollList<DataForMapNameRenderer>;
+    private readonly _listVersion   : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
     // @ts-ignore
-    private readonly _labelTips     : UiLabel;
+    private readonly _labelTips     : TwnsUiLabel.UiLabel;
 
     public static show(): void {
         if (!CommonChangeVersionPanel._instance) {
@@ -179,13 +179,13 @@ export class CommonChangeVersionPanel extends UiPanel<void> {
 type DataForMapNameRenderer = {
     gameVersion : GameVersion;
 };
-class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
+class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
     // @ts-ignore
-    private _labelName      : UiLabel;
+    private _labelName      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _labelDesc      : UiLabel;
+    private _labelDesc      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _labelCurrent   : UiLabel;
+    private _labelCurrent   : TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([

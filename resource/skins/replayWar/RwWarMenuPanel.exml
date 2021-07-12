@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" top="40" bottom="0" width="160" x="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelMenuTitle" text="菜单" y="10" bold="true" size="20" textColor="0xffffff"
+        <TwnsUiLabel:UiLabel id="_labelMenuTitle" text="菜单" y="10" bold="true" size="20" textColor="0xffffff"
                         horizontalCenter="0" />
-        <GameUi:UiLabel id="_labelNoCommand" text="(暂无可用选项)" bold="true" size="20" textColor="0xFFFFFF"
+        <TwnsUiLabel:UiLabel id="_labelNoCommand" text="(暂无可用选项)" bold="true" size="20" textColor="0xFFFFFF"
                         horizontalCenter="0" verticalCenter="0" />
-        <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="35" top="35">
+        <TwnsUiScrollList:UiScrollList id="_listCommand" left="0" right="0" bottom="35" top="35">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="160" height="50" currentState="up" states="down,up">
                         <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                            <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                            <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
                                             anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
                                             visible.up="false" />
-                            <GameUi:UiLabel id="_labelName" text="选项名六个字" size="22" textColor="0xffffff"
+                            <TwnsUiLabel:UiLabel id="_labelName" text="选项名六个字" size="22" textColor="0xffffff"
                                             horizontalCenter="0" verticalCenter="0" maxTextWidth="150" />
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>
             </e:List>
-        </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" bottom="0" left="0"
-                         right="0"></GameUi:UiButton>
+        </TwnsUiScrollList:UiScrollList>
+        <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" bottom="0" left="0"
+                         right="0"></TwnsUiButton:UiButton>
     </e:Group>
     <e:Group id="_groupInfo" top="40" bottom="0" right="0" left="160">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" locked="true" />
         <e:Scroller left="0" right="0" top="10" bottom="10">
             <e:Group y="10" left="0" right="0">
                 <e:Group y="0" x="0">
-                    <GameUi:UiLabel id="_labelWarInfoTitle" text="战场信息" y="0" bold="true" size="20" textColor="0xFFFFFF"
+                    <TwnsUiLabel:UiLabel id="_labelWarInfoTitle" text="战场信息" y="0" bold="true" size="20" textColor="0xFFFFFF"
                                     horizontalCenter="0" locked="true" />
                     <e:Group y="25" width="800" x="0">
                         <e:Group x="0" y="0" width="800">
                             <e:Group x="0" y="0" locked="true">
-                                <GameUi:UiButton id="_btnMapName" label="地图" y="0" x="0"
+                                <TwnsUiButton:UiButton id="_btnMapName" label="地图" y="0" x="0"
                                                  skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" />
-                                <GameUi:UiLabel id="_labelMapName" text="地图名称" y="0" size="16" textColor="0xFFFFFF"
+                                <TwnsUiLabel:UiLabel id="_labelMapName" text="地图名称" y="0" size="16" textColor="0xFFFFFF"
                                                 x="130" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="middle" />
                                 </e:layout>
                             </e:Group>
                             <e:Group x="0" y="34" locked="true">
-                                <GameUi:UiButton id="_btnMapDesigner" label="地图作者" y="-34" x="126"
+                                <TwnsUiButton:UiButton id="_btnMapDesigner" label="地图作者" y="-34" x="126"
                                                  skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
                                                  />
-                                <GameUi:UiLabel id="_labelMapDesigner" text="地图名称" y="0" size="16" textColor="0xFFFFFF"
+                                <TwnsUiLabel:UiLabel id="_labelMapDesigner" text="地图名称" y="0" size="16" textColor="0xFFFFFF"
                                                 x="130" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="middle" />
@@ -61,29 +61,29 @@
                         </e:Group>
                         <e:Group x="0" y="34" width="800">
                             <e:Group x="0" y="0">
-                                <GameUi:UiButton id="_btnWarId" label="战局ID" y="-34" x="126"
+                                <TwnsUiButton:UiButton id="_btnWarId" label="战局ID" y="-34" x="126"
                                                  skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
                                                  />
-                                <GameUi:UiLabel id="_labelWarId" text="111" y="0" size="16" textColor="0xFFFFFF" x="130" />
+                                <TwnsUiLabel:UiLabel id="_labelWarId" text="111" y="0" size="16" textColor="0xFFFFFF" x="130" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="middle" />
                                 </e:layout>
                             </e:Group>
                             <e:Group x="0" y="34">
-                                <GameUi:UiButton id="_btnTurnIndex" label="回合数" y="-34" x="126"
+                                <TwnsUiButton:UiButton id="_btnTurnIndex" label="回合数" y="-34" x="126"
                                                  skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
                                                  />
-                                <GameUi:UiLabel id="_labelTurnIndex" text="111" y="0" size="16" textColor="0xFFFFFF"
+                                <TwnsUiLabel:UiLabel id="_labelTurnIndex" text="111" y="0" size="16" textColor="0xFFFFFF"
                                                 x="130" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="middle" />
                                 </e:layout>
                             </e:Group>
                             <e:Group x="0" y="68">
-                                <GameUi:UiButton id="_btnActionId" label="行动数" y="-24" x="136"
+                                <TwnsUiButton:UiButton id="_btnActionId" label="行动数" y="-24" x="136"
                                                  skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
                                                  />
-                                <GameUi:UiLabel id="_labelActionId" text="111" y="0" size="16" textColor="0xFFFFFF"
+                                <TwnsUiLabel:UiLabel id="_labelActionId" text="111" y="0" size="16" textColor="0xFFFFFF"
                                                 x="130" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="middle" />
@@ -99,29 +99,29 @@
                     </e:Group>
                 </e:Group>
                 <e:Group y="80" x="0">
-                    <GameUi:UiLabel id="_labelPlayerInfoTitle" text="玩家信息" y="0" bold="true" size="20"
+                    <TwnsUiLabel:UiLabel id="_labelPlayerInfoTitle" text="玩家信息" y="0" bold="true" size="20"
                                     textColor="0xFFFFFF" horizontalCenter="0" maxTextWidth="120" locked="true" />
-                    <GameUi:UiScrollList id="_listPlayer" y="30" horizontalCenter="0">
+                    <TwnsUiScrollList:UiScrollList id="_listPlayer" y="30" horizontalCenter="0">
                         <e:List>
                             <e:itemRendererSkinName>
                                 <e:Skin width="190" currentState="up" states="down,up">
                                     <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                                        <GameUi:UiLabel id="_labelName" text="玩家名居然会有十个字" size="16" textColor="0xffffff"
+                                        <TwnsUiLabel:UiLabel id="_labelName" text="玩家名居然会有十个字" size="16" textColor="0xffffff"
                                                         horizontalCenter="0" y="5" maxTextWidth="190" />
-                                        <GameUi:UiLabel id="_labelForce" text="红方 A队" size="16" textColor="0xFFFFFF"
+                                        <TwnsUiLabel:UiLabel id="_labelForce" text="红方 A队" size="16" textColor="0xFFFFFF"
                                                         y="25" horizontalCenter="0" />
-                                        <GameUi:UiLabel id="_labelLost" text="已战败" size="18" textColor="0xFFFFFF"
+                                        <TwnsUiLabel:UiLabel id="_labelLost" text="已战败" size="18" textColor="0xFFFFFF"
                                                         y="120" horizontalCenter="0" />
-                                        <GameUi:UiScrollList id="_listInfo" y="42" horizontalCenter="0">
+                                        <TwnsUiScrollList:UiScrollList id="_listInfo" y="42" horizontalCenter="0">
                                             <e:List>
                                                 <e:itemRendererSkinName>
                                                     <e:Skin width="190">
                                                         <e:Group left="0" right="0" top="0"
                                                                  bottom="0">
-                                                            <GameUi:UiButton id="_btnTitle" label="Buildings"
+                                                            <TwnsUiButton:UiButton id="_btnTitle" label="Buildings"
                                                                              skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                                                              x="0" width="100" />
-                                                            <GameUi:UiLabel id="_labelValue" text="(Empty)" size="14"
+                                                            <TwnsUiLabel:UiLabel id="_labelValue" text="(Empty)" size="14"
                                                                             textColor="0xFFFFFF" x="100"
                                                                             verticalCenter="0" width="90" />
                                                             <e:layout>
@@ -134,7 +134,7 @@
                                                     <e:VerticalLayout gap="0" />
                                                 </e:layout>
                                             </e:List>
-                                        </GameUi:UiScrollList>
+                                        </TwnsUiScrollList:UiScrollList>
                                     </e:Group>
                                 </e:Skin>
                             </e:itemRendererSkinName>
@@ -142,7 +142,7 @@
                                 <e:HorizontalLayout/>
                             </e:layout>
                         </e:List>
-                    </GameUi:UiScrollList>
+                    </TwnsUiScrollList:UiScrollList>
                 </e:Group>
                 <e:layout>
                     <e:VerticalLayout horizontalAlign="center" />

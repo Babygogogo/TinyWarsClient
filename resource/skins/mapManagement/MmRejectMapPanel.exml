@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" />
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" />
     <e:Group width="430" height="300" horizontalCenter="0" verticalCenter="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelTitle" text="拒审" textColor="0xffffff" y="12" horizontalCenter="0" size="24" />
-        <GameUi:UiLabel id="_labelTips" text="请输入拒审理由" textColor="0xFFFFFF" size="18" left="10" right="10" top="50"
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="拒审" textColor="0xffffff" y="12" horizontalCenter="0" size="24" />
+        <TwnsUiLabel:UiLabel id="_labelTips" text="请输入拒审理由" textColor="0xFFFFFF" size="18" left="10" right="10" top="50"
                         wordWrap="true" />
         <GameUi:UiTextInput id="_inputReason" anchorOffsetX="0" anchorOffsetY="0" maxChars="200" left="10" right="10"
                             height="160" top="90">
@@ -20,7 +20,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiTextInput>
-        <GameUi:UiButton id="_btnCancel" label="取消" horizontalCenter="-80" bottom="15">
+        <TwnsUiButton:UiButton id="_btnCancel" label="取消" horizontalCenter="-80" bottom="15">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -28,8 +28,8 @@
                              textColor="0xff0000" />
                 </e:Skin>
             </GameUi:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiButton id="_btnConfirm" label="确定" horizontalCenter="80" bottom="15">
+        </TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnConfirm" label="确定" horizontalCenter="80" bottom="15">
             <e:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -37,6 +37,6 @@
                              textColor="0x00ff00" />
                 </e:Skin>
             </e:skinName>
-        </GameUi:UiButton>
+        </TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>

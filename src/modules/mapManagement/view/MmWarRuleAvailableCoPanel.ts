@@ -1,35 +1,34 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiComponent }          from "../../../utility/ui/UiComponent";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }         from "../../../utility/ui/UiButton";
+import { TwnsUiComponent }          from "../../../utility/ui/UiComponent";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { ConfigManager }        from "../../../utility/ConfigManager";
 import { Helpers }              from "../../../utility/Helpers";
 import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
+import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
 import { Types }                from "../../../utility/Types";
+import LangTextType             = TwnsLangTextType.LangTextType;
+import NotifyType               = TwnsNotifyType.NotifyType;
 import WarRule                  = ProtoTypes.WarRule;
 
 type OpenDataForMmWarRuleAvailableCoPanel = {
     playerRule      : WarRule.IDataForPlayerRule;
     warRule         : WarRule.IWarRule;
 };
-export class MmWarRuleAvailableCoPanel extends UiPanel<OpenDataForMmWarRuleAvailableCoPanel> {
+export class MmWarRuleAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMmWarRuleAvailableCoPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: MmWarRuleAvailableCoPanel;
 
-    private _labelAvailableCoTitle  : UiLabel;
+    private _labelAvailableCoTitle  : TwnsUiLabel.UiLabel;
     private _groupCoTiers           : eui.Group;
     private _groupCoNames           : eui.Group;
-    private _btnCancel              : UiButton;
+    private _btnCancel              : TwnsUiButton.UiButton;
 
     private _renderersForCoTiers    : RendererForCoTier[] = [];
     private _renderersForCoNames    : RendererForCoName[] = [];
@@ -173,9 +172,9 @@ enum CoTierState {
     Unavailable,
 }
 
-class RendererForCoTier extends UiComponent {
-    private _imgSelected: UiImage;
-    private _labelName  : UiLabel;
+class RendererForCoTier extends TwnsUiComponent.UiComponent {
+    private _imgSelected: TwnsUiImage.UiImage;
+    private _labelName  : TwnsUiLabel.UiLabel;
 
     private _tier           : number;
     private _isCustomSwitch = false;
@@ -219,9 +218,9 @@ class RendererForCoTier extends UiComponent {
     }
 }
 
-class RendererForCoName extends UiComponent {
-    private _imgSelected: UiImage;
-    private _labelName  : UiLabel;
+class RendererForCoName extends TwnsUiComponent.UiComponent {
+    private _imgSelected: TwnsUiImage.UiImage;
+    private _labelName  : TwnsUiLabel.UiLabel;
 
     private _coId           : number;
     private _isSelected     : boolean;

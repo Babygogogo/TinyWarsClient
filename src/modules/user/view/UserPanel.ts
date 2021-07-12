@@ -1,10 +1,10 @@
 
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
 import { ChatPanel }            from "../../chat/view/ChatPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { ConfigManager }        from "../../../utility/ConfigManager";
@@ -23,101 +23,101 @@ import WarType                  = Types.WarType;
 type OpenDataForUserPanel = {
     userId  : number;
 };
-export class UserPanel extends UiPanel<OpenDataForUserPanel> {
+export class UserPanel extends TwnsUiPanel.UiPanel<OpenDataForUserPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: UserPanel;
 
     // @ts-ignore
-    private readonly _imgMask           : UiImage;
+    private readonly _imgMask           : TwnsUiImage.UiImage;
     // @ts-ignore
     private readonly _group             : eui.Group;
     // @ts-ignore
-    private readonly _labelTitle        : UiLabel;
+    private readonly _labelTitle        : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _btnClose          : UiButton;
+    private readonly _btnClose          : TwnsUiButton.UiButton;
 
     // @ts-ignore
-    private readonly _groupButtons      : UiButton;
+    private readonly _groupButtons      : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnChat           : UiButton;
+    private readonly _btnChat           : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _imgLogo           : UiImage;
+    private readonly _imgLogo           : TwnsUiImage.UiImage;
 
     // @ts-ignore
-    private readonly _labelStdRankScoreTitle    : UiLabel;
+    private readonly _labelStdRankScoreTitle    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelStdRankScore         : UiLabel;
+    private readonly _labelStdRankScore         : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelStdRankRankTitle     : UiLabel;
+    private readonly _labelStdRankRankTitle     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelStdRankRank          : UiLabel;
+    private readonly _labelStdRankRank          : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelStdRankRankSuffix    : UiLabel;
+    private readonly _labelStdRankRankSuffix    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelFogRankScoreTitle    : UiLabel;
+    private readonly _labelFogRankScoreTitle    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelFogRankScore         : UiLabel;
+    private readonly _labelFogRankScore         : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelFogRankRankTitle     : UiLabel;
+    private readonly _labelFogRankRankTitle     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelFogRankRank          : UiLabel;
+    private readonly _labelFogRankRank          : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelFogRankRankSuffix    : UiLabel;
+    private readonly _labelFogRankRankSuffix    : TwnsUiLabel.UiLabel;
 
     // @ts-ignore
-    private readonly _labelRegisterTimeTitle    : UiLabel;
+    private readonly _labelRegisterTimeTitle    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelRegisterTime1        : UiLabel;
+    private readonly _labelRegisterTime1        : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelRegisterTime2        : UiLabel;
+    private readonly _labelRegisterTime2        : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelLastLoginTimeTitle   : UiLabel;
+    private readonly _labelLastLoginTimeTitle   : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelLastLoginTime1       : UiLabel;
+    private readonly _labelLastLoginTime1       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelLastLoginTime2       : UiLabel;
+    private readonly _labelLastLoginTime2       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelOnlineTimeTitle      : UiLabel;
+    private readonly _labelOnlineTimeTitle      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelOnlineTime           : UiLabel;
+    private readonly _labelOnlineTime           : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelLoginCountTitle      : UiLabel;
+    private readonly _labelLoginCountTitle      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelLoginCount           : UiLabel;
+    private readonly _labelLoginCount           : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelUserId               : UiLabel;
+    private readonly _labelUserId               : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelUserIdTitle          : UiLabel;
+    private readonly _labelUserIdTitle          : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelDiscordId            : UiLabel;
+    private readonly _labelDiscordId            : TwnsUiLabel.UiLabel;
 
     // @ts-ignore
-    private readonly _labelHistoryStd           : UiLabel;
+    private readonly _labelHistoryStd           : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelHistoryStdWin        : UiLabel;
+    private readonly _labelHistoryStdWin        : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelHistoryStdLose       : UiLabel;
+    private readonly _labelHistoryStdLose       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelHistoryStdDraw       : UiLabel;
+    private readonly _labelHistoryStdDraw       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelHistoryStdRatio      : UiLabel;
+    private readonly _labelHistoryStdRatio      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelHistoryFog           : UiLabel;
+    private readonly _labelHistoryFog           : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelHistoryFogWin        : UiLabel;
+    private readonly _labelHistoryFogWin        : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelHistoryFogLose       : UiLabel;
+    private readonly _labelHistoryFogLose       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelHistoryFogDraw       : UiLabel;
+    private readonly _labelHistoryFogDraw       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelHistoryFogRatio      : UiLabel;
+    private readonly _labelHistoryFogRatio      : TwnsUiLabel.UiLabel;
 
     // @ts-ignore
-    private readonly _sclHistoryStd             : UiScrollList<DataForHistoryRenderer>;
+    private readonly _sclHistoryStd             : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
     // @ts-ignore
-    private readonly _sclHistoryFog             : UiScrollList<DataForHistoryRenderer>;
+    private readonly _sclHistoryFog             : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
 
     public static show(openData: OpenDataForUserPanel): void {
         if (!UserPanel._instance) {
@@ -376,21 +376,21 @@ type DataForHistoryRenderer = {
     showBottom? : boolean;
 };
 
-class HistoryRenderer extends UiListItemRenderer<DataForHistoryRenderer> {
+class HistoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForHistoryRenderer> {
     // @ts-ignore
-    private readonly _imgBg         : UiImage;
+    private readonly _imgBg         : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _labelType     : UiLabel;
+    private readonly _labelType     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelWin      : UiLabel;
+    private readonly _labelWin      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelLose     : UiLabel;
+    private readonly _labelLose     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelDraw     : UiLabel;
+    private readonly _labelDraw     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _labelRatio    : UiLabel;
+    private readonly _labelRatio    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _imgBottom     : UiImage;
+    private readonly _imgBottom     : TwnsUiImage.UiImage;
 
     protected async _onDataChanged(): Promise<void> {
         const data              = this.data;

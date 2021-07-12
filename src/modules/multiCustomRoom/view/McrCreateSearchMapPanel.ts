@@ -1,8 +1,8 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { McrCreateMapListPanel }        from "./McrCreateMapListPanel";
 import { Helpers }                      from "../../../utility/Helpers";
@@ -15,34 +15,34 @@ import NotifyType       = TwnsNotifyType.NotifyType;
 import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
 
-export class McrCreateSearchMapPanel extends UiPanel<void> {
+export class McrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<void> {
     protected _IS_EXCLUSIVE = false;
     protected _LAYER_TYPE   = Types.LayerType.Hud2;
 
     private static _instance: McrCreateSearchMapPanel;
 
-    private readonly _imgMask                   : UiImage;
+    private readonly _imgMask                   : TwnsUiImage.UiImage;
 
     private readonly _group                     : eui.Group;
-    private readonly _btnClose                  : UiButton;
-    private readonly _btnReset                  : UiButton;
-    private readonly _btnSearch                 : UiButton;
-    private readonly _labelName                 : UiLabel;
-    private readonly _labelMapNameTitle         : UiLabel;
-    private readonly _labelDesignerTitle        : UiLabel;
-    private readonly _labelPlayersCountTitle    : UiLabel;
-    private readonly _labelPlayedTimesTitle     : UiLabel;
-    private readonly _labelMinRatingTitle       : UiLabel;
-    private readonly _labelDesc                 : UiLabel;
+    private readonly _btnClose                  : TwnsUiButton.UiButton;
+    private readonly _btnReset                  : TwnsUiButton.UiButton;
+    private readonly _btnSearch                 : TwnsUiButton.UiButton;
+    private readonly _labelName                 : TwnsUiLabel.UiLabel;
+    private readonly _labelMapNameTitle         : TwnsUiLabel.UiLabel;
+    private readonly _labelDesignerTitle        : TwnsUiLabel.UiLabel;
+    private readonly _labelPlayersCountTitle    : TwnsUiLabel.UiLabel;
+    private readonly _labelPlayedTimesTitle     : TwnsUiLabel.UiLabel;
+    private readonly _labelMinRatingTitle       : TwnsUiLabel.UiLabel;
+    private readonly _labelDesc                 : TwnsUiLabel.UiLabel;
     private readonly _inputMapName              : UiTextInput;
     private readonly _inputDesigner             : UiTextInput;
     private readonly _inputPlayersCount         : UiTextInput;
     private readonly _inputPlayedTimes          : UiTextInput;
     private readonly _inputMinRating            : UiTextInput;
 
-    private readonly _labelTagFogTitle          : UiLabel;
-    private readonly _labelTagFog               : UiLabel;
-    private readonly _btnTagFog                 : UiButton;
+    private readonly _labelTagFogTitle          : TwnsUiLabel.UiLabel;
+    private readonly _labelTagFog               : TwnsUiLabel.UiLabel;
+    private readonly _btnTagFog                 : TwnsUiButton.UiButton;
 
     private _mapTag         : ProtoTypes.Map.IDataForMapTag = {};
 

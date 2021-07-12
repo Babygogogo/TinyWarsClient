@@ -1,8 +1,8 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -16,21 +16,21 @@ import { MeModel }                      from "../model/MeModel";
 import { MeProxy }                      from "../model/MeProxy";
 import * as MeUtility                   from "../model/MeUtility";
 
-export class MeConfirmSaveMapPanel extends UiPanel<void> {
+export class MeConfirmSaveMapPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
     protected readonly _IS_EXCLUSIVE = true;
 
     private static _instance: MeConfirmSaveMapPanel;
 
-    private _labelTitle             : UiLabel;
-    private _labelContent           : UiLabel;
-    private _labelReviewDescTitle   : UiLabel;
-    private _labelReviewDesc        : UiLabel;
+    private _labelTitle             : TwnsUiLabel.UiLabel;
+    private _labelContent           : TwnsUiLabel.UiLabel;
+    private _labelReviewDescTitle   : TwnsUiLabel.UiLabel;
+    private _labelReviewDesc        : TwnsUiLabel.UiLabel;
     private _groupNeedReview        : eui.Group;
-    private _imgNeedReview          : UiImage;
-    private _labelNeedReview        : UiLabel;
-    private _btnCancel              : UiButton;
-    private _btnConfirm             : UiButton;
+    private _imgNeedReview          : TwnsUiImage.UiImage;
+    private _labelNeedReview        : TwnsUiLabel.UiLabel;
+    private _btnCancel              : TwnsUiButton.UiButton;
+    private _btnConfirm             : TwnsUiButton.UiButton;
 
     private _slotIndex  : number;
     private _mapRawData : ProtoTypes.Map.IMapRawData;

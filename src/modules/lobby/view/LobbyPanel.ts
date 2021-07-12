@@ -1,7 +1,7 @@
 
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { McrMainMenuPanel }             from "../../multiCustomRoom/view/McrMainMenuPanel";
 import { MrrMainMenuPanel }             from "../../multiRankRoom/view/MrrMainMenuPanel";
@@ -24,7 +24,7 @@ export namespace TwnsLobbyPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     // eslint-disable-next-line no-shadow
-    export class LobbyPanel extends UiPanel<void> {
+    export class LobbyPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -35,36 +35,36 @@ export namespace TwnsLobbyPanel {
         // @ts-ignore
         private _groupWelcome   : eui.Group;
         // @ts-ignore
-        private _labelTips0     : UiLabel;
+        private _labelTips0     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelTips1     : UiLabel;
+        private _labelTips1     : TwnsUiLabel.UiLabel;
         // @ts-ignore
         private _groupQq        : eui.Group;
         // @ts-ignore
-        private _labelTips2     : UiLabel;
+        private _labelTips2     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelTips3     : UiLabel;
+        private _labelTips3     : TwnsUiLabel.UiLabel;
         // @ts-ignore
         private _groupDiscord   : eui.Group;
         // @ts-ignore
-        private _labelTips4     : UiLabel;
+        private _labelTips4     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelTips5     : UiLabel;
+        private _labelTips5     : TwnsUiLabel.UiLabel;
         // @ts-ignore
         private _groupGithub    : eui.Group;
         // @ts-ignore
-        private _labelTips6     : UiLabel;
+        private _labelTips6     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelTips7     : UiLabel;
+        private _labelTips7     : TwnsUiLabel.UiLabel;
 
         // @ts-ignore
         private _group          : eui.Group;
         // @ts-ignore
-        private _btnSinglePlayer: UiButton;
+        private _btnSinglePlayer: TwnsUiButton.UiButton;
         // @ts-ignore
-        private _btnMultiPlayer : UiButton;
+        private _btnMultiPlayer : TwnsUiButton.UiButton;
         // @ts-ignore
-        private _btnRanking     : UiButton;
+        private _btnRanking     : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!LobbyPanel._instance) {

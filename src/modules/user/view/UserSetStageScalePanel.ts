@@ -1,8 +1,8 @@
 
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiPanel }              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiImage }              from "../../../utility/ui/UiImage";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { CommonConstants }      from "../../../utility/CommonConstants";
@@ -16,36 +16,36 @@ import { Types }                from "../../../utility/Types";
 import StageMinScale            = CommonConstants.StageMinScale;
 import StageMaxScale            = CommonConstants.StageMaxScale;
 
-export class UserSetStageScalePanel extends UiPanel<void> {
+export class UserSetStageScalePanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
     protected readonly _IS_EXCLUSIVE = false;
 
     private static _instance: UserSetStageScalePanel;
 
     // @ts-ignore
-    private readonly _imgMask           : UiImage;
+    private readonly _imgMask           : TwnsUiImage.UiImage;
     // @ts-ignore
     private readonly _group             : eui.Group;
     // @ts-ignore
-    private readonly _labelTitle        : UiLabel;
+    private readonly _labelTitle        : TwnsUiLabel.UiLabel;
 
     // @ts-ignore
-    private readonly _labelScaleTitle   : UiLabel;
+    private readonly _labelScaleTitle   : TwnsUiLabel.UiLabel;
     // @ts-ignore
     private readonly _groupScale        : eui.Group;
     // @ts-ignore
-    private readonly _imgScaleBar       : UiImage;
+    private readonly _imgScaleBar       : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _imgScalePoint     : UiImage;
+    private readonly _imgScalePoint     : TwnsUiImage.UiImage;
     // @ts-ignore
-    private readonly _labelScale        : UiLabel;
+    private readonly _labelScale        : TwnsUiLabel.UiLabel;
 
     // @ts-ignore
-    private readonly _btnCancel         : UiButton;
+    private readonly _btnCancel         : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnDefault        : UiButton;
+    private readonly _btnDefault        : TwnsUiButton.UiButton;
     // @ts-ignore
-    private readonly _btnConfirm        : UiButton;
+    private readonly _btnConfirm        : TwnsUiButton.UiButton;
 
     private _prevScale                  : number | undefined;
     private _selectedScale              : number | undefined;

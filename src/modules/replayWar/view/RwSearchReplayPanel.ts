@@ -1,8 +1,8 @@
 
-import { UiImage }                      from "../../../utility/ui/UiImage";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Helpers }                      from "../../../utility/Helpers";
@@ -15,36 +15,36 @@ import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                        from "../../../utility/Types";
 import { RwProxy }                      from "../model/RwProxy";
 
-export class RwSearchReplayPanel extends UiPanel<void> {
+export class RwSearchReplayPanel extends TwnsUiPanel.UiPanel<void> {
     protected _IS_EXCLUSIVE = false;
     protected _LAYER_TYPE   = Types.LayerType.Hud2;
 
     private static _instance: RwSearchReplayPanel;
 
-    private readonly _imgMask                   : UiImage;
+    private readonly _imgMask                   : TwnsUiImage.UiImage;
 
     private readonly _group                     : eui.Group;
-    private readonly _btnReset                  : UiButton;
-    private readonly _btnSearch                 : UiButton;
-    private readonly _labelName                 : UiLabel;
-    private readonly _labelDesc                 : UiLabel;
+    private readonly _btnReset                  : TwnsUiButton.UiButton;
+    private readonly _btnSearch                 : TwnsUiButton.UiButton;
+    private readonly _labelName                 : TwnsUiLabel.UiLabel;
+    private readonly _labelDesc                 : TwnsUiLabel.UiLabel;
 
-    private readonly _labelReplayIdTitle        : UiLabel;
+    private readonly _labelReplayIdTitle        : TwnsUiLabel.UiLabel;
     private readonly _inputReplayId             : UiTextInput;
 
-    private readonly _labelMapNameTitle         : UiLabel;
+    private readonly _labelMapNameTitle         : TwnsUiLabel.UiLabel;
     private readonly _inputMapName              : UiTextInput;
 
-    private readonly _labelUserNicknameTitle    : UiLabel;
+    private readonly _labelUserNicknameTitle    : TwnsUiLabel.UiLabel;
     private readonly _inputUserNickname         : UiTextInput;
 
-    private readonly _labelCoNameTitle          : UiLabel;
+    private readonly _labelCoNameTitle          : TwnsUiLabel.UiLabel;
     private readonly _inputCoName               : UiTextInput;
 
-    private readonly _labelMinGlobalRatingTitle : UiLabel;
+    private readonly _labelMinGlobalRatingTitle : TwnsUiLabel.UiLabel;
     private readonly _inputMinGlobalRating      : UiTextInput;
 
-    private readonly _labelMinMyRatingTitle     : UiLabel;
+    private readonly _labelMinMyRatingTitle     : TwnsUiLabel.UiLabel;
     private readonly _inputMinMyRating          : UiTextInput;
 
     public static show(): void {

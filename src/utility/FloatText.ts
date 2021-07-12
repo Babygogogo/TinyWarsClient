@@ -2,7 +2,7 @@
 import { Types }            from "./Types";
 import { StageManager }     from "./StageManager";
 import { Logger }           from "./Logger";
-import { UiLabel }          from "./ui/UiLabel";
+import { TwnsUiLabel }      from "./ui/UiLabel";
 
 export namespace FloatText {
     const SHOW_TIME_MS      = 3000;
@@ -60,7 +60,7 @@ export namespace FloatText {
         public constructor(text: string) {
             super();
 
-            const label     = new UiLabel();
+            const label     = new TwnsUiLabel.UiLabel();
             label.textColor = 0xFFFFFF;
             label.stroke    = 2;
             label.size      = 20;

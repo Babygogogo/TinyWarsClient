@@ -1,11 +1,11 @@
 
-import { UiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                      from "../../../utility/ui/UiPanel";
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiScrollList }                 from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
-import { UiMapInfo }                    from "../../../utility/ui/UiMapInfo";
+import { TwnsUiMapInfo }                    from "../../../utility/ui/UiMapInfo";
 import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
 import { TwnsLobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
 import { CcrCreateSearchMapPanel }      from "./CcrCreateSearchMapPanel";
@@ -32,7 +32,7 @@ type FiltersForMapList = {
     minRating?      : number;
     mapTag?         : IDataForMapTag;
 };
-export class CcrCreateMapListPanel extends UiPanel<FiltersForMapList> {
+export class CcrCreateMapListPanel extends TwnsUiPanel.UiPanel<FiltersForMapList> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
     protected readonly _IS_EXCLUSIVE = true;
 
@@ -40,23 +40,23 @@ export class CcrCreateMapListPanel extends UiPanel<FiltersForMapList> {
 
     private readonly _groupMapView          : eui.Group;
     private readonly _zoomMap               : UiZoomableMap;
-    private readonly _labelLoading          : UiLabel;
+    private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
     private readonly _groupNavigator        : eui.Group;
-    private readonly _labelMultiPlayer      : UiLabel;
-    private readonly _labelCreateRoom       : UiLabel;
-    private readonly _labelChooseMap        : UiLabel;
+    private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
+    private readonly _labelCreateRoom       : TwnsUiLabel.UiLabel;
+    private readonly _labelChooseMap        : TwnsUiLabel.UiLabel;
 
-    private readonly _btnBack               : UiButton;
-    private readonly _btnSearch             : UiButton;
-    private readonly _btnMapInfo            : UiButton;
-    private readonly _btnNextStep           : UiButton;
+    private readonly _btnBack               : TwnsUiButton.UiButton;
+    private readonly _btnSearch             : TwnsUiButton.UiButton;
+    private readonly _btnMapInfo            : TwnsUiButton.UiButton;
+    private readonly _btnNextStep           : TwnsUiButton.UiButton;
 
     private readonly _groupMapList          : eui.Group;
-    private readonly _listMap               : UiScrollList<DataForMapNameRenderer>;
-    private readonly _labelNoMap            : UiLabel;
+    private readonly _listMap               : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
+    private readonly _labelNoMap            : TwnsUiLabel.UiLabel;
 
-    private readonly _uiMapInfo             : UiMapInfo;
+    private readonly _uiMapInfo             : TwnsUiMapInfo.UiMapInfo;
 
     private _mapFilters         : FiltersForMapList = {};
     private _dataForList        : DataForMapNameRenderer[] = [];
@@ -324,10 +324,10 @@ type DataForMapNameRenderer = {
     mapName : string;
     panel   : CcrCreateMapListPanel;
 };
-class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
-    private _btnChoose: UiButton;
-    private _btnNext  : UiButton;
-    private _labelName: UiLabel;
+class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
+    private _btnChoose: TwnsUiButton.UiButton;
+    private _btnNext  : TwnsUiButton.UiButton;
+    private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

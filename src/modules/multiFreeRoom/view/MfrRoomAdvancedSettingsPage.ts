@@ -1,8 +1,8 @@
 
-import { UiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { UiButton }             from "../../../utility/ui/UiButton";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
-import { UiScrollList }         from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
 import { UiTabPage }            from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }      from "../../common/view/CommonHelpPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
@@ -23,8 +23,8 @@ export type OpenDataForMfrRoomAdvancedSettingsPage = {
 };
 export class MfrRoomAdvancedSettingsPage extends UiTabPage<OpenDataForMfrRoomAdvancedSettingsPage> {
     private readonly _scroller      : eui.Scroller;
-    private readonly _listSetting   : UiScrollList<DataForSettingRenderer>;
-    private readonly _listPlayer    : UiScrollList<DataForPlayerRenderer>;
+    private readonly _listSetting   : TwnsUiScrollList.UiScrollList<DataForSettingRenderer>;
+    private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
     public constructor() {
         super();
@@ -107,9 +107,9 @@ export class MfrRoomAdvancedSettingsPage extends UiTabPage<OpenDataForMfrRoomAdv
 type DataForSettingRenderer = {
     playerRuleType  : PlayerRuleType;
 };
-class SettingRenderer extends UiListItemRenderer<DataForSettingRenderer> {
-    private readonly _labelName : UiLabel;
-    private readonly _btnHelp   : UiButton;
+class SettingRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSettingRenderer> {
+    private readonly _labelName : TwnsUiLabel.UiLabel;
+    private readonly _btnHelp   : TwnsUiButton.UiButton;
 
     protected _onOpened(): void {
         this._setUiListenerArray([
@@ -145,9 +145,9 @@ type DataForPlayerRenderer = {
     roomId      : number;
     playerIndex : number;
 };
-class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
-    private _labelPlayerIndex   : UiLabel;
-    private _listInfo           : UiScrollList<DataForInfoRenderer>;
+class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
+    private _labelPlayerIndex   : TwnsUiLabel.UiLabel;
+    private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
     protected _onOpened(): void {
         this._listInfo.setItemRenderer(InfoRenderer);
@@ -196,8 +196,8 @@ type DataForInfoRenderer = {
     infoColor?              : number;
     callbackOnTouchedTitle? : (() => void) | null;
 };
-class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
-    private readonly _labelValue    : UiLabel;
+class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+    private readonly _labelValue    : TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {
         this._updateComponentsForValue();

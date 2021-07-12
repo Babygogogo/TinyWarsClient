@@ -1,21 +1,21 @@
 
-import { UiImage }              from "../../../utility/ui/UiImage";
-import { UiLabel }              from "../../../utility/ui/UiLabel";
+import { TwnsUiImage }          from "../../../utility/ui/UiImage";
+import { TwnsUiLabel }          from "../../../utility/ui/UiLabel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
-import { BwDamageCalculator }     from "../model/BwDamageCalculator";
+import { BwDamageCalculator }   from "../model/BwDamageCalculator";
 import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
 import { Helpers }              from "../../../utility/Helpers";
 import { Lang }                 from "../../../utility/lang/Lang";
 import { NotifyData }           from "../../../utility/notify/NotifyData";
 import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
 import { Logger }               from "../../../utility/Logger";
 import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
+import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { Types }                from "../../../utility/Types";
 import { BwActionPlanner }      from "../model/BwActionPlanner";
 import { BwCursor }             from "../model/BwCursor";
+import LangTextType             = TwnsLangTextType.LangTextType;
+import NotifyType               = TwnsNotifyType.NotifyType;
 import GridIndex                = Types.GridIndex;
 import ActionPlannerState       = Types.ActionPlannerState;
 
@@ -70,13 +70,13 @@ export class BwCursorView extends eui.Group {
     private _conForTarget           = new egret.DisplayObjectContainer();
     private _conForSiloArea         = new egret.DisplayObjectContainer();
     private _conForDamage           = new egret.DisplayObjectContainer();
-    private _imgUpperLeftCorner     = new UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
-    private _imgUpperRightCorner    = new UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
-    private _imgLowerLeftCorner     = new UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
-    private _imgLowerRightCorner    = new UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
-    private _imgTarget              = new UiImage(_IMG_SOURCES_FOR_TARGET[this._frameIndexForImgTarget]);
-    private _imgSiloArea            = new UiImage(`c04_t03_s03_f01`);
-    private _labelDamage            = new UiLabel();
+    private _imgUpperLeftCorner     = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
+    private _imgUpperRightCorner    = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
+    private _imgLowerLeftCorner     = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
+    private _imgLowerRightCorner    = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
+    private _imgTarget              = new TwnsUiImage.UiImage(_IMG_SOURCES_FOR_TARGET[this._frameIndexForImgTarget]);
+    private _imgSiloArea            = new TwnsUiImage.UiImage(`c04_t03_s03_f01`);
+    private _labelDamage            = new TwnsUiLabel.UiLabel();
 
     public constructor() {
         super();
@@ -558,7 +558,7 @@ export class BwCursorView extends eui.Group {
         this._conForAll.addChild(this._conForSiloArea);
     }
     private _initConForDamage(): void {
-        const imgBg         = new UiImage("c04_t01_s02_f01");
+        const imgBg         = new TwnsUiImage.UiImage("c04_t01_s02_f01");
         imgBg.scale9Grid    = new egret.Rectangle(9, 9, 2, 2);
         imgBg.width         = _DAMAGE_CON_WIDTH;
         imgBg.height        = _DAMAGE_CON_HEIGHT;
@@ -658,7 +658,7 @@ export class BwCursorView extends eui.Group {
     protected _getConForDamage(): egret.DisplayObjectContainer {
         return this._conForDamage;
     }
-    protected _getLabelDamage(): UiLabel {
+    protected _getLabelDamage(): TwnsUiLabel.UiLabel {
         return this._labelDamage;
     }
     protected _getActionPlanner(): BwActionPlanner {

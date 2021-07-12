@@ -1,6 +1,6 @@
 
-import { UiButton }                     from "../../../utility/ui/UiButton";
-import { UiLabel }                      from "../../../utility/ui/UiLabel";
+import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
@@ -18,24 +18,24 @@ import { WarMapModel }                  from "../../warMap/model/WarMapModel";
 import { ScrCreateModel }                     from "../model/ScrCreateModel";
 
 export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
-    private readonly _labelMapNameTitle             : UiLabel;
-    private readonly _labelMapName                  : UiLabel;
+    private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
+    private readonly _labelMapName                  : TwnsUiLabel.UiLabel;
 
-    private readonly _labelSaveSlotTitle            : UiLabel;
-    private readonly _labelSaveSlot                 : UiLabel;
-    private readonly _btnSaveSlot                   : UiButton;
+    private readonly _labelSaveSlotTitle            : TwnsUiLabel.UiLabel;
+    private readonly _labelSaveSlot                 : TwnsUiLabel.UiLabel;
+    private readonly _btnSaveSlot                   : TwnsUiButton.UiButton;
 
-    private readonly _labelSlotCommentTitle         : UiLabel;
+    private readonly _labelSlotCommentTitle         : TwnsUiLabel.UiLabel;
     private readonly _inputSlotComment              : UiTextInput;
 
-    private readonly _labelWarRuleTitle             : UiLabel;
-    private readonly _labelWarRule                  : UiLabel;
-    private readonly _btnWarRule                    : UiButton;
+    private readonly _labelWarRuleTitle             : TwnsUiLabel.UiLabel;
+    private readonly _labelWarRule                  : TwnsUiLabel.UiLabel;
+    private readonly _btnWarRule                    : TwnsUiButton.UiButton;
 
-    private readonly _labelHasFogTitle              : UiLabel;
-    private readonly _labelHasFog                   : UiLabel;
-    private readonly _btnHasFog                     : UiButton;
-    private readonly _btnHasFogHelp                 : UiButton;
+    private readonly _labelHasFogTitle              : TwnsUiLabel.UiLabel;
+    private readonly _labelHasFog                   : TwnsUiLabel.UiLabel;
+    private readonly _btnHasFog                     : TwnsUiButton.UiButton;
+    private readonly _btnHasFogHelp                 : TwnsUiButton.UiButton;
 
     private _mapRawData : ProtoTypes.Map.IMapRawData;
 

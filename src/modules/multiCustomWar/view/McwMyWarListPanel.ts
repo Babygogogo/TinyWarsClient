@@ -1,9 +1,9 @@
 
-import { UiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
-import { UiPanel }                                                              from "../../../utility/ui/UiPanel";
-import { UiButton }                                                             from "../../../utility/ui/UiButton";
-import { UiLabel }                                                              from "../../../utility/ui/UiLabel";
-import { UiScrollList }                                                         from "../../../utility/ui/UiScrollList";
+import { TwnsUiListItemRenderer }                                                   from "../../../utility/ui/UiListItemRenderer";
+import { TwnsUiPanel }                                                              from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                                                              from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                                                              from "../../../utility/ui/UiLabel";
+import { TwnsUiScrollList }                                                         from "../../../utility/ui/UiScrollList";
 import { UiTab }                                                                from "../../../utility/ui/UiTab";
 import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
 import { TwnsLobbyBottomPanel }                                                 from "../../lobby/view/LobbyBottomPanel";
@@ -28,7 +28,7 @@ export namespace TwnsMcwMyWarListPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     // eslint-disable-next-line no-shadow
-    export class McwMyWarListPanel extends UiPanel<void> {
+    export class McwMyWarListPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -42,25 +42,25 @@ export namespace TwnsMcwMyWarListPanel {
         // @ts-ignore
         private readonly _groupNavigator        : eui.Group;
         // @ts-ignore
-        private readonly _labelMultiPlayer      : UiLabel;
+        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelMyWar            : UiLabel;
+        private readonly _labelMyWar            : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelChooseWar        : UiLabel;
+        private readonly _labelChooseWar        : TwnsUiLabel.UiLabel;
 
         // @ts-ignore
-        private readonly _btnBack               : UiButton;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnNextStep           : UiButton;
+        private readonly _btnNextStep           : TwnsUiButton.UiButton;
 
         // @ts-ignore
         private readonly _groupWarList          : eui.Group;
         // @ts-ignore
-        private readonly _listWar               : UiScrollList<DataForWarRenderer>;
+        private readonly _listWar               : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
         // @ts-ignore
-        private readonly _labelNoWar            : UiLabel;
+        private readonly _labelNoWar            : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelLoading          : UiLabel;
+        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
 
@@ -301,7 +301,7 @@ export namespace TwnsMcwMyWarListPanel {
     };
     class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
         // @ts-ignore
-        private _labelName: UiLabel;
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
@@ -311,15 +311,15 @@ export namespace TwnsMcwMyWarListPanel {
     type DataForWarRenderer = {
         warId: number;
     };
-    class WarRenderer extends UiListItemRenderer<DataForWarRenderer> {
+    class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
         // @ts-ignore
-        private readonly _btnChoose     : UiButton;
+        private readonly _btnChoose     : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnNext       : UiButton;
+        private readonly _btnNext       : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _labelName     : UiLabel;
+        private readonly _labelName     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _imgRed        : UiLabel;
+        private readonly _imgRed        : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
