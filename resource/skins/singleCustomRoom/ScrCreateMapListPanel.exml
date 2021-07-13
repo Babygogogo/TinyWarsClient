@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
         xmlns:TwnsUiMapInfo="TwnsUiMapInfo.*" xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
+        xmlns:w="http://ns.egret.com/wing" xmlns:TwnsUiZoomableMap="TwnsUiZoomableMap.*">
     <e:Group left="0" right="0" top="0" bottom="0">
         <e:Group id="_groupMapView" left="240" right="200" bottom="20" top="130">
             <TwnsUiLabel:UiLabel id="_labelLoading" text="正在加载图片\n请耐心等候" size="20" textColor="0xFFFFFF"
                                  textAlign="center" horizontalCenter="0" verticalCenter="0" />
-            <GameUi:UiZoomableMap id="_zoomMap" left="0" right="0" top="0" bottom="0" />
+            <TwnsUiZoomableMap:UiZoomableMap id="_zoomMap" left="0" right="0" top="0" bottom="0" />
         </e:Group>
         <TwnsUiButton:UiButton id="_btnBack" label="Back" y="20" height="30" width="80"
                                skinName="Skins.Component.Button.ButtonYellow001" left="0" />

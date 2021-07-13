@@ -2,7 +2,7 @@
 import { TwnsUiPanel }                  from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                  from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                  from "../../../utility/ui/UiLabel";
-import { UiTextInput }              from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }              from "../../../utility/ui/UiTextInput";
 import { MmAvailabilityListPanel }  from "./MmAvailabilityListPanel";
 import { Lang }                     from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -28,11 +28,11 @@ export class MmAvailabilitySearchPanel extends TwnsUiPanel.UiPanel<void> {
     private _labelPlayedTimesTitle  : TwnsUiLabel.UiLabel;
     private _labelMinRatingTitle    : TwnsUiLabel.UiLabel;
     private _labelDesc              : TwnsUiLabel.UiLabel;
-    private _inputMapName           : UiTextInput;
-    private _inputDesigner          : UiTextInput;
-    private _inputPlayersCount      : UiTextInput;
-    private _inputPlayedTimes       : UiTextInput;
-    private _inputMinRating         : UiTextInput;
+    private _inputMapName           : TwnsUiTextInput.UiTextInput;
+    private _inputDesigner          : TwnsUiTextInput.UiTextInput;
+    private _inputPlayersCount      : TwnsUiTextInput.UiTextInput;
+    private _inputPlayedTimes       : TwnsUiTextInput.UiTextInput;
+    private _inputMinRating         : TwnsUiTextInput.UiTextInput;
 
     public static show(): void {
         if (!MmAvailabilitySearchPanel._instance) {

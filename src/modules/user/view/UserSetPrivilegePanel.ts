@@ -3,7 +3,7 @@ import { TwnsUiImage }              from "../../../utility/ui/UiImage";
 import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { UiTextInput }          from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }          from "../../../utility/ui/UiTextInput";
 import { FloatText }            from "../../../utility/FloatText";
 import { Lang }                 from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -25,7 +25,7 @@ export class UserSetPrivilegePanel extends TwnsUiPanel.UiPanel<OpenDataForUserSe
     private static _instance: UserSetPrivilegePanel;
 
     private _btnGetInfo             : TwnsUiButton.UiButton;
-    private _inputUserId            : UiTextInput;
+    private _inputUserId            : TwnsUiTextInput.UiTextInput;
     private _labelUserName          : TwnsUiLabel.UiLabel;
     private _groupIsAdmin           : eui.Group;
     private _imgIsAdmin             : TwnsUiImage.UiImage;

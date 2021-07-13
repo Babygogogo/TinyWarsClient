@@ -5,7 +5,7 @@ import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
 import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiTextInput }          from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }          from "../../../utility/ui/UiTextInput";
 import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { FloatText }            from "../../../utility/FloatText";
@@ -54,7 +54,7 @@ export class ChatPanel extends TwnsUiPanel.UiPanel<OpenDataForChatPanel> {
     private readonly _labelNoMessage    : TwnsUiLabel.UiLabel;
     private readonly _listMessage       : TwnsUiScrollList.UiScrollList<DataForMessageRenderer>;
     private readonly _groupInput        : eui.Group;
-    private readonly _inputMessage      : UiTextInput;
+    private readonly _inputMessage      : TwnsUiTextInput.UiTextInput;
     private readonly _btnSend           : TwnsUiButton.UiButton;
 
     private _dataForListChat: DataForChatPageRenderer[] = [];

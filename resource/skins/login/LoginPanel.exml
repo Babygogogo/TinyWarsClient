@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="400" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+<e:Skin width="960" height="400" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0" touchThrough="true">
         <TwnsUiImage:UiImage id="_imgTitle" source="login_title_001" horizontalCenter="0" verticalCenter="-120" />
@@ -8,7 +8,7 @@
                 <e:Group width="280" x="0" id="_groupAccount">
                     <TwnsUiLabel:UiLabel id="_labelAccount" text="账号" size="18" textColor="0xFFFFFF" verticalCenter="0"
                                     left="0" />
-                    <GameUi:UiTextInput id="_inputAccount" anchorOffsetX="0" anchorOffsetY="0" restrict="A-Za-z0-9_"
+                    <TwnsUiTextInput:UiTextInput id="_inputAccount" anchorOffsetX="0" anchorOffsetY="0" restrict="A-Za-z0-9_"
                                         maxChars="20" left="90" right="0" top="0" bottom="0"
                                         skinName="Skins.Component.TextInput.TextInput003" />
                 </e:Group>
@@ -17,7 +17,7 @@
                 <e:Group width="280" id="_groupPassword">
                     <TwnsUiLabel:UiLabel id="_labelPassword" text="密码" size="18" textColor="0xFFFFFF" verticalCenter="0"
                                     left="0" x="10" y="17" />
-                    <GameUi:UiTextInput id="_inputPassword" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                    <TwnsUiTextInput:UiTextInput id="_inputPassword" y="0" anchorOffsetX="0" anchorOffsetY="0"
                                         restrict="A-Za-z0-9_" maxChars="20" displayAsPassword="true" left="90" right="0"
                                         skinName="Skins.Component.TextInput.TextInput003" />
                 </e:Group>

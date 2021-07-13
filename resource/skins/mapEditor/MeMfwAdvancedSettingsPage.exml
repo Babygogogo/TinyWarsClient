@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="760" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+<e:Skin width="760" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group x="10" y="10">
         <TwnsUiLabel:UiLabel id="_labelMapNameTitle" text="地图名称：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"

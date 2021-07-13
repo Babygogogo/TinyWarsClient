@@ -4,7 +4,7 @@ import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import { TwnsUiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
 import { CommonBlockPanel }             from "../../common/view/CommonBlockPanel";
 import { McrWatchMainMenuPanel }        from "./McrWatchMainMenuPanel";
 import { ConfigManager }                from "../../../utility/ConfigManager";
@@ -33,7 +33,7 @@ export class McrWatchOngoingWarsPanel extends TwnsUiPanel.UiPanel<void> {
     private _labelCommentTitle  : TwnsUiLabel.UiLabel;
     private _listWar            : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
     private _labelNoWar         : TwnsUiLabel.UiLabel;
-    private _zoomMap            : UiZoomableMap;
+    private _zoomMap            : TwnsUiZoomableMap.UiZoomableMap;
     private _btnBack            : TwnsUiButton.UiButton;
 
     private _groupInfo      : eui.Group;

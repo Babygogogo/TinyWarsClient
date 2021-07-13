@@ -1,7 +1,7 @@
 
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Helpers }                      from "../../../utility/Helpers";
@@ -19,7 +19,7 @@ import { WarMapModel }                  from "../../warMap/model/WarMapModel";
 export type OpenDataForCcwWarBasicSettingsPage = {
     warId  : number | null | undefined;
 };
-export class CcwWarBasicSettingsPage extends UiTabPage<OpenDataForCcwWarBasicSettingsPage> {
+export class CcwWarBasicSettingsPage extends TwnsUiTabPage.UiTabPage<OpenDataForCcwWarBasicSettingsPage> {
     // @ts-ignore
     private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
     // @ts-ignore

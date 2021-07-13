@@ -12,7 +12,7 @@ import { Logger }               from "../../../utility/Logger";
 import { Notify }               from "../../../utility/notify/Notify";
 import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { Types }                from "../../../utility/Types";
-import { BwActionPlanner }      from "../model/BwActionPlanner";
+import { TwnsBwActionPlanner }  from "../model/BwActionPlanner";
 import { BwCursor }             from "../model/BwCursor";
 import LangTextType             = TwnsLangTextType.LangTextType;
 import NotifyType               = TwnsNotifyType.NotifyType;
@@ -56,7 +56,7 @@ const _DAMAGE_CON_HEIGHT    = 60;
 export class BwCursorView extends eui.Group {
     private _cursor                 : BwCursor;
     private _mapSize                : Types.MapSize;
-    private _actionPlanner          : BwActionPlanner;
+    private _actionPlanner          : TwnsBwActionPlanner.BwActionPlanner;
     private _frameIndexForImgTarget = 0;
 
     private _currGlobalTouchPoints      = new Map<number, Types.Point>();
@@ -661,7 +661,7 @@ export class BwCursorView extends eui.Group {
     protected _getLabelDamage(): TwnsUiLabel.UiLabel {
         return this._labelDamage;
     }
-    protected _getActionPlanner(): BwActionPlanner {
+    protected _getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
         return this._actionPlanner;
     }
 

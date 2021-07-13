@@ -4,8 +4,8 @@ import { TwnsUiPanel }                                                      from
 import { TwnsUiButton }                                                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                                                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                                                 from "../../../utility/ui/UiScrollList";
-import { UiTab }                                                        from "../../../utility/ui/UiTab";
-import { UiTabItemRenderer }                                            from "../../../utility/ui/UiTabItemRenderer";
+import { TwnsUiTab }                                                        from "../../../utility/ui/UiTab";
+import { TwnsUiTabItemRenderer }                                            from "../../../utility/ui/UiTabItemRenderer";
 import { McrMainMenuPanel }                                             from "../../multiCustomRoom/view/McrMainMenuPanel";
 import { CommonBlockPanel }                                             from "../../common/view/CommonBlockPanel";
 import { OpenDataForRwReplayWarInfoPage, RwReplayWarInfoPage }          from "./RwReplayWarInfoPage";
@@ -34,7 +34,7 @@ export class RwReplayListPanel extends TwnsUiPanel.UiPanel<void> {
     private static _instance: RwReplayListPanel;
 
     private readonly _groupTab              : eui.Group;
-    private readonly _tabSettings           : UiTab<DataForTabItemRenderer, OpenDataForRwReplayMapInfoPage | OpenDataForRwReplayPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
+    private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForRwReplayMapInfoPage | OpenDataForRwReplayPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
 
     private readonly _groupNavigator        : eui.Group;
     private readonly _labelReplay           : TwnsUiLabel.UiLabel;
@@ -302,7 +302,7 @@ export class RwReplayListPanel extends TwnsUiPanel.UiPanel<void> {
 type DataForTabItemRenderer = {
     name: string;
 };
-class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
+class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
     private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {

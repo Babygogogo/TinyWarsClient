@@ -4,7 +4,7 @@ import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import { TwnsUiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
 import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
 import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
 import { TwnsLobbyPanel }                   from "../../lobby/view/LobbyPanel";
@@ -27,7 +27,7 @@ export class MeMapListPanel extends TwnsUiPanel.UiPanel<void> {
 
     private static _instance: MeMapListPanel;
 
-    private _zoomMap        : UiZoomableMap;
+    private _zoomMap        : TwnsUiZoomableMap.UiZoomableMap;
     private _labelNoData    : TwnsUiLabel.UiLabel;
     private _labelMenuTitle : TwnsUiLabel.UiLabel;
     private _labelLoading   : TwnsUiLabel.UiLabel;

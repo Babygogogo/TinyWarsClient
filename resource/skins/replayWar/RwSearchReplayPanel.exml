@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
                     scale9Grid="1,1,2,2" locked="true" />
@@ -16,7 +16,7 @@
                                 scale9Grid="1,1,2,2" />
                 <TwnsUiLabel:UiLabel id="_labelReplayIdTitle" text="Replay ID" textColor="0xFFFFFF" size="16"
                                 maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <GameUi:UiTextInput id="_inputReplayId" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="10"
+                <TwnsUiTextInput:UiTextInput id="_inputReplayId" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="10"
                                     verticalCenter="0" height="24" right="6" restrict="0-9."
                                     skinName="Skins.Component.TextInput.TextInput002" />
             </e:Group>
@@ -25,24 +25,24 @@
                                 scale9Grid="1,1,2,2" />
                 <TwnsUiLabel:UiLabel id="_labelMapNameTitle" text="Map Name" textColor="0xFFFFFF" size="16"
                                 maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <GameUi:UiTextInput id="_inputMapName" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" verticalCenter="0"
-                                    height="24" right="6" skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
+                <TwnsUiTextInput:UiTextInput id="_inputMapName" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" verticalCenter="0"
+                                    height="24" right="6" skinName="Skins.Component.TextInput.TextInput002"></TwnsUiTextInput:UiTextInput>
             </e:Group>
             <e:Group x="0" y="0" height="32" width="410">
                 <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                 scale9Grid="1,1,2,2" />
                 <TwnsUiLabel:UiLabel id="_labelUserNicknameTitle" text="User Nickname" textColor="0xFFFFFF" size="16"
                                 maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <GameUi:UiTextInput id="_inputUserNickname" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
+                <TwnsUiTextInput:UiTextInput id="_inputUserNickname" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
                                     verticalCenter="0" height="24" right="6"
-                                    skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
+                                    skinName="Skins.Component.TextInput.TextInput002"></TwnsUiTextInput:UiTextInput>
             </e:Group>
             <e:Group x="10" y="10" height="32" width="410">
                 <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                 scale9Grid="1,1,2,2" />
                 <TwnsUiLabel:UiLabel id="_labelCoNameTitle" text="CO Name" textColor="0xFFFFFF" size="16" maxTextWidth="100"
                                 x="10" verticalCenter="0" bold="true" />
-                <GameUi:UiTextInput id="_inputCoName" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
+                <TwnsUiTextInput:UiTextInput id="_inputCoName" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
                                     verticalCenter="0" height="24" right="6"
                                     skinName="Skins.Component.TextInput.TextInput002" />
             </e:Group>
@@ -51,16 +51,16 @@
                                 scale9Grid="1,1,2,2" />
                 <TwnsUiLabel:UiLabel id="_labelMinMyRatingTitle" text="My Rating" textColor="0xFFFFFF" size="16"
                                 maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <GameUi:UiTextInput id="_inputMinMyRating" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="2" verticalCenter="0"
+                <TwnsUiTextInput:UiTextInput id="_inputMinMyRating" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="2" verticalCenter="0"
                                     height="24" right="6" restrict="0-9"
-                                    skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
+                                    skinName="Skins.Component.TextInput.TextInput002"></TwnsUiTextInput:UiTextInput>
             </e:Group>
             <e:Group x="10" y="10" height="32" width="410">
                 <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                 scale9Grid="1,1,2,2" />
                 <TwnsUiLabel:UiLabel id="_labelMinGlobalRatingTitle" text="Global Rating" textColor="0xFFFFFF" size="16"
                                 maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <GameUi:UiTextInput id="_inputMinGlobalRating" width="270" anchorOffsetX="0" anchorOffsetY="0"
+                <TwnsUiTextInput:UiTextInput id="_inputMinGlobalRating" width="270" anchorOffsetX="0" anchorOffsetY="0"
                                     maxChars="2" verticalCenter="0" height="24" right="6" restrict="0-9"
                                     skinName="Skins.Component.TextInput.TextInput002" />
             </e:Group>

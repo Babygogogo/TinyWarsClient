@@ -1,7 +1,6 @@
 
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { Helpers }              from "../../../utility/Helpers";
-import { Notify }               from "../../../utility/notify/Notify";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { Lang }                 from "../../../utility/lang/Lang";
@@ -10,7 +9,7 @@ import LangTextType         = TwnsLangTextType.LangTextType;
 import { Types }                from "../../../utility/Types";
 import { StageManager }         from "../../../utility/StageManager";
 import { BwUnitView }           from "./BwUnitView";
-import { DataForUnitAction }    from "../model/BwActionPlanner";
+import { TwnsBwActionPlanner }    from "../model/BwActionPlanner";
 import { BwWar }                from "../model/BwWar";
 import { BwUnit }               from "../model/BwUnit";
 import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
@@ -22,7 +21,7 @@ import UnitActionType           = Types.UnitActionType;
 export type OpenDataForBwUnitActionsPanel = {
     war         : BwWar;
     destination : Types.GridIndex;
-    actionList  : DataForUnitAction[];
+    actionList  : TwnsBwActionPlanner.DataForUnitAction[];
 };
 export class BwUnitActionsPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitActionsPanel> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;

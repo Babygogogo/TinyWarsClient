@@ -1,14 +1,11 @@
 
-import { BwUnit }                               from "../../baseWar/model/BwUnit";
-import { BwActionPlanner, DataForUnitAction }   from "../../baseWar/model/BwActionPlanner";
-import { Types }                                from "../../../utility/Types";
-import GridIndex                                = Types.GridIndex;
-import State                                    = Types.ActionPlannerState;
+import { BwUnit }                   from "../../baseWar/model/BwUnit";
+import { TwnsBwActionPlanner }      from "../../baseWar/model/BwActionPlanner";
+import { Types }                    from "../../../utility/Types";
+import GridIndex                    = Types.GridIndex;
+import State                        = Types.ActionPlannerState;
 
-export class TwActionPlanner extends BwActionPlanner {
-    private _getPlayerIndexInTurn(): number {
-        return this._getWar().getPlayerIndexInTurn();
-    }
+export class TwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for setting common state.
@@ -92,40 +89,40 @@ export class TwActionPlanner extends BwActionPlanner {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for generating actions for the focused unit.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected _getActionUnitBeLoaded(): DataForUnitAction[] {
+    protected _getActionUnitBeLoaded(): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
-    protected _getActionUnitJoin(): DataForUnitAction[] {
+    protected _getActionUnitJoin(): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
-    protected _getActionUnitUseCoSuperPower(): DataForUnitAction[] {
+    protected _getActionUnitUseCoSuperPower(): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
-    protected _getActionUnitUseCoPower(): DataForUnitAction[] {
+    protected _getActionUnitUseCoPower(): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
-    protected _getActionUnitLoadCo(): DataForUnitAction[] {
+    protected _getActionUnitLoadCo(): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
-    protected _getActionUnitCapture(): DataForUnitAction[] {
+    protected _getActionUnitCapture(): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
-    protected _getActionUnitDive(): DataForUnitAction[] {
+    protected _getActionUnitDive(): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
-    protected _getActionUnitSurface(): DataForUnitAction[] {
+    protected _getActionUnitSurface(): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
-    protected _getActionUnitBuildTile(): DataForUnitAction[] {
+    protected _getActionUnitBuildTile(): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
-    protected _getActionUnitSupply(): DataForUnitAction[] {
+    protected _getActionUnitSupply(): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
-    protected _getActionUnitProduceUnit(): DataForUnitAction[] {
+    protected _getActionUnitProduceUnit(): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
-    protected _getActionUnitWait(hasOtherAction: boolean): DataForUnitAction[] {
+    protected _getActionUnitWait(hasOtherAction: boolean): TwnsBwActionPlanner.DataForUnitAction[] {
         return [];
     }
 }

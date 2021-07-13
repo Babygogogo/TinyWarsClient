@@ -2,7 +2,7 @@
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { MeWarMenuPanel }               from "./MeWarMenuPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { FloatText }                    from "../../../utility/FloatText";
@@ -27,8 +27,8 @@ export class MeClearPanel extends TwnsUiPanel.UiPanel<void> {
     private _labelCurrWidth     : TwnsUiLabel.UiLabel;
     private _labelCurrHeight    : TwnsUiLabel.UiLabel;
     private _labelNewSizeTitle  : TwnsUiLabel.UiLabel;
-    private _inputNewWidth      : UiTextInput;
-    private _inputNewHeight     : UiTextInput;
+    private _inputNewWidth      : TwnsUiTextInput.UiTextInput;
+    private _inputNewHeight     : TwnsUiTextInput.UiTextInput;
     private _labelTips1         : TwnsUiLabel.UiLabel;
     private _labelTips2         : TwnsUiLabel.UiLabel;
     private _btnCancel          : TwnsUiButton.UiButton;

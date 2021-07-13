@@ -3,7 +3,7 @@ import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
 import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { ConfigManager }                from "../../../utility/ConfigManager";
@@ -24,7 +24,7 @@ import { MrrModel }                     from "../model/MrrModel";
 export type OpenDataForMrrRoomPlayerInfoPage = {
     roomId  : number;
 };
-export class MrrRoomPlayerInfoPage extends UiTabPage<OpenDataForMrrRoomPlayerInfoPage> {
+export class MrrRoomPlayerInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForMrrRoomPlayerInfoPage> {
     private readonly _groupInfo     : eui.Group;
     private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 

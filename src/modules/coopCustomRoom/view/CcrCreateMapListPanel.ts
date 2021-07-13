@@ -4,7 +4,7 @@ import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import { TwnsUiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
 import { TwnsUiMapInfo }                    from "../../../utility/ui/UiMapInfo";
 import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
 import { TwnsLobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
@@ -39,7 +39,7 @@ export class CcrCreateMapListPanel extends TwnsUiPanel.UiPanel<FiltersForMapList
     private static _instance: CcrCreateMapListPanel;
 
     private readonly _groupMapView          : eui.Group;
-    private readonly _zoomMap               : UiZoomableMap;
+    private readonly _zoomMap               : TwnsUiZoomableMap.UiZoomableMap;
     private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
     private readonly _groupNavigator        : eui.Group;

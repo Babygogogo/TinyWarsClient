@@ -3,7 +3,7 @@ import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { FloatText }                    from "../../../utility/FloatText";
 import { Helpers }                      from "../../../utility/Helpers";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -32,7 +32,7 @@ export class McrJoinPasswordPanel extends TwnsUiPanel.UiPanel<OpenData> {
     private readonly _labelRoomTitle        : TwnsUiLabel.UiLabel;
     private readonly _labelPasswordTitle    : TwnsUiLabel.UiLabel;
     private readonly _labelWarName          : TwnsUiLabel.UiLabel;
-    private readonly _inputWarPassword      : UiTextInput;
+    private readonly _inputWarPassword      : TwnsUiTextInput.UiTextInput;
     private readonly _btnCancel             : TwnsUiButton.UiButton;
     private readonly _btnConfirm            : TwnsUiButton.UiButton;
 

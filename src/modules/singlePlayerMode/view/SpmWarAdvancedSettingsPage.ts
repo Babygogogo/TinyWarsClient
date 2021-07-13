@@ -3,7 +3,7 @@ import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItem
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -21,7 +21,7 @@ import PlayerRuleType                   = Types.PlayerRuleType;
 export type OpenDataForSpmWarAdvancedSettingsPage = {
     slotIndex   : number;
 };
-export class SpmWarAdvancedSettingsPage extends UiTabPage<OpenDataForSpmWarAdvancedSettingsPage> {
+export class SpmWarAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<OpenDataForSpmWarAdvancedSettingsPage> {
     private readonly _scroller      : eui.Scroller;
     private readonly _listSetting   : TwnsUiScrollList.UiScrollList<DataForSettingRenderer>;
     private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;

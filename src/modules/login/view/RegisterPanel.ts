@@ -1,23 +1,22 @@
 
-import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
-import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiImage }                  from "../../../utility/ui/UiImage";
+import { TwnsUiPanel }                  from "../../../utility/ui/UiPanel";
+import { TwnsUiButton }                 from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                  from "../../../utility/ui/UiLabel";
+import { TwnsUiTextInput }              from "../../../utility/ui/UiTextInput";
 import { FloatText }                    from "../../../utility/FloatText";
 import { Helpers }                      from "../../../utility/Helpers";
 import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
+import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
 import { LocalStorage }                 from "../../../utility/LocalStorage";
 import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
+import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
 import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
 import { Types }                        from "../../../utility/Types";
 import { UserModel }                    from "../../user/model/UserModel";
 import { UserProxy }                    from "../../user/model/UserProxy";
+import LangTextType         = TwnsLangTextType.LangTextType;
+import NotifyType           = TwnsNotifyType.NotifyType;
 
 export class RegisterPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -32,15 +31,15 @@ export class RegisterPanel extends TwnsUiPanel.UiPanel<void> {
     // @ts-ignore
     private _labelAccount       : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _inputAccount       : UiTextInput;
+    private _inputAccount       : TwnsUiTextInput.UiTextInput;
     // @ts-ignore
     private _labelPassword      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _inputPassword      : UiTextInput;
+    private _inputPassword      : TwnsUiTextInput.UiTextInput;
     // @ts-ignore
     private _labelNickname      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _inputNickname      : UiTextInput;
+    private _inputNickname      : TwnsUiTextInput.UiTextInput;
     // @ts-ignore
     private _btnRegister        : TwnsUiButton.UiButton;
     // @ts-ignore

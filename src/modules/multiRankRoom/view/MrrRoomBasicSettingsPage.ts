@@ -1,7 +1,7 @@
 
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Helpers }                      from "../../../utility/Helpers";
@@ -19,7 +19,7 @@ import { MrrModel }                     from "../model/MrrModel";
 export type OpenDataForMrrRoomBasicSettingsPage = {
     roomId  : number | null;
 };
-export class MrrRoomBasicSettingsPage extends UiTabPage<OpenDataForMrrRoomBasicSettingsPage> {
+export class MrrRoomBasicSettingsPage extends TwnsUiTabPage.UiTabPage<OpenDataForMrrRoomBasicSettingsPage> {
     private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
     private readonly _labelMapName                  : TwnsUiLabel.UiLabel;
 

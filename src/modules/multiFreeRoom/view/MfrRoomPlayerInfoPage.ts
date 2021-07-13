@@ -4,7 +4,7 @@ import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer
 import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiTabPage }            from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }            from "../../../utility/ui/UiTabPage";
 import { ChatPanel }            from "../../chat/view/ChatPanel";
 import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
 import { CommonCoInfoPanel }    from "../../common/view/CommonCoInfoPanel";
@@ -28,7 +28,7 @@ import { UserModel }            from "../../user/model/UserModel";
 export type OpenDataForMfrRoomPlayerInfoPage = {
     roomId  : number;
 };
-export class MfrRoomPlayerInfoPage extends UiTabPage<OpenDataForMfrRoomPlayerInfoPage> {
+export class MfrRoomPlayerInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForMfrRoomPlayerInfoPage> {
     private readonly _groupInfo     : eui.Group;
     private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 

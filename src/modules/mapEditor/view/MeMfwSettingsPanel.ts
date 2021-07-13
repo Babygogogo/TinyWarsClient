@@ -2,8 +2,8 @@
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTab }                        from "../../../utility/ui/UiTab";
-import { UiTabItemRenderer }            from "../../../utility/ui/UiTabItemRenderer";
+import { TwnsUiTab }                        from "../../../utility/ui/UiTab";
+import { TwnsUiTabItemRenderer }            from "../../../utility/ui/UiTabItemRenderer";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { MfrCreateSettingsPanel }       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import { MeMfwAdvancedSettingsPage }    from "./MeMfwAdvancedSettingsPage";
@@ -32,7 +32,7 @@ export class MeMfwSettingsPanel extends TwnsUiPanel.UiPanel<void> {
 
     private static _instance: MeMfwSettingsPanel;
 
-    private _tabSettings    : UiTab<DataForTabItemRenderer, void>;
+    private _tabSettings    : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
     private _labelMenuTitle : TwnsUiLabel.UiLabel;
     private _btnBack        : TwnsUiButton.UiButton;
     private _btnConfirm     : TwnsUiButton.UiButton;
@@ -135,7 +135,7 @@ type DataForTabItemRenderer = {
     name: string;
 };
 
-class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
+class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
     private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {

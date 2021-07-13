@@ -1,7 +1,7 @@
 
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { TwnsUiMapInfo }                    from "../../../utility/ui/UiMapInfo";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -16,9 +16,9 @@ import { WarMapModel }                  from "../../warMap/model/WarMapModel";
 export type OpenDataForCcwWarMapInfoPage = {
     warId   : number | null | undefined;
 };
-export class CcwWarMapInfoPage extends UiTabPage<OpenDataForCcwWarMapInfoPage> {
+export class CcwWarMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForCcwWarMapInfoPage> {
     // @ts-ignore
-    private readonly _zoomMap       : UiZoomableMap;
+    private readonly _zoomMap       : TwnsUiZoomableMap.UiZoomableMap;
     // @ts-ignore
     private readonly _uiMapInfo     : TwnsUiMapInfo.UiMapInfo;
     // @ts-ignore

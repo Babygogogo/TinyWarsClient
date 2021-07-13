@@ -2,7 +2,7 @@
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { MeWarMenuPanel }               from "./MeWarMenuPanel";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -21,8 +21,8 @@ export class MeOffsetPanel extends TwnsUiPanel.UiPanel<void> {
     private static _instance: MeOffsetPanel;
 
     private _labelTitle     : TwnsUiLabel.UiLabel;
-    private _inputOffsetX   : UiTextInput;
-    private _inputOffsetY   : UiTextInput;
+    private _inputOffsetX   : TwnsUiTextInput.UiTextInput;
+    private _inputOffsetY   : TwnsUiTextInput.UiTextInput;
     private _labelTips      : TwnsUiLabel.UiLabel;
     private _btnCancel      : TwnsUiButton.UiButton;
     private _btnConfirm     : TwnsUiButton.UiButton;

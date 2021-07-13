@@ -3,7 +3,7 @@ import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { RegisterPanel }                from "./RegisterPanel";
 import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
 import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
@@ -33,14 +33,14 @@ export namespace TwnsLoginPanel {
         // @ts-ignore
         private _labelAccount               : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _inputAccount               : UiTextInput;
+        private _inputAccount               : TwnsUiTextInput.UiTextInput;
 
         // @ts-ignore
         private _groupPassword              : eui.Group;
         // @ts-ignore
         private _labelPassword              : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _inputPassword              : UiTextInput;
+        private _inputPassword              : TwnsUiTextInput.UiTextInput;
 
         // @ts-ignore
         private _groupPasswordCommand       : eui.Group;

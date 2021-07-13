@@ -3,7 +3,7 @@ import { TwnsUiImage }              from "../../../utility/ui/UiImage";
 import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { UiTextInput }          from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }          from "../../../utility/ui/UiTextInput";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { FloatText }            from "../../../utility/FloatText";
@@ -30,7 +30,7 @@ export class UserChangeNicknamePanel extends TwnsUiPanel.UiPanel<void> {
     // @ts-ignore
     private readonly _labelNote     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _inputNickname : UiTextInput;
+    private readonly _inputNickname : TwnsUiTextInput.UiTextInput;
     // @ts-ignore
     private readonly _btnConfirm    : TwnsUiButton.UiButton;
     // @ts-ignore

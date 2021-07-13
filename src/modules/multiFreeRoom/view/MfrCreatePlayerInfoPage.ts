@@ -3,7 +3,7 @@ import { TwnsUiImage }              from "../../../utility/ui/UiImage";
 import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiTabPage }            from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }            from "../../../utility/ui/UiTabPage";
 import { CommonCoInfoPanel }    from "../../common/view/CommonCoInfoPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { ConfigManager }        from "../../../utility/ConfigManager";
@@ -18,7 +18,7 @@ import { BwHelpers }            from "../../baseWar/model/BwHelpers";
 import LangTextType             = TwnsLangTextType.LangTextType;
 import NotifyType               = TwnsNotifyType.NotifyType;
 
-export class MfrCreatePlayerInfoPage extends UiTabPage<void> {
+export class MfrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
     // @ts-ignore
     private readonly _groupInfo     : eui.Group;
     // @ts-ignore

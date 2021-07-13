@@ -2,8 +2,8 @@
 import { TwnsUiPanel }                          from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                          from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                          from "../../../utility/ui/UiLabel";
-import { UiTab }                            from "../../../utility/ui/UiTab";
-import { UiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
+import { TwnsUiTab }                            from "../../../utility/ui/UiTab";
+import { TwnsUiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
 import { CcrCreateMapListPanel }            from "./CcrCreateMapListPanel";
 import { CcrCreateAdvancedSettingsPage }    from "./CcrCreateAdvancedSettingsPage";
 import { CcrCreateBasicSettingsPage }       from "./CcrCreateBasicSettingsPage";
@@ -36,7 +36,7 @@ export class CcrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
     private readonly _labelRoomSettings     : TwnsUiLabel.UiLabel;
 
     private readonly _groupTab              : eui.Group;
-    private readonly _tabSettings           : UiTab<DataForTabItemRenderer, void>;
+    private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
 
     private readonly _btnBack               : TwnsUiButton.UiButton;
     private readonly _btnConfirm            : TwnsUiButton.UiButton;
@@ -207,7 +207,7 @@ export class CcrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
 type DataForTabItemRenderer = {
     name: string;
 };
-class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
+class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
     private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {

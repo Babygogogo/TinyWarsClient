@@ -2,7 +2,7 @@
 import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { WarMapBuildingListPanel }      from "../../warMap/view/WarMapBuildingListPanel";
@@ -13,7 +13,7 @@ import { Lang }                         from "../../../utility/lang/Lang";
 import LangTextType                     = TwnsLangTextType.LangTextType;
 import NotifyType                       = TwnsNotifyType.NotifyType;
 
-export class MeSimBasicSettingsPage extends UiTabPage<void> {
+export class MeSimBasicSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
     private _btnMapNameTitle            : TwnsUiButton.UiButton;
     private _labelMapName               : TwnsUiLabel.UiLabel;
     private _btnBuildings               : TwnsUiButton.UiButton;

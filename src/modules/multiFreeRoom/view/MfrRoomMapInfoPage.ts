@@ -1,7 +1,7 @@
 
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { UiZoomableMap }        from "../../../utility/ui/UiZoomableMap";
-import { UiTabPage }            from "../../../utility/ui/UiTabPage";
+import { TwnsUiZoomableMap }        from "../../../utility/ui/UiZoomableMap";
+import { TwnsUiTabPage }            from "../../../utility/ui/UiTabPage";
 import { TwnsUiMapInfo }            from "../../../utility/ui/UiMapInfo";
 import { Lang }                 from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -15,8 +15,8 @@ import { MfrModel }             from "../../multiFreeRoom/model/MfrModel";
 export type OpenDataForMfrRoomMapInfoPage = {
     roomId  : number;
 };
-export class MfrRoomMapInfoPage extends UiTabPage<OpenDataForMfrRoomMapInfoPage> {
-    private readonly _zoomMap       : UiZoomableMap;
+export class MfrRoomMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForMfrRoomMapInfoPage> {
+    private readonly _zoomMap       : TwnsUiZoomableMap.UiZoomableMap;
     private readonly _uiMapInfo     : TwnsUiMapInfo.UiMapInfo;
     private readonly _labelLoading  : TwnsUiLabel.UiLabel;
 

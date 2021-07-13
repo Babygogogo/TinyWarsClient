@@ -1,20 +1,20 @@
 
-import { UiZoomableComponent }          from "../../../utility/ui/UiZoomableComponent";
+import { TwnsUiZoomableComponent }      from "../../../utility/ui/UiZoomableComponent";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Notify }                       from "../../../utility/notify/Notify";
 import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
 import { NotifyData }                   from "../../../utility/notify/NotifyData";
-import NotifyType       = TwnsNotifyType.NotifyType;
 import { StageManager }                 from "../../../utility/StageManager";
 import { Types }                        from "../../../utility/Types";
+import NotifyType                       = TwnsNotifyType.NotifyType;
 import GridIndex                        = Types.GridIndex;
 import Point                            = Types.Point;
 const PADDING_HORIZONTAL                = 150;
 const PADDING_VERTICAL                  = 50;
 
 export class BwWarView extends eui.Group {
-    private _fieldContainer     = new UiZoomableComponent();
+    private _fieldContainer     = new TwnsUiZoomableComponent.UiZoomableComponent();
     private _war                : BwWar;
 
     private _isShowingVibration = false;
@@ -75,7 +75,7 @@ export class BwWarView extends eui.Group {
         this._fieldContainer.setMouseWheelListenerEnabled(false);
     }
 
-    public getFieldContainer(): UiZoomableComponent {
+    public getFieldContainer(): TwnsUiZoomableComponent.UiZoomableComponent {
         return this._fieldContainer;
     }
 

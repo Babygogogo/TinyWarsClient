@@ -1,6 +1,6 @@
 
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
-import { BwActionPlanner }              from "./BwActionPlanner";
+import { TwnsClientErrorCode }          from "../../../utility/ClientErrorCode";
+import { TwnsBwActionPlanner }          from "./BwActionPlanner";
 import { BwCommonSettingManager }       from "./BwCommonSettingManager";
 import { BwCursor }                     from "./BwCursor";
 import { BwField }                      from "./BwField";
@@ -423,7 +423,7 @@ export abstract class BwWar {
     public getTileMap(): BwTileMap {
         return this.getField().getTileMap();
     }
-    public getActionPlanner(): BwActionPlanner {
+    public getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
         return this.getField().getActionPlanner();
     }
     public getGridVisionEffect(): BwGridVisualEffect {

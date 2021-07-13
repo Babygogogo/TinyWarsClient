@@ -2,7 +2,7 @@
 import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { UiTextInput }          from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }          from "../../../utility/ui/UiTextInput";
 import { FloatText }            from "../../../utility/FloatText";
 import { Lang }                 from "../../../utility/lang/Lang";
 import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
@@ -27,7 +27,7 @@ export class MfrJoinPasswordPanel extends TwnsUiPanel.UiPanel<OpenDataForMfrJoin
     private _labelRoomTitle     : TwnsUiLabel.UiLabel;
     private _labelPasswordTitle : TwnsUiLabel.UiLabel;
     private _labelWarName       : TwnsUiLabel.UiLabel;
-    private _inputWarPassword   : UiTextInput;
+    private _inputWarPassword   : TwnsUiTextInput.UiTextInput;
     private _btnCancel          : TwnsUiButton.UiButton;
     private _btnConfirm         : TwnsUiButton.UiButton;
 

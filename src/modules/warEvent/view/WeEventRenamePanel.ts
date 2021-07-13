@@ -2,7 +2,7 @@
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { FloatText }                    from "../../../utility/FloatText";
@@ -26,8 +26,8 @@ export class WeEventRenamePanel extends TwnsUiPanel.UiPanel<OpenDataForWeEventRe
 
     private static _instance: WeEventRenamePanel;
 
-    private _inputChinese   : UiTextInput;
-    private _inputEnglish   : UiTextInput;
+    private _inputChinese   : TwnsUiTextInput.UiTextInput;
+    private _inputEnglish   : TwnsUiTextInput.UiTextInput;
     private _labelTip       : TwnsUiLabel.UiLabel;
     private _labelTitle     : TwnsUiLabel.UiLabel;
     private _labelChinese   : TwnsUiLabel.UiLabel;

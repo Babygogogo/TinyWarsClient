@@ -3,7 +3,7 @@ import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Helpers }                      from "../../../utility/Helpers";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -30,22 +30,22 @@ export class RwSearchReplayPanel extends TwnsUiPanel.UiPanel<void> {
     private readonly _labelDesc                 : TwnsUiLabel.UiLabel;
 
     private readonly _labelReplayIdTitle        : TwnsUiLabel.UiLabel;
-    private readonly _inputReplayId             : UiTextInput;
+    private readonly _inputReplayId             : TwnsUiTextInput.UiTextInput;
 
     private readonly _labelMapNameTitle         : TwnsUiLabel.UiLabel;
-    private readonly _inputMapName              : UiTextInput;
+    private readonly _inputMapName              : TwnsUiTextInput.UiTextInput;
 
     private readonly _labelUserNicknameTitle    : TwnsUiLabel.UiLabel;
-    private readonly _inputUserNickname         : UiTextInput;
+    private readonly _inputUserNickname         : TwnsUiTextInput.UiTextInput;
 
     private readonly _labelCoNameTitle          : TwnsUiLabel.UiLabel;
-    private readonly _inputCoName               : UiTextInput;
+    private readonly _inputCoName               : TwnsUiTextInput.UiTextInput;
 
     private readonly _labelMinGlobalRatingTitle : TwnsUiLabel.UiLabel;
-    private readonly _inputMinGlobalRating      : UiTextInput;
+    private readonly _inputMinGlobalRating      : TwnsUiTextInput.UiTextInput;
 
     private readonly _labelMinMyRatingTitle     : TwnsUiLabel.UiLabel;
-    private readonly _inputMinMyRating          : UiTextInput;
+    private readonly _inputMinMyRating          : TwnsUiTextInput.UiTextInput;
 
     public static show(): void {
         if (!RwSearchReplayPanel._instance) {

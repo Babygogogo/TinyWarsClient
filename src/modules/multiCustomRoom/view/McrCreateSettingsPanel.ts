@@ -5,8 +5,8 @@ import { TwnsUiPanel }                          from "../../../utility/ui/UiPane
 import { TwnsUiButton }                          from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                          from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                     from "../../../utility/ui/UiScrollList";
-import { UiTab }                            from "../../../utility/ui/UiTab";
-import { UiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
+import { TwnsUiTab }                            from "../../../utility/ui/UiTab";
+import { TwnsUiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
 import { McrCreateAdvancedSettingsPage }    from "./McrCreateAdvancedSettingsPage";
 import { McrCreateBasicSettingsPage }       from "./McrCreateBasicSettingsPage";
 import { McrCreateMapListPanel }            from "./McrCreateMapListPanel";
@@ -56,7 +56,7 @@ export class McrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
     private readonly _sclSkinId             : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
 
     private readonly _groupTab              : eui.Group;
-    private readonly _tabSettings           : UiTab<DataForTabItemRenderer, void>;
+    private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
 
     private readonly _btnBack               : TwnsUiButton.UiButton;
     private readonly _btnConfirm            : TwnsUiButton.UiButton;
@@ -275,7 +275,7 @@ export class McrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
 type DataForTabItemRenderer = {
     name: string;
 };
-class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
+class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
     private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {

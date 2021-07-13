@@ -1,8 +1,8 @@
 
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { ScrCreateSaveSlotsPanel }      from "./ScrCreateSaveSlotsPanel";
@@ -17,7 +17,7 @@ import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes"
 import { WarMapModel }                  from "../../warMap/model/WarMapModel";
 import { ScrCreateModel }                     from "../model/ScrCreateModel";
 
-export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
+export class ScrCreateBasicSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
     private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
     private readonly _labelMapName                  : TwnsUiLabel.UiLabel;
 
@@ -26,7 +26,7 @@ export class ScrCreateBasicSettingsPage extends UiTabPage<void> {
     private readonly _btnSaveSlot                   : TwnsUiButton.UiButton;
 
     private readonly _labelSlotCommentTitle         : TwnsUiLabel.UiLabel;
-    private readonly _inputSlotComment              : UiTextInput;
+    private readonly _inputSlotComment              : TwnsUiTextInput.UiTextInput;
 
     private readonly _labelWarRuleTitle             : TwnsUiLabel.UiLabel;
     private readonly _labelWarRule                  : TwnsUiLabel.UiLabel;

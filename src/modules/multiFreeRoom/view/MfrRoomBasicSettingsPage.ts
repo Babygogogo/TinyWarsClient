@@ -1,7 +1,7 @@
 
 import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { UiTabPage }            from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }            from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }      from "../../common/view/CommonHelpPanel";
 import { Helpers }              from "../../../utility/Helpers";
 import { Lang }                 from "../../../utility/lang/Lang";
@@ -17,7 +17,7 @@ import { MfrModel }             from "../../multiFreeRoom/model/MfrModel";
 export type OpenDataForMfrRoomBasicSettingsPage = {
     roomId  : number | null;
 };
-export class MfrRoomBasicSettingsPage extends UiTabPage<OpenDataForMfrRoomBasicSettingsPage> {
+export class MfrRoomBasicSettingsPage extends TwnsUiTabPage.UiTabPage<OpenDataForMfrRoomBasicSettingsPage> {
     private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
     private readonly _labelMapName                  : TwnsUiLabel.UiLabel;
 

@@ -1,7 +1,7 @@
 
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -17,7 +17,7 @@ import { SpmModel }                     from "../model/SpmModel";
 export type OpenDataForSpmWarBasicSettingsPage = {
     slotIndex   : number | null;
 };
-export class SpmWarBasicSettingsPage extends UiTabPage<OpenDataForSpmWarBasicSettingsPage> {
+export class SpmWarBasicSettingsPage extends TwnsUiTabPage.UiTabPage<OpenDataForSpmWarBasicSettingsPage> {
     private readonly _labelMapNameTitle     : TwnsUiLabel.UiLabel;
     private readonly _labelMapName          : TwnsUiLabel.UiLabel;
 

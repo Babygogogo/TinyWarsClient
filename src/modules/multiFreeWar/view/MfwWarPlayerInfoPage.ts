@@ -4,7 +4,7 @@ import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer
 import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiTabPage }            from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }            from "../../../utility/ui/UiTabPage";
 import { ChatPanel }            from "../../chat/view/ChatPanel";
 import { CommonCoInfoPanel }    from "../../common/view/CommonCoInfoPanel";
 import { UserPanel }            from "../../user/view/UserPanel";
@@ -26,7 +26,7 @@ import { UserModel }            from "../../user/model/UserModel";
 export type OpenDataForMfwWarPlayerInfoPage = {
     warId   : number;
 };
-export class MfwWarPlayerInfoPage extends UiTabPage<OpenDataForMfwWarPlayerInfoPage> {
+export class MfwWarPlayerInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForMfwWarPlayerInfoPage> {
     private readonly _groupInfo     : eui.Group;
     private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 

@@ -3,7 +3,7 @@ import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItem
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -22,7 +22,7 @@ export type OpenDataForMrrPreviewAdvancedSettingsPage = {
     hasFog  : boolean;
     mapId   : number;
 };
-export class MrrPreviewAdvancedSettingsPage extends UiTabPage<OpenDataForMrrPreviewAdvancedSettingsPage> {
+export class MrrPreviewAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<OpenDataForMrrPreviewAdvancedSettingsPage> {
     private readonly _scroller      : eui.Scroller;
     private readonly _listSetting   : TwnsUiScrollList.UiScrollList<DataForSettingRenderer>;
     private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;

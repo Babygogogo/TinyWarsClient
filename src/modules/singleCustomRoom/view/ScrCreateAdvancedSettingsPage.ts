@@ -2,9 +2,9 @@
 import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { ScrCreateBanCoPanel }          from "./ScrCreateBanCoPanel";
@@ -21,7 +21,7 @@ import { Types }                        from "../../../utility/Types";
 import { ScrCreateModel }                     from "../model/ScrCreateModel";
 import PlayerRuleType                   = Types.PlayerRuleType;
 
-export class ScrCreateAdvancedSettingsPage extends UiTabPage<void> {
+export class ScrCreateAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
     private readonly _scroller      : eui.Scroller;
     private readonly _btnReset      : TwnsUiButton.UiButton;
     private readonly _btnCustomize  : TwnsUiButton.UiButton;
@@ -220,7 +220,7 @@ type DataForInfoRenderer = {
 };
 class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
     private readonly _btnCustom     : TwnsUiButton.UiButton;
-    private readonly _inputValue    : UiTextInput;
+    private readonly _inputValue    : TwnsUiTextInput.UiTextInput;
     private readonly _labelValue    : TwnsUiLabel.UiLabel;
 
     private _callbackForTouchLabelValue     : () => void;

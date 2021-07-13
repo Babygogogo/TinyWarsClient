@@ -3,7 +3,7 @@ import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { CcrCreateMapListPanel }        from "./CcrCreateMapListPanel";
 import { Helpers }                      from "../../../utility/Helpers";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -33,11 +33,11 @@ export class CcrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<void> {
     private readonly _labelPlayedTimesTitle     : TwnsUiLabel.UiLabel;
     private readonly _labelMinRatingTitle       : TwnsUiLabel.UiLabel;
     private readonly _labelDesc                 : TwnsUiLabel.UiLabel;
-    private readonly _inputMapName              : UiTextInput;
-    private readonly _inputDesigner             : UiTextInput;
-    private readonly _inputPlayersCount         : UiTextInput;
-    private readonly _inputPlayedTimes          : UiTextInput;
-    private readonly _inputMinRating            : UiTextInput;
+    private readonly _inputMapName              : TwnsUiTextInput.UiTextInput;
+    private readonly _inputDesigner             : TwnsUiTextInput.UiTextInput;
+    private readonly _inputPlayersCount         : TwnsUiTextInput.UiTextInput;
+    private readonly _inputPlayedTimes          : TwnsUiTextInput.UiTextInput;
+    private readonly _inputMinRating            : TwnsUiTextInput.UiTextInput;
 
     private readonly _labelTagFogTitle          : TwnsUiLabel.UiLabel;
     private readonly _labelTagFog               : TwnsUiLabel.UiLabel;

@@ -1,7 +1,7 @@
 
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { TwnsUiMapInfo }                    from "../../../utility/ui/UiMapInfo";
 import { ConfigManager }                from "../../../utility/ConfigManager";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -16,8 +16,8 @@ import { WarMapModel }                  from "../../warMap/model/WarMapModel";
 export type OpenDataForMrrPreviewMapInfoPage = {
     mapId: number;
 };
-export class MrrPreviewMapInfoPage extends UiTabPage<OpenDataForMrrPreviewMapInfoPage> {
-    private readonly _zoomMap       : UiZoomableMap;
+export class MrrPreviewMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForMrrPreviewMapInfoPage> {
+    private readonly _zoomMap       : TwnsUiZoomableMap.UiZoomableMap;
     private readonly _uiMapInfo     : TwnsUiMapInfo.UiMapInfo;
     private readonly _labelLoading  : TwnsUiLabel.UiLabel;
 

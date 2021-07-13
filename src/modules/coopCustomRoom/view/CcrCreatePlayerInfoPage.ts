@@ -4,7 +4,7 @@ import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItem
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPanel";
 import { CommonChooseCoPanel }          from "../../common/view/CommonChooseCoPanel";
@@ -20,7 +20,7 @@ import NotifyType       = TwnsNotifyType.NotifyType;
 import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
 import { CcrCreateModel }               from "../model/CcrCreateModel";
 
-export class CcrCreatePlayerInfoPage extends UiTabPage<void> {
+export class CcrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
     private readonly _groupInfo     : eui.Group;
     private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 

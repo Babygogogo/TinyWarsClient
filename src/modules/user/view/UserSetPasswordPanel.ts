@@ -1,6 +1,6 @@
 
 import { TwnsUiButton }              from "../../../utility/ui/UiButton";
-import { UiTextInput }          from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }          from "../../../utility/ui/UiTextInput";
 import { TwnsUiImage }              from "../../../utility/ui/UiImage";
 import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
@@ -29,15 +29,15 @@ export class UserSetPasswordPanel extends TwnsUiPanel.UiPanel<void> {
     // @ts-ignore
     private readonly _labelOldPasswordTitle     : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _inputOldPassword          : UiTextInput;
+    private readonly _inputOldPassword          : TwnsUiTextInput.UiTextInput;
     // @ts-ignore
     private readonly _labelNewPasswordTitle0    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _inputNewPassword0         : UiTextInput;
+    private readonly _inputNewPassword0         : TwnsUiTextInput.UiTextInput;
     // @ts-ignore
     private readonly _labelNewPasswordTitle1    : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _inputNewPassword1         : UiTextInput;
+    private readonly _inputNewPassword1         : TwnsUiTextInput.UiTextInput;
     // @ts-ignore
     private readonly _btnConfirm                : TwnsUiButton.UiButton;
     // @ts-ignore

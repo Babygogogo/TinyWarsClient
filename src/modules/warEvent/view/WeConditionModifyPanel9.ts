@@ -3,7 +3,7 @@ import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { WeConditionTypeListPanel }     from "./WeConditionTypeListPanel";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -39,7 +39,7 @@ export class WeConditionModifyPanel9 extends TwnsUiPanel.UiPanel<OpenDataForWeCo
     private _labelEvent         : TwnsUiLabel.UiLabel;
     private _btnEvent           : TwnsUiButton.UiButton;
     private _labelCalledCount   : TwnsUiLabel.UiLabel;
-    private _inputCalledCount   : UiTextInput;
+    private _inputCalledCount   : TwnsUiTextInput.UiTextInput;
 
     public static show(openData: OpenDataForWeConditionModifyPanel9): void {
         if (!WeConditionModifyPanel9._instance) {

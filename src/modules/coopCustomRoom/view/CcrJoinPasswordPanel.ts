@@ -2,7 +2,7 @@
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { FloatText }                    from "../../../utility/FloatText";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
@@ -28,7 +28,7 @@ export class CcrJoinPasswordPanel extends TwnsUiPanel.UiPanel<OpenDataForCcrJoin
     private readonly _labelRoomTitle        : TwnsUiLabel.UiLabel;
     private readonly _labelPasswordTitle    : TwnsUiLabel.UiLabel;
     private readonly _labelWarName          : TwnsUiLabel.UiLabel;
-    private readonly _inputWarPassword      : UiTextInput;
+    private readonly _inputWarPassword      : TwnsUiTextInput.UiTextInput;
     private readonly _btnCancel             : TwnsUiButton.UiButton;
     private readonly _btnConfirm            : TwnsUiButton.UiButton;
 

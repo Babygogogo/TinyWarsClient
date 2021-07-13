@@ -2,7 +2,7 @@
 import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
 import { BwCursor }             from "./BwCursor";
 import { BwGridVisualEffect }   from "./BwGridVisualEffect";
-import { BwActionPlanner }      from "./BwActionPlanner";
+import { TwnsBwActionPlanner }      from "./BwActionPlanner";
 import { BwFogMap }             from "./BwFogMap";
 import { BwTileMap }            from "./BwTileMap";
 import { BwUnitMap }            from "./BwUnitMap";
@@ -21,7 +21,7 @@ export abstract class BwField {
     public abstract getFogMap(): BwFogMap;
     public abstract getTileMap(): BwTileMap;
     public abstract getUnitMap(): BwUnitMap;
-    public abstract getActionPlanner(): BwActionPlanner;
+    public abstract getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner;
 
     public init({ data, configVersion, playersCountUnneutral }: {
         data                    : ISerialField | null | undefined;

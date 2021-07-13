@@ -1,7 +1,7 @@
 
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Helpers }                      from "../../../utility/Helpers";
@@ -18,7 +18,7 @@ export type OpenDataForMrrPreviewBasicSettingsPage = {
     hasFog  : boolean;
     mapId   : number | null;
 };
-export class MrrPreviewBasicSettingsPage extends UiTabPage<OpenDataForMrrPreviewBasicSettingsPage> {
+export class MrrPreviewBasicSettingsPage extends TwnsUiTabPage.UiTabPage<OpenDataForMrrPreviewBasicSettingsPage> {
     private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
     private readonly _labelMapName                  : TwnsUiLabel.UiLabel;
 

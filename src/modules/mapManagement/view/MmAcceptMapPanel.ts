@@ -3,7 +3,7 @@ import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { MeWar }                        from "../../mapEditor/model/MeWar";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
@@ -28,7 +28,7 @@ export class MmAcceptMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
     // @ts-ignore
     private _labelTips      : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private _inputReason    : UiTextInput;
+    private _inputReason    : TwnsUiTextInput.UiTextInput;
     // @ts-ignore
     private _btnCancel      : TwnsUiButton.UiButton;
     // @ts-ignore

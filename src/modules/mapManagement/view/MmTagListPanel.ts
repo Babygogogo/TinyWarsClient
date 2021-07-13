@@ -1,23 +1,22 @@
 
 import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
 import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import { TwnsUiButton }             from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
-import { UiZoomableMap }        from "../../../utility/ui/UiZoomableMap";
-import { FiltersForMapList }    from "./MmAvailabilityListPanel";
-import { MmTagSearchPanel }     from "./MmTagSearchPanel";
-import { MmMainMenuPanel }      from "./MmMainMenuPanel";
-import { MmTagChangePanel }     from "./MmTagChangePanel";
-import { FloatText }            from "../../../utility/FloatText";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { TwnsUiZoomableMap }        from "../../../utility/ui/UiZoomableMap";
+import { FiltersForMapList }        from "./MmAvailabilityListPanel";
+import { MmTagSearchPanel }         from "./MmTagSearchPanel";
+import { MmMainMenuPanel }          from "./MmMainMenuPanel";
+import { MmTagChangePanel }         from "./MmTagChangePanel";
+import { FloatText }                from "../../../utility/FloatText";
+import { Lang }                     from "../../../utility/lang/Lang";
+import { TwnsLangTextType }         from "../../../utility/lang/LangTextType";
+import { TwnsNotifyType }           from "../../../utility/notify/NotifyType";
+import { Types }                    from "../../../utility/Types";
+import { WarMapModel }              from "../../warMap/model/WarMapModel";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                from "../../../utility/Types";
-import { WarMapModel }          from "../../warMap/model/WarMapModel";
 
 export class MmTagListPanel extends TwnsUiPanel.UiPanel<FiltersForMapList> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -26,7 +25,7 @@ export class MmTagListPanel extends TwnsUiPanel.UiPanel<FiltersForMapList> {
     private static _instance: MmTagListPanel;
 
     private _listMap        : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
-    private _zoomMap        : UiZoomableMap;
+    private _zoomMap        : TwnsUiZoomableMap.UiZoomableMap;
     private _labelMenuTitle : TwnsUiLabel.UiLabel;
     private _btnSearch      : TwnsUiButton.UiButton;
     private _btnBack        : TwnsUiButton.UiButton;

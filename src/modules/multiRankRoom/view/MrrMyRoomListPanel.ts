@@ -4,8 +4,8 @@ import { TwnsUiPanel }                                                          
 import { TwnsUiButton }                                                              from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                                                              from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                                                         from "../../../utility/ui/UiScrollList";
-import { UiTab }                                                                from "../../../utility/ui/UiTab";
-import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
+import { TwnsUiTab }                                                                from "../../../utility/ui/UiTab";
+import { TwnsUiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
 import { TwnsLobbyBottomPanel }                                                 from "../../lobby/view/LobbyBottomPanel";
 import { TwnsLobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
 import { MrrMainMenuPanel }                                                     from "./MrrMainMenuPanel";
@@ -33,7 +33,7 @@ export class MrrMyRoomListPanel extends TwnsUiPanel.UiPanel<void> {
     private static _instance: MrrMyRoomListPanel;
 
     private readonly _groupTab              : eui.Group;
-    private readonly _tabSettings           : UiTab<DataForTabItemRenderer, OpenDataForMrrRoomMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForMrrRoomAdvancedSettingsPage | OpenDataForMrrRoomBasicSettingsPage>;
+    private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForMrrRoomMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForMrrRoomAdvancedSettingsPage | OpenDataForMrrRoomBasicSettingsPage>;
 
     private readonly _groupNavigator        : eui.Group;
     private readonly _labelRankMatch        : TwnsUiLabel.UiLabel;
@@ -286,7 +286,7 @@ export class MrrMyRoomListPanel extends TwnsUiPanel.UiPanel<void> {
 type DataForTabItemRenderer = {
     name: string;
 };
-class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
+class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
     private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {

@@ -5,8 +5,8 @@ import { TwnsUiPanel }                                                          
 import { TwnsUiButton }                                                              from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                                                              from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                                                         from "../../../utility/ui/UiScrollList";
-import { UiTab }                                                                from "../../../utility/ui/UiTab";
-import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
+import { TwnsUiTab }                                                                from "../../../utility/ui/UiTab";
+import { TwnsUiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
 import { ChatPanel }                                                            from "../../chat/view/ChatPanel";
 import { CommonConfirmPanel }                                                   from "../../common/view/CommonConfirmPanel";
 import { McrMyRoomListPanel }                                                   from "./McrMyRoomListPanel";
@@ -45,7 +45,7 @@ export class McrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrRoomInfo
     private static _instance: McrRoomInfoPanel;
 
     private readonly _groupTab          : eui.Group;
-    private readonly _tabSettings       : UiTab<DataForTabItemRenderer, OpenDataForMcrRoomMapInfoPage | OpenDataForMcrRoomPlayerInfoPage | OpenDataForMcrRoomBasicSettingsPage | OpenDataForMcrRoomAdvancedSettingsPage>;
+    private readonly _tabSettings       : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForMcrRoomMapInfoPage | OpenDataForMcrRoomPlayerInfoPage | OpenDataForMcrRoomBasicSettingsPage | OpenDataForMcrRoomAdvancedSettingsPage>;
 
     private readonly _groupNavigator    : eui.Group;
     private readonly _labelMultiPlayer  : TwnsUiLabel.UiLabel;
@@ -446,7 +446,7 @@ export class McrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrRoomInfo
 type DataForTabItemRenderer = {
     name: string;
 };
-class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
+class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
     private _labelName: TwnsUiLabel.UiLabel;
 
     protected _onDataChanged(): void {

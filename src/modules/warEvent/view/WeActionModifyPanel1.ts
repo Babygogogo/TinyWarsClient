@@ -4,7 +4,7 @@ import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItem
 import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTextInput }                  from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { BwWar }                        from "../../baseWar/model/BwWar";
@@ -181,11 +181,11 @@ class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnit
     private _imgNeedMovableTile     : TwnsUiImage.UiImage;
 
     private _labelGridIndex         : TwnsUiLabel.UiLabel;
-    private _inputGridX             : UiTextInput;
-    private _inputGridY             : UiTextInput;
+    private _inputGridX             : TwnsUiTextInput.UiTextInput;
+    private _inputGridY             : TwnsUiTextInput.UiTextInput;
 
     private _labelPlayerIndex       : TwnsUiLabel.UiLabel;
-    private _inputPlayerIndex       : UiTextInput;
+    private _inputPlayerIndex       : TwnsUiTextInput.UiTextInput;
 
     private _btnUnitType            : TwnsUiButton.UiButton;
     private _labelUnitType          : TwnsUiLabel.UiLabel;
@@ -194,13 +194,13 @@ class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnit
     private _labelActionState       : TwnsUiLabel.UiLabel;
 
     private _labelHp                : TwnsUiLabel.UiLabel;
-    private _inputHp                : UiTextInput;
+    private _inputHp                : TwnsUiTextInput.UiTextInput;
 
     private _labelFuel              : TwnsUiLabel.UiLabel;
-    private _inputFuel              : UiTextInput;
+    private _inputFuel              : TwnsUiTextInput.UiTextInput;
 
     private _labelPromotion         : TwnsUiLabel.UiLabel;
-    private _inputPromotion         : UiTextInput;
+    private _inputPromotion         : TwnsUiTextInput.UiTextInput;
 
     private _groupHasLoadedCo       : eui.Group;
     private _labelHasLoadedCo       : TwnsUiLabel.UiLabel;
@@ -208,11 +208,11 @@ class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnit
 
     private _groupPrimaryAmmo       : eui.Group;
     private _labelPrimaryAmmo       : TwnsUiLabel.UiLabel;
-    private _inputPrimaryAmmo       : UiTextInput;
+    private _inputPrimaryAmmo       : TwnsUiTextInput.UiTextInput;
 
     private _groupFlareAmmo         : eui.Group;
     private _labelFlareAmmo         : TwnsUiLabel.UiLabel;
-    private _inputFlareAmmo         : UiTextInput;
+    private _inputFlareAmmo         : TwnsUiTextInput.UiTextInput;
 
     private _groupIsDiving          : eui.Group;
     private _labelIsDiving          : TwnsUiLabel.UiLabel;
@@ -220,11 +220,11 @@ class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnit
 
     private _groupBuildMaterial     : eui.Group;
     private _labelBuildMaterial     : TwnsUiLabel.UiLabel;
-    private _inputBuildMaterial     : UiTextInput;
+    private _inputBuildMaterial     : TwnsUiTextInput.UiTextInput;
 
     private _groupProduceMaterial   : eui.Group;
     private _labelProduceMaterial   : TwnsUiLabel.UiLabel;
-    private _inputProduceMaterial   : UiTextInput;
+    private _inputProduceMaterial   : TwnsUiTextInput.UiTextInput;
 
     protected _onOpened(): void {
         this._setUiListenerArray([

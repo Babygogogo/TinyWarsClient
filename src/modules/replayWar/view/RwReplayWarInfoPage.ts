@@ -1,6 +1,6 @@
 
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { Helpers }                      from "../../../utility/Helpers";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -16,7 +16,7 @@ import { RwModel }                      from "../model/RwModel";
 export type OpenDataForRwReplayWarInfoPage = {
     replayId: number | null;
 };
-export class RwReplayWarInfoPage extends UiTabPage<OpenDataForRwReplayWarInfoPage> {
+export class RwReplayWarInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForRwReplayWarInfoPage> {
     private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
     private readonly _labelMapName                  : TwnsUiLabel.UiLabel;
 

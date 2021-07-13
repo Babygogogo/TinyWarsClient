@@ -7,7 +7,7 @@ import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { Types }                from "../../../utility/Types";
 import { TimeModel }            from "../../time/model/TimeModel";
 import { TwnsUiImage }          from "../../../utility/ui/UiImage";
-import { BwActionPlanner }      from "../model/BwActionPlanner";
+import { TwnsBwActionPlanner }  from "../model/BwActionPlanner";
 import { BwUnit }               from "../model/BwUnit";
 import { BwUnitView }           from "./BwUnitView";
 import NotifyType               = TwnsNotifyType.NotifyType;
@@ -82,7 +82,7 @@ const ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL = 0.6;
 const ALPHA_FOR_ATTACKABLE_GRIDS_SILO   = 0.15;
 
 export class BwActionPlannerView extends egret.DisplayObjectContainer {
-    private _actionPlanner  : BwActionPlanner;
+    private _actionPlanner  : TwnsBwActionPlanner.BwActionPlanner;
     private _mapSize        : Types.MapSize;
 
     private _conForGrids            = new egret.DisplayObjectContainer();
@@ -115,7 +115,7 @@ export class BwActionPlannerView extends egret.DisplayObjectContainer {
         this.addChild(this._conForUnits);
     }
 
-    public init(actionPlanner: BwActionPlanner): void {
+    public init(actionPlanner: TwnsBwActionPlanner.BwActionPlanner): void {
         this._actionPlanner = actionPlanner;
         this._mapSize       = actionPlanner.getMapSize();
         this._initConForMovableGrids();
@@ -123,7 +123,7 @@ export class BwActionPlannerView extends egret.DisplayObjectContainer {
         this._initConForAttackableGrids();
         this._initConForMovePath();
     }
-    public fastInit(actionPlanner: BwActionPlanner): void {
+    public fastInit(actionPlanner: TwnsBwActionPlanner.BwActionPlanner): void {
         this._actionPlanner = actionPlanner;
     }
 

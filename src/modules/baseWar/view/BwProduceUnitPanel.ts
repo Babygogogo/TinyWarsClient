@@ -22,7 +22,7 @@ import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
 import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { BwActionPlanner }      from "../model/BwActionPlanner";
+import { TwnsBwActionPlanner }      from "../model/BwActionPlanner";
 import { CommonInputPanel }     from "../../common/view/CommonInputPanel";
 import UnitType                 = Types.UnitType;
 import GridIndex                = Types.GridIndex;
@@ -216,7 +216,7 @@ type DataForUnitRenderer = {
     minCost                 : number;
     cfgCost                 : number;
     currentFund             : number;
-    actionPlanner           : BwActionPlanner;
+    actionPlanner           : TwnsBwActionPlanner.BwActionPlanner;
     gridIndex               : GridIndex;
     unitProductionSkillCfg  : number[] | null;
     panel                   : BwProduceUnitPanel;

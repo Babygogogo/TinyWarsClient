@@ -11,7 +11,7 @@ import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { TwnsUiImage }              from "../../../utility/ui/UiImage";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { UiTextInput }          from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }          from "../../../utility/ui/UiTextInput";
 
 type OpenData = {
     title           : string;
@@ -31,7 +31,7 @@ export class CommonInputPanel extends TwnsUiPanel.UiPanel<OpenData> {
     private readonly _group         : eui.Group;
     private readonly _labelTitle    : TwnsUiLabel.UiLabel;
     private readonly _labelTips     : TwnsUiLabel.UiLabel;
-    private readonly _input         : UiTextInput;
+    private readonly _input         : TwnsUiTextInput.UiTextInput;
     private readonly _btnCancel     : TwnsUiButton.UiButton;
     private readonly _btnConfirm    : TwnsUiButton.UiButton;
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0">
         <e:Group id="_groupTab" top="80" left="200" right="0" bottom="0" locked="true">
-            <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
+            <TwnsUiTab:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
                 <e:skinName>
                     <e:Skin>
                         <e:Group id="_page" top="40" bottom="0" left="0" right="0" />
@@ -30,7 +30,7 @@
                         </e:Scroller>
                     </e:Skin>
                 </e:skinName>
-            </GameUi:UiTab>
+            </TwnsUiTab:UiTab>
         </e:Group>
         <e:Group id="_groupNavigator" x="200" y="20">
             <e:Group x="0" y="0">

@@ -1,8 +1,8 @@
 
 import { TwnsUiButton }              from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { UiTextInput }          from "../../../utility/ui/UiTextInput";
-import { UiTabPage }            from "../../../utility/ui/UiTabPage";
+import { TwnsUiTextInput }          from "../../../utility/ui/UiTextInput";
+import { TwnsUiTabPage }            from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }      from "../../common/view/CommonHelpPanel";
 import { CommonInputPanel }     from "../../common/view/CommonInputPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
@@ -16,18 +16,18 @@ import { MfrCreateModel }       from "../model/MfrCreateModel";
 import LangTextType             = TwnsLangTextType.LangTextType;
 import NotifyType               = TwnsNotifyType.NotifyType;
 
-export class MfrCreateBasicSettingsPage extends UiTabPage<void> {
+export class MfrCreateBasicSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
     private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
     private readonly _labelMapName                  : TwnsUiLabel.UiLabel;
 
     private readonly _labelWarNameTitle             : TwnsUiLabel.UiLabel;
-    private readonly _inputWarName                  : UiTextInput;
+    private readonly _inputWarName                  : TwnsUiTextInput.UiTextInput;
 
     private readonly _labelWarPasswordTitle         : TwnsUiLabel.UiLabel;
-    private readonly _inputWarPassword              : UiTextInput;
+    private readonly _inputWarPassword              : TwnsUiTextInput.UiTextInput;
 
     private readonly _labelWarCommentTitle          : TwnsUiLabel.UiLabel;
-    private readonly _inputWarComment               : UiTextInput;
+    private readonly _inputWarComment               : TwnsUiTextInput.UiTextInput;
 
     private readonly _labelWarRuleTitle             : TwnsUiLabel.UiLabel;
     private readonly _labelWarRule                  : TwnsUiLabel.UiLabel;

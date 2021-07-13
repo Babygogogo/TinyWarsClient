@@ -1,8 +1,8 @@
 
-import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
-import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiImage }                  from "../../../utility/ui/UiImage";
+import { TwnsUiButton }                 from "../../../utility/ui/UiButton";
+import { TwnsUiLabel }                  from "../../../utility/ui/UiLabel";
+import { TwnsUiTabPage }                from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { WarMapBuildingListPanel }      from "../../warMap/view/WarMapBuildingListPanel";
@@ -13,7 +13,7 @@ import { Lang }                         from "../../../utility/lang/Lang";
 import NotifyType                       = TwnsNotifyType.NotifyType;
 import LangTextType                     = TwnsLangTextType.LangTextType;
 
-export class MeMfwBasicSettingsPage extends UiTabPage<void> {
+export class MeMfwBasicSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
     private _btnMapNameTitle            : TwnsUiButton.UiButton;
     private _labelMapName               : TwnsUiLabel.UiLabel;
     private _btnBuildings               : TwnsUiButton.UiButton;

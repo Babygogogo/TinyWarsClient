@@ -3,7 +3,7 @@ import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
 import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { ConfigManager }                from "../../../utility/ConfigManager";
@@ -20,7 +20,7 @@ import { SpmModel }                     from "../model/SpmModel";
 export type OpenDataForSpmWarPlayerInfoPage = {
     slotIndex   : number;
 };
-export class SpmWarPlayerInfoPage extends UiTabPage<OpenDataForSpmWarPlayerInfoPage> {
+export class SpmWarPlayerInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForSpmWarPlayerInfoPage> {
     private readonly _groupInfo     : eui.Group;
     private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 

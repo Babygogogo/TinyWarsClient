@@ -3,7 +3,7 @@ import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItem
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Lang }                         from "../../../utility/lang/Lang";
@@ -22,7 +22,7 @@ import PlayerRuleType                   = Types.PlayerRuleType;
 export type OpenDataForCcwWarAdvancedSettingsPage = {
     warId  : number | null | undefined;
 };
-export class CcwWarAdvancedSettingsPage extends UiTabPage<OpenDataForCcwWarAdvancedSettingsPage> {
+export class CcwWarAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<OpenDataForCcwWarAdvancedSettingsPage> {
     // @ts-ignore
     private readonly _scroller      : eui.Scroller;
     // @ts-ignore

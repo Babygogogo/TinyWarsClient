@@ -3,7 +3,7 @@ import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItem
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
 import { CommonChooseCoPanel }          from "../../common/view/CommonChooseCoPanel";
@@ -17,7 +17,7 @@ import { Lang }                         from "../../../utility/lang/Lang";
 import LangTextType                     = TwnsLangTextType.LangTextType;
 import NotifyType                       = TwnsNotifyType.NotifyType;
 
-export class MeSimAdvancedSettingsPage extends UiTabPage<void> {
+export class MeSimAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
     private _labelMapNameTitle      : TwnsUiLabel.UiLabel;
     private _labelMapName           : TwnsUiLabel.UiLabel;
     private _labelPlayersCountTitle : TwnsUiLabel.UiLabel;

@@ -2,7 +2,7 @@
 import { TwnsUiImage }              from "../../../utility/ui/UiImage";
 import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }              from "../../../utility/ui/UiButton";
-import { UiTextInput }          from "../../../utility/ui/UiTextInput";
+import { TwnsUiTextInput }          from "../../../utility/ui/UiTextInput";
 import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
@@ -32,7 +32,7 @@ export class UserChangeDiscordIdPanel extends TwnsUiPanel.UiPanel<void> {
     // @ts-ignore
     private readonly _labelNote         : TwnsUiLabel.UiLabel;
     // @ts-ignore
-    private readonly _inputDiscordId    : UiTextInput;
+    private readonly _inputDiscordId    : TwnsUiTextInput.UiTextInput;
     // @ts-ignore
     private readonly _labelUrl          : TwnsUiLabel.UiLabel;
     // @ts-ignore

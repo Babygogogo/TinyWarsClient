@@ -4,7 +4,7 @@ import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItem
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiTabPage }                    from "../../../utility/ui/UiTabPage";
+import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
@@ -26,7 +26,7 @@ import { RwModel }                      from "../model/RwModel";
 export type OpenDataForRwReplayPlayerInfoPage = {
     replayId: number;
 };
-export class RwReplayPlayerInfoPage extends UiTabPage<OpenDataForRwReplayPlayerInfoPage> {
+export class RwReplayPlayerInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForRwReplayPlayerInfoPage> {
     private readonly _groupInfo     : eui.Group;
     private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 

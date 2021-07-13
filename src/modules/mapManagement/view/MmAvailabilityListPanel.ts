@@ -4,7 +4,7 @@ import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
 import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { UiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import { TwnsUiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
 import { MmAvailabilitySearchPanel }    from "./MmAvailabilitySearchPanel";
 import { MmMainMenuPanel }              from "./MmMainMenuPanel";
 import { MmAvailabilityChangePanel }    from "./MmAvailabilityChangePanel";
@@ -32,7 +32,7 @@ export class MmAvailabilityListPanel extends TwnsUiPanel.UiPanel<FiltersForMapLi
     private static _instance: MmAvailabilityListPanel;
 
     private _listMap        : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
-    private _zoomMap        : UiZoomableMap;
+    private _zoomMap        : TwnsUiZoomableMap.UiZoomableMap;
     private _labelMenuTitle : TwnsUiLabel.UiLabel;
     private _btnSearch      : TwnsUiButton.UiButton;
     private _btnBack        : TwnsUiButton.UiButton;

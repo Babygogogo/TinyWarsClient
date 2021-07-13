@@ -3,7 +3,7 @@ import { CommonConfirmPanel }                   from "../../common/view/CommonCo
 import { BwProduceUnitPanel }                   from "../../baseWar/view/BwProduceUnitPanel";
 import { BwUnitActionsPanel }                   from "../../baseWar/view/BwUnitActionsPanel";
 import { BwUnit }                               from "../../baseWar/model/BwUnit";
-import { BwActionPlanner, DataForUnitAction }   from "../../baseWar/model/BwActionPlanner";
+import { TwnsBwActionPlanner }   from "../../baseWar/model/BwActionPlanner";
 import { SpwWar }                               from "./SpwWar";
 import { FloatText }                            from "../../../utility/FloatText";
 import { GridIndexHelpers }                     from "../../../utility/GridIndexHelpers";
@@ -21,7 +21,7 @@ import State                                    = Types.ActionPlannerState;
 import UnitActionType                           = Types.UnitActionType;
 import UnitType                                 = Types.UnitType;
 
-export class SpwActionPlanner extends BwActionPlanner {
+export class SpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
     private _getPlayerIndexInTurn(): number {
         return this._getWar().getPlayerIndexInTurn();
     }
@@ -424,7 +424,7 @@ export class SpwActionPlanner extends BwActionPlanner {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for generating actions for the focused unit.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected _getActionUnitBeLoaded(): DataForUnitAction[] {
+    protected _getActionUnitBeLoaded(): TwnsBwActionPlanner.DataForUnitAction[] {
         const destination   = this.getMovePathDestination();
         const focusUnit     = this.getFocusUnit();
         if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -436,7 +436,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                 : [];
         }
     }
-    protected _getActionUnitJoin(): DataForUnitAction[] {
+    protected _getActionUnitJoin(): TwnsBwActionPlanner.DataForUnitAction[] {
         const destination   = this.getMovePathDestination();
         const focusUnit     = this.getFocusUnit();
         if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -448,7 +448,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                 : [];
         }
     }
-    protected _getActionUnitUseCoSuperPower(): DataForUnitAction[] {
+    protected _getActionUnitUseCoSuperPower(): TwnsBwActionPlanner.DataForUnitAction[] {
         if (this.getChosenUnitsForDrop().length) {
             return [];
         } else {
@@ -465,7 +465,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                 }];
         }
     }
-    protected _getActionUnitUseCoPower(): DataForUnitAction[] {
+    protected _getActionUnitUseCoPower(): TwnsBwActionPlanner.DataForUnitAction[] {
         if (this.getChosenUnitsForDrop().length) {
             return [];
         } else {
@@ -482,7 +482,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                 }];
         }
     }
-    protected _getActionUnitLoadCo(): DataForUnitAction[] {
+    protected _getActionUnitLoadCo(): TwnsBwActionPlanner.DataForUnitAction[] {
         if (this.getChosenUnitsForDrop().length) {
             return [];
         } else {
@@ -491,7 +491,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                 : [];
         }
     }
-    protected _getActionUnitCapture(): DataForUnitAction[] {
+    protected _getActionUnitCapture(): TwnsBwActionPlanner.DataForUnitAction[] {
         if (this.getChosenUnitsForDrop().length) {
             return [];
         } else {
@@ -500,7 +500,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                 : [];
         }
     }
-    protected _getActionUnitDive(): DataForUnitAction[] {
+    protected _getActionUnitDive(): TwnsBwActionPlanner.DataForUnitAction[] {
         if (this.getChosenUnitsForDrop().length) {
             return [];
         } else {
@@ -509,7 +509,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                 : [];
         }
     }
-    protected _getActionUnitSurface(): DataForUnitAction[] {
+    protected _getActionUnitSurface(): TwnsBwActionPlanner.DataForUnitAction[] {
         if (this.getChosenUnitsForDrop().length) {
             return [];
         } else {
@@ -518,7 +518,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                 : [];
         }
     }
-    protected _getActionUnitBuildTile(): DataForUnitAction[] {
+    protected _getActionUnitBuildTile(): TwnsBwActionPlanner.DataForUnitAction[] {
         if (this.getChosenUnitsForDrop().length) {
             return [];
         } else {
@@ -527,7 +527,7 @@ export class SpwActionPlanner extends BwActionPlanner {
                 : [];
         }
     }
-    protected _getActionUnitSupply(): DataForUnitAction[] {
+    protected _getActionUnitSupply(): TwnsBwActionPlanner.DataForUnitAction[] {
         if (this.getChosenUnitsForDrop().length) {
             return [];
         } else {
@@ -545,7 +545,7 @@ export class SpwActionPlanner extends BwActionPlanner {
             return [];
         }
     }
-    protected _getActionUnitProduceUnit(): DataForUnitAction[] {
+    protected _getActionUnitProduceUnit(): TwnsBwActionPlanner.DataForUnitAction[] {
         if (this.getChosenUnitsForDrop().length) {
             return [];
         } else {
@@ -586,7 +586,7 @@ export class SpwActionPlanner extends BwActionPlanner {
             }
         }
     }
-    protected _getActionUnitWait(hasOtherAction: boolean): DataForUnitAction[] {
+    protected _getActionUnitWait(hasOtherAction: boolean): TwnsBwActionPlanner.DataForUnitAction[] {
         const existingUnit = this._getUnitMap().getVisibleUnitOnMap(this.getMovePathDestination());
         if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
             return [];

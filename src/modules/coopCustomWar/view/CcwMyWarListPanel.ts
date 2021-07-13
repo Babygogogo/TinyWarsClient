@@ -4,8 +4,8 @@ import { TwnsUiPanel }                                                          
 import { TwnsUiButton }                                                              from "../../../utility/ui/UiButton";
 import { TwnsUiLabel }                                                              from "../../../utility/ui/UiLabel";
 import { TwnsUiScrollList }                                                         from "../../../utility/ui/UiScrollList";
-import { UiTab }                                                                from "../../../utility/ui/UiTab";
-import { UiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
+import { TwnsUiTab }                                                                from "../../../utility/ui/UiTab";
+import { TwnsUiTabItemRenderer }                                                    from "../../../utility/ui/UiTabItemRenderer";
 import { TwnsLobbyBottomPanel }                                                     from "../../lobby/view/LobbyBottomPanel";
 import { TwnsLobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
 import { CcrMainMenuPanel }                                                     from "../../coopCustomRoom/view/CcrMainMenuPanel";
@@ -37,7 +37,7 @@ export namespace TwnsCcwMyWarListPanel {
         // @ts-ignore
         private readonly _groupTab              : eui.Group;
         // @ts-ignore
-        private readonly _tabSettings           : UiTab<DataForTabItemRenderer, OpenDataForCcwWarMapInfoPage | OpenDataForCcwWarPlayerInfoPage | OpenDataForCcwWarAdvancedSettingsPage | OpenDataForCcwWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCcwWarMapInfoPage | OpenDataForCcwWarPlayerInfoPage | OpenDataForCcwWarAdvancedSettingsPage | OpenDataForCcwWarBasicSettingsPage>;
 
         // @ts-ignore
         private readonly _groupNavigator        : eui.Group;
@@ -299,7 +299,7 @@ export namespace TwnsCcwMyWarListPanel {
     type DataForTabItemRenderer = {
         name: string;
     };
-    class TabItemRenderer extends UiTabItemRenderer<DataForTabItemRenderer> {
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
         // @ts-ignore
         private _labelName: TwnsUiLabel.UiLabel;
 

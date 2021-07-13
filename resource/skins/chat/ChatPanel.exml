@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+        xmlns:w="http://ns.egret.com/wing" xmlns:TwnsUiTextInput="TwnsUiTextInput.*">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
                     scale9Grid="1,1,2,2" locked="true" />
     <e:Group width="920" scaleX="1" scaleY="1" height="500" horizontalCenter="0" verticalCenter="0">
@@ -58,7 +58,7 @@
         <e:Group id="_groupInput" height="40" width="740" bottom="0" right="0">
             <TwnsUiImage:UiImage source="commonRectangle0001" scale9Grid="2,2,1,1" anchorOffsetX="0" anchorOffsetY="0"
                             alpha="0.8" left="0" right="80" top="0" bottom="0" />
-            <GameUi:UiTextInput id="_inputMessage" maxChars="200" left="10" right="90" bottom="4">
+            <TwnsUiTextInput:UiTextInput id="_inputMessage" maxChars="200" left="10" right="90" bottom="4">
                 <GameUi:skinName>
                     <e:Skin width="100" height="30">
                         <e:EditableText id="textDisplay" size="24" left="0" right="0" textColor="0xffffff" top="0"
@@ -67,7 +67,7 @@
                                  height="30" textColor="0x808080" />
                     </e:Skin>
                 </GameUi:skinName>
-            </GameUi:UiTextInput>
+            </TwnsUiTextInput:UiTextInput>
             <TwnsUiButton:UiButton id="_btnSend" label="Send" width="70" right="0" verticalCenter="0" height="40">
                 <GameUi:skinName>
                     <e:Skin>
