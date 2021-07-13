@@ -1,6 +1,6 @@
 
-import { TwnsUiImage }          from "../../../utility/ui/UiImage";
-import { TwnsUiLabel }          from "../../../utility/ui/UiLabel";
+import TwnsUiImage          from "../../../utility/ui/UiImage";
+import TwnsUiLabel          from "../../../utility/ui/UiLabel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { BwDamageCalculator }   from "../model/BwDamageCalculator";
 import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";

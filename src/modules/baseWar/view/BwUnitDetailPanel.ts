@@ -18,12 +18,12 @@ import { WarMapUnitView }           from "../../warMap/view/WarMapUnitView";
 import { CommonDamageChartPanel }   from "../../common/view/CommonDamageChartPanel";
 import { CommonInputPanel }         from "../../common/view/CommonInputPanel";
 import { CommonConfirmPanel }       from "../../common/view/CommonConfirmPanel";
-import { TwnsUiPanel }                  from "../../../utility/ui/UiPanel";
-import { TwnsUiScrollList }             from "../../../utility/ui/UiScrollList";
-import { TwnsUiButton }                  from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }                  from "../../../utility/ui/UiLabel";
-import { TwnsUiListItemRenderer }       from "../../../utility/ui/UiListItemRenderer";
-import { TwnsUiImage }                  from "../../../utility/ui/UiImage";
+import TwnsUiPanel                  from "../../../utility/ui/UiPanel";
+import TwnsUiScrollList             from "../../../utility/ui/UiScrollList";
+import TwnsUiButton                  from "../../../utility/ui/UiButton";
+import TwnsUiLabel                  from "../../../utility/ui/UiLabel";
+import TwnsUiListItemRenderer       from "../../../utility/ui/UiListItemRenderer";
+import TwnsUiImage                  from "../../../utility/ui/UiImage";
 import UnitType                     = Types.UnitType;
 import TileType                     = Types.TileType;
 

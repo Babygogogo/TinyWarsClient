@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
         xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing"
         xmlns:TwnsUiMapInfo="TwnsUiMapInfo.*" xmlns:TwnsUiZoomableMap="TwnsUiZoomableMap.*">
     <e:Group left="0" right="0" top="0" bottom="0">
@@ -37,7 +37,7 @@
             </e:layout>
         </e:Group>
         <TwnsUiButton:UiButton id="_btnSearch" label="Filter" x="20" y="80" height="30" width="80">
-            <GameUi:skinName>
+            <TwnsUiButton:skinName>
                 <e:Skin>
                     <e:Group left="0" right="0" top="0" bottom="0">
                         <e:Image source="commonPentagon0000" scale9Grid="4,4,1,1" left="0" right="0" top="0" bottom="0" />
@@ -48,10 +48,10 @@
                                              height="16" />
                     </e:Group>
                 </e:Skin>
-            </GameUi:skinName>
+            </TwnsUiButton:skinName>
         </TwnsUiButton:UiButton>
         <TwnsUiButton:UiButton id="_btnMapInfo" label="Filter" x="240" y="80" height="30" width="100">
-            <GameUi:skinName>
+            <TwnsUiButton:skinName>
                 <e:Skin>
                     <e:Group left="0" right="0" top="0" bottom="0">
                         <e:Image left="0" right="0" top="0" bottom="0" source="commonRectangle0000" scale9Grid="2,2,1,1" />
@@ -62,7 +62,7 @@
                                              height="16" />
                     </e:Group>
                 </e:Skin>
-            </GameUi:skinName>
+            </TwnsUiButton:skinName>
         </TwnsUiButton:UiButton>
         <e:Group id="_groupMapList" width="200" top="130" bottom="70" left="20">
             <TwnsUiLabel:UiLabel id="_labelNoMap" text="没有符合条件的地图" bold="true" size="20" textColor="0xFFFFFF"
@@ -77,14 +77,14 @@
                                                  source="commonPentagon0003" visible.up="false" scale9Grid="4,4,1,1" />
                             <TwnsUiButton:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
                                                    visible.down="false">
-                                <GameUi:skinName>
+                                <TwnsUiButton:skinName>
                                     <e:Skin states="up,down,disabled">
                                         <e:Image source="commonColorTransparent0000" left="0" right="0" top="0"
                                                  bottom="0" />
                                         <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
                                                  bold="true" textColor="0x000000" />
                                     </e:Skin>
-                                </GameUi:skinName>
+                                </TwnsUiButton:skinName>
                             </TwnsUiButton:UiButton>
                             <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="16" verticalCenter="0" x="10"
                                                  maxTextWidth="150" />

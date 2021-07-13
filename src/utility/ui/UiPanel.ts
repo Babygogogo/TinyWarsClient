@@ -2,9 +2,9 @@
 import { Logger }           from "../Logger";
 import { Types }            from "../Types";
 import { StageManager }     from "../StageManager";
-import { TwnsUiComponent }  from "./UiComponent";
+import TwnsUiComponent  from "./UiComponent";
 
-export namespace TwnsUiPanel {
+namespace TwnsUiPanel {
     export abstract class UiPanel<OpenData> extends TwnsUiComponent.UiComponent {
         protected abstract readonly _LAYER_TYPE  : Types.LayerType;
         protected abstract readonly _IS_EXCLUSIVE: boolean;
@@ -199,3 +199,5 @@ export namespace TwnsUiPanel {
         }
     }
 }
+
+export default TwnsUiPanel;

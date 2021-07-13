@@ -1,8 +1,8 @@
 
-import { TwnsUiListItemRenderer }   from "./UiListItemRenderer";
-import { TwnsUiComponent }          from "./UiComponent";
-import { TwnsUiLabel }              from "./UiLabel";
-import { TwnsUiScrollList }         from "./UiScrollList";
+import TwnsUiListItemRenderer   from "./UiListItemRenderer";
+import TwnsUiComponent          from "./UiComponent";
+import TwnsUiLabel              from "./UiLabel";
+import TwnsUiScrollList         from "./UiScrollList";
 import { MeTileSimpleView }         from "../../modules/mapEditor/view/MeTileSimpleView";
 import { CommonConstants }          from "../CommonConstants";
 import { ConfigManager }            from "../ConfigManager";
@@ -14,7 +14,7 @@ import { Types }                    from "../Types";
 import { BwHelpers }                from "../../modules/baseWar/model/BwHelpers";
 import { WarMapModel }              from "../../modules/warMap/model/WarMapModel";
 
-export namespace TwnsUiMapInfo {
+namespace TwnsUiMapInfo {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import TileType         = Types.TileType;
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -200,3 +200,5 @@ export namespace TwnsUiMapInfo {
         }
     }
 }
+
+export default TwnsUiMapInfo;

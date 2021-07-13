@@ -1,6 +1,6 @@
 
 import { WarMapUnitView }       from "./WarMapUnitView";
-import { TwnsUiImage }          from "../../../utility/ui/UiImage";
+import TwnsUiImage          from "../../../utility/ui/UiImage";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { ConfigManager }        from "../../../utility/ConfigManager";
 import { Helpers }              from "../../../utility/Helpers";

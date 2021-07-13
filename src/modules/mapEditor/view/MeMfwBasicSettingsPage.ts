@@ -1,8 +1,8 @@
 
-import { TwnsUiImage }                  from "../../../utility/ui/UiImage";
-import { TwnsUiButton }                 from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }                  from "../../../utility/ui/UiLabel";
-import { TwnsUiTabPage }                from "../../../utility/ui/UiTabPage";
+import TwnsUiImage                  from "../../../utility/ui/UiImage";
+import TwnsUiButton                 from "../../../utility/ui/UiButton";
+import TwnsUiLabel                  from "../../../utility/ui/UiLabel";
+import TwnsUiTabPage                from "../../../utility/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { WarMapBuildingListPanel }      from "../../warMap/view/WarMapBuildingListPanel";

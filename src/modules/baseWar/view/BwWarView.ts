@@ -1,5 +1,5 @@
 
-import { TwnsUiZoomableComponent }      from "../../../utility/ui/UiZoomableComponent";
+import TwnsUiZoomableComponent      from "../../../utility/ui/UiZoomableComponent";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Notify }                       from "../../../utility/notify/Notify";

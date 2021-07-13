@@ -56,7 +56,7 @@ const config: ResourceManagerConfig = {
                             templateFilePath: "template/web/index.html"
                         },
                     }),
-                    new ExmlPlugin('commonjs'), // 非 EUI 项目关闭此设置
+                    new ExmlPlugin('commonjs2'), // 非 EUI 项目关闭此设置
                     // new EuiCompilerPlugin(),//新的 eui 编译器
                     new UglifyPlugin([{
                         sources: ["main.js"],

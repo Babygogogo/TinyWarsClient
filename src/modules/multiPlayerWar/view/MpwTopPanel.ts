@@ -1,7 +1,7 @@
 
-import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
+import TwnsUiButton                      from "../../../utility/ui/UiButton";
+import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";

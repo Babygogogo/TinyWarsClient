@@ -1,9 +1,9 @@
 
-import { TwnsUiButton }              from "../../../utility/ui/UiButton";
-import { TwnsUiTextInput }          from "../../../utility/ui/UiTextInput";
-import { TwnsUiImage }              from "../../../utility/ui/UiImage";
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import TwnsUiButton              from "../../../utility/ui/UiButton";
+import TwnsUiTextInput          from "../../../utility/ui/UiTextInput";
+import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { FloatText }            from "../../../utility/FloatText";

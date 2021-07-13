@@ -1,8 +1,8 @@
 
-import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { TwnsUiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
-import { TwnsUiTabPage }                    from "../../../utility/ui/UiTabPage";
-import { TwnsUiMapInfo }                    from "../../../utility/ui/UiMapInfo";
+import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
+import TwnsUiZoomableMap                from "../../../utility/ui/UiZoomableMap";
+import TwnsUiTabPage                    from "../../../utility/ui/UiTabPage";
+import TwnsUiMapInfo                    from "../../../utility/ui/UiMapInfo";
 import { ConfigManager }                from "../../../utility/ConfigManager";
 import { Lang }                         from "../../../utility/lang/Lang";
 import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";

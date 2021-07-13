@@ -1,9 +1,9 @@
 
-import { TwnsUiImage }              from "../../../utility/ui/UiImage";
-import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
-import { TwnsUiTabPage }            from "../../../utility/ui/UiTabPage";
+import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiListItemRenderer   from "../../../utility/ui/UiListItemRenderer";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
+import TwnsUiScrollList         from "../../../utility/ui/UiScrollList";
+import TwnsUiTabPage            from "../../../utility/ui/UiTabPage";
 import { CommonCoInfoPanel }    from "../../common/view/CommonCoInfoPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { ConfigManager }        from "../../../utility/ConfigManager";

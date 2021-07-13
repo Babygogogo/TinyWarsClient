@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
                     scale9Grid="1,1,2,2" locked="true" />
@@ -74,7 +74,7 @@
         </e:Group>
         <e:Group bottom="20" right="20">
             <TwnsUiButton:UiButton id="_btnSearch" label="确定" width="80" x="0" y="0">
-                <GameUi:skinName>
+                <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
                             <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0000"
@@ -84,10 +84,10 @@
                                             wordWrap="true" bold="true" />
                         </e:Group>
                     </e:Skin>
-                </GameUi:skinName>
+                </TwnsUiButton:skinName>
             </TwnsUiButton:UiButton>
             <TwnsUiButton:UiButton id="_btnReset" label="全部显示" width="80" x="10" y="10">
-                <GameUi:skinName>
+                <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
                             <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0009"
@@ -97,7 +97,7 @@
                                             bold="true" textColor="0x000000" />
                         </e:Group>
                     </e:Skin>
-                </GameUi:skinName>
+                </TwnsUiButton:skinName>
             </TwnsUiButton:UiButton>
             <e:layout>
                 <e:HorizontalLayout gap="30" />

@@ -7,11 +7,11 @@ import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { Types }                from "../../../utility/Types";
 import { Helpers }              from "../../../utility/Helpers";
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }              from "../../../utility/ui/UiButton";
-import { TwnsUiImage }              from "../../../utility/ui/UiImage";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { TwnsUiTextInput }          from "../../../utility/ui/UiTextInput";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
+import TwnsUiButton              from "../../../utility/ui/UiButton";
+import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
+import TwnsUiTextInput          from "../../../utility/ui/UiTextInput";
 
 type OpenData = {
     title           : string;

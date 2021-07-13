@@ -6,7 +6,7 @@ import { Notify }               from "../../../utility/notify/Notify";
 import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { Types }                from "../../../utility/Types";
 import { TimeModel }            from "../../time/model/TimeModel";
-import { TwnsUiImage }          from "../../../utility/ui/UiImage";
+import TwnsUiImage          from "../../../utility/ui/UiImage";
 import { TwnsBwActionPlanner }  from "../model/BwActionPlanner";
 import { BwUnit }               from "../model/BwUnit";
 import { BwUnitView }           from "./BwUnitView";

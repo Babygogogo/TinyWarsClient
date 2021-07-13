@@ -1,5 +1,5 @@
 
-import { TwnsUiImage }          from "../../../utility/ui/UiImage";
+import TwnsUiImage          from "../../../utility/ui/UiImage";
 import { BwGridVisualEffect }   from "../model/BwGridVisualEffect";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";

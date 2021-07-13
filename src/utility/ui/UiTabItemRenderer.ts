@@ -1,7 +1,9 @@
 
-import { TwnsUiListItemRenderer } from "./UiListItemRenderer";
+import TwnsUiListItemRenderer from "./UiListItemRenderer";
 
-export namespace TwnsUiTabItemRenderer {
+namespace TwnsUiTabItemRenderer {
     export class UiTabItemRenderer<DataForTabItem> extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTabItem> {
     }
 }
+
+export default TwnsUiTabItemRenderer;

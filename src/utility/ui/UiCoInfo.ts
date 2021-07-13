@@ -1,16 +1,16 @@
 
-import { TwnsUiImage }              from "./UiImage";
-import { TwnsUiListItemRenderer }   from "./UiListItemRenderer";
-import { TwnsUiComponent }          from "./UiComponent";
-import { TwnsUiLabel }              from "./UiLabel";
-import { TwnsUiScrollList }         from "./UiScrollList";
+import TwnsUiImage              from "./UiImage";
+import TwnsUiListItemRenderer   from "./UiListItemRenderer";
+import TwnsUiComponent          from "./UiComponent";
+import TwnsUiLabel              from "./UiLabel";
+import TwnsUiScrollList         from "./UiScrollList";
 import { ConfigManager }            from "../ConfigManager";
 import { Lang }                     from "../lang/Lang";
 import { TwnsLangTextType }         from "../lang/LangTextType";
 import { TwnsNotifyType }           from "../notify/NotifyType";
 import { Types }                    from "../Types";
 
-export namespace TwnsUiCoInfo {
+namespace TwnsUiCoInfo {
     import CoSkillType      = Types.CoSkillType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -222,3 +222,5 @@ export namespace TwnsUiCoInfo {
         }
     }
 }
+
+export default TwnsUiCoInfo;

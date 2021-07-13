@@ -1,14 +1,14 @@
 
-import { TwnsUiImage }                  from "./UiImage";
-import { TwnsUiComponent }              from "./UiComponent";
-import { TwnsUiLabel }                  from "./UiLabel";
+import TwnsUiImage                  from "./UiImage";
+import TwnsUiComponent              from "./UiComponent";
+import TwnsUiLabel                  from "./UiLabel";
 import { TwnsLangTextType }             from "../lang/LangTextType";
 import { TwnsNotifyType }               from "../notify/NotifyType";
 import { Lang }                         from "../lang/Lang";
 import { Notify }                       from "../notify/Notify";
 import { Types }                        from "../Types";
 
-export namespace TwnsUiRadioButton {
+namespace TwnsUiRadioButton {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
@@ -132,3 +132,5 @@ export namespace TwnsUiRadioButton {
         return isOn ? 0xFFFFFF : 0x889988;
     }
 }
+
+export default TwnsUiRadioButton;

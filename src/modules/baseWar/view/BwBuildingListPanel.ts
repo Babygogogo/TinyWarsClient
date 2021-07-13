@@ -1,10 +1,10 @@
 
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
 import { BwPlayerManager }      from "../model/BwPlayerManager";
 import { BwWar }                from "../model/BwWar";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../../utility/ui/UiListItemRenderer";
+import TwnsUiScrollList         from "../../../utility/ui/UiScrollList";
 import { MeTileSimpleView }     from "../../mapEditor/view/MeTileSimpleView";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { ConfigManager }        from "../../../utility/ConfigManager";

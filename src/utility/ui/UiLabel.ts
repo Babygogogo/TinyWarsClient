@@ -1,5 +1,5 @@
 
-export namespace TwnsUiLabel {
+namespace TwnsUiLabel {
     export class UiLabel extends eui.Label {
         public touchEnabled = false;
         public maxTextWidth = 0;
@@ -26,3 +26,5 @@ export namespace TwnsUiLabel {
         }
     }
 }
+
+export default TwnsUiLabel;

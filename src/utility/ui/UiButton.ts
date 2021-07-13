@@ -1,11 +1,11 @@
 
-import { TwnsUiLabel }      from "./UiLabel";
-import { TwnsUiImage }      from "./UiImage";
+import TwnsUiLabel      from "./UiLabel";
+import TwnsUiImage      from "./UiImage";
 import { Helpers }          from "../Helpers";
 import { Types }            from "../Types";
 import { SoundManager }     from "../SoundManager";
 
-export namespace TwnsUiButton {
+namespace TwnsUiButton {
     export class UiButton extends eui.Button {
         private _imgExtra       : eui.Image;
         private _imgDisplay     : TwnsUiImage.UiImage;
@@ -73,3 +73,5 @@ export namespace TwnsUiButton {
         }
     }
 }
+
+export default TwnsUiButton;

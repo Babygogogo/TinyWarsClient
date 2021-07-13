@@ -1,5 +1,5 @@
 
-import { TwnsUiImage }          from "../../../utility/ui/UiImage";
+import TwnsUiImage          from "../../../utility/ui/UiImage";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { Logger }               from "../../../utility/Logger";
 import { Types }                from "../../../utility/Types";

@@ -1,11 +1,11 @@
 
-import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
-import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { TwnsUiCoInfo }                     from "../../../utility/ui/UiCoInfo";
+import TwnsUiImage                      from "../../../utility/ui/UiImage";
+import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
+import TwnsUiButton                      from "../../../utility/ui/UiButton";
+import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
+import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
+import TwnsUiCoInfo                     from "../../../utility/ui/UiCoInfo";
 import { ConfigManager }                from "../../../utility/ConfigManager";
 import { Helpers }                      from "../../../utility/Helpers";
 import { Lang }                         from "../../../utility/lang/Lang";

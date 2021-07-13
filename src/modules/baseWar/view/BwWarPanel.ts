@@ -1,5 +1,5 @@
 
-import { TwnsUiPanel }  from "../../../utility/ui/UiPanel";
+import TwnsUiPanel  from "../../../utility/ui/UiPanel";
 import { BwWar }    from "../model/BwWar";
 import { Types }    from "../../../utility/Types";
 

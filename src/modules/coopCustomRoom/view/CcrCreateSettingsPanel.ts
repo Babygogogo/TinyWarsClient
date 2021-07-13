@@ -1,9 +1,9 @@
 
-import { TwnsUiPanel }                          from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }                          from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }                          from "../../../utility/ui/UiLabel";
-import { TwnsUiTab }                            from "../../../utility/ui/UiTab";
-import { TwnsUiTabItemRenderer }                from "../../../utility/ui/UiTabItemRenderer";
+import TwnsUiPanel                          from "../../../utility/ui/UiPanel";
+import TwnsUiButton                          from "../../../utility/ui/UiButton";
+import TwnsUiLabel                          from "../../../utility/ui/UiLabel";
+import TwnsUiTab                            from "../../../utility/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../../utility/ui/UiTabItemRenderer";
 import { CcrCreateMapListPanel }            from "./CcrCreateMapListPanel";
 import { CcrCreateAdvancedSettingsPage }    from "./CcrCreateAdvancedSettingsPage";
 import { CcrCreateBasicSettingsPage }       from "./CcrCreateBasicSettingsPage";

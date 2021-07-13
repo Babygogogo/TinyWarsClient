@@ -4,7 +4,7 @@ import { Notify }           from "./notify/Notify";
 import { TwnsNotifyType }   from "./notify/NotifyType";
 import { Logger }           from "./Logger";
 import { CommonConstants }  from "./CommonConstants";
-import { TwnsUiPanel }      from "./ui/UiPanel";
+import TwnsUiPanel      from "./ui/UiPanel";
 
 export namespace StageManager {
     import LayerType            = Types.LayerType;

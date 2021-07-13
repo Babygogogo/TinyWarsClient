@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgBackground" source="bg_002_png" left="0" right="0" top="0" bottom="0" />
     <TwnsUiScrollList:UiScrollList id="_listLanguage" width="160" left="0" x="0" scaleX="1" scaleY="1" verticalCenter="120">
@@ -36,7 +36,7 @@
         </e:layout>
     </e:Group>
     <TwnsUiButton:UiButton id="_btnVersion" label="Button" right="0" verticalCenter="120">
-        <GameUi:skinName>
+        <TwnsUiButton:skinName>
             <e:Skin>
                 <e:Group y="0" width="160" x="0" height="36">
                     <e:Image scale9Grid="3,3,1,1" source="commonPentagon0010" width="160" height="36" y="0" scaleX="-1"
@@ -45,7 +45,7 @@
                                     bold="true" verticalAlign="middle" verticalCenter="0" left="40" right="20" />
                 </e:Group>
             </e:Skin>
-        </GameUi:skinName>
+        </TwnsUiButton:skinName>
     </TwnsUiButton:UiButton>
     <TwnsUiLabel:UiLabel id="_labelVersion" text="v19.0118.0149" bottom="20" right="20" size="18" textColor="0xFFFFFF"
                     textAlign="right" lineSpacing="2" />

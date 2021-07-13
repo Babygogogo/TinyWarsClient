@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="400" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+<e:Skin width="960" height="400" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0" touchThrough="true">
         <TwnsUiImage:UiImage id="_imgTitle" source="login_title_001" horizontalCenter="0" verticalCenter="-120" />
@@ -34,12 +34,12 @@
                                         y="1" />
                     </e:Group>
                     <TwnsUiButton:UiButton id="_btnForgetPassword" label="找回密码" right="0" bottom="0">
-                        <GameUi:skinName>
+                        <TwnsUiButton:skinName>
                             <e:Skin states="up,down,disabled">
                                 <e:Image id="_imgDisplay" width="100%" height="100%" source="commonColorTransparent0000" />
                                 <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="12" />
                             </e:Skin>
-                        </GameUi:skinName>
+                        </TwnsUiButton:skinName>
                     </TwnsUiButton:UiButton>
                 </e:Group>
             </e:Group>

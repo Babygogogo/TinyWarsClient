@@ -1,9 +1,9 @@
 
-import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
-import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { TwnsUiTextInput }                  from "../../../utility/ui/UiTextInput";
+import TwnsUiImage                      from "../../../utility/ui/UiImage";
+import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
+import TwnsUiButton                      from "../../../utility/ui/UiButton";
+import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
+import TwnsUiTextInput                  from "../../../utility/ui/UiTextInput";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { Helpers }                      from "../../../utility/Helpers";
 import { Lang }                         from "../../../utility/lang/Lang";

@@ -1,7 +1,7 @@
 
-import { TwnsUiImage }              from "../../../utility/ui/UiImage";
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
-import { TwnsUiCoInfo }             from "../../../utility/ui/UiCoInfo";
+import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
+import TwnsUiCoInfo             from "../../../utility/ui/UiCoInfo";
 import { Helpers }              from "../../../utility/Helpers";
 import { Notify }               from "../../../utility/notify/Notify";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";

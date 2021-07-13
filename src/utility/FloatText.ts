@@ -2,7 +2,7 @@
 import { Types }            from "./Types";
 import { StageManager }     from "./StageManager";
 import { Logger }           from "./Logger";
-import { TwnsUiLabel }      from "./ui/UiLabel";
+import TwnsUiLabel      from "./ui/UiLabel";
 
 export namespace FloatText {
     const SHOW_TIME_MS      = 3000;

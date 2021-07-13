@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
                     scale9Grid="1,1,2,2" />
@@ -60,7 +60,7 @@
                 <TwnsUiImage:UiImage width="400" height="30" source="commonRectangle0001" scale9Grid="2,2,1,1" y="0.406"
                                 x="0" />
                 <TwnsUiButton:UiButton id="_btnPrevBgm" left="10" verticalCenter="0">
-                    <GameUi:skinName>
+                    <TwnsUiButton:skinName>
                         <e:Skin>
                             <e:Group left="0" right="0" y="0">
                                 <e:Image source="commonTriangle0000" left="0" right="0" top="0" bottom="0"
@@ -72,12 +72,12 @@
                                                 top="0" locked="true" />
                             </e:Group>
                         </e:Skin>
-                    </GameUi:skinName>
+                    </TwnsUiButton:skinName>
                 </TwnsUiButton:UiButton>
                 <TwnsUiLabel:UiLabel id="_labelBgmName" text="Hope Never Dies" size="18" textColor="0xFFFFFF"
                                 horizontalCenter="0" verticalCenter="0" />
                 <TwnsUiButton:UiButton id="_btnNextBgm" right="10" verticalCenter="0">
-                    <GameUi:skinName>
+                    <TwnsUiButton:skinName>
                         <e:Skin>
                             <e:Group left="0" right="0" y="0">
                                 <e:Image left="0" right="0" top="0" bottom="0" source="commonTriangle0000" />
@@ -88,7 +88,7 @@
                                                 top="0" locked="true" />
                             </e:Group>
                         </e:Skin>
-                    </GameUi:skinName>
+                    </TwnsUiButton:skinName>
                 </TwnsUiButton:UiButton>
             </e:Group>
         </e:Group>

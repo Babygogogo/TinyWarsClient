@@ -2,7 +2,7 @@
 import { Notify }      from "../notify/Notify";
 import { Types }       from "../Types";
 
-export namespace TwnsUiListItemRenderer {
+namespace TwnsUiListItemRenderer {
     import UiListener      = Types.UiListener;
 
     export class UiListItemRenderer<DataForRenderer> extends eui.ItemRenderer {
@@ -164,3 +164,5 @@ export namespace TwnsUiListItemRenderer {
         }
     }
 }
+
+export default TwnsUiListItemRenderer;

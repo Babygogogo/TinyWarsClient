@@ -5,9 +5,9 @@ import { TwnsNotifyType }           from "../notify/NotifyType";
 import { Logger }                   from "../Logger";
 import { StageManager }             from "../StageManager";
 import { SoundManager }             from "../SoundManager";
-import { TwnsUiListItemRenderer }   from "./UiListItemRenderer";
+import TwnsUiListItemRenderer   from "./UiListItemRenderer";
 
-export namespace TwnsUiScrollList {
+namespace TwnsUiScrollList {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import UiListener               = Types.UiListener;
 
@@ -340,3 +340,5 @@ export namespace TwnsUiScrollList {
         }
     }
 }
+
+export default TwnsUiScrollList;

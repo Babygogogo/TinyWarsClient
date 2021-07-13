@@ -1,8 +1,8 @@
 
-import { TwnsUiPanel }                  from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }                  from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }                  from "../../../utility/ui/UiLabel";
-import { TwnsUiTextInput }              from "../../../utility/ui/UiTextInput";
+import TwnsUiPanel                  from "../../../utility/ui/UiPanel";
+import TwnsUiButton                  from "../../../utility/ui/UiButton";
+import TwnsUiLabel                  from "../../../utility/ui/UiLabel";
+import TwnsUiTextInput              from "../../../utility/ui/UiTextInput";
 import { MmAvailabilityListPanel }  from "./MmAvailabilityListPanel";
 import { Lang }                     from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";

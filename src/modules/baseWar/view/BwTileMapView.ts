@@ -1,7 +1,7 @@
 
 import { BwTileView }           from "./BwTileView";
 import { BwTileMap }            from "../model/BwTileMap";
-import { TwnsUiImage }          from "../../../utility/ui/UiImage";
+import TwnsUiImage          from "../../../utility/ui/UiImage";
 import { UserModel }            from "../../user/model/UserModel";
 import { Notify }               from "../../../utility/notify/Notify";
 import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";

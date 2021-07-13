@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group width="600" horizontalCenter="0" height="280" verticalCenter="0">
         <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
@@ -36,13 +36,13 @@
             </e:List>
         </TwnsUiScrollList:UiScrollList>
         <TwnsUiButton:UiButton id="_btnConfirm" label="确定" horizontalCenter="-100" bottom="10">
-            <GameUi:skinName>
+            <TwnsUiButton:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
                     <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
                              textColor="0x00ff00" />
                 </e:Skin>
-            </GameUi:skinName>
+            </TwnsUiButton:skinName>
         </TwnsUiButton:UiButton>
         <TwnsUiButton:UiButton id="_btnCancel" label="取消" horizontalCenter="100" bottom="10">
             <e:skinName>

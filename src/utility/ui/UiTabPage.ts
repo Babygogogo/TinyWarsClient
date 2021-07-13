@@ -1,7 +1,7 @@
 
-import { TwnsUiComponent } from "./UiComponent";
+import TwnsUiComponent from "./UiComponent";
 
-export namespace TwnsUiTabPage {
+namespace TwnsUiTabPage {
     export abstract class UiTabPage<OpenData> extends TwnsUiComponent.UiComponent {
         private _openData   : OpenData;
 
@@ -40,3 +40,5 @@ export namespace TwnsUiTabPage {
         }
     }
 }
+
+export default TwnsUiTabPage;

@@ -1,8 +1,8 @@
 
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { TwnsUiImage }              from "../../../utility/ui/UiImage";
-import { TwnsUiButton }              from "../../../utility/ui/UiButton";
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
+import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiButton              from "../../../utility/ui/UiButton";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { CommonConstants }      from "../../../utility/CommonConstants";

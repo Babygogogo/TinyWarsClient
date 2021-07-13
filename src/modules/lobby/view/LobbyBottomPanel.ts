@@ -1,6 +1,6 @@
 
-import { TwnsUiImage }                      from "../../../utility/ui/UiImage";
-import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import TwnsUiImage                      from "../../../utility/ui/UiImage";
+import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
 import { CommonDamageChartPanel }       from "../../common/view/CommonDamageChartPanel";

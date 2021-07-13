@@ -1,8 +1,8 @@
 
-import { TwnsUiImage }              from "../../../utility/ui/UiImage";
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }              from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
+import TwnsUiButton              from "../../../utility/ui/UiButton";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
 import { MmWarRulePanel }       from "./MmWarRulePanel";
 import { Lang }                 from "../../../utility/lang/Lang";
 import { TwnsLangTextType } from "../../../utility/lang/LangTextType";

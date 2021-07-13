@@ -1,6 +1,6 @@
 
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }              from "../../../utility/ui/UiButton";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
+import TwnsUiButton              from "../../../utility/ui/UiButton";
 import { TwnsCommonAlertPanel }     from "../../common/view/CommonAlertPanel";
 import { MfrJoinRoomListPanel } from "./MfrJoinRoomListPanel";
 import { MfrMyRoomListPanel }   from "./MfrMyRoomListPanel";

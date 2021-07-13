@@ -1,5 +1,5 @@
 
-import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
+import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
 import { Types }                        from "../../../utility/Types";
 
 export namespace TwnsBwBackgroundPanel {

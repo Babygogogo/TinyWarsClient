@@ -12,10 +12,10 @@ import { BwUnitView }           from "./BwUnitView";
 import { TwnsBwActionPlanner }    from "../model/BwActionPlanner";
 import { BwWar }                from "../model/BwWar";
 import { BwUnit }               from "../model/BwUnit";
-import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
-import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import TwnsUiScrollList         from "../../../utility/ui/UiScrollList";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
+import TwnsUiListItemRenderer   from "../../../utility/ui/UiListItemRenderer";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
 import UnitActionType           = Types.UnitActionType;
 
 export type OpenDataForBwUnitActionsPanel = {

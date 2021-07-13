@@ -1,6 +1,6 @@
 
-import { TwnsUiPanel }                          from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }                          from "../../../utility/ui/UiButton";
+import TwnsUiPanel                          from "../../../utility/ui/UiPanel";
+import TwnsUiButton                          from "../../../utility/ui/UiButton";
 import { SpmMainMenuPanel }                 from "../../singlePlayerMode/view/SpmMainMenuPanel";
 import { TwnsMrwMyWarListPanel }                from "../../multiRankWar/view/MrwMyWarListPanel";
 import { MrrMyRoomListPanel }               from "./MrrMyRoomListPanel";

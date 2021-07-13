@@ -1,7 +1,7 @@
 
-import { TwnsUiImage }              from "../../../utility/ui/UiImage";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
 import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
 import { Lang }                 from "../../../utility/lang/Lang";
 import { NotifyData }           from "../../../utility/notify/NotifyData";

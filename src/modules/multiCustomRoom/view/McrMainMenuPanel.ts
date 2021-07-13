@@ -1,6 +1,6 @@
 
-import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
+import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
+import TwnsUiButton                      from "../../../utility/ui/UiButton";
 import { TwnsLobbyBottomPanel }         from "../../lobby/view/LobbyBottomPanel";
 import { TwnsLobbyTopPanel }            from "../../lobby/view/LobbyTopPanel";
 import { TwnsMcwMyWarListPanel }        from "../../multiCustomWar/view/McwMyWarListPanel";

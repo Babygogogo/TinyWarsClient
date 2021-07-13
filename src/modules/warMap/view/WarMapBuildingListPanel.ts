@@ -1,8 +1,8 @@
 
-import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
-import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
+import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
+import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
+import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
 import { MeTileSimpleView }             from "../../mapEditor/view/MeTileSimpleView";
 import { CommonConstants }              from "../../../utility/CommonConstants";
 import { ConfigManager }                from "../../../utility/ConfigManager";

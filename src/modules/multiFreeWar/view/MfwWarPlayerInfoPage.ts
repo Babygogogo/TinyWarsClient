@@ -1,10 +1,10 @@
 
-import { TwnsUiImage }              from "../../../utility/ui/UiImage";
-import { TwnsUiListItemRenderer }   from "../../../utility/ui/UiListItemRenderer";
-import { TwnsUiButton }              from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { TwnsUiScrollList }         from "../../../utility/ui/UiScrollList";
-import { TwnsUiTabPage }            from "../../../utility/ui/UiTabPage";
+import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiListItemRenderer   from "../../../utility/ui/UiListItemRenderer";
+import TwnsUiButton              from "../../../utility/ui/UiButton";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
+import TwnsUiScrollList         from "../../../utility/ui/UiScrollList";
+import TwnsUiTabPage            from "../../../utility/ui/UiTabPage";
 import { ChatPanel }            from "../../chat/view/ChatPanel";
 import { CommonCoInfoPanel }    from "../../common/view/CommonCoInfoPanel";
 import { UserPanel }            from "../../user/view/UserPanel";

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:GameUi="*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" locked="true" />
     <e:Group top="40" bottom="0" width="760" horizontalCenter="0">
@@ -91,7 +91,7 @@
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <TwnsUiTextInput:UiTextInput id="_inputGridX" width="40" x="58" y="0" anchorOffsetX="0"
                                                             anchorOffsetY="0" maxChars="20">
-                                            <GameUi:skinName>
+                                            <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
                                                     <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
@@ -99,11 +99,11 @@
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
                                                              right="0" text="" height="30" textColor="0x808080" />
                                                 </e:Skin>
-                                            </GameUi:skinName>
+                                            </TwnsUiButton:skinName>
                                         </TwnsUiTextInput:UiTextInput>
                                         <TwnsUiTextInput:UiTextInput id="_inputGridY" width="40" x="68" y="10" anchorOffsetX="0"
                                                             anchorOffsetY="0" maxChars="20">
-                                            <GameUi:skinName>
+                                            <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
                                                     <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
@@ -111,7 +111,7 @@
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
                                                              right="0" text="" height="30" textColor="0x808080" />
                                                 </e:Skin>
-                                            </GameUi:skinName>
+                                            </TwnsUiButton:skinName>
                                         </TwnsUiTextInput:UiTextInput>
                                         <e:layout>
                                             <e:HorizontalLayout verticalAlign="middle" />
@@ -122,7 +122,7 @@
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <TwnsUiTextInput:UiTextInput id="_inputPlayerIndex" width="40" x="58" y="0"
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
-                                            <GameUi:skinName>
+                                            <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
                                                     <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
@@ -130,7 +130,7 @@
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
                                                              right="0" text="" height="30" textColor="0x808080" />
                                                 </e:Skin>
-                                            </GameUi:skinName>
+                                            </TwnsUiButton:skinName>
                                         </TwnsUiTextInput:UiTextInput>
                                         <e:layout>
                                             <e:HorizontalLayout verticalAlign="middle" />
@@ -156,7 +156,7 @@
                                                         y="12" />
                                         <TwnsUiTextInput:UiTextInput id="_inputHp" width="40" x="58" y="0" anchorOffsetX="0"
                                                             anchorOffsetY="0" maxChars="20">
-                                            <GameUi:skinName>
+                                            <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
                                                     <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
@@ -164,7 +164,7 @@
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
                                                              right="0" text="" height="30" textColor="0x808080" />
                                                 </e:Skin>
-                                            </GameUi:skinName>
+                                            </TwnsUiButton:skinName>
                                         </TwnsUiTextInput:UiTextInput>
                                         <e:layout>
                                             <e:HorizontalLayout verticalAlign="middle" />
@@ -175,7 +175,7 @@
                                                         y="12" />
                                         <TwnsUiTextInput:UiTextInput id="_inputFuel" width="40" x="58" y="0" anchorOffsetX="0"
                                                             anchorOffsetY="0" maxChars="20">
-                                            <GameUi:skinName>
+                                            <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
                                                     <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
@@ -183,7 +183,7 @@
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
                                                              right="0" text="" height="30" textColor="0x808080" />
                                                 </e:Skin>
-                                            </GameUi:skinName>
+                                            </TwnsUiButton:skinName>
                                         </TwnsUiTextInput:UiTextInput>
                                         <e:layout>
                                             <e:HorizontalLayout verticalAlign="middle" />
@@ -194,7 +194,7 @@
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <TwnsUiTextInput:UiTextInput id="_inputPromotion" width="40" x="58" y="0"
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
-                                            <GameUi:skinName>
+                                            <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
                                                     <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
@@ -202,7 +202,7 @@
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
                                                              right="0" text="" height="30" textColor="0x808080" />
                                                 </e:Skin>
-                                            </GameUi:skinName>
+                                            </TwnsUiButton:skinName>
                                         </TwnsUiTextInput:UiTextInput>
                                         <e:layout>
                                             <e:HorizontalLayout verticalAlign="middle" />
@@ -231,7 +231,7 @@
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <TwnsUiTextInput:UiTextInput id="_inputPrimaryAmmo" width="40" x="58" y="0"
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
-                                            <GameUi:skinName>
+                                            <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
                                                     <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
@@ -239,7 +239,7 @@
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
                                                              right="0" text="" height="30" textColor="0x808080" />
                                                 </e:Skin>
-                                            </GameUi:skinName>
+                                            </TwnsUiButton:skinName>
                                         </TwnsUiTextInput:UiTextInput>
                                         <e:layout>
                                             <e:HorizontalLayout verticalAlign="middle" />
@@ -250,7 +250,7 @@
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <TwnsUiTextInput:UiTextInput id="_inputFlareAmmo" width="40" x="58" y="0"
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
-                                            <GameUi:skinName>
+                                            <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
                                                     <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
@@ -258,7 +258,7 @@
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
                                                              right="0" text="" height="30" textColor="0x808080" />
                                                 </e:Skin>
-                                            </GameUi:skinName>
+                                            </TwnsUiButton:skinName>
                                         </TwnsUiTextInput:UiTextInput>
                                         <e:layout>
                                             <e:HorizontalLayout verticalAlign="middle" />
@@ -287,7 +287,7 @@
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <TwnsUiTextInput:UiTextInput id="_inputBuildMaterial" width="40" x="58" y="0"
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
-                                            <GameUi:skinName>
+                                            <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
                                                     <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
@@ -295,7 +295,7 @@
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
                                                              right="0" text="" height="30" textColor="0x808080" />
                                                 </e:Skin>
-                                            </GameUi:skinName>
+                                            </TwnsUiButton:skinName>
                                         </TwnsUiTextInput:UiTextInput>
                                         <e:layout>
                                             <e:HorizontalLayout verticalAlign="middle" />
@@ -306,7 +306,7 @@
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <TwnsUiTextInput:UiTextInput id="_inputProduceMaterial" width="40" x="58" y="0"
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
-                                            <GameUi:skinName>
+                                            <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
                                                     <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
@@ -314,7 +314,7 @@
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
                                                              right="0" text="" height="30" textColor="0x808080" />
                                                 </e:Skin>
-                                            </GameUi:skinName>
+                                            </TwnsUiButton:skinName>
                                         </TwnsUiTextInput:UiTextInput>
                                         <e:layout>
                                             <e:HorizontalLayout verticalAlign="middle" />

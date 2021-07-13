@@ -2,7 +2,7 @@
 import { Notify }   from "../notify/Notify";
 import { Types }    from "../Types";
 
-export namespace TwnsUiComponent {
+namespace TwnsUiComponent {
     import UiListener   = Types.UiListener;
 
     export class UiComponent extends eui.Component {
@@ -133,3 +133,5 @@ export namespace TwnsUiComponent {
         }
     }
 }
+
+export default TwnsUiComponent;

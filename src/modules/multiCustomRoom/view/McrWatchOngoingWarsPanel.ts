@@ -1,10 +1,10 @@
 
-import { TwnsUiListItemRenderer }           from "../../../utility/ui/UiListItemRenderer";
-import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
-import { TwnsUiScrollList }                 from "../../../utility/ui/UiScrollList";
-import { TwnsUiZoomableMap }                from "../../../utility/ui/UiZoomableMap";
+import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
+import TwnsUiButton                      from "../../../utility/ui/UiButton";
+import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
+import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
+import TwnsUiZoomableMap                from "../../../utility/ui/UiZoomableMap";
 import { CommonBlockPanel }             from "../../common/view/CommonBlockPanel";
 import { McrWatchMainMenuPanel }        from "./McrWatchMainMenuPanel";
 import { ConfigManager }                from "../../../utility/ConfigManager";

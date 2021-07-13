@@ -1,7 +1,7 @@
 
-import { TwnsUiPanel }                      from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }                      from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }                      from "../../../utility/ui/UiLabel";
+import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
+import TwnsUiButton                      from "../../../utility/ui/UiButton";
+import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
 import { BwUnit }                       from "../../baseWar/model/BwUnit";
 import { BwUnitView }                   from "../../baseWar/view/BwUnitView";
 import { MeDrawer }                     from "../model/MeDrawer";

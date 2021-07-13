@@ -1,7 +1,7 @@
 
-import { TwnsUiButton }              from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { TwnsUiTabPage }            from "../../../utility/ui/UiTabPage";
+import TwnsUiButton              from "../../../utility/ui/UiButton";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
+import TwnsUiTabPage            from "../../../utility/ui/UiTabPage";
 import { CommonHelpPanel }      from "../../common/view/CommonHelpPanel";
 import { Helpers }              from "../../../utility/Helpers";
 import { Lang }                 from "../../../utility/lang/Lang";

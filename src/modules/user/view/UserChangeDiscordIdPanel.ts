@@ -1,9 +1,9 @@
 
-import { TwnsUiImage }              from "../../../utility/ui/UiImage";
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
-import { TwnsUiButton }              from "../../../utility/ui/UiButton";
-import { TwnsUiTextInput }          from "../../../utility/ui/UiTextInput";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
+import TwnsUiButton              from "../../../utility/ui/UiButton";
+import TwnsUiTextInput          from "../../../utility/ui/UiTextInput";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
 import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";

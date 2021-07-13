@@ -1,9 +1,9 @@
 
-import { TwnsUiImage }              from "../../../utility/ui/UiImage";
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
-import { TwnsUiRadioButton }        from "../../../utility/ui/UiRadioButton";
-import { TwnsUiButton }             from "../../../utility/ui/UiButton";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
+import TwnsUiRadioButton        from "../../../utility/ui/UiRadioButton";
+import TwnsUiButton             from "../../../utility/ui/UiButton";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
 import { UserChangeNicknamePanel }  from "./UserChangeNicknamePanel";
 import { UserSetPasswordPanel }     from "./UserSetPasswordPanel";
 import { UserChangeDiscordIdPanel } from "./UserChangeDiscordIdPanel";

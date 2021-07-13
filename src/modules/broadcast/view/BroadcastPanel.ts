@@ -1,6 +1,6 @@
 
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
 import { Types }                from "../../../utility/Types";
 import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
 import { BroadcastModel }       from "../model/BroadcastModel";

@@ -1,6 +1,6 @@
 
 import { BwUnit }               from "../model/BwUnit";
-import { TwnsUiImage }          from "../../../utility/ui/UiImage";
+import TwnsUiImage          from "../../../utility/ui/UiImage";
 import { TimeModel }            from "../../time/model/TimeModel";
 import { CommonModel }          from "../../common/model/CommonModel";
 import { UserModel }            from "../../user/model/UserModel";

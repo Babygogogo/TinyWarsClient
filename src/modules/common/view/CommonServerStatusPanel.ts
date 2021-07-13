@@ -1,8 +1,8 @@
 
-import { TwnsUiImage }              from "../../../utility/ui/UiImage";
-import { TwnsUiLabel }              from "../../../utility/ui/UiLabel";
-import { TwnsUiButton }              from "../../../utility/ui/UiButton";
-import { TwnsUiPanel }              from "../../../utility/ui/UiPanel";
+import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiLabel              from "../../../utility/ui/UiLabel";
+import TwnsUiButton              from "../../../utility/ui/UiButton";
+import TwnsUiPanel              from "../../../utility/ui/UiPanel";
 import { CommonConstants }      from "../../../utility/CommonConstants";
 import { Helpers }              from "../../../utility/Helpers";
 import { Lang }                 from "../../../utility/lang/Lang";

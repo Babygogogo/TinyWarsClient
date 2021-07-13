@@ -1,5 +1,5 @@
 
-import { TwnsUiImage }      from "../../../utility/ui/UiImage";
+import TwnsUiImage      from "../../../utility/ui/UiImage";
 import { CommonModel }      from "../../common/model/CommonModel";
 import { TimeModel }        from "../../time/model/TimeModel";
 import { UserModel }        from "../../user/model/UserModel";
