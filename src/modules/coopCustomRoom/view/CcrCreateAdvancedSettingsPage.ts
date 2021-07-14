@@ -1,24 +1,24 @@
 
-import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiTextInput                  from "../../../utility/ui/UiTextInput";
-import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
-import TwnsUiTabPage                    from "../../../utility/ui/UiTabPage";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiTextInput                  from "../../tools/ui/UiTextInput";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { CommonChooseCoPanel }          from "../../common/view/CommonChooseCoPanel";
 import { CcrCreateBanCoPanel }          from "./CcrCreateBanCoPanel";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { FloatText }                    from "../../../utility/FloatText";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
 import PlayerRuleType                   = Types.PlayerRuleType;
 import { CcrCreateModel } from "../model/CcrCreateModel";
 

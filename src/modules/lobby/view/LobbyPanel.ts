@@ -1,24 +1,24 @@
 
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { McrMainMenuPanel }             from "../../multiCustomRoom/view/McrMainMenuPanel";
 import { MrrMainMenuPanel }             from "../../multiRankRoom/view/MrrMainMenuPanel";
 import { SpmMainMenuPanel }             from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { Types }                        from "../../../utility/Types";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Lang }                         from "../../../utility/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import Types                        from "../../tools/helpers/Types";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Lang                         from "../../tools/lang/Lang";
 import { CcrModel }                     from "../../coopCustomRoom/model/CcrModel";
 import { McrModel }                     from "../../multiCustomRoom/model/McrModel";
 import { MfrModel }                     from "../../multiFreeRoom/model/MfrModel";
 import { MrrModel }                     from "../../multiRankRoom/model/MrrModel";
-import { MpwModel }                     from "../../multiPlayerWar/model/MpwModel";
+import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
 
-export namespace TwnsLobbyPanel {
+namespace TwnsLobbyPanel {
     import Tween            = egret.Tween;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -288,3 +288,5 @@ export namespace TwnsLobbyPanel {
         }
     }
 }
+
+export default TwnsLobbyPanel;

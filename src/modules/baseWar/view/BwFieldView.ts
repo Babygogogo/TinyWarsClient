@@ -1,5 +1,5 @@
 import { BwField }                  from "../model/BwField";
-import { BwActionPlannerView }      from "./BwActionPlannerView";
+import TwnsBwActionPlannerView      from "./BwActionPlannerView";
 import { BwCursorView }             from "./BwCursorView";
 import { BwGridVisualEffectView }   from "./BwGridVisualEffectView";
 import { BwTileMapView }            from "./BwTileMapView";
@@ -8,7 +8,7 @@ import { BwUnitMapView }            from "./BwUnitMapView";
 export class BwFieldView extends egret.DisplayObjectContainer {
     private _field                  : BwField;
     private _tileMapView            : BwTileMapView;
-    private _actionPlannerView      : BwActionPlannerView;
+    private _actionPlannerView      : TwnsBwActionPlannerView.BwActionPlannerView;
     private _unitMapView            : BwUnitMapView;
     private _cursorView             : BwCursorView;
     private _gridVisionEffectView   : BwGridVisualEffectView;

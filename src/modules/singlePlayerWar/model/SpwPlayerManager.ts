@@ -1,14 +1,14 @@
 
-import { Logger }           from "../../../utility/Logger";
+import Logger           from "../../tools/helpers/Logger";
 import { BwPlayerManager }  from "../../baseWar/model/BwPlayerManager";
-import { BwPlayer }         from "../../baseWar/model/BwPlayer";
+import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
 
 export class SpwPlayerManager extends BwPlayerManager {
     ////////////////////////////////////////////////////////////////////////////////
     // The other public functions.
     ////////////////////////////////////////////////////////////////////////////////
-    public getHumanPlayers(): BwPlayer[] {
-        const players: BwPlayer[] = [];
+    public getHumanPlayers(): TwnsBwPlayer.BwPlayer[] {
+        const players: TwnsBwPlayer.BwPlayer[] = [];
         for (const [, player] of this.getAllPlayersDict()) {
             if (player.getUserId() != null) {
                 players.push(player);

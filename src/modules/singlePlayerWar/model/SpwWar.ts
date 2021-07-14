@@ -1,18 +1,20 @@
 
-import { BwWar }                        from "../../baseWar/model/BwWar";
-import { BwCommonSettingManager }       from "../../baseWar/model/BwCommonSettingManager";
-import { BwPlayer }                     from "../../baseWar/model/BwPlayer";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
+import TwnsBwCommonSettingManager       from "../../baseWar/model/BwCommonSettingManager";
+import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
 import { BwWarEventManager }            from "../../baseWar/model/BwWarEventManager";
 import { SpwPlayerManager }             from "./SpwPlayerManager";
 import { SpwField }                     from "./SpwField";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { BwVisibilityHelpers }            from "../../baseWar/model/BwVisibilityHelpers";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import BwVisibilityHelpers            from "../../baseWar/model/BwVisibilityHelpers";
 import WarAction                        = ProtoTypes.WarAction;
 import ISpmWarSaveSlotExtraData         = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+import BwWar            = TwnsBwWar.BwWar;
+import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
 
 export abstract class SpwWar extends BwWar {
     private readonly _playerManager         = new SpwPlayerManager();
@@ -173,7 +175,7 @@ export abstract class SpwWar extends BwWar {
     public getHumanPlayerIndexes(): number[] {
         return (this.getPlayerManager() as SpwPlayerManager).getHumanPlayerIndexes();
     }
-    public getHumanPlayers(): BwPlayer[] {
+    public getHumanPlayers(): TwnsBwPlayer.BwPlayer[] {
         return (this.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
     }
 }

@@ -1,21 +1,21 @@
 
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiTextInput                  from "../../../utility/ui/UiTextInput";
-import TwnsUiTabPage                    from "../../../utility/ui/UiTabPage";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiTextInput                  from "../../tools/ui/UiTextInput";
+import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { ScrCreateSaveSlotsPanel }      from "./ScrCreateSaveSlotsPanel";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { WarMapModel }                  from "../../warMap/model/WarMapModel";
-import { ScrCreateModel }                     from "../model/ScrCreateModel";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
+import ScrCreateModel                     from "../model/ScrCreateModel";
 
 export class ScrCreateBasicSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
     private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;

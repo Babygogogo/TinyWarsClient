@@ -1,10 +1,10 @@
 
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { Types }                from "../../../utility/Types";
-import { BwWarRuleHelpers }     from "../../baseWar/model/BwWarRuleHelpers";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+import BwWarRuleHelpers     from "../../baseWar/model/BwWarRuleHelpers";
 import { MfrModel }             from "./MfrModel";
 
 export namespace MfrJoinModel {

@@ -1,7 +1,7 @@
 
 import { BwFogMap }             from "../../baseWar/model/BwFogMap";
 import { RwWar }                from "./RwWar";
-import { BwVisibilityHelpers }    from "../../baseWar/model/BwVisibilityHelpers";
+import BwVisibilityHelpers    from "../../baseWar/model/BwVisibilityHelpers";
 
 export class RwFogMap extends BwFogMap {
     public startRunning(war: RwWar): void {

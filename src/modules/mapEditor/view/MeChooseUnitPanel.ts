@@ -1,22 +1,22 @@
 
-import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
-import { BwUnit }                       from "../../baseWar/model/BwUnit";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
 import { BwUnitView }                   from "../../baseWar/view/BwUnitView";
 import { DataForDrawUnit }              from "../model/MeDrawer";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                        from "../../../utility/Types";
-import { MeModel }                      from "../model/MeModel";
+import Types                        from "../../tools/helpers/Types";
+import MeModel                      from "../model/MeModel";
 
 const MAX_RECENT_COUNT = 10;
 
@@ -205,7 +205,7 @@ class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnit
         this._labelName.text    = Lang.getUnitName(unitType);
 
         const unitView  = this._unitView;
-        const unit      = new BwUnit();
+        const unit      = new TwnsBwUnit.BwUnit();
         unit.init({
             gridIndex   : { x: 0, y: 0 },
             unitId      : 0,

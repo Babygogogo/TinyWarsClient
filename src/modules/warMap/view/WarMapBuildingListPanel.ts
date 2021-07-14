@@ -1,19 +1,19 @@
 
-import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
-import { MeTileSimpleView }             from "../../mapEditor/view/MeTileSimpleView";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import TwnsMeTileSimpleView             from "../../mapEditor/view/MeTileSimpleView";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
 
 type OpenDataForBuildingListPanel = {
     configVersion           : string;
@@ -116,7 +116,7 @@ class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTile
     private _labelNum4      : TwnsUiLabel.UiLabel;
     private _labelTotalNum  : TwnsUiLabel.UiLabel;
 
-    private _tileView       = new MeTileSimpleView();
+    private _tileView       = new TwnsMeTileSimpleView.MeTileSimpleView();
 
     private _labelNumList   : TwnsUiLabel.UiLabel[];
 

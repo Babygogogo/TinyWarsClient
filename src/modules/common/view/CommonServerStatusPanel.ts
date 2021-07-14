@@ -1,19 +1,19 @@
 
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import TwnsUiButton              from "../../../utility/ui/UiButton";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { Helpers }              from "../../../utility/Helpers";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiButton              from "../../tools/ui/UiButton";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Helpers              from "../../tools/helpers/Helpers";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { Types }                from "../../../utility/Types";
-import { CommonProxy }          from "../../common/model/CommonProxy";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+import CommonProxy          from "../../common/model/CommonProxy";
 
 export class CommonServerStatusPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;

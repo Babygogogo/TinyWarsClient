@@ -1,7 +1,7 @@
 
-import TwnsUiPanel                  from "../../../utility/ui/UiPanel";
-import TwnsUiLabel                  from "../../../utility/ui/UiLabel";
-import { Types }                        from "../../../utility/Types";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import Types                        from "../../tools/helpers/Types";
 
 type OpenDataForCommonBlockPanel = {
     title  : string;

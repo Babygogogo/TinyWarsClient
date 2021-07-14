@@ -1,29 +1,31 @@
 
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
-import { BwWar }                        from "../../baseWar/model/BwWar";
-import { BwCommonSettingManager }       from "../../baseWar/model/BwCommonSettingManager";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
+import TwnsBwCommonSettingManager       from "../../baseWar/model/BwCommonSettingManager";
 import { BwWarEventManager }            from "../../baseWar/model/BwWarEventManager";
 import { RwWarMenuPanel }               from "../view/RwWarMenuPanel";
 import { RwPlayerManager }              from "./RwPlayerManager";
 import { RwField }                      from "./RwField";
 import { BwWarActionExecutor }          from "../../baseWar/model/BwWarActionExecutor";
-import { FloatText }                    from "../../../utility/FloatText";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Logger                       from "../../tools/helpers/Logger";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
-import { BwVisibilityHelpers }            from "../../baseWar/model/BwVisibilityHelpers";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
+import BwVisibilityHelpers            from "../../baseWar/model/BwVisibilityHelpers";
 import WarType                          = Types.WarType;
 import WarAction                        = ProtoTypes.WarAction;
 import IWarActionContainer              = WarAction.IWarActionContainer;
 import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+import BwWar            = TwnsBwWar.BwWar;
+import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
 
 type CheckPointData = {
     warData     : ISerialWar;

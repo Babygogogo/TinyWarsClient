@@ -1,20 +1,23 @@
 
-import { BwWar }                        from "../../baseWar/model/BwWar";
-import { BwPlayer }                     from "./BwPlayer";
-import { BwUnitMap }                    from "./BwUnitMap";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { GridIndexHelpers }             from "../../../utility/GridIndexHelpers";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Logger }                       from "../../../utility/Logger";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
-import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
+import TwnsBwPlayer                     from "./BwPlayer";
+import TwnsBwUnitMap                    from "./BwUnitMap";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers             from "../../tools/helpers/GridIndexHelpers";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Logger                       from "../../tools/helpers/Logger";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
+import BwHelpers                    from "../../baseWar/model/BwHelpers";
 
 export namespace BwCoSkillHelpers {
-    import GridIndex                        = Types.GridIndex;
-    import Structure                        = ProtoTypes.Structure;
-    import IDataForUseCoSkill               = Structure.IDataForUseCoSkill;
+    import BwPlayer             = TwnsBwPlayer.BwPlayer;
+    import GridIndex            = Types.GridIndex;
+    import Structure            = ProtoTypes.Structure;
+    import IDataForUseCoSkill   = Structure.IDataForUseCoSkill;
+    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
+    import BwWar                = TwnsBwWar.BwWar;
 
     type DamageMaps = {
         hpMap   : number[][];

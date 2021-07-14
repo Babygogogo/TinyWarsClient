@@ -1,9 +1,9 @@
 
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiRadioButton        from "../../../utility/ui/UiRadioButton";
-import TwnsUiButton             from "../../../utility/ui/UiButton";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiRadioButton        from "../../tools/ui/UiRadioButton";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import { UserChangeNicknamePanel }  from "./UserChangeNicknamePanel";
 import { UserSetPasswordPanel }     from "./UserSetPasswordPanel";
 import { UserChangeDiscordIdPanel } from "./UserChangeDiscordIdPanel";
@@ -17,21 +17,21 @@ import { CommonChangeVersionPanel } from "../../common/view/CommonChangeVersionP
 import { CommonRankListPanel }      from "../../common/view/CommonRankListPanel";
 import { CommonServerStatusPanel }  from "../../common/view/CommonServerStatusPanel";
 import { ChangeLogPanel }           from "../../changeLog/view/ChangeLogPanel";
-import { TwnsLobbyBackgroundPanel }     from "../../lobby/view/LobbyBackgroundPanel";
+import TwnsLobbyBackgroundPanel     from "../../lobby/view/LobbyBackgroundPanel";
 import { MmMainMenuPanel }          from "../../mapManagement/view/MmMainMenuPanel";
-import { CommonConstants }          from "../../../utility/CommonConstants";
-import { Helpers }                  from "../../../utility/Helpers";
-import { Lang }                     from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
-import { LocalStorage }             from "../../../utility/LocalStorage";
-import { Logger }                   from "../../../utility/Logger";
-import { Notify }                   from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
-import { StageManager }             from "../../../utility/StageManager";
-import { Types }                    from "../../../utility/Types";
-import { TimeModel }                from "../../time/model/TimeModel";
-import { UserModel }                from "../../user/model/UserModel";
-import { UserProxy }                from "../../user/model/UserProxy";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import LocalStorage             from "../../tools/helpers/LocalStorage";
+import Logger                   from "../../tools/helpers/Logger";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
+import StageManager             from "../../tools/helpers/StageManager";
+import Types                    from "../../tools/helpers/Types";
+import Timer                from "../../tools/helpers/Timer";
+import UserModel                from "../../user/model/UserModel";
+import UserProxy                from "../../user/model/UserProxy";
 import LangTextType         = TwnsLangTextType.LangTextType;
 import NotifyType       = TwnsNotifyType.NotifyType;
 
@@ -189,15 +189,15 @@ export class UserSettingsPanel extends TwnsUiPanel.UiPanel<void> {
             leftTextType    : LangTextType.B0561,
             rightTextType   : LangTextType.B0562,
             callbackOnLeft  : () => {
-                TimeModel.startUnitAnimationTick();
+                Timer.startUnitAnimationTick();
                 LocalStorage.setShowUnitAnimation(true);
             },
             callbackOnRight : () => {
-                TimeModel.stopUnitAnimationTick();
+                Timer.stopUnitAnimationTick();
                 LocalStorage.setShowUnitAnimation(false);
             },
             checkerForLeftOn: () => {
-                return TimeModel.checkIsUnitAnimationTicking();
+                return Timer.checkIsUnitAnimationTicking();
             },
         });
         this._uiRadioTileAnimation.setData({
@@ -205,15 +205,15 @@ export class UserSettingsPanel extends TwnsUiPanel.UiPanel<void> {
             leftTextType    : LangTextType.B0561,
             rightTextType   : LangTextType.B0562,
             callbackOnLeft  : () => {
-                TimeModel.startTileAnimationTick();
+                Timer.startTileAnimationTick();
                 LocalStorage.setShowTileAnimation(true);
             },
             callbackOnRight : () => {
-                TimeModel.stopTileAnimationTick();
+                Timer.stopTileAnimationTick();
                 LocalStorage.setShowTileAnimation(false);
             },
             checkerForLeftOn: () => {
-                return TimeModel.checkIsTileAnimationTicking();
+                return Timer.checkIsTileAnimationTicking();
             },
         });
         this._uiRadioShowGridBorder.setData({

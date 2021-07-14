@@ -1,5 +1,5 @@
 
-import { BwVisibilityHelpers }            from "../../baseWar/model/BwVisibilityHelpers";
+import BwVisibilityHelpers            from "../../baseWar/model/BwVisibilityHelpers";
 import { BwFogMap }                     from "../../baseWar/model/BwFogMap";
 import { SpwWar }                       from "./SpwWar";
 

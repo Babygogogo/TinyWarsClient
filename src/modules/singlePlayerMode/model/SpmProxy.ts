@@ -1,16 +1,16 @@
 
 import { SpwWar }                       from "../../singlePlayerWar/model/SpwWar";
 import { SrwWar }                       from "../../singleRankWar/model/SrwWar";
-import { TwnsNetMessageCodes }          from "../../../utility/network/NetMessageCodes";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { ScrCreateModel }               from "../../singleCustomRoom/model/ScrCreateModel";
+import TwnsNetMessageCodes          from "../../tools/network/NetMessageCodes";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ScrCreateModel               from "../../singleCustomRoom/model/ScrCreateModel";
 import { SpmSrwRankModel }              from "./SpmSrwRankModel";
-import { SpmModel }                     from "./SpmModel";
-import { NetManager }                   from "../../../utility/network/NetManager";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import SpmModel                     from "./SpmModel";
+import NetManager                   from "../../tools/network/NetManager";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 
-export namespace SpmProxy {
+namespace SpmProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
@@ -186,3 +186,5 @@ export namespace SpmProxy {
         }
     }
 }
+
+export default SpmProxy;

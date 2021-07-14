@@ -1,16 +1,16 @@
 
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiButton         from "../../../utility/ui/UiButton";
-import TwnsUiComponent          from "../../../utility/ui/UiComponent";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import { ConfigManager }        from "../../../utility/ConfigManager";
-import { Helpers }              from "../../../utility/Helpers";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { Types }                from "../../../utility/Types";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiComponent          from "../../tools/ui/UiComponent";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
 import LangTextType             = TwnsLangTextType.LangTextType;
 import NotifyType               = TwnsNotifyType.NotifyType;
 import WarRule                  = ProtoTypes.WarRule;

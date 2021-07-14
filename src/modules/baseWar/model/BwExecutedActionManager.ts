@@ -1,8 +1,8 @@
 
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Logger }                       from "../../../utility/Logger";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Logger                       from "../../tools/helpers/Logger";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import IWarActionContainer              = ProtoTypes.WarAction.IWarActionContainer;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 

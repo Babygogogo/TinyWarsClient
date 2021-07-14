@@ -1,28 +1,28 @@
 
-import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
-import TwnsUiZoomableMap                from "../../../utility/ui/UiZoomableMap";
-import TwnsUiMapInfo                    from "../../../utility/ui/UiMapInfo";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import TwnsUiZoomableMap                from "../../tools/ui/UiZoomableMap";
+import TwnsUiMapInfo                    from "../../tools/ui/UiMapInfo";
 import { SpmMainMenuPanel }             from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
-import { TwnsLobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
+import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import { ScrCreateSearchMapPanel }      from "./ScrCreateSearchMapPanel";
 import { ScrCreateSettingsPanel }       from "./ScrCreateSettingsPanel";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
-import { WarMapModel }                  from "../../warMap/model/WarMapModel";
-import { ScrCreateModel }                     from "../model/ScrCreateModel";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
+import ScrCreateModel                     from "../model/ScrCreateModel";
 import IDataForMapTag                   = ProtoTypes.Map.IDataForMapTag;
 
 type FiltersForMapList = {

@@ -1,38 +1,41 @@
 
-import { BwWar }                from "./BwWar";
+import TwnsBwWar                from "./BwWar";
 import { BwTile }               from "./BwTile";
-import { BwUnit }               from "./BwUnit";
-import { BwPlayer }             from "./BwPlayer";
-import { BwTileMap }            from "./BwTileMap";
-import { BwUnitMap }            from "./BwUnitMap";
-import { TwnsClientErrorCode }  from "../../../utility/ClientErrorCode";
-import { BwWarRuleHelpers }     from "./BwWarRuleHelpers";
-import { Types }                from "../../../utility/Types";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { Logger }               from "../../../utility/Logger";
-import { Helpers }              from "../../../utility/Helpers";
-import { ConfigManager }        from "../../../utility/ConfigManager";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { BwVisibilityHelpers }    from "./BwVisibilityHelpers";
+import TwnsBwUnit               from "./BwUnit";
+import TwnsBwPlayer             from "./BwPlayer";
+import TwnsBwTileMap            from "./BwTileMap";
+import TwnsBwUnitMap            from "./BwUnitMap";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import BwWarRuleHelpers     from "./BwWarRuleHelpers";
+import Types                from "../../tools/helpers/Types";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Logger               from "../../tools/helpers/Logger";
+import Helpers              from "../../tools/helpers/Helpers";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import BwVisibilityHelpers    from "./BwVisibilityHelpers";
 
-export namespace BwHelpers {
-    import GridIndex                = Types.GridIndex;
-    import MovableArea              = Types.MovableArea;
-    import AttackableArea           = Types.AttackableArea;
-    import MapSize                  = Types.MapSize;
-    import MovePathNode             = Types.MovePathNode;
-    import UnitType                 = Types.UnitType;
-    import TileType                 = Types.TileType;
-    import WarType                  = Types.WarType;
-    import Visibility               = Types.Visibility;
-    import CoSkillAreaType          = Types.CoSkillAreaType;
-    import ISerialUnit              = WarSerialization.ISerialUnit;
-    import ISerialTile              = WarSerialization.ISerialTile;
-    import ISerialWar               = WarSerialization.ISerialWar;
-    import WarSerialization         = ProtoTypes.WarSerialization;
-    import IRuleForPlayers          = ProtoTypes.WarRule.IRuleForPlayers;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+namespace BwHelpers {
+    import GridIndex        = Types.GridIndex;
+    import MovableArea      = Types.MovableArea;
+    import AttackableArea   = Types.AttackableArea;
+    import MapSize          = Types.MapSize;
+    import MovePathNode     = Types.MovePathNode;
+    import UnitType         = Types.UnitType;
+    import TileType         = Types.TileType;
+    import WarType          = Types.WarType;
+    import Visibility       = Types.Visibility;
+    import CoSkillAreaType  = Types.CoSkillAreaType;
+    import ISerialUnit      = WarSerialization.ISerialUnit;
+    import ISerialTile      = WarSerialization.ISerialTile;
+    import ISerialWar       = WarSerialization.ISerialWar;
+    import WarSerialization = ProtoTypes.WarSerialization;
+    import IRuleForPlayers  = ProtoTypes.WarRule.IRuleForPlayers;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import BwUnit           = TwnsBwUnit.BwUnit;
+    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+    import BwWar            = TwnsBwWar.BwWar;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -318,7 +321,7 @@ export namespace BwHelpers {
         }
     }
 
-    export function createDistanceMap(tileMap: BwTileMap, unit: BwUnit, destination: GridIndex): { distanceMap: (number | null)[][], maxDistance: number } {
+    export function createDistanceMap(tileMap: TwnsBwTileMap.BwTileMap, unit: BwUnit, destination: GridIndex): { distanceMap: (number | null)[][], maxDistance: number } {
         const area          : MovableArea = [];
         const availableGrids: AvailableMovableGrid[] = [];
         _updateAvailableGrids({ grids: availableGrids, index: 0, gridIndex: destination, prev: undefined, totalMoveCost: 0 });
@@ -356,7 +359,7 @@ export namespace BwHelpers {
         return { distanceMap, maxDistance};
     }
 
-    export function findNearestCapturableTile(tileMap: BwTileMap, unitMap: BwUnitMap, unit: BwUnit): BwTile | null {
+    export function findNearestCapturableTile(tileMap: TwnsBwTileMap.BwTileMap, unitMap: BwUnitMap, unit: BwUnit): BwTile | null {
         const area          : MovableArea = [];
         const availableGrids: AvailableMovableGrid[] = [];
         _updateAvailableGrids({ grids: availableGrids, index: 0, gridIndex: unit.getGridIndex(), prev: undefined, totalMoveCost: 0 });
@@ -701,7 +704,7 @@ export namespace BwHelpers {
 
     export function exeInstantSkill(
         war         : BwWar,
-        player      : BwPlayer,
+        player      : TwnsBwPlayer.BwPlayer,
         gridIndex   : GridIndex,
         skillId     : number,
         extraData   : ProtoTypes.Structure.IDataForUseCoSkill
@@ -1017,7 +1020,7 @@ export namespace BwHelpers {
         return ClientErrorCode.NoError;
     }
 
-    export function getAdjacentPlasmas(tileMap: BwTileMap, origin: GridIndex): GridIndex[] {
+    export function getAdjacentPlasmas(tileMap: TwnsBwTileMap.BwTileMap, origin: GridIndex): GridIndex[] {
         const plasmas           = [origin];
         const mapSize           = tileMap.getMapSize();
         const mapHeight         = mapSize.height;
@@ -1312,3 +1315,5 @@ export namespace BwHelpers {
             && (aliveState !== Types.PlayerAliveState.Dead);
     }
 }
+
+export default BwHelpers;

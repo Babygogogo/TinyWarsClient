@@ -1,24 +1,24 @@
 
-import TwnsUiImage                      from "../../../utility/ui/UiImage";
-import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { DataForDrawTileBase }          from "../model/MeDrawer";
-import { MeTileSimpleView }             from "./MeTileSimpleView";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import TwnsMeTileSimpleView             from "./MeTileSimpleView";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { NotifyData }                   from "../../../utility/notify/NotifyData";
-import { Types }                        from "../../../utility/Types";
-import { MeModel }                      from "../model/MeModel";
+import NotifyData                   from "../../tools/notify/NotifyData";
+import Types                        from "../../tools/helpers/Types";
+import MeModel                      from "../model/MeModel";
 
 const MAX_RECENT_COUNT = 10;
 
@@ -206,7 +206,7 @@ class TileBaseRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataFor
     private _group          : eui.Group;
     private _conTileView    : eui.Group;
 
-    private _tileView   = new MeTileSimpleView();
+    private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([

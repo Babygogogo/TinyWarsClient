@@ -1,12 +1,12 @@
 
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { Types }                from "../../../utility/Types";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { ProtoManager }         from "../../../utility/proto/ProtoManager";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Types                from "../../tools/helpers/Types";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import ProtoManager         from "../../tools/proto/ProtoManager";
 
-export namespace SpmModel {
+namespace SpmModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import NetMessage           = ProtoTypes.NetMessage;
     import SpmWarSaveSlotData   = Types.SpmWarSaveSlotData;
@@ -125,3 +125,5 @@ export namespace SpmModel {
         getSlotDict().delete(data.slotIndex);
     }
 }
+
+export default SpmModel;

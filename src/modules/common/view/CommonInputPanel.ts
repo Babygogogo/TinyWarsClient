@@ -1,17 +1,17 @@
 
-import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                from "../../../utility/Types";
-import { Helpers }              from "../../../utility/Helpers";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiButton              from "../../../utility/ui/UiButton";
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import TwnsUiTextInput          from "../../../utility/ui/UiTextInput";
+import Types                from "../../tools/helpers/Types";
+import Helpers              from "../../tools/helpers/Helpers";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiButton              from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
 
 type OpenData = {
     title           : string;

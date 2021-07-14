@@ -1,23 +1,25 @@
 
-import { BwTileMap }                    from "./BwTileMap";
-import { BwUnit }                       from "./BwUnit";
-import { BwUnitMap }                    from "./BwUnitMap";
-import { BwWar }                        from "./BwWar";
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { GridIndexHelpers }             from "../../../utility/GridIndexHelpers";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Logger }                       from "../../../utility/Logger";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
-import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import TwnsBwTileMap                    from "./BwTileMap";
+import TwnsBwUnit                       from "./BwUnit";
+import TwnsBwUnitMap                    from "./BwUnitMap";
+import TwnsBwWar                        from "./BwWar";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers             from "../../tools/helpers/GridIndexHelpers";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Logger                       from "../../tools/helpers/Logger";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
+import BwHelpers                    from "../../baseWar/model/BwHelpers";
 import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;
 import IDataForWarEventCalledCount      = ProtoTypes.WarSerialization.IDataForWarEventCalledCount;
 import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
 import WarEvent                         = ProtoTypes.WarEvent;
 import IExtraDataForSystemCallWarEvent  = ProtoTypes.WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+import BwWar            = TwnsBwWar.BwWar;
 
 export class BwWarEventManager {
     private _war?               : BwWar;
@@ -253,7 +255,7 @@ export class BwWarEventManager {
             revisedUnitData.gridIndex   = gridIndex;
             revisedUnitData.unitId      = unitId;
 
-            const unit      = new BwUnit();
+            const unit      = new TwnsBwUnit.BwUnit();
             const unitError = unit.init(revisedUnitData, configVersion);
             if (unitError) {
                 Logger.error(`BwWarEventManager._callActionAddUnit() unitError: ${unitError}`);
@@ -899,7 +901,7 @@ export class BwWarEventManager {
 function getGridIndexForAddUnit({ origin, unitMap, tileMap, moveType, needMovableTile, canBeBlockedByUnit }: {
     origin              : Types.GridIndex;
     unitMap             : BwUnitMap;
-    tileMap             : BwTileMap;
+    tileMap             : TwnsBwTileMap.BwTileMap;
     moveType            : Types.MoveType;
     needMovableTile     : boolean;
     canBeBlockedByUnit  : boolean;

@@ -1,27 +1,28 @@
 
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
-import { BwWar }                        from "../../baseWar/model/BwWar";
-import { BwCommonSettingManager }       from "../../baseWar/model/BwCommonSettingManager";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
+import TwnsBwCommonSettingManager       from "../../baseWar/model/BwCommonSettingManager";
 import { BwWarEventManager }            from "../../baseWar/model/BwWarEventManager";
 import { TwPlayerManager }              from "./TwPlayerManager";
 import { TwField }                      from "./TwField";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Logger }                       from "../../../utility/Logger";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
-import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
-import { TimeModel }                    from "../../time/model/TimeModel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Logger                       from "../../tools/helpers/Logger";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
+import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import Timer                    from "../../tools/helpers/Timer";
 import * as WarEventHelper              from "../../warEvent/model/WarEventHelper";
 import WarSerialization                 = ProtoTypes.WarSerialization;
 import ISerialWar                       = WarSerialization.ISerialWar;
 import IMapRawData                      = ProtoTypes.Map.IMapRawData;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+import BwWar            = TwnsBwWar.BwWar;
 
 export class TwWar extends BwWar {
     private readonly _playerManager         = new TwPlayerManager();
     private readonly _field                 = new TwField();
-    private readonly _commonSettingManager  = new BwCommonSettingManager();
+    private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();
     private readonly _warEventManager       = new BwWarEventManager();
 
     public getCanCheat(): boolean {
@@ -33,7 +34,7 @@ export class TwWar extends BwWar {
     public getField(): TwField {
         return this._field;
     }
-    public getCommonSettingManager(): BwCommonSettingManager {
+    public getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager {
         return this._commonSettingManager;
     }
     public getWarEventManager(): BwWarEventManager {
@@ -217,7 +218,7 @@ function _createInitialTurnData(): WarSerialization.ISerialTurnManager {
         turnIndex       : CommonConstants.WarFirstTurnIndex,
         playerIndex     : 0,
         turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
-        enterTurnTime   : TimeModel.getServerTimestamp(),
+        enterTurnTime   : Timer.getServerTimestamp(),
     };
 }
 

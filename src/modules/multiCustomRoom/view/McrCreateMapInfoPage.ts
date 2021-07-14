@@ -1,12 +1,12 @@
 
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiZoomableMap                from "../../../utility/ui/UiZoomableMap";
-import TwnsUiTabPage                    from "../../../utility/ui/UiTabPage";
-import TwnsUiMapInfo                    from "../../../utility/ui/UiMapInfo";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiZoomableMap                from "../../tools/ui/UiZoomableMap";
+import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
+import TwnsUiMapInfo                    from "../../tools/ui/UiMapInfo";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import { McrCreateModel }               from "../model/McrCreateModel";
 import LangTextType         = TwnsLangTextType.LangTextType;
 import NotifyType       = TwnsNotifyType.NotifyType;

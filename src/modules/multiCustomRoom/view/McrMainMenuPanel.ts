@@ -1,9 +1,9 @@
 
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import { TwnsLobbyBottomPanel }         from "../../lobby/view/LobbyBottomPanel";
-import { TwnsLobbyTopPanel }            from "../../lobby/view/LobbyTopPanel";
-import { TwnsMcwMyWarListPanel }        from "../../multiCustomWar/view/McwMyWarListPanel";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import TwnsMcwMyWarListPanel        from "../../multiCustomWar/view/McwMyWarListPanel";
 import { MfrMainMenuPanel }             from "../../multiFreeRoom/view/MfrMainMenuPanel";
 import { MrrMainMenuPanel }             from "../../multiRankRoom/view/MrrMainMenuPanel";
 import { RwReplayListPanel }            from "../../replayWar/view/RwReplayListPanel";
@@ -13,13 +13,13 @@ import { McrCreateMapListPanel }        from "./McrCreateMapListPanel";
 import { McrJoinRoomListPanel }         from "./McrJoinRoomListPanel";
 import { McrMyRoomListPanel }           from "./McrMyRoomListPanel";
 import { CcrMainMenuPanel }             from "../../coopCustomRoom/view/CcrMainMenuPanel";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { Types }                        from "../../../utility/Types";
-import { Helpers }                      from "../../../utility/Helpers";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import Types                        from "../../tools/helpers/Types";
+import Helpers                      from "../../tools/helpers/Helpers";
 import { CcrModel }                     from "../../coopCustomRoom/model/CcrModel";
 import { McrModel }                     from "../../multiCustomRoom/model/McrModel";
 import { MfrModel }                     from "../../multiFreeRoom/model/MfrModel";
-import { MpwModel }                     from "../../multiPlayerWar/model/MpwModel";
+import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
 import NotifyType                       = TwnsNotifyType.NotifyType;
 import Tween                            = egret.Tween;
 

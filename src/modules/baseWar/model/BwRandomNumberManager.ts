@@ -1,7 +1,7 @@
 
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
-import { Logger }                       from "../../../utility/Logger";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
+import Logger                       from "../../tools/helpers/Logger";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import ISeedRandomState                 = ProtoTypes.Structure.ISeedRandomState;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 

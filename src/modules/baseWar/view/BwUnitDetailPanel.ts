@@ -1,31 +1,32 @@
 
-import { Notify }                   from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Lang }                     from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Types }                    from "../../../utility/Types";
-import { FloatText }                from "../../../utility/FloatText";
-import { ConfigManager }            from "../../../utility/ConfigManager";
-import { ProtoTypes }               from "../../../utility/proto/ProtoTypes";
-import { CommonConstants }          from "../../../utility/CommonConstants";
-import { TimeModel }                from "../../time/model/TimeModel";
-import { CommonModel }              from "../../common/model/CommonModel";
-import { UserModel }                from "../../user/model/UserModel";
-import { BwUnit }                   from "../model/BwUnit";
+import Types                    from "../../tools/helpers/Types";
+import FloatText                from "../../tools/helpers/FloatText";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Timer                from "../../tools/helpers/Timer";
+import CommonModel              from "../../common/model/CommonModel";
+import UserModel                from "../../user/model/UserModel";
+import TwnsBwUnit                   from "../model/BwUnit";
 import { WarMapUnitView }           from "../../warMap/view/WarMapUnitView";
 import { CommonDamageChartPanel }   from "../../common/view/CommonDamageChartPanel";
 import { CommonInputPanel }         from "../../common/view/CommonInputPanel";
 import { CommonConfirmPanel }       from "../../common/view/CommonConfirmPanel";
-import TwnsUiPanel                  from "../../../utility/ui/UiPanel";
-import TwnsUiScrollList             from "../../../utility/ui/UiScrollList";
-import TwnsUiButton                  from "../../../utility/ui/UiButton";
-import TwnsUiLabel                  from "../../../utility/ui/UiLabel";
-import TwnsUiListItemRenderer       from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiImage                  from "../../../utility/ui/UiImage";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+import TwnsUiButton                  from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+import TwnsUiImage                  from "../../tools/ui/UiImage";
 import UnitType                     = Types.UnitType;
 import TileType                     = Types.TileType;
+import BwUnit                       = TwnsBwUnit.BwUnit;
 
 export type OpenDataForBwUnitDetailPanel = {
     unit: BwUnit;
@@ -109,7 +110,7 @@ export class BwUnitDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitDeta
     }
 
     private _onNotifyUnitAnimationTick(): void {
-        this._unitView.updateOnAnimationTick(TimeModel.getUnitAnimationTickCount());
+        this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
     }
     private _onNotifyBwPlannerStateChanged(): void {
         this.close();
@@ -151,7 +152,7 @@ export class BwUnitDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitDeta
             skinId          : unit.getSkinId(),
             unitType        : unit.getUnitType(),
             actionState     : unit.getActionState(),
-        }, TimeModel.getUnitAnimationTickCount());
+        }, Timer.getUnitAnimationTickCount());
     }
 
     private _updateListInfo(): void {
@@ -662,7 +663,7 @@ class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDa
 
     private _onNotifyUnitAnimationTick(): void {
         if (this.data) {
-            this._unitView.updateOnAnimationTick(TimeModel.getUnitAnimationTickCount());
+            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
         }
     }
 
@@ -686,7 +687,7 @@ class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDa
                 unitType        : targetUnitType,
                 playerIndex     : data.playerIndex,
                 actionState     : Types.UnitActionState.Idle,
-            }, TimeModel.getUnitAnimationTickCount());
+            }, Timer.getUnitAnimationTickCount());
 
             const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
             const targetArmorType           = ConfigManager.getUnitTemplateCfg(configVersion, targetUnitType).armorType;
@@ -718,7 +719,7 @@ class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDa
                 objectType  : ConfigManager.getTileObjectTypeByTileType(targetTileType),
                 isDark      : false,
                 shapeId     : 0,
-                tickCount   : TimeModel.getTileAnimationTickCount(),
+                tickCount   : Timer.getTileAnimationTickCount(),
             });
             this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
             this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;

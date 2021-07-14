@@ -1,21 +1,22 @@
 
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { NotifyData }           from "../../../utility/notify/NotifyData";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { StageManager }         from "../../../utility/StageManager";
-import { Types }                from "../../../utility/Types";
-import { BwWar }                from "../model/BwWar";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Lang                 from "../../tools/lang/Lang";
+import NotifyData           from "../../tools/notify/NotifyData";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import StageManager         from "../../tools/helpers/StageManager";
+import Types                from "../../tools/helpers/Types";
+import TwnsBwWar                from "../model/BwWar";
 import { BwCoListPanel }        from "./BwCoListPanel";
 import { BwProduceUnitPanel }   from "./BwProduceUnitPanel";
 import { BwTileDetailPanel }    from "./BwTileDetailPanel";
 import { BwTileView }           from "./BwTileView";
-import { BwUnitBriefPanel }     from "./BwUnitBriefPanel";
+import TwnsBwUnitBriefPanel     from "./BwUnitBriefPanel";
+import BwWar            = TwnsBwWar.BwWar;
 
-export namespace BwTileBriefPanel {
+namespace TwnsBwTileBriefPanel {
     import Tween                = egret.Tween;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -30,7 +31,6 @@ export namespace BwTileBriefPanel {
     type OpenData = {
         war : BwWar;
     };
-    // eslint-disable-next-line no-shadow
     export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -204,7 +204,7 @@ export namespace BwTileBriefPanel {
         }
 
         private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
-            const unitBriefPanel = BwUnitBriefPanel.BwUnitBriefPanel.getInstance();
+            const unitBriefPanel = TwnsBwUnitBriefPanel.BwUnitBriefPanel.getInstance();
             let target = e.target as egret.DisplayObject;
             while (target) {
                 if ((target) && ((target === this) || (target === unitBriefPanel))) {
@@ -246,3 +246,5 @@ export namespace BwTileBriefPanel {
         }
     }
 }
+
+export default TwnsBwTileBriefPanel;

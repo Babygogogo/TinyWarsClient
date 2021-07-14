@@ -1,21 +1,21 @@
 
-import TwnsUiImage                      from "../../../utility/ui/UiImage";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiComponent                  from "../../../utility/ui/UiComponent";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
-import { TwnsLangTextType }                 from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }                   from "../../../utility/notify/NotifyType";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiComponent                  from "../../tools/ui/UiComponent";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsCommonAlertPanel             from "../../common/view/CommonAlertPanel";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                        from "../../../utility/Types";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import Types                        from "../../tools/helpers/Types";
+import Notify                       from "../../tools/notify/Notify";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Lang                         from "../../tools/lang/Lang";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
 import WarRule                          = ProtoTypes.WarRule;
 import LangTextType     = TwnsLangTextType.LangTextType;
 

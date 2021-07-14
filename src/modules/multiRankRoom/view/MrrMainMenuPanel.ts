@@ -1,20 +1,20 @@
 
-import TwnsUiPanel                          from "../../../utility/ui/UiPanel";
-import TwnsUiButton                          from "../../../utility/ui/UiButton";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiButton                          from "../../tools/ui/UiButton";
 import { SpmMainMenuPanel }                 from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import { TwnsMrwMyWarListPanel }                from "../../multiRankWar/view/MrwMyWarListPanel";
+import TwnsMrwMyWarListPanel                from "../../multiRankWar/view/MrwMyWarListPanel";
 import { MrrMyRoomListPanel }               from "./MrrMyRoomListPanel";
 import { MrrSetMaxConcurrentCountPanel }    from "./MrrSetMaxConcurrentCountPanel";
-import { TwnsLobbyBottomPanel }                 from "../../lobby/view/LobbyBottomPanel";
-import { TwnsLobbyTopPanel }                    from "../../lobby/view/LobbyTopPanel";
+import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import { MrrPreviewMapListPanel }           from "./MrrPreviewMapListPanel";
 import { McrMainMenuPanel }                 from "../../multiCustomRoom/view/McrMainMenuPanel";
-import { Helpers }                          from "../../../utility/Helpers";
-import { Notify }                           from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Helpers                          from "../../tools/helpers/Helpers";
+import Notify                           from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                            from "../../../utility/Types";
-import { MpwModel }                         from "../../multiPlayerWar/model/MpwModel";
+import Types                            from "../../tools/helpers/Types";
+import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
 import { MrrModel }                         from "../model/MrrModel";
 import Tween                                = egret.Tween;
 

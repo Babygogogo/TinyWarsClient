@@ -1,24 +1,26 @@
 
-import { TwnsClientErrorCode }          from "../../../utility/ClientErrorCode";
-import { BwWar }                        from "../../baseWar/model/BwWar";
-import { BwUnit }                       from "../../baseWar/model/BwUnit";
-import { BwUnitMap }                    from "./BwUnitMap";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { GridIndexHelpers }             from "../../../utility/GridIndexHelpers";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
-import { BwVisibilityHelpers }            from "./BwVisibilityHelpers";
-import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import BwHelpers            from "../../baseWar/model/BwHelpers";
+import TwnsBwUnit           from "../../baseWar/model/BwUnit";
+import TwnsBwWar            from "../../baseWar/model/BwWar";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwUnitMap        from "./BwUnitMap";
+import BwVisibilityHelpers  from "./BwVisibilityHelpers";
 
-export namespace BwActionReviser {
-    import TurnPhaseCode                    = Types.TurnPhaseCode;
-    import GridIndex                        = Types.GridIndex;
-    import DropDestination                  = Types.DropDestination;
-    import PlayerAliveState                 = Types.PlayerAliveState;
-    import IWarActionContainer              = ProtoTypes.WarAction.IWarActionContainer;
-    import WarAction                        = ProtoTypes.WarAction;
-    import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+namespace BwActionReviser {
+    import TurnPhaseCode        = Types.TurnPhaseCode;
+    import GridIndex            = Types.GridIndex;
+    import DropDestination      = Types.DropDestination;
+    import PlayerAliveState     = Types.PlayerAliveState;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
+    import WarAction            = ProtoTypes.WarAction;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
+    import BwWar                = TwnsBwWar.BwWar;
 
     type ErrorCodeAndAction = {
         errorCode   : ClientErrorCode;
@@ -1345,7 +1347,7 @@ export namespace BwActionReviser {
         return destinations;
     }
 
-    function checkCanDoSupply(unitMap: BwUnitMap, focusUnit: BwUnit, destination: GridIndex): boolean {
+    function checkCanDoSupply(unitMap: BwUnitMap, focusUnit: TwnsBwUnit.BwUnit, destination: GridIndex): boolean {
         if (focusUnit.checkIsAdjacentUnitSupplier()) {
             const mapSize = unitMap.getMapSize();
             if (mapSize == null) {
@@ -1364,3 +1366,5 @@ export namespace BwActionReviser {
         return false;
     }
 }
+
+export default BwActionReviser;

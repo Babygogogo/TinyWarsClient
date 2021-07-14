@@ -1,21 +1,23 @@
 
-import { BwPlayer }                 from "../../baseWar/model/BwPlayer";
-import { BwWar }                    from "../../baseWar/model/BwWar";
+import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
+import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import { BwWarEventManager }        from "../../baseWar/model/BwWarEventManager";
 import { MpwPlayerManager }         from "./MpwPlayerManager";
 import { MpwField }                 from "./MpwField";
-import { BwCommonSettingManager }   from "../../baseWar/model/BwCommonSettingManager";
+import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
 import { MpwWarMenuPanel }          from "../view/MpwWarMenuPanel";
-import { CommonConstants }          from "../../../utility/CommonConstants";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import { BwDestructionHelpers }       from "../../baseWar/model/BwDestructionHelpers";
-import { Lang }                     from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { ProtoTypes }               from "../../../utility/proto/ProtoTypes";
-import { BwVisibilityHelpers }        from "../../baseWar/model/BwVisibilityHelpers";
-import { TimeModel }                from "../../time/model/TimeModel";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import BwVisibilityHelpers        from "../../baseWar/model/BwVisibilityHelpers";
+import Timer                from "../../tools/helpers/Timer";
 import * as MpwUtility              from "./MpwUtility";
 import WarAction                    = ProtoTypes.WarAction;
+import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
+import BwWar            = TwnsBwWar.BwWar;
 
 export abstract class MpwWar extends BwWar {
     private readonly _playerManager         = new MpwPlayerManager();
@@ -172,7 +174,7 @@ export abstract class MpwWar extends BwWar {
         if (player.getPlayerIndex() === 0) {
             return null;
         } else {
-            return (this.getEnterTurnTime() + player.getRestTimeToBoot() - TimeModel.getServerTimestamp()) || null;
+            return (this.getEnterTurnTime() + player.getRestTimeToBoot() - Timer.getServerTimestamp()) || null;
         }
     }
 
@@ -183,7 +185,7 @@ export abstract class MpwWar extends BwWar {
     public getPlayerIndexLoggedIn(): number | undefined {
         return this.getPlayerManager().getPlayerIndexLoggedIn();
     }
-    public getPlayerLoggedIn(): BwPlayer {
+    public getPlayerLoggedIn(): TwnsBwPlayer.BwPlayer {
         return this.getPlayerManager().getPlayerLoggedIn();
     }
 }

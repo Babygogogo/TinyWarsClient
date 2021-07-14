@@ -1,13 +1,13 @@
 
-import { TwnsNetMessageCodes }  from "../../../utility/network/NetMessageCodes";
-import { TwnsNotifyType }   from "../../../utility/notify/NotifyType";
-import { Notify }           from "../../../utility/notify/Notify";
-import { UserModel }        from "../../user/model/UserModel";
-import { NetManager }       from "../../../utility/network/NetManager";
-import { ProtoTypes }       from "../../../utility/proto/ProtoTypes";
-import { Sha1Generator }    from "../../../utility/Sha1Generator";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Notify               from "../../tools/notify/Notify";
+import UserModel            from "../../user/model/UserModel";
+import NetManager           from "../../tools/network/NetManager";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Sha1Generator        from "../../tools/helpers/Sha1Generator";
 
-export namespace UserProxy {
+namespace UserProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
@@ -176,3 +176,5 @@ export namespace UserProxy {
         }
     }
 }
+
+export default UserProxy;

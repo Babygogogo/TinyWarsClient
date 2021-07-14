@@ -1,15 +1,15 @@
 
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiButton              from "../../../utility/ui/UiButton";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { Types }                from "../../../utility/Types";
-import { Helpers }              from "../../../utility/Helpers";
-import { Lang }                 from "../../../utility/lang/Lang";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Types                from "../../tools/helpers/Types";
+import Helpers              from "../../tools/helpers/Helpers";
+import Lang                 from "../../tools/lang/Lang";
 
-export namespace TwnsCommonAlertPanel {
+namespace TwnsCommonAlertPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
@@ -119,3 +119,5 @@ export namespace TwnsCommonAlertPanel {
         }
     }
 }
+
+export default TwnsCommonAlertPanel;

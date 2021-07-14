@@ -1,13 +1,14 @@
 
-import { BwWar }                        from "../../baseWar/model/BwWar";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
 import { BwFogMap }                     from "../../baseWar/model/BwFogMap";
 import { MeField }                      from "./MeField";
-import { Logger }                       from "../../../utility/Logger";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import Logger                       from "../../tools/helpers/Logger";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import BwHelpers                    from "../../baseWar/model/BwHelpers";
 import WarSerialization                 = ProtoTypes.WarSerialization;
 import ISerialFogMap                    = WarSerialization.ISerialFogMap;
 import IDataForFogMapFromPath           = WarSerialization.IDataForFogMapFromPath;
+import BwWar            = TwnsBwWar.BwWar;
 
 export class MeFogMap extends BwFogMap {
     public serializeForCreateSfw(): ISerialFogMap | undefined {

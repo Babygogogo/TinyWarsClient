@@ -1,12 +1,12 @@
 
-import { TwnsNetMessageCodes }          from "../../../utility/network/NetMessageCodes";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { NetManager }                   from "../../../utility/network/NetManager";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import TwnsNetMessageCodes          from "../../tools/network/NetMessageCodes";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import NetManager                   from "../../tools/network/NetManager";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import { McrModel }                     from "../../multiCustomRoom/model/McrModel";
 
-export namespace McrProxy {
+namespace McrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
@@ -222,3 +222,5 @@ export namespace McrProxy {
         }
     }
 }
+
+export default McrProxy;

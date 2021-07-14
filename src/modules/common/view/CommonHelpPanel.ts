@@ -1,10 +1,10 @@
 
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiButton              from "../../../utility/ui/UiButton";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import { Helpers }              from "../../../utility/Helpers";
-import { Types }                from "../../../utility/Types";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiButton              from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
 
 type OpenData = {
     title  : string;

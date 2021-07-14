@@ -1,23 +1,23 @@
 
-import TwnsUiImage                      from "../../../utility/ui/UiImage";
-import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
-import TwnsUiTabPage                    from "../../../utility/ui/UiTabPage";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPanel";
 import { CommonChooseCoPanel }          from "../../common/view/CommonChooseCoPanel";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { FloatText }                    from "../../../utility/FloatText";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Logger }                       from "../../../utility/Logger";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Logger                       from "../../tools/helpers/Logger";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
 import { CcrCreateModel }               from "../model/CcrCreateModel";
 
 export class CcrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {

@@ -1,11 +1,12 @@
 
-import { BwWar }                        from "../../baseWar/model/BwWar";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
-import { SpwModel }                     from "./SpwModel";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
+import SpwModel                     from "./SpwModel";
 import GridIndex                        = Types.GridIndex;
 import UnitType                         = Types.UnitType;
 import IMovePath                        = ProtoTypes.Structure.IMovePath;
+import BwWar            = TwnsBwWar.BwWar;
 
 export function reqPlayerDeleteUnit(war: BwWar, gridIndex: GridIndex): void {
     SpwModel.handlePlayerActionAndAutoActions(war, {

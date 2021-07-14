@@ -1,18 +1,18 @@
 
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
-import { BwWar }                            from "../../baseWar/model/BwWar";
-import { BwUnit }                           from "../../baseWar/model/BwUnit";
-import { BwPlayer }                         from "./BwPlayer";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
+import TwnsBwWar                            from "../../baseWar/model/BwWar";
+import TwnsBwUnit                           from "../../baseWar/model/BwUnit";
+import TwnsBwPlayer                         from "./BwPlayer";
 import { BwTile }                           from "./BwTile";
-import { CommonConstants }                  from "../../../utility/CommonConstants";
-import { ConfigManager }                    from "../../../utility/ConfigManager";
+import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import { BwDamageCalculator }                 from "./BwDamageCalculator";
-import { FloatText }                        from "../../../utility/FloatText";
-import { GridIndexHelpers }                 from "../../../utility/GridIndexHelpers";
-import { ProtoTypes }                       from "../../../utility/proto/ProtoTypes";
-import { Types }                            from "../../../utility/Types";
-import { BwVisibilityHelpers }                from "./BwVisibilityHelpers";
-import { BwHelpers }                        from "../../baseWar/model/BwHelpers";
+import FloatText                        from "../../tools/helpers/FloatText";
+import GridIndexHelpers                 from "../../tools/helpers/GridIndexHelpers";
+import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+import Types                            from "../../tools/helpers/Types";
+import BwVisibilityHelpers                from "./BwVisibilityHelpers";
+import BwHelpers                        from "../../baseWar/model/BwHelpers";
 import { BwCoSkillHelpers }                 from "./BwCoSkillHelpers";
 import { BwDestructionHelpers }             from "./BwDestructionHelpers";
 
@@ -52,6 +52,9 @@ export namespace BwWarActionExecutor {
     import IWarActionUnitUseCoSkill             = WarAction.IWarActionUnitUseCoSkill;
     import IWarActionUnitWait                   = WarAction.IWarActionUnitWait;
     import ClientErrorCode                      = TwnsClientErrorCode.ClientErrorCode;
+    import BwPlayer                             = TwnsBwPlayer.BwPlayer;
+    import BwUnit                               = TwnsBwUnit.BwUnit;
+    import BwWar                                = TwnsBwWar.BwWar;
 
     type ResultForHandleDestructionForTile = {
         errorCode           : ClientErrorCode;

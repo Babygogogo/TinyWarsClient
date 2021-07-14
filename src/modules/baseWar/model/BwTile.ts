@@ -1,17 +1,17 @@
 
-import { BwWar }                from "./BwWar";
-import { BwUnit }               from "./BwUnit";
-import { BwPlayer }             from "./BwPlayer";
+import TwnsBwWar                from "./BwWar";
+import TwnsBwUnit               from "./BwUnit";
+import TwnsBwPlayer             from "./BwPlayer";
 import { BwTileView }           from "../view/BwTileView";
-import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
-import { BwHelpers }            from "./BwHelpers";
-import { Types }                from "../../../utility/Types";
-import { Logger }               from "../../../utility/Logger";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { ConfigManager }        from "../../../utility/ConfigManager";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { BwVisibilityHelpers }    from "./BwVisibilityHelpers";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
+import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+import BwHelpers            from "./BwHelpers";
+import Types                from "../../tools/helpers/Types";
+import Logger               from "../../tools/helpers/Logger";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import BwVisibilityHelpers    from "./BwVisibilityHelpers";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import TileType                 = Types.TileType;
 import TileObjectType           = Types.TileObjectType;
 import TileBaseType             = Types.TileBaseType;
@@ -19,6 +19,8 @@ import TileTemplateCfg          = Types.TileTemplateCfg;
 import UnitCategory             = Types.UnitCategory;
 import ISerialTile              = ProtoTypes.WarSerialization.ISerialTile;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+import BwUnit                   = TwnsBwUnit.BwUnit;
+import BwWar            = TwnsBwWar.BwWar;
 
 export class BwTile {
     private _templateCfg    : TileTemplateCfg;
@@ -550,7 +552,7 @@ export class BwTile {
         return this._playerIndex;
     }
 
-    public getPlayer(): BwPlayer | undefined {
+    public getPlayer(): TwnsBwPlayer.BwPlayer | undefined {
         const war = this.getWar();
         if (war == null) {
             Logger.error(`BwTile.getPlayer() empty war.`);

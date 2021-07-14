@@ -1,15 +1,15 @@
 
-import TwnsUiImage                  from "../../../utility/ui/UiImage";
-import TwnsUiButton                 from "../../../utility/ui/UiButton";
-import TwnsUiLabel                  from "../../../utility/ui/UiLabel";
-import TwnsUiTabPage                from "../../../utility/ui/UiTabPage";
+import TwnsUiImage                  from "../../tools/ui/UiImage";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiTabPage                from "../../tools/ui/UiTabPage";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { WarMapBuildingListPanel }      from "../../warMap/view/WarMapBuildingListPanel";
-import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import { MeMfwModel }                   from "../model/MeMfwModel";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { Lang }                         from "../../../utility/lang/Lang";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import Lang                         from "../../tools/lang/Lang";
 import NotifyType                       = TwnsNotifyType.NotifyType;
 import LangTextType                     = TwnsLangTextType.LangTextType;
 

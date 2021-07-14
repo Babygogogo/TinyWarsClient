@@ -1,20 +1,21 @@
 
-import TwnsUiButton         from "../../../utility/ui/UiButton";
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiScrollList         from "../../../utility/ui/UiScrollList";
-import { BwWar }                from "../model/BwWar";
-import { BwPlayer }             from "../model/BwPlayer";
-import { ConfigManager }        from "../../../utility/ConfigManager";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { Types }                from "../../../utility/Types";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsBwWar                from "../model/BwWar";
+import TwnsBwPlayer             from "../model/BwPlayer";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Types                from "../../tools/helpers/Types";
 import LangTextType             = TwnsLangTextType.LangTextType;
 import NotifyType               = TwnsNotifyType.NotifyType;
+import BwWar            = TwnsBwWar.BwWar;
 
 type OpenDataForBwCoListPanel = {
     war             : BwWar;
@@ -327,7 +328,7 @@ export class BwCoListPanel extends TwnsUiPanel.UiPanel<OpenDataForBwCoListPanel>
 
 type DataForCoRenderer = {
     configVersion   : string;
-    player          : BwPlayer;
+    player          : TwnsBwPlayer.BwPlayer;
     index           : number;
     panel           : BwCoListPanel;
 };

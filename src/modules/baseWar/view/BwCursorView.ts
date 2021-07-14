@@ -1,23 +1,24 @@
 
-import TwnsUiImage          from "../../../utility/ui/UiImage";
-import TwnsUiLabel          from "../../../utility/ui/UiLabel";
-import { CommonConstants }      from "../../../utility/CommonConstants";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
 import { BwDamageCalculator }   from "../model/BwDamageCalculator";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { Helpers }              from "../../../utility/Helpers";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { NotifyData }           from "../../../utility/notify/NotifyData";
-import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
-import { Logger }               from "../../../utility/Logger";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { Types }                from "../../../utility/Types";
-import { TwnsBwActionPlanner }  from "../model/BwActionPlanner";
-import { BwCursor }             from "../model/BwCursor";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Lang                 from "../../tools/lang/Lang";
+import NotifyData           from "../../tools/notify/NotifyData";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import Logger               from "../../tools/helpers/Logger";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Types                from "../../tools/helpers/Types";
+import TwnsBwActionPlanner  from "../model/BwActionPlanner";
+import TwnsBwCursor             from "../model/BwCursor";
 import LangTextType             = TwnsLangTextType.LangTextType;
 import NotifyType               = TwnsNotifyType.NotifyType;
 import GridIndex                = Types.GridIndex;
 import ActionPlannerState       = Types.ActionPlannerState;
+import BwCursor         = TwnsBwCursor.BwCursor;
 
 const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
 const _PULSE_IN_DURATION                    = 150;

@@ -1,15 +1,15 @@
 
-import { CommonModel }          from "../../common/model/CommonModel";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { Types }                from "../../../utility/Types";
-import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
-import { UserProxy }            from "./UserProxy";
-import { FloatText }            from "../../../utility/FloatText";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import CommonModel          from "../../common/model/CommonModel";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Types                from "../../tools/helpers/Types";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import UserProxy            from "./UserProxy";
+import FloatText            from "../../tools/helpers/FloatText";
+import Lang                 from "../../tools/lang/Lang";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
-export namespace UserModel {
+namespace UserModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NetMessage           = ProtoTypes.NetMessage;
@@ -266,3 +266,5 @@ export namespace UserModel {
         setIsLoggedIn(false);
     }
 }
+
+export default UserModel;

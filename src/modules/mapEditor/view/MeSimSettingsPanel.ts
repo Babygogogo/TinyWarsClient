@@ -1,22 +1,22 @@
 
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiTab                        from "../../../utility/ui/UiTab";
-import TwnsUiTabItemRenderer            from "../../../utility/ui/UiTabItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiTab                        from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { SpmCreateSfwSaveSlotsPanel }   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import { MeSimAdvancedSettingsPage }    from "./MeSimAdvancedSettingsPage";
 import { MeSimBasicSettingsPage }       from "./MeSimBasicSettingsPage";
 import { MeWarMenuPanel }               from "./MeWarMenuPanel";
-import { FlowManager }                  from "../../../utility/FlowManager";
-import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
+import { FlowManager }                  from "../../tools/helpers/FlowManager";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import { MeSimModel }                   from "../model/MeSimModel";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { Types }                        from "../../../utility/Types";
-import { FloatText }                    from "../../../utility/FloatText";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import Types                        from "../../tools/helpers/Types";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Lang                         from "../../tools/lang/Lang";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import LangTextType                     = TwnsLangTextType.LangTextType;
 import NotifyType                       = TwnsNotifyType.NotifyType;
 

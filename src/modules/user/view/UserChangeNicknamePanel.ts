@@ -1,19 +1,19 @@
 
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiButton              from "../../../utility/ui/UiButton";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import TwnsUiTextInput          from "../../../utility/ui/UiTextInput";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiButton              from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { FloatText }            from "../../../utility/FloatText";
-import { Helpers }              from "../../../utility/Helpers";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Types }                from "../../../utility/Types";
-import { UserModel }            from "../../user/model/UserModel";
-import { UserProxy }            from "../../user/model/UserProxy";
+import Types                from "../../tools/helpers/Types";
+import UserModel            from "../../user/model/UserModel";
+import UserProxy            from "../../user/model/UserProxy";
 
 export class UserChangeNicknamePanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;

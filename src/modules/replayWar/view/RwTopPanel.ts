@@ -1,24 +1,24 @@
 
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
 import { BwCoListPanel }                from "../../baseWar/view/BwCoListPanel";
 import { BwUnitListPanel }              from "../../baseWar/view/BwUnitListPanel";
 import { RwWar }                        from "../model/RwWar";
 import { RwWarMenuPanel }               from "./RwWarMenuPanel";
-import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { Types }                        from "../../../utility/Types";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { FloatText }                    from "../../../utility/FloatText";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Lang }                         from "../../../utility/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import Types                        from "../../tools/helpers/Types";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Lang                         from "../../tools/lang/Lang";
 import { ChatModel }                    from "../../chat/model/ChatModel";
-import { RwModel }                      from "../model/RwModel";
+import RwModel                      from "../model/RwModel";
 
-export namespace TwnsRwTopPanel {
+namespace TwnsRwTopPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
@@ -300,3 +300,5 @@ export namespace TwnsRwTopPanel {
         }
     }
 }
+
+export default TwnsRwTopPanel;

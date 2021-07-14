@@ -1,21 +1,21 @@
 
-import { BwUnit }                       from "../../baseWar/model/BwUnit";
-import { BwTileMap }                    from "../../baseWar/model/BwTileMap";
-import { BwUnitMap }                    from "../../baseWar/model/BwUnitMap";
+import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
+import TwnsBwTileMap                    from "../../baseWar/model/BwTileMap";
+import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
 import { MeWar }                        from "./MeWar";
-import { ConfigManager }                from "../../../utility/ConfigManager";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
 import { BwDestructionHelpers }           from "../../baseWar/model/BwDestructionHelpers";
-import { FloatText }                    from "../../../utility/FloatText";
-import { GridIndexHelpers }             from "../../../utility/GridIndexHelpers";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import FloatText                    from "../../tools/helpers/FloatText";
+import GridIndexHelpers             from "../../tools/helpers/GridIndexHelpers";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Logger                       from "../../tools/helpers/Logger";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { NotifyData }                   from "../../../utility/notify/NotifyData";
-import { Types }                        from "../../../utility/Types";
+import NotifyData                   from "../../tools/notify/NotifyData";
+import Types                        from "../../tools/helpers/Types";
 import * as MeUtility                   from "./MeUtility";
 import DrawerMode                       = Types.MapEditorDrawerMode;
 import GridIndex                        = Types.GridIndex;
@@ -23,6 +23,8 @@ import SymmetryType                     = Types.SymmetryType;
 import UnitType                         = Types.UnitType;
 import TileBaseType                     = Types.TileBaseType;
 import TileObjectType                   = Types.TileObjectType;
+import BwUnit                           = TwnsBwUnit.BwUnit;
+import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
 
 export type DataForDrawTileObject = {
     objectType  : TileObjectType;
@@ -40,7 +42,7 @@ export type DataForDrawUnit = {
 
 export class MeDrawer {
     private _war                            : MeWar;
-    private _tileMap                        : BwTileMap;
+    private _tileMap                        : TwnsBwTileMap.BwTileMap;
     private _unitMap                        : BwUnitMap;
     private _configVersion                  : string;
     private _mode                           = DrawerMode.Preview;

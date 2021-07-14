@@ -1,10 +1,10 @@
 
-import TwnsUiImage          from "../../../utility/ui/UiImage";
+import TwnsUiImage          from "../../tools/ui/UiImage";
 import { BwGridVisualEffect }   from "../model/BwGridVisualEffect";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { Helpers }              from "../../../utility/Helpers";
-import { Types }                from "../../../utility/Types";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
 import GridIndex                = Types.GridIndex;
 
 const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;

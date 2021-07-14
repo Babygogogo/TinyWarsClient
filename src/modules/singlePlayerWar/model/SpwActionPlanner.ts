@@ -1,18 +1,18 @@
 
 import { CommonConfirmPanel }                   from "../../common/view/CommonConfirmPanel";
 import { BwProduceUnitPanel }                   from "../../baseWar/view/BwProduceUnitPanel";
-import { BwUnitActionsPanel }                   from "../../baseWar/view/BwUnitActionsPanel";
-import { BwUnit }                               from "../../baseWar/model/BwUnit";
-import { TwnsBwActionPlanner }   from "../../baseWar/model/BwActionPlanner";
+import TwnsBwUnitActionsPanel                   from "../../baseWar/view/BwUnitActionsPanel";
+import TwnsBwUnit                               from "../../baseWar/model/BwUnit";
+import TwnsBwActionPlanner   from "../../baseWar/model/BwActionPlanner";
 import { SpwWar }                               from "./SpwWar";
-import { FloatText }                            from "../../../utility/FloatText";
-import { GridIndexHelpers }                     from "../../../utility/GridIndexHelpers";
-import { Lang }                                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import FloatText                            from "../../tools/helpers/FloatText";
+import GridIndexHelpers                     from "../../tools/helpers/GridIndexHelpers";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { ProtoTypes }                           from "../../../utility/proto/ProtoTypes";
-import { Types }                                from "../../../utility/Types";
-import { BwHelpers }                            from "../../baseWar/model/BwHelpers";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import Types                                from "../../tools/helpers/Types";
+import BwHelpers                            from "../../baseWar/model/BwHelpers";
 import * as SpwLocalProxy                       from "./SpwLocalProxy";
 import TurnPhaseCode                            = Types.TurnPhaseCode;
 import UnitState                                = Types.UnitActionState;
@@ -236,13 +236,13 @@ export class SpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
 
         const currState = this.getState();
         if (currState === State.ChoosingAction) {
-            BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+            TwnsBwUnitActionsPanel.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
         } else {
-            BwUnitActionsPanel.hide();
+            TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
         }
     }
 
-    protected _checkCanControlUnit(unit: BwUnit): boolean {
+    protected _checkCanControlUnit(unit: TwnsBwUnit.BwUnit): boolean {
         const playerInTurn = this._getWar().getPlayerInTurn();
         return (unit.getPlayerIndex() === playerInTurn.getPlayerIndex())
             && (playerInTurn.getUserId() != null);
@@ -618,7 +618,7 @@ export class SpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Other functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: BwUnit): number | undefined {
+    protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: TwnsBwUnit.BwUnit): number | undefined {
         if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
             return undefined;
         } else {
@@ -663,7 +663,7 @@ export class SpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
         }));
     }
 
-    protected _addUnitForPreviewAttackableArea(unit: BwUnit): void {
+    protected _addUnitForPreviewAttackableArea(unit: TwnsBwUnit.BwUnit): void {
         const canAttackAfterMove    = unit.checkCanAttackAfterMove();
         const beginningGridIndex    = unit.getGridIndex();
         const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());

@@ -1,18 +1,18 @@
 
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
-import { BwWar }                        from "../../baseWar/model/BwWar";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
 import { MeDrawer }                     from "./MeDrawer";
 import { MeField }                      from "./MeField";
 import { MePlayerManager }              from "./MePlayerManager";
 import { MeCommonSettingManager }       from "./MeCommonSettingManager";
 import { MeWarEventManager }            from "./MeWarEventManager";
 import { MeWarMenuPanel }               from "../view/MeWarMenuPanel";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { Helpers }                      from "../../../utility/Helpers";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
-import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
-import { TimeModel }                    from "../../time/model/TimeModel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
+import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import Timer                    from "../../tools/helpers/Timer";
 import * as MeUtility                   from "./MeUtility";
 import WarAction                        = ProtoTypes.WarAction;
 import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
@@ -21,6 +21,7 @@ import IMapRawData                      = ProtoTypes.Map.IMapRawData;
 import IDataForMapTag                   = ProtoTypes.Map.IDataForMapTag;
 import ILanguageText                    = ProtoTypes.Structure.ILanguageText;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+import BwWar            = TwnsBwWar.BwWar;
 
 export class MeWar extends BwWar {
     private readonly _playerManager         = new MePlayerManager();
@@ -93,7 +94,7 @@ export class MeWar extends BwWar {
             mapWidth                : mapSize.width,
             mapHeight               : mapSize.height,
             playersCountUnneutral,
-            modifiedTime            : TimeModel.getServerTimestamp(),
+            modifiedTime            : Timer.getServerTimestamp(),
             tileDataArray           : this.getTileMap().serialize().tiles,
             unitDataArray           : unitMap.serialize().units,
             warRuleArray            : this.getRevisedWarRuleArray(playersCountUnneutral),

@@ -1,23 +1,23 @@
 
-import TwnsUiImage                      from "../../../utility/ui/UiImage";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiComponent                  from "../../../utility/ui/UiComponent";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiCoInfo                     from "../../../utility/ui/UiCoInfo";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiComponent                  from "../../tools/ui/UiComponent";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiCoInfo                     from "../../tools/ui/UiCoInfo";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
-import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import TwnsCommonAlertPanel             from "../../common/view/CommonAlertPanel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                        from "../../../utility/Types";
-import { MrrProxy }                     from "../model/MrrProxy";
+import Types                        from "../../tools/helpers/Types";
+import MrrProxy                     from "../model/MrrProxy";
 
 type OpenDataForMrrRoomBanCoPanel = {
     roomId: number;

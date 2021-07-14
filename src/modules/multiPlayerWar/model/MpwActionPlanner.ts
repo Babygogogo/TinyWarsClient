@@ -1,19 +1,19 @@
 
-import { TwnsBwActionPlanner }   from "../../baseWar/model/BwActionPlanner";
-import { BwUnit }                               from "../../baseWar/model/BwUnit";
+import TwnsBwActionPlanner   from "../../baseWar/model/BwActionPlanner";
+import TwnsBwUnit                               from "../../baseWar/model/BwUnit";
 import { BwProduceUnitPanel }                   from "../../baseWar/view/BwProduceUnitPanel";
-import { BwUnitActionsPanel }                   from "../../baseWar/view/BwUnitActionsPanel";
+import TwnsBwUnitActionsPanel                   from "../../baseWar/view/BwUnitActionsPanel";
 import { CommonConfirmPanel }                   from "../../common/view/CommonConfirmPanel";
 import { MpwWar }                               from "./MpwWar";
-import { FloatText }                            from "../../../utility/FloatText";
-import { GridIndexHelpers }                     from "../../../utility/GridIndexHelpers";
-import { Lang }                                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import FloatText                            from "../../tools/helpers/FloatText";
+import GridIndexHelpers                     from "../../tools/helpers/GridIndexHelpers";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Logger }                               from "../../../utility/Logger";
-import { Types }                                from "../../../utility/Types";
-import { MpwProxy }                             from "../../multiPlayerWar/model/MpwProxy";
-import { UserModel }                            from "../../user/model/UserModel";
+import Logger                               from "../../tools/helpers/Logger";
+import Types                                from "../../tools/helpers/Types";
+import MpwProxy                             from "../../multiPlayerWar/model/MpwProxy";
+import UserModel                            from "../../user/model/UserModel";
 import TurnPhaseCode                            = Types.TurnPhaseCode;
 import UnitState                                = Types.UnitActionState;
 import GridIndex                                = Types.GridIndex;
@@ -571,13 +571,13 @@ export class MpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
 
         const currState = this.getState();
         if (currState === State.ChoosingAction) {
-            BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+            TwnsBwUnitActionsPanel.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
         } else {
-            BwUnitActionsPanel.hide();
+            TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
         }
     }
 
-    protected _checkCanControlUnit(unit: BwUnit): boolean {
+    protected _checkCanControlUnit(unit: TwnsBwUnit.BwUnit): boolean {
         const war           = this._getWar();
         const playerInTurn  = war ? war.getPlayerInTurn() : undefined;
         if (playerInTurn == null) {

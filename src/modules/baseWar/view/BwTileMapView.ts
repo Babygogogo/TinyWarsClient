@@ -1,15 +1,16 @@
 
 import { BwTileView }           from "./BwTileView";
-import { BwTileMap }            from "../model/BwTileMap";
-import TwnsUiImage          from "../../../utility/ui/UiImage";
-import { UserModel }            from "../../user/model/UserModel";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { Helpers }              from "../../../utility/Helpers";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { BwVisibilityHelpers }  from "../model/BwVisibilityHelpers";
-import { CommonConstants }      from "../../../utility/CommonConstants";
+import TwnsBwTileMap            from "../model/BwTileMap";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import UserModel            from "../../user/model/UserModel";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Helpers              from "../../tools/helpers/Helpers";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import BwVisibilityHelpers  from "../model/BwVisibilityHelpers";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
 import NotifyType               = TwnsNotifyType.NotifyType;
+import BwTileMap                = TwnsBwTileMap.BwTileMap;
 
 const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 

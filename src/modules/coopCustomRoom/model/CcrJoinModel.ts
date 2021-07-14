@@ -1,10 +1,10 @@
 
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import { CcrModel }                     from "./CcrModel";
-import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
+import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
 
 export namespace CcrJoinModel {
     import NotifyType       = TwnsNotifyType.NotifyType;

@@ -1,13 +1,13 @@
 
-import TwnsUiImage          from "../../../utility/ui/UiImage";
-import { Types }                from "../../../utility/Types";
-import { Helpers }              from "../../../utility/Helpers";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { ConfigManager }        from "../../../utility/ConfigManager";
-import { BwHelpers }            from "../../baseWar/model/BwHelpers";
-import { TimeModel }            from "../../time/model/TimeModel";
-import { CommonModel }          from "../../common/model/CommonModel";
-import { UserModel }            from "../../user/model/UserModel";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import Types                from "../../tools/helpers/Types";
+import Helpers              from "../../tools/helpers/Helpers";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import BwHelpers            from "../../baseWar/model/BwHelpers";
+import Timer            from "../../tools/helpers/Timer";
+import CommonModel          from "../../common/model/CommonModel";
+import UserModel            from "../../user/model/UserModel";
 
 const { width: GRID_WIDTH, height: GRID_HEIGHT }    = CommonConstants.GridSize;
 const IMG_UNIT_STATE_WIDTH                          = 28;
@@ -48,7 +48,7 @@ export class WarMapUnitView extends egret.DisplayObjectContainer {
         this._isDark    = data.actionState === Types.UnitActionState.Acted;
         this.x          = gridIndex.x * GRID_WIDTH - GRID_WIDTH / 4;
         this.y          = gridIndex.y * GRID_HEIGHT - GRID_HEIGHT / 2;
-        this.updateOnAnimationTick(tickCount || TimeModel.getUnitAnimationTickCount());
+        this.updateOnAnimationTick(tickCount || Timer.getUnitAnimationTickCount());
 
         this._updateImageHp();
         this._resetStateAnimationFrames();
@@ -108,7 +108,7 @@ export class WarMapUnitView extends egret.DisplayObjectContainer {
         const framesCount       = frames.length;
         this._imgState.source   = framesCount <= 0
             ? undefined
-            : frames[Math.floor(TimeModel.getUnitAnimationTickCount() / 6) % framesCount];
+            : frames[Math.floor(Timer.getUnitAnimationTickCount() / 6) % framesCount];
     }
 
     private _addFrameForCoSkill(): void {

@@ -1,18 +1,19 @@
 
-import TwnsUiImage                      from "../../../utility/ui/UiImage";
-import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
-import { BwWar }                        from "../../baseWar/model/BwWar";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
+import BwWar            = TwnsBwWar.BwWar;
 
 type OpenDataForSpwChooseCoPanel = {
     war         : BwWar;

@@ -1,26 +1,26 @@
 
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import { BwUnit }                       from "../../baseWar/model/BwUnit";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
 import { BwUnitView }                   from "../../baseWar/view/BwUnitView";
 import { MeDrawer }                     from "../model/MeDrawer";
 import { MeWar }                        from "../model/MeWar";
 import { MeChooseTileBasePanel }        from "./MeChooseTileBasePanel";
 import { MeChooseUnitPanel }            from "./MeChooseUnitPanel";
-import { MeTileSimpleView }             from "./MeTileSimpleView";
+import TwnsMeTileSimpleView             from "./MeTileSimpleView";
 import { MeWarMenuPanel }               from "./MeWarMenuPanel";
 import { MeChooseTileObjectPanel }      from "./MeChooseTileObjectPanel";
 import { MeVisibilityPanel }            from "./MeVisibilityPanel";
 import { MeSymmetryPanel }              from "./MeSymmetryPanel";
-import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { Types }                        from "../../../utility/Types";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { MeModel }                      from "../model/MeModel";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import Types                        from "../../tools/helpers/Types";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Lang                         from "../../tools/lang/Lang";
+import MeModel                      from "../model/MeModel";
 
-export namespace TwnsMeTopPanel {
+namespace TwnsMeTopPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import DrawerMode       = Types.MapEditorDrawerMode;
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -49,7 +49,7 @@ export namespace TwnsMeTopPanel {
         private _btnMenu                : TwnsUiButton.UiButton;
 
         private _unitView   = new BwUnitView();
-        private _tileView   = new MeTileSimpleView();
+        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
         private _war    : MeWar;
         private _drawer : MeDrawer;
@@ -326,7 +326,7 @@ export namespace TwnsMeTopPanel {
         }
         private _initUnitView(): void {
             const war   = this._war;
-            const unit  = new BwUnit();
+            const unit  = new TwnsBwUnit.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
@@ -351,3 +351,5 @@ export namespace TwnsMeTopPanel {
         }
     }
 }
+
+export default TwnsMeTopPanel;

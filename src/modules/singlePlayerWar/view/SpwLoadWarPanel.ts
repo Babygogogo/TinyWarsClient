@@ -1,25 +1,25 @@
 
-import TwnsUiImage                      from "../../../utility/ui/UiImage";
-import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { FlowManager }                  from "../../../utility/FlowManager";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import { FlowManager }                  from "../../tools/helpers/FlowManager";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                        from "../../../utility/Types";
-import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
-import { SpmModel }                     from "../../singlePlayerMode/model/SpmModel";
-import { WarMapModel }                  from "../../warMap/model/WarMapModel";
-import { SpwModel }                     from "../model/SpwModel";
+import Types                        from "../../tools/helpers/Types";
+import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import SpmModel                     from "../../singlePlayerMode/model/SpmModel";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
+import SpwModel                     from "../model/SpwModel";
 
 export class SpwLoadWarPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;

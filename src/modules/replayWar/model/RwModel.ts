@@ -1,15 +1,15 @@
 
 import { RwWar }                        from "./RwWar";
-import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { Helpers }                      from "../../../utility/Helpers";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { ProtoManager }                 from "../../../utility/proto/ProtoManager";
-import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
-import { WarMapModel }                  from "../../warMap/model/WarMapModel";
+import Logger                       from "../../tools/helpers/Logger";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import Helpers                      from "../../tools/helpers/Helpers";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import ProtoManager                 from "../../tools/proto/ProtoManager";
+import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
 
-export namespace RwModel {
+namespace RwModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IReplayInfo      = ProtoTypes.Replay.IReplayInfo;
 
@@ -94,3 +94,5 @@ export namespace RwModel {
         return _war;
     }
 }
+
+export default RwModel;

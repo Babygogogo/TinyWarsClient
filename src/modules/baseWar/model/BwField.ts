@@ -1,17 +1,20 @@
 
-import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
-import { BwCursor }             from "./BwCursor";
+import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+import TwnsBwCursor             from "./BwCursor";
 import { BwGridVisualEffect }   from "./BwGridVisualEffect";
-import { TwnsBwActionPlanner }      from "./BwActionPlanner";
+import TwnsBwActionPlanner      from "./BwActionPlanner";
 import { BwFogMap }             from "./BwFogMap";
-import { BwTileMap }            from "./BwTileMap";
-import { BwUnitMap }            from "./BwUnitMap";
-import { BwWar }                from "./BwWar";
+import TwnsBwTileMap            from "./BwTileMap";
+import TwnsBwUnitMap            from "./BwUnitMap";
+import TwnsBwWar                from "./BwWar";
 import { BwFieldView }          from "../view/BwFieldView";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { BwHelpers }            from "../../baseWar/model/BwHelpers";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import BwHelpers            from "../../baseWar/model/BwHelpers";
 import ISerialField             = ProtoTypes.WarSerialization.ISerialField;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+import BwWar            = TwnsBwWar.BwWar;
+import BwCursor         = TwnsBwCursor.BwCursor;
 
 export abstract class BwField {
     private readonly _cursor            = new BwCursor();
@@ -19,7 +22,7 @@ export abstract class BwField {
     private readonly _view              = new BwFieldView();
 
     public abstract getFogMap(): BwFogMap;
-    public abstract getTileMap(): BwTileMap;
+    public abstract getTileMap(): TwnsBwTileMap.BwTileMap;
     public abstract getUnitMap(): BwUnitMap;
     public abstract getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner;
 

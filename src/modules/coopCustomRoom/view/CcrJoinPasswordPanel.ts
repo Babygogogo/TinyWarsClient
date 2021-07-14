@@ -1,16 +1,16 @@
 
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiTextInput                  from "../../../utility/ui/UiTextInput";
-import { FloatText }                    from "../../../utility/FloatText";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
-import { WarMapModel }                  from "../../warMap/model/WarMapModel";
-import { CcrProxy }                     from "../model/CcrProxy";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiTextInput                  from "../../tools/ui/UiTextInput";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
+import CcrProxy                     from "../model/CcrProxy";
 import { CcrJoinModel }                 from "../model/CcrJoinModel";
 import LangTextType                     = TwnsLangTextType.LangTextType;
 import NotifyType                       = TwnsNotifyType.NotifyType;

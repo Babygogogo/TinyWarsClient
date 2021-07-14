@@ -1,24 +1,25 @@
 
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
 import { BwCoListPanel }                from "../../baseWar/view/BwCoListPanel";
 import { BwUnitListPanel }              from "../../baseWar/view/BwUnitListPanel";
 import { SpwWarMenuPanel }              from "./SpwWarMenuPanel";
-import { BwWar }                        from "../../baseWar/model/BwWar";
-import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { Types }                        from "../../../utility/Types";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { FloatText }                    from "../../../utility/FloatText";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import Types                        from "../../tools/helpers/Types";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Lang                         from "../../tools/lang/Lang";
+import BwHelpers                    from "../../baseWar/model/BwHelpers";
 import { ChatModel }                    from "../../chat/model/ChatModel";
+import BwWar            = TwnsBwWar.BwWar;
 
-export namespace TwnsSpwTopPanel {
+namespace TwnsSpwTopPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
@@ -357,3 +358,5 @@ export namespace TwnsSpwTopPanel {
         }
     }
 }
+
+export default TwnsSpwTopPanel;

@@ -1,7 +1,7 @@
 
-import { BwUnit }                   from "../../baseWar/model/BwUnit";
-import { TwnsBwActionPlanner }      from "../../baseWar/model/BwActionPlanner";
-import { Types }                    from "../../../utility/Types";
+import TwnsBwUnit                   from "../../baseWar/model/BwUnit";
+import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
+import Types                    from "../../tools/helpers/Types";
 import GridIndex                    = Types.GridIndex;
 import State                        = Types.ActionPlannerState;
 
@@ -52,7 +52,7 @@ export class TwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
         // nothing to do
     }
 
-    protected _checkCanControlUnit(unit: BwUnit): boolean {
+    protected _checkCanControlUnit(unit: TwnsBwUnit.BwUnit): boolean {
         const playerInTurn = this._getWar().getPlayerInTurn();
         return (unit.getPlayerIndex() === playerInTurn.getPlayerIndex())
             && (playerInTurn.getUserId() != null);

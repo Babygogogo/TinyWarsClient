@@ -1,19 +1,19 @@
 
-import TwnsUiImage                      from "../../../utility/ui/UiImage";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
 import { CommonDamageChartPanel }       from "../../common/view/CommonDamageChartPanel";
 import { UserOnlineUsersPanel }         from "../../user/view/UserOnlineUsersPanel";
-import { TwnsLobbyTopPanel }                from "./LobbyTopPanel";
+import TwnsLobbyTopPanel                from "./LobbyTopPanel";
 import { MeMapListPanel }               from "../../mapEditor/view/MeMapListPanel";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { Types }                        from "../../../utility/Types";
-import { Helpers }                      from "../../../utility/Helpers";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import Types                        from "../../tools/helpers/Types";
+import Helpers                      from "../../tools/helpers/Helpers";
 import { ChatModel }                    from "../../chat/model/ChatModel";
-import { UserModel }                    from "../../user/model/UserModel";
+import UserModel                    from "../../user/model/UserModel";
 
-export namespace TwnsLobbyBottomPanel {
+namespace TwnsLobbyBottomPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import Tween            = egret.Tween;
 
@@ -168,3 +168,5 @@ export namespace TwnsLobbyBottomPanel {
         }
     }
 }
+
+export default TwnsLobbyBottomPanel;

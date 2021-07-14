@@ -1,23 +1,26 @@
 
-import TwnsUiImage                      from "../../../utility/ui/UiImage";
-import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
-import { BwWar }                        from "../../baseWar/model/BwWar";
-import { BwUnit }                       from "../../baseWar/model/BwUnit";
-import { BwCursor }                     from "../model/BwCursor";
-import { BwUnitMap }                    from "../model/BwUnitMap";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
+import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
+import TwnsBwCursor                     from "../model/BwCursor";
+import TwnsBwUnitMap                    from "../model/BwUnitMap";
 import { BwUnitView }                   from "./BwUnitView";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                        from "../../../utility/Types";
-import { CommonModel }                  from "../../common/model/CommonModel";
+import Types                        from "../../tools/helpers/Types";
+import CommonModel                  from "../../common/model/CommonModel";
+import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+import BwWar            = TwnsBwWar.BwWar;
+import BwCursor         = TwnsBwCursor.BwCursor;
 
 type OpenDataForBwUnitListPanel = {
     war : BwWar;
@@ -174,7 +177,7 @@ const _IMAGE_SOURCE_MATERIAL    = `c03_t99_s02_f04`;
 const _IMAGE_SOURCE_FLARE       = `c03_t99_s02_f02`;
 
 type DataForUnitRenderer = {
-    unit    : BwUnit;
+    unit    : TwnsBwUnit.BwUnit;
     cursor  : BwCursor;
 };
 class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {

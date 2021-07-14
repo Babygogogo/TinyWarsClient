@@ -1,14 +1,14 @@
 
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import { Types }                from "../../../utility/Types";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import Types                from "../../tools/helpers/Types";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import { BroadcastModel }       from "../model/BroadcastModel";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { StageManager }         from "../../../utility/StageManager";
+import Lang                 from "../../tools/lang/Lang";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import StageManager         from "../../tools/helpers/StageManager";
 
-export namespace TwnsBroadcastPanel {
+namespace TwnsBroadcastPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     const _FLOW_SPEED = 80;
@@ -107,3 +107,5 @@ export namespace TwnsBroadcastPanel {
         }
     }
 }
+
+export default TwnsBroadcastPanel;

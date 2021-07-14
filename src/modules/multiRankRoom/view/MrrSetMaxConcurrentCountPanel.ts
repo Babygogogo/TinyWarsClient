@@ -1,19 +1,19 @@
 
-import TwnsUiImage                      from "../../../utility/ui/UiImage";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                        from "../../../utility/Types";
+import Types                        from "../../tools/helpers/Types";
 import { MrrModel }                     from "../model/MrrModel";
-import { MrrProxy }                     from "../model/MrrProxy";
+import MrrProxy                     from "../model/MrrProxy";
 import MaxCount                         = CommonConstants.RankMaxConcurrentCount;
 import MinCount                         = CommonConstants.RankMinConcurrentCount;
 

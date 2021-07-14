@@ -1,13 +1,13 @@
 
-import { Logger }                       from "../../../utility/Logger";
-import { Types }                        from "../../../utility/Types";
+import Logger                       from "../../tools/helpers/Logger";
+import Types                        from "../../tools/helpers/Types";
 import { MeWar }                        from "./MeWar";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { UserModel }                    from "../../user/model/UserModel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import UserModel                    from "../../user/model/UserModel";
 import * as MeUtility                   from "./MeUtility";
 
-export namespace MeModel {
+namespace MeModel {
     import MapReviewStatus                  = Types.MapReviewStatus;
     import IMapEditorData                   = ProtoTypes.Map.IMapEditorData;
 
@@ -104,3 +104,5 @@ export namespace MeModel {
         };
     }
 }
+
+export default MeModel;

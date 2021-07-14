@@ -1,21 +1,21 @@
 
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
-import { TwnsLobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import { SpmWarListPanel }              from "./SpmWarListPanel";
 import { ScrCreateMapListPanel }        from "../../singleCustomRoom/view/ScrCreateMapListPanel";
 import { MrrMainMenuPanel }             from "../../multiRankRoom/view/MrrMainMenuPanel";
 import { McrMainMenuPanel }             from "../../multiCustomRoom/view/McrMainMenuPanel";
-import { FloatText }                    from "../../../utility/FloatText";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                        from "../../../utility/Types";
+import Types                        from "../../tools/helpers/Types";
 import Tween                            = egret.Tween;
 
 export class SpmMainMenuPanel extends TwnsUiPanel.UiPanel<void> {

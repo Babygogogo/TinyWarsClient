@@ -1,110 +1,115 @@
 
-import TwnsUiImage          from "../../../utility/ui/UiImage";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { Logger }               from "../../../utility/Logger";
-import { Types }                from "../../../utility/Types";
-import { CommonModel }          from "../../common/model/CommonModel";
-import { TimeModel }            from "../../time/model/TimeModel";
-import { UserModel }            from "../../user/model/UserModel";
-import TileObjectType           = Types.TileObjectType;
-import TileBaseType             = Types.TileBaseType;
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Logger           from "../../tools/helpers/Logger";
+import Types            from "../../tools/helpers/Types";
+import CommonModel      from "../../common/model/CommonModel";
+import Timer            from "../../tools/helpers/Timer";
+import UserModel        from "../../user/model/UserModel";
 
-const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
+namespace TwnsMeTileSimpleView {
+    import TileObjectType           = Types.TileObjectType;
+    import TileBaseType             = Types.TileBaseType;
 
-export class MeTileSimpleView {
-    private _imgBase        = new TwnsUiImage.UiImage();
-    private _imgObject      = new TwnsUiImage.UiImage();
+    const { height: GRID_HEIGHT }   = CommonConstants.GridSize;
 
-    private _baseType       : TileBaseType;
-    private _baseShapeId    : number;
-    private _objectType     : TileObjectType;
-    private _objectShapeId  : number;
-    private _playerIndex    : number;
+    export class MeTileSimpleView {
+        private _imgBase        = new TwnsUiImage.UiImage();
+        private _imgObject      = new TwnsUiImage.UiImage();
 
-    public constructor() {
-        this._imgBase.anchorOffsetY     = GRID_HEIGHT;
-        this._imgObject.anchorOffsetY   = GRID_HEIGHT * 2;
-    }
+        private _baseType       : TileBaseType;
+        private _baseShapeId    : number;
+        private _objectType     : TileObjectType;
+        private _objectShapeId  : number;
+        private _playerIndex    : number;
 
-    public init(
-        { tileBaseType, tileBaseShapeId, tileObjectType, tileObjectShapeId, playerIndex }: {
-            tileBaseType        : TileBaseType;
-            tileBaseShapeId     : number;
-            tileObjectType      : TileObjectType;
-            tileObjectShapeId   : number;
-            playerIndex         : number;
-        }
-    ): MeTileSimpleView {
-        if (playerIndex == null) {
-            Logger.error(`MeTileSimpleView.init() empty playerIndex.`);
-            return undefined;
+        public constructor() {
+            this._imgBase.anchorOffsetY     = GRID_HEIGHT;
+            this._imgObject.anchorOffsetY   = GRID_HEIGHT * 2;
         }
 
-        this._baseType      = tileBaseType;
-        this._baseShapeId   = tileBaseShapeId;
-        this._objectType    = tileObjectType;
-        this._objectShapeId = tileObjectShapeId;
-        this._playerIndex   = playerIndex;
+        public init(
+            { tileBaseType, tileBaseShapeId, tileObjectType, tileObjectShapeId, playerIndex }: {
+                tileBaseType        : TileBaseType;
+                tileBaseShapeId     : number;
+                tileObjectType      : TileObjectType;
+                tileObjectShapeId   : number;
+                playerIndex         : number;
+            }
+        ): MeTileSimpleView {
+            if (playerIndex == null) {
+                Logger.error(`MeTileSimpleView.init() empty playerIndex.`);
+                return undefined;
+            }
 
-        return this;
-    }
+            this._baseType      = tileBaseType;
+            this._baseShapeId   = tileBaseShapeId;
+            this._objectType    = tileObjectType;
+            this._objectShapeId = tileObjectShapeId;
+            this._playerIndex   = playerIndex;
 
-    public startRunningView(): void {
-        this.updateView();
-    }
-
-    public updateView(): void {
-        this._updateImages();
-    }
-
-    public setHasFog(hasFog: boolean): void {
-        this._updateImages();
-    }
-
-    public getImgObject(): TwnsUiImage.UiImage {
-        return this._imgObject;
-    }
-    public getImgBase(): TwnsUiImage.UiImage {
-        return this._imgBase;
-    }
-
-    public updateOnAnimationTick(): void {
-        this._updateImages();
-    }
-
-    protected _updateImages(): void {
-        const version   = UserModel.getSelfSettingsTextureVersion();
-        const tickCount = TimeModel.getTileAnimationTickCount();
-        const skinId    = this._playerIndex;
-
-        const objectType = this._objectType;
-        if ((objectType == null) || (objectType === TileObjectType.Empty)) {
-            this._imgObject.visible = false;
-        } else {
-            this._imgObject.visible = true;
-            this._imgObject.source  = CommonModel.getCachedTileObjectImageSource({
-                version,
-                skinId,
-                objectType,
-                isDark      : false,
-                shapeId     : this._objectShapeId,
-                tickCount,
-            });
+            return this;
         }
 
-        const baseType = this._baseType;
-        if ((baseType == null) || (baseType === TileBaseType.Empty)) {
-            this._imgBase.visible = false;
-        } else {
-            this._imgBase.visible = true;
-            this._imgBase.source  = CommonModel.getCachedTileBaseImageSource({
-                version,
-                skinId      : CommonConstants.UnitAndTileNeutralSkinId,
-                baseType,
-                isDark      : false,
-                shapeId     : this._baseShapeId,
-                tickCount,
-            });
+        public startRunningView(): void {
+            this.updateView();
+        }
+
+        public updateView(): void {
+            this._updateImages();
+        }
+
+        public setHasFog(hasFog: boolean): void {
+            this._updateImages();
+        }
+
+        public getImgObject(): TwnsUiImage.UiImage {
+            return this._imgObject;
+        }
+        public getImgBase(): TwnsUiImage.UiImage {
+            return this._imgBase;
+        }
+
+        public updateOnAnimationTick(): void {
+            this._updateImages();
+        }
+
+        protected _updateImages(): void {
+            const version   = UserModel.getSelfSettingsTextureVersion();
+            const tickCount = Timer.getTileAnimationTickCount();
+            const skinId    = this._playerIndex;
+
+            const objectType = this._objectType;
+            if ((objectType == null) || (objectType === TileObjectType.Empty)) {
+                this._imgObject.visible = false;
+            } else {
+                this._imgObject.visible = true;
+                this._imgObject.source  = CommonModel.getCachedTileObjectImageSource({
+                    version,
+                    skinId,
+                    objectType,
+                    isDark      : false,
+                    shapeId     : this._objectShapeId,
+                    tickCount,
+                });
+            }
+
+            const baseType = this._baseType;
+            if ((baseType == null) || (baseType === TileBaseType.Empty)) {
+                this._imgBase.visible = false;
+            } else {
+                this._imgBase.visible = true;
+                this._imgBase.source  = CommonModel.getCachedTileBaseImageSource({
+                    version,
+                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                    baseType,
+                    isDark      : false,
+                    shapeId     : this._baseShapeId,
+                    tickCount,
+                });
+            }
         }
     }
 }
+
+export default TwnsMeTileSimpleView;

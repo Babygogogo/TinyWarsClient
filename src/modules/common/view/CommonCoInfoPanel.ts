@@ -1,12 +1,12 @@
 
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiCoInfo             from "../../../utility/ui/UiCoInfo";
-import { Helpers }              from "../../../utility/Helpers";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
+import Helpers              from "../../tools/helpers/Helpers";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                from "../../../utility/Types";
+import Types                from "../../tools/helpers/Types";
 
 type OpenDataForCommonCoInfoPanel = {
     configVersion   : string;

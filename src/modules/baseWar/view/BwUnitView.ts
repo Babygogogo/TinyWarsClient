@@ -1,16 +1,17 @@
 
-import { BwUnit }               from "../model/BwUnit";
-import TwnsUiImage          from "../../../utility/ui/UiImage";
-import { TimeModel }            from "../../time/model/TimeModel";
-import { CommonModel }          from "../../common/model/CommonModel";
-import { UserModel }            from "../../user/model/UserModel";
-import { Types }                from "../../../utility/Types";
-import { BwVisibilityHelpers }  from "../model/BwVisibilityHelpers";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { Helpers }              from "../../../utility/Helpers";
-import { CommonConstants }      from "../../../utility/CommonConstants";
+import TwnsBwUnit               from "../model/BwUnit";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import Timer            from "../../tools/helpers/Timer";
+import CommonModel          from "../../common/model/CommonModel";
+import UserModel            from "../../user/model/UserModel";
+import Types                from "../../tools/helpers/Types";
+import BwVisibilityHelpers  from "../model/BwVisibilityHelpers";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
 import UnitAnimationType        = Types.UnitAnimationType;
 import GridIndex                = Types.GridIndex;
+import BwUnit                   = TwnsBwUnit.BwUnit;
 
 const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = CommonConstants.GridSize;
 const _IMG_UNIT_STAND_ANCHOR_OFFSET_X               = _GRID_WIDTH * 3 / 4;
@@ -80,7 +81,7 @@ export class BwUnitView extends egret.DisplayObjectContainer {
             version     : UserModel.getSelfSettingsTextureVersion(),
             isDark      : this._isDark,
             isMoving    : this._animationType === UnitAnimationType.Move,
-            tickCount   : TimeModel.getUnitAnimationTickCount(),
+            tickCount   : Timer.getUnitAnimationTickCount(),
             skinId      : unit.getSkinId(),
             unitType    : unit.getUnitType(),
         });
@@ -116,7 +117,7 @@ export class BwUnitView extends egret.DisplayObjectContainer {
         const framesCount       = this._framesForStateAnimation.length;
         this._imgState.source   = framesCount <= 0
             ? undefined
-            : this._framesForStateAnimation[Math.floor(TimeModel.getUnitAnimationTickCount() / 6) % framesCount];
+            : this._framesForStateAnimation[Math.floor(Timer.getUnitAnimationTickCount() / 6) % framesCount];
     }
 
     protected _getIsDark(): boolean {

@@ -1,13 +1,13 @@
 
-import { CommonModel }          from "./CommonModel";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { TwnsNetMessageCodes }  from "../../../utility/network/NetMessageCodes";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { ConfigManager }        from "../../../utility/ConfigManager";
-import { NetManager }           from "../../../utility/network/NetManager";
+import CommonModel          from "./CommonModel";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import NetManager           from "../../tools/network/NetManager";
 
-export namespace CommonProxy {
+namespace CommonProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
@@ -69,3 +69,5 @@ export namespace CommonProxy {
         }
     }
 }
+
+export default CommonProxy;

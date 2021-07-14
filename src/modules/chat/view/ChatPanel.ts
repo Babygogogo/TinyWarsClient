@@ -1,33 +1,33 @@
 
-import TwnsUiButton              from "../../../utility/ui/UiButton";
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiScrollList         from "../../../utility/ui/UiScrollList";
-import TwnsUiTextInput          from "../../../utility/ui/UiTextInput";
+import TwnsUiButton              from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
 import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { FloatText }            from "../../../utility/FloatText";
-import { Helpers }              from "../../../utility/Helpers";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Logger }               from "../../../utility/Logger";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Logger               from "../../tools/helpers/Logger";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { Types }                from "../../../utility/Types";
-import { TimeModel }            from "../../time/model/TimeModel";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+import Timer            from "../../tools/helpers/Timer";
 import { ChatModel }            from "../model/ChatModel";
-import { ChatProxy }            from "../model/ChatProxy";
-import { WarMapModel }          from "../../warMap/model/WarMapModel";
-import { MpwModel }             from "../../multiPlayerWar/model/MpwModel";
+import ChatProxy            from "../model/ChatProxy";
+import WarMapModel          from "../../warMap/model/WarMapModel";
+import MpwModel             from "../../multiPlayerWar/model/MpwModel";
 import { CcrModel }             from "../../coopCustomRoom/model/CcrModel";
 import { MfrModel }             from "../../multiFreeRoom/model/MfrModel";
 import { McrModel }             from "../../multiCustomRoom/model/McrModel";
-import { UserModel }            from "../../user/model/UserModel";
+import UserModel            from "../../user/model/UserModel";
 import ChatCategory             = Types.ChatMessageToCategory;
 import ChatChannel              = Types.ChatChannel;
 import NetMessage               = ProtoTypes.NetMessage;
@@ -194,7 +194,7 @@ export class ChatPanel extends TwnsUiPanel.UiPanel<OpenDataForChatPanel> {
     }
 
     private _onTouchedBtnRefresh(): void {
-        const currTime  = TimeModel.getServerTimestamp();
+        const currTime  = Timer.getServerTimestamp();
         const cdTime    = ChatModel.getTimestampForNextReqAllMessages() - currTime;
         if (cdTime > 0) {
             FloatText.show(Lang.getFormattedText(LangTextType.F0026, cdTime));

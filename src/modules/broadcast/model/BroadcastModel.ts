@@ -1,7 +1,7 @@
 
 
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { TimeModel }            from "../../time/model/TimeModel";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Timer            from "../../tools/helpers/Timer";
 
 export namespace BroadcastModel {
     import IBroadcastMessage        = ProtoTypes.Broadcast.IBroadcastMessage;
@@ -15,7 +15,7 @@ export namespace BroadcastModel {
         return _messageList;
     }
     export function getOngoingMessageList(): IBroadcastMessage[] {
-        const currTime = TimeModel.getServerTimestamp();
+        const currTime = Timer.getServerTimestamp();
         return _messageList.filter(v => {
             return (v.startTime <= currTime)
                 && (v.endTime >= currTime);

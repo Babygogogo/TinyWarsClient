@@ -1,14 +1,15 @@
 
-import { BwWar }                from "./BwWar";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { Types }                from "../../../utility/Types";
-import { Logger }               from "../../../utility/Logger";
-import { TwnsClientErrorCode }  from "../../../utility/ClientErrorCode";
+import TwnsBwWar                from "./BwWar";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Types                from "../../tools/helpers/Types";
+import Logger               from "../../tools/helpers/Logger";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 
 export namespace BwDestructionHelpers {
     import GridIndex        = Types.GridIndex;
     import TileObjectType   = Types.TileObjectType;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar            = TwnsBwWar.BwWar;
 
     export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): ClientErrorCode {
         const unitMap   = war.getUnitMap();

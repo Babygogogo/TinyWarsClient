@@ -1,138 +1,145 @@
-import { TwnsClientErrorCode }  from "../../../utility/ClientErrorCode";
-import { Helpers }          from "../../../utility/Helpers";
-import { Notify }           from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }            from "../../../utility/Types";
+
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import Helpers          from "../../tools/helpers/Helpers";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
+import Types            from "../../tools/helpers/Types";
 import { BwCursorView }     from "../view/BwCursorView";
-import { BwWar }            from "./BwWar";
-import { NotifyData }       from "../../../utility/notify/NotifyData";
-import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+import TwnsBwWar            from "./BwWar";
+import NotifyData       from "../../tools/notify/NotifyData";
 
-export class BwCursor {
-    private _gridX              = 0;
-    private _gridY              = 0;
-    private _previousGridIndex  : Types.GridIndex;
-    private _mapSize            : Types.MapSize;
-    private _isMovableByTouches = true;
-    private readonly _view      = new BwCursorView();
+namespace TwnsBwCursor {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar            = TwnsBwWar.BwWar;
 
-    private _war    : BwWar;
+    export class BwCursor {
+        private _gridX              = 0;
+        private _gridY              = 0;
+        private _previousGridIndex  : Types.GridIndex;
+        private _mapSize            : Types.MapSize;
+        private _isMovableByTouches = true;
+        private readonly _view      = new BwCursorView();
 
-    private _notifyListeners: Notify.Listener[] = [
-        { type: NotifyType.BwCursorTapped,                 callback: this._onNotifyBwCursorTapped },
-        { type: NotifyType.BwCursorDragged,                callback: this._onNotifyBwCursorDragged },
-        { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-    ];
+        private _war    : BwWar;
 
-    public init(mapSize: Types.MapSize): ClientErrorCode {
-        this._setMapSize(Helpers.deepClone(mapSize));
-        this.setGridIndex({ x: 0, y: 0 });
+        private _notifyListeners: Notify.Listener[] = [
+            { type: NotifyType.BwCursorTapped,                 callback: this._onNotifyBwCursorTapped },
+            { type: NotifyType.BwCursorDragged,                callback: this._onNotifyBwCursorDragged },
+            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+        ];
 
-        this.getView().init(this);
+        public init(mapSize: Types.MapSize): ClientErrorCode {
+            this._setMapSize(Helpers.deepClone(mapSize));
+            this.setGridIndex({ x: 0, y: 0 });
 
-        return ClientErrorCode.NoError;
-    }
-    public fastInit(mapSize: Types.MapSize): ClientErrorCode {
-        this.getView().fastInit(this);
+            this.getView().init(this);
 
-        return ClientErrorCode.NoError;
-    }
+            return ClientErrorCode.NoError;
+        }
+        public fastInit(mapSize: Types.MapSize): ClientErrorCode {
+            this.getView().fastInit(this);
 
-    public startRunning(war: BwWar): void {
-        this._war = war;
+            return ClientErrorCode.NoError;
+        }
 
-        Notify.addEventListeners(this._notifyListeners, this, undefined, 10);
-    }
-    public startRunningView(): void {
-        this.getView().startRunningView();
-    }
-    public stopRunning(): void {
-        Notify.removeEventListeners(this._notifyListeners, this);
+        public startRunning(war: BwWar): void {
+            this._war = war;
 
-        this.getView().stopRunningView();
-    }
+            Notify.addEventListeners(this._notifyListeners, this, undefined, 10);
+        }
+        public startRunningView(): void {
+            this.getView().startRunningView();
+        }
+        public stopRunning(): void {
+            Notify.removeEventListeners(this._notifyListeners, this);
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Callbacks.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    private _onNotifyBwCursorTapped(e: egret.Event): void {
-        if (this.getIsMovableByTouches()) {
-            const data = e.data as NotifyData.BwCursorTapped;
-            this.setGridIndex(data.tappedOn);
+            this.getView().stopRunningView();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyBwCursorTapped(e: egret.Event): void {
+            if (this.getIsMovableByTouches()) {
+                const data = e.data as NotifyData.BwCursorTapped;
+                this.setGridIndex(data.tappedOn);
+                this.updateView();
+            }
+        }
+        private _onNotifyBwCursorDragged(e: egret.Event): void {
+            if (this.getIsMovableByTouches()) {
+                const data = e.data as NotifyData.BwCursorDragged;
+                this.setGridIndex(data.draggedTo);
+                this.updateView();
+            }
+        }
+        private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
             this.updateView();
         }
-    }
-    private _onNotifyBwCursorDragged(e: egret.Event): void {
-        if (this.getIsMovableByTouches()) {
-            const data = e.data as NotifyData.BwCursorDragged;
-            this.setGridIndex(data.draggedTo);
-            this.updateView();
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Other functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getWar(): BwWar {
+            return this._war;
         }
-    }
-    private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
-        this.updateView();
-    }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Other functions.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    public getWar(): BwWar {
-        return this._war;
-    }
+        public getView(): BwCursorView {
+            return this._view;
+        }
+        public updateView(): void {
+            this.getView().updateView();
+        }
 
-    public getView(): BwCursorView {
-        return this._view;
-    }
-    public updateView(): void {
-        this.getView().updateView();
-    }
+        public setVisibleForConForNormal(visible: boolean): void {
+            this.getView().setVisibleForConForNormal(visible);
+        }
+        public setVisibleForConForTarget(visible: boolean): void {
+            this.getView().setVisibleForConForTarget(visible);
+        }
+        public setVisibleForConForSiloArea(visible: boolean): void {
+            this.getView().setVisibleForConForSiloArea(visible);
+        }
 
-    public setVisibleForConForNormal(visible: boolean): void {
-        this.getView().setVisibleForConForNormal(visible);
-    }
-    public setVisibleForConForTarget(visible: boolean): void {
-        this.getView().setVisibleForConForTarget(visible);
-    }
-    public setVisibleForConForSiloArea(visible: boolean): void {
-        this.getView().setVisibleForConForSiloArea(visible);
-    }
+        private _setMapSize(size: Types.MapSize): void {
+            this._mapSize = size;
+        }
+        public getMapSize(): Types.MapSize {
+            return this._mapSize;
+        }
 
-    private _setMapSize(size: Types.MapSize): void {
-        this._mapSize = size;
-    }
-    public getMapSize(): Types.MapSize {
-        return this._mapSize;
-    }
+        public getGridX(): number {
+            return this._gridX;
+        }
+        public getGridY(): number {
+            return this._gridY;
+        }
+        public setGridIndex(gridIndex: Types.GridIndex): void {
+            this._setPreviousGridIndex(this.getGridIndex());
 
-    public getGridX(): number {
-        return this._gridX;
-    }
-    public getGridY(): number {
-        return this._gridY;
-    }
-    public setGridIndex(gridIndex: Types.GridIndex): void {
-        this._setPreviousGridIndex(this.getGridIndex());
+            this._gridX = gridIndex.x;
+            this._gridY = gridIndex.y;
+            Notify.dispatch(NotifyType.BwCursorGridIndexChanged);
+        }
+        public getGridIndex(): Types.GridIndex {
+            return { x: this.getGridX(), y: this.getGridY() };
+        }
 
-        this._gridX = gridIndex.x;
-        this._gridY = gridIndex.y;
-        Notify.dispatch(NotifyType.BwCursorGridIndexChanged);
-    }
-    public getGridIndex(): Types.GridIndex {
-        return { x: this.getGridX(), y: this.getGridY() };
-    }
+        private _setPreviousGridIndex(gridIndex: Types.GridIndex): void {
+            this._previousGridIndex = gridIndex;
+        }
+        public getPreviousGridIndex(): Types.GridIndex | undefined {
+            return this._previousGridIndex;
+        }
 
-    private _setPreviousGridIndex(gridIndex: Types.GridIndex): void {
-        this._previousGridIndex = gridIndex;
-    }
-    public getPreviousGridIndex(): Types.GridIndex | undefined {
-        return this._previousGridIndex;
-    }
-
-    public setIsMovableByTouches(isMovable: boolean): void {
-        this._isMovableByTouches = isMovable;
-    }
-    public getIsMovableByTouches(): boolean {
-        return this._isMovableByTouches;
+        public setIsMovableByTouches(isMovable: boolean): void {
+            this._isMovableByTouches = isMovable;
+        }
+        public getIsMovableByTouches(): boolean {
+            return this._isMovableByTouches;
+        }
     }
 }
+
+export default TwnsBwCursor;

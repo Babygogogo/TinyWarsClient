@@ -1,28 +1,28 @@
 
-import TwnsUiPanel                          from "../../../utility/ui/UiPanel";
-import TwnsUiButton                          from "../../../utility/ui/UiButton";
-import TwnsUiLabel                          from "../../../utility/ui/UiLabel";
-import TwnsUiTab                            from "../../../utility/ui/UiTab";
-import TwnsUiTabItemRenderer                from "../../../utility/ui/UiTabItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiButton                          from "../../tools/ui/UiButton";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
 import { CommonConfirmPanel }               from "../../common/view/CommonConfirmPanel";
 import { ScrCreateBasicSettingsPage }       from "./ScrCreateBasicSettingsPage";
 import { ScrCreateMapListPanel }            from "./ScrCreateMapListPanel";
 import { ScrCreateAdvancedSettingsPage }    from "./ScrCreateAdvancedSettingsPage";
 import { ScrCreateMapInfoPage }             from "./ScrCreateMapInfoPage";
 import { ScrCreatePlayerInfoPage }          from "./ScrCreatePlayerInfoPage";
-import { FlowManager }                      from "../../../utility/FlowManager";
-import { Helpers }                          from "../../../utility/Helpers";
-import { Lang }                             from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import { FlowManager }                      from "../../tools/helpers/FlowManager";
+import Helpers                          from "../../tools/helpers/Helpers";
+import Lang                             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                           from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                           from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { ProtoTypes }                       from "../../../utility/proto/ProtoTypes";
-import { Types }                            from "../../../utility/Types";
-import { SpmModel }                         from "../../singlePlayerMode/model/SpmModel";
-import { SpmProxy }                         from "../../singlePlayerMode/model/SpmProxy";
-import { ScrCreateModel }                         from "../model/ScrCreateModel";
+import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+import Types                            from "../../tools/helpers/Types";
+import SpmModel                         from "../../singlePlayerMode/model/SpmModel";
+import SpmProxy                         from "../../singlePlayerMode/model/SpmProxy";
+import ScrCreateModel                         from "../model/ScrCreateModel";
 const CONFIRM_INTERVAL_MS = 5000;
 
 export class ScrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {

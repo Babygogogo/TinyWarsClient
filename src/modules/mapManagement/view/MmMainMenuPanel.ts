@@ -1,21 +1,21 @@
 
-import TwnsUiListItemRenderer       from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel                  from "../../../utility/ui/UiPanel";
-import TwnsUiButton                  from "../../../utility/ui/UiButton";
-import TwnsUiLabel                  from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList             from "../../../utility/ui/UiScrollList";
+import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiButton                  from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
 import { MmReviewListPanel }        from "./MmReviewListPanel";
 import { MmAvailabilityListPanel }  from "./MmAvailabilityListPanel";
 import { MmTagListPanel }           from "./MmTagListPanel";
-import { FloatText }                from "../../../utility/FloatText";
-import { FlowManager }              from "../../../utility/FlowManager";
-import { Lang }                     from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import FloatText                from "../../tools/helpers/FloatText";
+import { FlowManager }              from "../../tools/helpers/FlowManager";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                   from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                    from "../../../utility/Types";
+import Types                    from "../../tools/helpers/Types";
 
 export class MmMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;

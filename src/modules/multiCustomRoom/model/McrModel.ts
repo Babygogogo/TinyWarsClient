@@ -1,11 +1,11 @@
 
-import { Helpers }                      from "../../../utility/Helpers";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { McrProxy }                     from "../../multiCustomRoom/model/McrProxy";
-import { UserModel }                    from "../../user/model/UserModel";
-import { BwWarRuleHelpers }             from "../../baseWar/model/BwWarRuleHelpers";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import McrProxy                     from "../../multiCustomRoom/model/McrProxy";
+import UserModel                    from "../../user/model/UserModel";
+import BwWarRuleHelpers             from "../../baseWar/model/BwWarRuleHelpers";
 
 export namespace McrModel {
     import NotifyType                       = TwnsNotifyType.NotifyType;

@@ -1,7 +1,6 @@
 
-import { BwUnit }                   from "../../baseWar/model/BwUnit";
-import { TwnsBwActionPlanner }      from "../../baseWar/model/BwActionPlanner";
-import { Types }                    from "../../../utility/Types";
+import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
+import Types                    from "../../tools/helpers/Types";
 import GridIndex                    = Types.GridIndex;
 import State                        = Types.ActionPlannerState;
 
@@ -48,7 +47,7 @@ export class MeActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
         // nothing to do
     }
 
-    protected _checkCanControlUnit(unit: BwUnit): boolean {
+    protected _checkCanControlUnit(): boolean {
         return false;
     }
 

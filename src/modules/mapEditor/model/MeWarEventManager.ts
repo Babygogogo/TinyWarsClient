@@ -1,8 +1,8 @@
 
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
 import { BwWarEventManager }            from "../../baseWar/model/BwWarEventManager";
-import { Helpers }                      from "../../../utility/Helpers";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import Helpers                      from "../../tools/helpers/Helpers";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;
 import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;

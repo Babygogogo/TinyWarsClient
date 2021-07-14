@@ -1,9 +1,11 @@
 
-import TwnsUiPanel  from "../../../utility/ui/UiPanel";
-import { BwWar }    from "../model/BwWar";
-import { Types }    from "../../../utility/Types";
+import TwnsUiPanel  from "../../tools/ui/UiPanel";
+import TwnsBwWar    from "../model/BwWar";
+import Types    from "../../tools/helpers/Types";
 
-export namespace BwWarPanel {
+namespace TwnsBwWarPanel {
+    import BwWar            = TwnsBwWar.BwWar;
+
     type OpenDataForBwWarPanel = {
         war: BwWar;
     };
@@ -42,3 +44,5 @@ export namespace BwWarPanel {
         }
     }
 }
+
+export default TwnsBwWarPanel;

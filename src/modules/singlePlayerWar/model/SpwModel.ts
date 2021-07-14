@@ -1,29 +1,30 @@
 
-import { TwnsClientErrorCode }          from "../../../utility/ClientErrorCode";
-import { TwnsCommonAlertPanel }         from "../../common/view/CommonAlertPanel";
-import { BwWar }                        from "../../baseWar/model/BwWar";
+import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import TwnsCommonAlertPanel         from "../../common/view/CommonAlertPanel";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
 import { SpwWar }                       from "./SpwWar";
 import { ScwWar }                       from "../../singleCustomWar/model/ScwWar";
 import { SfwWar }                       from "../../singleFreeWar/model/SfwWar";
 import { SrwWar }                       from "../../singleRankWar/model/SrwWar";
 import { SpwPlayerManager }             from "./SpwPlayerManager";
-import { FlowManager }                  from "../../../utility/FlowManager";
-import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
-import { Logger }                       from "../../../utility/Logger";
-import { Types }                        from "../../../utility/Types";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import { FlowManager }                  from "../../tools/helpers/FlowManager";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import Logger                       from "../../tools/helpers/Logger";
+import Types                        from "../../tools/helpers/Types";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Lang                         from "../../tools/lang/Lang";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import { BwRobot }                      from "../../baseWar/model/BwRobot";
-import { BwActionReviser }              from "../../baseWar/model/BwActionReviser";
+import BwActionReviser              from "../../baseWar/model/BwActionReviser";
 import { BwWarActionExecutor }          from "../../baseWar/model/BwWarActionExecutor";
 
-export namespace SpwModel {
-    import LangTextType                     = TwnsLangTextType.LangTextType;
-    import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
-    import WarSerialization                 = ProtoTypes.WarSerialization;
-    import IWarActionContainer              = ProtoTypes.WarAction.IWarActionContainer;
-    import ISpmWarSaveSlotExtraData         = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+namespace SpwModel {
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import WarSerialization         = ProtoTypes.WarSerialization;
+    import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
+    import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+    import BwWar                    = TwnsBwWar.BwWar;
 
     let _war: SpwWar;
     export function init(): void {
@@ -357,3 +358,5 @@ export namespace SpwModel {
         return ClientErrorCode.NoError;
     }
 }
+
+export default SpwModel;

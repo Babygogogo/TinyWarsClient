@@ -1,25 +1,25 @@
 
-import { TwnsClientErrorCode }  from "../../../utility/ClientErrorCode";
-import { TwnsCommonAlertPanel }     from "../../common/view/CommonAlertPanel";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
 import { MpwWar }               from "./MpwWar";
 import { CcwWar }               from "../../coopCustomWar/model/CcwWar";
 import { McwWar }               from "../../multiCustomWar/model/McwWar";
 import { MfwWar }               from "../../multiFreeWar/model/MfwWar";
 import { MrwWar }               from "../../multiRankWar/model/MrwWar";
-import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
-import { Logger }               from "../../../utility/Logger";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { Types }                from "../../../utility/Types";
-import { FlowManager }          from "../../../utility/FlowManager";
-import { FloatText }            from "../../../utility/FloatText";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { MpwProxy }             from "../../multiPlayerWar/model/MpwProxy";
-import { UserModel }            from "../../user/model/UserModel";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import Logger               from "../../tools/helpers/Logger";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Types                from "../../tools/helpers/Types";
+import { FlowManager }          from "../../tools/helpers/FlowManager";
+import FloatText            from "../../tools/helpers/FloatText";
+import Lang                 from "../../tools/lang/Lang";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import MpwProxy             from "../../multiPlayerWar/model/MpwProxy";
+import UserModel            from "../../user/model/UserModel";
 import { BwWarActionExecutor }  from "../../baseWar/model/BwWarActionExecutor";
 
-export namespace MpwModel {
+namespace MpwModel {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IMpwWarInfo              = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
@@ -422,3 +422,5 @@ export namespace MpwModel {
         }
     }
 }
+
+export default MpwModel;

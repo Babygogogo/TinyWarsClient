@@ -1,5 +1,5 @@
 
-import { ProtoTypes }       from "../../../utility/proto/ProtoTypes";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
 export namespace ChangeLogModel {
     import IChangeLogMessage    = ProtoTypes.ChangeLog.IChangeLogMessage;

@@ -1,31 +1,32 @@
 
 
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Types }                from "../../../utility/Types";
-import { FloatText }            from "../../../utility/FloatText";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { ConfigManager }        from "../../../utility/ConfigManager";
-import { Helpers }              from "../../../utility/Helpers";
-import { BwHelpers }            from "../model/BwHelpers";
-import { BwUnit }               from "../model/BwUnit";
-import { BwWar }                from "../model/BwWar";
+import Types                from "../../tools/helpers/Types";
+import FloatText            from "../../tools/helpers/FloatText";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
+import BwHelpers            from "../model/BwHelpers";
+import TwnsBwUnit               from "../model/BwUnit";
+import TwnsBwWar                from "../model/BwWar";
 import { BwUnitDetailPanel }    from "./BwUnitDetailPanel";
 import { BwUnitView }           from "./BwUnitView";
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiScrollList         from "../../../utility/ui/UiScrollList";
-import TwnsUiButton              from "../../../utility/ui/UiButton";
-import TwnsUiListItemRenderer   from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import { TwnsBwActionPlanner }      from "../model/BwActionPlanner";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiButton              from "../../tools/ui/UiButton";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsBwActionPlanner      from "../model/BwActionPlanner";
 import { CommonInputPanel }     from "../../common/view/CommonInputPanel";
 import UnitType                 = Types.UnitType;
 import GridIndex                = Types.GridIndex;
+import BwWar            = TwnsBwWar.BwWar;
 
 type OpenDataForBwProduceUnitPanel = {
     gridIndex   : GridIndex;
@@ -149,7 +150,7 @@ export class BwProduceUnitPanel extends TwnsUiPanel.UiPanel<OpenDataForBwProduce
         const minNormalizedHp   = skillCfg ? BwHelpers.getNormalizedHp(skillCfg[3]) : BwHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
         for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
-            const unit = new BwUnit();
+            const unit = new TwnsBwUnit.BwUnit();
             unit.init({
                 gridIndex   : { x: -1, y: -1 },
                 unitId      : -1,
@@ -212,7 +213,7 @@ function sorterForDataForList(a: DataForUnitRenderer, b: DataForUnitRenderer): n
 
 type DataForUnitRenderer = {
     unitType                : UnitType;
-    unit                    : BwUnit;
+    unit                    : TwnsBwUnit.BwUnit;
     minCost                 : number;
     cfgCost                 : number;
     currentFund             : number;

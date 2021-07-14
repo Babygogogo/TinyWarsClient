@@ -1,10 +1,10 @@
 
-import { Logger }                       from "../../../utility/Logger";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { Helpers }                      from "../../../utility/Helpers";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
-import { UserModel }                    from "../../user/model/UserModel";
+import Logger                       from "../../tools/helpers/Logger";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import UserModel                    from "../../user/model/UserModel";
 
 export namespace MeSimModel {
     import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;

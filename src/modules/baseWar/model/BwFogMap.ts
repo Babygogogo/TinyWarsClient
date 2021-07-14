@@ -1,14 +1,14 @@
 
-import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
-import { BwUnit }               from "./BwUnit";
-import { BwWar }                from "./BwWar";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { Helpers }              from "../../../utility/Helpers";
-import { Logger }               from "../../../utility/Logger";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { Types }                from "../../../utility/Types";
-import { BwHelpers }            from "../../baseWar/model/BwHelpers";
+import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+import TwnsBwUnit               from "./BwUnit";
+import TwnsBwWar                from "./BwWar";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+import BwHelpers            from "../../baseWar/model/BwHelpers";
 import ForceFogCode             = Types.ForceFogCode;
 import GridIndex                = Types.GridIndex;
 import MapSize                  = Types.MapSize;
@@ -17,6 +17,7 @@ import WarSerialization         = ProtoTypes.WarSerialization;
 import ISerialFogMap            = WarSerialization.ISerialFogMap;
 import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+import BwWar            = TwnsBwWar.BwWar;
 
 export abstract class BwFogMap {
     private _forceFogCode           : ForceFogCode;
@@ -255,7 +256,7 @@ export abstract class BwFogMap {
             }
         }
     }
-    public updateMapFromPathsByUnitAndPath(unit: BwUnit, path: GridIndex[]): void {
+    public updateMapFromPathsByUnitAndPath(unit: TwnsBwUnit.BwUnit, path: GridIndex[]): void {
         const playerIndex = unit.getPlayerIndex();
         if (playerIndex == null) {
             Logger.error(`BwFogMap.updateMapFromPathsByUnitAndPath() empty playerIndex.`);

@@ -1,10 +1,10 @@
 
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
 import { SpwWar }                       from "../../singlePlayerWar/model/SpwWar";
 import { SpwWarMenuPanel }              from "../../singlePlayerWar/view/SpwWarMenuPanel";
-import { Logger }                       from "../../../utility/Logger";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
+import Logger                       from "../../tools/helpers/Logger";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
 import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
 import ISettingsForScw                  = ProtoTypes.WarSettings.ISettingsForScw;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;

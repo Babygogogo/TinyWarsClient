@@ -1,12 +1,12 @@
 
-import TwnsUiImage      from "../../../utility/ui/UiImage";
-import { CommonModel }      from "../../common/model/CommonModel";
-import { TimeModel }        from "../../time/model/TimeModel";
-import { UserModel }        from "../../user/model/UserModel";
-import { Types }            from "../../../utility/Types";
-import { Logger }           from "../../../utility/Logger";
-import { CommonConstants }  from "../../../utility/CommonConstants";
-import { ProtoTypes }       from "../../../utility/proto/ProtoTypes";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import CommonModel      from "../../common/model/CommonModel";
+import Timer        from "../../tools/helpers/Timer";
+import UserModel        from "../../user/model/UserModel";
+import Types            from "../../tools/helpers/Types";
+import Logger           from "../../tools/helpers/Logger";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
 import TileObjectType       = Types.TileObjectType;
 import TileBaseType         = Types.TileBaseType;
 import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
@@ -64,7 +64,7 @@ export class BwTileView {
         const imgObject = this.getImgObject();
         const imgBase   = this.getImgBase();
         const version   = UserModel.getSelfSettingsTextureVersion();
-        const tickCount = TimeModel.getTileAnimationTickCount();
+        const tickCount = Timer.getTileAnimationTickCount();
 
         const objectType = tileData.objectType;
         if (objectType == null) {

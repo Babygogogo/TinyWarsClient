@@ -1,15 +1,16 @@
 
-import TwnsUiZoomableComponent      from "../../../utility/ui/UiZoomableComponent";
-import { BwWar }                        from "../../baseWar/model/BwWar";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { NotifyData }                   from "../../../utility/notify/NotifyData";
-import { StageManager }                 from "../../../utility/StageManager";
-import { Types }                        from "../../../utility/Types";
+import TwnsUiZoomableComponent      from "../../tools/ui/UiZoomableComponent";
+import TwnsBwWar                        from "../../baseWar/model/BwWar";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import NotifyData                   from "../../tools/notify/NotifyData";
+import StageManager                 from "../../tools/helpers/StageManager";
+import Types                        from "../../tools/helpers/Types";
 import NotifyType                       = TwnsNotifyType.NotifyType;
 import GridIndex                        = Types.GridIndex;
 import Point                            = Types.Point;
+import BwWar            = TwnsBwWar.BwWar;
 const PADDING_HORIZONTAL                = 150;
 const PADDING_VERTICAL                  = 50;
 

@@ -1,11 +1,11 @@
 
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
-import { UserModel }                    from "../../user/model/UserModel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Logger                       from "../../tools/helpers/Logger";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import UserModel                    from "../../user/model/UserModel";
 import { MrrModel }                     from "./MrrModel";
 
 export namespace MrrSelfSettingsModel {

@@ -1,249 +1,255 @@
 
-import { TwnsClientErrorCode }      from "../../../utility/ClientErrorCode";
-import { BwWar }                from "./BwWar";
-import { ConfigManager }        from "../../../utility/ConfigManager";
-import { Helpers }              from "../../../utility/Helpers";
-import { Logger }               from "../../../utility/Logger";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { BwWarRuleHelpers }      from "./BwWarRuleHelpers";
-import ISettingsForCommon       = ProtoTypes.WarSettings.ISettingsForCommon;
-import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwWar            from "./BwWar";
+import BwWarRuleHelpers     from "./BwWarRuleHelpers";
 
-export class BwCommonSettingManager {
-    private _war?               : BwWar;
-    private _settingsForCommon? : ISettingsForCommon;
+namespace TwnsBwCommonSettingManager {
+    import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar                = TwnsBwWar.BwWar;
 
-    public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
-        settings                : ISettingsForCommon | null | undefined;
-        allWarEventIdArray      : number[];
-        playersCountUnneutral   : number;
-    }): Promise<ClientErrorCode> {
-        if (settings == null) {
-            return ClientErrorCode.BwCommonSettingManagerInit00;
+    export class BwCommonSettingManager {
+        private _war?               : BwWar;
+        private _settingsForCommon? : ISettingsForCommon;
+
+        public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
+            settings                : ISettingsForCommon | null | undefined;
+            allWarEventIdArray      : number[];
+            playersCountUnneutral   : number;
+        }): Promise<ClientErrorCode> {
+            if (settings == null) {
+                return ClientErrorCode.BwCommonSettingManagerInit00;
+            }
+
+            const configVersion = settings.configVersion;
+            if ((configVersion == null) || (!await ConfigManager.checkIsVersionValid(configVersion))) {
+                return ClientErrorCode.BwCommonSettingManagerInit01;
+            }
+
+            const warRule = settings.warRule;
+            if (warRule == null) {
+                return ClientErrorCode.BwCommonSettingManagerInit02;
+            }
+
+            const errorCodeForWarRule = BwWarRuleHelpers.getErrorCodeForWarRule({
+                rule                : warRule,
+                allWarEventIdArray,
+                configVersion,
+                playersCountUnneutral,
+            });
+            if (errorCodeForWarRule) {
+                return errorCodeForWarRule;
+            }
+
+            this._setSettingsForCommon(settings);
+
+            return ClientErrorCode.NoError;
         }
 
-        const configVersion = settings.configVersion;
-        if ((configVersion == null) || (!await ConfigManager.checkIsVersionValid(configVersion))) {
-            return ClientErrorCode.BwCommonSettingManagerInit01;
+        public serializeForCreateSfw(): ISettingsForCommon | undefined {
+            return Helpers.deepClone(this.getSettingsForCommon());
+        }
+        public serializeForCreateMfr(): ISettingsForCommon | undefined {
+            return this.serializeForCreateSfw();
         }
 
-        const warRule = settings.warRule;
-        if (warRule == null) {
-            return ClientErrorCode.BwCommonSettingManagerInit02;
+        public startRunning(war: BwWar): void {
+            this._setWar(war);
         }
 
-        const errorCodeForWarRule = BwWarRuleHelpers.getErrorCodeForWarRule({
-            rule                : warRule,
-            allWarEventIdArray,
-            configVersion,
-            playersCountUnneutral,
-        });
-        if (errorCodeForWarRule) {
-            return errorCodeForWarRule;
+        private _setWar(war: BwWar): void {
+            this._war = war;
+        }
+        protected _getWar(): BwWar | undefined {
+            return this._war;
         }
 
-        this._setSettingsForCommon(settings);
-
-        return ClientErrorCode.NoError;
-    }
-
-    public serializeForCreateSfw(): ISettingsForCommon | undefined {
-        return Helpers.deepClone(this.getSettingsForCommon());
-    }
-    public serializeForCreateMfr(): ISettingsForCommon | undefined {
-        return this.serializeForCreateSfw();
-    }
-
-    public startRunning(war: BwWar): void {
-        this._setWar(war);
-    }
-
-    private _setWar(war: BwWar): void {
-        this._war = war;
-    }
-    protected _getWar(): BwWar | undefined {
-        return this._war;
-    }
-
-    protected _setSettingsForCommon(settings: ISettingsForCommon): void {
-        this._settingsForCommon = settings;
-    }
-    public getSettingsForCommon(): ISettingsForCommon | undefined {
-        return this._settingsForCommon;
-    }
-
-    public getConfigVersion(): string | null | undefined {
-        const settings = this.getSettingsForCommon();
-        if (settings == null) {
-            Logger.error(`BwCommonSettingManager.getConfigVersion() empty settings.`);
-            return undefined;
+        protected _setSettingsForCommon(settings: ISettingsForCommon): void {
+            this._settingsForCommon = settings;
+        }
+        public getSettingsForCommon(): ISettingsForCommon | undefined {
+            return this._settingsForCommon;
         }
 
-        return settings.configVersion;
-    }
-    public getSettingsHasFogByDefault(): boolean | null | undefined {
-        const settingsForCommon = this.getSettingsForCommon();
-        if (settingsForCommon == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsHasFogByDefault() empty settingsForCommon.`);
-            return undefined;
-        }
+        public getConfigVersion(): string | null | undefined {
+            const settings = this.getSettingsForCommon();
+            if (settings == null) {
+                Logger.error(`BwCommonSettingManager.getConfigVersion() empty settings.`);
+                return undefined;
+            }
 
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsHasFogByDefault() empty warRule.`);
-            return undefined;
+            return settings.configVersion;
         }
+        public getSettingsHasFogByDefault(): boolean | null | undefined {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsHasFogByDefault() empty settingsForCommon.`);
+                return undefined;
+            }
 
-        return BwWarRuleHelpers.getHasFogByDefault(warRule);
-    }
-    public getSettingsIncomeMultiplier(playerIndex: number): number | null | undefined {
-        const settingsForCommon = this.getSettingsForCommon();
-        if (settingsForCommon == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsIncomeMultiplier() empty settingsForCommon.`);
-            return undefined;
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsHasFogByDefault() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelpers.getHasFogByDefault(warRule);
         }
+        public getSettingsIncomeMultiplier(playerIndex: number): number | null | undefined {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsIncomeMultiplier() empty settingsForCommon.`);
+                return undefined;
+            }
 
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsIncomeMultiplier() empty warRule.`);
-            return undefined;
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsIncomeMultiplier() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelpers.getIncomeMultiplier(warRule, playerIndex);
         }
+        public getSettingsEnergyGrowthMultiplier(playerIndex: number): number | null | undefined {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsEnergyGrowthMultiplier() empty settingsForCommon.`);
+                return undefined;
+            }
 
-        return BwWarRuleHelpers.getIncomeMultiplier(warRule, playerIndex);
-    }
-    public getSettingsEnergyGrowthMultiplier(playerIndex: number): number | null | undefined {
-        const settingsForCommon = this.getSettingsForCommon();
-        if (settingsForCommon == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsEnergyGrowthMultiplier() empty settingsForCommon.`);
-            return undefined;
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsEnergyGrowthMultiplier() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelpers.getEnergyGrowthMultiplier(warRule, playerIndex);
         }
+        public getSettingsAttackPowerModifier(playerIndex: number): number | null | undefined {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsAttackPowerModifier() empty settingsForCommon.`);
+                return undefined;
+            }
 
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsEnergyGrowthMultiplier() empty warRule.`);
-            return undefined;
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsAttackPowerModifier() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelpers.getAttackPowerModifier(warRule, playerIndex);
         }
+        public getSettingsMoveRangeModifier(playerIndex: number): number | null | undefined {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsMoveRangeModifier() empty settingsForCommon.`);
+                return undefined;
+            }
 
-        return BwWarRuleHelpers.getEnergyGrowthMultiplier(warRule, playerIndex);
-    }
-    public getSettingsAttackPowerModifier(playerIndex: number): number | null | undefined {
-        const settingsForCommon = this.getSettingsForCommon();
-        if (settingsForCommon == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsAttackPowerModifier() empty settingsForCommon.`);
-            return undefined;
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsMoveRangeModifier() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelpers.getMoveRangeModifier(warRule, playerIndex);
         }
+        public getSettingsVisionRangeModifier(playerIndex: number): number | null | undefined {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsVisionRangeModifier() empty settingsForCommon.`);
+                return undefined;
+            }
 
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsAttackPowerModifier() empty warRule.`);
-            return undefined;
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsVisionRangeModifier() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelpers.getVisionRangeModifier(warRule, playerIndex);
         }
+        public getSettingsInitialFund(playerIndex: number): number | null | undefined {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsInitialFund() empty settingsForCommon.`);
+                return undefined;
+            }
 
-        return BwWarRuleHelpers.getAttackPowerModifier(warRule, playerIndex);
-    }
-    public getSettingsMoveRangeModifier(playerIndex: number): number | null | undefined {
-        const settingsForCommon = this.getSettingsForCommon();
-        if (settingsForCommon == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsMoveRangeModifier() empty settingsForCommon.`);
-            return undefined;
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsInitialFund() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelpers.getInitialFund(warRule, playerIndex);
         }
+        public getSettingsEnergyAddPctOnLoadCo(playerIndex: number): number | null | undefined {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsEnergyAddPctOnLoadCo() empty settingsForCommon.`);
+                return undefined;
+            }
 
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsMoveRangeModifier() empty warRule.`);
-            return undefined;
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsEnergyAddPctOnLoadCo() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelpers.getEnergyAddPctOnLoadCo(warRule, playerIndex);
         }
+        public getSettingsLuckLowerLimit(playerIndex: number): number | null | undefined {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsLuckLowerLimit() empty settingsForCommon.`);
+                return undefined;
+            }
 
-        return BwWarRuleHelpers.getMoveRangeModifier(warRule, playerIndex);
-    }
-    public getSettingsVisionRangeModifier(playerIndex: number): number | null | undefined {
-        const settingsForCommon = this.getSettingsForCommon();
-        if (settingsForCommon == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsVisionRangeModifier() empty settingsForCommon.`);
-            return undefined;
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsLuckLowerLimit() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelpers.getLuckLowerLimit(warRule, playerIndex);
         }
+        public getSettingsLuckUpperLimit(playerIndex: number): number | null | undefined {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsLuckUpperLimit() empty settingsForCommon.`);
+                return undefined;
+            }
 
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsVisionRangeModifier() empty warRule.`);
-            return undefined;
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                Logger.error(`BwCommonSettingManager.getSettingsLuckUpperLimit() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelpers.getLuckUpperLimit(warRule, playerIndex);
         }
+        public getTeamIndex(playerIndex: number): number | undefined | null {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwCommonSettingManager.getTeamIndex() empty settingsForCommon.`);
+                return undefined;
+            }
 
-        return BwWarRuleHelpers.getVisionRangeModifier(warRule, playerIndex);
-    }
-    public getSettingsInitialFund(playerIndex: number): number | null | undefined {
-        const settingsForCommon = this.getSettingsForCommon();
-        if (settingsForCommon == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsInitialFund() empty settingsForCommon.`);
-            return undefined;
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                Logger.error(`BwCommonSettingManager.getTeamIndex() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelpers.getTeamIndex(warRule, playerIndex);
         }
-
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsInitialFund() empty warRule.`);
-            return undefined;
-        }
-
-        return BwWarRuleHelpers.getInitialFund(warRule, playerIndex);
-    }
-    public getSettingsEnergyAddPctOnLoadCo(playerIndex: number): number | null | undefined {
-        const settingsForCommon = this.getSettingsForCommon();
-        if (settingsForCommon == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsEnergyAddPctOnLoadCo() empty settingsForCommon.`);
-            return undefined;
-        }
-
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsEnergyAddPctOnLoadCo() empty warRule.`);
-            return undefined;
-        }
-
-        return BwWarRuleHelpers.getEnergyAddPctOnLoadCo(warRule, playerIndex);
-    }
-    public getSettingsLuckLowerLimit(playerIndex: number): number | null | undefined {
-        const settingsForCommon = this.getSettingsForCommon();
-        if (settingsForCommon == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsLuckLowerLimit() empty settingsForCommon.`);
-            return undefined;
-        }
-
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsLuckLowerLimit() empty warRule.`);
-            return undefined;
-        }
-
-        return BwWarRuleHelpers.getLuckLowerLimit(warRule, playerIndex);
-    }
-    public getSettingsLuckUpperLimit(playerIndex: number): number | null | undefined {
-        const settingsForCommon = this.getSettingsForCommon();
-        if (settingsForCommon == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsLuckUpperLimit() empty settingsForCommon.`);
-            return undefined;
-        }
-
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingManager.getSettingsLuckUpperLimit() empty warRule.`);
-            return undefined;
-        }
-
-        return BwWarRuleHelpers.getLuckUpperLimit(warRule, playerIndex);
-    }
-    public getTeamIndex(playerIndex: number): number | undefined | null {
-        const settingsForCommon = this.getSettingsForCommon();
-        if (settingsForCommon == null) {
-            Logger.error(`BwCommonSettingManager.getTeamIndex() empty settingsForCommon.`);
-            return undefined;
-        }
-
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingManager.getTeamIndex() empty warRule.`);
-            return undefined;
-        }
-
-        return BwWarRuleHelpers.getTeamIndex(warRule, playerIndex);
     }
 }
+
+export default TwnsBwCommonSettingManager;

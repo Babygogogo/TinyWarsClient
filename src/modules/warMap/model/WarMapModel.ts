@@ -1,12 +1,12 @@
 
-import { Types }            from "../../../utility/Types";
-import { Notify }           from "../../../utility/notify/Notify";
-import { TwnsNotifyType }   from "../../../utility/notify/NotifyType";
-import { WarMapProxy }      from "./WarMapProxy";
-import { ProtoTypes }       from "../../../utility/proto/ProtoTypes";
-import { Lang }             from "../../../utility/lang/Lang";
+import Types            from "../../tools/helpers/Types";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import WarMapProxy      from "./WarMapProxy";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import Lang             from "../../tools/lang/Lang";
 
-export namespace WarMapModel {
+namespace WarMapModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import WarType              = Types.WarType;
     import MsgMapGetRawDataIs   = NetMessage.MsgMapGetRawData.IS;
@@ -244,3 +244,5 @@ export namespace WarMapModel {
         return _reviewingMaps;
     }
 }
+
+export default WarMapModel;

@@ -1,14 +1,14 @@
 
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
-import { BwCommonSettingManager }       from "../../baseWar/model/BwCommonSettingManager";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
+import TwnsBwCommonSettingManager       from "../../baseWar/model/BwCommonSettingManager";
 import { MeWar }                        from "./MeWar";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Helpers }                      from "../../../utility/Helpers";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Helpers                      from "../../tools/helpers/Helpers";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import ISettingsForCommon               = ProtoTypes.WarSettings.ISettingsForCommon;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
-export class MeCommonSettingManager extends BwCommonSettingManager {
+export class MeCommonSettingManager extends TwnsBwCommonSettingManager.BwCommonSettingManager {
     public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
         settings                : ISettingsForCommon | null | undefined;
         allWarEventIdArray      : number[];

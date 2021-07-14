@@ -1,26 +1,26 @@
-import TwnsUiButton              from "../../../utility/ui/UiButton";
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiScrollList         from "../../../utility/ui/UiScrollList";
+import TwnsUiButton              from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 import { WarMapUnitView }       from "../../warMap/view/WarMapUnitView";
 import { BwTile }               from "../model/BwTile";
 import { CommonInputPanel }     from "../../common/view/CommonInputPanel";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { ConfigManager }        from "../../../utility/ConfigManager";
-import { FloatText }            from "../../../utility/FloatText";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import FloatText            from "../../tools/helpers/FloatText";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { Types }                from "../../../utility/Types";
-import { CommonModel }          from "../../common/model/CommonModel";
-import { TimeModel }            from "../../time/model/TimeModel";
-import { UserModel }            from "../../user/model/UserModel";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+import CommonModel          from "../../common/model/CommonModel";
+import Timer            from "../../tools/helpers/Timer";
+import UserModel            from "../../user/model/UserModel";
 import UnitType                 = Types.UnitType;
 
 type OpenDataForBwTileDetailPanel = {
@@ -113,7 +113,7 @@ export class BwTileDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForBwTileDeta
         const data                  = this._getOpenData();
         const tile                  = data.tile;
         const version               = UserModel.getSelfSettingsTextureVersion();
-        const tickCount             = TimeModel.getTileAnimationTickCount();
+        const tickCount             = Timer.getTileAnimationTickCount();
         const skinId                = tile.getSkinId();
         this._imgTileBase.source    = CommonModel.getCachedTileBaseImageSource({
             version,
@@ -395,7 +395,7 @@ class MoveCostRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataFor
 
     private _onNotifyUnitAnimationTick(): void {
         if (this.data) {
-            this._unitView.updateOnAnimationTick(TimeModel.getUnitAnimationTickCount());
+            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
         }
     }
 
@@ -418,6 +418,6 @@ class MoveCostRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataFor
             playerIndex     : data.playerIndex,
             unitType        : data.unitType,
             actionState     : Types.UnitActionState.Idle,
-        }, TimeModel.getUnitAnimationTickCount());
+        }, Timer.getUnitAnimationTickCount());
     }
 }

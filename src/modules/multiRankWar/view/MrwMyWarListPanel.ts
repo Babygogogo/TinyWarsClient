@@ -1,28 +1,28 @@
 
-import TwnsUiListItemRenderer                                                   from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel                                                              from "../../../utility/ui/UiPanel";
-import TwnsUiButton                                                              from "../../../utility/ui/UiButton";
-import TwnsUiLabel                                                              from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList                                                         from "../../../utility/ui/UiScrollList";
-import TwnsUiTab                                                                from "../../../utility/ui/UiTab";
-import TwnsUiTabItemRenderer                                                    from "../../../utility/ui/UiTabItemRenderer";
-import { TwnsLobbyBottomPanel }                                                     from "../../lobby/view/LobbyBottomPanel";
-import { TwnsLobbyTopPanel }                                                        from "../../lobby/view/LobbyTopPanel";
+import TwnsUiListItemRenderer                                                   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                                                              from "../../tools/ui/UiPanel";
+import TwnsUiButton                                                              from "../../tools/ui/UiButton";
+import TwnsUiLabel                                                              from "../../tools/ui/UiLabel";
+import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
+import TwnsUiTab                                                                from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
+import TwnsLobbyBottomPanel                                                     from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                                                        from "../../lobby/view/LobbyTopPanel";
 import { MrrMainMenuPanel }                                                     from "../../multiRankRoom/view/MrrMainMenuPanel";
-import { TwnsLangTextType }                                                     from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }                                                       from "../../../utility/notify/NotifyType";
-import { Types }                                                                from "../../../utility/Types";
+import TwnsLangTextType                                                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                                                       from "../../tools/notify/NotifyType";
+import Types                                                                from "../../tools/helpers/Types";
 import { OpenDataForMrwWarMapInfoPage, MrwWarMapInfoPage }                      from "./MrwWarMapInfoPage";
 import { OpenDataForMrwWarPlayerInfoPage, MrwWarPlayerInfoPage }                from "./MrwWarPlayerInfoPage";
 import { OpenDataForMrwWarAdvancedSettingsPage, MrwWarAdvancedSettingsPage }    from "./MrwWarAdvancedSettingsPage";
 import { OpenDataForMrwWarBasicSettingsPage, MrwWarBasicSettingsPage }          from "./MrwWarBasicSettingsPage";
-import { Helpers }                                                              from "../../../utility/Helpers";
-import { Lang }                                                                 from "../../../utility/lang/Lang";
-import { MpwModel }                                                             from "../../multiPlayerWar/model/MpwModel";
-import { MpwProxy }                                                             from "../../multiPlayerWar/model/MpwProxy";
-import { WarMapModel }                                                          from "../../warMap/model/WarMapModel";
+import Helpers                                                              from "../../tools/helpers/Helpers";
+import Lang                                                                 from "../../tools/lang/Lang";
+import MpwModel                                                             from "../../multiPlayerWar/model/MpwModel";
+import MpwProxy                                                             from "../../multiPlayerWar/model/MpwProxy";
+import WarMapModel                                                          from "../../warMap/model/WarMapModel";
 
-export namespace TwnsMrwMyWarListPanel {
+namespace TwnsMrwMyWarListPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
@@ -342,3 +342,5 @@ export namespace TwnsMrwMyWarListPanel {
         }
     }
 }
+
+export default TwnsMrwMyWarListPanel;

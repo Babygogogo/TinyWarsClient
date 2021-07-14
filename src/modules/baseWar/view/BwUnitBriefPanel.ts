@@ -1,25 +1,27 @@
 
-import TwnsUiImage              from "../../../utility/ui/UiImage";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { NotifyData }           from "../../../utility/notify/NotifyData";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { StageManager }         from "../../../utility/StageManager";
-import { Types }                from "../../../utility/Types";
-import { BwVisibilityHelpers }    from "../model/BwVisibilityHelpers";
-import { CommonModel }          from "../../common/model/CommonModel";
-import { BwUnit }               from "../model/BwUnit";
-import { BwWar }                from "../model/BwWar";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Lang                 from "../../tools/lang/Lang";
+import NotifyData           from "../../tools/notify/NotifyData";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import StageManager         from "../../tools/helpers/StageManager";
+import Types                from "../../tools/helpers/Types";
+import BwVisibilityHelpers    from "../model/BwVisibilityHelpers";
+import CommonModel          from "../../common/model/CommonModel";
+import TwnsBwUnit               from "../model/BwUnit";
+import TwnsBwWar                from "../model/BwWar";
 import { BwCoListPanel }        from "./BwCoListPanel";
 import { BwProduceUnitPanel }   from "./BwProduceUnitPanel";
-import { BwTileBriefPanel }     from "./BwTileBriefPanel";
+import TwnsBwTileBriefPanel     from "./BwTileBriefPanel";
 import { BwUnitDetailPanel }    from "./BwUnitDetailPanel";
 import { BwUnitView }           from "./BwUnitView";
+import BwWar            = TwnsBwWar.BwWar;
 
-export namespace BwUnitBriefPanel {
+namespace TwnsBwUnitBriefPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
+    import BwUnit               = TwnsBwUnit.BwUnit;
     import Tween                = egret.Tween;
 
     const _CELL_WIDTH           = 80;
@@ -211,7 +213,7 @@ export namespace BwUnitBriefPanel {
         }
 
         private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
-            const tileBriefPanel = BwTileBriefPanel.BwTileBriefPanel.getInstance();
+            const tileBriefPanel = TwnsBwTileBriefPanel.BwTileBriefPanel.getInstance();
             let target = e.target as egret.DisplayObject;
             while (target) {
                 if ((target) && ((target === tileBriefPanel) || (target === this))) {
@@ -362,3 +364,5 @@ export namespace BwUnitBriefPanel {
         }
     }
 }
+
+export default TwnsBwUnitBriefPanel;

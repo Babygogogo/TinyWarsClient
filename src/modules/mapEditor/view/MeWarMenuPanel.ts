@@ -1,18 +1,18 @@
 
-import TwnsUiListItemRenderer           from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList                 from "../../../utility/ui/UiScrollList";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
 import { UserSettingsPanel }            from "../../user/view/UserSettingsPanel";
-import { BwUnit }                       from "../../baseWar/model/BwUnit";
+import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
 import { BwUnitView }                   from "../../baseWar/view/BwUnitView";
 import { DataForDrawUnit }              from "../model/MeDrawer";
 import { MeWar }                        from "../model/MeWar";
-import { MeTileSimpleView }             from "./MeTileSimpleView";
+import TwnsMeTileSimpleView             from "./MeTileSimpleView";
 import { MeModifyMapNamePanel }         from "./MeModifyMapNamePanel";
 import { MeResizePanel }                from "./MeResizePanel";
 import { MeConfirmSaveMapPanel }        from "./MeConfirmSaveMapPanel";
@@ -27,18 +27,18 @@ import { MeOffsetPanel }                from "./MeOffsetPanel";
 import { WeEventListPanel }             from "../../warEvent/view/WeEventListPanel";
 import { MmAcceptMapPanel }             from "../../mapManagement/view/MmAcceptMapPanel";
 import { MmRejectMapPanel }             from "../../mapManagement/view/MmRejectMapPanel";
-import { TwnsLangTextType }                 from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }                   from "../../../utility/notify/NotifyType";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { FloatText }                    from "../../../utility/FloatText";
-import { FlowManager }                  from "../../../utility/FlowManager";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
-import { MeModel }                      from "../model/MeModel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import FloatText                    from "../../tools/helpers/FloatText";
+import { FlowManager }                  from "../../tools/helpers/FlowManager";
+import Lang                         from "../../tools/lang/Lang";
+import Logger                       from "../../tools/helpers/Logger";
+import Notify                       from "../../tools/notify/Notify";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
+import MeModel                      from "../model/MeModel";
 import { MeSimModel }                   from "../model/MeSimModel";
 import { MeMfwModel }                   from "../model/MeMfwModel";
 import * as MeUtility                   from "../model/MeUtility";
@@ -730,7 +730,7 @@ class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTile
     private _labelNum       : TwnsUiLabel.UiLabel;
     private _conTileView    : eui.Group;
 
-    private _tileView   = new MeTileSimpleView();
+    private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
     protected _onOpened(): void {
         this._setNotifyListenerArray([
@@ -793,7 +793,7 @@ class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnit
         this._labelNum.text    = "" + data.count;
 
         const war   = MeModel.getWar();
-        const unit  = new BwUnit();
+        const unit  = new TwnsBwUnit.BwUnit();
         unit.init({
             gridIndex   : { x: 0, y: 0 },
             unitId      : 0,

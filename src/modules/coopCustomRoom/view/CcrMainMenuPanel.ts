@@ -1,10 +1,10 @@
 
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import { TwnsCommonAlertPanel }             from "../../common/view/CommonAlertPanel";
-import { TwnsCcwMyWarListPanel }            from "../../coopCustomWar/view/CcwMyWarListPanel";
-import { TwnsLobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
-import { TwnsLobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsCommonAlertPanel             from "../../common/view/CommonAlertPanel";
+import TwnsCcwMyWarListPanel            from "../../coopCustomWar/view/CcwMyWarListPanel";
+import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import { MrrMainMenuPanel }             from "../../multiRankRoom/view/MrrMainMenuPanel";
 import { SpmMainMenuPanel }             from "../../singlePlayerMode/view/SpmMainMenuPanel";
 import { CcrMyRoomListPanel }           from "./CcrMyRoomListPanel";
@@ -12,16 +12,16 @@ import { McrMainMenuPanel }             from "../../multiCustomRoom/view/McrMain
 import { MfrMainMenuPanel }             from "../../multiFreeRoom/view/MfrMainMenuPanel";
 import { CcrCreateMapListPanel }        from "./CcrCreateMapListPanel";
 import { CcrJoinRoomListPanel }         from "./CcrJoinRoomListPanel";
-import { TwnsLangTextType }                 from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }                   from "../../../utility/notify/NotifyType";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                        from "../../../utility/Types";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Lang }                         from "../../../utility/lang/Lang";
+import Types                        from "../../tools/helpers/Types";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Lang                         from "../../tools/lang/Lang";
 import { CcrModel }                     from "../../coopCustomRoom/model/CcrModel";
 import { McrModel }                     from "../../multiCustomRoom/model/McrModel";
 import { MfrModel }                     from "../../multiFreeRoom/model/MfrModel";
-import { MpwModel }                     from "../../multiPlayerWar/model/MpwModel";
+import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
 import Tween                            = egret.Tween;
 import LangTextType     = TwnsLangTextType.LangTextType;
 

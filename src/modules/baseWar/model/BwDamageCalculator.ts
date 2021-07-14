@@ -1,19 +1,22 @@
 
-import { TwnsClientErrorCode }  from "../../../utility/ClientErrorCode";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { Logger }               from "../../../utility/Logger";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { Types }                from "../../../utility/Types";
-import { BwHelpers }            from "./BwHelpers";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Logger               from "../../tools/helpers/Logger";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+import BwHelpers            from "./BwHelpers";
 import { BwTile }               from "./BwTile";
-import { BwUnit }               from "./BwUnit";
-import { BwUnitMap }            from "./BwUnitMap";
-import { BwWar }                from "./BwWar";
+import TwnsBwUnit               from "./BwUnit";
+import TwnsBwUnitMap            from "./BwUnitMap";
+import TwnsBwWar                from "./BwWar";
 
 export namespace BwDamageCalculator {
-    import GridIndex                = Types.GridIndex;
-    import IBattleDamageInfo        = ProtoTypes.Structure.IBattleDamageInfo;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import GridIndex            = Types.GridIndex;
+    import IBattleDamageInfo    = ProtoTypes.Structure.IBattleDamageInfo;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import BwUnit               = TwnsBwUnit.BwUnit;
+    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
+    import BwWar                = TwnsBwWar.BwWar;
 
     function checkIsInAttackRange(
         attackerGridIndex   : GridIndex,

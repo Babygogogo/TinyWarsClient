@@ -1,14 +1,14 @@
 
-import { TwnsNetMessageCodes }  from "../../../utility/network/NetMessageCodes";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { Types }                from "../../../utility/Types";
-import { NetManager }           from "../../../utility/network/NetManager";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { TimeModel }            from "../../time/model/TimeModel";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Types                from "../../tools/helpers/Types";
+import NetManager           from "../../tools/network/NetManager";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Timer                from "../../tools/helpers/Timer";
 import { ChatModel }            from "./ChatModel";
 
-export namespace ChatProxy {
+namespace ChatProxy {
     import NetMessage       = ProtoTypes.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -55,7 +55,7 @@ export namespace ChatProxy {
     export function reqUpdateReadProgress(
         toCategory  : Types.ChatMessageToCategory,
         toTarget    : number,
-        timestamp   = TimeModel.getServerTimestamp(),
+        timestamp   = Timer.getServerTimestamp(),
     ): void {
         NetManager.send({ MsgChatUpdateReadProgress: { c: {
             progress: {
@@ -84,3 +84,5 @@ export namespace ChatProxy {
         }
     }
 }
+
+export default ChatProxy;

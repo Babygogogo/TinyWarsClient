@@ -1,16 +1,16 @@
 
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiButton                      from "../../../utility/ui/UiButton";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiButton                      from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
 import { UserSettingsPanel }            from "../../user/view/UserSettingsPanel";
 import { UserOnlineUsersPanel }         from "../../user/view/UserOnlineUsersPanel";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { Types }                        from "../../../utility/Types";
-import { UserModel }                    from "../../user/model/UserModel";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import Types                        from "../../tools/helpers/Types";
+import UserModel                    from "../../user/model/UserModel";
 
-export namespace TwnsLobbyTopPanel {
+namespace TwnsLobbyTopPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export class LobbyTopPanel extends TwnsUiPanel.UiPanel<void> {
@@ -120,3 +120,5 @@ export namespace TwnsLobbyTopPanel {
         }
     }
 }
+
+export default TwnsLobbyTopPanel;

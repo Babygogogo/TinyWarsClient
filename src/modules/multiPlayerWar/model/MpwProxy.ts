@@ -1,21 +1,22 @@
 
-import { TwnsNetMessageCodes }  from "../../../utility/network/NetMessageCodes";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
-import { BwWar }                from "../../baseWar/model/BwWar";
-import { TwnsLangTextType }     from "../../../utility/lang/LangTextType";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { Types }                from "../../../utility/Types";
-import { MpwModel }             from "../../multiPlayerWar/model/MpwModel";
-import { NetManager }           from "../../../utility/network/NetManager";
-import { Lang }                 from "../../../utility/lang/Lang";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import TwnsBwWar                from "../../baseWar/model/BwWar";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Types                from "../../tools/helpers/Types";
+import MpwModel             from "../../multiPlayerWar/model/MpwModel";
+import NetManager           from "../../tools/network/NetManager";
+import Lang                 from "../../tools/lang/Lang";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
-export namespace MpwProxy {
+namespace MpwProxy {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import BwWar            = TwnsBwWar.BwWar;
 
     export function init(): void {
         NetManager.addListeners([
@@ -243,3 +244,5 @@ export namespace MpwProxy {
         }
     }
 }
+
+export default MpwProxy;

@@ -1,20 +1,20 @@
 
-import TwnsUiListItemRenderer   from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiButton             from "../../../utility/ui/UiButton";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList         from "../../../utility/ui/UiScrollList";
-import TwnsUiZoomableMap        from "../../../utility/ui/UiZoomableMap";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiZoomableMap        from "../../tools/ui/UiZoomableMap";
 import { FiltersForMapList }        from "./MmAvailabilityListPanel";
 import { MmTagSearchPanel }         from "./MmTagSearchPanel";
 import { MmMainMenuPanel }          from "./MmMainMenuPanel";
 import { MmTagChangePanel }         from "./MmTagChangePanel";
-import { FloatText }                from "../../../utility/FloatText";
-import { Lang }                     from "../../../utility/lang/Lang";
-import { TwnsLangTextType }         from "../../../utility/lang/LangTextType";
-import { TwnsNotifyType }           from "../../../utility/notify/NotifyType";
-import { Types }                    from "../../../utility/Types";
-import { WarMapModel }              from "../../warMap/model/WarMapModel";
+import FloatText                from "../../tools/helpers/FloatText";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import Types                    from "../../tools/helpers/Types";
+import WarMapModel              from "../../warMap/model/WarMapModel";
 import LangTextType         = TwnsLangTextType.LangTextType;
 import NotifyType       = TwnsNotifyType.NotifyType;
 

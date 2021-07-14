@@ -1,24 +1,24 @@
 
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Lang }                 from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Types }                from "../../../utility/Types";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { ConfigManager }        from "../../../utility/ConfigManager";
-import { TimeModel }            from "../../time/model/TimeModel";
-import { UserModel }            from "../../user/model/UserModel";
-import { CommonModel }          from "../../common/model/CommonModel";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import TwnsUiPanel              from "../../../utility/ui/UiPanel";
-import TwnsUiLabel              from "../../../utility/ui/UiLabel";
-import TwnsUiScrollList         from "../../../utility/ui/UiScrollList";
-import TwnsUiButton              from "../../../utility/ui/UiButton";
+import Types                from "../../tools/helpers/Types";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Timer            from "../../tools/helpers/Timer";
+import UserModel            from "../../user/model/UserModel";
+import CommonModel          from "../../common/model/CommonModel";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiButton              from "../../tools/ui/UiButton";
 import { WarMapUnitView }       from "../../warMap/view/WarMapUnitView";
-import TwnsUiListItemRenderer   from "../../../utility/ui/UiListItemRenderer";
-import TwnsUiImage              from "../../../utility/ui/UiImage";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiImage              from "../../tools/ui/UiImage";
 import UnitType                 = Types.UnitType;
 import TileType                 = Types.TileType;
 import IUnitTemplateCfg         = ProtoTypes.Config.IUnitTemplateCfg;
@@ -132,7 +132,7 @@ export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<void> {
     }
 
     private _onNotifyUnitAnimationTick(): void {
-        this._unitView.updateOnAnimationTick(TimeModel.getUnitAnimationTickCount());
+        this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
     }
     private _onNotifyBwPlannerStateChanged(): void {
         this.close();
@@ -196,7 +196,7 @@ export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<void> {
                 playerIndex     : CommonConstants.WarFirstPlayerIndex,
                 unitType,
                 actionState     : Types.UnitActionState.Idle,
-            }, TimeModel.getUnitAnimationTickCount());
+            }, Timer.getUnitAnimationTickCount());
         }
     }
 
@@ -466,7 +466,7 @@ class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDa
 
     private _onNotifyUnitAnimationTick(): void {
         if (this.data) {
-            this._unitView.updateOnAnimationTick(TimeModel.getUnitAnimationTickCount());
+            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
         }
     }
 
@@ -490,7 +490,7 @@ class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDa
                 unitType        : targetUnitType,
                 playerIndex     : data.playerIndex,
                 actionState     : Types.UnitActionState.Idle,
-            }, TimeModel.getUnitAnimationTickCount());
+            }, Timer.getUnitAnimationTickCount());
 
             const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
             const targetArmorType           = ConfigManager.getUnitTemplateCfg(configVersion, targetUnitType).armorType;
@@ -522,7 +522,7 @@ class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDa
                 objectType  : ConfigManager.getTileObjectTypeByTileType(targetTileType),
                 isDark      : false,
                 shapeId     : 0,
-                tickCount   : TimeModel.getTileAnimationTickCount(),
+                tickCount   : Timer.getTileAnimationTickCount(),
             });
             this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
             this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;

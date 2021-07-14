@@ -1,29 +1,31 @@
 
-import { TwnsClientErrorCode }  from "../../../utility/ClientErrorCode";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { ConfigManager }        from "../../../utility/ConfigManager";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
 import { BwDamageCalculator }     from "./BwDamageCalculator";
-import { GridIndexHelpers }     from "../../../utility/GridIndexHelpers";
-import { Helpers }              from "../../../utility/Helpers";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { Types }                from "../../../utility/Types";
-import { BwVisibilityHelpers }    from "./BwVisibilityHelpers";
-import { BwHelpers }            from "./BwHelpers";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+import BwVisibilityHelpers    from "./BwVisibilityHelpers";
+import BwHelpers            from "./BwHelpers";
 import { BwTile }               from "./BwTile";
-import { BwUnit }               from "./BwUnit";
-import { BwWar }                from "./BwWar";
+import TwnsBwUnit               from "./BwUnit";
+import TwnsBwWar                from "./BwWar";
 
 export namespace BwRobot {
-    import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
-    import IWarActionContainer              = ProtoTypes.WarAction.IWarActionContainer;
-    import WeaponType                       = Types.WeaponType;
-    import GridIndex                        = Types.GridIndex;
-    import MovableArea                      = Types.MovableArea;
-    import MovePathNode                     = Types.MovePathNode;
-    import TileType                         = Types.TileType;
-    import UnitType                         = Types.UnitType;
-    import UnitActionState                  = Types.UnitActionState;
-    import checkAndCallLater                = Helpers.checkAndCallLater;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
+    import WeaponType           = Types.WeaponType;
+    import GridIndex            = Types.GridIndex;
+    import MovableArea          = Types.MovableArea;
+    import MovePathNode         = Types.MovePathNode;
+    import TileType             = Types.TileType;
+    import UnitType             = Types.UnitType;
+    import UnitActionState      = Types.UnitActionState;
+    import BwUnit               = TwnsBwUnit.BwUnit;
+    import BwWar                = TwnsBwWar.BwWar;
+    import checkAndCallLater    = Helpers.checkAndCallLater;
 
     type AttackInfo = {
         baseDamage      : number | null | undefined;

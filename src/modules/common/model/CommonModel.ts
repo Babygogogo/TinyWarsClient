@@ -1,11 +1,11 @@
 
-import { Types }            from "../../../utility/Types";
-import { ConfigManager }    from "../../../utility/ConfigManager";
-import { Helpers }          from "../../../utility/Helpers";
-import { ProtoTypes }       from "../../../utility/proto/ProtoTypes";
-import { UserModel }        from "../../user/model/UserModel";
+import Types            from "../../tools/helpers/Types";
+import ConfigManager    from "../../tools/helpers/ConfigManager";
+import Helpers          from "../../tools/helpers/Helpers";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import UserModel        from "../../user/model/UserModel";
 
-export namespace CommonModel {
+namespace CommonModel {
     import UnitType             = Types.UnitType;
     import TileBaseType         = Types.TileBaseType;
     import TileObjectType       = Types.TileObjectType;
@@ -200,3 +200,5 @@ export namespace CommonModel {
         return _rankList;
     }
 }
+
+export default CommonModel;

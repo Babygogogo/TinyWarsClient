@@ -1,16 +1,16 @@
 
-import TwnsUiImage                      from "../../../utility/ui/UiImage";
-import TwnsUiPanel                      from "../../../utility/ui/UiPanel";
-import TwnsUiLabel                      from "../../../utility/ui/UiLabel";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import { MeWar }                        from "../model/MeWar";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                        from "../../../utility/Types";
-import { MeModel }                      from "../model/MeModel";
+import Types                        from "../../tools/helpers/Types";
+import MeModel                      from "../model/MeModel";
 
 export class MeVisibilityPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;

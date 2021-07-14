@@ -1,12 +1,12 @@
 
-import { TwnsNetMessageCodes }  from "../../../utility/network/NetMessageCodes";
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType }       from "../../../utility/notify/NotifyType";
-import { NetManager }           from "../../../utility/network/NetManager";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import NetManager           from "../../tools/network/NetManager";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import { ChangeLogModel }       from "./ChangeLogModel";
 
-export namespace ChangeLogProxy {
+namespace ChangeLogProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
@@ -61,3 +61,5 @@ export namespace ChangeLogProxy {
         }
     }
 }
+
+export default ChangeLogProxy;

@@ -1,10 +1,10 @@
 
 import { ChatPanel }            from "../view/ChatPanel";
-import { Logger }               from "../../../utility/Logger";
-import { ProtoTypes }           from "../../../utility/proto/ProtoTypes";
-import { Types }                from "../../../utility/Types";
-import { UserModel }            from "../../user/model/UserModel";
-import { FloatText }            from "../../../utility/FloatText";
+import Logger               from "../../tools/helpers/Logger";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+import UserModel            from "../../user/model/UserModel";
+import FloatText            from "../../tools/helpers/FloatText";
 
 export namespace ChatModel {
     import ChatCategory             = Types.ChatMessageToCategory;

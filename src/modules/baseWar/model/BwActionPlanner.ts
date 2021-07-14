@@ -1,25 +1,25 @@
 
-import { GridIndexHelpers }                 from "../../../utility/GridIndexHelpers";
-import { Helpers }                          from "../../../utility/Helpers";
-import { Logger }                           from "../../../utility/Logger";
-import { Notify }                           from "../../../utility/notify/Notify";
-import { TwnsNotifyType }                   from "../../../utility/notify/NotifyType";
-import { UserModel }                        from "../../user/model/UserModel";
-import { Types }                            from "../../../utility/Types";
-import { BwVisibilityHelpers }              from "./BwVisibilityHelpers";
-import { BwHelpers }                        from "./BwHelpers";
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
-import { NotifyData }                       from "../../../utility/notify/NotifyData";
-import { BwActionPlannerView }              from "../view/BwActionPlannerView";
-import { BwTileMap }                        from "./BwTileMap";
-import { BwTurnManager }                    from "./BwTurnManager";
-import { BwUnit }                           from "./BwUnit";
-import { BwUnitMap }                        from "./BwUnitMap";
-import { BwWar }                            from "./BwWar";
-import { OpenDataForBwUnitActionsPanel }    from "../view/BwUnitActionsPanel";
-import { BwCursor }                         from "./BwCursor";
+import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Logger                   from "../../tools/helpers/Logger";
+import Types                    from "../../tools/helpers/Types";
+import Notify                   from "../../tools/notify/Notify";
+import NotifyData               from "../../tools/notify/NotifyData";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import UserModel                from "../../user/model/UserModel";
+import TwnsBwActionPlannerView  from "../view/BwActionPlannerView";
+import TwnsBwUnitActionsPanel   from "../view/BwUnitActionsPanel";
+import TwnsBwCursor             from "./BwCursor";
+import BwHelpers                from "./BwHelpers";
+import TwnsBwTileMap            from "./BwTileMap";
+import TwnsBwTurnManager        from "./BwTurnManager";
+import TwnsBwUnit               from "./BwUnit";
+import TwnsBwUnitMap            from "./BwUnitMap";
+import BwVisibilityHelpers      from "./BwVisibilityHelpers";
+import TwnsBwWar                from "./BwWar";
 
-export namespace TwnsBwActionPlanner {
+namespace TwnsBwActionPlanner {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import UnitState        = Types.UnitActionState;
@@ -29,6 +29,9 @@ export namespace TwnsBwActionPlanner {
     import AttackableArea   = Types.AttackableArea;
     import MovePathNode     = Types.MovePathNode;
     import UnitActionType   = Types.UnitActionType;
+    import BwUnit           = TwnsBwUnit.BwUnit;
+    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+    import BwWar            = TwnsBwWar.BwWar;
 
     type ChosenUnitForDrop = {
         unit        : BwUnit;
@@ -44,7 +47,7 @@ export namespace TwnsBwActionPlanner {
     };
 
     export abstract class BwActionPlanner {
-        private readonly _view  = new BwActionPlannerView();
+        private readonly _view  = new TwnsBwActionPlannerView.BwActionPlannerView();
 
         private _war        : BwWar;
         private _mapSize    : Types.MapSize;
@@ -107,13 +110,13 @@ export namespace TwnsBwActionPlanner {
         protected _getUnitMap(): BwUnitMap {
             return this._getWar().getUnitMap();
         }
-        protected _getTileMap(): BwTileMap {
+        protected _getTileMap(): TwnsBwTileMap.BwTileMap {
             return this._getWar().getTileMap();
         }
-        protected _getTurnManager(): BwTurnManager {
+        protected _getTurnManager(): TwnsBwTurnManager.BwTurnManager {
             return this._getWar().getTurnManager();
         }
-        public getCursor(): BwCursor | undefined {
+        public getCursor(): TwnsBwCursor.BwCursor | undefined {
             const war = this._getWar();
             return war ? war.getCursor() : undefined;
         }
@@ -1074,7 +1077,7 @@ export namespace TwnsBwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): BwActionPlannerView {
+        public getView(): TwnsBwActionPlannerView.BwActionPlannerView {
             return this._view;
         }
         protected abstract _updateView(): void;
@@ -1616,7 +1619,7 @@ export namespace TwnsBwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getDataForUnitActionsPanel(): OpenDataForBwUnitActionsPanel {
+        protected _getDataForUnitActionsPanel(): TwnsBwUnitActionsPanel.OpenDataForBwUnitActionsPanel {
             const destination           = this.getMovePathDestination();
             const actionUnitBeLoaded    = this._getActionUnitBeLoaded();
             const war                   = this._getWar();
@@ -1797,3 +1800,5 @@ export namespace TwnsBwActionPlanner {
         }
     }
 }
+
+export default TwnsBwActionPlanner;

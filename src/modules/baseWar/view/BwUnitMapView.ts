@@ -1,15 +1,16 @@
 
-import { Notify }               from "../../../utility/notify/Notify";
-import { TwnsNotifyType } from "../../../utility/notify/NotifyType";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import { Types }                from "../../../utility/Types";
-import { BwVisibilityHelpers }    from "../model/BwVisibilityHelpers";
-import { CommonConstants }      from "../../../utility/CommonConstants";
-import { ConfigManager }        from "../../../utility/ConfigManager";
-import { BwUnitMap }            from "../model/BwUnitMap";
+import Types                from "../../tools/helpers/Types";
+import BwVisibilityHelpers    from "../model/BwVisibilityHelpers";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import TwnsBwUnitMap            from "../model/BwUnitMap";
 import { BwUnitView }           from "./BwUnitView";
 import UnitCategory             = Types.UnitCategory;
 import ActionPlannerState       = Types.ActionPlannerState;
+import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
 
 const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
 

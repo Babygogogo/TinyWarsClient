@@ -1,20 +1,21 @@
 
 import { BwField }          from "../../baseWar/model/BwField";
-import { BwTileMap }        from "../../baseWar/model/BwTileMap";
-import { BwUnitMap }        from "../../baseWar/model/BwUnitMap";
+import TwnsBwTileMap        from "../../baseWar/model/BwTileMap";
+import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
 import { MeActionPlanner }  from "./MeActionPlanner";
 import { MeFogMap }         from "./MeFogMap";
+import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
 
 export class MeField extends BwField {
     private readonly _fogMap        = new MeFogMap();
-    private readonly _tileMap       = new BwTileMap();
+    private readonly _tileMap       = new TwnsBwTileMap.BwTileMap();
     private readonly _unitMap       = new BwUnitMap();
     private readonly _actionPlanner = new MeActionPlanner();
 
     public getFogMap(): MeFogMap {
         return this._fogMap;
     }
-    public getTileMap(): BwTileMap {
+    public getTileMap(): TwnsBwTileMap.BwTileMap {
         return this._tileMap;
     }
     public getUnitMap(): BwUnitMap {

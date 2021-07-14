@@ -1,20 +1,20 @@
 
-import { TwnsLangTextType }             from "../../../utility/lang/LangTextType";
-import { Logger }                       from "../../../utility/Logger";
-import { Notify }                       from "../../../utility/notify/Notify";
-import { TwnsNotifyType }               from "../../../utility/notify/NotifyType";
-import { NotifyData }                   from "../../../utility/notify/NotifyData";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
-import { UserModel }                    from "../../user/model/UserModel";
-import { WarMapModel }                  from "../../warMap/model/WarMapModel";
-import { SpmModel }                     from "../../singlePlayerMode/model/SpmModel";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import Logger                       from "../../tools/helpers/Logger";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import NotifyData                   from "../../tools/notify/NotifyData";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Lang                         from "../../tools/lang/Lang";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import UserModel                    from "../../user/model/UserModel";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
+import SpmModel                     from "../../singlePlayerMode/model/SpmModel";
 
-export namespace ScrCreateModel {
+namespace ScrCreateModel {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IDataForPlayerRule       = ProtoTypes.WarRule.IDataForPlayerRule;
@@ -378,3 +378,5 @@ export namespace ScrCreateModel {
         return null;
     }
 }
+
+export default ScrCreateModel;

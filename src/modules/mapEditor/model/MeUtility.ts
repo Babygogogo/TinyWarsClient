@@ -1,22 +1,22 @@
 
-import { TwnsClientErrorCode }              from "../../../utility/ClientErrorCode";
-import { BwUnit }                       from "../../baseWar/model/BwUnit";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
+import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
 import { BwTile }                       from "../../baseWar/model/BwTile";
-import { BwUnitMap }                    from "../../baseWar/model/BwUnitMap";
+import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
 import { MeWar }                        from "./MeWar";
 import { TwWar }                        from "../../testWar/model/TwWar";
-import { CommonConstants }              from "../../../utility/CommonConstants";
-import { ConfigManager }                from "../../../utility/ConfigManager";
-import { Helpers }                      from "../../../utility/Helpers";
-import { Lang }                         from "../../../utility/lang/Lang";
-import { TwnsLangTextType } from "../../../utility/lang/LangTextType";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
-import { ProtoTypes }                   from "../../../utility/proto/ProtoTypes";
-import { Types }                        from "../../../utility/Types";
-import { BwHelpers }                    from "../../baseWar/model/BwHelpers";
-import { BwWarRuleHelpers }              from "../../baseWar/model/BwWarRuleHelpers";
-import { TimeModel }                    from "../../time/model/TimeModel";
-import { UserModel }                    from "../../user/model/UserModel";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Types                        from "../../tools/helpers/Types";
+import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import Timer                    from "../../tools/helpers/Timer";
+import UserModel                    from "../../user/model/UserModel";
 import * as WarEventHelper              from "../../warEvent/model/WarEventHelper";
 import GridIndex                        = Types.GridIndex;
 import TileObjectType                   = Types.TileObjectType;
@@ -29,6 +29,7 @@ import ISerialTile                      = WarSerialization.ISerialTile;
 import ISerialUnit                      = WarSerialization.ISerialUnit;
 import ISerialPlayer                    = WarSerialization.ISerialPlayer;
 import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
 
 export type AsymmetricalCounters = {
     UpToDown            : number | null;
@@ -52,7 +53,7 @@ export async function createDefaultMapRawData(slotIndex: number): Promise<IMapRa
         mapWidth,
         mapHeight,
         playersCountUnneutral   : 2,
-        modifiedTime            : TimeModel.getServerTimestamp(),
+        modifiedTime            : Timer.getServerTimestamp(),
         tileDataArray           : createDefaultTileDataArray(mapWidth, mapHeight, TileBaseType.Plain),
         unitDataArray           : [],
         warEventFullData        : {
@@ -175,7 +176,7 @@ export function clearMap(mapRawData: IMapRawData, newWidth: number, newHeight: n
         mapHeight               : newHeight,
         playersCountUnneutral   : mapRawData.playersCountUnneutral,
         warEventFullData        : mapRawData.warEventFullData,
-        modifiedTime            : TimeModel.getServerTimestamp(),
+        modifiedTime            : Timer.getServerTimestamp(),
         tileDataArray           : createDefaultTileDataArray(newWidth, newHeight, TileBaseType.Plain),
         unitDataArray           : null,
         warRuleArray            : mapRawData.warRuleArray,
@@ -191,7 +192,7 @@ export function resizeMap(mapRawData: IMapRawData, newWidth: number, newHeight: 
         mapHeight               : newHeight,
         playersCountUnneutral   : mapRawData.playersCountUnneutral,
         warEventFullData        : mapRawData.warEventFullData,
-        modifiedTime            : TimeModel.getServerTimestamp(),
+        modifiedTime            : Timer.getServerTimestamp(),
         tileDataArray           : getNewTileDataListForResize(mapRawData, newWidth, newHeight),
         unitDataArray           : getNewUnitDataListForResize(mapRawData, newWidth, newHeight),
         warRuleArray            : mapRawData.warRuleArray,
@@ -240,7 +241,7 @@ export function addOffset(mapRawData: IMapRawData, offsetX: number, offsetY: num
         mapWidth                : mapRawData.mapWidth,
         mapHeight               : mapRawData.mapHeight,
         playersCountUnneutral   : mapRawData.playersCountUnneutral,
-        modifiedTime            : TimeModel.getServerTimestamp(),
+        modifiedTime            : Timer.getServerTimestamp(),
         tileDataArray           : getNewTileDataListForOffset(mapRawData, offsetX, offsetY),
         unitDataArray           : getNewUnitDataListForOffset(mapRawData, offsetX, offsetY),
         warRuleArray            : mapRawData.warRuleArray,
@@ -312,7 +313,7 @@ function getNewUnitDataListForOffset(mapRawData: IMapRawData, offsetX: number, o
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 export function reviseAllUnitIds(unitMap: BwUnitMap): void {
-    const allUnits  = new Map<number, { unit: BwUnit, newUnitId: number }>();
+    const allUnits  = new Map<number, { unit: TwnsBwUnit.BwUnit, newUnitId: number }>();
     let nextUnitId  = 0;
     for (const unit of unitMap.getAllUnits()) {
         allUnits.set(unit.getUnitId(), { unit, newUnitId: nextUnitId } );
