@@ -14,7 +14,7 @@ import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
-import * as WarEventHelper              from "../model/WarEventHelper";
+import WarEventHelper              from "../model/WarEventHelper";
 import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
 
 type OpenDataForWeNodeReplacePanel = {

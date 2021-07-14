@@ -3,7 +3,7 @@ import TwnsUiImage                      from "../../tools/ui/UiImage";
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
-import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { WarMapBuildingListPanel }      from "../../warMap/view/WarMapBuildingListPanel";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";

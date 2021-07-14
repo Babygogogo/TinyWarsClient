@@ -1,6 +1,6 @@
 
 import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
-import { BwPlayerManager }  from "../../baseWar/model/BwPlayerManager";
+import BwPlayerManager = TwnsBwPlayerManager.BwPlayerManager;import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
 import UserModel        from "../../user/model/UserModel";
 
 export class MpwPlayerManager extends BwPlayerManager {

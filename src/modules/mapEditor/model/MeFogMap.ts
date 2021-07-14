@@ -1,6 +1,6 @@
 
 import TwnsBwWar                        from "../../baseWar/model/BwWar";
-import { BwFogMap }                     from "../../baseWar/model/BwFogMap";
+import BwFogMap = TwnsBwFogMap.BwFogMap;import TwnsBwFogMap                     from "../../baseWar/model/BwFogMap";
 import { MeField }                      from "./MeField";
 import Logger                       from "../../tools/helpers/Logger";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";

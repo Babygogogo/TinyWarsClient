@@ -4,7 +4,7 @@ import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiTab                        from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
-import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import { MfrCreateSettingsPanel }       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import { MeMfwAdvancedSettingsPage }    from "./MeMfwAdvancedSettingsPage";
 import { MeMfwBasicSettingsPage }       from "./MeMfwBasicSettingsPage";

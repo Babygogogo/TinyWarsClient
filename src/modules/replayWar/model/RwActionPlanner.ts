@@ -1,5 +1,5 @@
 
-import { BwProduceUnitPanel }                   from "../../baseWar/view/BwProduceUnitPanel";
+import BwProduceUnitPanel = TwnsBwProduceUnitPanel.BwProduceUnitPanel;import TwnsBwProduceUnitPanel                   from "../../baseWar/view/BwProduceUnitPanel";
 import TwnsBwUnitActionsPanel                   from "../../baseWar/view/BwUnitActionsPanel";
 import TwnsBwUnit                               from "../../baseWar/model/BwUnit";
 import TwnsBwActionPlanner   from "../../baseWar/model/BwActionPlanner";

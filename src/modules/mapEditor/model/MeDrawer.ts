@@ -4,7 +4,7 @@ import TwnsBwTileMap                    from "../../baseWar/model/BwTileMap";
 import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
 import { MeWar }                        from "./MeWar";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
-import { BwDestructionHelpers }           from "../../baseWar/model/BwDestructionHelpers";
+import BwDestructionHelpers           from "../../baseWar/model/BwDestructionHelpers";
 import FloatText                    from "../../tools/helpers/FloatText";
 import GridIndexHelpers             from "../../tools/helpers/GridIndexHelpers";
 import Lang                         from "../../tools/lang/Lang";

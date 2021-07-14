@@ -4,7 +4,7 @@ import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiTab                        from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
-import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import { SpmCreateSfwSaveSlotsPanel }   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import { MeSimAdvancedSettingsPage }    from "./MeSimAdvancedSettingsPage";
 import { MeSimBasicSettingsPage }       from "./MeSimBasicSettingsPage";

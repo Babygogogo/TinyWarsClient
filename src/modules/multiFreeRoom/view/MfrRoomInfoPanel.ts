@@ -8,7 +8,7 @@ import TwnsUiScrollList                                                         
 import TwnsUiTab                                                                from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
 import { ChatPanel }                                                            from "../../chat/view/ChatPanel";
-import { CommonConfirmPanel }                                                   from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel                                                   from "../../common/view/CommonConfirmPanel";
 import { MfrMyRoomListPanel }                                                   from "./MfrMyRoomListPanel";
 import { OpenDataForMfrRoomMapInfoPage, MfrRoomMapInfoPage }                    from "./MfrRoomMapInfoPage";
 import { OpenDataForMfrRoomPlayerInfoPage, MfrRoomPlayerInfoPage }              from "./MfrRoomPlayerInfoPage";

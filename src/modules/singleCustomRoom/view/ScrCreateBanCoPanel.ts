@@ -5,7 +5,7 @@ import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiComponent                  from "../../tools/ui/UiComponent";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiCoInfo                     from "../../tools/ui/UiCoInfo";
-import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonAlertPanel             from "../../common/view/CommonAlertPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";

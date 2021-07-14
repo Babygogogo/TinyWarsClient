@@ -2,20 +2,21 @@
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
+import Timer                from "../../tools/helpers/Timer";
+import Types                from "../../tools/helpers/Types";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import Types                from "../../tools/helpers/Types";
-import Timer                from "../../tools/helpers/Timer";
 import TwnsUiImage          from "../../tools/ui/UiImage";
 import TwnsBwActionPlanner  from "../model/BwActionPlanner";
-import TwnsBwUnit               from "../model/BwUnit";
-import { BwUnitView }           from "./BwUnitView";
+import TwnsBwUnit           from "../model/BwUnit";
+import TwnsBwUnitView       from "./BwUnitView";
 
 namespace TwnsBwActionPlannerView {
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import State                    = Types.ActionPlannerState;
-    import GridIndex                = Types.GridIndex;
-    import Direction                = Types.Direction;
+    import NotifyType   = TwnsNotifyType.NotifyType;
+    import State        = Types.ActionPlannerState;
+    import GridIndex    = Types.GridIndex;
+    import Direction    = Types.Direction;
+    import BwUnitView   = TwnsBwUnitView.BwUnitView;
 
     const _PATH_GRID_SOURCE_EMPTY               = undefined;
     const _PATH_GRID_SOURCE_LINE_VERTICAL       = `c08_t01_s01_f01`;

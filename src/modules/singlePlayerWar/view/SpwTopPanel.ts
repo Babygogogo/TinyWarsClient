@@ -2,11 +2,11 @@
 import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
-import { BwCoListPanel }                from "../../baseWar/view/BwCoListPanel";
-import { BwUnitListPanel }              from "../../baseWar/view/BwUnitListPanel";
+import BwCoListPanel = TwnsBwCoListPanel.BwCoListPanel;import TwnsBwCoListPanel                from "../../baseWar/view/BwCoListPanel";
+import BwUnitListPanel = TwnsBwUnitListPanel.BwUnitListPanel;import TwnsBwUnitListPanel              from "../../baseWar/view/BwUnitListPanel";
 import { SpwWarMenuPanel }              from "./SpwWarMenuPanel";
 import TwnsBwWar                        from "../../baseWar/model/BwWar";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";

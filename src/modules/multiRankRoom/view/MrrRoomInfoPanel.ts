@@ -7,7 +7,7 @@ import TwnsUiLabel                                                              
 import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
 import TwnsUiTab                                                                from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
-import { CommonConfirmPanel }                                                   from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel                                                   from "../../common/view/CommonConfirmPanel";
 import { MrrMyRoomListPanel }                                                   from "./MrrMyRoomListPanel";
 import { MrrRoomBanCoPanel }                                                    from "./MrrRoomBanCoPanel";
 import { MrrRoomChooseCoPanel }                                                 from "./MrrRoomChooseCoPanel";

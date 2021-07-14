@@ -1,17 +1,17 @@
 
-import TwnsBwWar                from "./BwWar";
-import { BwTile }               from "./BwTile";
-import TwnsBwPlayer             from "./BwPlayer";
-import { BwUnitView }           from "../view/BwUnitView";
-import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
-import BwHelpers            from "./BwHelpers";
-import Types                from "../../tools/helpers/Types";
-import Logger               from "../../tools/helpers/Logger";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import BwVisibilityHelpers    from "./BwVisibilityHelpers";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwUnitView       from "../view/BwUnitView";
+import BwHelpers            from "./BwHelpers";
+import TwnsBwPlayer         from "./BwPlayer";
+import TwnsBwTile           from "./BwTile";
+import BwVisibilityHelpers  from "./BwVisibilityHelpers";
+import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwUnit {
     import UnitActionState      = Types.UnitActionState;
@@ -28,6 +28,8 @@ namespace TwnsBwUnit {
     import Config               = ProtoTypes.Config;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwWar                = TwnsBwWar.BwWar;
+    import BwTile               = TwnsBwTile.BwTile;
+    import BwUnitView           = TwnsBwUnitView.BwUnitView;
 
     export class BwUnit {
         private _templateCfg                : UnitTemplateCfg;

@@ -1,11 +1,11 @@
 
-import TwnsBwWar                from "./BwWar";
+import TwnsBwWar            from "./BwWar";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import Types                from "../../tools/helpers/Types";
 import Logger               from "../../tools/helpers/Logger";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 
-export namespace BwDestructionHelpers {
+namespace BwDestructionHelpers {
     import GridIndex        = Types.GridIndex;
     import TileObjectType   = Types.TileObjectType;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
@@ -150,3 +150,5 @@ export namespace BwDestructionHelpers {
         }
     }
 }
+
+export default BwDestructionHelpers;

@@ -1,4 +1,4 @@
-import { BwField }          from "../../baseWar/model/BwField";
+import BwField = TwnsBwField.BwField;import TwnsBwField          from "../../baseWar/model/BwField";
 import TwnsBwTileMap        from "../../baseWar/model/BwTileMap";
 import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
 import { MpwActionPlanner } from "./MpwActionPlanner";

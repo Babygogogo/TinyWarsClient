@@ -2,7 +2,7 @@
 import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
 import TwnsBwWar                        from "../../baseWar/model/BwWar";
 import TwnsBwCommonSettingManager       from "../../baseWar/model/BwCommonSettingManager";
-import { BwWarEventManager }            from "../../baseWar/model/BwWarEventManager";
+import BwWarEventManager = TwnsBwWarEventManager.BwWarEventManager;import TwnsBwWarEventManager            from "../../baseWar/model/BwWarEventManager";
 import { TwPlayerManager }              from "./TwPlayerManager";
 import { TwField }                      from "./TwField";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
@@ -12,7 +12,7 @@ import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
 import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
 import Timer                    from "../../tools/helpers/Timer";
-import * as WarEventHelper              from "../../warEvent/model/WarEventHelper";
+import WarEventHelper              from "../../warEvent/model/WarEventHelper";
 import WarSerialization                 = ProtoTypes.WarSerialization;
 import ISerialWar                       = WarSerialization.ISerialWar;
 import IMapRawData                      = ProtoTypes.Map.IMapRawData;

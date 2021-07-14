@@ -3,7 +3,7 @@ import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiTextInput                  from "../../tools/ui/UiTextInput";
 import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
-import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
 import { ScrCreateSaveSlotsPanel }      from "./ScrCreateSaveSlotsPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";

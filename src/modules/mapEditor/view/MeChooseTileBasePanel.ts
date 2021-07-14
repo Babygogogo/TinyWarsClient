@@ -5,7 +5,7 @@ import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import { DataForDrawTileBase }          from "../model/MeDrawer";
 import TwnsMeTileSimpleView             from "./MeTileSimpleView";
 import CommonConstants              from "../../tools/helpers/CommonConstants";

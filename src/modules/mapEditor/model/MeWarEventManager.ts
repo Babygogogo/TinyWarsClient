@@ -1,6 +1,6 @@
 
 import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
-import { BwWarEventManager }            from "../../baseWar/model/BwWarEventManager";
+import BwWarEventManager = TwnsBwWarEventManager.BwWarEventManager;import TwnsBwWarEventManager            from "../../baseWar/model/BwWarEventManager";
 import Helpers                      from "../../tools/helpers/Helpers";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;

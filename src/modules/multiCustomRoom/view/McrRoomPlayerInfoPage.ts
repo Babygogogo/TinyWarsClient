@@ -6,7 +6,7 @@ import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
-import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";

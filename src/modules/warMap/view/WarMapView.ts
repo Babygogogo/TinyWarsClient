@@ -1,5 +1,5 @@
 
-import { WarMapUnitView }       from "./WarMapUnitView";
+import WarMapUnitView = TwnsWarMapUnitView.WarMapUnitView;import TwnsWarMapUnitView       from "./WarMapUnitView";
 import TwnsUiImage          from "../../tools/ui/UiImage";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";

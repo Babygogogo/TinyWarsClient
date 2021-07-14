@@ -1,13 +1,13 @@
 
 import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
-import { BwWarEventManager }        from "../../baseWar/model/BwWarEventManager";
+import BwWarEventManager = TwnsBwWarEventManager.BwWarEventManager;import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
 import { MpwPlayerManager }         from "./MpwPlayerManager";
 import { MpwField }                 from "./MpwField";
 import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
 import { MpwWarMenuPanel }          from "../view/MpwWarMenuPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
-import { BwDestructionHelpers }       from "../../baseWar/model/BwDestructionHelpers";
+import BwDestructionHelpers       from "../../baseWar/model/BwDestructionHelpers";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;

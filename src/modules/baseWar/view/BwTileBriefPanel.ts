@@ -1,22 +1,26 @@
 
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import StageManager             from "../../tools/helpers/StageManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import NotifyData               from "../../tools/notify/NotifyData";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Lang                 from "../../tools/lang/Lang";
-import NotifyData           from "../../tools/notify/NotifyData";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import StageManager         from "../../tools/helpers/StageManager";
-import Types                from "../../tools/helpers/Types";
 import TwnsBwWar                from "../model/BwWar";
-import { BwCoListPanel }        from "./BwCoListPanel";
-import { BwProduceUnitPanel }   from "./BwProduceUnitPanel";
-import { BwTileDetailPanel }    from "./BwTileDetailPanel";
-import { BwTileView }           from "./BwTileView";
+import TwnsBwCoListPanel        from "./BwCoListPanel";
+import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
+import TwnsBwTileDetailPanel    from "./BwTileDetailPanel";
+import TwnsBwTileView           from "./BwTileView";
 import TwnsBwUnitBriefPanel     from "./BwUnitBriefPanel";
-import BwWar            = TwnsBwWar.BwWar;
 
 namespace TwnsBwTileBriefPanel {
+    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
+    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
+    import BwTileDetailPanel    = TwnsBwTileDetailPanel.BwTileDetailPanel;
+    import BwTileView           = TwnsBwTileView.BwTileView;
+    import BwWar                = TwnsBwWar.BwWar;
     import Tween                = egret.Tween;
     import NotifyType           = TwnsNotifyType.NotifyType;
 

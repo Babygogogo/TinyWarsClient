@@ -1,6 +1,6 @@
 
 import Logger           from "../../tools/helpers/Logger";
-import { BwPlayerManager }  from "../../baseWar/model/BwPlayerManager";
+import BwPlayerManager = TwnsBwPlayerManager.BwPlayerManager;import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
 import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
 
 export class SpwPlayerManager extends BwPlayerManager {

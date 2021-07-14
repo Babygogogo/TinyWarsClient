@@ -6,7 +6,7 @@ import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
-import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import FloatText            from "../../tools/helpers/FloatText";
 import Helpers              from "../../tools/helpers/Helpers";

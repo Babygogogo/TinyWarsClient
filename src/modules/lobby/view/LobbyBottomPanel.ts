@@ -3,7 +3,7 @@ import TwnsUiImage                      from "../../tools/ui/UiImage";
 import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
-import { CommonDamageChartPanel }       from "../../common/view/CommonDamageChartPanel";
+import CommonDamageChartPanel = TwnsCommonDamageChartPanel.CommonDamageChartPanel;import TwnsCommonDamageChartPanel       from "../../common/view/CommonDamageChartPanel";
 import { UserOnlineUsersPanel }         from "../../user/view/UserOnlineUsersPanel";
 import TwnsLobbyTopPanel                from "./LobbyTopPanel";
 import { MeMapListPanel }               from "../../mapEditor/view/MeMapListPanel";

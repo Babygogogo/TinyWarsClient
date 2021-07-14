@@ -1,17 +1,16 @@
 
-import TwnsBwWar                from "./BwWar";
-import TwnsBwUnit               from "./BwUnit";
-import { BwUnitMapView }        from "../view/BwUnitMapView";
-import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
-import BwHelpers            from "./BwHelpers";
-import Types                from "../../tools/helpers/Types";
-import Helpers              from "../../tools/helpers/Helpers";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Logger               from "../../tools/helpers/Logger";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import BwVisibilityHelpers    from "./BwVisibilityHelpers";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
-import BwWar            = TwnsBwWar.BwWar;
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwUnitMapView    from "../view/BwUnitMapView";
+import BwHelpers            from "./BwHelpers";
+import TwnsBwUnit           from "./BwUnit";
+import BwVisibilityHelpers  from "./BwVisibilityHelpers";
+import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwUnitMap {
     import GridIndex        = Types.GridIndex;
@@ -20,6 +19,8 @@ namespace TwnsBwUnitMap {
     import ISerialUnit      = WarSerialization.ISerialUnit;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import BwUnit           = TwnsBwUnit.BwUnit;
+    import BwUnitMapView    = TwnsBwUnitMapView.BwUnitMapView;
+    import BwWar            = TwnsBwWar.BwWar;
 
     export class BwUnitMap {
         private _war            : BwWar | undefined;

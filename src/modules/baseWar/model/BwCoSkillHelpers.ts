@@ -1,17 +1,17 @@
 
-import TwnsBwWar                        from "../../baseWar/model/BwWar";
-import TwnsBwPlayer                     from "./BwPlayer";
-import TwnsBwUnitMap                    from "./BwUnitMap";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers             from "../../tools/helpers/GridIndexHelpers";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Logger                       from "../../tools/helpers/Logger";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import Types                        from "../../tools/helpers/Types";
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import TwnsBwWar            from "../../baseWar/model/BwWar";
+import TwnsBwPlayer         from "./BwPlayer";
+import TwnsBwUnitMap        from "./BwUnitMap";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+import BwHelpers            from "../../baseWar/model/BwHelpers";
 
-export namespace BwCoSkillHelpers {
+namespace BwCoSkillHelpers {
     import BwPlayer             = TwnsBwPlayer.BwPlayer;
     import GridIndex            = Types.GridIndex;
     import Structure            = ProtoTypes.Structure;
@@ -980,3 +980,5 @@ export namespace BwCoSkillHelpers {
         return centers[0];
     }
 }
+
+export default BwCoSkillHelpers;

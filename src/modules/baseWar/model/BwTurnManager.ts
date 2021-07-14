@@ -1,19 +1,19 @@
 
-import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
-import Types                    from "../../tools/helpers/Types";
-import { BwDestructionHelpers }       from "./BwDestructionHelpers";
-import Notify                   from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import Logger                   from "../../tools/helpers/Logger";
-import ConfigManager            from "../../tools/helpers/ConfigManager";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
-import BwVisibilityHelpers        from "./BwVisibilityHelpers";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Logger               from "../../tools/helpers/Logger";
 import Timer                from "../../tools/helpers/Timer";
-import BwHelpers                from "./BwHelpers";
-import TwnsBwUnit                   from "./BwUnit";
-import TwnsBwWar                    from "./BwWar";
+import Types                from "../../tools/helpers/Types";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import BwDestructionHelpers from "./BwDestructionHelpers";
+import BwHelpers            from "./BwHelpers";
+import TwnsBwUnit           from "./BwUnit";
+import BwVisibilityHelpers  from "./BwVisibilityHelpers";
+import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwTurnManager {
     import NotifyType                   = TwnsNotifyType.NotifyType;

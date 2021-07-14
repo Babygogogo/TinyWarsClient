@@ -6,7 +6,7 @@ import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import { CommonChangeVersionPanel }     from "../../common/view/CommonChangeVersionPanel";
-import { WarMapUnitView }               from "../../warMap/view/WarMapUnitView";
+import WarMapUnitView = TwnsWarMapUnitView.WarMapUnitView;import TwnsWarMapUnitView               from "../../warMap/view/WarMapUnitView";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";

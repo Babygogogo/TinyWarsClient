@@ -1,224 +1,232 @@
 
+import BwHelpers                from "../../baseWar/model/BwHelpers";
 import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
-import TwnsBwCursor             from "./BwCursor";
-import { BwGridVisualEffect }   from "./BwGridVisualEffect";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsBwFieldView          from "../view/BwFieldView";
 import TwnsBwActionPlanner      from "./BwActionPlanner";
-import { BwFogMap }             from "./BwFogMap";
+import TwnsBwCursor             from "./BwCursor";
+import TwnsBwFogMap             from "./BwFogMap";
+import TwnsBwGridVisualEffect   from "./BwGridVisualEffect";
 import TwnsBwTileMap            from "./BwTileMap";
 import TwnsBwUnitMap            from "./BwUnitMap";
 import TwnsBwWar                from "./BwWar";
-import { BwFieldView }          from "../view/BwFieldView";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import BwHelpers            from "../../baseWar/model/BwHelpers";
-import ISerialField             = ProtoTypes.WarSerialization.ISerialField;
-import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
-import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
-import BwWar            = TwnsBwWar.BwWar;
-import BwCursor         = TwnsBwCursor.BwCursor;
 
-export abstract class BwField {
-    private readonly _cursor            = new BwCursor();
-    private readonly _gridVisualEffect  = new BwGridVisualEffect();
-    private readonly _view              = new BwFieldView();
+namespace TwnsBwField {
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ISerialField         = ProtoTypes.WarSerialization.ISerialField;
+    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
+    import BwWar                = TwnsBwWar.BwWar;
+    import BwCursor             = TwnsBwCursor.BwCursor;
+    import BwFogMap             = TwnsBwFogMap.BwFogMap;
+    import BwGridVisualEffect   = TwnsBwGridVisualEffect.BwGridVisualEffect;
+    import BwFieldView          = TwnsBwFieldView.BwFieldView;
 
-    public abstract getFogMap(): BwFogMap;
-    public abstract getTileMap(): TwnsBwTileMap.BwTileMap;
-    public abstract getUnitMap(): BwUnitMap;
-    public abstract getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner;
+    export abstract class BwField {
+        private readonly _cursor            = new BwCursor();
+        private readonly _gridVisualEffect  = new BwGridVisualEffect();
+        private readonly _view              = new BwFieldView();
 
-    public init({ data, configVersion, playersCountUnneutral }: {
-        data                    : ISerialField | null | undefined;
-        configVersion           : string;
-        playersCountUnneutral   : number;
-    }): ClientErrorCode {
-        if (data == null) {
-            return ClientErrorCode.BwFieldInit00;
-        }
+        public abstract getFogMap(): BwFogMap;
+        public abstract getTileMap(): TwnsBwTileMap.BwTileMap;
+        public abstract getUnitMap(): BwUnitMap;
+        public abstract getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner;
 
-        const mapSize = BwHelpers.getMapSize(data.tileMap);
-        if (!BwHelpers.checkIsValidMapSize(mapSize)) {
-            return ClientErrorCode.BwFieldInit01;
-        }
+        public init({ data, configVersion, playersCountUnneutral }: {
+            data                    : ISerialField | null | undefined;
+            configVersion           : string;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
+            if (data == null) {
+                return ClientErrorCode.BwFieldInit00;
+            }
 
-        const fogMapError = this.getFogMap().init({
-            data                : data.fogMap,
-            mapSize,
-            playersCountUnneutral
-        });
-        if (fogMapError) {
-            return fogMapError;
-        }
+            const mapSize = BwHelpers.getMapSize(data.tileMap);
+            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+                return ClientErrorCode.BwFieldInit01;
+            }
 
-        const tileMap       = this.getTileMap();
-        const tileMapError  = tileMap.init({
-            data                : data.tileMap,
-            configVersion,
-            mapSize,
-            playersCountUnneutral
-        });
-        if (tileMapError) {
-            return tileMapError;
-        }
+            const fogMapError = this.getFogMap().init({
+                data                : data.fogMap,
+                mapSize,
+                playersCountUnneutral
+            });
+            if (fogMapError) {
+                return fogMapError;
+            }
 
-        const unitMap       = this.getUnitMap();
-        const unitMapError  = unitMap.init({
-            data                : data.unitMap,
-            configVersion,
-            mapSize,
-            playersCountUnneutral
-        });
-        if (unitMapError) {
-            return unitMapError;
-        }
+            const tileMap       = this.getTileMap();
+            const tileMapError  = tileMap.init({
+                data                : data.tileMap,
+                configVersion,
+                mapSize,
+                playersCountUnneutral
+            });
+            if (tileMapError) {
+                return tileMapError;
+            }
 
-        const { width, height } = mapSize;
-        for (let x = 0; x < width; ++x) {
-            for (let y = 0; y < height; ++y) {
-                const gridIndex = { x, y };
-                const tile      = tileMap.getTile(gridIndex);
-                if (tile == null) {
-                    return ClientErrorCode.BwFieldInit02;
-                }
+            const unitMap       = this.getUnitMap();
+            const unitMapError  = unitMap.init({
+                data                : data.unitMap,
+                configVersion,
+                mapSize,
+                playersCountUnneutral
+            });
+            if (unitMapError) {
+                return unitMapError;
+            }
 
-                if ((tile.getMaxHp() != null) && (unitMap.getUnitOnMap(gridIndex))) {
-                    return ClientErrorCode.BwFieldInit03;
+            const { width, height } = mapSize;
+            for (let x = 0; x < width; ++x) {
+                for (let y = 0; y < height; ++y) {
+                    const gridIndex = { x, y };
+                    const tile      = tileMap.getTile(gridIndex);
+                    if (tile == null) {
+                        return ClientErrorCode.BwFieldInit02;
+                    }
+
+                    if ((tile.getMaxHp() != null) && (unitMap.getUnitOnMap(gridIndex))) {
+                        return ClientErrorCode.BwFieldInit03;
+                    }
                 }
             }
+
+            const actionPlannerError = this.getActionPlanner().init(mapSize);
+            if (actionPlannerError) {
+                return actionPlannerError;
+            }
+
+            const cursorError = this.getCursor().init(mapSize);
+            if (cursorError) {
+                return cursorError;
+            }
+
+            const gridVisualEffectError = this.getGridVisualEffect().init();
+            if (gridVisualEffectError) {
+                return gridVisualEffectError;
+            }
+
+            this.getView().init(this);
+
+            return ClientErrorCode.NoError;
+        }
+        public fastInit({ data, configVersion, playersCountUnneutral }: {
+            data                    : ISerialField;
+            configVersion           : string;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
+            const mapSize       = BwHelpers.getMapSize(data.tileMap);
+            const fogMapError   = this.getFogMap().fastInit({
+                data                : data.fogMap,
+                mapSize,
+                playersCountUnneutral
+            });
+            if (fogMapError) {
+                return fogMapError;
+            }
+
+            const tileMapError = this.getTileMap().fastInit({
+                data                : data.tileMap,
+                configVersion,
+                mapSize,
+                playersCountUnneutral,
+            });
+            if (tileMapError) {
+                return tileMapError;
+            }
+
+            const unitMapError = this.getUnitMap().fastInit({
+                data                : data.unitMap,
+                configVersion,
+                mapSize,
+                playersCountUnneutral,
+            });
+            if (unitMapError) {
+                return unitMapError;
+            }
+
+            const cursorError = this.getCursor().fastInit(mapSize);
+            if (cursorError) {
+                return cursorError;
+            }
+
+            const actionPlannerError = this.getActionPlanner().fastInit(mapSize);
+            if (actionPlannerError) {
+                return actionPlannerError;
+            }
+
+            const gridVisualEffectError = this.getGridVisualEffect().fastInit();
+            if (gridVisualEffectError) {
+                return gridVisualEffectError;
+            }
+
+            this.getView().fastInit(this);
+
+            return ClientErrorCode.NoError;
         }
 
-        const actionPlannerError = this.getActionPlanner().init(mapSize);
-        if (actionPlannerError) {
-            return actionPlannerError;
+        public startRunning(war: BwWar): void {
+            this.getTileMap().startRunning(war);
+            this.getUnitMap().startRunning(war);
+            this.getFogMap().startRunning(war);
+            this.getCursor().startRunning(war);
+            this.getActionPlanner().startRunning(war);
+            this.getGridVisualEffect().startRunning(war);
+        }
+        public startRunningView(): void {
+            this.getView().startRunningView();
+            this.getTileMap().startRunningView();
+            this.getUnitMap().startRunningView();
+            this.getCursor().startRunningView();
+            this.getActionPlanner().startRunningView();
+            this.getGridVisualEffect().startRunningView();
+        }
+        public stopRunning(): void {
+            this.getView().stopRunningView();
+            this.getTileMap().stopRunning();
+            this.getUnitMap().stopRunning();
+            this.getCursor().stopRunning();
+            this.getActionPlanner().stopRunning();
+            this.getGridVisualEffect().stopRunning();
         }
 
-        const cursorError = this.getCursor().init(mapSize);
-        if (cursorError) {
-            return cursorError;
+        public serialize(): ISerialField {
+            return {
+                fogMap  : this.getFogMap().serialize(),
+                unitMap : this.getUnitMap().serialize(),
+                tileMap : this.getTileMap().serialize(),
+            };
+        }
+        public serializeForCreateSfw(): ISerialField {
+            return {
+                fogMap  : this.getFogMap().serializeForCreateSfw(),
+                unitMap : this.getUnitMap().serializeForCreateSfw(),
+                tileMap : this.getTileMap().serializeForCreateSfw(),
+            };
+        }
+        public serializeForCreateMfr(): ISerialField {
+            return {
+                fogMap  : this.getFogMap().serializeForCreateMfr(),
+                unitMap : this.getUnitMap().serializeForCreateMfr(),
+                tileMap : this.getTileMap().serializeForCreateMfr(),
+            };
         }
 
-        const gridVisualEffectError = this.getGridVisualEffect().init();
-        if (gridVisualEffectError) {
-            return gridVisualEffectError;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // The other functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getView(): BwFieldView {
+            return this._view;
         }
 
-        this.getView().init(this);
-
-        return ClientErrorCode.NoError;
-    }
-    public fastInit({ data, configVersion, playersCountUnneutral }: {
-        data                    : ISerialField;
-        configVersion           : string;
-        playersCountUnneutral   : number;
-    }): ClientErrorCode {
-        const mapSize       = BwHelpers.getMapSize(data.tileMap);
-        const fogMapError   = this.getFogMap().fastInit({
-            data                : data.fogMap,
-            mapSize,
-            playersCountUnneutral
-        });
-        if (fogMapError) {
-            return fogMapError;
+        public getCursor(): BwCursor {
+            return this._cursor;
         }
 
-        const tileMapError = this.getTileMap().fastInit({
-            data                : data.tileMap,
-            configVersion,
-            mapSize,
-            playersCountUnneutral,
-        });
-        if (tileMapError) {
-            return tileMapError;
+        public getGridVisualEffect(): BwGridVisualEffect {
+            return this._gridVisualEffect;
         }
-
-        const unitMapError = this.getUnitMap().fastInit({
-            data                : data.unitMap,
-            configVersion,
-            mapSize,
-            playersCountUnneutral,
-        });
-        if (unitMapError) {
-            return unitMapError;
-        }
-
-        const cursorError = this.getCursor().fastInit(mapSize);
-        if (cursorError) {
-            return cursorError;
-        }
-
-        const actionPlannerError = this.getActionPlanner().fastInit(mapSize);
-        if (actionPlannerError) {
-            return actionPlannerError;
-        }
-
-        const gridVisualEffectError = this.getGridVisualEffect().fastInit();
-        if (gridVisualEffectError) {
-            return gridVisualEffectError;
-        }
-
-        this.getView().fastInit(this);
-
-        return ClientErrorCode.NoError;
-    }
-
-    public startRunning(war: BwWar): void {
-        this.getTileMap().startRunning(war);
-        this.getUnitMap().startRunning(war);
-        this.getFogMap().startRunning(war);
-        this.getCursor().startRunning(war);
-        this.getActionPlanner().startRunning(war);
-        this.getGridVisualEffect().startRunning(war);
-    }
-    public startRunningView(): void {
-        this.getView().startRunningView();
-        this.getTileMap().startRunningView();
-        this.getUnitMap().startRunningView();
-        this.getCursor().startRunningView();
-        this.getActionPlanner().startRunningView();
-        this.getGridVisualEffect().startRunningView();
-    }
-    public stopRunning(): void {
-        this.getView().stopRunningView();
-        this.getTileMap().stopRunning();
-        this.getUnitMap().stopRunning();
-        this.getCursor().stopRunning();
-        this.getActionPlanner().stopRunning();
-        this.getGridVisualEffect().stopRunning();
-    }
-
-    public serialize(): ISerialField {
-        return {
-            fogMap  : this.getFogMap().serialize(),
-            unitMap : this.getUnitMap().serialize(),
-            tileMap : this.getTileMap().serialize(),
-        };
-    }
-    public serializeForCreateSfw(): ISerialField {
-        return {
-            fogMap  : this.getFogMap().serializeForCreateSfw(),
-            unitMap : this.getUnitMap().serializeForCreateSfw(),
-            tileMap : this.getTileMap().serializeForCreateSfw(),
-        };
-    }
-    public serializeForCreateMfr(): ISerialField {
-        return {
-            fogMap  : this.getFogMap().serializeForCreateMfr(),
-            unitMap : this.getUnitMap().serializeForCreateMfr(),
-            tileMap : this.getTileMap().serializeForCreateMfr(),
-        };
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // The other functions.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    public getView(): BwFieldView {
-        return this._view;
-    }
-
-    public getCursor(): BwCursor {
-        return this._cursor;
-    }
-
-    public getGridVisualEffect(): BwGridVisualEffect {
-        return this._gridVisualEffect;
     }
 }
+
+export default TwnsBwField;

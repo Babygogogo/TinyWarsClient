@@ -1,5 +1,5 @@
 
-import { BwFogMap }             from "../../baseWar/model/BwFogMap";
+import BwFogMap = TwnsBwFogMap.BwFogMap;import TwnsBwFogMap             from "../../baseWar/model/BwFogMap";
 import { RwWar }                from "./RwWar";
 import BwVisibilityHelpers    from "../../baseWar/model/BwVisibilityHelpers";
 

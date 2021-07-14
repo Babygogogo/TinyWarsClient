@@ -1,17 +1,18 @@
 
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import Helpers          from "../../tools/helpers/Helpers";
-import Notify           from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import Types            from "../../tools/helpers/Types";
-import { BwCursorView }     from "../view/BwCursorView";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Notify               from "../../tools/notify/Notify";
+import NotifyData           from "../../tools/notify/NotifyData";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsBwCursorView     from "../view/BwCursorView";
 import TwnsBwWar            from "./BwWar";
-import NotifyData       from "../../tools/notify/NotifyData";
 
 namespace TwnsBwCursor {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import BwWar            = TwnsBwWar.BwWar;
+    import BwCursorView     = TwnsBwCursorView.BwCursorView;
 
     export class BwCursor {
         private _gridX              = 0;

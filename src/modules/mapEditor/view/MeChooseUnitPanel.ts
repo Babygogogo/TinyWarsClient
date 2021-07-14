@@ -5,7 +5,7 @@ import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
-import { BwUnitView }                   from "../../baseWar/view/BwUnitView";
+import BwUnitView = TwnsBwUnitView.BwUnitView;import TwnsBwUnitView                   from "../../baseWar/view/BwUnitView";
 import { DataForDrawUnit }              from "../model/MeDrawer";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";

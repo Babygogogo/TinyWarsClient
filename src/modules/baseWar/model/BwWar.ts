@@ -1,28 +1,28 @@
 
+import BwHelpers                    from "../../baseWar/model/BwHelpers";
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
-import TwnsBwActionPlanner          from "./BwActionPlanner";
-import TwnsBwCommonSettingManager       from "./BwCommonSettingManager";
-import TwnsBwCursor                     from "./BwCursor";
-import { BwField }                      from "./BwField";
-import { BwFogMap }                     from "./BwFogMap";
-import { BwGridVisualEffect }           from "./BwGridVisualEffect";
-import TwnsBwPlayer                     from "./BwPlayer";
-import { BwPlayerManager }              from "./BwPlayerManager";
-import TwnsBwTileMap                    from "./BwTileMap";
-import TwnsBwTurnManager                from "./BwTurnManager";
-import TwnsBwUnitMap                    from "./BwUnitMap";
-import { BwWarEventManager }            from "./BwWarEventManager";
-import { BwExecutedActionManager }      from "./BwExecutedActionManager";
-import { BwRandomNumberManager }        from "./BwRandomNumberManager";
-import { BwDrawVoteManager }            from "./BwDrawVoteManager";
-import { BwWarView }                    from "../view/BwWarView";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Logger                       from "../../tools/helpers/Logger";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
-import Timer                    from "../../tools/helpers/Timer";
-import * as WarEventHelper              from "../../warEvent/model/WarEventHelper";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import WarEventHelper               from "../../warEvent/model/WarEventHelper";
+import TwnsBwWarView                from "../view/BwWarView";
+import TwnsBwActionPlanner          from "./BwActionPlanner";
+import TwnsBwCommonSettingManager   from "./BwCommonSettingManager";
+import TwnsBwCursor                 from "./BwCursor";
+import TwnsBwDrawVoteManager        from "./BwDrawVoteManager";
+import TwnsBwExecutedActionManager  from "./BwExecutedActionManager";
+import TwnsBwField                  from "./BwField";
+import TwnsBwFogMap                 from "./BwFogMap";
+import TwnsBwGridVisualEffect       from "./BwGridVisualEffect";
+import TwnsBwPlayer                 from "./BwPlayer";
+import TwnsBwPlayerManager          from "./BwPlayerManager";
+import TwnsBwRandomNumberManager    from "./BwRandomNumberManager";
+import TwnsBwTileMap                from "./BwTileMap";
+import TwnsBwTurnManager            from "./BwTurnManager";
+import TwnsBwUnitMap                from "./BwUnitMap";
+import TwnsBwWarEventManager        from "./BwWarEventManager";
 
 namespace TwnsBwWar {
     import WarAction                = ProtoTypes.WarAction;
@@ -31,6 +31,15 @@ namespace TwnsBwWar {
     import BwUnitMap                = TwnsBwUnitMap.BwUnitMap;
     import BwCursor                 = TwnsBwCursor.BwCursor;
     import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
+    import BwDrawVoteManager        = TwnsBwDrawVoteManager.BwDrawVoteManager;
+    import BwExecutedActionManager  = TwnsBwExecutedActionManager.BwExecutedActionManager;
+    import BwWarView                = TwnsBwWarView.BwWarView;
+    import BwField                  = TwnsBwField.BwField;
+    import BwFogMap                 = TwnsBwFogMap.BwFogMap;
+    import BwGridVisualEffect       = TwnsBwGridVisualEffect.BwGridVisualEffect;
+    import BwPlayerManager          = TwnsBwPlayerManager.BwPlayerManager;
+    import BwRandomNumberManager    = TwnsBwRandomNumberManager.BwRandomNumberManager;
+    import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
 
     export abstract class BwWar {
         private readonly _turnManager           = new TwnsBwTurnManager.BwTurnManager();

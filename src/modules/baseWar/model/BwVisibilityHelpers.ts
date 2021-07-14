@@ -1,13 +1,13 @@
 
-import TwnsBwWar                from "./BwWar";
-import TwnsBwUnitMap            from "./BwUnitMap";
-import TwnsBwUnit               from "./BwUnit";
-import { BwTile }               from "./BwTile";
-import Types                from "../../tools/helpers/Types";
-import Logger               from "../../tools/helpers/Logger";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import TwnsBwTile           from "./BwTile";
+import TwnsBwUnit           from "./BwUnit";
+import TwnsBwUnitMap        from "./BwUnitMap";
+import TwnsBwWar            from "./BwWar";
 
 namespace BwVisibilityHelpers {
     import GridIndex        = Types.GridIndex;
@@ -16,6 +16,7 @@ namespace BwVisibilityHelpers {
     import BwUnit           = TwnsBwUnit.BwUnit;
     import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
     import BwWar            = TwnsBwWar.BwWar;
+    import BwTile           = TwnsBwTile.BwTile;
 
     export function checkIsUnitOnMapVisibleToTeam(
         { war, gridIndex, unitType, isDiving, unitPlayerIndex, observerTeamIndex }: {

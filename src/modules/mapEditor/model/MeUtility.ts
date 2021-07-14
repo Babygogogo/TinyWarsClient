@@ -1,7 +1,7 @@
 
 import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
 import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
-import { BwTile }                       from "../../baseWar/model/BwTile";
+import BwTile = TwnsBwTile.BwTile;import TwnsBwTile                       from "../../baseWar/model/BwTile";
 import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
 import { MeWar }                        from "./MeWar";
 import { TwWar }                        from "../../testWar/model/TwWar";
@@ -17,7 +17,7 @@ import BwHelpers                    from "../../baseWar/model/BwHelpers";
 import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
 import Timer                    from "../../tools/helpers/Timer";
 import UserModel                    from "../../user/model/UserModel";
-import * as WarEventHelper              from "../../warEvent/model/WarEventHelper";
+import WarEventHelper              from "../../warEvent/model/WarEventHelper";
 import GridIndex                        = Types.GridIndex;
 import TileObjectType                   = Types.TileObjectType;
 import TileBaseType                     = Types.TileBaseType;

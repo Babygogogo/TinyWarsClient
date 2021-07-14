@@ -2,7 +2,7 @@
 import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import { McrMainMenuPanel }             from "../../multiCustomRoom/view/McrMainMenuPanel";
 import { MrrMainMenuPanel }             from "../../multiRankRoom/view/MrrMainMenuPanel";
 import { SpmMainMenuPanel }             from "../../singlePlayerMode/view/SpmMainMenuPanel";

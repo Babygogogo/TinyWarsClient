@@ -2,21 +2,22 @@
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Logger               from "../../tools/helpers/Logger";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import BwHelpers            from "./BwHelpers";
-import { BwTile }               from "./BwTile";
-import TwnsBwUnit               from "./BwUnit";
-import TwnsBwUnitMap            from "./BwUnitMap";
-import TwnsBwWar                from "./BwWar";
+import TwnsBwTile           from "./BwTile";
+import TwnsBwUnit           from "./BwUnit";
+import TwnsBwUnitMap        from "./BwUnitMap";
+import TwnsBwWar            from "./BwWar";
 
-export namespace BwDamageCalculator {
+namespace BwDamageCalculator {
     import GridIndex            = Types.GridIndex;
     import IBattleDamageInfo    = ProtoTypes.Structure.IBattleDamageInfo;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwUnit               = TwnsBwUnit.BwUnit;
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
     import BwWar                = TwnsBwWar.BwWar;
+    import BwTile               = TwnsBwTile.BwTile;
 
     function checkIsInAttackRange(
         attackerGridIndex   : GridIndex,
@@ -463,3 +464,5 @@ export namespace BwDamageCalculator {
         };
     }
 }
+
+export default BwDamageCalculator;

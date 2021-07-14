@@ -2,18 +2,18 @@
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
-import { BwDamageCalculator }     from "./BwDamageCalculator";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import Types                from "../../tools/helpers/Types";
-import BwVisibilityHelpers    from "./BwVisibilityHelpers";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import BwDamageCalculator   from "./BwDamageCalculator";
 import BwHelpers            from "./BwHelpers";
-import { BwTile }               from "./BwTile";
-import TwnsBwUnit               from "./BwUnit";
-import TwnsBwWar                from "./BwWar";
+import TwnsBwTile           from "./BwTile";
+import TwnsBwUnit           from "./BwUnit";
+import BwVisibilityHelpers  from "./BwVisibilityHelpers";
+import TwnsBwWar            from "./BwWar";
 
-export namespace BwRobot {
+namespace BwRobot {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import WeaponType           = Types.WeaponType;
@@ -24,6 +24,7 @@ export namespace BwRobot {
     import UnitType             = Types.UnitType;
     import UnitActionState      = Types.UnitActionState;
     import BwUnit               = TwnsBwUnit.BwUnit;
+    import BwTile               = TwnsBwTile.BwTile;
     import BwWar                = TwnsBwWar.BwWar;
     import checkAndCallLater    = Helpers.checkAndCallLater;
 
@@ -3193,3 +3194,5 @@ export namespace BwRobot {
         };
     }
 }
+
+export default BwRobot;

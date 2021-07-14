@@ -2,7 +2,7 @@
 import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
 import TwnsBwWar                        from "../../baseWar/model/BwWar";
 import TwnsBwCommonSettingManager       from "../../baseWar/model/BwCommonSettingManager";
-import { BwWarEventManager }            from "../../baseWar/model/BwWarEventManager";
+import BwWarEventManager = TwnsBwWarEventManager.BwWarEventManager;import TwnsBwWarEventManager            from "../../baseWar/model/BwWarEventManager";
 import { RwWarMenuPanel }               from "../view/RwWarMenuPanel";
 import { RwPlayerManager }              from "./RwPlayerManager";
 import { RwField }                      from "./RwField";

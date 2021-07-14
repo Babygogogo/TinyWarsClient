@@ -12,7 +12,7 @@ import { UserSetSoundPanel }        from "./UserSetSoundPanel";
 import { UserSetStageScalePanel }   from "./UserSetStageScalePanel";
 import { UserSetPrivilegePanel }    from "./UserSetPrivilegePanel";
 import { ChatPanel }                from "../../chat/view/ChatPanel";
-import { CommonDamageChartPanel }   from "../../common/view/CommonDamageChartPanel";
+import CommonDamageChartPanel = TwnsCommonDamageChartPanel.CommonDamageChartPanel;import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
 import { CommonChangeVersionPanel } from "../../common/view/CommonChangeVersionPanel";
 import { CommonRankListPanel }      from "../../common/view/CommonRankListPanel";
 import { CommonServerStatusPanel }  from "../../common/view/CommonServerStatusPanel";

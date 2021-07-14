@@ -1,15 +1,15 @@
 
-import TwnsBwWar                from "./BwWar";
-import { BwTileMapView }        from "../view/BwTileMapView";
-import { BwTile }               from "./BwTile";
-import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
-import BwHelpers            from "./BwHelpers";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
-import Helpers              from "../../tools/helpers/Helpers";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
+import TwnsBwTileMapView    from "../view/BwTileMapView";
+import BwHelpers            from "./BwHelpers";
+import TwnsBwTile           from "./BwTile";
+import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwTileMap {
     import MapSize          = Types.MapSize;
@@ -18,6 +18,8 @@ namespace TwnsBwTileMap {
     import ISerialTile      = WarSerialization.ISerialTile;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import BwWar            = TwnsBwWar.BwWar;
+    import BwTileMapView    = TwnsBwTileMapView.BwTileMapView;
+    import BwTile           = TwnsBwTile.BwTile;
 
     export class BwTileMap {
         private _map        : BwTile[][];

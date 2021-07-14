@@ -12,7 +12,7 @@ import TwnsLangTextType from "../../tools/lang/LangTextType";
 import Notify                       from "../../tools/notify/Notify";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
-import * as WarEventHelper              from "../model/WarEventHelper";
+import WarEventHelper              from "../model/WarEventHelper";
 import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
 import IWarEventCondition               = ProtoTypes.WarEvent.IWarEventCondition;
 import LangTextType         = TwnsLangTextType.LangTextType;

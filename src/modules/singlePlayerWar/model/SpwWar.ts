@@ -2,7 +2,7 @@
 import TwnsBwWar                        from "../../baseWar/model/BwWar";
 import TwnsBwCommonSettingManager       from "../../baseWar/model/BwCommonSettingManager";
 import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
-import { BwWarEventManager }            from "../../baseWar/model/BwWarEventManager";
+import BwWarEventManager = TwnsBwWarEventManager.BwWarEventManager;import TwnsBwWarEventManager            from "../../baseWar/model/BwWarEventManager";
 import { SpwPlayerManager }             from "./SpwPlayerManager";
 import { SpwField }                     from "./SpwField";
 import CommonConstants              from "../../tools/helpers/CommonConstants";

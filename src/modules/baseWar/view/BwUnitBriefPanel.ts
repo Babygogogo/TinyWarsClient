@@ -1,25 +1,29 @@
 
+import CommonModel              from "../../common/model/CommonModel";
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import StageManager             from "../../tools/helpers/StageManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import NotifyData               from "../../tools/notify/NotifyData";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Lang                 from "../../tools/lang/Lang";
-import NotifyData           from "../../tools/notify/NotifyData";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import StageManager         from "../../tools/helpers/StageManager";
-import Types                from "../../tools/helpers/Types";
-import BwVisibilityHelpers    from "../model/BwVisibilityHelpers";
-import CommonModel          from "../../common/model/CommonModel";
 import TwnsBwUnit               from "../model/BwUnit";
+import BwVisibilityHelpers      from "../model/BwVisibilityHelpers";
 import TwnsBwWar                from "../model/BwWar";
-import { BwCoListPanel }        from "./BwCoListPanel";
-import { BwProduceUnitPanel }   from "./BwProduceUnitPanel";
+import TwnsBwCoListPanel        from "./BwCoListPanel";
+import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
 import TwnsBwTileBriefPanel     from "./BwTileBriefPanel";
-import { BwUnitDetailPanel }    from "./BwUnitDetailPanel";
-import { BwUnitView }           from "./BwUnitView";
-import BwWar            = TwnsBwWar.BwWar;
+import TwnsBwUnitDetailPanel    from "./BwUnitDetailPanel";
+import TwnsBwUnitView           from "./BwUnitView";
 
 namespace TwnsBwUnitBriefPanel {
+    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
+    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
+    import BwUnitDetailPanel    = TwnsBwUnitDetailPanel.BwUnitDetailPanel;
+    import BwUnitView           = TwnsBwUnitView.BwUnitView;
+    import BwWar                = TwnsBwWar.BwWar;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import BwUnit               = TwnsBwUnit.BwUnit;
     import Tween                = egret.Tween;

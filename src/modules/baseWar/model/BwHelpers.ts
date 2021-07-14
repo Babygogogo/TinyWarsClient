@@ -1,20 +1,20 @@
 
-import TwnsBwWar                from "./BwWar";
-import { BwTile }               from "./BwTile";
-import TwnsBwUnit               from "./BwUnit";
-import TwnsBwPlayer             from "./BwPlayer";
-import TwnsBwTileMap            from "./BwTileMap";
-import TwnsBwUnitMap            from "./BwUnitMap";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import BwWarRuleHelpers     from "./BwWarRuleHelpers";
-import Types                from "../../tools/helpers/Types";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import Logger               from "../../tools/helpers/Logger";
-import Helpers              from "../../tools/helpers/Helpers";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
-import BwVisibilityHelpers    from "./BwVisibilityHelpers";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwPlayer         from "./BwPlayer";
+import TwnsBwTile           from "./BwTile";
+import TwnsBwTileMap        from "./BwTileMap";
+import TwnsBwUnit           from "./BwUnit";
+import TwnsBwUnitMap        from "./BwUnitMap";
+import BwVisibilityHelpers  from "./BwVisibilityHelpers";
+import TwnsBwWar            from "./BwWar";
+import BwWarRuleHelpers     from "./BwWarRuleHelpers";
 
 namespace BwHelpers {
     import GridIndex        = Types.GridIndex;
@@ -36,6 +36,7 @@ namespace BwHelpers {
     import BwUnit           = TwnsBwUnit.BwUnit;
     import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
     import BwWar            = TwnsBwWar.BwWar;
+    import BwTile           = TwnsBwTile.BwTile;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;

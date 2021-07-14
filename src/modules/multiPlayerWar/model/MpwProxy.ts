@@ -1,6 +1,6 @@
 
 import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
-import { CommonConfirmPanel }   from "../../common/view/CommonConfirmPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import TwnsBwWar                from "../../baseWar/model/BwWar";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
 import Notify               from "../../tools/notify/Notify";

@@ -1,71 +1,82 @@
-import { BwField }                  from "../model/BwField";
+
+import TwnsBwField                  from "../model/BwField";
 import TwnsBwActionPlannerView      from "./BwActionPlannerView";
-import { BwCursorView }             from "./BwCursorView";
-import { BwGridVisualEffectView }   from "./BwGridVisualEffectView";
-import { BwTileMapView }            from "./BwTileMapView";
-import { BwUnitMapView }            from "./BwUnitMapView";
+import TwnsBwCursorView             from "./BwCursorView";
+import TwnsBwGridVisualEffectView   from "./BwGridVisualEffectView";
+import TwnsBwTileMapView            from "./BwTileMapView";
+import TwnsBwUnitMapView            from "./BwUnitMapView";
 
-export class BwFieldView extends egret.DisplayObjectContainer {
-    private _field                  : BwField;
-    private _tileMapView            : BwTileMapView;
-    private _actionPlannerView      : TwnsBwActionPlannerView.BwActionPlannerView;
-    private _unitMapView            : BwUnitMapView;
-    private _cursorView             : BwCursorView;
-    private _gridVisionEffectView   : BwGridVisualEffectView;
+namespace TwnsBwFieldView {
+    import BwGridVisualEffectView   = TwnsBwGridVisualEffectView.BwGridVisualEffectView;
+    import BwTileMapView            = TwnsBwTileMapView.BwTileMapView;
+    import BwUnitMapView            = TwnsBwUnitMapView.BwUnitMapView;
+    import BwField                  = TwnsBwField.BwField;
+    import BwCursorView             = TwnsBwCursorView.BwCursorView;
 
-    public init(field: BwField): void {
-        if (!this._field) {
+    export class BwFieldView extends egret.DisplayObjectContainer {
+        private _field                  : BwField;
+        private _tileMapView            : BwTileMapView;
+        private _actionPlannerView      : TwnsBwActionPlannerView.BwActionPlannerView;
+        private _unitMapView            : BwUnitMapView;
+        private _cursorView             : BwCursorView;
+        private _gridVisionEffectView   : BwGridVisualEffectView;
+
+        public init(field: BwField): void {
+            if (!this._field) {
+                this._field = field;
+
+                this._tileMapView           = field.getTileMap().getView();
+                this._actionPlannerView     = field.getActionPlanner().getView();
+                this._unitMapView           = field.getUnitMap().getView();
+                this._cursorView            = field.getCursor().getView();
+                this._gridVisionEffectView  = field.getGridVisualEffect().getView();
+                this.addChild(this._tileMapView);
+                this.addChild(this._actionPlannerView.getContainerForGrids());
+                this.addChild(this._unitMapView);
+                this.addChild(this._actionPlannerView.getContainerForUnits());
+                this.addChild(this._cursorView);
+                this.addChild(this._gridVisionEffectView);
+            }
+        }
+        public fastInit(field: BwField): void {
             this._field = field;
+        }
 
-            this._tileMapView           = field.getTileMap().getView();
-            this._actionPlannerView     = field.getActionPlanner().getView();
-            this._unitMapView           = field.getUnitMap().getView();
-            this._cursorView            = field.getCursor().getView();
-            this._gridVisionEffectView  = field.getGridVisualEffect().getView();
-            this.addChild(this._tileMapView);
-            this.addChild(this._actionPlannerView.getContainerForGrids());
-            this.addChild(this._unitMapView);
-            this.addChild(this._actionPlannerView.getContainerForUnits());
-            this.addChild(this._cursorView);
-            this.addChild(this._gridVisionEffectView);
+        public startRunningView(): void {
+            // nothing to do
+        }
+        public stopRunningView(): void {
+            // nothing to do
+        }
+
+        private _getUnitMapView(): BwUnitMapView {
+            return this._unitMapView;
+        }
+        private _getTileMapView(): BwTileMapView {
+            return this._tileMapView;
+        }
+
+        public setUnitsVisible(visible: boolean): void {
+            this._getUnitMapView().visible = visible;
+        }
+        public getUnitsVisible(): boolean {
+            return this._getUnitMapView().visible;
+        }
+
+        public setTileObjectsVisible(visible: boolean): void {
+            this._getTileMapView().setObjectLayerVisible(visible);
+        }
+        public getTileObjectsVisible(): boolean {
+            return this._getTileMapView().getObjectLayerVisible();
+        }
+
+        public setTileBasesVisible(visible: boolean): void {
+            this._getTileMapView().setBaseLayerVisible(visible);
+        }
+        public getTileBasesVisible(): boolean {
+            return this._getTileMapView().getBaseLayerVisible();
         }
     }
-    public fastInit(field: BwField): void {
-        this._field = field;
-    }
-
-    public startRunningView(): void {
-        // nothing to do
-    }
-    public stopRunningView(): void {
-        // nothing to do
-    }
-
-    private _getUnitMapView(): BwUnitMapView {
-        return this._unitMapView;
-    }
-    private _getTileMapView(): BwTileMapView {
-        return this._tileMapView;
-    }
-
-    public setUnitsVisible(visible: boolean): void {
-        this._getUnitMapView().visible = visible;
-    }
-    public getUnitsVisible(): boolean {
-        return this._getUnitMapView().visible;
-    }
-
-    public setTileObjectsVisible(visible: boolean): void {
-        this._getTileMapView().setObjectLayerVisible(visible);
-    }
-    public getTileObjectsVisible(): boolean {
-        return this._getTileMapView().getObjectLayerVisible();
-    }
-
-    public setTileBasesVisible(visible: boolean): void {
-        this._getTileMapView().setBaseLayerVisible(visible);
-    }
-    public getTileBasesVisible(): boolean {
-        return this._getTileMapView().getBaseLayerVisible();
-    }
 }
+
+export default TwnsBwFieldView;

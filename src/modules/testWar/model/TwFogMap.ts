@@ -1,6 +1,6 @@
 
 import TwnsBwWar        from "../../baseWar/model/BwWar";
-import { BwFogMap }     from "../../baseWar/model/BwFogMap";
+import BwFogMap = TwnsBwFogMap.BwFogMap;import TwnsBwFogMap     from "../../baseWar/model/BwFogMap";
 import BwWar            = TwnsBwWar.BwWar;
 
 export class TwFogMap extends BwFogMap {

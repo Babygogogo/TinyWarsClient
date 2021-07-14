@@ -14,7 +14,7 @@ import Types                        from "../../tools/helpers/Types";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import Lang                         from "../../tools/lang/Lang";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import { BwRobot }                      from "../../baseWar/model/BwRobot";
+import BwRobot                      from "../../baseWar/model/BwRobot";
 import BwActionReviser              from "../../baseWar/model/BwActionReviser";
 import { BwWarActionExecutor }          from "../../baseWar/model/BwWarActionExecutor";
 

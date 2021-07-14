@@ -1,25 +1,26 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import Helpers              from "../../tools/helpers/Helpers";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import Types                from "../../tools/helpers/Types";
-import StageManager         from "../../tools/helpers/StageManager";
-import { BwUnitView }           from "./BwUnitView";
-import TwnsBwActionPlanner    from "../model/BwActionPlanner";
-import TwnsBwWar                from "../model/BwWar";
-import TwnsBwUnit               from "../model/BwUnit";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
+import StageManager             from "../../tools/helpers/StageManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsBwActionPlanner      from "../model/BwActionPlanner";
+import TwnsBwUnit               from "../model/BwUnit";
+import TwnsBwWar                from "../model/BwWar";
+import TwnsBwUnitView           from "./BwUnitView";
 
 namespace TwnsBwUnitActionsPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import UnitActionType   = Types.UnitActionType;
     import BwWar            = TwnsBwWar.BwWar;
+    import BwUnitView       = TwnsBwUnitView.BwUnitView;
 
     export type OpenDataForBwUnitActionsPanel = {
         war         : BwWar;

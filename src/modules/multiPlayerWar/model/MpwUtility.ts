@@ -1,5 +1,5 @@
 
-import { BwTile }               from "../../baseWar/model/BwTile";
+import BwTile = TwnsBwTile.BwTile;import TwnsBwTile               from "../../baseWar/model/BwTile";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import Types                from "../../tools/helpers/Types";
 

@@ -1,16 +1,16 @@
 
-import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
-import Types                from "../../tools/helpers/Types";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import Logger               from "../../tools/helpers/Logger";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
 import UserModel            from "../../user/model/UserModel";
 import BwHelpers            from "./BwHelpers";
-import TwnsBwWar                from "./BwWar";
+import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwPlayer {
     import NotifyType       = TwnsNotifyType.NotifyType;

@@ -4,7 +4,7 @@ import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
-import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
+import CommonInputPanel = TwnsCommonInputPanel.CommonInputPanel;import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
 import { CommonChooseCoPanel }          from "../../common/view/CommonChooseCoPanel";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";

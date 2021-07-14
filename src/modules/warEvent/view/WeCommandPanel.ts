@@ -2,8 +2,8 @@
 import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
-import { CommonInputPanel }             from "../../common/view/CommonInputPanel";
+import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
+import CommonInputPanel = TwnsCommonInputPanel.CommonInputPanel;import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
 import { MeWar }                        from "../../mapEditor/model/MeWar";
 import { WeEventRenamePanel }           from "./WeEventRenamePanel";
 import { WeNodeReplacePanel }           from "./WeNodeReplacePanel";
@@ -20,7 +20,7 @@ import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import Types                        from "../../tools/helpers/Types";
-import * as WarEventHelper              from "../model/WarEventHelper";
+import WarEventHelper              from "../model/WarEventHelper";
 import ColorValue                       = Types.ColorValue;
 import WarEventDescType                 = Types.WarEventDescType;
 

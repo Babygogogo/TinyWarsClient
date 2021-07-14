@@ -3,7 +3,7 @@ import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
-import { BwUnitView }                   from "../../baseWar/view/BwUnitView";
+import BwUnitView = TwnsBwUnitView.BwUnitView;import TwnsBwUnitView                   from "../../baseWar/view/BwUnitView";
 import { MeDrawer }                     from "../model/MeDrawer";
 import { MeWar }                        from "../model/MeWar";
 import { MeChooseTileBasePanel }        from "./MeChooseTileBasePanel";

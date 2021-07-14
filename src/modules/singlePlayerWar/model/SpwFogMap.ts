@@ -1,6 +1,6 @@
 
 import BwVisibilityHelpers            from "../../baseWar/model/BwVisibilityHelpers";
-import { BwFogMap }                     from "../../baseWar/model/BwFogMap";
+import BwFogMap = TwnsBwFogMap.BwFogMap;import TwnsBwFogMap                     from "../../baseWar/model/BwFogMap";
 import { SpwWar }                       from "./SpwWar";
 
 export class SpwFogMap extends BwFogMap {
