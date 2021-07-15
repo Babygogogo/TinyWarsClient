@@ -6,7 +6,7 @@ import TwnsUiLabel                                                              
 import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
 import TwnsUiTab                                                                from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
-import { FlowManager }                                                          from "../../tools/helpers/FlowManager";
+import FlowManager                                                          from "../../tools/helpers/FlowManager";
 import Helpers                                                              from "../../tools/helpers/Helpers";
 import Lang                                                                 from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
@@ -15,14 +15,14 @@ import Notify                                                               from
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import Types                                                                from "../../tools/helpers/Types";
-import BwHelpers                                                            from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers                                                     from "../../tools/warHelpers/WarCommonHelpers";
 import WarMapModel                                                          from "../../warMap/model/WarMapModel";
 import SpmModel                                                             from "../model/SpmModel";
 import { OpenDataForSpmWarMapInfoPage, SpmWarMapInfoPage }                      from "./SpmWarMapInfoPage";
 import { OpenDataForSpmWarPlayerInfoPage, SpmWarPlayerInfoPage }                from "./SpmWarPlayerInfoPage";
 import TwnsLobbyBottomPanel                                                     from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                                                        from "../../lobby/view/LobbyTopPanel";
-import { SpmMainMenuPanel }                                                     from "./SpmMainMenuPanel";
+import SpmMainMenuPanel= TwnsSpmMainMenuPanel.SpmMainMenuPanel;import TwnsSpmMainMenuPanel                                                     from "./SpmMainMenuPanel";
 import { OpenDataForSpmWarAdvancedSettingsPage, SpmWarAdvancedSettingsPage }    from "./SpmWarAdvancedSettingsPage";
 import { OpenDataForSpmWarBasicSettingsPage, SpmWarBasicSettingsPage }          from "./SpmWarBasicSettingsPage";
 
@@ -316,13 +316,13 @@ class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRe
             labelName.text  = null;
         } else {
             const warData   = slotData.warData;
-            labelType.text  = `${slotIndex}. ${Lang.getWarTypeName(BwHelpers.getWarType(warData))}`;
+            labelType.text  = `${slotIndex}. ${Lang.getWarTypeName(WarCommonHelpers.getWarType(warData))}`;
 
             const slotComment = slotData.extraData.slotComment;
             if (slotComment) {
                 labelName.text = slotComment;
             } else {
-                const mapId     = BwHelpers.getMapId(warData);
+                const mapId     = WarCommonHelpers.getMapId(warData);
                 labelName.text  = mapId == null
                     ? `(${Lang.getText(LangTextType.B0321)})`
                     : await WarMapModel.getMapNameInCurrentLanguage(mapId);

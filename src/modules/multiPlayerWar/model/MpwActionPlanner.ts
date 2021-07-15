@@ -4,7 +4,7 @@ import TwnsBwUnit                               from "../../baseWar/model/BwUnit
 import BwProduceUnitPanel = TwnsBwProduceUnitPanel.BwProduceUnitPanel;import TwnsBwProduceUnitPanel                   from "../../baseWar/view/BwProduceUnitPanel";
 import TwnsBwUnitActionsPanel                   from "../../baseWar/view/BwUnitActionsPanel";
 import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel                   from "../../common/view/CommonConfirmPanel";
-import { MpwWar }                               from "./MpwWar";
+import MpwWar= TwnsMpwWar.MpwWar;import TwnsMpwWar                               from "./MpwWar";
 import FloatText                            from "../../tools/helpers/FloatText";
 import GridIndexHelpers                     from "../../tools/helpers/GridIndexHelpers";
 import Lang                                 from "../../tools/lang/Lang";

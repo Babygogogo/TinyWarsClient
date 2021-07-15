@@ -4,7 +4,7 @@ import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import CommonInputPanel = TwnsCommonInputPanel.CommonInputPanel;import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
-import { MeWar }                        from "../../mapEditor/model/MeWar";
+import MeWar= TwnsMeWar.MeWar;import TwnsMeWar                        from "../../mapEditor/model/MeWar";
 import { WeEventRenamePanel }           from "./WeEventRenamePanel";
 import { WeNodeReplacePanel }           from "./WeNodeReplacePanel";
 import { WeConditionReplacePanel }      from "./WeConditionReplacePanel";

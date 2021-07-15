@@ -1,13 +1,13 @@
 
-import Helpers                      from "../../tools/helpers/Helpers";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import CcrProxy                     from "../../coopCustomRoom/model/CcrProxy";
-import UserModel                    from "../../user/model/UserModel";
-import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import Helpers          from "../../tools/helpers/Helpers";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import CcrProxy         from "../../coopCustomRoom/model/CcrProxy";
+import UserModel        from "../../user/model/UserModel";
+import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
 
-export namespace CcrModel {
+namespace CcrModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
     import ICcrRoomInfo     = ProtoTypes.CoopCustomRoom.ICcrRoomInfo;
@@ -208,7 +208,7 @@ export namespace CcrModel {
                 return true;
             }
 
-            if ((playerDataList.length === BwWarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))     &&
+            if ((playerDataList.length === WarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))     &&
                 (playerDataList.every(v => v.isReady))                                                              &&
                 (selfPlayerData)                                                                                    &&
                 (roomInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
@@ -229,7 +229,9 @@ export namespace CcrModel {
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         return (selfPlayerData != null)
             && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
-            && (playerDataList.length == BwWarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))
+            && (playerDataList.length == WarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))
             && (playerDataList.every(v => v.isReady));
     }
 }
+
+export default CcrModel;

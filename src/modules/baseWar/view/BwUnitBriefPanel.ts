@@ -10,7 +10,7 @@ import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsBwUnit               from "../model/BwUnit";
-import BwVisibilityHelpers      from "../model/BwVisibilityHelpers";
+import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsBwWar                from "../model/BwWar";
 import TwnsBwCoListPanel        from "./BwCoListPanel";
 import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
@@ -182,7 +182,7 @@ namespace TwnsBwUnitBriefPanel {
                 const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
 
                 if ((unitOnMap)                                         &&
-                    (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                         war,
                         gridIndex,
                         unitType            : unitOnMap.getUnitType(),

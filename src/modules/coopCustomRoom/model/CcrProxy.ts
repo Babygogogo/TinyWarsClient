@@ -1,10 +1,10 @@
 
-import TwnsNetMessageCodes              from "../../tools/network/NetMessageCodes";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import NetManager                   from "../../tools/network/NetManager";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import { CcrModel }                     from "../../coopCustomRoom/model/CcrModel";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import NetManager           from "../../tools/network/NetManager";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import CcrModel             from "../../coopCustomRoom/model/CcrModel";
 
 namespace CcrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;

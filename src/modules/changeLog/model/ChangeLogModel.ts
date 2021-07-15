@@ -1,7 +1,7 @@
 
 import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
-export namespace ChangeLogModel {
+namespace ChangeLogModel {
     import IChangeLogMessage    = ProtoTypes.ChangeLog.IChangeLogMessage;
 
     let _messageList: IChangeLogMessage[];
@@ -16,3 +16,5 @@ export namespace ChangeLogModel {
         return (getAllMessageList() || []).find(v => v.messageId === messageId);
     }
 }
+
+export default ChangeLogModel;

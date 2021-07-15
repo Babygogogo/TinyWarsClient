@@ -6,7 +6,7 @@ import TwnsUiMapInfo            from "../../tools/ui/UiMapInfo";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import { MfrCreateModel }       from "../model/MfrCreateModel";
+import MfrCreateModel       from "../model/MfrCreateModel";
 import LangTextType             = TwnsLangTextType.LangTextType;
 import NotifyType               = TwnsNotifyType.NotifyType;
 

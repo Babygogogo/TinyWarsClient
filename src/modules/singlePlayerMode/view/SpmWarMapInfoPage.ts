@@ -9,7 +9,7 @@ import LangTextType         = TwnsLangTextType.LangTextType;
 import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 import SpmModel                     from "../model/SpmModel";
 
@@ -64,7 +64,7 @@ export class SpmWarMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForSpmWar
             return;
         }
 
-        const mapId = BwHelpers.getMapId(warData);
+        const mapId = WarCommonHelpers.getMapId(warData);
         if (mapId != null) {
             const mapRawData = await WarMapModel.getRawData(mapId);
             if (mapRawData == null) {

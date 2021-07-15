@@ -6,7 +6,7 @@ import TwnsUiLabel                                                              
 import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
 import TwnsUiTab                                                                from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
-import { MfrMainMenuPanel }                                                     from "./MfrMainMenuPanel";
+import MfrMainMenuPanel= TwnsMfrMainMenuPanel.MfrMainMenuPanel;import TwnsMfrMainMenuPanel                                                     from "./MfrMainMenuPanel";
 import { MfrRoomInfoPanel }                                                     from "./MfrRoomInfoPanel";
 import TwnsLobbyBottomPanel                                                     from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                                                        from "../../lobby/view/LobbyTopPanel";
@@ -20,7 +20,7 @@ import TwnsLangTextType from "../../tools/lang/LangTextType";
 import TwnsNotifyType                                                       from "../../tools/notify/NotifyType";
 import { MfrJoinModel }                                                         from "../model/MfrJoinModel";
 import Types                                                                from "../../tools/helpers/Types";
-import { MfrModel }                                                             from "../../multiFreeRoom/model/MfrModel";
+import MfrModel                                                             from "../../multiFreeRoom/model/MfrModel";
 import MfrProxy                                                             from "../../multiFreeRoom/model/MfrProxy";
 import LangTextType         = TwnsLangTextType.LangTextType;
 import NotifyType       = TwnsNotifyType.NotifyType;

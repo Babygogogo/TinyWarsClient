@@ -1,9 +1,9 @@
 
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
 import Types                from "../../tools/helpers/Types";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import { BroadcastModel }       from "../model/BroadcastModel";
+import BroadcastModel       from "../model/BroadcastModel";
 import Lang                 from "../../tools/lang/Lang";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import StageManager         from "../../tools/helpers/StageManager";

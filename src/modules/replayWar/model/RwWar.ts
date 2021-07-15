@@ -6,7 +6,7 @@ import BwWarEventManager = TwnsBwWarEventManager.BwWarEventManager;import TwnsBw
 import { RwWarMenuPanel }               from "../view/RwWarMenuPanel";
 import { RwPlayerManager }              from "./RwPlayerManager";
 import { RwField }                      from "./RwField";
-import { BwWarActionExecutor }          from "../../baseWar/model/BwWarActionExecutor";
+import WarActionExecutor          from "../../tools/warHelpers/WarActionExecutor";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
@@ -18,7 +18,7 @@ import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
-import BwVisibilityHelpers            from "../../baseWar/model/BwVisibilityHelpers";
+import WarVisibilityHelpers           from "../../tools/warHelpers/WarVisibilityHelpers";
 import WarType                          = Types.WarType;
 import WarAction                        = ProtoTypes.WarAction;
 import IWarActionContainer              = WarAction.IWarActionContainer;
@@ -92,7 +92,7 @@ export class RwWar extends BwWar {
         // No need to update units.
 
         const tileMap       = this.getTileMap();
-        const visibleTiles  = BwVisibilityHelpers.getAllTilesVisibleToTeam(this, this.getPlayerInTurn().getTeamIndex());
+        const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeam(this, this.getPlayerInTurn().getTeamIndex());
         for (const tile of tileMap.getAllTiles()) {
             tile.setHasFog(!visibleTiles.has(tile));
             tile.flushDataToView();
@@ -483,7 +483,7 @@ export class RwWar extends BwWar {
     }
     private async _doExecuteAction(action: IWarActionContainer, isFastExecute: boolean): Promise<void> {
         this.setNextActionId(this.getNextActionId() + 1);
-        const errorCode = await BwWarActionExecutor.checkAndExecute(this, action, isFastExecute);
+        const errorCode = await WarActionExecutor.checkAndExecute(this, action, isFastExecute);
         if (errorCode) {
             Logger.error(`RwWar._doExecuteAction() errorCode: ${errorCode}`);
         }

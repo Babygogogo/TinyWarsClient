@@ -1,12 +1,12 @@
 
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import { CcrModel }                     from "./CcrModel";
-import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import CcrModel         from "./CcrModel";
+import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
 
-export namespace CcrJoinModel {
+namespace CcrJoinModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import ICcrRoomInfo     = ProtoTypes.CoopCustomRoom.ICcrRoomInfo;
 
@@ -24,7 +24,7 @@ export namespace CcrJoinModel {
             return {
                 roomId          : roomInfo.roomId,
                 isReady         : false,
-                coId            : BwWarRuleHelpers.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
+                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
                 playerIndex,
                 unitAndTileSkinId,
             };
@@ -56,7 +56,7 @@ export namespace CcrJoinModel {
     }
 
     function generateAvailablePlayerIndexList(info: ICcrRoomInfo): number[] {
-        const playersCount      = BwWarRuleHelpers.getPlayersCount(info.settingsForCommon.warRule);
+        const playersCount      = WarRuleHelpers.getPlayersCount(info.settingsForCommon.warRule);
         const playerInfoList    = info.playerDataList;
         const indexes           : number[] = [];
         for (let i = 1; i <= playersCount; ++i) {
@@ -77,3 +77,5 @@ export namespace CcrJoinModel {
         return idList;
     }
 }
+
+export default CcrJoinModel;

@@ -1,5 +1,5 @@
 
-import BwHelpers            from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
@@ -223,7 +223,7 @@ namespace TwnsBwWarEventManager {
                     continue;
                 }
 
-                if (BwHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+                if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     configVersion,

@@ -13,7 +13,7 @@ import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import Types                        from "../../tools/helpers/Types";
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 import SpmModel                     from "../../singlePlayerMode/model/SpmModel";
 import ScrCreateModel                     from "../model/ScrCreateModel";
@@ -153,13 +153,13 @@ class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlot
             labelMapName.text   = `----`;
         } else {
             const warData   = slotInfo.warData;
-            labelType.text  = Lang.getWarTypeName(BwHelpers.getWarType(warData));
+            labelType.text  = Lang.getWarTypeName(WarCommonHelpers.getWarType(warData));
 
             const slotComment = slotInfo.extraData.slotComment;
             if (slotComment) {
                 labelMapName.text = slotComment;
             } else {
-                const mapId         = BwHelpers.getMapId(warData);
+                const mapId         = WarCommonHelpers.getMapId(warData);
                 labelMapName.text   = mapId == null
                     ? `(${Lang.getText(LangTextType.B0321)})`
                     : await WarMapModel.getMapNameInCurrentLanguage(mapId);

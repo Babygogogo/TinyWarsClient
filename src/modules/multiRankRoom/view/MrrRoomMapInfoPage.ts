@@ -11,7 +11,7 @@ import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
-import { MrrModel }                     from "../model/MrrModel";
+import MrrModel                     from "../model/MrrModel";
 
 export type OpenDataForMrrRoomMapInfoPage = {
     roomId  : number;

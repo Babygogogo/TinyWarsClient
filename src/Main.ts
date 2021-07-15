@@ -7,7 +7,7 @@ import "./modules/tools/ui/UiTab";
 import "./modules/tools/ui/UiCoInfo";
 import "./modules/tools/ui/UiMapInfo";
 import "./modules/tools/ui/UiRadioButton";
-import { FlowManager }  from "./modules/tools/helpers/FlowManager";
+import FlowManager from "./modules/tools/helpers/FlowManager";
 
 // export declare interface Window {
 //     CLIENT_VERSION      : string;

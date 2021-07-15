@@ -6,7 +6,7 @@ import Types                from "../../tools/helpers/Types";
 import NetManager           from "../../tools/network/NetManager";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import Timer                from "../../tools/helpers/Timer";
-import { ChatModel }            from "./ChatModel";
+import ChatModel            from "./ChatModel";
 
 namespace ChatProxy {
     import NetMessage       = ProtoTypes.NetMessage;

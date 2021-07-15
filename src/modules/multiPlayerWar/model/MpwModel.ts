@@ -1,8 +1,9 @@
 
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
-import { MpwWar }               from "./MpwWar";
-import { CcwWar }               from "../../coopCustomWar/model/CcwWar";
+import MpwWar= TwnsMpwWar.MpwWar;import TwnsMpwWar               from "./MpwWar";
+import TwnsCcwWar               from "../../coopCustomWar/model/CcwWar";
+import CcwWar = TwnsCcwWar.CcwWar;
 import { McwWar }               from "../../multiCustomWar/model/McwWar";
 import { MfwWar }               from "../../multiFreeWar/model/MfwWar";
 import { MrwWar }               from "../../multiRankWar/model/MrwWar";
@@ -11,13 +12,13 @@ import Logger               from "../../tools/helpers/Logger";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import Types                from "../../tools/helpers/Types";
-import { FlowManager }          from "../../tools/helpers/FlowManager";
+import FlowManager          from "../../tools/helpers/FlowManager";
 import FloatText            from "../../tools/helpers/FloatText";
 import Lang                 from "../../tools/lang/Lang";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import MpwProxy             from "../../multiPlayerWar/model/MpwProxy";
 import UserModel            from "../../user/model/UserModel";
-import { BwWarActionExecutor }  from "../../baseWar/model/BwWarActionExecutor";
+import WarActionExecutor  from "../../tools/warHelpers/WarActionExecutor";
 
 namespace MpwModel {
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -351,7 +352,7 @@ namespace MpwModel {
 
         war.getExecutedActionManager().addExecutedAction(container);
 
-        const errorCode = await BwWarActionExecutor.checkAndExecute(war, container, false);
+        const errorCode = await WarActionExecutor.checkAndExecute(war, container, false);
         if (errorCode) {
             Logger.error(`MpwModel.checkAndRunFirstCachedAction() errorCode: ${errorCode}.`);
         }

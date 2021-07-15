@@ -15,14 +15,14 @@ import { McrCreateChooseCoPanel }           from "./McrCreateChooseCoPanel";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import FloatText                        from "../../tools/helpers/FloatText";
-import { FlowManager }                      from "../../tools/helpers/FlowManager";
+import FlowManager                      from "../../tools/helpers/FlowManager";
 import Helpers                          from "../../tools/helpers/Helpers";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import Types                            from "../../tools/helpers/Types";
-import BwHelpers                        from "../../baseWar/model/BwHelpers";
-import BwWarRuleHelpers                  from "../../baseWar/model/BwWarRuleHelpers";
+import WarCommonHelpers                 from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers                  from "../../tools/warHelpers/WarRuleHelpers";
 import { McrCreateModel }                   from "../model/McrCreateModel";
 import McrProxy                         from "../../multiCustomRoom/model/McrProxy";
 import LangTextType         = TwnsLangTextType.LangTextType;
@@ -309,9 +309,9 @@ class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<Data
             const playerIndex   = data.playerIndex;
             creator.setSelfPlayerIndex(playerIndex);
 
-            const availableCoIdArray = BwWarRuleHelpers.getAvailableCoIdArrayForPlayer(creator.getWarRule(), playerIndex, ConfigManager.getLatestFormalVersion());
+            const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer(creator.getWarRule(), playerIndex, ConfigManager.getLatestFormalVersion());
             if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
-                creator.setSelfCoId(BwWarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
+                creator.setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
             }
         }
     }
@@ -329,7 +329,7 @@ class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<Data
         const data = this.data;
         if (data) {
             const playerIndex       = data.playerIndex;
-            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelpers.getTeamIndex(McrCreateModel.getWarRule(), playerIndex))})`;
+            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(McrCreateModel.getWarRule(), playerIndex))})`;
         }
     }
     private _updateState(): void {
@@ -368,7 +368,7 @@ class SkinIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSk
         const data = this.data;
         if (data) {
             const skinId            = data.skinId;
-            this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, McrCreateModel.getSelfUnitAndTileSkinId() === skinId);
+            this._imgColor.source   = WarCommonHelpers.getImageSourceForSkinId(skinId, McrCreateModel.getSelfUnitAndTileSkinId() === skinId);
         }
     }
 }

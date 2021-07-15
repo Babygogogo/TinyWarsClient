@@ -5,9 +5,9 @@ import TwnsNotifyType               from "../../tools/notify/NotifyType";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import McrProxy                     from "../../multiCustomRoom/model/McrProxy";
 import UserModel                    from "../../user/model/UserModel";
-import BwWarRuleHelpers             from "../../baseWar/model/BwWarRuleHelpers";
+import WarRuleHelpers             from "../../tools/warHelpers/WarRuleHelpers";
 
-export namespace McrModel {
+namespace McrModel {
     import NotifyType                       = TwnsNotifyType.NotifyType;
     import NetMessage                       = ProtoTypes.NetMessage;
     import IMcrRoomInfo                     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
@@ -208,7 +208,7 @@ export namespace McrModel {
                 return true;
             }
 
-            if ((playerDataList.length === BwWarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))    &&
+            if ((playerDataList.length === WarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))    &&
                 (playerDataList.every(v => (v.isReady) && (v.userId != null)))                                      &&
                 (selfPlayerData)                                                                                    &&
                 (roomInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
@@ -229,7 +229,9 @@ export namespace McrModel {
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         return (selfPlayerData != null)
             && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
-            && (playerDataList.length == BwWarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))
+            && (playerDataList.length == WarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))
             && (playerDataList.every(v => (v.isReady) && (v.userId != null)));
     }
 }
+
+export default McrModel;

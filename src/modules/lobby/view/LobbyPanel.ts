@@ -1,27 +1,31 @@
 
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiButton                      from "../../tools/ui/UiButton";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import { McrMainMenuPanel }             from "../../multiCustomRoom/view/McrMainMenuPanel";
-import { MrrMainMenuPanel }             from "../../multiRankRoom/view/MrrMainMenuPanel";
-import { SpmMainMenuPanel }             from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import Types                        from "../../tools/helpers/Types";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Lang                         from "../../tools/lang/Lang";
-import { CcrModel }                     from "../../coopCustomRoom/model/CcrModel";
-import { McrModel }                     from "../../multiCustomRoom/model/McrModel";
-import { MfrModel }                     from "../../multiFreeRoom/model/MfrModel";
-import { MrrModel }                     from "../../multiRankRoom/model/MrrModel";
-import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import CcrModel                 from "../../coopCustomRoom/model/CcrModel";
+import McrModel                 from "../../multiCustomRoom/model/McrModel";
+import TwnsMcrMainMenuPanel     from "../../multiCustomRoom/view/McrMainMenuPanel";
+import MfrModel                 from "../../multiFreeRoom/model/MfrModel";
+import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
+import MrrModel                 from "../../multiRankRoom/model/MrrModel";
+import TwnsMrrMainMenuPanel     from "../../multiRankRoom/view/MrrMainMenuPanel";
+import TwnsSpmMainMenuPanel     from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
 namespace TwnsLobbyPanel {
-    import Tween            = egret.Tween;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import McrMainMenuPanel     = TwnsMcrMainMenuPanel.McrMainMenuPanel;
+    import MrrMainMenuPanel     = TwnsMrrMainMenuPanel.MrrMainMenuPanel;
+    import SpmMainMenuPanel     = TwnsSpmMainMenuPanel.SpmMainMenuPanel;
+    import Tween                = egret.Tween;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = TwnsLangTextType.LangTextType;
 
     // eslint-disable-next-line no-shadow
     export class LobbyPanel extends TwnsUiPanel.UiPanel<void> {

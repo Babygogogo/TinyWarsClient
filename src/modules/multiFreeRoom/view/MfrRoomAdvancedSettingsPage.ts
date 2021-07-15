@@ -4,7 +4,7 @@ import TwnsUiButton              from "../../tools/ui/UiButton";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
-import { CommonHelpPanel }      from "../../common/view/CommonHelpPanel";
+import CommonHelpPanel = TwnsCommonHelpPanel.CommonHelpPanel;import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
@@ -14,8 +14,8 @@ import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import Types                from "../../tools/helpers/Types";
-import BwWarRuleHelpers      from "../../baseWar/model/BwWarRuleHelpers";
-import { MfrModel }             from "../../multiFreeRoom/model/MfrModel";
+import WarRuleHelpers      from "../../tools/warHelpers/WarRuleHelpers";
+import MfrModel             from "../../multiFreeRoom/model/MfrModel";
 import PlayerRuleType           = Types.PlayerRuleType;
 
 export type OpenDataForMfrRoomAdvancedSettingsPage = {
@@ -225,28 +225,28 @@ class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfo
     }
     private async _updateComponentsForValueAsTeamIndex(playerIndex: number): Promise<void> {
         const warRule           = await this._getWarRule();
-        const teamIndex         = warRule ? BwWarRuleHelpers.getTeamIndex(warRule, playerIndex) : undefined;
+        const teamIndex         = warRule ? WarRuleHelpers.getTeamIndex(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = teamIndex == null ? null : Lang.getPlayerTeamName(teamIndex);
         labelValue.textColor    = 0xFFFFFF;
     }
     private async _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): Promise<void> {
         const warRule           = await this._getWarRule();
-        const currValue         = warRule ? (BwWarRuleHelpers.getBannedCoIdArray(warRule, playerIndex) || []).length : 0;
+        const currValue         = warRule ? (WarRuleHelpers.getBannedCoIdArray(warRule, playerIndex) || []).length : 0;
         const labelValue        = this._labelValue;
         labelValue.text         = `${currValue}`;
         labelValue.textColor    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
     }
     private async _updateComponentsForValueAsInitialFund(playerIndex: number): Promise<void> {
         const warRule           = await this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelpers.getInitialFund(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? WarRuleHelpers.getInitialFund(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
     }
     private async _updateComponentsForValueAsIncomeMultiplier(playerIndex: number): Promise<void> {
         const warRule           = await this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelpers.getIncomeMultiplier(warRule, playerIndex): undefined;
+        const currValue         = warRule ? WarRuleHelpers.getIncomeMultiplier(warRule, playerIndex): undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
@@ -254,49 +254,49 @@ class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfo
     private async _updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex: number): Promise<void> {
         const warRule           = await this._getWarRule();
         const roomInfo          = await this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelpers.getEnergyAddPctOnLoadCo(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? WarRuleHelpers.getEnergyAddPctOnLoadCo(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
     }
     private async _updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex: number): Promise<void> {
         const warRule           = await this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelpers.getEnergyGrowthMultiplier(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? WarRuleHelpers.getEnergyGrowthMultiplier(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
     }
     private async _updateComponentsForValueAsMoveRangeModifier(playerIndex: number): Promise<void> {
         const warRule           = await this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelpers.getMoveRangeModifier(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? WarRuleHelpers.getMoveRangeModifier(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
     }
     private async _updateComponentsForValueAsAttackPowerModifier(playerIndex: number): Promise<void> {
         const warRule           = await this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelpers.getAttackPowerModifier(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? WarRuleHelpers.getAttackPowerModifier(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
     }
     private async _updateComponentsForValueAsVisionRangeModifier(playerIndex: number): Promise<void> {
         const warRule           = await this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelpers.getVisionRangeModifier(warRule, playerIndex): undefined;
+        const currValue         = warRule ? WarRuleHelpers.getVisionRangeModifier(warRule, playerIndex): undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
     }
     private async _updateComponentsForValueAsLuckLowerLimit(playerIndex: number): Promise<void> {
         const warRule           = await this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelpers.getLuckLowerLimit(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? WarRuleHelpers.getLuckLowerLimit(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
     }
     private async _updateComponentsForValueAsLuckUpperLimit(playerIndex: number): Promise<void> {
         const warRule           = await this._getWarRule();
-        const currValue         = warRule ? BwWarRuleHelpers.getLuckUpperLimit(warRule, playerIndex) : undefined;
+        const currValue         = warRule ? WarRuleHelpers.getLuckUpperLimit(warRule, playerIndex) : undefined;
         const labelValue        = this._labelValue;
         labelValue.text         = currValue == null ? null : `${currValue}`;
         labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);

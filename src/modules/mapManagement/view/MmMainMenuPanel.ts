@@ -5,10 +5,10 @@ import TwnsUiButton                  from "../../tools/ui/UiButton";
 import TwnsUiLabel                  from "../../tools/ui/UiLabel";
 import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
 import { MmReviewListPanel }        from "./MmReviewListPanel";
-import { MmAvailabilityListPanel }  from "./MmAvailabilityListPanel";
+import MmAvailabilityListPanel= TwnsMmAvailabilityListPanel.MmAvailabilityListPanel;import TwnsMmAvailabilityListPanel  from "./MmAvailabilityListPanel";
 import { MmTagListPanel }           from "./MmTagListPanel";
 import FloatText                from "../../tools/helpers/FloatText";
-import { FlowManager }              from "../../tools/helpers/FlowManager";
+import FlowManager              from "../../tools/helpers/FlowManager";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
@@ -17,118 +17,123 @@ import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import Types                    from "../../tools/helpers/Types";
 
-export class MmMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
-    protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-    protected readonly _IS_EXCLUSIVE = true;
+namespace TwnsMmMainMenuPanel {
 
-    private static _instance: MmMainMenuPanel;
+    export class MmMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
+        protected readonly _IS_EXCLUSIVE = true;
 
-    private _labelMenuTitle : TwnsUiLabel.UiLabel;
-    private _btnBack        : TwnsUiButton.UiButton;
-    private _listCommand    : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
+        private static _instance: MmMainMenuPanel;
 
-    public static show(): void {
-        if (!MmMainMenuPanel._instance) {
-            MmMainMenuPanel._instance = new MmMainMenuPanel();
+        private _labelMenuTitle : TwnsUiLabel.UiLabel;
+        private _btnBack        : TwnsUiButton.UiButton;
+        private _listCommand    : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
+
+        public static show(): void {
+            if (!MmMainMenuPanel._instance) {
+                MmMainMenuPanel._instance = new MmMainMenuPanel();
+            }
+            MmMainMenuPanel._instance.open(undefined);
         }
-        MmMainMenuPanel._instance.open(undefined);
-    }
 
-    public static async hide(): Promise<void> {
-        if (MmMainMenuPanel._instance) {
-            await MmMainMenuPanel._instance.close();
+        public static async hide(): Promise<void> {
+            if (MmMainMenuPanel._instance) {
+                await MmMainMenuPanel._instance.close();
+            }
+        }
+
+        private constructor() {
+            super();
+
+            this.skinName = "resource/skins/mapManagement/MmMainMenuPanel.exml";
+        }
+
+        protected async _onOpened(): Promise<void> {
+            this._setUiListenerArray([
+                { ui: this._btnBack, callback: this._onTouchedBtnBack },
+            ]);
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgMmReloadAllMaps, callback: this._onMsgMmReloadAllMaps },
+            ]);
+            this._listCommand.setItemRenderer(CommandRenderer);
+
+            this._updateView();
+            this._listCommand.bindData(await this._createDataForListCommand());
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+            this.close();
+            FlowManager.gotoLobby();
+        }
+        private _onMsgUserLogout(e: egret.Event): void {
+            this.close();
+        }
+        private _onMsgMmReloadAllMaps(e: egret.Event): void {
+            FloatText.show(Lang.getText(LangTextType.A0075));
+        }
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateView();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Private functions.
+        ////////////////////////////////////////////////////////////////////////////////
+        private async _updateView(): Promise<void> {
+            this._labelMenuTitle.text   = Lang.getText(LangTextType.B0192);
+            this._btnBack.label         = Lang.getText(LangTextType.B0146);
+            this._listCommand.bindData(await this._createDataForListCommand());
+        }
+
+        private async _createDataForListCommand(): Promise<DataForCommandRenderer[]> {
+            const dataList: DataForCommandRenderer[] = [
+                {
+                    name    : Lang.getText(LangTextType.B0295),
+                    callback: (): void => {
+                        this.close();
+                        MmReviewListPanel.show();
+                    },
+                },
+                {
+                    name    : Lang.getText(LangTextType.B0193),
+                    callback: (): void => {
+                        this.close();
+                        MmAvailabilityListPanel.show({});
+                    },
+                },
+                {
+                    name    : Lang.getText(LangTextType.B0444),
+                    callback: (): void => {
+                        this.close();
+                        MmTagListPanel.show();
+                    },
+                },
+            ];
+
+            return dataList;
         }
     }
 
-    private constructor() {
-        super();
+    type DataForCommandRenderer = {
+        name    : string;
+        callback: () => void;
+    };
+    class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
+        private _labelCommand: TwnsUiLabel.UiLabel;
 
-        this.skinName = "resource/skins/mapManagement/MmMainMenuPanel.exml";
-    }
+        protected _onDataChanged(): void {
+            const data = this.data;
+            this._labelCommand.text = data.name;
+        }
 
-    protected async _onOpened(): Promise<void> {
-        this._setUiListenerArray([
-            { ui: this._btnBack, callback: this._onTouchedBtnBack },
-        ]);
-        this._setNotifyListenerArray([
-            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
-            { type: NotifyType.MsgMmReloadAllMaps, callback: this._onMsgMmReloadAllMaps },
-        ]);
-        this._listCommand.setItemRenderer(CommandRenderer);
-
-        this._updateView();
-        this._listCommand.bindData(await this._createDataForListCommand());
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // Callbacks.
-    ////////////////////////////////////////////////////////////////////////////////
-    private _onTouchedBtnBack(e: egret.TouchEvent): void {
-        this.close();
-        FlowManager.gotoLobby();
-    }
-    private _onMsgUserLogout(e: egret.Event): void {
-        this.close();
-    }
-    private _onMsgMmReloadAllMaps(e: egret.Event): void {
-        FloatText.show(Lang.getText(LangTextType.A0075));
-    }
-    private _onNotifyLanguageChanged(e: egret.Event): void {
-        this._updateView();
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // Private functions.
-    ////////////////////////////////////////////////////////////////////////////////
-    private async _updateView(): Promise<void> {
-        this._labelMenuTitle.text   = Lang.getText(LangTextType.B0192);
-        this._btnBack.label         = Lang.getText(LangTextType.B0146);
-        this._listCommand.bindData(await this._createDataForListCommand());
-    }
-
-    private async _createDataForListCommand(): Promise<DataForCommandRenderer[]> {
-        const dataList: DataForCommandRenderer[] = [
-            {
-                name    : Lang.getText(LangTextType.B0295),
-                callback: (): void => {
-                    this.close();
-                    MmReviewListPanel.show();
-                },
-            },
-            {
-                name    : Lang.getText(LangTextType.B0193),
-                callback: (): void => {
-                    this.close();
-                    MmAvailabilityListPanel.show({});
-                },
-            },
-            {
-                name    : Lang.getText(LangTextType.B0444),
-                callback: (): void => {
-                    this.close();
-                    MmTagListPanel.show();
-                },
-            },
-        ];
-
-        return dataList;
+        public onItemTapEvent(e: eui.ItemTapEvent): void {
+            this.data.callback();
+        }
     }
 }
 
-type DataForCommandRenderer = {
-    name    : string;
-    callback: () => void;
-};
-class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
-    private _labelCommand: TwnsUiLabel.UiLabel;
-
-    protected _onDataChanged(): void {
-        const data = this.data;
-        this._labelCommand.text = data.name;
-    }
-
-    public onItemTapEvent(e: eui.ItemTapEvent): void {
-        this.data.callback();
-    }
-}
+export default TwnsMmMainMenuPanel;

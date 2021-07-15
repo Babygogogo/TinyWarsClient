@@ -1,7 +1,7 @@
 
 import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
 import TwnsBwWar                        from "../../baseWar/model/BwWar";
-import { MeWar }                        from "../../mapEditor/model/MeWar";
+import MeWar= TwnsMeWar.MeWar;import TwnsMeWar                        from "../../mapEditor/model/MeWar";
 import { WeConditionModifyPanel1 }      from "../view/WeConditionModifyPanel1";
 import { WeConditionModifyPanel10 }     from "../view/WeConditionModifyPanel10";
 import { WeConditionModifyPanel11 }     from "../view/WeConditionModifyPanel11";
@@ -25,7 +25,7 @@ import LangTextType         = TwnsLangTextType.LangTextType;
 import Logger                       from "../../tools/helpers/Logger";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import LanguageType                     = Types.LanguageType;
 import ConditionType                    = Types.WarEventConditionType;
 import ActionType                       = Types.WarEventActionType;
@@ -489,7 +489,7 @@ namespace WarEventHelper {
                     return false;
                 }
 
-                if (BwHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+                if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
                     configVersion,
@@ -1090,7 +1090,7 @@ namespace WarEventHelper {
             return (v.canBeBlockedByUnit != null)
                 && (v.needMovableTile != null)
                 && (unitData.loaderUnitId == null)
-                && (!BwHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+                && (!WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     playersCountUnneutral: CommonConstants.WarMaxPlayerIndex,

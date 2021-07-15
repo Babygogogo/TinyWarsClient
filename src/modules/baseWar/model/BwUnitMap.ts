@@ -7,9 +7,9 @@ import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import TwnsBwUnitMapView    from "../view/BwUnitMapView";
-import BwHelpers            from "./BwHelpers";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsBwUnit           from "./BwUnit";
-import BwVisibilityHelpers  from "./BwVisibilityHelpers";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwUnitMap {
@@ -46,7 +46,7 @@ namespace TwnsBwUnitMap {
                 return ClientErrorCode.BwUnitMapInit01;
             }
 
-            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+            if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 return ClientErrorCode.BwUnitMapInit02;
             }
 
@@ -203,7 +203,7 @@ namespace TwnsBwUnitMap {
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-            for (const unit of BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+            for (const unit of WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
                 units.push(unit.serializeForCreateSfw());
 
                 if (teamIndexes.has(unit.getTeamIndex())) {
@@ -228,7 +228,7 @@ namespace TwnsBwUnitMap {
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-            for (const unit of BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+            for (const unit of WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
                 units.push(unit.serializeForCreateMfr());
 
                 if (teamIndexes.has(unit.getTeamIndex())) {
@@ -357,7 +357,7 @@ namespace TwnsBwUnitMap {
                 return undefined;
             }
 
-            return (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+            return (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                 war,
                 unitType,
                 isDiving,

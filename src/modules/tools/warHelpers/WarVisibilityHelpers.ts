@@ -1,15 +1,15 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Logger               from "../../tools/helpers/Logger";
-import Types                from "../../tools/helpers/Types";
-import TwnsBwTile           from "./BwTile";
-import TwnsBwUnit           from "./BwUnit";
-import TwnsBwUnitMap        from "./BwUnitMap";
-import TwnsBwWar            from "./BwWar";
+import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+import GridIndexHelpers     from "../helpers/GridIndexHelpers";
+import Helpers              from "../helpers/Helpers";
+import Logger               from "../helpers/Logger";
+import Types                from "../helpers/Types";
+import TwnsBwTile           from "../../baseWar/model/BwTile";
+import TwnsBwUnit           from "../../baseWar/model/BwUnit";
+import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
+import TwnsBwWar            from "../../baseWar/model/BwWar";
 
-namespace BwVisibilityHelpers {
+namespace WarVisibilityHelpers {
     import GridIndex        = Types.GridIndex;
     import Visibility       = Types.Visibility;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
@@ -551,4 +551,4 @@ namespace BwVisibilityHelpers {
     }
 }
 
-export default BwVisibilityHelpers;
+export default WarVisibilityHelpers;

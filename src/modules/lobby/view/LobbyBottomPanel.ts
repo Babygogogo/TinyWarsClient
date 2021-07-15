@@ -1,21 +1,26 @@
 
-import TwnsUiImage                      from "../../tools/ui/UiImage";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import { ChatPanel }                    from "../../chat/view/ChatPanel";
-import { UserPanel }                    from "../../user/view/UserPanel";
-import CommonDamageChartPanel = TwnsCommonDamageChartPanel.CommonDamageChartPanel;import TwnsCommonDamageChartPanel       from "../../common/view/CommonDamageChartPanel";
-import { UserOnlineUsersPanel }         from "../../user/view/UserOnlineUsersPanel";
-import TwnsLobbyTopPanel                from "./LobbyTopPanel";
-import { MeMapListPanel }               from "../../mapEditor/view/MeMapListPanel";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import Types                        from "../../tools/helpers/Types";
+import ChatModel                    from "../../chat/model/ChatModel";
+import TwnsChatPanel                from "../../chat/view/ChatPanel";
+import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
+import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
 import Helpers                      from "../../tools/helpers/Helpers";
-import { ChatModel }                    from "../../chat/model/ChatModel";
+import Types                        from "../../tools/helpers/Types";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiImage                  from "../../tools/ui/UiImage";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
 import UserModel                    from "../../user/model/UserModel";
+import TwnsUserOnlineUsersPanel     from "../../user/view/UserOnlineUsersPanel";
+import TwnsUserPanel                from "../../user/view/UserPanel";
+import TwnsLobbyTopPanel            from "./LobbyTopPanel";
 
 namespace TwnsLobbyBottomPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import Tween            = egret.Tween;
+    import ChatPanel                = TwnsChatPanel.ChatPanel;
+    import UserPanel                = TwnsUserPanel.UserPanel;
+    import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
+    import UserOnlineUsersPanel     = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
+    import MeMapListPanel           = TwnsMeMapListPanel.MeMapListPanel;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import Tween                    = egret.Tween;
 
     // eslint-disable-next-line no-shadow
     export class LobbyBottomPanel extends TwnsUiPanel.UiPanel<void> {

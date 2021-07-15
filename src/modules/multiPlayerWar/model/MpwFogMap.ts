@@ -1,14 +1,14 @@
 
-import BwVisibilityHelpers    from "../../baseWar/model/BwVisibilityHelpers";
+import WarVisibilityHelpers   from "../../tools/warHelpers/WarVisibilityHelpers";
 import * as MpwUtility          from "./MpwUtility";
 import BwFogMap = TwnsBwFogMap.BwFogMap;import TwnsBwFogMap             from "../../baseWar/model/BwFogMap";
-import { MpwWar }               from "./MpwWar";
+import MpwWar= TwnsMpwWar.MpwWar;import TwnsMpwWar               from "./MpwWar";
 
 export class MpwFogMap extends BwFogMap {
     public startRunning(war: MpwWar): void {
         this._setWar(war);
 
-        const visibleTiles = BwVisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+        const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
         for (const tile of war.getTileMap().getAllTiles()) {
             if (visibleTiles.has(tile)) {
                 tile.setHasFog(false);

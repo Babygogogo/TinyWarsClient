@@ -1,17 +1,17 @@
 
 import TwnsBwWar            from "../../baseWar/model/BwWar";
-import TwnsBwPlayer         from "./BwPlayer";
-import TwnsBwUnitMap        from "./BwUnitMap";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Logger               from "../../tools/helpers/Logger";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import Types                from "../../tools/helpers/Types";
-import BwHelpers            from "../../baseWar/model/BwHelpers";
+import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
+import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
+import CommonConstants      from "../helpers/CommonConstants";
+import ConfigManager        from "../helpers/ConfigManager";
+import GridIndexHelpers     from "../helpers/GridIndexHelpers";
+import Helpers              from "../helpers/Helpers";
+import Logger               from "../helpers/Logger";
+import ProtoTypes           from "../proto/ProtoTypes";
+import Types                from "../helpers/Types";
+import WarCommonHelpers     from "./WarCommonHelpers";
 
-namespace BwCoSkillHelpers {
+namespace WarCoSkillHelpers {
     import BwPlayer             = TwnsBwPlayer.BwPlayer;
     import GridIndex            = Types.GridIndex;
     import Structure            = ProtoTypes.Structure;
@@ -122,7 +122,7 @@ namespace BwCoSkillHelpers {
 
                 if ((unit.getPlayerIndex() === playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
                 ) {
                     unit.setCurrentHp(Math.max(
                         1,
@@ -186,7 +186,7 @@ namespace BwCoSkillHelpers {
 
                 if ((unit.getPlayerIndex() !== playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
                 ) {
                     unit.setCurrentHp(Math.max(
                         1,
@@ -238,7 +238,7 @@ namespace BwCoSkillHelpers {
 
                 if ((unit.getPlayerIndex() === playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
                 ) {
                     const maxFuel = unit.getMaxFuel();
                     if (maxFuel == null) {
@@ -306,7 +306,7 @@ namespace BwCoSkillHelpers {
 
                 if ((unit.getPlayerIndex() !== playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
                 ) {
                     const maxFuel = unit.getMaxFuel();
                     if (maxFuel == null) {
@@ -380,7 +380,7 @@ namespace BwCoSkillHelpers {
 
                 if ((unit.getPlayerIndex() === playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
                 ) {
                     if (maxBuildMaterial != null) {
                         const currentBuildMaterial = unit.getCurrentBuildMaterial();
@@ -470,7 +470,7 @@ namespace BwCoSkillHelpers {
 
                 if ((unit.getPlayerIndex() !== playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
                 ) {
                     if (maxBuildMaterial != null) {
                         const currentBuildMaterial = unit.getCurrentBuildMaterial();
@@ -565,7 +565,7 @@ namespace BwCoSkillHelpers {
 
                 if ((unit.getPlayerIndex() === playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
                 ) {
                     if (modifier > 0) {
                         unit.setPrimaryWeaponCurrentAmmo(Math.min(
@@ -632,7 +632,7 @@ namespace BwCoSkillHelpers {
 
                 if ((unit.getPlayerIndex() !== playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
                 ) {
                     if (modifier > 0) {
                         unit.setPrimaryWeaponCurrentAmmo(Math.min(
@@ -732,7 +732,7 @@ namespace BwCoSkillHelpers {
 
                 if ((unit.getPlayerIndex() === playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
                 ) {
                     const currentPromotion = unit.getCurrentPromotion();
                     if (currentPromotion == null) {
@@ -981,4 +981,4 @@ namespace BwCoSkillHelpers {
     }
 }
 
-export default BwCoSkillHelpers;
+export default WarCoSkillHelpers;

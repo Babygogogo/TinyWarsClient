@@ -6,7 +6,7 @@ import TwnsUiTextInput                  from "../../tools/ui/UiTextInput";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
 import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
+import CommonHelpPanel = TwnsCommonHelpPanel.CommonHelpPanel;import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
 import { ScrCreateBanCoPanel }          from "./ScrCreateBanCoPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import FloatText                    from "../../tools/helpers/FloatText";

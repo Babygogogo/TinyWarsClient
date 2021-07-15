@@ -7,7 +7,7 @@ import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import TwnsUiImage          from "../../tools/ui/UiImage";
 import UserModel            from "../../user/model/UserModel";
 import TwnsBwTileMap        from "../model/BwTileMap";
-import BwVisibilityHelpers  from "../model/BwVisibilityHelpers";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsBwTileView       from "./BwTileView";
 
 namespace TwnsBwTileMapView {
@@ -195,7 +195,7 @@ namespace TwnsBwTileMapView {
                     : player.getCoGridIndexListOnMap().filter(gridIndex => {
                         const unit = unitMap.getUnitOnMap(gridIndex);
                         return (!!unit)
-                            && (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            && (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex,
                                 unitType: unit.getUnitType(),

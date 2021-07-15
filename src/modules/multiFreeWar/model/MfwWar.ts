@@ -1,6 +1,6 @@
 
 import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
-import { MpwWar }                       from "../../multiPlayerWar/model/MpwWar";
+import MpwWar= TwnsMpwWar.MpwWar;import TwnsMpwWar                       from "../../multiPlayerWar/model/MpwWar";
 import Logger                       from "../../tools/helpers/Logger";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";

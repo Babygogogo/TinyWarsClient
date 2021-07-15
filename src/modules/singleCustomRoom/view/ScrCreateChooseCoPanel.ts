@@ -16,7 +16,7 @@ import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
-import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import WarRuleHelpers              from "../../tools/warHelpers/WarRuleHelpers";
 import ScrCreateModel                     from "../model/ScrCreateModel";
 
 type OpenDataForScrCreateChooseCoPanel = {
@@ -149,7 +149,7 @@ export class ScrCreateChooseCoPanel extends TwnsUiPanel.UiPanel<OpenDataForScrCr
         const configVersion = ConfigManager.getLatestFormalVersion();
         const dataArray     : DataForCoRenderer[] = [];
         let index           = 0;
-        for (const coId of BwWarRuleHelpers.getAvailableCoIdArrayForPlayer(ScrCreateModel.getWarRule(), this._getOpenData().playerIndex, configVersion)) {
+        for (const coId of WarRuleHelpers.getAvailableCoIdArrayForPlayer(ScrCreateModel.getWarRule(), this._getOpenData().playerIndex, configVersion)) {
             dataArray.push({
                 coBasicCfg  : ConfigManager.getCoBasicCfg(configVersion, coId),
                 index,

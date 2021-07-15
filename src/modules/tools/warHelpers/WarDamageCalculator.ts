@@ -1,16 +1,16 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Logger               from "../../tools/helpers/Logger";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import BwHelpers            from "./BwHelpers";
-import TwnsBwTile           from "./BwTile";
-import TwnsBwUnit           from "./BwUnit";
-import TwnsBwUnitMap        from "./BwUnitMap";
-import TwnsBwWar            from "./BwWar";
+import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+import GridIndexHelpers     from "../helpers/GridIndexHelpers";
+import Logger               from "../helpers/Logger";
+import Types                from "../helpers/Types";
+import ProtoTypes           from "../proto/ProtoTypes";
+import WarCommonHelpers     from "./WarCommonHelpers";
+import TwnsBwTile           from "../../baseWar/model/BwTile";
+import TwnsBwUnit           from "../../baseWar/model/BwUnit";
+import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
+import TwnsBwWar            from "../../baseWar/model/BwWar";
 
-namespace BwDamageCalculator {
+namespace WarDamageCalculator {
     import GridIndex            = Types.GridIndex;
     import IBattleDamageInfo    = ProtoTypes.Structure.IBattleDamageInfo;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
@@ -263,7 +263,7 @@ namespace BwDamageCalculator {
 
         return Math.max(0, Math.floor(0.000001 +
             (baseAttackDamage * attackBonusMultiplier + luckValue)  *
-            (BwHelpers.getNormalizedHp(attackerHp) / 10)            *
+            (WarCommonHelpers.getNormalizedHp(attackerHp) / 10)            *
             defenseBonusMultiplier
         ));
     }
@@ -465,4 +465,4 @@ namespace BwDamageCalculator {
     }
 }
 
-export default BwDamageCalculator;
+export default WarDamageCalculator;

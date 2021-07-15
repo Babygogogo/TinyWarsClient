@@ -5,7 +5,7 @@ import Timer                from "../../tools/helpers/Timer";
 import CommonModel          from "../../common/model/CommonModel";
 import UserModel            from "../../user/model/UserModel";
 import Types                from "../../tools/helpers/Types";
-import BwVisibilityHelpers  from "../model/BwVisibilityHelpers";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
@@ -167,7 +167,7 @@ namespace TwnsBwUnitView {
                     if (isDiving) {
                         tween.call(() => {
                             this.visible = (i === path.length - 1)
-                                && (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                                && (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                     war,
                                     gridIndex,
                                     unitType,
@@ -178,7 +178,7 @@ namespace TwnsBwUnitView {
                         });
                     } else {
                         tween.call(() => {
-                            this.visible = (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            this.visible = (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex           : path[i - 1],
                                 unitType,
@@ -186,7 +186,7 @@ namespace TwnsBwUnitView {
                                 unitPlayerIndex     : playerIndex,
                                 observerTeamIndexes : watcherTeamIndexes,
                             }))
-                            || (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            || (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex,
                                 unitType,
@@ -207,7 +207,7 @@ namespace TwnsBwUnitView {
                     tween.call(() => {
                         this._setImgUnitFlippedX(false);
                         if ((isBlocked)                                         &&
-                            (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 unitType,
                                 isDiving,
@@ -236,7 +236,7 @@ namespace TwnsBwUnitView {
                         cursor.updateView();
                         this._setImgUnitFlippedX(false);
                         if ((isBlocked)                                         &&
-                            (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 unitType,
                                 isDiving,

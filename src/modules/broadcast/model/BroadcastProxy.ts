@@ -4,7 +4,7 @@ import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import Notify               from "../../tools/notify/Notify";
 import NetManager           from "../../tools/network/NetManager";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import { BroadcastModel }       from "./BroadcastModel";
+import BroadcastModel       from "./BroadcastModel";
 
 namespace BroadcastProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;

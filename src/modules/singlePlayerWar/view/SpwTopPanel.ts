@@ -3,8 +3,8 @@ import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import { ChatPanel }                    from "../../chat/view/ChatPanel";
-import { UserPanel }                    from "../../user/view/UserPanel";
+import ChatPanel = TwnsChatPanel.ChatPanel;import TwnsChatPanel                    from "../../chat/view/ChatPanel";
+import UserPanel = TwnsUserPanel.UserPanel;import TwnsUserPanel                    from "../../user/view/UserPanel";
 import BwCoListPanel = TwnsBwCoListPanel.BwCoListPanel;import TwnsBwCoListPanel                from "../../baseWar/view/BwCoListPanel";
 import BwUnitListPanel = TwnsBwUnitListPanel.BwUnitListPanel;import TwnsBwUnitListPanel              from "../../baseWar/view/BwUnitListPanel";
 import { SpwWarMenuPanel }              from "./SpwWarMenuPanel";
@@ -15,8 +15,8 @@ import Types                        from "../../tools/helpers/Types";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Lang                         from "../../tools/lang/Lang";
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
-import { ChatModel }                    from "../../chat/model/ChatModel";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
+import ChatModel                    from "../../chat/model/ChatModel";
 import BwWar            = TwnsBwWar.BwWar;
 
 namespace TwnsSpwTopPanel {
@@ -172,7 +172,7 @@ namespace TwnsSpwTopPanel {
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
-                const gridIndex = BwHelpers.getIdleBuildingGridIndex(war);
+                const gridIndex = WarCommonHelpers.getIdleBuildingGridIndex(war);
                 if (!gridIndex) {
                     FloatText.show(Lang.getText(LangTextType.A0077));
                 } else {

@@ -13,7 +13,7 @@ import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
-import { MrrModel }                     from "../model/MrrModel";
+import MrrModel                     from "../model/MrrModel";
 import { MrrSelfSettingsModel }         from "../model/MrrSelfSettingsModel";
 import LangTextType                     = TwnsLangTextType.LangTextType;
 import NotifyType                       = TwnsNotifyType.NotifyType;

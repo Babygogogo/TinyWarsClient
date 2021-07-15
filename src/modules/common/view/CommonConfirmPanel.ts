@@ -1,15 +1,15 @@
 
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiButton              from "../../tools/ui/UiButton";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import Helpers              from "../../tools/helpers/Helpers";
-import Lang                 from "../../tools/lang/Lang";
+import Helpers          from "../../tools/helpers/Helpers";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import Types                from "../../tools/helpers/Types";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonConfirmPanel {
+    import LangTextType = TwnsLangTextType.LangTextType;
 
     type OpenDataForCommonConfirmPanel = {
         title?              : string;

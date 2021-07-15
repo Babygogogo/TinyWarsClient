@@ -7,7 +7,7 @@ import TwnsUiLabel                                                              
 import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
 import TwnsUiTab                                                                from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
-import { ChatPanel }                                                            from "../../chat/view/ChatPanel";
+import ChatPanel = TwnsChatPanel.ChatPanel;import TwnsChatPanel                                                            from "../../chat/view/ChatPanel";
 import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel                                                   from "../../common/view/CommonConfirmPanel";
 import { McrMyRoomListPanel }                                                   from "./McrMyRoomListPanel";
 import { McrRoomChooseCoPanel }                                                 from "./McrRoomChooseCoPanel";
@@ -27,9 +27,9 @@ import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import ProtoTypes                                                           from "../../tools/proto/ProtoTypes";
 import Types                                                                from "../../tools/helpers/Types";
-import BwHelpers                                                            from "../../baseWar/model/BwHelpers";
-import BwWarRuleHelpers                                                      from "../../baseWar/model/BwWarRuleHelpers";
-import { McrModel }                                                             from "../../multiCustomRoom/model/McrModel";
+import WarCommonHelpers                                                     from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers                                                      from "../../tools/warHelpers/WarRuleHelpers";
+import McrModel                                                             from "../../multiCustomRoom/model/McrModel";
 import McrProxy                                                             from "../../multiCustomRoom/model/McrProxy";
 import UserModel                                                            from "../../user/model/UserModel";
 import WarMapModel                                                          from "../../warMap/model/WarMapModel";
@@ -498,13 +498,13 @@ class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<Data
             }
         } else {
             const settingsForCommon     = roomInfo.settingsForCommon;
-            const availableCoIdArray    = BwWarRuleHelpers.getAvailableCoIdArrayForPlayer(settingsForCommon.warRule, newPlayerIndex, settingsForCommon.configVersion);
+            const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer(settingsForCommon.warRule, newPlayerIndex, settingsForCommon.configVersion);
             const currCoId              = selfPlayerData.coId;
             McrProxy.reqMcrSetSelfSettings({
                 roomId,
                 playerIndex         : newPlayerIndex,
                 unitAndTileSkinId   : selfPlayerData.unitAndTileSkinId,
-                coId                : availableCoIdArray.indexOf(currCoId) >= 0 ? currCoId : BwWarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray),
+                coId                : availableCoIdArray.indexOf(currCoId) >= 0 ? currCoId : WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray),
             });
         }
     }
@@ -530,7 +530,7 @@ class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<Data
         const data = this.data;
         if (data) {
             const playerIndex       = data.playerIndex;
-            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelpers.getTeamIndex((await McrModel.getRoomInfo(data.roomId)).settingsForCommon.warRule, playerIndex))})`;
+            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex((await McrModel.getRoomInfo(data.roomId)).settingsForCommon.warRule, playerIndex))})`;
         }
     }
     private async _updateState(): Promise<void> {
@@ -613,7 +613,7 @@ class SkinIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSk
             const selfUserId        = UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
-            this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
+            this._imgColor.source   = WarCommonHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
         }
     }
 }

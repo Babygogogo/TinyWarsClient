@@ -12,7 +12,7 @@ import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import Types                        from "../../tools/helpers/Types";
-import { MrrModel }                     from "../model/MrrModel";
+import MrrModel                     from "../model/MrrModel";
 import MrrProxy                     from "../model/MrrProxy";
 import MaxCount                         = CommonConstants.RankMaxConcurrentCount;
 import MinCount                         = CommonConstants.RankMinConcurrentCount;

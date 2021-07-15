@@ -1,19 +1,19 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Logger               from "../../tools/helpers/Logger";
-import Timer                from "../../tools/helpers/Timer";
-import Types                from "../../tools/helpers/Types";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import BwDestructionHelpers from "./BwDestructionHelpers";
-import BwHelpers            from "./BwHelpers";
-import TwnsBwUnit           from "./BwUnit";
-import BwVisibilityHelpers  from "./BwVisibilityHelpers";
-import TwnsBwWar            from "./BwWar";
+import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Logger                   from "../../tools/helpers/Logger";
+import Timer                    from "../../tools/helpers/Timer";
+import Types                    from "../../tools/helpers/Types";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import WarDestructionHelpers    from "../../tools/warHelpers/WarDestructionHelpers";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsBwUnit               from "./BwUnit";
+import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwWar                from "./BwWar";
 
 namespace TwnsBwTurnManager {
     import NotifyType                   = TwnsNotifyType.NotifyType;
@@ -445,7 +445,7 @@ namespace TwnsBwTurnManager {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_01;
             }
 
-            const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             if (visibleUnits == null) {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_02;
             }
@@ -492,7 +492,7 @@ namespace TwnsBwTurnManager {
                     (unit.getPlayerIndex() === playerIndex) && (allUnitsOnMap.push(unit));
                 }
 
-                const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
                 if (visibleUnits == null) {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_03;
                 }
@@ -571,7 +571,7 @@ namespace TwnsBwTurnManager {
                         }
 
                         fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
-                        BwDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+                        WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
                     }
                 }
             }
@@ -590,7 +590,7 @@ namespace TwnsBwTurnManager {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_01;
             }
 
-            const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             if (visibleUnits == null) {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_02;
             }
@@ -638,7 +638,7 @@ namespace TwnsBwTurnManager {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_03;
                 }
 
-                const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
                 if (visibleUnits == null) {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_04;
                 }
@@ -772,7 +772,7 @@ namespace TwnsBwTurnManager {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithExtraData_01;
             }
 
-            const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             if (visibleUnits == null) {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithExtraData_02;
             }
@@ -829,7 +829,7 @@ namespace TwnsBwTurnManager {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_05;
                 }
 
-                const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
                 if (visibleUnits == null) {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_06;
                 }
@@ -858,7 +858,7 @@ namespace TwnsBwTurnManager {
 
                             if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
                                 (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
-                                (BwHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
                             ) {
                                 targetUnits.push(unit);
                             }
@@ -932,7 +932,7 @@ namespace TwnsBwTurnManager {
 
                             if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
                                 (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
-                                (BwHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
                             ) {
                                 const maxFuel = unit.getMaxFuel();
                                 if (maxFuel == null) {
@@ -978,7 +978,7 @@ namespace TwnsBwTurnManager {
 
                             if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
                                 (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
-                                (BwHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
                             ) {
                                 const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                                 if (maxAmmo) {

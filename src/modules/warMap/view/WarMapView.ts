@@ -8,7 +8,7 @@ import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import Types                from "../../tools/helpers/Types";
-import BwHelpers            from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 import CommonModel          from "../../common/model/CommonModel";
 import Timer                from "../../tools/helpers/Timer";
 import UserModel            from "../../user/model/UserModel";
@@ -47,7 +47,7 @@ namespace TwnsWarMapView {
         public showMapByWarData(warData: ISerialWar, players?: ISerialPlayer[]): void {
             const field     = warData.field;
             const tileMap   = field.tileMap;
-            const mapSize   = BwHelpers.getMapSize(tileMap);
+            const mapSize   = WarCommonHelpers.getMapSize(tileMap);
             this.width      = GRID_WIDTH * mapSize.width;
             this.height     = GRID_HEIGHT * mapSize.height;
 

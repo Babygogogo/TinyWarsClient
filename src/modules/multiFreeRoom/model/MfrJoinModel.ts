@@ -4,8 +4,8 @@ import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import Types                from "../../tools/helpers/Types";
-import BwWarRuleHelpers     from "../../baseWar/model/BwWarRuleHelpers";
-import { MfrModel }             from "./MfrModel";
+import WarRuleHelpers     from "../../tools/warHelpers/WarRuleHelpers";
+import MfrModel             from "./MfrModel";
 
 export namespace MfrJoinModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -51,7 +51,7 @@ export namespace MfrJoinModel {
         return await MfrModel.getRoomInfo(getTargetRoomId());
     }
     export async function getTeamIndex(): Promise<number> {
-        return BwWarRuleHelpers.getPlayerRule((await MfrModel.getRoomInfo(getTargetRoomId())).settingsForMfw.initialWarData.settingsForCommon.warRule, getPlayerIndex()).teamIndex;
+        return WarRuleHelpers.getPlayerRule((await MfrModel.getRoomInfo(getTargetRoomId())).settingsForMfw.initialWarData.settingsForCommon.warRule, getPlayerIndex()).teamIndex;
     }
 
     export function resetData(roomInfo: IMfrRoomInfo): void {

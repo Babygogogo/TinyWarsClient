@@ -8,7 +8,7 @@ import TwnsUiTab                                                                
 import TwnsUiTabItemRenderer                                                            from "../../tools/ui/UiTabItemRenderer";
 import TwnsLobbyBottomPanel                                                         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                                                                from "../../lobby/view/LobbyTopPanel";
-import { MrrMainMenuPanel }                                                             from "./MrrMainMenuPanel";
+import MrrMainMenuPanel= TwnsMrrMainMenuPanel.MrrMainMenuPanel;import TwnsMrrMainMenuPanel                                                             from "./MrrMainMenuPanel";
 import { OpenDataForMrrPreviewAdvancedSettingsPage, MrrPreviewAdvancedSettingsPage }    from "./MrrPreviewAdvancedSettingsPage";
 import { OpenDataForMrrPreviewBasicSettingsPage, MrrPreviewBasicSettingsPage }          from "./MrrPreviewBasicSettingsPage";
 import { OpenDataForMrrPreviewMapInfoPage, MrrPreviewMapInfoPage }                      from "./MrrPreviewMapInfoPage";
@@ -19,7 +19,7 @@ import TwnsNotifyType                                                           
 import ProtoTypes                                                                   from "../../tools/proto/ProtoTypes";
 import Types                                                                        from "../../tools/helpers/Types";
 import WarMapModel                                                                  from "../../warMap/model/WarMapModel";
-import { MrrModel }                                                                     from "../model/MrrModel";
+import MrrModel                                                                     from "../model/MrrModel";
 import LangTextType                                                                     = TwnsLangTextType.LangTextType;
 import NotifyType                                                                       = TwnsNotifyType.NotifyType;
 

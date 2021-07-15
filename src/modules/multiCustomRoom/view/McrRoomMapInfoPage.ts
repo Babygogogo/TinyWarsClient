@@ -10,7 +10,7 @@ import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import { McrModel }                     from "../../multiCustomRoom/model/McrModel";
+import McrModel                     from "../../multiCustomRoom/model/McrModel";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 
 export type OpenDataForMcrRoomMapInfoPage = {

@@ -14,7 +14,7 @@ import TwnsNotifyType               from "../../tools/notify/NotifyType";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
 import { McrCreateModel }               from "../model/McrCreateModel";
-import BwWarRuleHelpers             from "../../baseWar/model/BwWarRuleHelpers";
+import WarRuleHelpers             from "../../tools/warHelpers/WarRuleHelpers";
 import LangTextType         = TwnsLangTextType.LangTextType;
 import NotifyType       = TwnsNotifyType.NotifyType;
 
@@ -149,7 +149,7 @@ export class McrCreateChooseCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrCr
         const configVersion = ConfigManager.getLatestFormalVersion();
         const dataArray     : DataForCoRenderer[] = [];
         let index           = 0;
-        for (const coId of BwWarRuleHelpers.getAvailableCoIdArrayForPlayer(creator.getWarRule(), creator.getSelfPlayerIndex(), configVersion)) {
+        for (const coId of WarRuleHelpers.getAvailableCoIdArrayForPlayer(creator.getWarRule(), creator.getSelfPlayerIndex(), configVersion)) {
             dataArray.push({
                 coBasicCfg  : ConfigManager.getCoBasicCfg(configVersion, coId),
                 index,

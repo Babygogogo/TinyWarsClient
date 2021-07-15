@@ -7,16 +7,16 @@ import { ScwWar }                       from "../../singleCustomWar/model/ScwWar
 import { SfwWar }                       from "../../singleFreeWar/model/SfwWar";
 import { SrwWar }                       from "../../singleRankWar/model/SrwWar";
 import { SpwPlayerManager }             from "./SpwPlayerManager";
-import { FlowManager }                  from "../../tools/helpers/FlowManager";
+import FlowManager                  from "../../tools/helpers/FlowManager";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import Logger                       from "../../tools/helpers/Logger";
 import Types                        from "../../tools/helpers/Types";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import Lang                         from "../../tools/lang/Lang";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import BwRobot                      from "../../baseWar/model/BwRobot";
-import BwActionReviser              from "../../baseWar/model/BwActionReviser";
-import { BwWarActionExecutor }          from "../../baseWar/model/BwWarActionExecutor";
+import WarRobot                      from "../../tools/warHelpers/WarRobot";
+import WarActionReviser              from "../../tools/warHelpers/WarActionReviser";
+import WarActionExecutor          from "../../tools/warHelpers/WarActionExecutor";
 
 namespace SpwModel {
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -124,7 +124,7 @@ namespace SpwModel {
         const {
             errorCode   : errorCodeForRobotAction,
             action      : robotAction,
-        } = await BwRobot.getNextAction(war);
+        } = await WarRobot.getNextAction(war);
         if (errorCodeForRobotAction) {
             Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() errorCodeForRobotAction: ${errorCodeForRobotAction}`);
             _warsWithRobotRunning.delete(war);
@@ -339,7 +339,7 @@ namespace SpwModel {
         const {
             errorCode   : errorCodeForRevisedAction,
             action      : revisedAction,
-        } = BwActionReviser.revise(war, action);
+        } = WarActionReviser.revise(war, action);
         if (errorCodeForRevisedAction) {
             Logger.error(`SpwModel.reviseAndExecute() errorCodeForRevisedAction: ${errorCodeForRevisedAction}.`);
             return errorCodeForRevisedAction;
@@ -348,7 +348,7 @@ namespace SpwModel {
             return ClientErrorCode.SpwModel_ReviseAndExecute_00;
         }
 
-        const errorCodeForExecute = await BwWarActionExecutor.checkAndExecute(war, revisedAction, false);
+        const errorCodeForExecute = await WarActionExecutor.checkAndExecute(war, revisedAction, false);
         if (errorCodeForExecute) {
             Logger.error(`SpwModel.reviseAndExecute() errorCodeForExecute: ${errorCodeForExecute}.`);
             return errorCodeForExecute;

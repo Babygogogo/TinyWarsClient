@@ -16,8 +16,8 @@ import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
-import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
-import { McrModel }                     from "../../multiCustomRoom/model/McrModel";
+import WarRuleHelpers              from "../../tools/warHelpers/WarRuleHelpers";
+import McrModel                     from "../../multiCustomRoom/model/McrModel";
 import McrProxy                     from "../../multiCustomRoom/model/McrProxy";
 
 type OpenDataForMcrRoomChooseCoPanel = {
@@ -173,7 +173,7 @@ export class McrRoomChooseCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrRoom
         const configVersion = settingsForCommon.configVersion;
         const dataArray     : DataForCoRenderer[] = [];
         let index           = 0;
-        for (const coId of BwWarRuleHelpers.getAvailableCoIdArrayForPlayer(settingsForCommon.warRule, openData.playerIndex, configVersion) || []) {
+        for (const coId of WarRuleHelpers.getAvailableCoIdArrayForPlayer(settingsForCommon.warRule, openData.playerIndex, configVersion) || []) {
             dataArray.push({
                 coBasicCfg  : ConfigManager.getCoBasicCfg(configVersion, coId),
                 index,

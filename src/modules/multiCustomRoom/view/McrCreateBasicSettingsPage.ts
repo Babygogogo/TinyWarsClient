@@ -4,7 +4,7 @@ import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiTextInput                  from "../../tools/ui/UiTextInput";
 import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
 import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
+import CommonHelpPanel = TwnsCommonHelpPanel.CommonHelpPanel;import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
 import CommonInputPanel = TwnsCommonInputPanel.CommonInputPanel;import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import FloatText                    from "../../tools/helpers/FloatText";

@@ -8,7 +8,7 @@ import TwnsUiTab                                                                
 import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
 import TwnsLobbyBottomPanel                                                     from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                                                        from "../../lobby/view/LobbyTopPanel";
-import { McrMainMenuPanel }                                                     from "./McrMainMenuPanel";
+import McrMainMenuPanel= TwnsMcrMainMenuPanel.McrMainMenuPanel;import TwnsMcrMainMenuPanel                                                     from "./McrMainMenuPanel";
 import { OpenDataForMcrRoomAdvancedSettingsPage, McrRoomAdvancedSettingsPage }  from "./McrRoomAdvancedSettingsPage";
 import { OpenDataForMcrRoomBasicSettingsPage, McrRoomBasicSettingsPage }        from "./McrRoomBasicSettingsPage";
 import { McrRoomInfoPanel }                                                     from "./McrRoomInfoPanel";
@@ -19,7 +19,7 @@ import Lang                                                                 from
 import TwnsLangTextType from "../../tools/lang/LangTextType";
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import Types                                                                from "../../tools/helpers/Types";
-import { McrModel }                                                             from "../../multiCustomRoom/model/McrModel";
+import McrModel                                                             from "../../multiCustomRoom/model/McrModel";
 import McrProxy                                                             from "../../multiCustomRoom/model/McrProxy";
 import WarMapModel                                                          from "../../warMap/model/WarMapModel";
 import { McrJoinModel }                                                         from "../model/McrJoinModel";

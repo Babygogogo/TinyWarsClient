@@ -6,7 +6,7 @@ import TwnsNotifyType               from "../../tools/notify/NotifyType";
 import Helpers                      from "../../tools/helpers/Helpers";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import ProtoManager                 from "../../tools/proto/ProtoManager";
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 
 namespace RwModel {
@@ -60,7 +60,7 @@ namespace RwModel {
         }
 
         const warData                   = ProtoManager.decodeAsSerialWar(encodedWarData);
-        const mapRawData                = await WarMapModel.getRawData(BwHelpers.getMapId(warData));
+        const mapRawData                = await WarMapModel.getRawData(WarCommonHelpers.getMapId(warData));
         const unitDataArray             = mapRawData.unitDataArray || [];
         const field                     = warData.field;
         warData.seedRandomCurrentState  = Helpers.deepClone(warData.seedRandomInitialState);

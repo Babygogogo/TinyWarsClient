@@ -3,7 +3,7 @@ import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import Logger                       from "../../tools/helpers/Logger";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 
 namespace TwnsBwDrawVoteManager {
     import ISerialPlayerManager = ProtoTypes.WarSerialization.ISerialPlayerManager;
@@ -20,7 +20,7 @@ namespace TwnsBwDrawVoteManager {
             } else {
                 let maxVotes = 0;
                 for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {
-                    if (BwHelpers.checkCanVoteForDraw({
+                    if (WarCommonHelpers.checkCanVoteForDraw({
                         playerIndex : playerData.playerIndex,
                         aliveState  : playerData.aliveState,
                     })) {

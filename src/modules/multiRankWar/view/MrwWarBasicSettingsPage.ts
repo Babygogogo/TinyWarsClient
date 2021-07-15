@@ -2,7 +2,7 @@
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
-import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
+import CommonHelpPanel = TwnsCommonHelpPanel.CommonHelpPanel;import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";

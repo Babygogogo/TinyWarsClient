@@ -4,7 +4,7 @@ import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";
 import NetManager                   from "../../tools/network/NetManager";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import { McrModel }                     from "../../multiCustomRoom/model/McrModel";
+import McrModel                     from "../../multiCustomRoom/model/McrModel";
 
 namespace McrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;

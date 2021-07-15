@@ -11,7 +11,7 @@ import TwnsLangTextType         from "../lang/LangTextType";
 import TwnsNotifyType           from "../notify/NotifyType";
 import ProtoTypes               from "../proto/ProtoTypes";
 import Types                    from "../helpers/Types";
-import BwHelpers                from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers         from "../warHelpers/WarCommonHelpers";
 import WarMapModel              from "../../warMap/model/WarMapModel";
 
 namespace TwnsUiMapInfo {
@@ -107,7 +107,7 @@ namespace TwnsUiMapInfo {
             const warData = data.warData;
             if (warData) {
                 const tileMapData       = warData.field.tileMap;
-                const mapSize           = BwHelpers.getMapSize(tileMapData);
+                const mapSize           = WarCommonHelpers.getMapSize(tileMapData);
                 labelMapName.text       = `--`;
                 labelDesigner.text      = `--`;
                 labelPlayersCount.text  = `${warData.playerManager.players.length - 1}`;

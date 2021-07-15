@@ -4,9 +4,9 @@ import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import Types                from "../../tools/helpers/Types";
-import BwWarRuleHelpers     from "../../baseWar/model/BwWarRuleHelpers";
+import WarRuleHelpers     from "../../tools/warHelpers/WarRuleHelpers";
 
-export namespace MfrCreateModel {
+namespace MfrCreateModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import BootTimerType    = Types.BootTimerType;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
@@ -88,7 +88,7 @@ export namespace MfrCreateModel {
         }
     }
     export function tickSelfPlayerIndex(): void {
-        setSelfPlayerIndex(getSelfPlayerIndex() % BwWarRuleHelpers.getPlayersCount(getWarRule()) + 1);
+        setSelfPlayerIndex(getSelfPlayerIndex() % WarRuleHelpers.getPlayersCount(getWarRule()) + 1);
     }
     export function getSelfPlayerIndex(): number {
         return getData().selfPlayerIndex;
@@ -141,72 +141,74 @@ export namespace MfrCreateModel {
     }
 
     export function tickTeamIndex(playerIndex: number): void {
-        BwWarRuleHelpers.tickTeamIndex(getWarRule(), playerIndex);
+        WarRuleHelpers.tickTeamIndex(getWarRule(), playerIndex);
     }
     export function getTeamIndex(playerIndex: number): number {
-        return BwWarRuleHelpers.getTeamIndex(getWarRule(), playerIndex);
+        return WarRuleHelpers.getTeamIndex(getWarRule(), playerIndex);
     }
 
     export function setInitialFund(playerIndex: number, fund: number): void {
-        BwWarRuleHelpers.setInitialFund(getWarRule(), playerIndex, fund);
+        WarRuleHelpers.setInitialFund(getWarRule(), playerIndex, fund);
     }
     export function getInitialFund(playerIndex: number): number {
-        return BwWarRuleHelpers.getInitialFund(getWarRule(), playerIndex);
+        return WarRuleHelpers.getInitialFund(getWarRule(), playerIndex);
     }
 
     export function setIncomeMultiplier(playerIndex: number, multiplier: number): void {
-        BwWarRuleHelpers.setIncomeMultiplier(getWarRule(), playerIndex, multiplier);
+        WarRuleHelpers.setIncomeMultiplier(getWarRule(), playerIndex, multiplier);
     }
     export function getIncomeMultiplier(playerIndex: number): number {
-        return BwWarRuleHelpers.getIncomeMultiplier(getWarRule(), playerIndex);
+        return WarRuleHelpers.getIncomeMultiplier(getWarRule(), playerIndex);
     }
 
     export function setEnergyAddPctOnLoadCo(playerIndex: number, percentage: number): void {
-        BwWarRuleHelpers.setEnergyAddPctOnLoadCo(getWarRule(), playerIndex, percentage);
+        WarRuleHelpers.setEnergyAddPctOnLoadCo(getWarRule(), playerIndex, percentage);
     }
     export function getEnergyAddPctOnLoadCo(playerIndex: number): number {
-        return BwWarRuleHelpers.getEnergyAddPctOnLoadCo(getWarRule(), playerIndex);
+        return WarRuleHelpers.getEnergyAddPctOnLoadCo(getWarRule(), playerIndex);
     }
 
     export function setEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {
-        BwWarRuleHelpers.setEnergyGrowthMultiplier(getWarRule(), playerIndex, multiplier);
+        WarRuleHelpers.setEnergyGrowthMultiplier(getWarRule(), playerIndex, multiplier);
     }
     export function getEnergyGrowthMultiplier(playerIndex: number): number {
-        return BwWarRuleHelpers.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
+        return WarRuleHelpers.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
     }
 
     export function setLuckLowerLimit(playerIndex: number, limit: number): void {
-        BwWarRuleHelpers.setLuckLowerLimit(getWarRule(), playerIndex, limit);
+        WarRuleHelpers.setLuckLowerLimit(getWarRule(), playerIndex, limit);
     }
     export function getLuckLowerLimit(playerIndex: number): number {
-        return BwWarRuleHelpers.getLuckLowerLimit(getWarRule(), playerIndex);
+        return WarRuleHelpers.getLuckLowerLimit(getWarRule(), playerIndex);
     }
 
     export function setLuckUpperLimit(playerIndex: number, limit: number): void {
-        BwWarRuleHelpers.setLuckUpperLimit(getWarRule(), playerIndex, limit);
+        WarRuleHelpers.setLuckUpperLimit(getWarRule(), playerIndex, limit);
     }
     export function getLuckUpperLimit(playerIndex: number): number {
-        return BwWarRuleHelpers.getLuckUpperLimit(getWarRule(), playerIndex);
+        return WarRuleHelpers.getLuckUpperLimit(getWarRule(), playerIndex);
     }
 
     export function setMoveRangeModifier(playerIndex: number, modifier: number): void {
-        BwWarRuleHelpers.setMoveRangeModifier(getWarRule(), playerIndex, modifier);
+        WarRuleHelpers.setMoveRangeModifier(getWarRule(), playerIndex, modifier);
     }
     export function getMoveRangeModifier(playerIndex: number): number {
-        return BwWarRuleHelpers.getMoveRangeModifier(getWarRule(), playerIndex);
+        return WarRuleHelpers.getMoveRangeModifier(getWarRule(), playerIndex);
     }
 
     export function setAttackPowerModifier(playerIndex: number, modifier: number): void {
-        BwWarRuleHelpers.setAttackPowerModifier(getWarRule(), playerIndex, modifier);
+        WarRuleHelpers.setAttackPowerModifier(getWarRule(), playerIndex, modifier);
     }
     export function getAttackPowerModifier(playerIndex: number): number {
-        return BwWarRuleHelpers.getAttackPowerModifier(getWarRule(), playerIndex);
+        return WarRuleHelpers.getAttackPowerModifier(getWarRule(), playerIndex);
     }
 
     export function setVisionRangeModifier(playerIndex: number, modifier: number): void {
-        BwWarRuleHelpers.setVisionRangeModifier(getWarRule(), playerIndex, modifier);
+        WarRuleHelpers.setVisionRangeModifier(getWarRule(), playerIndex, modifier);
     }
     export function getVisionRangeModifier(playerIndex: number): number {
-        return BwWarRuleHelpers.getVisionRangeModifier(getWarRule(), playerIndex);
+        return WarRuleHelpers.getVisionRangeModifier(getWarRule(), playerIndex);
     }
 }
+
+export default MfrCreateModel;

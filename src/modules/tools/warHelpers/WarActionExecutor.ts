@@ -1,22 +1,22 @@
 
-import BwHelpers            from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers     from "./WarCommonHelpers";
 import TwnsBwUnit           from "../../baseWar/model/BwUnit";
 import TwnsBwWar            from "../../baseWar/model/BwWar";
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import FloatText            from "../../tools/helpers/FloatText";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import BwCoSkillHelpers     from "./BwCoSkillHelpers";
-import BwDamageCalculator   from "./BwDamageCalculator";
-import BwDestructionHelpers from "./BwDestructionHelpers";
-import TwnsBwPlayer         from "./BwPlayer";
-import TwnsBwTile           from "./BwTile";
-import BwVisibilityHelpers  from "./BwVisibilityHelpers";
+import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+import CommonConstants      from "../helpers/CommonConstants";
+import ConfigManager        from "../helpers/ConfigManager";
+import FloatText            from "../helpers/FloatText";
+import GridIndexHelpers     from "../helpers/GridIndexHelpers";
+import Types                from "../helpers/Types";
+import WarCoSkillHelpers    from "./WarCoSkillHelpers";
+import ProtoTypes           from "../proto/ProtoTypes";
+import WarDamageCalculator  from "./WarDamageCalculator";
+import WarDestructionHelpers from "./WarDestructionHelpers";
+import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
+import TwnsBwTile           from "../../baseWar/model/BwTile";
+import WarVisibilityHelpers from "./WarVisibilityHelpers";
 
-export namespace BwWarActionExecutor {
+namespace WarActionExecutor {
     import GridIndex                            = Types.GridIndex;
     import UnitActionState                      = Types.UnitActionState;
     import MovePath                             = Types.MovePath;
@@ -128,7 +128,7 @@ export namespace BwWarActionExecutor {
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit) {
             war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            BwDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+            WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
         }
 
         return ClientErrorCode.NoError;
@@ -141,7 +141,7 @@ export namespace BwWarActionExecutor {
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit) {
             war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            BwDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+            WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
@@ -181,7 +181,7 @@ export namespace BwWarActionExecutor {
         const playerIndex   = playerInTurn.getPlayerIndex();
         const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
         const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
-        const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * BwHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
+        const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * WarCommonHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
         const unit          = new BwUnit();
         unit.init({
             gridIndex,
@@ -205,7 +205,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
             const unitMap       = war.getUnitMap();
             const unitId        = unitMap.getNextUnitId();
@@ -234,7 +234,7 @@ export namespace BwWarActionExecutor {
             const playerIndex   = playerInTurn.getPlayerIndex();
             const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
-            const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * BwHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
+            const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * WarCommonHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
             const unit          = new BwUnit();
             unit.init({
                 gridIndex,
@@ -392,7 +392,7 @@ export namespace BwWarActionExecutor {
             : normalExeSystemDestroyPlayerForce(war, action);
     }
     async function fastExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<ClientErrorCode> {
-        BwDestructionHelpers.destroyPlayerForce(war, action.targetPlayerIndex, false);
+        WarDestructionHelpers.destroyPlayerForce(war, action.targetPlayerIndex, false);
 
         return ClientErrorCode.NoError;
     }
@@ -400,7 +400,7 @@ export namespace BwWarActionExecutor {
         const desc = await war.getDescForExeSystemDestroyPlayerForce(action);
         (desc) && (FloatText.show(desc));
 
-        BwDestructionHelpers.destroyPlayerForce(war, action.targetPlayerIndex, true);
+        WarDestructionHelpers.destroyPlayerForce(war, action.targetPlayerIndex, true);
 
         war.updateTilesAndUnitsOnVisibilityChanged();
         return ClientErrorCode.NoError;
@@ -475,16 +475,16 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
             const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             if (path.isBlocked) {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
             } else {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -530,7 +530,7 @@ export namespace BwWarActionExecutor {
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
-                        BwDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
+                        WarDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
                     }
                 }
 
@@ -542,13 +542,13 @@ export namespace BwWarActionExecutor {
         } else {
             const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             if (path.isBlocked) {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
             } else {
                 const targetGridIndex                                           = action.targetGridIndex as GridIndex;
-                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = BwDamageCalculator.getFinalBattleDamage({
+                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = WarDamageCalculator.getFinalBattleDamage({
                     war,
                     attackerMovePath: pathNodes,
                     launchUnitId,
@@ -560,7 +560,7 @@ export namespace BwWarActionExecutor {
                     return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_01;
                 }
 
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -628,7 +628,7 @@ export namespace BwWarActionExecutor {
                         }
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
-                        const unitLostNormalizedHp2 = BwHelpers.getNormalizedHp(unitOldHp2) - BwHelpers.getNormalizedHp(unitNewHp2);
+                        const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
                         if (errorCodeForPrimaryAmmo) {
@@ -749,11 +749,11 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
             const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             if (path.isBlocked) {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -762,15 +762,15 @@ export namespace BwWarActionExecutor {
 
             } else {
                 const selfTeamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-                const allVisibleUnits   = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
+                const allVisibleUnits   = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
 
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
                 await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, action.targetGridIndex as GridIndex);
                 if ((!allVisibleUnits.has(focusUnit))                   &&
-                    (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                         war,
                         gridIndex           : pathNodes[pathNodes.length - 1],
                         unitType            : focusUnit.getUnitType(),
@@ -825,7 +825,7 @@ export namespace BwWarActionExecutor {
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
-                        BwDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
+                        WarDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
                     }
 
                     affectedUnitSet.add(unit);
@@ -870,7 +870,7 @@ export namespace BwWarActionExecutor {
         } else {
             const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             if (path.isBlocked) {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -879,7 +879,7 @@ export namespace BwWarActionExecutor {
 
             } else {
                 const targetGridIndex                                           = action.targetGridIndex as GridIndex;
-                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = BwDamageCalculator.getFinalBattleDamage({
+                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = WarDamageCalculator.getFinalBattleDamage({
                     war,
                     attackerMovePath: pathNodes,
                     launchUnitId,
@@ -892,15 +892,15 @@ export namespace BwWarActionExecutor {
                 }
 
                 const selfTeamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-                const allVisibleUnits   = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
+                const allVisibleUnits   = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
 
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
                 await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, targetGridIndex);
                 if ((!allVisibleUnits.has(focusUnit))                   &&
-                    (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                         war,
                         gridIndex           : pathNodes[pathNodes.length - 1],
                         unitType            : focusUnit.getUnitType(),
@@ -976,7 +976,7 @@ export namespace BwWarActionExecutor {
                         }
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
-                        const unitLostNormalizedHp2 = BwHelpers.getNormalizedHp(unitOldHp2) - BwHelpers.getNormalizedHp(unitNewHp2);
+                        const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
                         if (errorCodeForPrimaryAmmo) {
@@ -1133,16 +1133,16 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
             const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             if (path.isBlocked) {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
             } else {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -1188,7 +1188,7 @@ export namespace BwWarActionExecutor {
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
-                        BwDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
+                        WarDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
                     }
                 }
 
@@ -1200,13 +1200,13 @@ export namespace BwWarActionExecutor {
         } else {
             const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             if (path.isBlocked) {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
             } else {
                 const targetGridIndex                                           = action.targetGridIndex as GridIndex;
-                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = BwDamageCalculator.getFinalBattleDamage({
+                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = WarDamageCalculator.getFinalBattleDamage({
                     war,
                     attackerMovePath: pathNodes,
                     launchUnitId,
@@ -1218,7 +1218,7 @@ export namespace BwWarActionExecutor {
                     return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_01;
                 }
 
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -1286,7 +1286,7 @@ export namespace BwWarActionExecutor {
                         }
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
-                        const unitLostNormalizedHp2 = BwHelpers.getNormalizedHp(unitOldHp2) - BwHelpers.getNormalizedHp(unitNewHp2);
+                        const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
                         if (errorCodeForPrimaryAmmo) {
@@ -1407,11 +1407,11 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
             const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             if (path.isBlocked) {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -1420,15 +1420,15 @@ export namespace BwWarActionExecutor {
 
             } else {
                 const selfTeamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-                const allVisibleUnits   = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
+                const allVisibleUnits   = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
 
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
                 await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, action.targetGridIndex as GridIndex);
                 if ((!allVisibleUnits.has(focusUnit))                   &&
-                    (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                         war,
                         gridIndex           : pathNodes[pathNodes.length - 1],
                         unitType            : focusUnit.getUnitType(),
@@ -1483,7 +1483,7 @@ export namespace BwWarActionExecutor {
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
-                        BwDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
+                        WarDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
                     }
 
                     affectedUnitSet.add(unit);
@@ -1528,7 +1528,7 @@ export namespace BwWarActionExecutor {
         } else {
             const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             if (path.isBlocked) {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -1537,7 +1537,7 @@ export namespace BwWarActionExecutor {
 
             } else {
                 const targetGridIndex                                           = action.targetGridIndex as GridIndex;
-                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = BwDamageCalculator.getFinalBattleDamage({
+                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = WarDamageCalculator.getFinalBattleDamage({
                     war,
                     attackerMovePath: pathNodes,
                     launchUnitId,
@@ -1550,15 +1550,15 @@ export namespace BwWarActionExecutor {
                 }
 
                 const selfTeamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-                const allVisibleUnits   = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
+                const allVisibleUnits   = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
 
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
                 await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, targetGridIndex);
                 if ((!allVisibleUnits.has(focusUnit))                   &&
-                    (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                         war,
                         gridIndex           : pathNodes[pathNodes.length - 1],
                         unitType            : focusUnit.getUnitType(),
@@ -1634,7 +1634,7 @@ export namespace BwWarActionExecutor {
                         }
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
-                        const unitLostNormalizedHp2 = BwHelpers.getNormalizedHp(unitOldHp2) - BwHelpers.getNormalizedHp(unitNewHp2);
+                        const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
                         if (errorCodeForPrimaryAmmo) {
@@ -1789,7 +1789,7 @@ export namespace BwWarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         focusUnit.setActionState(UnitActionState.Acted);
         if (path.isBlocked) {
             unitMap.setUnitOnMap(focusUnit);
@@ -1807,7 +1807,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -1815,7 +1815,7 @@ export namespace BwWarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
@@ -1851,7 +1851,7 @@ export namespace BwWarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -1889,7 +1889,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -1897,7 +1897,7 @@ export namespace BwWarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -1946,7 +1946,7 @@ export namespace BwWarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -1983,7 +1983,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -1991,7 +1991,7 @@ export namespace BwWarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2043,7 +2043,7 @@ export namespace BwWarActionExecutor {
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
         const isSuccessful  = !path.isBlocked;
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(true));
@@ -2056,7 +2056,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -2065,7 +2065,7 @@ export namespace BwWarActionExecutor {
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
         const isSuccessful  = !path.isBlocked;
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(true));
@@ -2074,7 +2074,7 @@ export namespace BwWarActionExecutor {
         focusUnit.updateView();
         if (isSuccessful) {
             const endingGridIndex = pathNodes[pathNodes.length - 1];
-            if (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+            if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                 war,
                 unitType            : focusUnit.getUnitType(),
                 unitPlayerIndex     : focusUnit.getPlayerIndex(),
@@ -2103,7 +2103,7 @@ export namespace BwWarActionExecutor {
         const unitMap           = war.getUnitMap();
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2135,7 +2135,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const path              = action.path as MovePath;
@@ -2144,7 +2144,7 @@ export namespace BwWarActionExecutor {
         const unitMap           = war.getUnitMap();
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2206,7 +2206,7 @@ export namespace BwWarActionExecutor {
         const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
 
         if (path.isBlocked) {
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2214,7 +2214,7 @@ export namespace BwWarActionExecutor {
             const targetUnit    = unitMap.getUnitOnMap(endingGridIndex);
             const player        = war.getPlayer(focusUnit.getPlayerIndex());
             unitMap.removeUnitOnMap(endingGridIndex, true);
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2290,7 +2290,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const path              = action.path as MovePath;
@@ -2301,7 +2301,7 @@ export namespace BwWarActionExecutor {
         const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
 
         if (path.isBlocked) {
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2312,7 +2312,7 @@ export namespace BwWarActionExecutor {
             const targetUnit    = unitMap.getUnitOnMap(endingGridIndex);
             const player        = war.getPlayer(focusUnit.getPlayerIndex());
             unitMap.removeUnitOnMap(endingGridIndex, false);
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2400,7 +2400,7 @@ export namespace BwWarActionExecutor {
         const unitMap       = war.getUnitMap();
         const launchUnitId  = action.launchUnitId;
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2420,7 +2420,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -2428,7 +2428,7 @@ export namespace BwWarActionExecutor {
         const unitMap       = war.getUnitMap();
         const launchUnitId  = action.launchUnitId;
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2466,7 +2466,7 @@ export namespace BwWarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2500,7 +2500,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -2508,7 +2508,7 @@ export namespace BwWarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2564,7 +2564,7 @@ export namespace BwWarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
 
         if (path.isBlocked) {
@@ -2596,7 +2596,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -2604,7 +2604,7 @@ export namespace BwWarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
 
         if (path.isBlocked) {
@@ -2647,7 +2647,7 @@ export namespace BwWarActionExecutor {
         const unitMap       = war.getUnitMap();
         const launchUnitId  = action.launchUnitId;
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2686,10 +2686,10 @@ export namespace BwWarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const extraData     = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
             const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2723,7 +2723,7 @@ export namespace BwWarActionExecutor {
 
         } else {
             const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2772,7 +2772,7 @@ export namespace BwWarActionExecutor {
         const pathNodes     = revisedPath.nodes;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2805,7 +2805,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const revisedPath   = action.path as MovePath;
@@ -2813,7 +2813,7 @@ export namespace BwWarActionExecutor {
         const pathNodes     = revisedPath.nodes;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2866,7 +2866,7 @@ export namespace BwWarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
         const isSuccessful  = !revisedPath.isBlocked;
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(false));
@@ -2879,7 +2879,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const unitMap       = war.getUnitMap();
@@ -2888,7 +2888,7 @@ export namespace BwWarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
         const isSuccessful  = !revisedPath.isBlocked;
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(false));
@@ -2897,7 +2897,7 @@ export namespace BwWarActionExecutor {
         focusUnit.updateView();
         if (isSuccessful) {
             const endingGridIndex = pathNodes[pathNodes.length - 1];
-            if (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+            if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                 war,
                 unitType            : focusUnit.getUnitType(),
                 unitPlayerIndex     : focusUnit.getPlayerIndex(),
@@ -2954,12 +2954,12 @@ export namespace BwWarActionExecutor {
         }
 
         if (revisedPath.isBlocked) {
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
         } else {
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2987,12 +2987,12 @@ export namespace BwWarActionExecutor {
             const skillDataList : IDataForUseCoSkill[] = [];
             const skillIdList   = player.getCoCurrentSkills() || [];
             for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                const dataForUseCoSkill = BwCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex);
+                const dataForUseCoSkill = WarCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex);
                 if (dataForUseCoSkill == null) {
                     return ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_09;
                 }
 
-                BwCoSkillHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skillIdList[skillIndex], dataForUseCoSkill);
+                WarCoSkillHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skillIdList[skillIndex], dataForUseCoSkill);
                 skillDataList.push(dataForUseCoSkill);
             }
         }
@@ -3011,14 +3011,14 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
             const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
             const player        = focusUnit.getPlayer();
             const currentEnergy = player.getCoCurrentEnergy();
 
             if (revisedPath.isBlocked) {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -3026,7 +3026,7 @@ export namespace BwWarActionExecutor {
                 focusUnit.updateView();
 
             } else {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -3059,7 +3059,7 @@ export namespace BwWarActionExecutor {
                         return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_04;
                     }
 
-                    BwCoSkillHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skillIdList[skillIndex], dataForUseCoSkill);
+                    WarCoSkillHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skillIdList[skillIndex], dataForUseCoSkill);
                 }
 
                 await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
@@ -3117,7 +3117,7 @@ export namespace BwWarActionExecutor {
             }
 
             if (revisedPath.isBlocked) {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -3125,7 +3125,7 @@ export namespace BwWarActionExecutor {
                 focusUnit.updateView();
 
             } else {
-                BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
@@ -3153,12 +3153,12 @@ export namespace BwWarActionExecutor {
                 const skillDataList : IDataForUseCoSkill[] = [];
                 const skillIdList   = player.getCoCurrentSkills() || [];
                 for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                    const dataForUseCoSkill = BwCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex);
+                    const dataForUseCoSkill = WarCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex);
                     if (dataForUseCoSkill == null) {
                         return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_12;
                     }
 
-                    BwCoSkillHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skillIdList[skillIndex], dataForUseCoSkill);
+                    WarCoSkillHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skillIdList[skillIndex], dataForUseCoSkill);
                     skillDataList.push(dataForUseCoSkill);
                 }
 
@@ -3207,7 +3207,7 @@ export namespace BwWarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -3219,7 +3219,7 @@ export namespace BwWarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
         }
 
         const unitMap       = war.getUnitMap();
@@ -3227,7 +3227,7 @@ export namespace BwWarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
+        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -3287,7 +3287,7 @@ export namespace BwWarActionExecutor {
         const destroyedTileSet = new Set([tile]);
         if (tile.getType() === TileType.Meteor) {
             const tileMap           = war.getTileMap();
-            const adjacentPlasmas   = BwHelpers.getAdjacentPlasmas(tileMap, gridIndex);
+            const adjacentPlasmas   = WarCommonHelpers.getAdjacentPlasmas(tileMap, gridIndex);
             if (adjacentPlasmas == null) {
                 return { errorCode: ClientErrorCode.BwWarActionExecutor_HandleDestructionForTile_02 };
             }
@@ -3379,7 +3379,7 @@ export namespace BwWarActionExecutor {
                 if ((cfg)                                                                                                                                                   &&
                     (targetLostNormalizedHp >= cfg[2])                                                                                                                      &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))                                                                      &&
-                    ((hasAttackerLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(attackerGridIndex, cfg[0], attackerCoGridIndexListOnMap, attackerCoZoneRadius)))
+                    ((hasAttackerLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(attackerGridIndex, cfg[0], attackerCoGridIndexListOnMap, attackerCoZoneRadius)))
                 ) {
                     attackerUnit.addPromotion();
                 }
@@ -3428,9 +3428,11 @@ export namespace BwWarActionExecutor {
         }
 
         if (unit.getCurrentHp() <= 0) {
-            BwDestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false);
+            WarDestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false);
         }
 
         return ClientErrorCode.NoError;
     }
 }
+
+export default WarActionExecutor;

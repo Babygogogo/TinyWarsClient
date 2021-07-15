@@ -8,7 +8,7 @@ import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import Types                from "../../tools/helpers/Types";
-import BwHelpers            from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 
 namespace TwnsBwFogMap {
     import ForceFogCode             = Types.ForceFogCode;
@@ -62,7 +62,7 @@ namespace TwnsBwFogMap {
                 return ClientErrorCode.BwFogMapInit03;
             }
 
-            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+            if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 return ClientErrorCode.BwFogMapInit04;
             }
 
@@ -130,7 +130,7 @@ namespace TwnsBwFogMap {
 
             const serialMapsFromPath: IDataForFogMapFromPath[] = [];
             for (const [playerIndex, map] of allMapsFromPath) {
-                const visibilityArray = BwHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                const visibilityArray = WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                 if (visibilityArray != null) {
                     serialMapsFromPath.push({
                         playerIndex,
@@ -158,7 +158,7 @@ namespace TwnsBwFogMap {
                     (player.getAliveState() === Types.PlayerAliveState.Alive)   &&
                     (targetTeamIndexes.has(player.getTeamIndex()))
                 ) {
-                    const visibilityArray = BwHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                    const visibilityArray = WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                     if (visibilityArray != null) {
                         mapsFromPath.push({
                             playerIndex,

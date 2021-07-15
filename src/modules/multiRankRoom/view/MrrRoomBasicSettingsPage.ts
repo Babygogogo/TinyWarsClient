@@ -2,7 +2,7 @@
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
-import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
+import CommonHelpPanel = TwnsCommonHelpPanel.CommonHelpPanel;import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
@@ -14,7 +14,7 @@ import NotifyType       = TwnsNotifyType.NotifyType;
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
-import { MrrModel }                     from "../model/MrrModel";
+import MrrModel                     from "../model/MrrModel";
 
 export type OpenDataForMrrRoomBasicSettingsPage = {
     roomId  : number | null;

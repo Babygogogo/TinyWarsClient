@@ -2,8 +2,8 @@
 import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import { ChatPanel }                    from "../../chat/view/ChatPanel";
-import { UserPanel }                    from "../../user/view/UserPanel";
+import ChatPanel = TwnsChatPanel.ChatPanel;import TwnsChatPanel                    from "../../chat/view/ChatPanel";
+import UserPanel = TwnsUserPanel.UserPanel;import TwnsUserPanel                    from "../../user/view/UserPanel";
 import BwCoListPanel = TwnsBwCoListPanel.BwCoListPanel;import TwnsBwCoListPanel                from "../../baseWar/view/BwCoListPanel";
 import BwUnitListPanel = TwnsBwUnitListPanel.BwUnitListPanel;import TwnsBwUnitListPanel              from "../../baseWar/view/BwUnitListPanel";
 import { RwWar }                        from "../model/RwWar";
@@ -15,7 +15,7 @@ import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
-import { ChatModel }                    from "../../chat/model/ChatModel";
+import ChatModel                    from "../../chat/model/ChatModel";
 import RwModel                      from "../model/RwModel";
 
 namespace TwnsRwTopPanel {

@@ -10,7 +10,7 @@ import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import BwVisibilityHelpers            from "../../baseWar/model/BwVisibilityHelpers";
+import WarVisibilityHelpers           from "../../tools/warHelpers/WarVisibilityHelpers";
 import WarAction                        = ProtoTypes.WarAction;
 import ISpmWarSaveSlotExtraData         = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
 import BwWar            = TwnsBwWar.BwWar;
@@ -29,12 +29,12 @@ export abstract class SpwWar extends BwWar {
 
     public updateTilesAndUnitsOnVisibilityChanged(): void {
         const teamIndexes   = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-        const visibleUnits  = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
+        const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
         for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
             unit.setViewVisible(visibleUnits.has(unit));
         }
 
-        const visibleTiles  = BwVisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
+        const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
         const tileMap       = this.getTileMap();
         for (const tile of tileMap.getAllTiles()) {
             tile.setHasFog(!visibleTiles.has(tile));

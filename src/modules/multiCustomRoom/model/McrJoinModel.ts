@@ -6,8 +6,8 @@ import TwnsNotifyType               from "../../tools/notify/NotifyType";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import McrProxy                     from "../../multiCustomRoom/model/McrProxy";
 import UserModel                    from "../../user/model/UserModel";
-import { McrModel }                     from "./McrModel";
-import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import McrModel                     from "./McrModel";
+import WarRuleHelpers              from "../../tools/warHelpers/WarRuleHelpers";
 
 export namespace McrJoinModel {
     import NotifyType                       = TwnsNotifyType.NotifyType;
@@ -29,7 +29,7 @@ export namespace McrJoinModel {
             return {
                 roomId          : roomInfo.roomId,
                 isReady         : false,
-                coId            : BwWarRuleHelpers.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
+                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
                 playerIndex,
                 unitAndTileSkinId,
             };
@@ -61,7 +61,7 @@ export namespace McrJoinModel {
     }
 
     function generateAvailablePlayerIndexList(info: IMcrRoomInfo): number[] {
-        const playersCount      = BwWarRuleHelpers.getPlayersCount(info.settingsForCommon.warRule);
+        const playersCount      = WarRuleHelpers.getPlayersCount(info.settingsForCommon.warRule);
         const playerInfoList    = info.playerDataList;
         const indexes           : number[] = [];
         for (let i = 1; i <= playersCount; ++i) {

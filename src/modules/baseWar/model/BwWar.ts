@@ -1,5 +1,5 @@
 
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Logger                       from "../../tools/helpers/Logger";
@@ -115,7 +115,7 @@ namespace TwnsBwWar {
             const commonSettingManagerError = await this.getCommonSettingManager().init({
                 settings                : data.settingsForCommon,
                 allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager ? dataForWarEventManager.warEventFullData : undefined),
-                playersCountUnneutral   : BwHelpers.getPlayersCountUnneutral(data.playerManager),
+                playersCountUnneutral   : WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
             });
             if (commonSettingManagerError) {
                 return commonSettingManagerError;

@@ -3,7 +3,7 @@ import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsUiButton              from "../../tools/ui/UiButton";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import { MmWarRulePanel }       from "./MmWarRulePanel";
+import MmWarRulePanel= TwnsMmWarRulePanel.MmWarRulePanel;import TwnsMmWarRulePanel       from "./MmWarRulePanel";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;

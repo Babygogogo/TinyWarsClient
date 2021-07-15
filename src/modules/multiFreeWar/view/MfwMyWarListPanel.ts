@@ -6,7 +6,7 @@ import TwnsUiLabel                                                              
 import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
 import TwnsUiTab                                                                from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
-import { MfrMainMenuPanel }                                                     from "../../multiFreeRoom/view/MfrMainMenuPanel";
+import MfrMainMenuPanel= TwnsMfrMainMenuPanel.MfrMainMenuPanel;import TwnsMfrMainMenuPanel                                                     from "../../multiFreeRoom/view/MfrMainMenuPanel";
 import TwnsLobbyBottomPanel                                                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                                                    from "../../lobby/view/LobbyTopPanel";
 import TwnsLangTextType                                                     from "../../tools/lang/LangTextType";

@@ -10,7 +10,7 @@ import { ScrCreateMapListPanel }            from "./ScrCreateMapListPanel";
 import { ScrCreateAdvancedSettingsPage }    from "./ScrCreateAdvancedSettingsPage";
 import { ScrCreateMapInfoPage }             from "./ScrCreateMapInfoPage";
 import { ScrCreatePlayerInfoPage }          from "./ScrCreatePlayerInfoPage";
-import { FlowManager }                      from "../../tools/helpers/FlowManager";
+import FlowManager                      from "../../tools/helpers/FlowManager";
 import Helpers                          from "../../tools/helpers/Helpers";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";

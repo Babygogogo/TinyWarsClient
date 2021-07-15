@@ -4,12 +4,12 @@ import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import { ChatPanel }                    from "../../chat/view/ChatPanel";
+import ChatPanel = TwnsChatPanel.ChatPanel;import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import CommonInputPanel = TwnsCommonInputPanel.CommonInputPanel;import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
-import { UserSettingsPanel }            from "../../user/view/UserSettingsPanel";
-import { MfrCreateSettingsPanel }       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
-import { SpmCreateSfwSaveSlotsPanel }   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
+import UserSettingsPanel= TwnsUserSettingsPanel.UserSettingsPanel;import TwnsUserSettingsPanel            from "../../user/view/UserSettingsPanel";
+import MfrCreateSettingsPanel= TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel;import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
+import SpmCreateSfwSaveSlotsPanel= TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
 import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
 import BwCoListPanel = TwnsBwCoListPanel.BwCoListPanel;import TwnsBwCoListPanel                from "../../baseWar/view/BwCoListPanel";
@@ -18,11 +18,11 @@ import { SpwPlayerManager }             from "../model/SpwPlayerManager";
 import { SpwWar }                       from "../model/SpwWar";
 import { SpwChooseCoPanel }             from "./SpwChooseCoPanel";
 import { SpwLoadWarPanel }              from "./SpwLoadWarPanel";
-import { TwWar }                        from "../../testWar/model/TwWar";
+import TwWar= TwnsTwWar.TwWar;import TwnsTwWar                        from "../../testWar/model/TwWar";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
-import { FlowManager }                  from "../../tools/helpers/FlowManager";
+import FlowManager                  from "../../tools/helpers/FlowManager";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
 import Logger                       from "../../tools/helpers/Logger";
@@ -30,8 +30,8 @@ import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
-import BwWarRuleHelpers             from "../../baseWar/model/BwWarRuleHelpers";
-import { MfrCreateModel }               from "../../multiFreeRoom/model/MfrCreateModel";
+import WarRuleHelpers             from "../../tools/warHelpers/WarRuleHelpers";
+import MfrCreateModel               from "../../multiFreeRoom/model/MfrCreateModel";
 import UserModel                    from "../../user/model/UserModel";
 import UserProxy                    from "../../user/model/UserProxy";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
@@ -867,7 +867,7 @@ class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPl
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelpers.setInitialFund(war.getWarRule(), playerIndex, value);
+                                WarRuleHelpers.setInitialFund(war.getWarRule(), playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -904,7 +904,7 @@ class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPl
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelpers.setIncomeMultiplier(war.getWarRule(), playerIndex, value);
+                                WarRuleHelpers.setIncomeMultiplier(war.getWarRule(), playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -941,7 +941,7 @@ class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPl
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelpers.setEnergyAddPctOnLoadCo(war.getWarRule(), playerIndex, value);
+                                WarRuleHelpers.setEnergyAddPctOnLoadCo(war.getWarRule(), playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -978,7 +978,7 @@ class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPl
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelpers.setEnergyGrowthMultiplier(war.getWarRule(), playerIndex, value);
+                                WarRuleHelpers.setEnergyGrowthMultiplier(war.getWarRule(), playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -1015,7 +1015,7 @@ class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPl
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelpers.setMoveRangeModifier(war.getWarRule(), playerIndex, value);
+                                WarRuleHelpers.setMoveRangeModifier(war.getWarRule(), playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -1052,7 +1052,7 @@ class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPl
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelpers.setAttackPowerModifier(war.getWarRule(), playerIndex, value);
+                                WarRuleHelpers.setAttackPowerModifier(war.getWarRule(), playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -1089,7 +1089,7 @@ class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPl
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                BwWarRuleHelpers.setVisionRangeModifier(war.getWarRule(), playerIndex, value);
+                                WarRuleHelpers.setVisionRangeModifier(war.getWarRule(), playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -1129,10 +1129,10 @@ class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPl
                                 const upperLimit    = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
                                 const warRule       = war.getWarRule();
                                 if (value <= upperLimit) {
-                                    BwWarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
+                                    WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
                                 } else {
-                                    BwWarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
-                                    BwWarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, upperLimit);
+                                    WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
+                                    WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, upperLimit);
                                 }
                                 this._updateView();
                             }
@@ -1173,10 +1173,10 @@ class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPl
                                 const lowerLimit    = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
                                 const warRule       = war.getWarRule();
                                 if (value >= lowerLimit) {
-                                    BwWarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
+                                    WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
                                 } else {
-                                    BwWarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
-                                    BwWarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
+                                    WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
+                                    WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
                                 }
                                 this._updateView();
                             }

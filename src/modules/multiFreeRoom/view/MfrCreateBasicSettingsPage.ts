@@ -3,7 +3,7 @@ import TwnsUiButton              from "../../tools/ui/UiButton";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
 import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
-import { CommonHelpPanel }      from "../../common/view/CommonHelpPanel";
+import CommonHelpPanel = TwnsCommonHelpPanel.CommonHelpPanel;import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
 import CommonInputPanel = TwnsCommonInputPanel.CommonInputPanel;import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import FloatText            from "../../tools/helpers/FloatText";
@@ -12,7 +12,7 @@ import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import Types                from "../../tools/helpers/Types";
-import { MfrCreateModel }       from "../model/MfrCreateModel";
+import MfrCreateModel       from "../model/MfrCreateModel";
 import LangTextType             = TwnsLangTextType.LangTextType;
 import NotifyType               = TwnsNotifyType.NotifyType;
 

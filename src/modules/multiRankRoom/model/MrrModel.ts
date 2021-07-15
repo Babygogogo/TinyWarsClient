@@ -7,7 +7,7 @@ import UserModel                    from "../../user/model/UserModel";
 import MrrProxy                     from "./MrrProxy";
 import { MrrSelfSettingsModel }         from "./MrrSelfSettingsModel";
 
-export namespace MrrModel {
+namespace MrrModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
     import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
@@ -243,3 +243,5 @@ export namespace MrrModel {
         return roomInfo.playerDataList.some(v => v.userId === selfUserId);
     }
 }
+
+export default MrrModel;

@@ -1,19 +1,19 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import BwDamageCalculator   from "./BwDamageCalculator";
-import BwHelpers            from "./BwHelpers";
-import TwnsBwTile           from "./BwTile";
-import TwnsBwUnit           from "./BwUnit";
-import BwVisibilityHelpers  from "./BwVisibilityHelpers";
-import TwnsBwWar            from "./BwWar";
+import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+import CommonConstants      from "../helpers/CommonConstants";
+import ConfigManager        from "../helpers/ConfigManager";
+import GridIndexHelpers     from "../helpers/GridIndexHelpers";
+import Helpers              from "../helpers/Helpers";
+import Types                from "../helpers/Types";
+import ProtoTypes           from "../proto/ProtoTypes";
+import WarDamageCalculator  from "./WarDamageCalculator";
+import WarCommonHelpers     from "./WarCommonHelpers";
+import TwnsBwTile           from "../../baseWar/model/BwTile";
+import TwnsBwUnit           from "../../baseWar/model/BwUnit";
+import WarVisibilityHelpers from "./WarVisibilityHelpers";
+import TwnsBwWar            from "../../baseWar/model/BwWar";
 
-namespace BwRobot {
+namespace WarRobot {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import WeaponType           = Types.WeaponType;
@@ -395,7 +395,7 @@ namespace BwRobot {
             return { errorCode: ClientErrorCode.SpwRobot_GetCommonParams_04 };
         }
 
-        const visibleUnits = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, new Set([teamIndex]));
+        const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, new Set([teamIndex]));
         if (visibleUnits == null) {
             return { errorCode: ClientErrorCode.SpwRobot_GetCommonParams_05 };
         }
@@ -668,7 +668,7 @@ namespace BwRobot {
         const tileMap           = war.getTileMap();
         return {
             errorCode       : ClientErrorCode.NoError,
-            reachableArea   : BwHelpers.createMovableArea({
+            reachableArea   : WarCommonHelpers.createMovableArea({
                 origin          : unitGridIndex,
                 maxMoveCost     : Math.min(moveRange, currentFuel),
                 mapSize,
@@ -762,7 +762,7 @@ namespace BwRobot {
 
         const { war, mapSize }              = commonParams;
         const unitMap                       = war.getUnitMap();
-        const attackerNormalizedCurrentHp   = BwHelpers.getNormalizedHp(attackerCurrentHp);
+        const attackerNormalizedCurrentHp   = WarCommonHelpers.getNormalizedHp(attackerCurrentHp);
         const baseDamageWithAmmo            = attacker.getCfgBaseDamage(targetArmorType, attacker.checkHasPrimaryWeapon() ? WeaponType.Primary : WeaponType.Secondary);
         const baseDamageForCurrentAmmo      = attacker.getBaseDamage(targetArmorType);
         const loaderUnitId                  = attacker.getLoaderUnitId();
@@ -779,7 +779,7 @@ namespace BwRobot {
                     errorCode   : ClientErrorCode.NoError,
                     attackInfo  : {
                         baseDamage  : baseDamageWithAmmo,
-                        normalizedHp: BwHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
+                        normalizedHp: WarCommonHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
                         fuel        : attackerMaxFuel,
                         luckValue,
                     },
@@ -839,7 +839,7 @@ namespace BwRobot {
                         errorCode   : ClientErrorCode.NoError,
                         attackInfo  : {
                             baseDamage  : baseDamageWithAmmo,
-                            normalizedHp: BwHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
+                            normalizedHp: WarCommonHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
                             fuel        : attackerMaxFuel,
                             luckValue,
                         }
@@ -943,7 +943,7 @@ namespace BwRobot {
             }
 
             const attackBonus   = globalOffenseBonus + promotionAttackBonus;
-            const movableArea   = BwHelpers.createMovableArea({
+            const movableArea   = WarCommonHelpers.createMovableArea({
                 origin          : beginningGridIndex,
                 maxMoveCost     : Math.min(attackerFinalMoveRange, fuel),
                 mapSize,
@@ -961,7 +961,7 @@ namespace BwRobot {
                     }
                 },
             });
-            const attackableArea = BwHelpers.createAttackableArea({
+            const attackableArea = WarCommonHelpers.createAttackableArea({
                 movableArea,
                 mapSize,
                 minAttackRange,
@@ -997,7 +997,7 @@ namespace BwRobot {
                     const damage = Math.floor(
                         (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                         * normalizedHp
-                        * BwDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileDefenseAmount)
+                        * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileDefenseAmount)
                         / CommonConstants.UnitHpNormalizer
                     );
                     if (!damageMap[x][y]) {
@@ -1523,7 +1523,7 @@ namespace BwRobot {
             return { errorCode: ClientErrorCode.SpwRobot_GetScoreForPosition_07 };
         }
 
-        const movableArea = BwHelpers.createMovableArea({
+        const movableArea = WarCommonHelpers.createMovableArea({
             origin          : gridIndex,
             maxMoveCost     : Number.MAX_SAFE_INTEGER,
             mapSize,
@@ -1577,7 +1577,7 @@ namespace BwRobot {
             const {
                 errorCode       : errorCodeForDiscoveredUnits,
                 discoveredUnits,
-            } = BwVisibilityHelpers.getDiscoveredUnitsByPath({
+            } = WarVisibilityHelpers.getDiscoveredUnitsByPath({
                 war             : commonParams.war,
                 path            : movePath,
                 movingUnit,
@@ -2172,7 +2172,7 @@ namespace BwRobot {
                             return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_11 };
                         }
 
-                        const damage    = Math.min(baseDamage * BwHelpers.getNormalizedHp(unitCurrentHp) / unitNormalizedMaxHp, targetUnitCurrentHp);
+                        const damage    = Math.min(baseDamage * WarCommonHelpers.getNormalizedHp(unitCurrentHp) / unitNormalizedMaxHp, targetUnitCurrentHp);
                         score           += - damage * productionCost / 3000 / Math.max(1, unitValueRatio);
                     }
                 }
@@ -2313,7 +2313,7 @@ namespace BwRobot {
                 continue;
             }
 
-            const { errorCode: errorCodeForDamage, battleDamageInfoArray } = BwDamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
+            const { errorCode: errorCodeForDamage, battleDamageInfoArray } = WarDamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
             if (errorCodeForDamage) {
                 continue;
             } else if (battleDamageInfoArray == null) {
@@ -2768,7 +2768,7 @@ namespace BwRobot {
                     continue;
                 }
 
-                const pathNodes = BwHelpers.createShortestMovePath(reachableArea, gridIndex);
+                const pathNodes = WarCommonHelpers.createShortestMovePath(reachableArea, gridIndex);
                 const {
                     errorCode       : errorCodeForScoreAndAction,
                     scoreAndAction,
@@ -3195,4 +3195,4 @@ namespace BwRobot {
     }
 }
 
-export default BwRobot;
+export default WarRobot;

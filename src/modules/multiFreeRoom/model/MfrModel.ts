@@ -3,11 +3,11 @@ import Helpers              from "../../tools/helpers/Helpers";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import BwWarRuleHelpers     from "../../baseWar/model/BwWarRuleHelpers";
+import WarRuleHelpers     from "../../tools/warHelpers/WarRuleHelpers";
 import MfrProxy             from "../../multiFreeRoom/model/MfrProxy";
 import UserModel            from "../../user/model/UserModel";
 
-export namespace MfrModel {
+namespace MfrModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IMfrRoomInfo     = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
     import NetMessage       = ProtoTypes.NetMessage;
@@ -207,7 +207,7 @@ export namespace MfrModel {
                 return true;
             }
 
-            if ((playerDataList.length === BwWarRuleHelpers.getPlayersCount(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule))   &&
+            if ((playerDataList.length === WarRuleHelpers.getPlayersCount(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule))   &&
                 (playerDataList.every(v => v.isReady))                                                                                          &&
                 (selfPlayerData)                                                                                                                &&
                 (roomInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
@@ -228,7 +228,9 @@ export namespace MfrModel {
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         return (selfPlayerData != null)
             && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
-            && (playerDataList.length === BwWarRuleHelpers.getPlayersCount(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule))
+            && (playerDataList.length === WarRuleHelpers.getPlayersCount(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule))
             && (playerDataList.every(v => v.isReady));
     }
 }
+
+export default MfrModel;

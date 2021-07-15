@@ -62,7 +62,7 @@ import StageManager                 from "./StageManager";
 import Timer                        from "./Timer";
 import Types                        from "./Types";
 
-export namespace FlowManager {
+namespace FlowManager {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -364,3 +364,5 @@ export namespace FlowManager {
         }
     }
 }
+
+export default FlowManager;

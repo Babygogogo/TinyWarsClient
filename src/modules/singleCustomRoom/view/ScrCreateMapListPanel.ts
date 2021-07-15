@@ -6,7 +6,7 @@ import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import TwnsUiZoomableMap                from "../../tools/ui/UiZoomableMap";
 import TwnsUiMapInfo                    from "../../tools/ui/UiMapInfo";
-import { SpmMainMenuPanel }             from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import SpmMainMenuPanel= TwnsSpmMainMenuPanel.SpmMainMenuPanel;import TwnsSpmMainMenuPanel             from "../../singlePlayerMode/view/SpmMainMenuPanel";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import { ScrCreateSearchMapPanel }      from "./ScrCreateSearchMapPanel";

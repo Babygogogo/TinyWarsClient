@@ -6,15 +6,15 @@ import TwnsUiLabel                                                      from "..
 import TwnsUiScrollList                                                 from "../../tools/ui/UiScrollList";
 import TwnsUiTab                                                        from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                                            from "../../tools/ui/UiTabItemRenderer";
-import { McrMainMenuPanel }                                             from "../../multiCustomRoom/view/McrMainMenuPanel";
-import { CommonBlockPanel }                                             from "../../common/view/CommonBlockPanel";
+import McrMainMenuPanel= TwnsMcrMainMenuPanel.McrMainMenuPanel;import TwnsMcrMainMenuPanel                                             from "../../multiCustomRoom/view/McrMainMenuPanel";
+import TwnsCommonBlockPanel                                             from "../../common/view/CommonBlockPanel";
 import { OpenDataForRwReplayWarInfoPage, RwReplayWarInfoPage }          from "./RwReplayWarInfoPage";
 import { RwSearchReplayPanel }                                          from "./RwSearchReplayPanel";
 import TwnsLobbyBottomPanel                                             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                                                from "../../lobby/view/LobbyTopPanel";
 import { OpenDataForRwReplayMapInfoPage, RwReplayMapInfoPage }          from "./RwReplayMapInfoPage";
 import { OpenDataForRwReplayPlayerInfoPage, RwReplayPlayerInfoPage }    from "./RwReplayPlayerInfoPage";
-import { FlowManager }                                                  from "../../tools/helpers/FlowManager";
+import FlowManager                                                  from "../../tools/helpers/FlowManager";
 import Helpers                                                      from "../../tools/helpers/Helpers";
 import Lang                                                         from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
@@ -26,6 +26,7 @@ import Types                                                        from "../../
 import WarMapModel                                                  from "../../warMap/model/WarMapModel";
 import RwModel                                                      from "../model/RwModel";
 import RwProxy                                                      from "../model/RwProxy";
+import CommonBlockPanel = TwnsCommonBlockPanel.CommonBlockPanel;
 
 export class RwReplayListPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;

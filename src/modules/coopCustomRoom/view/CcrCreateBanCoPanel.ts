@@ -1,319 +1,325 @@
 
-import TwnsUiImage                      from "../../tools/ui/UiImage";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiButton                      from "../../tools/ui/UiButton";
-import TwnsUiComponent                  from "../../tools/ui/UiComponent";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiCoInfo                     from "../../tools/ui/UiCoInfo";
-import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import TwnsCommonAlertPanel             from "../../common/view/CommonAlertPanel";
-import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import Types                        from "../../tools/helpers/Types";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Lang                         from "../../tools/lang/Lang";
-import { CcrCreateModel }               from "../model/CcrCreateModel";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import LangTextType     = TwnsLangTextType.LangTextType;
+import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
+import TwnsUiComponent          from "../../tools/ui/UiComponent";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import CcrCreateModel           from "../model/CcrCreateModel";
 
-type OpenDataForCcrCreateBanCoPanel = {
-    playerIndex : number;
-};
-export class CcrCreateBanCoPanel extends TwnsUiPanel.UiPanel<OpenDataForCcrCreateBanCoPanel> {
-    protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
-    protected readonly _IS_EXCLUSIVE = true;
+namespace TwnsCcrCreateBanCoPanel {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = TwnsLangTextType.LangTextType;
 
-    private static _instance: CcrCreateBanCoPanel;
+    type OpenDataForCcrCreateBanCoPanel = {
+        playerIndex : number;
+    };
+    export class CcrCreateBanCoPanel extends TwnsUiPanel.UiPanel<OpenDataForCcrCreateBanCoPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
+        protected readonly _IS_EXCLUSIVE = true;
 
-    private readonly _imgMask                   : TwnsUiImage.UiImage;
-    private readonly _group                     : eui.Group;
-    private readonly _labelAvailableCoTitle     : TwnsUiLabel.UiLabel;
-    // private readonly _groupCoTiers              : eui.Group;
-    private readonly _groupCoNames              : eui.Group;
-    private readonly _btnCancel                 : TwnsUiButton.UiButton;
-    private readonly _btnConfirm                : TwnsUiButton.UiButton;
-    private readonly _uiCoInfo                  : TwnsUiCoInfo.UiCoInfo;
+        private static _instance: CcrCreateBanCoPanel;
 
-    // private _renderersForCoTiers    : RendererForCoTier[] = [];
-    private _renderersForCoNames    : RendererForCoName[] = [];
+        private readonly _imgMask                   : TwnsUiImage.UiImage;
+        private readonly _group                     : eui.Group;
+        private readonly _labelAvailableCoTitle     : TwnsUiLabel.UiLabel;
+        // private readonly _groupCoTiers              : eui.Group;
+        private readonly _groupCoNames              : eui.Group;
+        private readonly _btnCancel                 : TwnsUiButton.UiButton;
+        private readonly _btnConfirm                : TwnsUiButton.UiButton;
+        private readonly _uiCoInfo                  : TwnsUiCoInfo.UiCoInfo;
 
-    private _playerIndex            : number;
-    private _bannedCoIdSet          = new Set<number>();
-    private _previewCoId            : number;
+        // private _renderersForCoTiers    : RendererForCoTier[] = [];
+        private _renderersForCoNames    : RendererForCoName[] = [];
 
-    public static show(openData: OpenDataForCcrCreateBanCoPanel): void {
-        if (!CcrCreateBanCoPanel._instance) {
-            CcrCreateBanCoPanel._instance = new CcrCreateBanCoPanel();
-        }
-        CcrCreateBanCoPanel._instance.open(openData);
-    }
+        private _playerIndex            : number;
+        private _bannedCoIdSet          = new Set<number>();
+        private _previewCoId            : number;
 
-    public static async hide(): Promise<void> {
-        if (CcrCreateBanCoPanel._instance) {
-            await CcrCreateBanCoPanel._instance.close();
-        }
-    }
-
-    public constructor() {
-        super();
-
-        this._setIsTouchMaskEnabled();
-        this._setIsCloseOnTouchedMask();
-        this.skinName = "resource/skins/coopCustomRoom/CcrCreateBanCoPanel.exml";
-    }
-
-    protected _onOpened(): void {
-        this._setUiListenerArray([
-            { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
-            { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-        ]);
-        this._setNotifyListenerArray([
-            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
-        ]);
-
-        this._showOpenAnimation();
-
-        const playerIndex = this._getOpenData().playerIndex;
-        this._playerIndex = playerIndex;
-
-        const bannedCoIdSet = this._bannedCoIdSet;
-        bannedCoIdSet.clear();
-        for (const coId of CcrCreateModel.getBannedCoIdArray(playerIndex) || []) {
-            bannedCoIdSet.add(coId);
+        public static show(openData: OpenDataForCcrCreateBanCoPanel): void {
+            if (!CcrCreateBanCoPanel._instance) {
+                CcrCreateBanCoPanel._instance = new CcrCreateBanCoPanel();
+            }
+            CcrCreateBanCoPanel._instance.open(openData);
         }
 
-        this._updateComponentsForLanguage();
-        // this._initGroupCoTiers();
-        this._initGroupCoNames();
-        this._initComponentsForPreviewCo();
-    }
-
-    protected async _onClosed(): Promise<void> {
-        await this._showCloseAnimation();
-
-        // this._clearGroupCoTiers();
-        this._clearGroupCoNames();
-    }
-
-    private _setPreviewCoId(coId: number): void {
-        if (this._getPreviewCoId() !== coId) {
-            this._previewCoId = coId;
-            this._updateComponentsForPreviewCoId();
-        }
-    }
-    private _getPreviewCoId(): number {
-        return this._previewCoId;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // Event callbacks.
-    ////////////////////////////////////////////////////////////////////////////////
-    private _onNotifyLanguageChanged(): void {
-        this._updateComponentsForLanguage();
-    }
-
-    private _onTouchedBtnCancel(): void {
-        this.close();
-    }
-
-    private _onTouchedBtnConfirm(): void {
-        const bannedCoIdSet = this._bannedCoIdSet;
-        if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-            TwnsCommonAlertPanel.CommonAlertPanel.show({
-                title   : Lang.getText(LangTextType.B0088),
-                content : Lang.getText(LangTextType.A0130),
-            });
-        } else {
-            const playerIndex   = this._playerIndex;
-            const callback      = () => {
-                CcrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
-                Notify.dispatch(NotifyType.CcrCreateBannedCoIdArrayChanged);
-                this.close();
-            };
-            if ((playerIndex !== CcrCreateModel.getSelfPlayerIndex()) ||
-                (!bannedCoIdSet.has(CcrCreateModel.getSelfCoId()))
-            ) {
-                callback();
-            } else {
-                CommonConfirmPanel.show({
-                    content : Lang.getText(LangTextType.A0057),
-                    callback: () => {
-                        CcrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
-                        callback();
-                    },
-                });
+        public static async hide(): Promise<void> {
+            if (CcrCreateBanCoPanel._instance) {
+                await CcrCreateBanCoPanel._instance.close();
             }
         }
-    }
 
-    private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
-        const renderer      = e.currentTarget as RendererForCoName;
-        const coId          = renderer.getCoId();
-        const bannedCoIdSet = this._bannedCoIdSet;
-        this._setPreviewCoId(coId);
+        public constructor() {
+            super();
 
-        if (!renderer.getIsSelected()) {
-            bannedCoIdSet.delete(coId);
-            this._updateGroupCoNames();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+            this.skinName = "resource/skins/coopCustomRoom/CcrCreateBanCoPanel.exml";
+        }
 
-        } else {
-            if (coId === CommonConstants.CoEmptyId) {
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
+                { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
+            ]);
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+
+            this._showOpenAnimation();
+
+            const playerIndex = this._getOpenData().playerIndex;
+            this._playerIndex = playerIndex;
+
+            const bannedCoIdSet = this._bannedCoIdSet;
+            bannedCoIdSet.clear();
+            for (const coId of CcrCreateModel.getBannedCoIdArray(playerIndex) || []) {
+                bannedCoIdSet.add(coId);
+            }
+
+            this._updateComponentsForLanguage();
+            // this._initGroupCoTiers();
+            this._initGroupCoNames();
+            this._initComponentsForPreviewCo();
+        }
+
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
+            // this._clearGroupCoTiers();
+            this._clearGroupCoNames();
+        }
+
+        private _setPreviewCoId(coId: number): void {
+            if (this._getPreviewCoId() !== coId) {
+                this._previewCoId = coId;
+                this._updateComponentsForPreviewCoId();
+            }
+        }
+        private _getPreviewCoId(): number {
+            return this._previewCoId;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Event callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(): void {
+            this._updateComponentsForLanguage();
+        }
+
+        private _onTouchedBtnCancel(): void {
+            this.close();
+        }
+
+        private _onTouchedBtnConfirm(): void {
+            const bannedCoIdSet = this._bannedCoIdSet;
+            if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
                 TwnsCommonAlertPanel.CommonAlertPanel.show({
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
                 });
+            } else {
+                const playerIndex   = this._playerIndex;
+                const callback      = () => {
+                    CcrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
+                    Notify.dispatch(NotifyType.CcrCreateBannedCoIdArrayChanged);
+                    this.close();
+                };
+                if ((playerIndex !== CcrCreateModel.getSelfPlayerIndex()) ||
+                    (!bannedCoIdSet.has(CcrCreateModel.getSelfCoId()))
+                ) {
+                    callback();
+                } else {
+                    CommonConfirmPanel.show({
+                        content : Lang.getText(LangTextType.A0057),
+                        callback: () => {
+                            CcrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
+                            callback();
+                        },
+                    });
+                }
+            }
+        }
+
+        private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
+            const renderer      = e.currentTarget as RendererForCoName;
+            const coId          = renderer.getCoId();
+            const bannedCoIdSet = this._bannedCoIdSet;
+            this._setPreviewCoId(coId);
+
+            if (!renderer.getIsSelected()) {
+                bannedCoIdSet.delete(coId);
+                this._updateGroupCoNames();
+
+            } else {
+                if (coId === CommonConstants.CoEmptyId) {
+                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                        title   : Lang.getText(LangTextType.B0088),
+                        content : Lang.getText(LangTextType.A0130),
+                    });
+                    return;
+                }
+
+                const callback = () => {
+                    bannedCoIdSet.add(coId);
+                    this._updateGroupCoNames();
+                };
+
+                if ((this._playerIndex !== CcrCreateModel.getSelfPlayerIndex()) ||
+                    (coId !== CcrCreateModel.getSelfCoId())
+                ) {
+                    callback();
+                } else {
+                    CommonConfirmPanel.show({
+                        content : Lang.getText(LangTextType.A0057),
+                        callback,
+                    });
+                }
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // View functions.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._btnCancel.label               = Lang.getText(LangTextType.B0154);
+            this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+            this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._playerIndex})`;
+
+            this._updateComponentsForPreviewCoId();
+        }
+
+        private _initGroupCoNames(): void {
+            for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestFormalVersion())) {
+                const renderer = new RendererForCoName();
+                renderer.setCoId(cfg.coId);
+                renderer.setIsSelected(true);
+
+                renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoNameRenderer, this);
+                this._renderersForCoNames.push(renderer);
+                this._groupCoNames.addChild(renderer);
+            }
+
+            this._updateGroupCoNames();
+        }
+
+        private _clearGroupCoNames(): void {
+            this._groupCoNames.removeChildren();
+            this._renderersForCoNames.length = 0;
+        }
+
+        private _updateGroupCoNames(): void {
+            const bannedCoIdSet = this._bannedCoIdSet;
+            for (const renderer of this._renderersForCoNames) {
+                renderer.setIsSelected(!bannedCoIdSet.has(renderer.getCoId()));
+            }
+        }
+
+        private _initComponentsForPreviewCo(): void {
+            this._setPreviewCoId(CommonConstants.CoEmptyId);
+        }
+
+        private _updateComponentsForPreviewCoId(): void {
+            const coId = this._previewCoId;
+            if (coId == null) {
                 return;
             }
 
-            const callback = () => {
-                bannedCoIdSet.add(coId);
-                this._updateGroupCoNames();
-            };
-
-            if ((this._playerIndex !== CcrCreateModel.getSelfPlayerIndex()) ||
-                (coId !== CcrCreateModel.getSelfCoId())
-            ) {
-                callback();
-            } else {
-                CommonConfirmPanel.show({
-                    content : Lang.getText(LangTextType.A0057),
-                    callback,
-                });
-            }
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // View functions.
-    ////////////////////////////////////////////////////////////////////////////////
-    private _updateComponentsForLanguage(): void {
-        this._btnCancel.label               = Lang.getText(LangTextType.B0154);
-        this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
-        this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._playerIndex})`;
-
-        this._updateComponentsForPreviewCoId();
-    }
-
-    private _initGroupCoNames(): void {
-        for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestFormalVersion())) {
-            const renderer = new RendererForCoName();
-            renderer.setCoId(cfg.coId);
-            renderer.setIsSelected(true);
-
-            renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoNameRenderer, this);
-            this._renderersForCoNames.push(renderer);
-            this._groupCoNames.addChild(renderer);
+            this._uiCoInfo.setCoData({
+                configVersion   : ConfigManager.getLatestFormalVersion(),
+                coId,
+            });
         }
 
-        this._updateGroupCoNames();
-    }
-
-    private _clearGroupCoNames(): void {
-        this._groupCoNames.removeChildren();
-        this._renderersForCoNames.length = 0;
-    }
-
-    private _updateGroupCoNames(): void {
-        const bannedCoIdSet = this._bannedCoIdSet;
-        for (const renderer of this._renderersForCoNames) {
-            renderer.setIsSelected(!bannedCoIdSet.has(renderer.getCoId()));
-        }
-    }
-
-    private _initComponentsForPreviewCo(): void {
-        this._setPreviewCoId(CommonConstants.CoEmptyId);
-    }
-
-    private _updateComponentsForPreviewCoId(): void {
-        const coId = this._previewCoId;
-        if (coId == null) {
-            return;
-        }
-
-        this._uiCoInfo.setCoData({
-            configVersion   : ConfigManager.getLatestFormalVersion(),
-            coId,
-        });
-    }
-
-    private _showOpenAnimation(): void {
-        Helpers.resetTween({
-            obj         : this._imgMask,
-            beginProps  : { alpha: 0 },
-            endProps    : { alpha: 1 },
-        });
-        Helpers.resetTween({
-            obj         : this._group,
-            beginProps  : { alpha: 0, verticalCenter: -40 },
-            endProps    : { alpha: 1, verticalCenter: 0 },
-        });
-    }
-    private _showCloseAnimation(): Promise<void> {
-        return new Promise<void>(resolve => {
+        private _showOpenAnimation(): void {
             Helpers.resetTween({
                 obj         : this._imgMask,
-                beginProps  : { alpha: 1 },
-                endProps    : { alpha: 0 },
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
             });
-
             Helpers.resetTween({
                 obj         : this._group,
-                beginProps  : { alpha: 1, verticalCenter: 0 },
-                endProps    : { alpha: 0, verticalCenter: -40 },
-                callback    : resolve,
+                beginProps  : { alpha: 0, verticalCenter: -40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
             });
-        });
-    }
-}
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
 
-class RendererForCoName extends TwnsUiComponent.UiComponent {
-    private readonly _imgUnselected : TwnsUiImage.UiImage;
-    private readonly _imgSelected   : TwnsUiImage.UiImage;
-    private readonly _labelName     : TwnsUiLabel.UiLabel;
-
-    private _coId           : number;
-    private _isSelected     : boolean;
-
-    public constructor() {
-        super();
-
-        this.skinName = "resource/skins/component/checkBox/CheckBox001.exml";
-    }
-
-    protected _onOpened(): void {
-        this._updateView();
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: -40 },
+                    callback    : resolve,
+                });
+            });
+        }
     }
 
-    public setCoId(coId: number): void {
-        this._coId = coId;
+    class RendererForCoName extends TwnsUiComponent.UiComponent {
+        private readonly _imgUnselected : TwnsUiImage.UiImage;
+        private readonly _imgSelected   : TwnsUiImage.UiImage;
+        private readonly _labelName     : TwnsUiLabel.UiLabel;
 
-        this._updateView();
-    }
-    public getCoId(): number {
-        return this._coId;
-    }
+        private _coId           : number;
+        private _isSelected     : boolean;
 
-    public setIsSelected(isSelected: boolean): void {
-        this._isSelected = isSelected;
-        this._updateView();
-    }
-    public getIsSelected(): boolean {
-        return this._isSelected;
-    }
+        public constructor() {
+            super();
 
-    private _updateView(): void {
-        if (!this.getIsOpening()) {
-            return;
+            this.skinName = "resource/skins/component/checkBox/CheckBox001.exml";
         }
 
-        const coCfg             = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), this._coId);
-        this._labelName.text    = coCfg ? coCfg.name : null;
+        protected _onOpened(): void {
+            this._updateView();
+        }
 
-        const isSelected            = this._isSelected;
-        this._imgSelected.visible   = isSelected;
-        this._imgUnselected.visible = !isSelected;
+        public setCoId(coId: number): void {
+            this._coId = coId;
+
+            this._updateView();
+        }
+        public getCoId(): number {
+            return this._coId;
+        }
+
+        public setIsSelected(isSelected: boolean): void {
+            this._isSelected = isSelected;
+            this._updateView();
+        }
+        public getIsSelected(): boolean {
+            return this._isSelected;
+        }
+
+        private _updateView(): void {
+            if (!this.getIsOpening()) {
+                return;
+            }
+
+            const coCfg             = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), this._coId);
+            this._labelName.text    = coCfg ? coCfg.name : null;
+
+            const isSelected            = this._isSelected;
+            this._imgSelected.visible   = isSelected;
+            this._imgUnselected.visible = !isSelected;
+        }
     }
 }
+
+export default TwnsCcrCreateBanCoPanel;

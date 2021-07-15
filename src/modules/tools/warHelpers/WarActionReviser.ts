@@ -1,17 +1,17 @@
 
-import BwHelpers            from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers     from "./WarCommonHelpers";
 import TwnsBwUnit           from "../../baseWar/model/BwUnit";
 import TwnsBwWar            from "../../baseWar/model/BwWar";
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsBwUnitMap        from "./BwUnitMap";
-import BwVisibilityHelpers  from "./BwVisibilityHelpers";
+import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+import CommonConstants      from "../helpers/CommonConstants";
+import ConfigManager        from "../helpers/ConfigManager";
+import GridIndexHelpers     from "../helpers/GridIndexHelpers";
+import Types                from "../helpers/Types";
+import ProtoTypes           from "../proto/ProtoTypes";
+import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
+import WarVisibilityHelpers from "./WarVisibilityHelpers";
 
-namespace BwActionReviser {
+namespace WarActionReviser {
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import GridIndex            = Types.GridIndex;
     import DropDestination      = Types.DropDestination;
@@ -227,7 +227,7 @@ namespace BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_13 };
         }
 
-        const cost = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * BwHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
+        const cost = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * WarCommonHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
         if (cost > fund) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_14 };
         }
@@ -439,7 +439,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -447,7 +447,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_06 };
         }
 
@@ -494,7 +494,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -502,7 +502,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_05 };
         }
 
@@ -538,7 +538,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -584,7 +584,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -592,7 +592,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBuildTile_03 };
         }
 
@@ -629,7 +629,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -637,7 +637,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitCaptureTile_03 };
         }
 
@@ -678,7 +678,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -686,7 +686,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDive_03 };
         }
 
@@ -722,7 +722,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -730,7 +730,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDropUnit_03 };
         }
 
@@ -771,7 +771,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -813,7 +813,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -821,7 +821,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_03 };
         }
 
@@ -879,7 +879,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -887,7 +887,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchSilo_03 };
         }
 
@@ -938,7 +938,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -946,7 +946,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLoadCo_03 };
         }
 
@@ -978,7 +978,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -986,7 +986,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitProduceUnit_03 };
         }
 
@@ -1036,7 +1036,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -1044,7 +1044,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSupplyUnit_03 };
         }
 
@@ -1081,7 +1081,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -1089,7 +1089,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSurface_03 };
         }
 
@@ -1125,7 +1125,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -1133,7 +1133,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitUseCoSkill_03 };
         }
 
@@ -1177,7 +1177,7 @@ namespace BwActionReviser {
 
         const rawPath                                               = rawAction.path;
         const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = BwHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         if (errorCodeForRevisedPath) {
             return { errorCode: errorCodeForRevisedPath };
         } else if (revisedPath == null) {
@@ -1185,7 +1185,7 @@ namespace BwActionReviser {
         }
 
         const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitWait_03 };
         }
 
@@ -1303,7 +1303,7 @@ namespace BwActionReviser {
                     return false;
                 }
 
-                if (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex           : droppingGridIndex,
                     unitType,
@@ -1367,4 +1367,4 @@ namespace BwActionReviser {
     }
 }
 
-export default BwActionReviser;
+export default WarActionReviser;

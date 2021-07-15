@@ -8,7 +8,7 @@ import TwnsUiTab                                                                
 import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
 import TwnsLobbyBottomPanel                                                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                                                        from "../../lobby/view/LobbyTopPanel";
-import { MrrMainMenuPanel }                                                     from "./MrrMainMenuPanel";
+import MrrMainMenuPanel= TwnsMrrMainMenuPanel.MrrMainMenuPanel;import TwnsMrrMainMenuPanel                                                     from "./MrrMainMenuPanel";
 import { MrrRoomInfoPanel }                                                     from "./MrrRoomInfoPanel";
 import { OpenDataForMrrRoomAdvancedSettingsPage, MrrRoomAdvancedSettingsPage }  from "./MrrRoomAdvancedSettingsPage";
 import { OpenDataForMrrRoomBasicSettingsPage, MrrRoomBasicSettingsPage }        from "./MrrRoomBasicSettingsPage";
@@ -20,7 +20,7 @@ import TwnsLangTextType                                                     from
 import TwnsNotifyType                                                       from "../../tools/notify/NotifyType";
 import Types                                                                from "../../tools/helpers/Types";
 import WarMapModel                                                          from "../../warMap/model/WarMapModel";
-import { MrrModel }                                                             from "../model/MrrModel";
+import MrrModel                                                             from "../model/MrrModel";
 import MrrProxy                                                             from "../model/MrrProxy";
 import { MrrSelfSettingsModel }                                                 from "../model/MrrSelfSettingsModel";
 import LangTextType                                                             = TwnsLangTextType.LangTextType;

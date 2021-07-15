@@ -17,7 +17,7 @@ import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 import TwnsBwActionPlanner      from "../model/BwActionPlanner";
-import BwHelpers                from "../model/BwHelpers";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsBwUnit               from "../model/BwUnit";
 import TwnsBwWar                from "../model/BwWar";
 import TwnsBwUnitDetailPanel    from "./BwUnitDetailPanel";
@@ -152,7 +152,7 @@ namespace TwnsBwProduceUnitPanel {
             const actionPlanner     = war.getActionPlanner();
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
-            const minNormalizedHp   = skillCfg ? BwHelpers.getNormalizedHp(skillCfg[3]) : BwHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            const minNormalizedHp   = skillCfg ? WarCommonHelpers.getNormalizedHp(skillCfg[3]) : WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
                 const unit = new TwnsBwUnit.BwUnit();

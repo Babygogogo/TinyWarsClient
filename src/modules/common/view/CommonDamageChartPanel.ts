@@ -1,29 +1,29 @@
 
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import Types                from "../../tools/helpers/Types";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import Timer            from "../../tools/helpers/Timer";
-import UserModel            from "../../user/model/UserModel";
-import CommonModel          from "../../common/model/CommonModel";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import TwnsUiButton              from "../../tools/ui/UiButton";
-import WarMapUnitView = TwnsWarMapUnitView.WarMapUnitView;import TwnsWarMapUnitView       from "../../warMap/view/WarMapUnitView";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import CommonModel              from "../../common/model/CommonModel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Timer                    from "../../tools/helpers/Timer";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
 import TwnsUiImage              from "../../tools/ui/UiImage";
-import UnitType                 = Types.UnitType;
-import TileType                 = Types.TileType;
-import IUnitTemplateCfg         = ProtoTypes.Config.IUnitTemplateCfg;
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import UserModel                from "../../user/model/UserModel";
+import TwnsWarMapUnitView       from "../../warMap/view/WarMapUnitView";
 
 namespace TwnsCommonDamageChartPanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import WarMapUnitView   = TwnsWarMapUnitView.WarMapUnitView;
+    import UnitType         = Types.UnitType;
+    import TileType         = Types.TileType;
+    import IUnitTemplateCfg = ProtoTypes.Config.IUnitTemplateCfg;
 
     export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;

@@ -1,15 +1,15 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import Logger               from "../../tools/helpers/Logger";
-import Helpers              from "../../tools/helpers/Helpers";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import Types                from "../../tools/helpers/Types";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
+import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+import ConfigManager        from "../helpers/ConfigManager";
+import Logger               from "../helpers/Logger";
+import Helpers              from "../helpers/Helpers";
+import ProtoTypes           from "../proto/ProtoTypes";
+import Lang                 from "../lang/Lang";
+import TwnsLangTextType     from "../lang/LangTextType";
+import Types                from "../helpers/Types";
+import CommonConstants      from "../helpers/CommonConstants";
 
-namespace BwWarRuleHelpers {
+namespace WarRuleHelpers {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import LanguageType         = Types.LanguageType;
@@ -1034,4 +1034,4 @@ namespace BwWarRuleHelpers {
     }
 }
 
-export default BwWarRuleHelpers;
+export default WarRuleHelpers;

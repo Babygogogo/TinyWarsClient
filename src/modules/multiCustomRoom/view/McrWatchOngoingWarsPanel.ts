@@ -5,10 +5,10 @@ import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import TwnsUiZoomableMap                from "../../tools/ui/UiZoomableMap";
-import { CommonBlockPanel }             from "../../common/view/CommonBlockPanel";
+import TwnsCommonBlockPanel             from "../../common/view/CommonBlockPanel";
 import { McrWatchMainMenuPanel }        from "./McrWatchMainMenuPanel";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
-import { FlowManager }                  from "../../tools/helpers/FlowManager";
+import FlowManager                  from "../../tools/helpers/FlowManager";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
@@ -21,6 +21,7 @@ import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                     from "../../multiPlayerWar/model/MpwProxy";
 import UserModel                    from "../../user/model/UserModel";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
+import CommonBlockPanel = TwnsCommonBlockPanel.CommonBlockPanel;
 
 export class McrWatchOngoingWarsPanel extends TwnsUiPanel.UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Scene;

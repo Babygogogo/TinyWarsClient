@@ -2,7 +2,7 @@
 import TwnsUiImage          from "../../tools/ui/UiImage";
 import TwnsUiLabel          from "../../tools/ui/UiLabel";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
-import BwDamageCalculator   from "../model/BwDamageCalculator";
+import WarDamageCalculator  from "../../tools/warHelpers/WarDamageCalculator";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import Lang                 from "../../tools/lang/Lang";
@@ -431,7 +431,7 @@ namespace TwnsBwCursorView {
                         con.visible = false;
                     } else {
                         const attackerUnitId                        = attackerUnit.getUnitId();
-                        const { errorCode, battleDamageInfoArray }  = BwDamageCalculator.getEstimatedBattleDamage({
+                        const { errorCode, battleDamageInfoArray }  = WarDamageCalculator.getEstimatedBattleDamage({
                             war,
                             attackerMovePath: movePath,
                             launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
@@ -446,7 +446,7 @@ namespace TwnsBwCursorView {
                         } else {
                             con.visible = true;
 
-                            const { errorCode: errorCodeForDamages, damages } = BwDamageCalculator.getAttackAndCounterDamage({
+                            const { errorCode: errorCodeForDamages, damages } = WarDamageCalculator.getAttackAndCounterDamage({
                                 battleDamageInfoArray,
                                 attackerUnitId,
                                 targetGridIndex     : gridIndex,
@@ -479,7 +479,7 @@ namespace TwnsBwCursorView {
                         con.visible = false;
                     } else {
                         const attackerUnitId                        = attackerUnit.getUnitId();
-                        const { errorCode, battleDamageInfoArray }  = BwDamageCalculator.getEstimatedBattleDamage({
+                        const { errorCode, battleDamageInfoArray }  = WarDamageCalculator.getEstimatedBattleDamage({
                             war,
                             attackerMovePath: movePath,
                             launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
@@ -494,7 +494,7 @@ namespace TwnsBwCursorView {
                         } else {
                             con.visible = true;
 
-                            const { errorCode: errorCodeForDamages, damages } = BwDamageCalculator.getAttackAndCounterDamage({
+                            const { errorCode: errorCodeForDamages, damages } = WarDamageCalculator.getAttackAndCounterDamage({
                                 battleDamageInfoArray,
                                 attackerUnitId,
                                 targetGridIndex     : gridIndex,

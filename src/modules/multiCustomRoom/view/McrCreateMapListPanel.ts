@@ -9,7 +9,7 @@ import TwnsUiMapInfo                    from "../../tools/ui/UiMapInfo";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import { McrCreateSearchMapPanel }      from "./McrCreateSearchMapPanel";
-import { McrMainMenuPanel }             from "./McrMainMenuPanel";
+import McrMainMenuPanel= TwnsMcrMainMenuPanel.McrMainMenuPanel;import TwnsMcrMainMenuPanel             from "./McrMainMenuPanel";
 import { McrCreateSettingsPanel }       from "./McrCreateSettingsPanel";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Helpers                      from "../../tools/helpers/Helpers";

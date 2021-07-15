@@ -4,7 +4,7 @@ import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
-import { CommonCoInfoPanel }    from "../../common/view/CommonCoInfoPanel";
+import CommonCoInfoPanel = TwnsCommonCoInfoPanel.CommonCoInfoPanel;import TwnsCommonCoInfoPanel    from "../../common/view/CommonCoInfoPanel";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import Helpers              from "../../tools/helpers/Helpers";
@@ -13,8 +13,8 @@ import TwnsLangTextType     from "../../tools/lang/LangTextType";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import Types                from "../../tools/helpers/Types";
 import UserModel            from "../../user/model/UserModel";
-import { MfrCreateModel }       from "../model/MfrCreateModel";
-import BwHelpers            from "../../baseWar/model/BwHelpers";
+import MfrCreateModel       from "../model/MfrCreateModel";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 import LangTextType             = TwnsLangTextType.LangTextType;
 import NotifyType               = TwnsNotifyType.NotifyType;
 
@@ -140,7 +140,7 @@ class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPl
         const initialWarData        = MfrCreateModel.getInitialWarData();
         const settingsForCommon     = initialWarData.settingsForCommon;
         this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-        this._labelTeamIndex.text   = Lang.getPlayerTeamName(BwHelpers.getTeamIndexByRuleForPlayers(settingsForCommon.warRule.ruleForPlayers, playerIndex));
+        this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarCommonHelpers.getTeamIndexByRuleForPlayers(settingsForCommon.warRule.ruleForPlayers, playerIndex));
 
         const playerData            = initialWarData.playerManager.players.find(v => v.playerIndex === playerIndex);
         this._imgSkin.source        = getSourceForImgSkin(playerData.unitAndTileSkinId);

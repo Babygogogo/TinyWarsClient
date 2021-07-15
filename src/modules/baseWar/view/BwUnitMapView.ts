@@ -5,7 +5,7 @@ import Types                from "../../tools/helpers/Types";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import TwnsBwUnitMap        from "../model/BwUnitMap";
-import BwVisibilityHelpers  from "../model/BwVisibilityHelpers";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsBwUnitView       from "./BwUnitView";
 
 namespace TwnsBwUnitMapView {
@@ -212,7 +212,7 @@ namespace TwnsBwUnitMapView {
         private _resetVisibleForAllUnitsOnMap(): void {
             const unitMap       = this._getUnitMap();
             const war           = unitMap.getWar();
-            const visibleUnits  = BwVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             for (const unit of unitMap.getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
             }

@@ -1,31 +1,40 @@
 
-import TwnsUiListItemRenderer                                                   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                                                              from "../../tools/ui/UiPanel";
-import TwnsUiButton                                                              from "../../tools/ui/UiButton";
-import TwnsUiLabel                                                              from "../../tools/ui/UiLabel";
-import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
-import TwnsUiTab                                                                from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
-import TwnsLobbyBottomPanel                                                     from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                                                        from "../../lobby/view/LobbyTopPanel";
-import { CcrMainMenuPanel }                                                     from "../../coopCustomRoom/view/CcrMainMenuPanel";
-import TwnsLangTextType                                                     from "../../tools/lang/LangTextType";
-import Logger                                                               from "../../tools/helpers/Logger";
-import TwnsNotifyType                                                       from "../../tools/notify/NotifyType";
-import Types                                                                from "../../tools/helpers/Types";
-import { CcwWarMapInfoPage, OpenDataForCcwWarMapInfoPage }                      from "./CcwWarMapInfoPage";
-import { CcwWarPlayerInfoPage, OpenDataForCcwWarPlayerInfoPage }                from "./CcwWarPlayerInfoPage";
-import { CcwWarAdvancedSettingsPage, OpenDataForCcwWarAdvancedSettingsPage }    from "./CcwWarAdvancedSettingsPage";
-import { CcwWarBasicSettingsPage, OpenDataForCcwWarBasicSettingsPage }          from "./CcwWarBasicSettingsPage";
-import Helpers                                                              from "../../tools/helpers/Helpers";
-import Lang                                                                 from "../../tools/lang/Lang";
-import MpwModel                                                             from "../../multiPlayerWar/model/MpwModel";
-import MpwProxy                                                             from "../../multiPlayerWar/model/MpwProxy";
-import WarMapModel                                                          from "../../warMap/model/WarMapModel";
+import TwnsCcrMainMenuPanel             from "../../coopCustomRoom/view/CcrMainMenuPanel";
+import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
+import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
+import MpwProxy                         from "../../multiPlayerWar/model/MpwProxy";
+import Helpers                          from "../../tools/helpers/Helpers";
+import Logger                           from "../../tools/helpers/Logger";
+import Types                            from "../../tools/helpers/Types";
+import Lang                             from "../../tools/lang/Lang";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import TwnsUiButton                     from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import TwnsUiTab                        from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                      from "../../warMap/model/WarMapModel";
+import TwnsCcwWarAdvancedSettingsPage   from "./CcwWarAdvancedSettingsPage";
+import TwnsCcwWarBasicSettingsPage      from "./CcwWarBasicSettingsPage";
+import TwnsCcwWarMapInfoPage            from "./CcwWarMapInfoPage";
+import TwnsCcwWarPlayerInfoPage         from "./CcwWarPlayerInfoPage";
 
 namespace TwnsCcwMyWarListPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import CcrMainMenuPanel                         = TwnsCcrMainMenuPanel.CcrMainMenuPanel;
+    import CcwWarMapInfoPage                        = TwnsCcwWarMapInfoPage.CcwWarMapInfoPage;
+    import OpenDataForCcwWarMapInfoPage             = TwnsCcwWarMapInfoPage.OpenDataForCcwWarMapInfoPage;
+    import CcwWarPlayerInfoPage                     = TwnsCcwWarPlayerInfoPage.CcwWarPlayerInfoPage;
+    import OpenDataForCcwWarPlayerInfoPage          = TwnsCcwWarPlayerInfoPage.OpenDataForCcwWarPlayerInfoPage;
+    import CcwWarAdvancedSettingsPage               = TwnsCcwWarAdvancedSettingsPage.CcwWarAdvancedSettingsPage;
+    import OpenDataForCcwWarAdvancedSettingsPage    = TwnsCcwWarAdvancedSettingsPage.OpenDataForCcwWarAdvancedSettingsPage;
+    import CcwWarBasicSettingsPage                  = TwnsCcwWarBasicSettingsPage.CcwWarBasicSettingsPage;
+    import OpenDataForCcwWarBasicSettingsPage       = TwnsCcwWarBasicSettingsPage.OpenDataForCcwWarBasicSettingsPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
 
     // eslint-disable-next-line no-shadow
     export class CcwMyWarListPanel extends TwnsUiPanel.UiPanel<void> {

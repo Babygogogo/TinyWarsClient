@@ -1,5 +1,5 @@
 
-import BwHelpers                from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
 import ProtoTypes               from "../../tools/proto/ProtoTypes";
 import TwnsBwFieldView          from "../view/BwFieldView";
@@ -40,8 +40,8 @@ namespace TwnsBwField {
                 return ClientErrorCode.BwFieldInit00;
             }
 
-            const mapSize = BwHelpers.getMapSize(data.tileMap);
-            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+            const mapSize = WarCommonHelpers.getMapSize(data.tileMap);
+            if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 return ClientErrorCode.BwFieldInit01;
             }
 
@@ -115,7 +115,7 @@ namespace TwnsBwField {
             configVersion           : string;
             playersCountUnneutral   : number;
         }): ClientErrorCode {
-            const mapSize       = BwHelpers.getMapSize(data.tileMap);
+            const mapSize       = WarCommonHelpers.getMapSize(data.tileMap);
             const fogMapError   = this.getFogMap().fastInit({
                 data                : data.fogMap,
                 mapSize,

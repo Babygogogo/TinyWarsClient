@@ -1,15 +1,16 @@
 
-import Logger                       from "../../tools/helpers/Logger";
-import Types                        from "../../tools/helpers/Types";
-import { MeWar }                        from "./MeWar";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import UserModel                    from "../../user/model/UserModel";
-import * as MeUtility                   from "./MeUtility";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Logger           from "../../tools/helpers/Logger";
+import Types            from "../../tools/helpers/Types";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import UserModel        from "../../user/model/UserModel";
+import MeUtility        from "./MeUtility";
+import TwnsMeWar        from "./MeWar";
 
 namespace MeModel {
-    import MapReviewStatus                  = Types.MapReviewStatus;
-    import IMapEditorData                   = ProtoTypes.Map.IMapEditorData;
+    import MeWar            = TwnsMeWar.MeWar;
+    import MapReviewStatus  = Types.MapReviewStatus;
+    import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
 
     const MAP_DICT  = new Map<number, IMapEditorData>();
     let _war        : MeWar;

@@ -9,7 +9,7 @@ import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import UserModel            from "../../user/model/UserModel";
-import BwHelpers            from "./BwHelpers";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwPlayer {
@@ -108,7 +108,7 @@ namespace TwnsBwPlayer {
             }
 
             const coCurrentEnergy = data.coCurrentEnergy || 0;
-            if (coCurrentEnergy > BwHelpers.getCoMaxEnergy(coConfig)) {
+            if (coCurrentEnergy > WarCommonHelpers.getCoMaxEnergy(coConfig)) {
                 return ClientErrorCode.BwPlayerInit11;
             }
 
@@ -311,7 +311,7 @@ namespace TwnsBwPlayer {
             return this._hasVotedForDraw;
         }
         public checkCanVoteForDraw(): boolean {
-            return BwHelpers.checkCanVoteForDraw({
+            return WarCommonHelpers.checkCanVoteForDraw({
                 playerIndex : this.getPlayerIndex(),
                 aliveState  : this.getAliveState(),
             });
@@ -423,7 +423,7 @@ namespace TwnsBwPlayer {
         }
         public getCoMaxEnergy(): number | null | undefined {
             const config = this._getCoBasicCfg();
-            return config ? BwHelpers.getCoMaxEnergy(config) : 0;
+            return config ? WarCommonHelpers.getCoMaxEnergy(config) : 0;
         }
         public getCoZoneExpansionEnergyList(): number[] | null | undefined {
             const cfg = this._getCoBasicCfg();

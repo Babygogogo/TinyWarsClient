@@ -9,7 +9,7 @@ import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import WarRuleHelpers              from "../../tools/warHelpers/WarRuleHelpers";
 import UserModel                    from "../../user/model/UserModel";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 import SpmModel                     from "../../singlePlayerMode/model/SpmModel";
@@ -61,7 +61,7 @@ namespace ScrCreateModel {
     }
 
     export function getPlayerRule(playerIndex: number): IDataForPlayerRule {
-        return BwWarRuleHelpers.getPlayerRule(getWarRule(), playerIndex);
+        return WarRuleHelpers.getPlayerRule(getWarRule(), playerIndex);
     }
     export function getPlayerInfo(playerIndex: number): IDataForPlayerInRoom {
         return getData().playerInfoList.find(v => v.playerIndex === playerIndex);
@@ -99,7 +99,7 @@ namespace ScrCreateModel {
         }
     }
     async function resetDataByCustomWarRuleId(): Promise<void> {
-        getData().settingsForCommon.warRule = BwWarRuleHelpers.createDefaultWarRule(null, (await getMapRawData()).playersCountUnneutral);
+        getData().settingsForCommon.warRule = WarRuleHelpers.createDefaultWarRule(null, (await getMapRawData()).playersCountUnneutral);
         setCustomWarRuleId();
         await resetPlayerInfoList();
     }
@@ -165,8 +165,8 @@ namespace ScrCreateModel {
 
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
             const oldInfo               = oldPlayerInfoList.find(v => v.playerIndex === playerIndex);
-            const availableCoIdArray    = BwWarRuleHelpers.getAvailableCoIdArrayForPlayer(warRule, playerIndex, configVersion);
-            const newCoId               = BwWarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
+            const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer(warRule, playerIndex, configVersion);
+            const newCoId               = WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
             if (oldInfo) {
                 const coId = oldInfo.coId;
                 newPlayerInfoList.push({
@@ -244,22 +244,22 @@ namespace ScrCreateModel {
         setPresetWarRuleId(null);
 
         const playerRule        = getPlayerRule(playerIndex);
-        playerRule.teamIndex    = playerRule.teamIndex % (BwWarRuleHelpers.getPlayersCount(getWarRule())) + 1;
+        playerRule.teamIndex    = playerRule.teamIndex % (WarRuleHelpers.getPlayersCount(getWarRule())) + 1;
 
         Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as NotifyData.ScrCreatePlayerInfoChanged);
     }
 
     export function getBannedCoIdArray(playerIndex: number): number[] {
-        return BwWarRuleHelpers.getBannedCoIdArray(getWarRule(), playerIndex);
+        return WarRuleHelpers.getBannedCoIdArray(getWarRule(), playerIndex);
     }
     export function addBannedCoId(playerIndex: number, coId: number): void {
-        BwWarRuleHelpers.addBannedCoId(getWarRule(), playerIndex, coId);
+        WarRuleHelpers.addBannedCoId(getWarRule(), playerIndex, coId);
     }
     export function deleteBannedCoId(playerIndex: number, coId: number): void {
-        BwWarRuleHelpers.deleteBannedCoId(getWarRule(), playerIndex, coId);
+        WarRuleHelpers.deleteBannedCoId(getWarRule(), playerIndex, coId);
     }
     export function setBannedCoIdArray(playerIndex: number, coIdSet: Set<number>): void {
-        BwWarRuleHelpers.setBannedCoIdArray(getWarRule(), playerIndex, coIdSet);
+        WarRuleHelpers.setBannedCoIdArray(getWarRule(), playerIndex, coIdSet);
     }
 
     export function getCoId(playerIndex: number): number | undefined {

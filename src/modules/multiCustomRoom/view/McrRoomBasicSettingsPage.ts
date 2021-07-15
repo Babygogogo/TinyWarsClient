@@ -2,7 +2,7 @@
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
-import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
+import CommonHelpPanel = TwnsCommonHelpPanel.CommonHelpPanel;import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
@@ -12,7 +12,7 @@ import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
-import { McrModel }                     from "../../multiCustomRoom/model/McrModel";
+import McrModel                     from "../../multiCustomRoom/model/McrModel";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 
 export type OpenDataForMcrRoomBasicSettingsPage = {

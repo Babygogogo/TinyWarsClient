@@ -4,7 +4,7 @@ import Types                from "../../tools/helpers/Types";
 import Helpers              from "../../tools/helpers/Helpers";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
-import BwHelpers            from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 import Timer            from "../../tools/helpers/Timer";
 import CommonModel          from "../../common/model/CommonModel";
 import UserModel            from "../../user/model/UserModel";
@@ -78,11 +78,11 @@ namespace TwnsWarMapUnitView {
         private _updateImageHp(): void {
             const data          = this._unitData;
             const hp            = data ? data.currentHp : null;
-            const normalizedHp  = hp == null ? null : BwHelpers.getNormalizedHp(hp);
+            const normalizedHp  = hp == null ? null : WarCommonHelpers.getNormalizedHp(hp);
             const imgHp         = this._imgHp;
             if ((normalizedHp == null)                                                      ||
                 (normalizedHp <= 0)                                                         ||
-                (normalizedHp >= BwHelpers.getNormalizedHp(this._getUnitTemplateCfg().maxHp))
+                (normalizedHp >= WarCommonHelpers.getNormalizedHp(this._getUnitTemplateCfg().maxHp))
             ) {
                 imgHp.visible = false;
             } else {

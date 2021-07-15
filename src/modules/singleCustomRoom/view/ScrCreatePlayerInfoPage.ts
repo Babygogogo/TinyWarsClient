@@ -5,7 +5,7 @@ import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
-import { CommonCoInfoPanel }            from "../../common/view/CommonCoInfoPanel";
+import CommonCoInfoPanel = TwnsCommonCoInfoPanel.CommonCoInfoPanel;import TwnsCommonCoInfoPanel            from "../../common/view/CommonCoInfoPanel";
 import { ScrCreateChooseCoPanel }       from "./ScrCreateChooseCoPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
@@ -14,7 +14,7 @@ import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import NotifyData                   from "../../tools/notify/NotifyData";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import ScrCreateModel                     from "../model/ScrCreateModel";
 import LangTextType                     = TwnsLangTextType.LangTextType;
 import NotifyType                       = TwnsNotifyType.NotifyType;
@@ -160,7 +160,7 @@ class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPl
         const playerIndex           = this.data.playerIndex;
         const settingsForCommon     = roomInfo.settingsForCommon;
         this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-        this._labelTeamIndex.text   = Lang.getPlayerTeamName(BwHelpers.getTeamIndexByRuleForPlayers(settingsForCommon.warRule.ruleForPlayers, playerIndex));
+        this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarCommonHelpers.getTeamIndexByRuleForPlayers(settingsForCommon.warRule.ruleForPlayers, playerIndex));
 
         const playerData            = this._getPlayerData();
         this._imgSkin.source        = getSourceForImgSkin(playerData ? playerData.unitAndTileSkinId : null);

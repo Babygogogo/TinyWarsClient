@@ -6,7 +6,7 @@ import TwnsUiLabel                                                              
 import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
 import TwnsUiTab                                                                from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
-import { MfrMainMenuPanel }                                                     from "./MfrMainMenuPanel";
+import MfrMainMenuPanel= TwnsMfrMainMenuPanel.MfrMainMenuPanel;import TwnsMfrMainMenuPanel                                                     from "./MfrMainMenuPanel";
 import { MfrRoomInfoPanel }                                                     from "./MfrRoomInfoPanel";
 import { MfrJoinPasswordPanel }                                                 from "./MfrJoinPasswordPanel";
 import TwnsLobbyBottomPanel                                                 from "../../lobby/view/LobbyBottomPanel";
@@ -22,7 +22,7 @@ import TwnsLangTextType                                                     from
 import TwnsNotifyType                                                       from "../../tools/notify/NotifyType";
 import ProtoTypes                                                           from "../../tools/proto/ProtoTypes";
 import Types                                                                from "../../tools/helpers/Types";
-import { MfrModel }                                                             from "../../multiFreeRoom/model/MfrModel";
+import MfrModel                                                             from "../../multiFreeRoom/model/MfrModel";
 import MfrProxy                                                             from "../../multiFreeRoom/model/MfrProxy";
 import UserModel                                                            from "../../user/model/UserModel";
 import { MfrJoinModel }                                                         from "../model/MfrJoinModel";

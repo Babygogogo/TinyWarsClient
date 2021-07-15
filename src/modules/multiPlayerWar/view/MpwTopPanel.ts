@@ -2,10 +2,10 @@
 import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import { ChatPanel }                    from "../../chat/view/ChatPanel";
+import ChatPanel = TwnsChatPanel.ChatPanel;import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import { UserPanel }                    from "../../user/view/UserPanel";
-import { MpwWar }                       from "../../multiPlayerWar/model/MpwWar";
+import UserPanel = TwnsUserPanel.UserPanel;import TwnsUserPanel                    from "../../user/view/UserPanel";
+import MpwWar= TwnsMpwWar.MpwWar;import TwnsMpwWar                       from "../../multiPlayerWar/model/MpwWar";
 import BwCoListPanel = TwnsBwCoListPanel.BwCoListPanel;import TwnsBwCoListPanel                from "../../baseWar/view/BwCoListPanel";
 import { MpwActionPlanner }             from "../model/MpwActionPlanner";
 import { MpwWarMenuPanel }              from "./MpwWarMenuPanel";
@@ -17,8 +17,8 @@ import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
-import { ChatModel }                    from "../../chat/model/ChatModel";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
+import ChatModel                    from "../../chat/model/ChatModel";
 import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                     from "../../multiPlayerWar/model/MpwProxy";
 
@@ -188,7 +188,7 @@ namespace TwnsMpwTopPanel {
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
-                const gridIndex = BwHelpers.getIdleBuildingGridIndex(war);
+                const gridIndex = WarCommonHelpers.getIdleBuildingGridIndex(war);
                 if (!gridIndex) {
                     FloatText.show(Lang.getText(LangTextType.A0077));
                 } else {

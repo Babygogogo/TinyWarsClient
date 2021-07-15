@@ -1,229 +1,234 @@
 
-import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiButton                      from "../../tools/ui/UiButton";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import TwnsUiZoomableMap                from "../../tools/ui/UiZoomableMap";
-import TwnsCommonAlertPanel             from "../../common/view/CommonAlertPanel";
-import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyPanel                   from "../../lobby/view/LobbyPanel";
-import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
-import { FlowManager }                  from "../../tools/helpers/FlowManager";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import Types                        from "../../tools/helpers/Types";
-import Lang                         from "../../tools/lang/Lang";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import MeModel                      from "../model/MeModel";
-import MeProxy                      from "../model/MeProxy";
-import IMapEditorData                   = ProtoTypes.Map.IMapEditorData;
-import LangTextType                     = TwnsLangTextType.LangTextType;
+import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
+import TwnsLobbyBottomPanel     from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyPanel           from "../../lobby/view/LobbyPanel";
+import TwnsLobbyTopPanel        from "../../lobby/view/LobbyTopPanel";
+import FlowManager              from "../../tools/helpers/FlowManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiZoomableMap        from "../../tools/ui/UiZoomableMap";
+import MeModel                  from "../model/MeModel";
+import MeProxy                  from "../model/MeProxy";
 
-export class MeMapListPanel extends TwnsUiPanel.UiPanel<void> {
-    protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-    protected readonly _IS_EXCLUSIVE = true;
+namespace TwnsMeMapListPanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
+    import LangTextType     = TwnsLangTextType.LangTextType;
 
-    private static _instance: MeMapListPanel;
+    export class MeMapListPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
+        protected readonly _IS_EXCLUSIVE = true;
 
-    private _zoomMap        : TwnsUiZoomableMap.UiZoomableMap;
-    private _labelNoData    : TwnsUiLabel.UiLabel;
-    private _labelMenuTitle : TwnsUiLabel.UiLabel;
-    private _labelLoading   : TwnsUiLabel.UiLabel;
-    private _listMap        : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
-    private _btnBack        : TwnsUiButton.UiButton;
+        private static _instance: MeMapListPanel;
 
-    private _dataForListMap     : DataForMapRenderer[] = [];
-    private _selectedWarIndex   : number;
+        private _zoomMap        : TwnsUiZoomableMap.UiZoomableMap;
+        private _labelNoData    : TwnsUiLabel.UiLabel;
+        private _labelMenuTitle : TwnsUiLabel.UiLabel;
+        private _labelLoading   : TwnsUiLabel.UiLabel;
+        private _listMap        : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
+        private _btnBack        : TwnsUiButton.UiButton;
 
-    public static show(): void {
-        if (!MeMapListPanel._instance) {
-            MeMapListPanel._instance = new MeMapListPanel();
+        private _dataForListMap     : DataForMapRenderer[] = [];
+        private _selectedWarIndex   : number;
+
+        public static show(): void {
+            if (!MeMapListPanel._instance) {
+                MeMapListPanel._instance = new MeMapListPanel();
+            }
+            MeMapListPanel._instance.open(undefined);
         }
-        MeMapListPanel._instance.open(undefined);
-    }
-    public static async hide(): Promise<void> {
-        if (MeMapListPanel._instance) {
-            await MeMapListPanel._instance.close();
-        }
-    }
-
-    public constructor() {
-        super();
-
-        this.skinName = "resource/skins/mapEditor/MeMapListPanel.exml";
-    }
-
-    protected _onOpened(): void {
-        this._setNotifyListenerArray([
-            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: NotifyType.MsgMeGetDataList,     callback: this._onNotifySMeGetDataList },
-        ]);
-        this._setUiListenerArray([
-            { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-        ]);
-        this._listMap.setItemRenderer(MapRenderer);
-
-        this._updateComponentsForLanguage();
-        this._labelLoading.visible = true;
-
-        MeProxy.reqMeGetMapDataList();
-    }
-
-    public async setSelectedIndex(newIndex: number): Promise<void> {
-        const oldIndex         = this._selectedWarIndex;
-        const dataList         = this._dataForListMap;
-        this._selectedWarIndex = dataList[newIndex] ? newIndex : undefined;
-
-        if (dataList[oldIndex]) {
-            this._listMap.updateSingleData(oldIndex, dataList[oldIndex]);
+        public static async hide(): Promise<void> {
+            if (MeMapListPanel._instance) {
+                await MeMapListPanel._instance.close();
+            }
         }
 
-        if (dataList[newIndex]) {
-            this._listMap.updateSingleData(newIndex, dataList[newIndex]);
-            await this._showMap(newIndex);
-        } else {
-            this._zoomMap.clearMap();
-        }
-    }
-    public getSelectedIndex(): number {
-        return this._selectedWarIndex;
-    }
+        public constructor() {
+            super();
 
-    ////////////////////////////////////////////////////////////////////////////////
-    // Callbacks.
-    ////////////////////////////////////////////////////////////////////////////////
-    private _onNotifySMeGetDataList(e: egret.Event): void {
-        const newData               = this._createDataForListMap(MeModel.getDataDict());
-        this._dataForListMap        = newData;
-        this._labelLoading.visible  = false;
-
-        if (newData.length > 0) {
-            this._listMap.bindData(newData);
-        } else {
-            this._listMap.clear();
-        }
-        this.setSelectedIndex(0);
-    }
-
-    private _onNotifyLanguageChanged(e: egret.Event): void {
-        this._updateComponentsForLanguage();
-    }
-
-    private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-        this.close();
-        TwnsLobbyPanel.LobbyPanel.show();
-        TwnsLobbyTopPanel.LobbyTopPanel.show();
-        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // Private functions.
-    ////////////////////////////////////////////////////////////////////////////////
-    private _updateComponentsForLanguage(): void {
-        this._labelNoData.text      = Lang.getText(LangTextType.B0278);
-        this._labelMenuTitle.text   = Lang.getText(LangTextType.B0272);
-        this._labelLoading.text     = Lang.getText(LangTextType.A0078);
-        this._btnBack.label         = Lang.getText(LangTextType.B0146);
-    }
-
-    private _createDataForListMap(dict: Map<number, IMapEditorData>): DataForMapRenderer[] {
-        const dataList: DataForMapRenderer[] = [];
-
-        let index = 0;
-        for (const [slotIndex, info] of dict) {
-            dataList.push({
-                index,
-                panel   : this,
-                mapData : info,
-            });
-            ++index;
+            this.skinName = "resource/skins/mapEditor/MeMapListPanel.exml";
         }
 
-        return dataList;
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMeGetDataList,     callback: this._onNotifySMeGetDataList },
+            ]);
+            this._setUiListenerArray([
+                { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
+            ]);
+            this._listMap.setItemRenderer(MapRenderer);
+
+            this._updateComponentsForLanguage();
+            this._labelLoading.visible = true;
+
+            MeProxy.reqMeGetMapDataList();
+        }
+
+        public async setSelectedIndex(newIndex: number): Promise<void> {
+            const oldIndex         = this._selectedWarIndex;
+            const dataList         = this._dataForListMap;
+            this._selectedWarIndex = dataList[newIndex] ? newIndex : undefined;
+
+            if (dataList[oldIndex]) {
+                this._listMap.updateSingleData(oldIndex, dataList[oldIndex]);
+            }
+
+            if (dataList[newIndex]) {
+                this._listMap.updateSingleData(newIndex, dataList[newIndex]);
+                await this._showMap(newIndex);
+            } else {
+                this._zoomMap.clearMap();
+            }
+        }
+        public getSelectedIndex(): number {
+            return this._selectedWarIndex;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _onNotifySMeGetDataList(e: egret.Event): void {
+            const newData               = this._createDataForListMap(MeModel.getDataDict());
+            this._dataForListMap        = newData;
+            this._labelLoading.visible  = false;
+
+            if (newData.length > 0) {
+                this._listMap.bindData(newData);
+            } else {
+                this._listMap.clear();
+            }
+            this.setSelectedIndex(0);
+        }
+
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
+        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+            this.close();
+            TwnsLobbyPanel.LobbyPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Private functions.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._labelNoData.text      = Lang.getText(LangTextType.B0278);
+            this._labelMenuTitle.text   = Lang.getText(LangTextType.B0272);
+            this._labelLoading.text     = Lang.getText(LangTextType.A0078);
+            this._btnBack.label         = Lang.getText(LangTextType.B0146);
+        }
+
+        private _createDataForListMap(dict: Map<number, IMapEditorData>): DataForMapRenderer[] {
+            const dataList: DataForMapRenderer[] = [];
+
+            let index = 0;
+            for (const [slotIndex, info] of dict) {
+                dataList.push({
+                    index,
+                    panel   : this,
+                    mapData : info,
+                });
+                ++index;
+            }
+
+            return dataList;
+        }
+
+        private async _showMap(index: number): Promise<void> {
+            const mapData = this._dataForListMap[index].mapData.mapRawData;
+            if (!mapData) {
+                this._labelNoData.visible = true;
+                this._zoomMap.clearMap();
+
+            } else {
+                this._labelNoData.visible = false;
+                this._zoomMap.showMapByMapData(mapData);
+            }
+        }
     }
 
-    private async _showMap(index: number): Promise<void> {
-        const mapData = this._dataForListMap[index].mapData.mapRawData;
-        if (!mapData) {
-            this._labelNoData.visible = true;
-            this._zoomMap.clearMap();
+    type DataForMapRenderer = {
+        index   : number;
+        mapData : IMapEditorData;
+        panel   : MeMapListPanel;
+    };
+    class MapRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapRenderer> {
+        private _btnChoose      : TwnsUiButton.UiButton;
+        private _labelName      : TwnsUiLabel.UiLabel;
+        private _labelStatus    : TwnsUiLabel.UiLabel;
+        private _btnNext        : TwnsUiButton.UiButton;
 
-        } else {
-            this._labelNoData.visible = false;
-            this._zoomMap.showMapByMapData(mapData);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
+            ]);
+        }
+
+        protected _onDataChanged(): void {
+            const data                  = this.data;
+            const mapData               = data.mapData;
+            const mapRawData            = mapData.mapRawData;
+            const status                = mapData.reviewStatus;
+            this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this._labelStatus.text      = Lang.getMapReviewStatusText(status);
+            this._labelStatus.textColor = getReviewStatusTextColor(status);
+            this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData ? mapRawData.mapNameArray : [] }) || `(${Lang.getText(LangTextType.B0277)})`;
+        }
+
+        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+            const data = this.data;
+            data.panel.setSelectedIndex(data.index);
+        }
+
+        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
+            const data          = this.data;
+            const mapData       = data.mapData;
+            const reviewStatus  = mapData.reviewStatus;
+
+            if (reviewStatus === Types.MapReviewStatus.Rejected) {
+                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    title   : Lang.getText(LangTextType.B0305),
+                    content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
+                    callback: () => {
+                        FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
+                    },
+                });
+            } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
+                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    title   : Lang.getText(LangTextType.B0326),
+                    content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
+                    callback: () => {
+                        FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
+                    },
+                });
+            } else {
+                FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
+            }
+        }
+    }
+
+    function getReviewStatusTextColor(status: Types.MapReviewStatus): number {
+        switch (status) {
+            case Types.MapReviewStatus.None     : return 0xffffff;
+            case Types.MapReviewStatus.Reviewing: return 0xffff00;
+            case Types.MapReviewStatus.Rejected : return 0xff0000;
+            case Types.MapReviewStatus.Accepted : return 0x00ff00;
+            default                             : return 0xffffff;
         }
     }
 }
 
-type DataForMapRenderer = {
-    index   : number;
-    mapData : IMapEditorData;
-    panel   : MeMapListPanel;
-};
-class MapRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapRenderer> {
-    private _btnChoose      : TwnsUiButton.UiButton;
-    private _labelName      : TwnsUiLabel.UiLabel;
-    private _labelStatus    : TwnsUiLabel.UiLabel;
-    private _btnNext        : TwnsUiButton.UiButton;
-
-    protected _onOpened(): void {
-        this._setUiListenerArray([
-            { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-            { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
-        ]);
-    }
-
-    protected _onDataChanged(): void {
-        const data                  = this.data;
-        const mapData               = data.mapData;
-        const mapRawData            = mapData.mapRawData;
-        const status                = mapData.reviewStatus;
-        this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-        this._labelStatus.text      = Lang.getMapReviewStatusText(status);
-        this._labelStatus.textColor = getReviewStatusTextColor(status);
-        this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData ? mapRawData.mapNameArray : [] }) || `(${Lang.getText(LangTextType.B0277)})`;
-    }
-
-    private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-        const data = this.data;
-        data.panel.setSelectedIndex(data.index);
-    }
-
-    private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-        const data          = this.data;
-        const mapData       = data.mapData;
-        const reviewStatus  = mapData.reviewStatus;
-
-        if (reviewStatus === Types.MapReviewStatus.Rejected) {
-            TwnsCommonAlertPanel.CommonAlertPanel.show({
-                title   : Lang.getText(LangTextType.B0305),
-                content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
-                callback: () => {
-                    FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
-                },
-            });
-        } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
-            TwnsCommonAlertPanel.CommonAlertPanel.show({
-                title   : Lang.getText(LangTextType.B0326),
-                content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
-                callback: () => {
-                    FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
-                },
-            });
-        } else {
-            FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
-        }
-    }
-}
-
-function getReviewStatusTextColor(status: Types.MapReviewStatus): number {
-    switch (status) {
-        case Types.MapReviewStatus.None     : return 0xffffff;
-        case Types.MapReviewStatus.Reviewing: return 0xffff00;
-        case Types.MapReviewStatus.Rejected : return 0xff0000;
-        case Types.MapReviewStatus.Accepted : return 0x00ff00;
-        default                             : return 0xffffff;
-    }
-}
+export default TwnsMeMapListPanel;

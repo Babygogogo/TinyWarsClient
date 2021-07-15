@@ -24,14 +24,14 @@ import TwnsLangTextType                                                     from
 import TwnsNotifyType                                                       from "../../tools/notify/NotifyType";
 import ProtoTypes                                                           from "../../tools/proto/ProtoTypes";
 import Types                                                                from "../../tools/helpers/Types";
-import BwWarRuleHelpers                                                     from "../../baseWar/model/BwWarRuleHelpers";
+import WarRuleHelpers                                                     from "../../tools/warHelpers/WarRuleHelpers";
 import Timer                                                            from "../../tools/helpers/Timer";
 import UserModel                                                            from "../../user/model/UserModel";
 import WarMapModel                                                          from "../../warMap/model/WarMapModel";
-import { MrrModel }                                                             from "../model/MrrModel";
+import MrrModel                                                             from "../model/MrrModel";
 import MrrProxy                                                             from "../model/MrrProxy";
 import { MrrSelfSettingsModel }                                                 from "../model/MrrSelfSettingsModel";
-import BwHelpers                                                            from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers                                                     from "../../tools/warHelpers/WarCommonHelpers";
 import LangTextType                                                             = TwnsLangTextType.LangTextType;
 import NotifyType                                                               = TwnsNotifyType.NotifyType;
 import NetMessage                                                               = ProtoTypes.NetMessage;
@@ -528,7 +528,7 @@ class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<Data
         const data = this.data;
         if (data) {
             const playerIndex       = data.playerIndex;
-            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelpers.getTeamIndex((await MrrModel.getRoomInfo(data.roomId)).settingsForCommon.warRule, playerIndex))})`;
+            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex((await MrrModel.getRoomInfo(data.roomId)).settingsForCommon.warRule, playerIndex))})`;
         }
     }
     private async _updateState(): Promise<void> {
@@ -588,7 +588,7 @@ class SkinIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSk
         const data = this.data;
         if (data) {
             const skinId            = data.skinId;
-            this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, MrrSelfSettingsModel.getUnitAndTileSkinId() === skinId);
+            this._imgColor.source   = WarCommonHelpers.getImageSourceForSkinId(skinId, MrrSelfSettingsModel.getUnitAndTileSkinId() === skinId);
         }
     }
 }

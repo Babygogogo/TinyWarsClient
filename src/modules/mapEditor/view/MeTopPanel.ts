@@ -1,29 +1,38 @@
 
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiButton                      from "../../tools/ui/UiButton";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
-import BwUnitView = TwnsBwUnitView.BwUnitView;import TwnsBwUnitView                   from "../../baseWar/view/BwUnitView";
-import { MeDrawer }                     from "../model/MeDrawer";
-import { MeWar }                        from "../model/MeWar";
-import { MeChooseTileBasePanel }        from "./MeChooseTileBasePanel";
-import { MeChooseUnitPanel }            from "./MeChooseUnitPanel";
-import TwnsMeTileSimpleView             from "./MeTileSimpleView";
-import { MeWarMenuPanel }               from "./MeWarMenuPanel";
-import { MeChooseTileObjectPanel }      from "./MeChooseTileObjectPanel";
-import { MeVisibilityPanel }            from "./MeVisibilityPanel";
-import { MeSymmetryPanel }              from "./MeSymmetryPanel";
+import TwnsBwUnit                   from "../../baseWar/model/BwUnit";
+import TwnsBwUnitView               from "../../baseWar/view/BwUnitView";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import Types                        from "../../tools/helpers/Types";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Lang                         from "../../tools/lang/Lang";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsMeDrawer                 from "../model/MeDrawer";
 import MeModel                      from "../model/MeModel";
+import TwnsMeWar                    from "../model/MeWar";
+import TwnsMeChooseTileBasePanel    from "./MeChooseTileBasePanel";
+import TwnsMeChooseTileObjectPanel  from "./MeChooseTileObjectPanel";
+import TwnsMeChooseUnitPanel        from "./MeChooseUnitPanel";
+import TwnsMeSymmetryPanel          from "./MeSymmetryPanel";
+import TwnsMeTileSimpleView         from "./MeTileSimpleView";
+import TwnsMeVisibilityPanel        from "./MeVisibilityPanel";
+import TwnsMeWarMenuPanel           from "./MeWarMenuPanel";
 
 namespace TwnsMeTopPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import DrawerMode       = Types.MapEditorDrawerMode;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import BwUnitView               = TwnsBwUnitView.BwUnitView;
+    import MeDrawer                 = TwnsMeDrawer.MeDrawer;
+    import MeWar                    = TwnsMeWar.MeWar;
+    import MeChooseTileBasePanel    = TwnsMeChooseTileBasePanel.MeChooseTileBasePanel;
+    import MeChooseUnitPanel        = TwnsMeChooseUnitPanel.MeChooseUnitPanel;
+    import MeWarMenuPanel           = TwnsMeWarMenuPanel.MeWarMenuPanel;
+    import MeChooseTileObjectPanel  = TwnsMeChooseTileObjectPanel.MeChooseTileObjectPanel;
+    import MeVisibilityPanel        = TwnsMeVisibilityPanel.MeVisibilityPanel;
+    import MeSymmetryPanel          = TwnsMeSymmetryPanel.MeSymmetryPanel;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import DrawerMode               = Types.MapEditorDrawerMode;
+    import LangTextType             = TwnsLangTextType.LangTextType;
 
     // eslint-disable-next-line no-shadow
     export class MeTopPanel extends TwnsUiPanel.UiPanel<void> {

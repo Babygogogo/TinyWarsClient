@@ -6,9 +6,9 @@ import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
+import CommonHelpPanel = TwnsCommonHelpPanel.CommonHelpPanel;import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
-import { FlowManager }                  from "../../tools/helpers/FlowManager";
+import FlowManager                  from "../../tools/helpers/FlowManager";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
@@ -16,7 +16,7 @@ import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import Types                        from "../../tools/helpers/Types";
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import SpmModel                     from "../../singlePlayerMode/model/SpmModel";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 import SpwModel                     from "../model/SpwModel";
@@ -179,13 +179,13 @@ class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlot
             labelMapName.text   = `----`;
         } else {
             const warData   = slotInfo.warData;
-            labelType.text  = Lang.getWarTypeName(BwHelpers.getWarType(warData));
+            labelType.text  = Lang.getWarTypeName(WarCommonHelpers.getWarType(warData));
 
             const slotComment = slotInfo.extraData.slotComment;
             if (slotComment) {
                 labelMapName.text = slotComment;
             } else {
-                const mapId         = BwHelpers.getMapId(warData);
+                const mapId         = WarCommonHelpers.getMapId(warData);
                 labelMapName.text   = mapId == null
                     ? `(${Lang.getText(LangTextType.B0321)})`
                     : await WarMapModel.getMapNameInCurrentLanguage(mapId);

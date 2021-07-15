@@ -7,7 +7,7 @@ import TwnsUiLabel                                                              
 import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
 import TwnsUiTab                                                                from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
-import { ChatPanel }                                                            from "../../chat/view/ChatPanel";
+import ChatPanel = TwnsChatPanel.ChatPanel;import TwnsChatPanel                                                            from "../../chat/view/ChatPanel";
 import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel                                                   from "../../common/view/CommonConfirmPanel";
 import { MfrMyRoomListPanel }                                                   from "./MfrMyRoomListPanel";
 import { OpenDataForMfrRoomMapInfoPage, MfrRoomMapInfoPage }                    from "./MfrRoomMapInfoPage";
@@ -26,9 +26,9 @@ import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import ProtoTypes                                                           from "../../tools/proto/ProtoTypes";
 import Types                                                                from "../../tools/helpers/Types";
-import BwHelpers                                                            from "../../baseWar/model/BwHelpers";
-import BwWarRuleHelpers                                                      from "../../baseWar/model/BwWarRuleHelpers";
-import { MfrModel }                                                             from "../../multiFreeRoom/model/MfrModel";
+import WarCommonHelpers                                                     from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers                                                      from "../../tools/warHelpers/WarRuleHelpers";
+import MfrModel                                                             from "../../multiFreeRoom/model/MfrModel";
 import MfrProxy                                                             from "../../multiFreeRoom/model/MfrProxy";
 import UserModel                                                            from "../../user/model/UserModel";
 import NetMessage                                                               = ProtoTypes.NetMessage;
@@ -506,7 +506,7 @@ class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<Data
         if (data) {
             const playerIndex       = data.playerIndex;
             const roomInfo          = await MfrModel.getRoomInfo(data.roomId);
-            const teamIndex         = roomInfo ? BwWarRuleHelpers.getTeamIndex(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule, playerIndex) : null;
+            const teamIndex         = roomInfo ? WarRuleHelpers.getTeamIndex(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule, playerIndex) : null;
             this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(teamIndex)})`;
         }
     }
@@ -559,7 +559,7 @@ class SkinIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSk
             const selfUserId        = UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
-            this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
+            this._imgColor.source   = WarCommonHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
         }
     }
 }

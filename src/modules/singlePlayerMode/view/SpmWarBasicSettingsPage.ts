@@ -2,7 +2,7 @@
 import TwnsUiButton                      from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
-import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
+import CommonHelpPanel = TwnsCommonHelpPanel.CommonHelpPanel;import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
@@ -10,7 +10,7 @@ import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import NotifyType       = TwnsNotifyType.NotifyType;
 import Types                        from "../../tools/helpers/Types";
-import BwHelpers                    from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 import SpmModel                     from "../model/SpmModel";
 
@@ -106,7 +106,7 @@ export class SpmWarBasicSettingsPage extends TwnsUiTabPage.UiTabPage<OpenDataFor
     private async _updateLabelMapName(): Promise<void> {
         const slotData          = this._getSlotData();
         const warData           = slotData ? slotData.warData : null;
-        const mapId             = warData ? BwHelpers.getMapId(warData) : null;
+        const mapId             = warData ? WarCommonHelpers.getMapId(warData) : null;
         this._labelMapName.text = mapId == null
             ? `(${Lang.getText(LangTextType.B0321)})`
             : await WarMapModel.getMapNameInCurrentLanguage(mapId);

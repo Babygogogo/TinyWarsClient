@@ -16,7 +16,7 @@ import MpwModel                         from "../../multiPlayerWar/model/MpwMode
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import { McrWatchOngoingWarsPanel }         from "./McrWatchOngoingWarsPanel";
-import { McrMainMenuPanel }                 from "./McrMainMenuPanel";
+import McrMainMenuPanel= TwnsMcrMainMenuPanel.McrMainMenuPanel;import TwnsMcrMainMenuPanel                 from "./McrMainMenuPanel";
 import { McrWatchMakeRequestWarsPanel }     from "./McrWatchMakeRequestWarsPanel";
 import { McrWatchDeleteWatcherWarsPanel }   from "./McrWatchDeleteWatcherWarsPanel";
 import { McrWatchHandleRequestWarsPanel }   from "./McrWatchHandleRequestWarsPanel";

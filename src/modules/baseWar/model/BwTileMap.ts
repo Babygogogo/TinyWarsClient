@@ -7,7 +7,7 @@ import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import TwnsBwTileMapView    from "../view/BwTileMapView";
-import BwHelpers            from "./BwHelpers";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsBwTile           from "./BwTile";
 import TwnsBwWar            from "./BwWar";
 
@@ -45,7 +45,7 @@ namespace TwnsBwTileMap {
 
             const mapWidth  = mapSize.width;
             const mapHeight = mapSize.height;
-            if ((!BwHelpers.checkIsValidMapSize(mapSize)) ||
+            if ((!WarCommonHelpers.checkIsValidMapSize(mapSize)) ||
                 (mapWidth * mapHeight !== tiles.length)
             ) {
                 return ClientErrorCode.BwTileMapInit02;

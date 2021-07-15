@@ -1,14 +1,15 @@
 
-import { ChatPanel }            from "../view/ChatPanel";
+import TwnsChatPanel        from "../view/ChatPanel";
 import Logger               from "../../tools/helpers/Logger";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import Types                from "../../tools/helpers/Types";
 import UserModel            from "../../user/model/UserModel";
 import FloatText            from "../../tools/helpers/FloatText";
 
-export namespace ChatModel {
-    import ChatCategory             = Types.ChatMessageToCategory;
-    import IChatMessage             = ProtoTypes.Chat.IChatMessage;
+namespace ChatModel {
+    import ChatCategory     = Types.ChatMessageToCategory;
+    import IChatMessage     = ProtoTypes.Chat.IChatMessage;
+    import ChatPanel        = TwnsChatPanel.ChatPanel;
 
     type MessageDict                    = Map<number, IChatMessage[]>;
     const _allMessageDict               = new Map<ChatCategory, MessageDict>();
@@ -146,3 +147,5 @@ export namespace ChatModel {
         }
     }
 }
+
+export default ChatModel;

@@ -1,22 +1,22 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Logger               from "../../tools/helpers/Logger";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsBwPlayer         from "./BwPlayer";
-import TwnsBwTile           from "./BwTile";
-import TwnsBwTileMap        from "./BwTileMap";
-import TwnsBwUnit           from "./BwUnit";
-import TwnsBwUnitMap        from "./BwUnitMap";
-import BwVisibilityHelpers  from "./BwVisibilityHelpers";
-import TwnsBwWar            from "./BwWar";
-import BwWarRuleHelpers     from "./BwWarRuleHelpers";
+import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+import CommonConstants      from "../helpers/CommonConstants";
+import ConfigManager        from "../helpers/ConfigManager";
+import GridIndexHelpers     from "../helpers/GridIndexHelpers";
+import Helpers              from "../helpers/Helpers";
+import Logger               from "../helpers/Logger";
+import Types                from "../helpers/Types";
+import ProtoTypes           from "../proto/ProtoTypes";
+import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
+import TwnsBwTile           from "../../baseWar/model/BwTile";
+import TwnsBwTileMap        from "../../baseWar/model/BwTileMap";
+import TwnsBwUnit           from "../../baseWar/model/BwUnit";
+import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
+import WarVisibilityHelpers from "./WarVisibilityHelpers";
+import TwnsBwWar            from "../../baseWar/model/BwWar";
+import WarRuleHelpers       from "./WarRuleHelpers";
 
-namespace BwHelpers {
+namespace WarCommonHelpers {
     import GridIndex        = Types.GridIndex;
     import MovableArea      = Types.MovableArea;
     import AttackableArea   = Types.AttackableArea;
@@ -235,7 +235,7 @@ namespace BwHelpers {
                     return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_16 };
                 }
 
-                if (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex,
                     unitType,
@@ -310,7 +310,7 @@ namespace BwHelpers {
                     return undefined;
                 }
 
-                return BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                return WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex           : destination,
                     unitType,
@@ -1135,7 +1135,7 @@ namespace BwHelpers {
     export function getWarType(warData: ISerialWar): WarType {
         const settingsForCommon = warData.settingsForCommon;
         const warRule           = settingsForCommon ? settingsForCommon.warRule : null;
-        const hasFog            = warRule ? BwWarRuleHelpers.getHasFogByDefault(warRule) : null;
+        const hasFog            = warRule ? WarRuleHelpers.getHasFogByDefault(warRule) : null;
         if (hasFog == null) {
             return WarType.Undefined;
         }
@@ -1317,4 +1317,4 @@ namespace BwHelpers {
     }
 }
 
-export default BwHelpers;
+export default WarCommonHelpers;

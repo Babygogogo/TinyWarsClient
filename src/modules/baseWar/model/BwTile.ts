@@ -7,10 +7,10 @@ import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import TwnsBwTileView       from "../view/BwTileView";
-import BwHelpers            from "./BwHelpers";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsBwPlayer         from "./BwPlayer";
 import TwnsBwUnit           from "./BwUnit";
-import BwVisibilityHelpers  from "./BwVisibilityHelpers";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwTile {
@@ -223,7 +223,7 @@ namespace TwnsBwTile {
         }
         public serializeForCreateSfw(): ISerialTile | undefined {
             const war = this.getWar();
-            if (BwVisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
+            if (WarVisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
                 const data = this.serialize();
                 if (data == null) {
                     Logger.error(`BwTile.serializeForCreateSfw() empty data.`);
@@ -652,7 +652,7 @@ namespace TwnsBwTile {
                 const currentHp             = attributes.hp;
                 const normalizedMaxHp       = unit.getNormalizedMaxHp();
                 const productionCost        = unit.getProductionFinalCost();
-                const normalizedCurrentHp   = BwHelpers.getNormalizedHp(currentHp);
+                const normalizedCurrentHp   = WarCommonHelpers.getNormalizedHp(currentHp);
                 const normalizedRepairHp    = Math.min(
                     normalizedMaxHp - normalizedCurrentHp,
                     this.getCfgNormalizedRepairHp()!,
@@ -760,7 +760,7 @@ namespace TwnsBwTile {
                     const tileCategory = skillCfg[2];
                     if ((tileCategory != null)                                                                                  &&
                         (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, tileCategory))                        &&
-                        (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, skillCfg[0], coGridIndexListOnMap, coZoneRadius))
+                        (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, skillCfg[0], coGridIndexListOnMap, coZoneRadius))
                     ) {
                         return skillCfg;
                     }

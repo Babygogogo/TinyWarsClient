@@ -1,9 +1,9 @@
 
 
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import Timer            from "../../tools/helpers/Timer";
+import ProtoTypes   from "../../tools/proto/ProtoTypes";
+import Timer        from "../../tools/helpers/Timer";
 
-export namespace BroadcastModel {
+namespace BroadcastModel {
     import IBroadcastMessage        = ProtoTypes.Broadcast.IBroadcastMessage;
 
     let _messageList    : IBroadcastMessage[] = [];
@@ -22,3 +22,5 @@ export namespace BroadcastModel {
         });
     }
 }
+
+export default BroadcastModel;

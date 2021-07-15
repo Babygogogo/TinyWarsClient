@@ -12,7 +12,7 @@ import TwnsLangTextType from "../../tools/lang/LangTextType";
 import LangTextType         = TwnsLangTextType.LangTextType;
 import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 import Types                                from "../../tools/helpers/Types";
-import BwHelpers                            from "../../baseWar/model/BwHelpers";
+import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
 import * as SpwLocalProxy                       from "./SpwLocalProxy";
 import TurnPhaseCode                            = Types.TurnPhaseCode;
 import UnitState                                = Types.UnitActionState;
@@ -641,7 +641,7 @@ export class SpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
         const beginningGridIndex    = focusUnit.getGridIndex();
         const hasAmmo               = (focusUnit.getPrimaryWeaponCurrentAmmo() > 0) || (focusUnit.checkHasSecondaryWeapon());
         const unitMap               = this._getUnitMap();
-        this._setAttackableArea(BwHelpers.createAttackableArea({
+        this._setAttackableArea(WarCommonHelpers.createAttackableArea({
             movableArea     : this.getMovableArea(),
             mapSize         : this.getMapSize(),
             minAttackRange  : focusUnit.getMinAttackRange(),
@@ -669,8 +669,8 @@ export class SpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
         const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
         const mapSize               = this.getMapSize();
         const unitMap               = this._getUnitMap();
-        const newArea               = BwHelpers.createAttackableArea({
-            movableArea: BwHelpers.createMovableArea({
+        const newArea               = WarCommonHelpers.createAttackableArea({
+            movableArea: WarCommonHelpers.createMovableArea({
                 origin          : unit.getGridIndex(),
                 maxMoveCost     : unit.getFinalMoveRange(),
                 mapSize,

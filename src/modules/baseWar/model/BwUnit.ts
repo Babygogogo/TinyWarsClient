@@ -7,10 +7,10 @@ import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import TwnsBwUnitView       from "../view/BwUnitView";
-import BwHelpers            from "./BwHelpers";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsBwPlayer         from "./BwPlayer";
 import TwnsBwTile           from "./BwTile";
-import BwVisibilityHelpers  from "./BwVisibilityHelpers";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwUnit {
@@ -59,7 +59,7 @@ namespace TwnsBwUnit {
         // Initializers and serializers.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public init(unitData: ISerialUnit, configVersion: string): ClientErrorCode {
-            const validationError = BwHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+            const validationError = WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                 unitData,
                 configVersion,
                 mapSize                 : undefined,
@@ -379,11 +379,11 @@ namespace TwnsBwUnit {
             return this._getTemplateCfg().maxHp;
         }
         public getNormalizedMaxHp(): number {
-            return BwHelpers.getNormalizedHp(this.getMaxHp());
+            return WarCommonHelpers.getNormalizedHp(this.getMaxHp());
         }
 
         public getNormalizedCurrentHp(): number {
-            return BwHelpers.getNormalizedHp(this.getCurrentHp());
+            return WarCommonHelpers.getNormalizedHp(this.getCurrentHp());
         }
         public getCurrentHp(): number {
             return this._currentHp;
@@ -529,7 +529,7 @@ namespace TwnsBwUnit {
                 const attackBonusCfg = skillCfg.attackBonus;
                 if ((attackBonusCfg)                                                                                                                        &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusCfg[1]))                                                   &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += attackBonusCfg[2];
                 }
@@ -538,7 +538,7 @@ namespace TwnsBwUnit {
                 if ((attackBonusByPromotionCfg)                                                                                                                     &&
                     (attackBonusByPromotionCfg[2] === promotion)                                                                                                    &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusByPromotionCfg[1]))                                                &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusByPromotionCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusByPromotionCfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += attackBonusByPromotionCfg[3];
                 }
@@ -594,7 +594,7 @@ namespace TwnsBwUnit {
                 const defenseBonusCfg = skillCfg.defenseBonus;
                 if ((defenseBonusCfg)                                                                                                                       &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, defenseBonusCfg[1]))                                                  &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, defenseBonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, defenseBonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += defenseBonusCfg[2];
                 }
@@ -603,7 +603,7 @@ namespace TwnsBwUnit {
                 if ((defenseBonusByPromotionCfg)                                                                                                                    &&
                     (defenseBonusByPromotionCfg[2] === promotion)                                                                                                   &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, defenseBonusByPromotionCfg[1]))                                               &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, defenseBonusByPromotionCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, defenseBonusByPromotionCfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += defenseBonusByPromotionCfg[3];
                 }
@@ -695,7 +695,7 @@ namespace TwnsBwUnit {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).maxAttackRangeBonus;
                 if ((cfg)                                                                                                                       &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += cfg[2];
                 }
@@ -746,7 +746,7 @@ namespace TwnsBwUnit {
                     return undefined;
                 }
 
-                if (BwVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     observerTeamIndex   : teamIndex,
                     gridIndex           : destination,
@@ -1103,7 +1103,7 @@ namespace TwnsBwUnit {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).moveRangeBonus;
                 if ((cfg)                                                                                                                       &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += cfg[2];
                 }
@@ -1487,7 +1487,7 @@ namespace TwnsBwUnit {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).unitVisionRangeBonus;
                 if ((cfg)                                                                                                                   &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                              &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += cfg[2];
                 }
@@ -1536,7 +1536,7 @@ namespace TwnsBwUnit {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).unitTrueVision;
                 if ((cfg)                                                                                                                   &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                              &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     return true;
                 }

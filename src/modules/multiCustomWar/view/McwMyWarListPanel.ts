@@ -8,7 +8,7 @@ import TwnsUiTab                                                                
 import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
 import TwnsLobbyBottomPanel                                                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                                                    from "../../lobby/view/LobbyTopPanel";
-import { McrMainMenuPanel }                                                     from "../../multiCustomRoom/view/McrMainMenuPanel";
+import McrMainMenuPanel= TwnsMcrMainMenuPanel.McrMainMenuPanel;import TwnsMcrMainMenuPanel                                                     from "../../multiCustomRoom/view/McrMainMenuPanel";
 import TwnsLangTextType                                                     from "../../tools/lang/LangTextType";
 import Logger                                                               from "../../tools/helpers/Logger";
 import TwnsNotifyType                                                       from "../../tools/notify/NotifyType";

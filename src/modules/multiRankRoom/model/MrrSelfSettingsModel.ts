@@ -4,9 +4,9 @@ import Logger                       from "../../tools/helpers/Logger";
 import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType from "../../tools/notify/NotifyType";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import BwWarRuleHelpers              from "../../baseWar/model/BwWarRuleHelpers";
+import WarRuleHelpers              from "../../tools/warHelpers/WarRuleHelpers";
 import UserModel                    from "../../user/model/UserModel";
-import { MrrModel }                     from "./MrrModel";
+import MrrModel                     from "./MrrModel";
 
 export namespace MrrSelfSettingsModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -111,7 +111,7 @@ export namespace MrrSelfSettingsModel {
             return undefined;
         }
 
-        const playerRule = BwWarRuleHelpers.getPlayerRule(settingsForCommon.warRule, playerIndex);
+        const playerRule = WarRuleHelpers.getPlayerRule(settingsForCommon.warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`MrrModel.generateAvailableCoIdList() empty playerRule.`);
             return undefined;
@@ -124,7 +124,7 @@ export namespace MrrSelfSettingsModel {
             }
         }
 
-        return BwWarRuleHelpers.getAvailableCoIdArray(configVersion, bannedCoIdSet);
+        return WarRuleHelpers.getAvailableCoIdArray(configVersion, bannedCoIdSet);
     }
 
     function generateAvailableSkinIdList(roomInfo: IMrrRoomInfo): number[] | undefined {
