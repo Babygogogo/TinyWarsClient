@@ -1,25 +1,26 @@
 
+import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
+import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import Types                            from "../../tools/helpers/Types";
+import Lang                             from "../../tools/lang/Lang";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                     from "../../tools/ui/UiButton";
 import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiButton                      from "../../tools/ui/UiButton";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import CommonHelpPanel = TwnsCommonHelpPanel.CommonHelpPanel;import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
-import { MmWarRuleAvailableCoPanel }    from "./MmWarRuleAvailableCoPanel";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import Types                        from "../../tools/helpers/Types";
-import IWarRule                         = ProtoTypes.WarRule.IWarRule;
-import IDataForPlayerRule               = ProtoTypes.WarRule.IDataForPlayerRule;
+import TwnsMmWarRuleAvailableCoPanel    from "./MmWarRuleAvailableCoPanel";
 
 namespace TwnsMmWarRulePanel {
+    import CommonHelpPanel              = TwnsCommonHelpPanel.CommonHelpPanel;
+    import MmWarRuleAvailableCoPanel    = TwnsMmWarRuleAvailableCoPanel.MmWarRuleAvailableCoPanel;
+    import LangTextType                 = TwnsLangTextType.LangTextType;
+    import NotifyType                   = TwnsNotifyType.NotifyType;
+    import IWarRule                     = ProtoTypes.WarRule.IWarRule;
+    import IDataForPlayerRule           = ProtoTypes.WarRule.IDataForPlayerRule;
 
     type OpenDataForMmWarRulePanel = ProtoTypes.Map.IMapRawData;
     export class MmWarRulePanel extends TwnsUiPanel.UiPanel<OpenDataForMmWarRulePanel> {

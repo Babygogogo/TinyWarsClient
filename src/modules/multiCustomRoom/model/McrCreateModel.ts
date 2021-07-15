@@ -10,7 +10,7 @@ import Types                        from "../../tools/helpers/Types";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 import WarRuleHelpers              from "../../tools/warHelpers/WarRuleHelpers";
 
-export namespace McrCreateModel {
+namespace McrCreateModel {
     import NotifyType                       = TwnsNotifyType.NotifyType;
     import BootTimerType                    = Types.BootTimerType;
 
@@ -328,3 +328,5 @@ export namespace McrCreateModel {
         return WarRuleHelpers.getVisionRangeModifier(getWarRule(), playerIndex);
     }
 }
+
+export default McrCreateModel;

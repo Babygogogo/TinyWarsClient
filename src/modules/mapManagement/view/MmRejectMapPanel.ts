@@ -1,16 +1,17 @@
 
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiButton                      from "../../tools/ui/UiButton";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiTextInput                  from "../../tools/ui/UiTextInput";
-import MeWar= TwnsMeWar.MeWar;import TwnsMeWar                        from "../../mapEditor/model/MeWar";
-import Lang                         from "../../tools/lang/Lang";
+import TwnsMeWar        from "../../mapEditor/model/MeWar";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
-import Types                        from "../../tools/helpers/Types";
-import WarMapProxy                  from "../../warMap/model/WarMapProxy";
-import LangTextType         = TwnsLangTextType.LangTextType;
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
+import WarMapProxy      from "../../warMap/model/WarMapProxy";
 
 namespace TwnsMmRejectMapPanel {
+    import MeWar        = TwnsMeWar.MeWar;
+    import LangTextType = TwnsLangTextType.LangTextType;
 
     type OpenData = {
         war: MeWar;

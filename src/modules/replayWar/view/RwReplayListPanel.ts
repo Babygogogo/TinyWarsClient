@@ -28,345 +28,350 @@ import RwModel                                                      from "../mod
 import RwProxy                                                      from "../model/RwProxy";
 import CommonBlockPanel = TwnsCommonBlockPanel.CommonBlockPanel;
 
-export class RwReplayListPanel extends TwnsUiPanel.UiPanel<void> {
-    protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-    protected readonly _IS_EXCLUSIVE = true;
+namespace TwnsRwReplayListPanel {
 
-    private static _instance: RwReplayListPanel;
+    export class RwReplayListPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
+        protected readonly _IS_EXCLUSIVE = true;
 
-    private readonly _groupTab              : eui.Group;
-    private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForRwReplayMapInfoPage | OpenDataForRwReplayPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
+        private static _instance: RwReplayListPanel;
 
-    private readonly _groupNavigator        : eui.Group;
-    private readonly _labelReplay           : TwnsUiLabel.UiLabel;
-    private readonly _labelChooseReplay     : TwnsUiLabel.UiLabel;
+        private readonly _groupTab              : eui.Group;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForRwReplayMapInfoPage | OpenDataForRwReplayPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
 
-    private readonly _btnBack               : TwnsUiButton.UiButton;
-    private readonly _btnNextStep           : TwnsUiButton.UiButton;
-    private readonly _btnSearch             : TwnsUiButton.UiButton;
+        private readonly _groupNavigator        : eui.Group;
+        private readonly _labelReplay           : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseReplay     : TwnsUiLabel.UiLabel;
 
-    private readonly _groupReplayList       : eui.Group;
-    private readonly _listReplay            : TwnsUiScrollList.UiScrollList<DataForReplayRenderer>;
-    private readonly _labelNoReplay         : TwnsUiLabel.UiLabel;
-    private readonly _labelLoading          : TwnsUiLabel.UiLabel;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnNextStep           : TwnsUiButton.UiButton;
+        private readonly _btnSearch             : TwnsUiButton.UiButton;
 
-    private _hasReceivedData    = false;
+        private readonly _groupReplayList       : eui.Group;
+        private readonly _listReplay            : TwnsUiScrollList.UiScrollList<DataForReplayRenderer>;
+        private readonly _labelNoReplay         : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
-    public static show(): void {
-        if (!RwReplayListPanel._instance) {
-            RwReplayListPanel._instance = new RwReplayListPanel();
+        private _hasReceivedData    = false;
+
+        public static show(): void {
+            if (!RwReplayListPanel._instance) {
+                RwReplayListPanel._instance = new RwReplayListPanel();
+            }
+            RwReplayListPanel._instance.open(undefined);
         }
-        RwReplayListPanel._instance.open(undefined);
-    }
-    public static async hide(): Promise<void> {
-        if (RwReplayListPanel._instance) {
-            await RwReplayListPanel._instance.close();
+        public static async hide(): Promise<void> {
+            if (RwReplayListPanel._instance) {
+                await RwReplayListPanel._instance.close();
+            }
+        }
+
+        public constructor() {
+            super();
+
+            this.skinName = "resource/skins/replayWar/RwReplayListPanel.exml";
+        }
+
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.RwPreviewingReplayIdChanged,    callback: this._onNotifyRwPreviewingReplayIdChanged },
+                { type: NotifyType.MsgReplayGetInfoList,           callback: this._onNotifyMsgReplayGetInfoList },
+                { type: NotifyType.MsgReplayGetData,               callback: this._onNotifyMsgReplayGetData },
+                { type: NotifyType.MsgReplayGetDataFailed,         callback: this._onNotifyMsgReplayGetDataFailed },
+            ]);
+            this._setUiListenerArray([
+                { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
+                { ui: this._btnSearch,      callback: this._onTouchedBtnSearch },
+                { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
+            ]);
+            this._tabSettings.setBarItemRenderer(TabItemRenderer);
+            this._listReplay.setItemRenderer(ReplayRenderer);
+
+            this._showOpenAnimation();
+
+            this._hasReceivedData = false;
+            this._initTabSettings();
+            this._updateComponentsForLanguage();
+            this._updateGroupReplayList();
+            this._updateComponentsForPreviewingReplayInfo();
+
+            RwProxy.reqReplayInfos(null);
+        }
+
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
+        private _onNotifyRwPreviewingReplayIdChanged(e: egret.Event): void {
+            this._updateComponentsForPreviewingReplayInfo();
+        }
+
+        private _onNotifyMsgReplayGetInfoList(e: egret.Event): void {
+            this._hasReceivedData = true;
+            this._updateGroupReplayList();
+            this._updateComponentsForPreviewingReplayInfo();
+        }
+
+        private _onNotifyMsgReplayGetData(e: egret.Event): void {
+            const data = RwModel.getReplayData();
+            FlowManager.gotoReplayWar(data.encodedWar, data.replayId);
+        }
+
+        private _onNotifyMsgReplayGetDataFailed(e: egret.Event): void {
+            CommonBlockPanel.hide();
+        }
+
+        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+            this.close();
+            McrMainMenuPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+        }
+        private _onTouchedBtnSearch(e: egret.TouchEvent): void {
+            RwSearchReplayPanel.show();
+        }
+        private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
+            const replayId = RwModel.getPreviewingReplayId();
+            if (replayId != null) {
+                CommonBlockPanel.show({
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0040),
+                });
+                RwProxy.reqReplayGetData(replayId);
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Private functions.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _initTabSettings(): void {
+            this._tabSettings.bindData([
+                {
+                    tabItemData : { name: Lang.getText(LangTextType.B0298) },
+                    pageClass   : RwReplayMapInfoPage,
+                    pageData    : { replayId: null } as OpenDataForRwReplayMapInfoPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(LangTextType.B0224) },
+                    pageClass   : RwReplayPlayerInfoPage,
+                    pageData    : { replayId: null } as OpenDataForRwReplayPlayerInfoPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : RwReplayWarInfoPage,
+                    pageData    : { replayId: null } as OpenDataForRwReplayWarInfoPage,
+                },
+            ]);
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+            this._labelReplay.text          = Lang.getText(LangTextType.B0092);
+            this._labelChooseReplay.text    = Lang.getText(LangTextType.B0598);
+            this._btnBack.label             = Lang.getText(LangTextType.B0146);
+            this._labelNoReplay.text        = Lang.getText(LangTextType.B0241);
+            this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
+            this._btnSearch.label           = Lang.getText(LangTextType.B0228);
+        }
+
+        private _updateGroupReplayList(): void {
+            const labelLoading  = this._labelLoading;
+            const labelNoReplay = this._labelNoReplay;
+            const listReplay    = this._listReplay;
+            if (!this._hasReceivedData) {
+                labelLoading.visible    = true;
+                labelNoReplay.visible   = false;
+                listReplay.clear();
+
+            } else {
+                const dataArray         = this._createDataForListReplay();
+                labelLoading.visible    = false;
+                labelNoReplay.visible   = !dataArray.length;
+                listReplay.bindData(dataArray);
+
+                const replayId = RwModel.getPreviewingReplayId();
+                if (dataArray.every(v => v.replayId != replayId)) {
+                    RwModel.setPreviewingReplayId(dataArray.length ? dataArray[0].replayId : null);
+                }
+            }
+        }
+
+        private _updateComponentsForPreviewingReplayInfo(): void {
+            const groupTab      = this._groupTab;
+            const btnNextStep   = this._btnNextStep;
+            const replayId      = RwModel.getPreviewingReplayId();
+            if ((!this._hasReceivedData) || (replayId == null)) {
+                groupTab.visible    = false;
+                btnNextStep.visible = false;
+            } else {
+                groupTab.visible    = true;
+                btnNextStep.visible = true;
+
+                const tab = this._tabSettings;
+                tab.updatePageData(0, { replayId } as OpenDataForRwReplayMapInfoPage);
+                tab.updatePageData(1, { replayId } as OpenDataForRwReplayPlayerInfoPage);
+                tab.updatePageData(2, { replayId } as OpenDataForRwReplayWarInfoPage);
+            }
+        }
+
+        private _createDataForListReplay(): DataForReplayRenderer[] {
+            const dataArray: DataForReplayRenderer[] = [];
+            for (const replayInfo of RwModel.getReplayInfoList() || []) {
+                dataArray.push({
+                    replayId: replayInfo.replayBriefInfo.replayId,
+                });
+            }
+
+            return dataArray.sort((v1, v2) => v2.replayId - v1.replayId);
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 0, y: -20 },
+                endProps    : { alpha: 1, y: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 0, y: -20 },
+                endProps    : { alpha: 1, y: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnSearch,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 80 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupReplayList,
+                beginProps  : { alpha: 0, left: -20 },
+                endProps    : { alpha: 1, left: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnNextStep,
+                beginProps  : { alpha: 0, left: -20 },
+                endProps    : { alpha: 1, left: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 0, },
+                endProps    : { alpha: 1, },
+            });
+        }
+        private async _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._btnBack,
+                    beginProps  : { alpha: 1, y: 20 },
+                    endProps    : { alpha: 0, y: -20 },
+                    callback    : resolve,
+                });
+                Helpers.resetTween({
+                    obj         : this._groupNavigator,
+                    beginProps  : { alpha: 1, y: 20 },
+                    endProps    : { alpha: 0, y: -20 },
+                });
+                Helpers.resetTween({
+                    obj         : this._btnSearch,
+                    beginProps  : { alpha: 1, y: 80 },
+                    endProps    : { alpha: 0, y: 40 },
+                });
+                Helpers.resetTween({
+                    obj         : this._groupReplayList,
+                    beginProps  : { alpha: 1, left: 20 },
+                    endProps    : { alpha: 0, left: -20 },
+                });
+                Helpers.resetTween({
+                    obj         : this._btnNextStep,
+                    beginProps  : { alpha: 1, left: 20 },
+                    endProps    : { alpha: 0, left: -20 },
+                });
+                Helpers.resetTween({
+                    obj         : this._groupTab,
+                    beginProps  : { alpha: 1, },
+                    endProps    : { alpha: 0, },
+                });
+            });
         }
     }
 
-    public constructor() {
-        super();
+    type DataForTabItemRenderer = {
+        name: string;
+    };
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
-        this.skinName = "resource/skins/replayWar/RwReplayListPanel.exml";
+        protected _onDataChanged(): void {
+            this._labelName.text = this.data.name;
+        }
     }
 
-    protected _onOpened(): void {
-        this._setNotifyListenerArray([
-            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: NotifyType.RwPreviewingReplayIdChanged,    callback: this._onNotifyRwPreviewingReplayIdChanged },
-            { type: NotifyType.MsgReplayGetInfoList,           callback: this._onNotifyMsgReplayGetInfoList },
-            { type: NotifyType.MsgReplayGetData,               callback: this._onNotifyMsgReplayGetData },
-            { type: NotifyType.MsgReplayGetDataFailed,         callback: this._onNotifyMsgReplayGetDataFailed },
-        ]);
-        this._setUiListenerArray([
-            { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
-            { ui: this._btnSearch,      callback: this._onTouchedBtnSearch },
-            { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
-        ]);
-        this._tabSettings.setBarItemRenderer(TabItemRenderer);
-        this._listReplay.setItemRenderer(ReplayRenderer);
+    type DataForReplayRenderer = {
+        replayId: number;
+    };
+    class ReplayRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForReplayRenderer> {
+        private readonly _btnChoose     : TwnsUiButton.UiButton;
+        private readonly _btnNext       : TwnsUiButton.UiButton;
+        private readonly _labelType     : TwnsUiLabel.UiLabel;
+        private readonly _labelId       : TwnsUiLabel.UiLabel;
+        private readonly _labelName     : TwnsUiLabel.UiLabel;
 
-        this._showOpenAnimation();
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
+            ]);
+            this._setNotifyListenerArray([
+                { type: NotifyType.RwPreviewingReplayIdChanged,  callback: this._onNotifyRwPreviewingReplayIdChanged },
+            ]);
+        }
 
-        this._hasReceivedData = false;
-        this._initTabSettings();
-        this._updateComponentsForLanguage();
-        this._updateGroupReplayList();
-        this._updateComponentsForPreviewingReplayInfo();
+        protected async _onDataChanged(): Promise<void> {
+            this._updateState();
 
-        RwProxy.reqReplayInfos(null);
-    }
+            const replayInfo        = RwModel.getReplayInfo(this.data.replayId);
+            const replayBriefInfo   = replayInfo ? replayInfo.replayBriefInfo : null;
+            const labelId           = this._labelId;
+            const labelType         = this._labelType;
+            const labelName         = this._labelName;
+            if (replayBriefInfo == null) {
+                labelId.text    = null;
+                labelType.text  = null;
+                labelName.text  = null;
+            } else {
+                labelId.text    = `ID: ${replayBriefInfo.replayId}`;
+                labelType.text  = Lang.getWarTypeName(replayBriefInfo.warType);
+                labelName.text  = await WarMapModel.getMapNameInCurrentLanguage(replayBriefInfo.mapId);
+            }
+        }
 
-    protected async _onClosed(): Promise<void> {
-        await this._showCloseAnimation();
-    }
+        private _onNotifyRwPreviewingReplayIdChanged(e: egret.Event): void {
+            this._updateState();
+        }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    // Callbacks.
-    ////////////////////////////////////////////////////////////////////////////////
-    private _onNotifyLanguageChanged(e: egret.Event): void {
-        this._updateComponentsForLanguage();
-    }
+        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+            RwModel.setPreviewingReplayId(this.data.replayId);
+        }
 
-    private _onNotifyRwPreviewingReplayIdChanged(e: egret.Event): void {
-        this._updateComponentsForPreviewingReplayInfo();
-    }
-
-    private _onNotifyMsgReplayGetInfoList(e: egret.Event): void {
-        this._hasReceivedData = true;
-        this._updateGroupReplayList();
-        this._updateComponentsForPreviewingReplayInfo();
-    }
-
-    private _onNotifyMsgReplayGetData(e: egret.Event): void {
-        const data = RwModel.getReplayData();
-        FlowManager.gotoReplayWar(data.encodedWar, data.replayId);
-    }
-
-    private _onNotifyMsgReplayGetDataFailed(e: egret.Event): void {
-        CommonBlockPanel.hide();
-    }
-
-    private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-        this.close();
-        McrMainMenuPanel.show();
-        TwnsLobbyTopPanel.LobbyTopPanel.show();
-        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
-    }
-    private _onTouchedBtnSearch(e: egret.TouchEvent): void {
-        RwSearchReplayPanel.show();
-    }
-    private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
-        const replayId = RwModel.getPreviewingReplayId();
-        if (replayId != null) {
+        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             CommonBlockPanel.show({
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0040),
             });
-            RwProxy.reqReplayGetData(replayId);
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // Private functions.
-    ////////////////////////////////////////////////////////////////////////////////
-    private _initTabSettings(): void {
-        this._tabSettings.bindData([
-            {
-                tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                pageClass   : RwReplayMapInfoPage,
-                pageData    : { replayId: null } as OpenDataForRwReplayMapInfoPage,
-            },
-            {
-                tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                pageClass   : RwReplayPlayerInfoPage,
-                pageData    : { replayId: null } as OpenDataForRwReplayPlayerInfoPage,
-            },
-            {
-                tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                pageClass   : RwReplayWarInfoPage,
-                pageData    : { replayId: null } as OpenDataForRwReplayWarInfoPage,
-            },
-        ]);
-    }
-
-    private _updateComponentsForLanguage(): void {
-        this._labelLoading.text         = Lang.getText(LangTextType.A0040);
-        this._labelReplay.text          = Lang.getText(LangTextType.B0092);
-        this._labelChooseReplay.text    = Lang.getText(LangTextType.B0598);
-        this._btnBack.label             = Lang.getText(LangTextType.B0146);
-        this._labelNoReplay.text        = Lang.getText(LangTextType.B0241);
-        this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
-        this._btnSearch.label           = Lang.getText(LangTextType.B0228);
-    }
-
-    private _updateGroupReplayList(): void {
-        const labelLoading  = this._labelLoading;
-        const labelNoReplay = this._labelNoReplay;
-        const listReplay    = this._listReplay;
-        if (!this._hasReceivedData) {
-            labelLoading.visible    = true;
-            labelNoReplay.visible   = false;
-            listReplay.clear();
-
-        } else {
-            const dataArray         = this._createDataForListReplay();
-            labelLoading.visible    = false;
-            labelNoReplay.visible   = !dataArray.length;
-            listReplay.bindData(dataArray);
-
-            const replayId = RwModel.getPreviewingReplayId();
-            if (dataArray.every(v => v.replayId != replayId)) {
-                RwModel.setPreviewingReplayId(dataArray.length ? dataArray[0].replayId : null);
-            }
-        }
-    }
-
-    private _updateComponentsForPreviewingReplayInfo(): void {
-        const groupTab      = this._groupTab;
-        const btnNextStep   = this._btnNextStep;
-        const replayId      = RwModel.getPreviewingReplayId();
-        if ((!this._hasReceivedData) || (replayId == null)) {
-            groupTab.visible    = false;
-            btnNextStep.visible = false;
-        } else {
-            groupTab.visible    = true;
-            btnNextStep.visible = true;
-
-            const tab = this._tabSettings;
-            tab.updatePageData(0, { replayId } as OpenDataForRwReplayMapInfoPage);
-            tab.updatePageData(1, { replayId } as OpenDataForRwReplayPlayerInfoPage);
-            tab.updatePageData(2, { replayId } as OpenDataForRwReplayWarInfoPage);
-        }
-    }
-
-    private _createDataForListReplay(): DataForReplayRenderer[] {
-        const dataArray: DataForReplayRenderer[] = [];
-        for (const replayInfo of RwModel.getReplayInfoList() || []) {
-            dataArray.push({
-                replayId: replayInfo.replayBriefInfo.replayId,
-            });
+            RwProxy.reqReplayGetData(this.data.replayId);
         }
 
-        return dataArray.sort((v1, v2) => v2.replayId - v1.replayId);
-    }
-
-    private _showOpenAnimation(): void {
-        Helpers.resetTween({
-            obj         : this._btnBack,
-            beginProps  : { alpha: 0, y: -20 },
-            endProps    : { alpha: 1, y: 20 },
-        });
-        Helpers.resetTween({
-            obj         : this._groupNavigator,
-            beginProps  : { alpha: 0, y: -20 },
-            endProps    : { alpha: 1, y: 20 },
-        });
-        Helpers.resetTween({
-            obj         : this._btnSearch,
-            beginProps  : { alpha: 0, y: 40 },
-            endProps    : { alpha: 1, y: 80 },
-        });
-        Helpers.resetTween({
-            obj         : this._groupReplayList,
-            beginProps  : { alpha: 0, left: -20 },
-            endProps    : { alpha: 1, left: 20 },
-        });
-        Helpers.resetTween({
-            obj         : this._btnNextStep,
-            beginProps  : { alpha: 0, left: -20 },
-            endProps    : { alpha: 1, left: 20 },
-        });
-        Helpers.resetTween({
-            obj         : this._groupTab,
-            beginProps  : { alpha: 0, },
-            endProps    : { alpha: 1, },
-        });
-    }
-    private async _showCloseAnimation(): Promise<void> {
-        return new Promise<void>(resolve => {
-            Helpers.resetTween({
-                obj         : this._btnBack,
-                beginProps  : { alpha: 1, y: 20 },
-                endProps    : { alpha: 0, y: -20 },
-                callback    : resolve,
-            });
-            Helpers.resetTween({
-                obj         : this._groupNavigator,
-                beginProps  : { alpha: 1, y: 20 },
-                endProps    : { alpha: 0, y: -20 },
-            });
-            Helpers.resetTween({
-                obj         : this._btnSearch,
-                beginProps  : { alpha: 1, y: 80 },
-                endProps    : { alpha: 0, y: 40 },
-            });
-            Helpers.resetTween({
-                obj         : this._groupReplayList,
-                beginProps  : { alpha: 1, left: 20 },
-                endProps    : { alpha: 0, left: -20 },
-            });
-            Helpers.resetTween({
-                obj         : this._btnNextStep,
-                beginProps  : { alpha: 1, left: 20 },
-                endProps    : { alpha: 0, left: -20 },
-            });
-            Helpers.resetTween({
-                obj         : this._groupTab,
-                beginProps  : { alpha: 1, },
-                endProps    : { alpha: 0, },
-            });
-        });
+        private _updateState(): void {
+            this.currentState = this.data.replayId === RwModel.getPreviewingReplayId() ? Types.UiState.Down : Types.UiState.Up;
+        }
     }
 }
 
-type DataForTabItemRenderer = {
-    name: string;
-};
-class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-    private _labelName: TwnsUiLabel.UiLabel;
-
-    protected _onDataChanged(): void {
-        this._labelName.text = this.data.name;
-    }
-}
-
-type DataForReplayRenderer = {
-    replayId: number;
-};
-class ReplayRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForReplayRenderer> {
-    private readonly _btnChoose     : TwnsUiButton.UiButton;
-    private readonly _btnNext       : TwnsUiButton.UiButton;
-    private readonly _labelType     : TwnsUiLabel.UiLabel;
-    private readonly _labelId       : TwnsUiLabel.UiLabel;
-    private readonly _labelName     : TwnsUiLabel.UiLabel;
-
-    protected _onOpened(): void {
-        this._setUiListenerArray([
-            { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-            { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
-        ]);
-        this._setNotifyListenerArray([
-            { type: NotifyType.RwPreviewingReplayIdChanged,  callback: this._onNotifyRwPreviewingReplayIdChanged },
-        ]);
-    }
-
-    protected async _onDataChanged(): Promise<void> {
-        this._updateState();
-
-        const replayInfo        = RwModel.getReplayInfo(this.data.replayId);
-        const replayBriefInfo   = replayInfo ? replayInfo.replayBriefInfo : null;
-        const labelId           = this._labelId;
-        const labelType         = this._labelType;
-        const labelName         = this._labelName;
-        if (replayBriefInfo == null) {
-            labelId.text    = null;
-            labelType.text  = null;
-            labelName.text  = null;
-        } else {
-            labelId.text    = `ID: ${replayBriefInfo.replayId}`;
-            labelType.text  = Lang.getWarTypeName(replayBriefInfo.warType);
-            labelName.text  = await WarMapModel.getMapNameInCurrentLanguage(replayBriefInfo.mapId);
-        }
-    }
-
-    private _onNotifyRwPreviewingReplayIdChanged(e: egret.Event): void {
-        this._updateState();
-    }
-
-    private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-        RwModel.setPreviewingReplayId(this.data.replayId);
-    }
-
-    private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-        CommonBlockPanel.show({
-            title   : Lang.getText(LangTextType.B0088),
-            content : Lang.getText(LangTextType.A0040),
-        });
-        RwProxy.reqReplayGetData(this.data.replayId);
-    }
-
-    private _updateState(): void {
-        this.currentState = this.data.replayId === RwModel.getPreviewingReplayId() ? Types.UiState.Down : Types.UiState.Up;
-    }
-}
+export default TwnsRwReplayListPanel;

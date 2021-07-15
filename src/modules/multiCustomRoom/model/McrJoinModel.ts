@@ -1,15 +1,12 @@
 
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import McrProxy                     from "../../multiCustomRoom/model/McrProxy";
-import UserModel                    from "../../user/model/UserModel";
-import McrModel                     from "./McrModel";
-import WarRuleHelpers              from "../../tools/warHelpers/WarRuleHelpers";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
+import McrModel         from "./McrModel";
 
-export namespace McrJoinModel {
+namespace McrJoinModel {
     import NotifyType                       = TwnsNotifyType.NotifyType;
     import NetMessage                       = ProtoTypes.NetMessage;
     import IMcrRoomInfo                     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
@@ -82,3 +79,5 @@ export namespace McrJoinModel {
         return idList;
     }
 }
+
+export default McrJoinModel;
