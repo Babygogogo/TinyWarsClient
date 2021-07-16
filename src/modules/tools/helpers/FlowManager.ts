@@ -293,7 +293,8 @@ namespace FlowManager {
     function _onNotifyNetworkConnected(): void {
         const account   = UserModel.getSelfAccount();
         const password  = UserModel.getSelfPassword();
-        if ((!UserModel.getIsLoggedIn())    &&
+        if ((_hasOnceWentToLobby)           &&
+            (!UserModel.getIsLoggedIn())    &&
             (account != null)               &&
             (password != null)
         ) {
