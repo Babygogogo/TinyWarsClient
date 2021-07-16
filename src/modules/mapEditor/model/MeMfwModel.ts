@@ -52,8 +52,8 @@ namespace MeMfwModel {
         const playerRuleArray   = warRule.ruleForPlayers.playerRuleDataArray;
         let hasAiPlayer         = false;
         for (const player of getWarData().playerManager.players) {
-            const playerIndex = player.playerIndex;
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            const playerRule = playerRuleArray.find(v => v.playerIndex === player.playerIndex);
+            if (playerRule == null) {
                 continue;
             }
 
@@ -62,7 +62,7 @@ namespace MeMfwModel {
                 hasAiPlayer = true;
             }
 
-            playerRuleArray.find(v => v.playerIndex === playerIndex).fixedCoIdInCcw = isAiPlayer ? player.coId : null;
+            playerRule.fixedCoIdInCcw = isAiPlayer ? player.coId : null;
         }
 
         const ruleAvailability  = warRule.ruleAvailability;
