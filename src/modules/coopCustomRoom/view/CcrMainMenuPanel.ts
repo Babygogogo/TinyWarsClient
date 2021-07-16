@@ -26,7 +26,6 @@ namespace TwnsCcrMainMenuPanel {
     import MrrMainMenuPanel         = TwnsMrrMainMenuPanel.MrrMainMenuPanel;
     import SpmMainMenuPanel         = TwnsSpmMainMenuPanel.SpmMainMenuPanel;
     import CcrMyRoomListPanel       = TwnsCcrMyRoomListPanel.CcrMyRoomListPanel;
-    import McrMainMenuPanel         = TwnsMcrMainMenuPanel.McrMainMenuPanel;
     import MfrMainMenuPanel         = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
     import CcrCreateMapListPanel    = TwnsCcrCreateMapListPanel.CcrCreateMapListPanel;
     import CcrJoinRoomListPanel     = TwnsCcrJoinRoomListPanel.CcrJoinRoomListPanel;
@@ -153,7 +152,7 @@ namespace TwnsCcrMainMenuPanel {
         }
         private _onTouchedBtnNormalMode(): void {
             this.close();
-            McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
         }
         private _onTouchedBtnFreeMode(): void {
             this.close();

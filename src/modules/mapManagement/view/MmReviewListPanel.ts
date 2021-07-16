@@ -16,7 +16,6 @@ import WarMapProxy              from "../../warMap/model/WarMapProxy";
 import TwnsMmMainMenuPanel      from "./MmMainMenuPanel";
 
 namespace TwnsMmReviewListPanel {
-    import MmMainMenuPanel  = TwnsMmMainMenuPanel.MmMainMenuPanel;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
@@ -116,7 +115,7 @@ namespace TwnsMmReviewListPanel {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            MmMainMenuPanel.show();
+            TwnsMmMainMenuPanel.MmMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

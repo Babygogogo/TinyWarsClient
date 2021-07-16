@@ -1,32 +1,39 @@
 
-import TwnsUiListItemRenderer                                                   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                                                              from "../../tools/ui/UiPanel";
-import TwnsUiButton                                                              from "../../tools/ui/UiButton";
-import TwnsUiLabel                                                              from "../../tools/ui/UiLabel";
-import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
-import TwnsUiTab                                                                from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
-import TwnsLobbyBottomPanel                                                     from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                                                        from "../../lobby/view/LobbyTopPanel";
-import MrrMainMenuPanel= TwnsMrrMainMenuPanel.MrrMainMenuPanel;import TwnsMrrMainMenuPanel                                                     from "../../multiRankRoom/view/MrrMainMenuPanel";
-import TwnsLangTextType                                                     from "../../tools/lang/LangTextType";
-import TwnsNotifyType                                                       from "../../tools/notify/NotifyType";
-import Types                                                                from "../../tools/helpers/Types";
-import { OpenDataForMrwWarMapInfoPage, MrwWarMapInfoPage }                      from "./MrwWarMapInfoPage";
-import { OpenDataForMrwWarPlayerInfoPage, MrwWarPlayerInfoPage }                from "./MrwWarPlayerInfoPage";
-import { OpenDataForMrwWarAdvancedSettingsPage, MrwWarAdvancedSettingsPage }    from "./MrwWarAdvancedSettingsPage";
-import { OpenDataForMrwWarBasicSettingsPage, MrwWarBasicSettingsPage }          from "./MrwWarBasicSettingsPage";
-import Helpers                                                              from "../../tools/helpers/Helpers";
-import Lang                                                                 from "../../tools/lang/Lang";
-import MpwModel                                                             from "../../multiPlayerWar/model/MpwModel";
-import MpwProxy                                                             from "../../multiPlayerWar/model/MpwProxy";
-import WarMapModel                                                          from "../../warMap/model/WarMapModel";
+import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
+import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
+import MpwProxy                         from "../../multiPlayerWar/model/MpwProxy";
+import TwnsMrrMainMenuPanel             from "../../multiRankRoom/view/MrrMainMenuPanel";
+import Helpers                          from "../../tools/helpers/Helpers";
+import Types                            from "../../tools/helpers/Types";
+import Lang                             from "../../tools/lang/Lang";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import TwnsUiButton                     from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import TwnsUiTab                        from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                      from "../../warMap/model/WarMapModel";
+import TwnsMrwWarAdvancedSettingsPage   from "./MrwWarAdvancedSettingsPage";
+import TwnsMrwWarBasicSettingsPage      from "./MrwWarBasicSettingsPage";
+import TwnsMrwWarMapInfoPage            from "./MrwWarMapInfoPage";
+import TwnsMrwWarPlayerInfoPage         from "./MrwWarPlayerInfoPage";
 
 namespace TwnsMrwMyWarListPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import OpenDataForMrwWarMapInfoPage             = TwnsMrwWarMapInfoPage.OpenDataForMrwWarMapInfoPage;
+    import MrwWarMapInfoPage                        = TwnsMrwWarMapInfoPage.MrwWarMapInfoPage;
+    import OpenDataForMrwWarPlayerInfoPage          = TwnsMrwWarPlayerInfoPage.OpenDataForMrwWarPlayerInfoPage;
+    import MrwWarPlayerInfoPage                     = TwnsMrwWarPlayerInfoPage.MrwWarPlayerInfoPage;
+    import OpenDataForMrwWarAdvancedSettingsPage    = TwnsMrwWarAdvancedSettingsPage.OpenDataForMrwWarAdvancedSettingsPage;
+    import MrwWarAdvancedSettingsPage               = TwnsMrwWarAdvancedSettingsPage.MrwWarAdvancedSettingsPage;
+    import OpenDataForMrwWarBasicSettingsPage       = TwnsMrwWarBasicSettingsPage.OpenDataForMrwWarBasicSettingsPage;
+    import MrwWarBasicSettingsPage                  = TwnsMrwWarBasicSettingsPage.MrwWarBasicSettingsPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
 
-    // eslint-disable-next-line no-shadow
     export class MrwMyWarListPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
@@ -116,7 +123,7 @@ namespace TwnsMrwMyWarListPanel {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            MrrMainMenuPanel.show();
+            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }

@@ -25,8 +25,6 @@ import TwnsCcrRoomMapInfoPage           from "./CcrRoomMapInfoPage";
 import TwnsCcrRoomPlayerInfoPage        from "./CcrRoomPlayerInfoPage";
 
 namespace TwnsCcrMyRoomListPanel {
-    import CcrRoomInfoPanel                         = TwnsCcrRoomInfoPanel.CcrRoomInfoPanel;
-    import CcrMainMenuPanel                         = TwnsCcrMainMenuPanel.CcrMainMenuPanel;
     import OpenDataForCcrRoomAdvancedSettingsPage   = TwnsCcrRoomAdvancedSettingsPage.OpenDataForCcrRoomAdvancedSettingsPage;
     import CcrRoomAdvancedSettingsPage              = TwnsCcrRoomAdvancedSettingsPage.CcrRoomAdvancedSettingsPage;
     import OpenDataForCcrRoomBasicSettingsPage      = TwnsCcrRoomBasicSettingsPage.OpenDataForCcrRoomBasicSettingsPage;
@@ -151,7 +149,7 @@ namespace TwnsCcrMyRoomListPanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            CcrMainMenuPanel.show();
+            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
@@ -160,7 +158,7 @@ namespace TwnsCcrMyRoomListPanel {
             const roomId = CcrJoinModel.getJoinedPreviewingRoomId();
             if (roomId != null) {
                 this.close();
-                CcrRoomInfoPanel.show({
+                TwnsCcrRoomInfoPanel.CcrRoomInfoPanel.show({
                     roomId,
                 });
             }
@@ -369,7 +367,7 @@ namespace TwnsCcrMyRoomListPanel {
 
         private _onTouchTapBtnNext(): void {
             CcrMyRoomListPanel.hide();
-            CcrRoomInfoPanel.show({
+            TwnsCcrRoomInfoPanel.CcrRoomInfoPanel.show({
                 roomId  : this.data.roomId,
             });
         }

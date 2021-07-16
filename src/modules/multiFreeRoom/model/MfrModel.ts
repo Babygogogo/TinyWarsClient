@@ -3,7 +3,7 @@ import Helpers              from "../../tools/helpers/Helpers";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers     from "../../tools/warHelpers/WarRuleHelpers";
+import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 import MfrProxy             from "../../multiFreeRoom/model/MfrProxy";
 import UserModel            from "../../user/model/UserModel";
 

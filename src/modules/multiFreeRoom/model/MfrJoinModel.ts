@@ -4,10 +4,10 @@ import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import Types                from "../../tools/helpers/Types";
-import WarRuleHelpers     from "../../tools/warHelpers/WarRuleHelpers";
+import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 import MfrModel             from "./MfrModel";
 
-export namespace MfrJoinModel {
+namespace MfrJoinModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IMfrRoomInfo     = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
 
@@ -130,3 +130,5 @@ export namespace MfrJoinModel {
         return indexArray;
     }
 }
+
+export default MfrJoinModel;

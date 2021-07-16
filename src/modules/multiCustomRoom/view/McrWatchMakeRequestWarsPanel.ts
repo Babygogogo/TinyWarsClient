@@ -20,7 +20,6 @@ import TwnsMcrWatchMainMenuPanel            from "./McrWatchMainMenuPanel";
 import TwnsMcrWatchMakeRequestDetailPanel   from "./McrWatchMakeRequestDetailPanel";
 
 namespace TwnsMcrWatchMakeRequestWarsPanel {
-    import McrWatchMainMenuPanel            = TwnsMcrWatchMainMenuPanel.McrWatchMainMenuPanel;
     import McrWatchMakeRequestDetailPanel   = TwnsMcrWatchMakeRequestDetailPanel.McrWatchMakeRequestDetailPanel;
     import LangTextType                     = TwnsLangTextType.LangTextType;
     import NotifyType                       = TwnsNotifyType.NotifyType;
@@ -138,7 +137,7 @@ namespace TwnsMcrWatchMakeRequestWarsPanel {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            McrWatchMainMenuPanel.show();
+            TwnsMcrWatchMainMenuPanel.McrWatchMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

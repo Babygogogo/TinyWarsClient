@@ -1,17 +1,18 @@
 
-import { RwWar }                        from "./RwWar";
-import Logger                       from "../../tools/helpers/Logger";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import Helpers                      from "../../tools/helpers/Helpers";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import ProtoManager                 from "../../tools/proto/ProtoManager";
-import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
-import WarMapModel                  from "../../warMap/model/WarMapModel";
+import Helpers          from "../../tools/helpers/Helpers";
+import Logger           from "../../tools/helpers/Logger";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoManager     from "../../tools/proto/ProtoManager";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
+import WarMapModel      from "../../warMap/model/WarMapModel";
+import TwnsRwWar        from "./RwWar";
 
 namespace RwModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IReplayInfo      = ProtoTypes.Replay.IReplayInfo;
+    import RwWar            = TwnsRwWar.RwWar;
 
     let _replayInfoList     : IReplayInfo[];
     let _replayData         : ProtoTypes.NetMessage.MsgReplayGetData.IS;

@@ -1,42 +1,51 @@
 
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiRadioButton        from "../../tools/ui/UiRadioButton";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import { UserChangeNicknamePanel }  from "./UserChangeNicknamePanel";
-import { UserSetPasswordPanel }     from "./UserSetPasswordPanel";
-import { UserChangeDiscordIdPanel } from "./UserChangeDiscordIdPanel";
-import UserOnlineUsersPanel= TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;import TwnsUserOnlineUsersPanel     from "./UserOnlineUsersPanel";
-import { UserSetSoundPanel }        from "./UserSetSoundPanel";
-import { UserSetStageScalePanel }   from "./UserSetStageScalePanel";
-import { UserSetPrivilegePanel }    from "./UserSetPrivilegePanel";
-import ChatPanel = TwnsChatPanel.ChatPanel;import TwnsChatPanel                from "../../chat/view/ChatPanel";
-import CommonDamageChartPanel = TwnsCommonDamageChartPanel.CommonDamageChartPanel;import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
+import TwnsChangeLogPanel           from "../../changeLog/view/ChangeLogPanel";
+import TwnsChatPanel                from "../../chat/view/ChatPanel";
 import TwnsCommonChangeVersionPanel from "../../common/view/CommonChangeVersionPanel";
+import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
 import TwnsCommonRankListPanel      from "../../common/view/CommonRankListPanel";
 import TwnsCommonServerStatusPanel  from "../../common/view/CommonServerStatusPanel";
-import TwnsChangeLogPanel           from "../../changeLog/view/ChangeLogPanel";
 import TwnsLobbyBackgroundPanel     from "../../lobby/view/LobbyBackgroundPanel";
-import MmMainMenuPanel= TwnsMmMainMenuPanel.MmMainMenuPanel;import TwnsMmMainMenuPanel          from "../../mapManagement/view/MmMainMenuPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LocalStorage             from "../../tools/helpers/LocalStorage";
-import Logger                   from "../../tools/helpers/Logger";
-import Notify                   from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import StageManager             from "../../tools/helpers/StageManager";
-import Types                    from "../../tools/helpers/Types";
-import Timer                from "../../tools/helpers/Timer";
-import UserModel                from "../../user/model/UserModel";
-import UserProxy                from "../../user/model/UserProxy";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import NotifyType       = TwnsNotifyType.NotifyType;
-import CommonChangeVersionPanel = TwnsCommonChangeVersionPanel.CommonChangeVersionPanel;
+import TwnsMmMainMenuPanel          from "../../mapManagement/view/MmMainMenuPanel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
+import LocalStorage                 from "../../tools/helpers/LocalStorage";
+import Logger                       from "../../tools/helpers/Logger";
+import StageManager                 from "../../tools/helpers/StageManager";
+import Timer                        from "../../tools/helpers/Timer";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiImage                  from "../../tools/ui/UiImage";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiRadioButton            from "../../tools/ui/UiRadioButton";
+import UserModel                    from "../../user/model/UserModel";
+import UserProxy                    from "../../user/model/UserProxy";
+import TwnsUserChangeDiscordIdPanel from "./UserChangeDiscordIdPanel";
+import TwnsUserChangeNicknamePanel  from "./UserChangeNicknamePanel";
+import TwnsUserOnlineUsersPanel     from "./UserOnlineUsersPanel";
+import TwnsUserSetPasswordPanel     from "./UserSetPasswordPanel";
+import TwnsUserSetPrivilegePanel    from "./UserSetPrivilegePanel";
+import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
+import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
 
 namespace TwnsUserSettingsPanel {
+    import UserChangeNicknamePanel  = TwnsUserChangeNicknamePanel.UserChangeNicknamePanel;
+    import UserSetPasswordPanel     = TwnsUserSetPasswordPanel.UserSetPasswordPanel;
+    import UserChangeDiscordIdPanel = TwnsUserChangeDiscordIdPanel.UserChangeDiscordIdPanel;
+    import UserOnlineUsersPanel     = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
+    import UserSetSoundPanel        = TwnsUserSetSoundPanel.UserSetSoundPanel;
+    import UserSetStageScalePanel   = TwnsUserSetStageScalePanel.UserSetStageScalePanel;
+    import UserSetPrivilegePanel    = TwnsUserSetPrivilegePanel.UserSetPrivilegePanel;
+    import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
+    import MmMainMenuPanel          = TwnsMmMainMenuPanel.MmMainMenuPanel;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import CommonChangeVersionPanel = TwnsCommonChangeVersionPanel.CommonChangeVersionPanel;
 
     export class UserSettingsPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -311,7 +320,7 @@ namespace TwnsUserSettingsPanel {
         }
         private _onTouchedBtnComplaint(): void {
             this.close();
-            ChatPanel.show({ toUserId: CommonConstants.AdminUserId });
+            TwnsChatPanel.ChatPanel.show({ toUserId: CommonConstants.AdminUserId });
         }
         private _onTouchedBtnUnitsInfo(): void {
             CommonDamageChartPanel.show();

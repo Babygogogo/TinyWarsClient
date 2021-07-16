@@ -1,17 +1,17 @@
 
-import WarMapUnitView = TwnsWarMapUnitView.WarMapUnitView;import TwnsWarMapUnitView       from "./WarMapUnitView";
-import TwnsUiImage          from "../../tools/ui/UiImage";
+import CommonModel          from "../../common/model/CommonModel";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import Helpers              from "../../tools/helpers/Helpers";
+import Timer                from "../../tools/helpers/Timer";
+import Types                from "../../tools/helpers/Types";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import Types                from "../../tools/helpers/Types";
+import TwnsUiImage          from "../../tools/ui/UiImage";
 import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
-import CommonModel          from "../../common/model/CommonModel";
-import Timer                from "../../tools/helpers/Timer";
 import UserModel            from "../../user/model/UserModel";
+import TwnsWarMapUnitView   from "./WarMapUnitView";
 
 namespace TwnsWarMapView {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -21,6 +21,7 @@ namespace TwnsWarMapView {
     import ISerialWar       = WarSerialization.ISerialWar;
     import ISerialTile      = WarSerialization.ISerialTile;
     import ISerialPlayer    = WarSerialization.ISerialPlayer;
+    import WarMapUnitView   = TwnsWarMapUnitView.WarMapUnitView;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 

@@ -1,21 +1,20 @@
 
-import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import TwnsMeTileSimpleView             from "../../mapEditor/view/MeTileSimpleView";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import Types                        from "../../tools/helpers/Types";
+import TwnsMeTileSimpleView     from "../../mapEditor/view/MeTileSimpleView";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
 namespace TwnsWarMapBuildingListPanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     type OpenDataForBuildingListPanel = {
         configVersion           : string;

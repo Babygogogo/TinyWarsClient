@@ -12,7 +12,6 @@ import MeUtility            from "../model/MeUtility";
 import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
 
 namespace TwnsMeOffsetPanel {
-    import MeWarMenuPanel   = TwnsMeWarMenuPanel.MeWarMenuPanel;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
@@ -91,7 +90,7 @@ namespace TwnsMeOffsetPanel {
             }
 
             this.close();
-            MeWarMenuPanel.hide();
+            TwnsMeWarMenuPanel.MeWarMenuPanel.hide();
         }
 
         private _onFocusOutInputOffsetX(): void {

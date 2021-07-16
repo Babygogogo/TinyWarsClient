@@ -1,86 +1,90 @@
 
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiZoomableMap                from "../../tools/ui/UiZoomableMap";
-import TwnsUiTabPage                    from "../../tools/ui/UiTabPage";
-import TwnsUiMapInfo                    from "../../tools/ui/UiMapInfo";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
-import WarMapModel                  from "../../warMap/model/WarMapModel";
+import MpwModel             from "../../multiPlayerWar/model/MpwModel";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiMapInfo        from "../../tools/ui/UiMapInfo";
+import TwnsUiTabPage        from "../../tools/ui/UiTabPage";
+import TwnsUiZoomableMap    from "../../tools/ui/UiZoomableMap";
+import WarMapModel          from "../../warMap/model/WarMapModel";
 
-export type OpenDataForMcwWarMapInfoPage = {
-    warId   : number | null | undefined;
-};
-export class McwWarMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForMcwWarMapInfoPage> {
-    // @ts-ignore
-    private readonly _zoomMap       : TwnsUiZoomableMap.UiZoomableMap;
-    // @ts-ignore
-    private readonly _uiMapInfo     : TwnsUiMapInfo.UiMapInfo;
-    // @ts-ignore
-    private readonly _labelLoading  : TwnsUiLabel.UiLabel;
+namespace TwnsMcwWarMapInfoPage {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
-    public constructor() {
-        super();
+    export type OpenDataForMcwWarMapInfoPage = {
+        warId   : number | null | undefined;
+    };
+    export class McwWarMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForMcwWarMapInfoPage> {
+        // @ts-ignore
+        private readonly _zoomMap       : TwnsUiZoomableMap.UiZoomableMap;
+        // @ts-ignore
+        private readonly _uiMapInfo     : TwnsUiMapInfo.UiMapInfo;
+        // @ts-ignore
+        private readonly _labelLoading  : TwnsUiLabel.UiLabel;
 
-        this.skinName = "resource/skins/multiCustomWar/McwWarMapInfoPage.exml";
-    }
+        public constructor() {
+            super();
 
-    protected _onOpened(): void {
-        this._setNotifyListenerArray([
-            { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-            { type: NotifyType.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
-        ]);
+            this.skinName = "resource/skins/multiCustomWar/McwWarMapInfoPage.exml";
+        }
 
-        this.left   = 0;
-        this.right  = 0;
-        this.top    = 0;
-        this.bottom = 0;
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
+            ]);
 
-        this._updateComponentsForLanguage();
-        this._updateComponentsForWarInfo();
-    }
+            this.left   = 0;
+            this.right  = 0;
+            this.top    = 0;
+            this.bottom = 0;
 
-    private _onNotifyLanguageChanged(): void {
-        this._updateComponentsForLanguage();
-    }
-
-    private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
-        const data  = e.data as ProtoTypes.NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
-        const warId = this._getOpenData().warId;
-        if ((warId != null) && ((data.infos || []).find(v => v.warId === warId))) {
+            this._updateComponentsForLanguage();
             this._updateComponentsForWarInfo();
         }
-    }
 
-    private _updateComponentsForLanguage(): void {
-        this._labelLoading.text = Lang.getText(LangTextType.A0150);
-    }
-    private async _updateComponentsForWarInfo(): Promise<void> {
-        const warId             = this._getOpenData().warId;
-        const warInfo           = warId != null ? MpwModel.getMyWarInfo(warId) : undefined;
-        const settingsForMcw    = warInfo ? warInfo.settingsForMcw : undefined;
-        const settingsForCommon = warInfo ? warInfo.settingsForCommon : undefined;
-        const configVersion     = settingsForCommon ? settingsForCommon.configVersion : undefined;
-        const mapId             = settingsForMcw ? settingsForMcw.mapId : undefined;
-        const mapRawData        = mapId != null ? await WarMapModel.getRawData(mapId) : undefined;
-        const zoomMap           = this._zoomMap;
-        const uiMapInfo         = this._uiMapInfo;
-        if ((mapId == null) || (mapRawData == null) || (configVersion == null)) {
-            zoomMap.clearMap();
-            uiMapInfo.setData(null);
-        } else {
-            zoomMap.showMapByMapData(mapRawData);
-            uiMapInfo.setData({
-                mapInfo: {
-                    mapId,
-                    configVersion,
-                },
-            });
+        private _onNotifyLanguageChanged(): void {
+            this._updateComponentsForLanguage();
+        }
+
+        private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
+            const data  = e.data as ProtoTypes.NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
+            const warId = this._getOpenData().warId;
+            if ((warId != null) && ((data.infos || []).find(v => v.warId === warId))) {
+                this._updateComponentsForWarInfo();
+            }
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelLoading.text = Lang.getText(LangTextType.A0150);
+        }
+        private async _updateComponentsForWarInfo(): Promise<void> {
+            const warId             = this._getOpenData().warId;
+            const warInfo           = warId != null ? MpwModel.getMyWarInfo(warId) : undefined;
+            const settingsForMcw    = warInfo ? warInfo.settingsForMcw : undefined;
+            const settingsForCommon = warInfo ? warInfo.settingsForCommon : undefined;
+            const configVersion     = settingsForCommon ? settingsForCommon.configVersion : undefined;
+            const mapId             = settingsForMcw ? settingsForMcw.mapId : undefined;
+            const mapRawData        = mapId != null ? await WarMapModel.getRawData(mapId) : undefined;
+            const zoomMap           = this._zoomMap;
+            const uiMapInfo         = this._uiMapInfo;
+            if ((mapId == null) || (mapRawData == null) || (configVersion == null)) {
+                zoomMap.clearMap();
+                uiMapInfo.setData(null);
+            } else {
+                zoomMap.showMapByMapData(mapRawData);
+                uiMapInfo.setData({
+                    mapInfo: {
+                        mapId,
+                        configVersion,
+                    },
+                });
+            }
         }
     }
 }
+
+export default TwnsMcwWarMapInfoPage;

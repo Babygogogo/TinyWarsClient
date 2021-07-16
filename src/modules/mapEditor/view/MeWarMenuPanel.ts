@@ -43,7 +43,6 @@ import TwnsMeTileSimpleView         from "./MeTileSimpleView";
 import TwnsMeWarRulePanel           from "./MeWarRulePanel";
 
 namespace TwnsMeWarMenuPanel {
-    import ChatPanel                = TwnsChatPanel.ChatPanel;
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonInputPanel         = TwnsCommonInputPanel.CommonInputPanel;
     import UserSettingsPanel        = TwnsUserSettingsPanel.UserSettingsPanel;
@@ -71,7 +70,7 @@ namespace TwnsMeWarMenuPanel {
     import LangTextType             = TwnsLangTextType.LangTextType;
 
     // eslint-disable-next-line no-shadow
-    const enum TwnsMeWarMenuType {
+    enum TwnsMeWarMenuType {
         Main,
         Advanced,
     }
@@ -571,7 +570,7 @@ namespace TwnsMeWarMenuPanel {
                 name    : Lang.getText(LangTextType.B0383),
                 callback: () => {
                     this.close();
-                    ChatPanel.show({});
+                    TwnsChatPanel.ChatPanel.show({});
                 },
             };
         }

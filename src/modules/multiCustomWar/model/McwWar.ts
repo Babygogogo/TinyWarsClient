@@ -1,99 +1,104 @@
 
 import TwnsMpwWar           from "../../multiPlayerWar/model/MpwWar";
-import MpwWar= TwnsMpwWar.MpwWar;
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import Logger           from "../../tools/helpers/Logger";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import Types            from "../../tools/helpers/Types";
-import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
-import ISettingsForMcw      = ProtoTypes.WarSettings.ISettingsForMcw;
-import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
-export class McwWar extends MpwWar {
-    private _settingsForMcw?: ISettingsForMcw;
+namespace TwnsMcwWar {
+    import MpwWar           = TwnsMpwWar.MpwWar;
+    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
+    import ISettingsForMcw  = ProtoTypes.WarSettings.ISettingsForMcw;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
-    public async init(data: ISerialWar): Promise<ClientErrorCode> {
-        const baseInitError = await this._baseInit(data);
-        if (baseInitError) {
-            return baseInitError;
+    export class McwWar extends MpwWar {
+        private _settingsForMcw?: ISettingsForMcw;
+
+        public async init(data: ISerialWar): Promise<ClientErrorCode> {
+            const baseInitError = await this._baseInit(data);
+            if (baseInitError) {
+                return baseInitError;
+            }
+
+            const settingsForMcw = data.settingsForMcw;
+            if (settingsForMcw == null) {
+                return ClientErrorCode.McwWarInit00;
+            }
+
+            this._setSettingsForMcw(settingsForMcw);
+
+            this._initView();
+
+            return ClientErrorCode.NoError;
         }
 
-        const settingsForMcw = data.settingsForMcw;
-        if (settingsForMcw == null) {
-            return ClientErrorCode.McwWarInit00;
+        public getCanCheat(): boolean {
+            return false;
+        }
+        public getWarType(): Types.WarType {
+            return this.getCommonSettingManager().getSettingsHasFogByDefault()
+                ? Types.WarType.McwFog
+                : Types.WarType.McwStd;
+        }
+        public getIsNeedExecutedAction(): boolean {
+            return false;
+        }
+        public getIsNeedSeedRandom(): boolean {
+            return false;
+        }
+        public getMapId(): number | null | undefined {
+            const settingsForMcw = this.getSettingsForMcw();
+            return settingsForMcw ? settingsForMcw.mapId : undefined;
         }
 
-        this._setSettingsForMcw(settingsForMcw);
-
-        this._initView();
-
-        return ClientErrorCode.NoError;
-    }
-
-    public getCanCheat(): boolean {
-        return false;
-    }
-    public getWarType(): Types.WarType {
-        return this.getCommonSettingManager().getSettingsHasFogByDefault()
-            ? Types.WarType.McwFog
-            : Types.WarType.McwStd;
-    }
-    public getIsNeedExecutedAction(): boolean {
-        return false;
-    }
-    public getIsNeedSeedRandom(): boolean {
-        return false;
-    }
-    public getMapId(): number | null | undefined {
-        const settingsForMcw = this.getSettingsForMcw();
-        return settingsForMcw ? settingsForMcw.mapId : undefined;
-    }
-
-    private _setSettingsForMcw(settings: ISettingsForMcw): void {
-        this._settingsForMcw = settings;
-    }
-    public getSettingsForMcw(): ISettingsForMcw | null | undefined {
-        return this._settingsForMcw;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // The other functions.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    public getWarName(): string | null | undefined {
-        const settingsForMcw = this.getSettingsForMcw();
-        if (settingsForMcw == null) {
-            Logger.error(`McwWar.getWarName() empty settingsForMcw.`);
-            return undefined;
+        private _setSettingsForMcw(settings: ISettingsForMcw): void {
+            this._settingsForMcw = settings;
+        }
+        public getSettingsForMcw(): ISettingsForMcw | null | undefined {
+            return this._settingsForMcw;
         }
 
-        return settingsForMcw.warName;
-    }
-    public getWarPassword(): string | null | undefined {
-        const settingsForMcw = this.getSettingsForMcw();
-        if (settingsForMcw == null) {
-            Logger.error(`McwWar.getWarPassword() empty settingsForMcw.`);
-            return undefined;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // The other functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getWarName(): string | null | undefined {
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getWarName() empty settingsForMcw.`);
+                return undefined;
+            }
+
+            return settingsForMcw.warName;
+        }
+        public getWarPassword(): string | null | undefined {
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getWarPassword() empty settingsForMcw.`);
+                return undefined;
+            }
+
+            return settingsForMcw.warPassword;
+        }
+        public getWarComment(): string | null | undefined {
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getWarComment() empty settingsForMcw.`);
+                return undefined;
+            }
+
+            return settingsForMcw.warComment;
         }
 
-        return settingsForMcw.warPassword;
-    }
-    public getWarComment(): string | null | undefined {
-        const settingsForMcw = this.getSettingsForMcw();
-        if (settingsForMcw == null) {
-            Logger.error(`McwWar.getWarComment() empty settingsForMcw.`);
-            return undefined;
+        public getSettingsBootTimerParams(): number[] | null | undefined {
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getSettingsBootTimerParams() empty settingsForMcw.`);
+                return undefined;
+            }
+
+            return settingsForMcw.bootTimerParams;
         }
-
-        return settingsForMcw.warComment;
-    }
-
-    public getSettingsBootTimerParams(): number[] | null | undefined {
-        const settingsForMcw = this.getSettingsForMcw();
-        if (settingsForMcw == null) {
-            Logger.error(`McwWar.getSettingsBootTimerParams() empty settingsForMcw.`);
-            return undefined;
-        }
-
-        return settingsForMcw.bootTimerParams;
     }
 }
+
+export default TwnsMcwWar;

@@ -1,14 +1,14 @@
 
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Logger                       from "../../tools/helpers/Logger";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers              from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel                    from "../../user/model/UserModel";
-import MrrModel                     from "./MrrModel";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Logger           from "../../tools/helpers/Logger";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel        from "../../user/model/UserModel";
+import MrrModel         from "./MrrModel";
 
-export namespace MrrSelfSettingsModel {
+namespace MrrSelfSettingsModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
 
@@ -156,3 +156,5 @@ export namespace MrrSelfSettingsModel {
         return availableSkinIdList;
     }
 }
+
+export default MrrSelfSettingsModel;

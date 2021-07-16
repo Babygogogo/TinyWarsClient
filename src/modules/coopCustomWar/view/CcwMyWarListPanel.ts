@@ -24,7 +24,6 @@ import TwnsCcwWarMapInfoPage            from "./CcwWarMapInfoPage";
 import TwnsCcwWarPlayerInfoPage         from "./CcwWarPlayerInfoPage";
 
 namespace TwnsCcwMyWarListPanel {
-    import CcrMainMenuPanel                         = TwnsCcrMainMenuPanel.CcrMainMenuPanel;
     import CcwWarMapInfoPage                        = TwnsCcwWarMapInfoPage.CcwWarMapInfoPage;
     import OpenDataForCcwWarMapInfoPage             = TwnsCcwWarMapInfoPage.OpenDataForCcwWarMapInfoPage;
     import CcwWarPlayerInfoPage                     = TwnsCcwWarPlayerInfoPage.CcwWarPlayerInfoPage;
@@ -138,7 +137,7 @@ namespace TwnsCcwMyWarListPanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            CcrMainMenuPanel.show();
+            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }

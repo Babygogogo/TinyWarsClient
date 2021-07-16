@@ -20,7 +20,6 @@ import TwnsCcrCreateMapListPanel            from "./CcrCreateMapListPanel";
 import TwnsCcrCreatePlayerInfoPage          from "./CcrCreatePlayerInfoPage";
 
 namespace TwnsCcrCreateSettingsPanel {
-    import CcrCreateMapListPanel            = TwnsCcrCreateMapListPanel.CcrCreateMapListPanel;
     import CcrCreateAdvancedSettingsPage    = TwnsCcrCreateAdvancedSettingsPage.CcrCreateAdvancedSettingsPage;
     import CcrCreateBasicSettingsPage       = TwnsCcrCreateBasicSettingsPage.CcrCreateBasicSettingsPage;
     import CcrCreateMapInfoPage             = TwnsCcrCreateMapInfoPage.CcrCreateMapInfoPage;
@@ -114,7 +113,7 @@ namespace TwnsCcrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            CcrCreateMapListPanel.show();
+            TwnsCcrCreateMapListPanel.CcrCreateMapListPanel.show();
         }
         private _onTouchedBtnConfirm(): void {
             const data = CcrCreateModel.getData();

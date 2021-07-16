@@ -1,24 +1,25 @@
 
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiButton                      from "../../tools/ui/UiButton";
-import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
-import { SpmWarListPanel }              from "./SpmWarListPanel";
-import { ScrCreateMapListPanel }        from "../../singleCustomRoom/view/ScrCreateMapListPanel";
-import MrrMainMenuPanel= TwnsMrrMainMenuPanel.MrrMainMenuPanel;import TwnsMrrMainMenuPanel             from "../../multiRankRoom/view/MrrMainMenuPanel";
-import McrMainMenuPanel= TwnsMcrMainMenuPanel.McrMainMenuPanel;import TwnsMcrMainMenuPanel             from "../../multiCustomRoom/view/McrMainMenuPanel";
+import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
+import TwnsMrrMainMenuPanel         from "../../multiRankRoom/view/MrrMainMenuPanel";
+import TwnsScrCreateMapListPanel    from "../../singleCustomRoom/view/ScrCreateMapListPanel";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
 import Types                        from "../../tools/helpers/Types";
-import Tween                            = egret.Tween;
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsSpmWarListPanel          from "./SpmWarListPanel";
 
 namespace TwnsSpmMainMenuPanel {
+    import SpmWarListPanel          = TwnsSpmWarListPanel.SpmWarListPanel;
+    import ScrCreateMapListPanel    = TwnsScrCreateMapListPanel.ScrCreateMapListPanel;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import Tween                    = egret.Tween;
 
     export class SpmMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -83,11 +84,11 @@ namespace TwnsSpmMainMenuPanel {
 
         private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
             this.close();
-            McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
         }
         private _onTouchedBtnRanking(e: egret.TouchEvent): void {
             this.close();
-            MrrMainMenuPanel.show();
+            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
         }
         private _onTouchedBtnCampaign(e: egret.TouchEvent): void {
             FloatText.show(Lang.getText(LangTextType.A0053));

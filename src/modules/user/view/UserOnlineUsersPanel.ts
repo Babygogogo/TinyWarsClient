@@ -1,23 +1,23 @@
 
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
 import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiButton              from "../../tools/ui/UiButton";
-import UserPanel = TwnsUserPanel.UserPanel;import TwnsUserPanel            from "../../user/view/UserPanel";
-import Helpers              from "../../tools/helpers/Helpers";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import Types                from "../../tools/helpers/Types";
-import UserProxy            from "../../user/model/UserProxy";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import UserProxy                from "../../user/model/UserProxy";
+import TwnsUserPanel            from "../../user/view/UserPanel";
 
 namespace TwnsUserOnlineUsersPanel {
+    import UserPanel    = TwnsUserPanel.UserPanel;
+    import LangTextType = TwnsLangTextType.LangTextType;
+    import NotifyType   = TwnsNotifyType.NotifyType;
 
     export class UserOnlineUsersPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;

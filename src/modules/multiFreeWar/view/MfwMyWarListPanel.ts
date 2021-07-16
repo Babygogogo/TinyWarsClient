@@ -1,31 +1,38 @@
 
-import TwnsUiListItemRenderer                                                   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                                                              from "../../tools/ui/UiPanel";
-import TwnsUiButton                                                              from "../../tools/ui/UiButton";
-import TwnsUiLabel                                                              from "../../tools/ui/UiLabel";
-import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
-import TwnsUiTab                                                                from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
-import MfrMainMenuPanel= TwnsMfrMainMenuPanel.MfrMainMenuPanel;import TwnsMfrMainMenuPanel                                                     from "../../multiFreeRoom/view/MfrMainMenuPanel";
-import TwnsLobbyBottomPanel                                                 from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                                                    from "../../lobby/view/LobbyTopPanel";
-import TwnsLangTextType                                                     from "../../tools/lang/LangTextType";
-import TwnsNotifyType                                                       from "../../tools/notify/NotifyType";
-import Types                                                                from "../../tools/helpers/Types";
-import { OpenDataForMfwWarBasicSettingsPage, MfwWarBasicSettingsPage }          from "./MfwWarBasicSettingsPage";
-import { OpenDataForMfwWarPlayerInfoPage, MfwWarPlayerInfoPage }                from "./MfwWarPlayerInfoPage";
-import { OpenDataForMfwWarAdvancedSettingsPage, MfwWarAdvancedSettingsPage }    from "./MfwWarAdvancedSettingsPage";
-import { OpenDataForMfwWarMapInfoPage, MfwWarMapInfoPage }                      from "./MfwWarMapInfoPage";
-import Helpers                                                              from "../../tools/helpers/Helpers";
-import Lang                                                                 from "../../tools/lang/Lang";
-import MpwModel                                                             from "../../multiPlayerWar/model/MpwModel";
-import MpwProxy                                                             from "../../multiPlayerWar/model/MpwProxy";
+import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
+import TwnsMfrMainMenuPanel             from "../../multiFreeRoom/view/MfrMainMenuPanel";
+import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
+import MpwProxy                         from "../../multiPlayerWar/model/MpwProxy";
+import Helpers                          from "../../tools/helpers/Helpers";
+import Types                            from "../../tools/helpers/Types";
+import Lang                             from "../../tools/lang/Lang";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import TwnsUiButton                     from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import TwnsUiTab                        from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
+import TwnsMfwWarAdvancedSettingsPage   from "./MfwWarAdvancedSettingsPage";
+import TwnsMfwWarBasicSettingsPage      from "./MfwWarBasicSettingsPage";
+import TwnsMfwWarMapInfoPage            from "./MfwWarMapInfoPage";
+import TwnsMfwWarPlayerInfoPage         from "./MfwWarPlayerInfoPage";
 
 namespace TwnsMfwMyWarListPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import OpenDataForMfwWarBasicSettingsPage       = TwnsMfwWarBasicSettingsPage.OpenDataForMfwWarBasicSettingsPage;
+    import MfwWarBasicSettingsPage                  = TwnsMfwWarBasicSettingsPage.MfwWarBasicSettingsPage;
+    import OpenDataForMfwWarPlayerInfoPage          = TwnsMfwWarPlayerInfoPage.OpenDataForMfwWarPlayerInfoPage;
+    import MfwWarPlayerInfoPage                     = TwnsMfwWarPlayerInfoPage.MfwWarPlayerInfoPage;
+    import OpenDataForMfwWarAdvancedSettingsPage    = TwnsMfwWarAdvancedSettingsPage.OpenDataForMfwWarAdvancedSettingsPage;
+    import MfwWarAdvancedSettingsPage               = TwnsMfwWarAdvancedSettingsPage.MfwWarAdvancedSettingsPage;
+    import OpenDataForMfwWarMapInfoPage             = TwnsMfwWarMapInfoPage.OpenDataForMfwWarMapInfoPage;
+    import MfwWarMapInfoPage                        = TwnsMfwWarMapInfoPage.MfwWarMapInfoPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
 
-    // eslint-disable-next-line no-shadow
     export class MfwMyWarListPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
@@ -115,7 +122,7 @@ namespace TwnsMfwMyWarListPanel {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            MfrMainMenuPanel.show();
+            TwnsMfrMainMenuPanel.MfrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }

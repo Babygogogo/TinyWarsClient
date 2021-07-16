@@ -1,7 +1,7 @@
 
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import ProtoTypes   from "../../tools/proto/ProtoTypes";
 
-export namespace SpmSrwRankModel {
+namespace SpmSrwRankModel {
     import NetMessage   = ProtoTypes.NetMessage;
 
     type SrwRankInfo    = NetMessage.MsgSpmGetSrwRankInfo.ISrwRankInfoForRule;
@@ -16,3 +16,5 @@ export namespace SpmSrwRankModel {
         _rankInfoDict.set(data.mapId, data.infoArray || []);
     }
 }
+
+export default SpmSrwRankModel;

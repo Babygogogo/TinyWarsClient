@@ -20,7 +20,6 @@ import WarMapModel                  from "../../warMap/model/WarMapModel";
 import TwnsMcrWatchMainMenuPanel    from "./McrWatchMainMenuPanel";
 
 namespace TwnsMcrWatchOngoingWarsPanel {
-    import McrWatchMainMenuPanel    = TwnsMcrWatchMainMenuPanel.McrWatchMainMenuPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import CommonBlockPanel         = TwnsCommonBlockPanel.CommonBlockPanel;
@@ -143,7 +142,7 @@ namespace TwnsMcrWatchOngoingWarsPanel {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            McrWatchMainMenuPanel.show();
+            TwnsMcrWatchMainMenuPanel.McrWatchMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

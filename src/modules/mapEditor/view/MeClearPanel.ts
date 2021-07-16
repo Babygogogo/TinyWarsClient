@@ -14,7 +14,6 @@ import MeUtility            from "../model/MeUtility";
 import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
 
 namespace TwnsMeClearPanel {
-    import MeWarMenuPanel   = TwnsMeWarMenuPanel.MeWarMenuPanel;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
@@ -104,7 +103,7 @@ namespace TwnsMeClearPanel {
                     .startRunningView();
 
                 this.close();
-                MeWarMenuPanel.hide();
+                TwnsMeWarMenuPanel.MeWarMenuPanel.hide();
             }
         }
 

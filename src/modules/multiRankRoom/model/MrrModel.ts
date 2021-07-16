@@ -1,11 +1,11 @@
 
-import Logger                       from "../../tools/helpers/Logger";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import UserModel                    from "../../user/model/UserModel";
-import MrrProxy                     from "./MrrProxy";
-import { MrrSelfSettingsModel }         from "./MrrSelfSettingsModel";
+import Logger               from "../../tools/helpers/Logger";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import UserModel            from "../../user/model/UserModel";
+import MrrProxy             from "./MrrProxy";
+import MrrSelfSettingsModel from "./MrrSelfSettingsModel";
 
 namespace MrrModel {
     import NotifyType       = TwnsNotifyType.NotifyType;

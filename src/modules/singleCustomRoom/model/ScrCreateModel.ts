@@ -1,18 +1,18 @@
 
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import Logger                       from "../../tools/helpers/Logger";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import NotifyData                   from "../../tools/notify/NotifyData";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Lang                         from "../../tools/lang/Lang";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers              from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel                    from "../../user/model/UserModel";
-import WarMapModel                  from "../../warMap/model/WarMapModel";
-import SpmModel                     from "../../singlePlayerMode/model/SpmModel";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import Logger           from "../../tools/helpers/Logger";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import NotifyData       from "../../tools/notify/NotifyData";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import ConfigManager    from "../../tools/helpers/ConfigManager";
+import Helpers          from "../../tools/helpers/Helpers";
+import Lang             from "../../tools/lang/Lang";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel        from "../../user/model/UserModel";
+import WarMapModel      from "../../warMap/model/WarMapModel";
+import SpmModel         from "../../singlePlayerMode/model/SpmModel";
 
 namespace ScrCreateModel {
     import LangTextType             = TwnsLangTextType.LangTextType;

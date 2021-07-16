@@ -1,30 +1,38 @@
 
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiButton                      from "../../tools/ui/UiButton";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import ChatPanel = TwnsChatPanel.ChatPanel;import TwnsChatPanel                    from "../../chat/view/ChatPanel";
-import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import UserPanel = TwnsUserPanel.UserPanel;import TwnsUserPanel                    from "../../user/view/UserPanel";
-import MpwWar= TwnsMpwWar.MpwWar;import TwnsMpwWar                       from "../../multiPlayerWar/model/MpwWar";
-import BwCoListPanel = TwnsBwCoListPanel.BwCoListPanel;import TwnsBwCoListPanel                from "../../baseWar/view/BwCoListPanel";
-import { MpwActionPlanner }             from "../model/MpwActionPlanner";
-import { MpwWarMenuPanel }              from "./MpwWarMenuPanel";
-import BwUnitListPanel = TwnsBwUnitListPanel.BwUnitListPanel;import TwnsBwUnitListPanel              from "../../baseWar/view/BwUnitListPanel";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import Types                        from "../../tools/helpers/Types";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import FloatText                    from "../../tools/helpers/FloatText";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Lang                         from "../../tools/lang/Lang";
-import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
-import ChatModel                    from "../../chat/model/ChatModel";
-import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
-import MpwProxy                     from "../../multiPlayerWar/model/MpwProxy";
+import TwnsBwCoListPanel        from "../../baseWar/view/BwCoListPanel";
+import TwnsBwUnitListPanel      from "../../baseWar/view/BwUnitListPanel";
+import ChatModel                from "../../chat/model/ChatModel";
+import TwnsChatPanel            from "../../chat/view/ChatPanel";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
+import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
+import TwnsMpwWar               from "../../multiPlayerWar/model/MpwWar";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsUserPanel            from "../../user/view/UserPanel";
+import TwnsMpwActionPlanner     from "../model/MpwActionPlanner";
+import TwnsMpwWarMenuPanel      from "./MpwWarMenuPanel";
 
 namespace TwnsMpwTopPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import ChatPanel            = TwnsChatPanel.ChatPanel;
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import UserPanel            = TwnsUserPanel.UserPanel;
+    import MpwWar               = TwnsMpwWar.MpwWar;
+    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
+    import MpwActionPlanner     = TwnsMpwActionPlanner.MpwActionPlanner;
+    import MpwWarMenuPanel      = TwnsMpwWarMenuPanel.MpwWarMenuPanel;
+    import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
 
     export class MpwTopPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;

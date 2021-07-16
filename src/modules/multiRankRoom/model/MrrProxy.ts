@@ -1,10 +1,10 @@
 
-import TwnsNetMessageCodes              from "../../tools/network/NetMessageCodes";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import NetManager                   from "../../tools/network/NetManager";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import MrrModel                     from "./MrrModel";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import NetManager           from "../../tools/network/NetManager";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import MrrModel             from "./MrrModel";
 
 namespace MrrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;

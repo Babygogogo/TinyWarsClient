@@ -30,7 +30,6 @@ import TwnsCcrRoomPlayerInfoPage        from "./CcrRoomPlayerInfoPage";
 
 namespace TwnsCcrJoinRoomListPanel {
     import CcrJoinPasswordPanel                     = TwnsCcrJoinPasswordPanel.CcrJoinPasswordPanel;
-    import CcrMainMenuPanel                         = TwnsCcrMainMenuPanel.CcrMainMenuPanel;
     import CcrRoomInfoPanel                         = TwnsCcrRoomInfoPanel.CcrRoomInfoPanel;
     import OpenDataForCcrRoomAdvancedSettingsPage   = TwnsCcrRoomAdvancedSettingsPage.OpenDataForCcrRoomAdvancedSettingsPage;
     import CcrRoomAdvancedSettingsPage              = TwnsCcrRoomAdvancedSettingsPage.CcrRoomAdvancedSettingsPage;
@@ -161,7 +160,7 @@ namespace TwnsCcrJoinRoomListPanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            CcrMainMenuPanel.show();
+            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }

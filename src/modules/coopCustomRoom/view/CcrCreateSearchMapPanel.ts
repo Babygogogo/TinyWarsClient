@@ -13,7 +13,6 @@ import TwnsUiTextInput              from "../../tools/ui/UiTextInput";
 import TwnsCcrCreateMapListPanel    from "./CcrCreateMapListPanel";
 
 namespace TwnsCcrCreateSearchMapPanel {
-    import CcrCreateMapListPanel    = TwnsCcrCreateMapListPanel.CcrCreateMapListPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
@@ -86,14 +85,14 @@ namespace TwnsCcrCreateSearchMapPanel {
         }
 
         private _onTouchedBtnReset(): void {
-            CcrCreateMapListPanel.getInstance().setMapFilters({});
+            TwnsCcrCreateMapListPanel.CcrCreateMapListPanel.getInstance().setMapFilters({});
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
             const minRatingText = this._inputMinRating.text;
             const minRating     = minRatingText ? Number(minRatingText) : null;
-            CcrCreateMapListPanel.getInstance().setMapFilters({
+            TwnsCcrCreateMapListPanel.CcrCreateMapListPanel.getInstance().setMapFilters({
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
                 playersCount: Number(this._inputPlayersCount.text) || null,

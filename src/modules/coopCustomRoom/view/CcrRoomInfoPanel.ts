@@ -32,7 +32,6 @@ import TwnsCcrRoomMapInfoPage           from "./CcrRoomMapInfoPage";
 import TwnsCcrRoomPlayerInfoPage        from "./CcrRoomPlayerInfoPage";
 
 namespace TwnsCcrRoomInfoPanel {
-    import ChatPanel                                = TwnsChatPanel.ChatPanel;
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import OpenDataForCcrRoomMapInfoPage            = TwnsCcrRoomMapInfoPage.OpenDataForCcrRoomMapInfoPage;
     import CcrRoomMapInfoPage                       = TwnsCcrRoomMapInfoPage.CcrRoomMapInfoPage;
@@ -222,7 +221,7 @@ namespace TwnsCcrRoomInfoPanel {
         }
 
         private _onTouchedBtnChat(): void {
-            ChatPanel.show({
+            TwnsChatPanel.ChatPanel.show({
                 toCcrRoomId: this._getOpenData().roomId,
             });
         }

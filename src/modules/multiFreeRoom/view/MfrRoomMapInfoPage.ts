@@ -1,73 +1,77 @@
 
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiZoomableMap        from "../../tools/ui/UiZoomableMap";
-import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
-import TwnsUiMapInfo            from "../../tools/ui/UiMapInfo";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import MfrModel             from "../../multiFreeRoom/model/MfrModel";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiMapInfo        from "../../tools/ui/UiMapInfo";
+import TwnsUiTabPage        from "../../tools/ui/UiTabPage";
+import TwnsUiZoomableMap    from "../../tools/ui/UiZoomableMap";
 
-export type OpenDataForMfrRoomMapInfoPage = {
-    roomId  : number;
-};
-export class MfrRoomMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForMfrRoomMapInfoPage> {
-    private readonly _zoomMap       : TwnsUiZoomableMap.UiZoomableMap;
-    private readonly _uiMapInfo     : TwnsUiMapInfo.UiMapInfo;
-    private readonly _labelLoading  : TwnsUiLabel.UiLabel;
+namespace TwnsMfrRoomMapInfoPage {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
-    public constructor() {
-        super();
+    export type OpenDataForMfrRoomMapInfoPage = {
+        roomId  : number;
+    };
+    export class MfrRoomMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForMfrRoomMapInfoPage> {
+        private readonly _zoomMap       : TwnsUiZoomableMap.UiZoomableMap;
+        private readonly _uiMapInfo     : TwnsUiMapInfo.UiMapInfo;
+        private readonly _labelLoading  : TwnsUiLabel.UiLabel;
 
-        this.skinName = "resource/skins/multiFreeRoom/MfrRoomMapInfoPage.exml";
-    }
+        public constructor() {
+            super();
 
-    protected _onOpened(): void {
-        this._setNotifyListenerArray([
-            { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            { type: NotifyType.MsgMfrGetRoomInfo,  callback: this._onNotifyMsgMfrGetRoomInfo },
-        ]);
+            this.skinName = "resource/skins/multiFreeRoom/MfrRoomMapInfoPage.exml";
+        }
 
-        this.left   = 0;
-        this.right  = 0;
-        this.top    = 0;
-        this.bottom = 0;
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMfrGetRoomInfo,  callback: this._onNotifyMsgMfrGetRoomInfo },
+            ]);
 
-        this._updateComponentsForLanguage();
-        this._updateComponentsForRoomInfo();
-    }
+            this.left   = 0;
+            this.right  = 0;
+            this.top    = 0;
+            this.bottom = 0;
 
-    private _onNotifyLanguageChanged(e: egret.Event): void {
-        this._updateComponentsForLanguage();
-    }
-    private _onNotifyMsgMfrGetRoomInfo(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomInfo.IS;
-        if (data.roomId === this._getOpenData().roomId) {
+            this._updateComponentsForLanguage();
             this._updateComponentsForRoomInfo();
         }
-    }
 
-    private _updateComponentsForLanguage(): void {
-        this._labelLoading.text = Lang.getText(LangTextType.A0150);
-    }
-    private async _updateComponentsForRoomInfo(): Promise<void> {
-        const roomId    = this._getOpenData().roomId;
-        const roomInfo  = await MfrModel.getRoomInfo(roomId);
-        const warData   = roomInfo ? roomInfo.settingsForMfw.initialWarData : null;
-        const zoomMap   = this._zoomMap;
-        const uiMapInfo = this._uiMapInfo;
-        if (!warData) {
-            zoomMap.clearMap();
-            uiMapInfo.setData(null);
-        } else {
-            zoomMap.showMapByWarData(warData);
-            uiMapInfo.setData({
-                warData,
-            });
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+        private _onNotifyMsgMfrGetRoomInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomInfo.IS;
+            if (data.roomId === this._getOpenData().roomId) {
+                this._updateComponentsForRoomInfo();
+            }
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelLoading.text = Lang.getText(LangTextType.A0150);
+        }
+        private async _updateComponentsForRoomInfo(): Promise<void> {
+            const roomId    = this._getOpenData().roomId;
+            const roomInfo  = await MfrModel.getRoomInfo(roomId);
+            const warData   = roomInfo ? roomInfo.settingsForMfw.initialWarData : null;
+            const zoomMap   = this._zoomMap;
+            const uiMapInfo = this._uiMapInfo;
+            if (!warData) {
+                zoomMap.clearMap();
+                uiMapInfo.setData(null);
+            } else {
+                zoomMap.showMapByWarData(warData);
+                uiMapInfo.setData({
+                    warData,
+                });
+            }
         }
     }
 }
+
+export default TwnsMfrRoomMapInfoPage;

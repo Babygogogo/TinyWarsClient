@@ -1,32 +1,37 @@
 
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiButton                      from "../../tools/ui/UiButton";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import ChatPanel = TwnsChatPanel.ChatPanel;import TwnsChatPanel                    from "../../chat/view/ChatPanel";
-import UserPanel = TwnsUserPanel.UserPanel;import TwnsUserPanel                    from "../../user/view/UserPanel";
-import BwCoListPanel = TwnsBwCoListPanel.BwCoListPanel;import TwnsBwCoListPanel                from "../../baseWar/view/BwCoListPanel";
-import BwUnitListPanel = TwnsBwUnitListPanel.BwUnitListPanel;import TwnsBwUnitListPanel              from "../../baseWar/view/BwUnitListPanel";
-import { SpwWarMenuPanel }              from "./SpwWarMenuPanel";
-import TwnsBwWar                        from "../../baseWar/model/BwWar";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import Types                        from "../../tools/helpers/Types";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import FloatText                    from "../../tools/helpers/FloatText";
-import Lang                         from "../../tools/lang/Lang";
-import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
-import ChatModel                    from "../../chat/model/ChatModel";
-import BwWar            = TwnsBwWar.BwWar;
+import TwnsBwWar                from "../../baseWar/model/BwWar";
+import TwnsBwCoListPanel        from "../../baseWar/view/BwCoListPanel";
+import TwnsBwUnitListPanel      from "../../baseWar/view/BwUnitListPanel";
+import ChatModel                from "../../chat/model/ChatModel";
+import TwnsChatPanel            from "../../chat/view/ChatPanel";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import FloatText                from "../../tools/helpers/FloatText";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsUserPanel            from "../../user/view/UserPanel";
+import TwnsSpwWarMenuPanel      from "./SpwWarMenuPanel";
 
 namespace TwnsSpwTopPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import ChatPanel            = TwnsChatPanel.ChatPanel;
+    import UserPanel            = TwnsUserPanel.UserPanel;
+    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
+    import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
+    import SpwWarMenuPanel      = TwnsSpwWarMenuPanel.SpwWarMenuPanel;
+    import BwWar                = TwnsBwWar.BwWar;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = TwnsLangTextType.LangTextType;
 
     type OpenData = {
         war : BwWar;
     };
-    // eslint-disable-next-line no-shadow
     export class SpwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;

@@ -1,34 +1,40 @@
 
-import TwnsUiListItemRenderer                                           from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                                                      from "../../tools/ui/UiPanel";
-import TwnsUiButton                                                      from "../../tools/ui/UiButton";
-import TwnsUiLabel                                                      from "../../tools/ui/UiLabel";
-import TwnsUiScrollList                                                 from "../../tools/ui/UiScrollList";
-import TwnsUiTab                                                        from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer                                            from "../../tools/ui/UiTabItemRenderer";
-import McrMainMenuPanel= TwnsMcrMainMenuPanel.McrMainMenuPanel;import TwnsMcrMainMenuPanel                                             from "../../multiCustomRoom/view/McrMainMenuPanel";
-import TwnsCommonBlockPanel                                             from "../../common/view/CommonBlockPanel";
-import { OpenDataForRwReplayWarInfoPage, RwReplayWarInfoPage }          from "./RwReplayWarInfoPage";
-import { RwSearchReplayPanel }                                          from "./RwSearchReplayPanel";
-import TwnsLobbyBottomPanel                                             from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                                                from "../../lobby/view/LobbyTopPanel";
-import { OpenDataForRwReplayMapInfoPage, RwReplayMapInfoPage }          from "./RwReplayMapInfoPage";
-import { OpenDataForRwReplayPlayerInfoPage, RwReplayPlayerInfoPage }    from "./RwReplayPlayerInfoPage";
-import FlowManager                                                  from "../../tools/helpers/FlowManager";
-import Helpers                                                      from "../../tools/helpers/Helpers";
-import Lang                                                         from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import Notify                                                       from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import Types                                                        from "../../tools/helpers/Types";
-import WarMapModel                                                  from "../../warMap/model/WarMapModel";
-import RwModel                                                      from "../model/RwModel";
-import RwProxy                                                      from "../model/RwProxy";
-import CommonBlockPanel = TwnsCommonBlockPanel.CommonBlockPanel;
+import TwnsCommonBlockPanel         from "../../common/view/CommonBlockPanel";
+import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
+import FlowManager                  from "../../tools/helpers/FlowManager";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+import TwnsUiTab                    from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer        from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
+import RwModel                      from "../model/RwModel";
+import RwProxy                      from "../model/RwProxy";
+import TwnsRwReplayMapInfoPage      from "./RwReplayMapInfoPage";
+import TwnsRwReplayPlayerInfoPage   from "./RwReplayPlayerInfoPage";
+import TwnsRwReplayWarInfoPage      from "./RwReplayWarInfoPage";
+import TwnsRwSearchReplayPanel      from "./RwSearchReplayPanel";
 
 namespace TwnsRwReplayListPanel {
+    import OpenDataForRwReplayWarInfoPage       = TwnsRwReplayWarInfoPage.OpenDataForRwReplayWarInfoPage;
+    import RwReplayWarInfoPage                  = TwnsRwReplayWarInfoPage.RwReplayWarInfoPage;
+    import RwSearchReplayPanel                  = TwnsRwSearchReplayPanel.RwSearchReplayPanel;
+    import OpenDataForRwReplayMapInfoPage       = TwnsRwReplayMapInfoPage.OpenDataForRwReplayMapInfoPage;
+    import RwReplayMapInfoPage                  = TwnsRwReplayMapInfoPage.RwReplayMapInfoPage;
+    import OpenDataForRwReplayPlayerInfoPage    = TwnsRwReplayPlayerInfoPage.OpenDataForRwReplayPlayerInfoPage;
+    import RwReplayPlayerInfoPage               = TwnsRwReplayPlayerInfoPage.RwReplayPlayerInfoPage;
+    import LangTextType                         = TwnsLangTextType.LangTextType;
+    import NotifyType                           = TwnsNotifyType.NotifyType;
+    import CommonBlockPanel                     = TwnsCommonBlockPanel.CommonBlockPanel;
 
     export class RwReplayListPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -131,7 +137,7 @@ namespace TwnsRwReplayListPanel {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }

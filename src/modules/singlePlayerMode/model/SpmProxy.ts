@@ -1,18 +1,20 @@
 
-import { SpwWar }                       from "../../singlePlayerWar/model/SpwWar";
-import { SrwWar }                       from "../../singleRankWar/model/SrwWar";
-import TwnsNetMessageCodes          from "../../tools/network/NetMessageCodes";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import ScrCreateModel               from "../../singleCustomRoom/model/ScrCreateModel";
-import { SpmSrwRankModel }              from "./SpmSrwRankModel";
-import SpmModel                     from "./SpmModel";
-import NetManager                   from "../../tools/network/NetManager";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import ScrCreateModel       from "../../singleCustomRoom/model/ScrCreateModel";
+import TwnsSpwWar           from "../../singlePlayerWar/model/SpwWar";
+import TwnsSrwWar           from "../../singleRankWar/model/SrwWar";
+import NetManager           from "../../tools/network/NetManager";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import SpmModel             from "./SpmModel";
+import SpmSrwRankModel      from "./SpmSrwRankModel";
 
 namespace SpmProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import SpwWar           = TwnsSpwWar.SpwWar;
+    import SrwWar           = TwnsSrwWar.SrwWar;
 
     export function init(): void {
         NetManager.addListeners([

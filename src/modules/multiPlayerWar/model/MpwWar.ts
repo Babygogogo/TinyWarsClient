@@ -1,25 +1,29 @@
 
+import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
 import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
-import BwWarEventManager = TwnsBwWarEventManager.BwWarEventManager;import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
-import { MpwPlayerManager }         from "./MpwPlayerManager";
-import { MpwField }                 from "./MpwField";
-import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
-import { MpwWarMenuPanel }          from "../view/MpwWarMenuPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import WarDestructionHelpers       from "../../tools/warHelpers/WarDestructionHelpers";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import WarVisibilityHelpers       from "../../tools/warHelpers/WarVisibilityHelpers";
-import Timer                from "../../tools/helpers/Timer";
-import * as MpwUtility              from "./MpwUtility";
-import WarAction                    = ProtoTypes.WarAction;
-import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
-import BwWar            = TwnsBwWar.BwWar;
+import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Timer                        from "../../tools/helpers/Timer";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import WarDestructionHelpers        from "../../tools/warHelpers/WarDestructionHelpers";
+import WarVisibilityHelpers         from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsMpwWarMenuPanel          from "../view/MpwWarMenuPanel";
+import TwnsMpwField                 from "./MpwField";
+import TwnsMpwPlayerManager         from "./MpwPlayerManager";
+import MpwUtility                   from "./MpwUtility";
 
 namespace TwnsMpwWar {
+    import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
+    import MpwPlayerManager         = TwnsMpwPlayerManager.MpwPlayerManager;
+    import MpwField                 = TwnsMpwField.MpwField;
+    import MpwWarMenuPanel          = TwnsMpwWarMenuPanel.MpwWarMenuPanel;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import WarAction                = ProtoTypes.WarAction;
+    import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
+    import BwWar                    = TwnsBwWar.BwWar;
 
     export abstract class MpwWar extends BwWar {
         private readonly _playerManager         = new MpwPlayerManager();

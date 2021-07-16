@@ -24,7 +24,6 @@ import WarMapModel              from "../../warMap/model/WarMapModel";
 import CcrProxy                 from "../model/CcrProxy";
 
 namespace TwnsCcrRoomPlayerInfoPage {
-    import ChatPanel            = TwnsChatPanel.ChatPanel;
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonCoInfoPanel    = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
     import UserPanel            = TwnsUserPanel.UserPanel;
@@ -149,7 +148,7 @@ namespace TwnsCcrRoomPlayerInfoPage {
             const playerData    = await this._getPlayerData();
             const userId        = playerData ? playerData.userId : undefined;
             if (userId != null) {
-                ChatPanel.show({ toUserId: userId });
+                TwnsChatPanel.ChatPanel.show({ toUserId: userId });
             }
         }
 

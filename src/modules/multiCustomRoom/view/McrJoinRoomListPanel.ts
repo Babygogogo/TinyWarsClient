@@ -29,7 +29,6 @@ import TwnsMcrRoomMapInfoPage           from "./McrRoomMapInfoPage";
 import TwnsMcrRoomPlayerInfoPage        from "./McrRoomPlayerInfoPage";
 
 namespace TwnsMcrJoinRoomListPanel {
-    import McrMainMenuPanel                         = TwnsMcrMainMenuPanel.McrMainMenuPanel;
     import McrJoinPasswordPanel                     = TwnsMcrJoinPasswordPanel.McrJoinPasswordPanel;
     import McrRoomInfoPanel                         = TwnsMcrRoomInfoPanel.McrRoomInfoPanel;
     import OpenDataForMcrRoomMapInfoPage            = TwnsMcrRoomMapInfoPage.OpenDataForMcrRoomMapInfoPage;
@@ -161,7 +160,7 @@ namespace TwnsMcrJoinRoomListPanel {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }

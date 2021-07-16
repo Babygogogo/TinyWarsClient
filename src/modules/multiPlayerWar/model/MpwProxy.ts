@@ -1,22 +1,23 @@
 
-import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
-import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import TwnsBwWar                from "../../baseWar/model/BwWar";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import Types                from "../../tools/helpers/Types";
-import MpwModel             from "../../multiPlayerWar/model/MpwModel";
-import NetManager           from "../../tools/network/NetManager";
-import Lang                 from "../../tools/lang/Lang";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import NetManager               from "../../tools/network/NetManager";
+import TwnsNetMessageCodes      from "../../tools/network/NetMessageCodes";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
 
 namespace MpwProxy {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
-    import BwWar            = TwnsBwWar.BwWar;
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NetMessage           = ProtoTypes.NetMessage;
+    import NetMessageCodes      = TwnsNetMessageCodes.NetMessageCodes;
+    import BwWar                = TwnsBwWar.BwWar;
 
     export function init(): void {
         NetManager.addListeners([

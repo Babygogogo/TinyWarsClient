@@ -29,7 +29,6 @@ import TwnsMcrCreateMapListPanel            from "./McrCreateMapListPanel";
 namespace TwnsMcrCreateSettingsPanel {
     import McrCreateAdvancedSettingsPage    = TwnsMcrCreateAdvancedSettingsPage.McrCreateAdvancedSettingsPage;
     import McrCreateBasicSettingsPage       = TwnsMcrCreateBasicSettingsPage.McrCreateBasicSettingsPage;
-    import McrCreateMapListPanel            = TwnsMcrCreateMapListPanel.McrCreateMapListPanel;
     import McrCreateMapInfoPage             = TwnsMcrCreateMapInfoPage.McrCreateMapInfoPage;
     import McrCreateChooseCoPanel           = TwnsMcrCreateChooseCoPanel.McrCreateChooseCoPanel;
     import LangTextType                     = TwnsLangTextType.LangTextType;
@@ -137,7 +136,7 @@ namespace TwnsMcrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
-            McrCreateMapListPanel.show();
+            TwnsMcrCreateMapListPanel.McrCreateMapListPanel.show();
         }
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const data = McrCreateModel.getData();

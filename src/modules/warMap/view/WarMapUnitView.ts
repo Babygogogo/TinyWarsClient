@@ -5,15 +5,14 @@ import Helpers              from "../../tools/helpers/Helpers";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
-import Timer            from "../../tools/helpers/Timer";
+import Timer                from "../../tools/helpers/Timer";
 import CommonModel          from "../../common/model/CommonModel";
 import UserModel            from "../../user/model/UserModel";
 
-const { width: GRID_WIDTH, height: GRID_HEIGHT }    = CommonConstants.GridSize;
-const IMG_UNIT_STATE_WIDTH                          = 28;
-const IMG_UNIT_STATE_HEIGHT                         = 36;
-
 namespace TwnsWarMapUnitView {
+    const { width: GRID_WIDTH, height: GRID_HEIGHT }    = CommonConstants.GridSize;
+    const IMG_UNIT_STATE_WIDTH                          = 28;
+    const IMG_UNIT_STATE_HEIGHT                         = 36;
 
     export class WarMapUnitView extends egret.DisplayObjectContainer {
         private readonly _imgUnit                   = new TwnsUiImage.UiImage();
@@ -193,4 +192,5 @@ namespace TwnsWarMapUnitView {
         return CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
     }
 }
+
 export default TwnsWarMapUnitView;

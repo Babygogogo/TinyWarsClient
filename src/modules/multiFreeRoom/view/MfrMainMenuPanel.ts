@@ -1,31 +1,33 @@
 
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiButton              from "../../tools/ui/UiButton";
 import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
-import { MfrJoinRoomListPanel } from "./MfrJoinRoomListPanel";
-import { MfrMyRoomListPanel }   from "./MfrMyRoomListPanel";
-import TwnsMfwMyWarListPanel    from "../../multiFreeWar/view/MfwMyWarListPanel";
-import MrrMainMenuPanel= TwnsMrrMainMenuPanel.MrrMainMenuPanel;import TwnsMrrMainMenuPanel     from "../../multiRankRoom/view/MrrMainMenuPanel";
-import SpmMainMenuPanel= TwnsSpmMainMenuPanel.SpmMainMenuPanel;import TwnsSpmMainMenuPanel     from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import CcrModel                 from "../../coopCustomRoom/model/CcrModel";
+import TwnsCcrMainMenuPanel     from "../../coopCustomRoom/view/CcrMainMenuPanel";
 import TwnsLobbyBottomPanel     from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel        from "../../lobby/view/LobbyTopPanel";
-import McrMainMenuPanel= TwnsMcrMainMenuPanel.McrMainMenuPanel;import TwnsMcrMainMenuPanel     from "../../multiCustomRoom/view/McrMainMenuPanel";
-import CcrMainMenuPanel = TwnsCcrMainMenuPanel.CcrMainMenuPanel;import TwnsCcrMainMenuPanel     from "../../coopCustomRoom/view/CcrMainMenuPanel";
+import McrModel                 from "../../multiCustomRoom/model/McrModel";
+import TwnsMcrMainMenuPanel     from "../../multiCustomRoom/view/McrMainMenuPanel";
+import MfrModel                 from "../../multiFreeRoom/model/MfrModel";
+import TwnsMfwMyWarListPanel    from "../../multiFreeWar/view/MfwMyWarListPanel";
+import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
+import TwnsMrrMainMenuPanel     from "../../multiRankRoom/view/MrrMainMenuPanel";
+import TwnsSpmMainMenuPanel     from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import Types                from "../../tools/helpers/Types";
-import FloatText            from "../../tools/helpers/FloatText";
-import Helpers              from "../../tools/helpers/Helpers";
-import Lang                 from "../../tools/lang/Lang";
-import McrModel             from "../../multiCustomRoom/model/McrModel";
-import MfrModel             from "../../multiFreeRoom/model/MfrModel";
-import MpwModel             from "../../multiPlayerWar/model/MpwModel";
-import CcrModel             from "../../coopCustomRoom/model/CcrModel";
-import Tween                    = egret.Tween;
-import LangTextType     = TwnsLangTextType.LangTextType;
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsMfrJoinRoomListPanel from "./MfrJoinRoomListPanel";
+import TwnsMfrMyRoomListPanel   from "./MfrMyRoomListPanel";
 
 namespace TwnsMfrMainMenuPanel {
+    import MfrJoinRoomListPanel = TwnsMfrJoinRoomListPanel.MfrJoinRoomListPanel;
+    import MfrMyRoomListPanel   = TwnsMfrMyRoomListPanel.MfrMyRoomListPanel;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import Tween                = egret.Tween;
+    import LangTextType         = TwnsLangTextType.LangTextType;
 
     export class MfrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -108,11 +110,11 @@ namespace TwnsMfrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnRanking(): void {
             this.close();
-            MrrMainMenuPanel.show();
+            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            SpmMainMenuPanel.show();
+            TwnsSpmMainMenuPanel.SpmMainMenuPanel.show();
         }
         private _onTouchedBtnCreateRoom(): void {
             FloatText.show(Lang.getText(LangTextType.A0053));
@@ -148,11 +150,11 @@ namespace TwnsMfrMainMenuPanel {
         }
         private _onTouchedBtnNormalMode(): void {
             this.close();
-            McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
         }
         private _onTouchedBtnCoopMode(): void {
             this.close();
-            CcrMainMenuPanel.show();
+            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
         }
 
         private _onMsgUserLogout(): void {

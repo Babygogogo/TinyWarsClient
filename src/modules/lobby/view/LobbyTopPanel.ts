@@ -11,7 +11,6 @@ import TwnsUserPanel            from "../../user/view/UserPanel";
 import TwnsUserSettingsPanel    from "../../user/view/UserSettingsPanel";
 
 namespace TwnsLobbyTopPanel {
-    import ChatPanel            = TwnsChatPanel.ChatPanel;
     import UserPanel            = TwnsUserPanel.UserPanel;
     import UserSettingsPanel    = TwnsUserSettingsPanel.UserSettingsPanel;
     import UserOnlineUsersPanel = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
@@ -88,7 +87,7 @@ namespace TwnsLobbyTopPanel {
 
         private _onTouchedGroupUserInfo(e: egret.Event): void {
             UserOnlineUsersPanel.hide();
-            ChatPanel.hide();
+            TwnsChatPanel.ChatPanel.hide();
             UserPanel.show({ userId: UserModel.getSelfUserId() });
         }
 

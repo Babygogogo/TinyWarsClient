@@ -19,7 +19,6 @@ import TwnsMmTagSearchPanel         from "./MmTagSearchPanel";
 namespace TwnsMmTagListPanel {
     import FiltersForMapList    = TwnsMmAvailabilityListPanel.FiltersForMapList;
     import MmTagSearchPanel     = TwnsMmTagSearchPanel.MmTagSearchPanel;
-    import MmMainMenuPanel      = TwnsMmMainMenuPanel.MmMainMenuPanel;
     import MmTagChangePanel     = TwnsMmTagChangePanel.MmTagChangePanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -134,7 +133,7 @@ namespace TwnsMmTagListPanel {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            MmMainMenuPanel.show();
+            TwnsMmMainMenuPanel.MmMainMenuPanel.show();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

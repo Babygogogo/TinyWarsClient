@@ -36,7 +36,6 @@ namespace TwnsMeWarRulePanel {
     import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
     import MeField                  = TwnsMeField.MeField;
     import MeWar                    = TwnsMeWar.MeWar;
-    import MeWarMenuPanel           = TwnsMeWarMenuPanel.MeWarMenuPanel;
     import CommonChooseCoPanel      = TwnsCommonChooseCoPanel.CommonChooseCoPanel;
     import MeAvailableCoPanel       = TwnsMeAvailableCoPanel.MeAvailableCoPanel;
     import MeAddWarEventToRulePanel = TwnsMeAddWarEventToRulePanel.MeAddWarEventToRulePanel;
@@ -190,7 +189,7 @@ namespace TwnsMeWarRulePanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            MeWarMenuPanel.show();
+            TwnsMeWarMenuPanel.MeWarMenuPanel.show();
         }
 
         private _onTouchedBtnDelete(): void {

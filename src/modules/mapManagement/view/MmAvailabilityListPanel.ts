@@ -17,7 +17,6 @@ import TwnsMmMainMenuPanel              from "./MmMainMenuPanel";
 
 namespace TwnsMmAvailabilityListPanel {
     import MmAvailabilitySearchPanel    = TwnsMmAvailabilitySearchPanel.MmAvailabilitySearchPanel;
-    import MmMainMenuPanel              = TwnsMmMainMenuPanel.MmMainMenuPanel;
     import MmAvailabilityChangePanel    = TwnsMmAvailabilityChangePanel.MmAvailabilityChangePanel;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
@@ -144,7 +143,7 @@ namespace TwnsMmAvailabilityListPanel {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            MmMainMenuPanel.show();
+            TwnsMmMainMenuPanel.MmMainMenuPanel.show();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

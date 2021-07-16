@@ -14,7 +14,6 @@ import TwnsUserPanel                from "../../user/view/UserPanel";
 import TwnsLobbyTopPanel            from "./LobbyTopPanel";
 
 namespace TwnsLobbyBottomPanel {
-    import ChatPanel                = TwnsChatPanel.ChatPanel;
     import UserPanel                = TwnsUserPanel.UserPanel;
     import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
     import UserOnlineUsersPanel     = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
@@ -83,17 +82,17 @@ namespace TwnsLobbyBottomPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedGroupMyInfo(e: egret.TouchEvent): void {
             UserOnlineUsersPanel.hide();
-            ChatPanel.hide();
+            TwnsChatPanel.ChatPanel.hide();
             UserPanel.show({ userId: UserModel.getSelfUserId() });
         }
 
         private _onTouchedGroupChat(e: egret.TouchEvent): void {
             UserOnlineUsersPanel.hide();
             UserPanel.hide();
-            if (!ChatPanel.getIsOpening()) {
-                ChatPanel.show({ toUserId: null });
+            if (!TwnsChatPanel.ChatPanel.getIsOpening()) {
+                TwnsChatPanel.ChatPanel.show({ toUserId: null });
             } else {
-                ChatPanel.hide();
+                TwnsChatPanel.ChatPanel.hide();
             }
         }
 

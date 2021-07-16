@@ -25,12 +25,10 @@ import TwnsMcrRoomMapInfoPage           from "./McrRoomMapInfoPage";
 import TwnsMcrRoomPlayerInfoPage        from "./McrRoomPlayerInfoPage";
 
 namespace TwnsMcrMyRoomListPanel {
-    import McrMainMenuPanel                         = TwnsMcrMainMenuPanel.McrMainMenuPanel;
     import OpenDataForMcrRoomAdvancedSettingsPage   = TwnsMcrRoomAdvancedSettingsPage.OpenDataForMcrRoomAdvancedSettingsPage;
     import McrRoomAdvancedSettingsPage              = TwnsMcrRoomAdvancedSettingsPage.McrRoomAdvancedSettingsPage;
     import OpenDataForMcrRoomBasicSettingsPage      = TwnsMcrRoomBasicSettingsPage.OpenDataForMcrRoomBasicSettingsPage;
     import McrRoomBasicSettingsPage                 = TwnsMcrRoomBasicSettingsPage.McrRoomBasicSettingsPage;
-    import McrRoomInfoPanel                         = TwnsMcrRoomInfoPanel.McrRoomInfoPanel;
     import OpenDataForMcrRoomMapInfoPage            = TwnsMcrRoomMapInfoPage.OpenDataForMcrRoomMapInfoPage;
     import McrRoomMapInfoPage                       = TwnsMcrRoomMapInfoPage.McrRoomMapInfoPage;
     import OpenDataForMcrRoomPlayerInfoPage         = TwnsMcrRoomPlayerInfoPage.OpenDataForMcrRoomPlayerInfoPage;
@@ -151,7 +149,7 @@ namespace TwnsMcrMyRoomListPanel {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
@@ -160,7 +158,7 @@ namespace TwnsMcrMyRoomListPanel {
             const roomId = McrJoinModel.getJoinedPreviewingRoomId();
             if (roomId != null) {
                 this.close();
-                McrRoomInfoPanel.show({
+                TwnsMcrRoomInfoPanel.McrRoomInfoPanel.show({
                     roomId,
                 });
             }
@@ -369,7 +367,7 @@ namespace TwnsMcrMyRoomListPanel {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             McrMyRoomListPanel.hide();
-            McrRoomInfoPanel.show({
+            TwnsMcrRoomInfoPanel.McrRoomInfoPanel.show({
                 roomId  : this.data.roomId,
             });
         }

@@ -23,7 +23,6 @@ namespace TwnsMeSimSettingsPanel {
     import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
     import MeSimAdvancedSettingsPage    = TwnsMeSimAdvancedSettingsPage.MeSimAdvancedSettingsPage;
     import MeSimBasicSettingsPage       = TwnsMeSimBasicSettingsPage.MeSimBasicSettingsPage;
-    import MeWarMenuPanel               = TwnsMeWarMenuPanel.MeWarMenuPanel;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
 
@@ -84,7 +83,7 @@ namespace TwnsMeSimSettingsPanel {
 
         private _onTouchedBtnBack(): void {
             this.close();
-            MeWarMenuPanel.show();
+            TwnsMeWarMenuPanel.MeWarMenuPanel.show();
         }
 
         private _onTouchedBtnConfirm(): void {

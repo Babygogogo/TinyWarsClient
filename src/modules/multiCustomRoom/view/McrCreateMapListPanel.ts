@@ -23,7 +23,6 @@ import TwnsMcrMainMenuPanel         from "./McrMainMenuPanel";
 
 namespace TwnsMcrCreateMapListPanel {
     import McrCreateSearchMapPanel  = TwnsMcrCreateSearchMapPanel.McrCreateSearchMapPanel;
-    import McrMainMenuPanel         = TwnsMcrMainMenuPanel.McrMainMenuPanel;
     import McrCreateSettingsPanel   = TwnsMcrCreateSettingsPanel.McrCreateSettingsPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
@@ -154,7 +153,7 @@ namespace TwnsMcrCreateMapListPanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }

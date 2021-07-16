@@ -1,31 +1,39 @@
 
-import TwnsUiListItemRenderer                                                   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                                                              from "../../tools/ui/UiPanel";
-import TwnsUiButton                                                              from "../../tools/ui/UiButton";
-import TwnsUiLabel                                                              from "../../tools/ui/UiLabel";
-import TwnsUiScrollList                                                         from "../../tools/ui/UiScrollList";
-import TwnsUiTab                                                                from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer                                                    from "../../tools/ui/UiTabItemRenderer";
-import TwnsLobbyBottomPanel                                                 from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                                                    from "../../lobby/view/LobbyTopPanel";
-import McrMainMenuPanel= TwnsMcrMainMenuPanel.McrMainMenuPanel;import TwnsMcrMainMenuPanel                                                     from "../../multiCustomRoom/view/McrMainMenuPanel";
-import TwnsLangTextType                                                     from "../../tools/lang/LangTextType";
-import Logger                                                               from "../../tools/helpers/Logger";
-import TwnsNotifyType                                                       from "../../tools/notify/NotifyType";
-import Types                                                                from "../../tools/helpers/Types";
-import { McwWarMapInfoPage, OpenDataForMcwWarMapInfoPage }                      from "./McwWarMapInfoPage";
-import { McwWarPlayerInfoPage, OpenDataForMcwWarPlayerInfoPage }                from "./McwWarPlayerInfoPage";
-import { McwWarAdvancedSettingsPage, OpenDataForMcwWarAdvancedSettingsPage }    from "./McwWarAdvancedSettingsPage";
-import { McwWarBasicSettingsPage, OpenDataForMcwWarBasicSettingsPage }          from "./McwWarBasicSettingsPage";
-import Helpers                                                              from "../../tools/helpers/Helpers";
-import Lang                                                                 from "../../tools/lang/Lang";
-import MpwModel                                                             from "../../multiPlayerWar/model/MpwModel";
-import MpwProxy                                                             from "../../multiPlayerWar/model/MpwProxy";
-import WarMapModel                                                          from "../../warMap/model/WarMapModel";
+import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
+import TwnsMcrMainMenuPanel             from "../../multiCustomRoom/view/McrMainMenuPanel";
+import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
+import MpwProxy                         from "../../multiPlayerWar/model/MpwProxy";
+import Helpers                          from "../../tools/helpers/Helpers";
+import Logger                           from "../../tools/helpers/Logger";
+import Types                            from "../../tools/helpers/Types";
+import Lang                             from "../../tools/lang/Lang";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import TwnsUiButton                     from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import TwnsUiTab                        from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                      from "../../warMap/model/WarMapModel";
+import TwnsMcwWarAdvancedSettingsPage   from "./McwWarAdvancedSettingsPage";
+import TwnsMcwWarBasicSettingsPage      from "./McwWarBasicSettingsPage";
+import TwnsMcwWarMapInfoPage            from "./McwWarMapInfoPage";
+import TwnsMcwWarPlayerInfoPage         from "./McwWarPlayerInfoPage";
 
 namespace TwnsMcwMyWarListPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import McwWarMapInfoPage                        = TwnsMcwWarMapInfoPage.McwWarMapInfoPage;
+    import OpenDataForMcwWarMapInfoPage             = TwnsMcwWarMapInfoPage.OpenDataForMcwWarMapInfoPage;
+    import McwWarPlayerInfoPage                     = TwnsMcwWarPlayerInfoPage.McwWarPlayerInfoPage;
+    import OpenDataForMcwWarPlayerInfoPage          = TwnsMcwWarPlayerInfoPage.OpenDataForMcwWarPlayerInfoPage;
+    import McwWarAdvancedSettingsPage               = TwnsMcwWarAdvancedSettingsPage.McwWarAdvancedSettingsPage;
+    import OpenDataForMcwWarAdvancedSettingsPage    = TwnsMcwWarAdvancedSettingsPage.OpenDataForMcwWarAdvancedSettingsPage;
+    import McwWarBasicSettingsPage                  = TwnsMcwWarBasicSettingsPage.McwWarBasicSettingsPage;
+    import OpenDataForMcwWarBasicSettingsPage       = TwnsMcwWarBasicSettingsPage.OpenDataForMcwWarBasicSettingsPage;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
 
     // eslint-disable-next-line no-shadow
     export class McwMyWarListPanel extends TwnsUiPanel.UiPanel<void> {
@@ -129,7 +137,7 @@ namespace TwnsMcwMyWarListPanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }

@@ -10,7 +10,6 @@ import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 import TwnsMmTagListPanel   from "./MmTagListPanel";
 
 namespace TwnsMmTagSearchPanel {
-    import MmTagListPanel   = TwnsMmTagListPanel.MmTagListPanel;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
@@ -75,12 +74,12 @@ namespace TwnsMmTagSearchPanel {
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
-            MmTagListPanel.getInstance().setMapFilters({});
+            TwnsMmTagListPanel.MmTagListPanel.getInstance().setMapFilters({});
             this.close();
         }
 
         private _onTouchedBtnSearch(e: egret.TouchEvent): void {
-            MmTagListPanel.getInstance().setMapFilters({
+            TwnsMmTagListPanel.MmTagListPanel.getInstance().setMapFilters({
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
                 playersCount: Number(this._inputPlayersCount.text) || null,

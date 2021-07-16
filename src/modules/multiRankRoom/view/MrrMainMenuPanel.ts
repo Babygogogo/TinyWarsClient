@@ -1,24 +1,27 @@
 
-import TwnsUiPanel                          from "../../tools/ui/UiPanel";
-import TwnsUiButton                          from "../../tools/ui/UiButton";
-import SpmMainMenuPanel= TwnsSpmMainMenuPanel.SpmMainMenuPanel;import TwnsSpmMainMenuPanel                 from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import TwnsMrwMyWarListPanel                from "../../multiRankWar/view/MrwMyWarListPanel";
-import { MrrMyRoomListPanel }               from "./MrrMyRoomListPanel";
-import { MrrSetMaxConcurrentCountPanel }    from "./MrrSetMaxConcurrentCountPanel";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
-import { MrrPreviewMapListPanel }           from "./MrrPreviewMapListPanel";
-import McrMainMenuPanel= TwnsMcrMainMenuPanel.McrMainMenuPanel;import TwnsMcrMainMenuPanel                 from "../../multiCustomRoom/view/McrMainMenuPanel";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Notify                           from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import Types                            from "../../tools/helpers/Types";
-import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
-import MrrModel                         from "../model/MrrModel";
-import Tween                                = egret.Tween;
+import TwnsMcrMainMenuPanel                 from "../../multiCustomRoom/view/McrMainMenuPanel";
+import MpwModel                             from "../../multiPlayerWar/model/MpwModel";
+import TwnsMrwMyWarListPanel                from "../../multiRankWar/view/MrwMyWarListPanel";
+import TwnsSpmMainMenuPanel                 from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Types                                from "../../tools/helpers/Types";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import MrrModel                             from "../model/MrrModel";
+import TwnsMrrMyRoomListPanel               from "./MrrMyRoomListPanel";
+import TwnsMrrPreviewMapListPanel           from "./MrrPreviewMapListPanel";
+import TwnsMrrSetMaxConcurrentCountPanel    from "./MrrSetMaxConcurrentCountPanel";
 
 namespace TwnsMrrMainMenuPanel {
+    import SpmMainMenuPanel                 = TwnsSpmMainMenuPanel.SpmMainMenuPanel;
+    import MrrMyRoomListPanel               = TwnsMrrMyRoomListPanel.MrrMyRoomListPanel;
+    import MrrSetMaxConcurrentCountPanel    = TwnsMrrSetMaxConcurrentCountPanel.MrrSetMaxConcurrentCountPanel;
+    import MrrPreviewMapListPanel           = TwnsMrrPreviewMapListPanel.MrrPreviewMapListPanel;
+    import NotifyType                       = TwnsNotifyType.NotifyType;
+    import Tween                            = egret.Tween;
 
     export class MrrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -87,7 +90,7 @@ namespace TwnsMrrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
             this.close();
-            McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
         }
         private _onTouchedBtnSinglePlayer(e: egret.TouchEvent): void {
             this.close();

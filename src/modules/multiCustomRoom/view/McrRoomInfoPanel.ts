@@ -32,7 +32,6 @@ import TwnsMcrRoomMapInfoPage           from "./McrRoomMapInfoPage";
 import TwnsMcrRoomPlayerInfoPage        from "./McrRoomPlayerInfoPage";
 
 namespace TwnsMcrRoomInfoPanel {
-    import ChatPanel                                = TwnsChatPanel.ChatPanel;
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import McrMyRoomListPanel                       = TwnsMcrMyRoomListPanel.McrMyRoomListPanel;
     import McrRoomChooseCoPanel                     = TwnsMcrRoomChooseCoPanel.McrRoomChooseCoPanel;
@@ -222,7 +221,7 @@ namespace TwnsMcrRoomInfoPanel {
         }
 
         private _onTouchedBtnChat(e: egret.TouchEvent): void {
-            ChatPanel.show({
+            TwnsChatPanel.ChatPanel.show({
                 toMcrRoomId: this._getOpenData().roomId,
             });
         }

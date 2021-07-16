@@ -22,7 +22,6 @@ import TwnsUserPanel            from "../../user/view/UserPanel";
 import WarMapModel              from "../../warMap/model/WarMapModel";
 
 namespace TwnsCcwWarPlayerInfoPage {
-    import ChatPanel            = TwnsChatPanel.ChatPanel;
     import CommonCoInfoPanel    = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
     import UserPanel            = TwnsUserPanel.UserPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -171,7 +170,7 @@ namespace TwnsCcwWarPlayerInfoPage {
             const playerData    = await this._getPlayerData();
             const userId        = playerData ? playerData.userId : undefined;
             if (userId != null) {
-                ChatPanel.show({ toUserId: userId });
+                TwnsChatPanel.ChatPanel.show({ toUserId: userId });
             }
         }
 

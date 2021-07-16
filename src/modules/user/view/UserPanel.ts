@@ -1,26 +1,25 @@
 
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsChatPanel            from "../../chat/view/ChatPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
 import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiButton              from "../../tools/ui/UiButton";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import ChatPanel = TwnsChatPanel.ChatPanel;import TwnsChatPanel            from "../../chat/view/ChatPanel";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import Helpers              from "../../tools/helpers/Helpers";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import Types                from "../../tools/helpers/Types";
-import UserModel            from "../../user/model/UserModel";
-import UserProxy            from "../../user/model/UserProxy";
-import WarType                  = Types.WarType;
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import UserModel                from "../../user/model/UserModel";
+import UserProxy                from "../../user/model/UserProxy";
 
 namespace TwnsUserPanel {
+    import LangTextType = TwnsLangTextType.LangTextType;
+    import NotifyType   = TwnsNotifyType.NotifyType;
+    import WarType      = Types.WarType;
 
     type OpenDataForUserPanel = {
         userId  : number;
@@ -187,7 +186,7 @@ namespace TwnsUserPanel {
         private _onTouchedBtnChat(): void {
             const userId = this._getOpenData().userId;
             this.close();
-            ChatPanel.show({ toUserId: userId });
+            TwnsChatPanel.ChatPanel.show({ toUserId: userId });
         }
 
         private _showOpenAnimation(): void {

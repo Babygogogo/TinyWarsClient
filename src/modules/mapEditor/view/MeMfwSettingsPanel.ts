@@ -26,10 +26,8 @@ import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
 namespace TwnsMeMfwSettingsPanel {
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import MfrCreateSettingsPanel       = TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel;
     import MeMfwAdvancedSettingsPage    = TwnsMeMfwAdvancedSettingsPage.MeMfwAdvancedSettingsPage;
     import MeMfwBasicSettingsPage       = TwnsMeMfwBasicSettingsPage.MeMfwBasicSettingsPage;
-    import MeWarMenuPanel               = TwnsMeWarMenuPanel.MeWarMenuPanel;
     import TwWar                        = TwnsTwWar.TwWar;
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import LangTextType                 = TwnsLangTextType.LangTextType;
@@ -90,7 +88,7 @@ namespace TwnsMeMfwSettingsPanel {
 
         private _onTouchedBtnBack(): void {
             this.close();
-            MeWarMenuPanel.show();
+            TwnsMeWarMenuPanel.MeWarMenuPanel.show();
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
@@ -108,7 +106,7 @@ namespace TwnsMeMfwSettingsPanel {
                         StageManager.closeAllPanels();
                         TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
                         TwnsBroadcastPanel.BroadcastPanel.show();
-                        MfrCreateSettingsPanel.show();
+                        TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
                     },
                 });
             }

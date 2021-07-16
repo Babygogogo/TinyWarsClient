@@ -1,27 +1,30 @@
 
-import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiButton                      from "../../tools/ui/UiButton";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import CommonConfirmPanel = TwnsCommonConfirmPanel.CommonConfirmPanel;import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import MeWar= TwnsMeWar.MeWar;import TwnsMeWar                        from "../../mapEditor/model/MeWar";
-import { WeCommandPanel }               from "./WeCommandPanel";
-import FloatText                    from "../../tools/helpers/FloatText";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import LangTextType         = TwnsLangTextType.LangTextType;
-import Logger                       from "../../tools/helpers/Logger";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType from "../../tools/notify/NotifyType";
-import NotifyType       = TwnsNotifyType.NotifyType;
-import Types                        from "../../tools/helpers/Types";
-import WarEventHelper              from "../model/WarEventHelper";
-import ColorValue                       = Types.ColorValue;
-import WarEventDescType                 = Types.WarEventDescType;
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import TwnsMeWar                from "../../mapEditor/model/MeWar";
+import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Logger                   from "../../tools/helpers/Logger";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import WarEventHelper           from "../model/WarEventHelper";
+import TwnsWeCommandPanel       from "./WeCommandPanel";
 
 namespace TwnsWeEventListPanel {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import MeWar                = TwnsMeWar.MeWar;
+    import WeCommandPanel       = TwnsWeCommandPanel.WeCommandPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import ColorValue           = Types.ColorValue;
+    import WarEventDescType     = Types.WarEventDescType;
 
     type OpenDataForWeEventListPanel = {
         war: MeWar;
