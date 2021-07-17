@@ -3,6 +3,7 @@ import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
 import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
 import TwnsBwCoListPanel                from "../../baseWar/view/BwCoListPanel";
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
+import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
 import MfrCreateModel                   from "../../multiFreeRoom/model/MfrCreateModel";
@@ -35,7 +36,6 @@ import TwnsSpwActionPlanner             from "../model/SpwActionPlanner";
 import SpwModel                         from "../model/SpwModel";
 import TwnsSpwPlayerManager             from "../model/SpwPlayerManager";
 import TwnsSpwWar                       from "../model/SpwWar";
-import TwnsSpwChooseCoPanel             from "./SpwChooseCoPanel";
 import TwnsSpwLoadWarPanel              from "./SpwLoadWarPanel";
 
 namespace TwnsSpwWarMenuPanel {
@@ -49,7 +49,6 @@ namespace TwnsSpwWarMenuPanel {
     import SpwActionPlanner             = TwnsSpwActionPlanner.SpwActionPlanner;
     import SpwPlayerManager             = TwnsSpwPlayerManager.SpwPlayerManager;
     import SpwWar                       = TwnsSpwWar.SpwWar;
-    import SpwChooseCoPanel             = TwnsSpwChooseCoPanel.SpwChooseCoPanel;
     import SpwLoadWarPanel              = TwnsSpwLoadWarPanel.SpwLoadWarPanel;
     import TwWar                        = TwnsTwWar.TwWar;
     import LangTextType                 = TwnsLangTextType.LangTextType;
@@ -781,9 +780,18 @@ namespace TwnsSpwWarMenuPanel {
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        SpwChooseCoPanel.show({
-                            war,
-                            playerIndex: player.getPlayerIndex(),
+                        const currentCoId = player.getCoId();
+                        TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                            currentCoId,
+                            availableCoIdArray  : ConfigManager.getEnabledCoArray(war.getConfigVersion()).map(v => v.coId),
+                            callbackOnConfirm   : (newCoId) => {
+                                if (newCoId !== currentCoId) {
+                                    player.setCoId(newCoId);
+                                    player.setCoCurrentEnergy(Math.min(player.getCoCurrentEnergy(), player.getCoMaxEnergy()));
+
+                                    war.getTileMap().getView().updateCoZone();
+                                }
+                            },
                         });
                     },
             };

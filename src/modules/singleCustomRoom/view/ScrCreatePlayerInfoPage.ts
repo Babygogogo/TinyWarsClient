@@ -1,4 +1,5 @@
 
+import TwnsCommonChooseCoPanel      from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonCoInfoPanel        from "../../common/view/CommonCoInfoPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
@@ -14,12 +15,11 @@ import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
 import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage                from "../../tools/ui/UiTabPage";
 import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers               from "../../tools/warHelpers/WarRuleHelpers";
 import ScrCreateModel               from "../model/ScrCreateModel";
-import TwnsScrCreateChooseCoPanel   from "./ScrCreateChooseCoPanel";
 
 namespace TwnsScrCreatePlayerInfoPage {
     import CommonCoInfoPanel        = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
-    import ScrCreateChooseCoPanel   = TwnsScrCreateChooseCoPanel.ScrCreateChooseCoPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
@@ -49,7 +49,7 @@ namespace TwnsScrCreatePlayerInfoPage {
             this._updateComponentsForPlayerInfo();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -111,7 +111,7 @@ namespace TwnsScrCreatePlayerInfoPage {
             this._updateComponentsForLanguage();
         }
 
-        private async _onTouchedGroupCo(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedGroupCo(): Promise<void> {
             const playerData    = this._getPlayerData();
             const coId          = playerData ? playerData.coId : null;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
@@ -122,19 +122,29 @@ namespace TwnsScrCreatePlayerInfoPage {
             }
         }
 
-        private async _onTouchedBtnChangeController(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnChangeController(): Promise<void> {
             ScrCreateModel.tickUserId(this.data.playerIndex);
         }
 
-        private async _onTouchedBtnChangeSkinId(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnChangeSkinId(): Promise<void> {
             ScrCreateModel.tickUnitAndTileSkinId(this.data.playerIndex);
         }
 
-        private async _onTouchedBtnChangeCo(e: egret.TouchEvent): Promise<void> {
-            ScrCreateChooseCoPanel.show({ playerIndex: this.data.playerIndex });
+        private async _onTouchedBtnChangeCo(): Promise<void> {
+            const playerIndex   = this.data.playerIndex;
+            const currentCoId   = ScrCreateModel.getCoId(playerIndex);
+            TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                currentCoId,
+                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(ScrCreateModel.getWarRule(), playerIndex, ConfigManager.getLatestFormalVersion()),
+                callbackOnConfirm   : (newCoId) => {
+                    if (newCoId !== currentCoId) {
+                        ScrCreateModel.setCoId(playerIndex, newCoId);
+                    }
+                },
+            });
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 

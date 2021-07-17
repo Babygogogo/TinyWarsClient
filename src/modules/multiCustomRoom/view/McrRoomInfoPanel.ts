@@ -1,5 +1,6 @@
 
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
+import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import McrModel                         from "../../multiCustomRoom/model/McrModel";
 import McrProxy                         from "../../multiCustomRoom/model/McrProxy";
@@ -27,14 +28,12 @@ import WarMapModel                      from "../../warMap/model/WarMapModel";
 import TwnsMcrMyRoomListPanel           from "./McrMyRoomListPanel";
 import TwnsMcrRoomAdvancedSettingsPage  from "./McrRoomAdvancedSettingsPage";
 import TwnsMcrRoomBasicSettingsPage     from "./McrRoomBasicSettingsPage";
-import TwnsMcrRoomChooseCoPanel         from "./McrRoomChooseCoPanel";
 import TwnsMcrRoomMapInfoPage           from "./McrRoomMapInfoPage";
 import TwnsMcrRoomPlayerInfoPage        from "./McrRoomPlayerInfoPage";
 
 namespace TwnsMcrRoomInfoPanel {
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import McrMyRoomListPanel                       = TwnsMcrMyRoomListPanel.McrMyRoomListPanel;
-    import McrRoomChooseCoPanel                     = TwnsMcrRoomChooseCoPanel.McrRoomChooseCoPanel;
     import OpenDataForMcrRoomAdvancedSettingsPage   = TwnsMcrRoomAdvancedSettingsPage.OpenDataForMcrRoomAdvancedSettingsPage;
     import McrRoomAdvancedSettingsPage              = TwnsMcrRoomAdvancedSettingsPage.McrRoomAdvancedSettingsPage;
     import OpenDataForMcrRoomBasicSettingsPage      = TwnsMcrRoomBasicSettingsPage.OpenDataForMcrRoomBasicSettingsPage;
@@ -179,12 +178,12 @@ namespace TwnsMcrRoomInfoPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             this.close();
             McrMyRoomListPanel.show();
         }
 
-        private async _onTouchedBtnChooseCo(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnChooseCo(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
             const roomInfo          = await McrModel.getRoomInfo(roomId);
             const selfUserId        = UserModel.getSelfUserId();
@@ -193,22 +192,34 @@ namespace TwnsMcrRoomInfoPanel {
                 if (selfPlayerData.isReady) {
                     FloatText.show(Lang.getText(LangTextType.A0128));
                 } else {
-                    McrRoomChooseCoPanel.show({
-                        roomId,
-                        playerIndex: selfPlayerData.playerIndex,
+                    const settingsForCommon = roomInfo.settingsForCommon;
+                    const playerIndex       = selfPlayerData.playerIndex;
+                    TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                        currentCoId         : selfPlayerData.coId,
+                        availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(settingsForCommon.warRule, playerIndex, settingsForCommon.configVersion),
+                        callbackOnConfirm   : (newCoId) => {
+                            if (newCoId !== selfPlayerData.coId) {
+                                McrProxy.reqMcrSetSelfSettings({
+                                    roomId,
+                                    playerIndex,
+                                    coId                : newCoId,
+                                    unitAndTileSkinId   : selfPlayerData.unitAndTileSkinId,
+                                });
+                            }
+                        },
                     });
                 }
             }
         }
 
-        private _onTouchedBtnStartGame(e: egret.TouchEvent): void {
+        private _onTouchedBtnStartGame(): void {
             const roomId = this._getOpenData().roomId;
             if (roomId != null) {
                 McrProxy.reqMcrStartWar(roomId);
             }
         }
 
-        private _onTouchedBtnDeleteRoom(e: egret.TouchEvent): void {
+        private _onTouchedBtnDeleteRoom(): void {
             const roomId = this._getOpenData().roomId;
             if (roomId != null) {
                 CommonConfirmPanel.show({
@@ -220,22 +231,14 @@ namespace TwnsMcrRoomInfoPanel {
             }
         }
 
-        private _onTouchedBtnChat(e: egret.TouchEvent): void {
+        private _onTouchedBtnChat(): void {
             TwnsChatPanel.ChatPanel.show({
                 toMcrRoomId: this._getOpenData().roomId,
             });
         }
 
-        private async _onTouchedBtnExitRoom(e: egret.TouchEvent): Promise<void> {
-            CommonConfirmPanel.show({
-                content : Lang.getText(LangTextType.A0126),
-                callback: () => {
-                    McrProxy.reqMcrExitRoom(this._getOpenData().roomId);
-                },
-            });
-        }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -486,7 +489,7 @@ namespace TwnsMcrRoomInfoPanel {
             this._updateState();
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             const data              = this.data;
             const roomId            = data.roomId;
             const roomInfo          = data ? await McrModel.getRoomInfo(roomId) : null;
@@ -520,7 +523,7 @@ namespace TwnsMcrRoomInfoPanel {
                 });
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
         private _onNotifyMsgMcrGetRoomInfo(e: egret.Event): void {
@@ -573,7 +576,7 @@ namespace TwnsMcrRoomInfoPanel {
             this._updateImgColor();
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             const data              = this.data;
             const roomId            = data.roomId;
             const roomInfo          = data ? await McrModel.getRoomInfo(roomId) : null;
@@ -651,7 +654,7 @@ namespace TwnsMcrRoomInfoPanel {
             this._updateStateAndImgRed();
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             const data              = this.data;
             const isReady           = data.isReady;
             const roomId            = data.roomId;
@@ -663,7 +666,7 @@ namespace TwnsMcrRoomInfoPanel {
                 McrProxy.reqMcrSetReady(roomId, isReady);
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
         private _onNotifyMsgMcrGetRoomInfo(e: egret.Event): void {

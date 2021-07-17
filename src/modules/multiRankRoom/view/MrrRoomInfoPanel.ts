@@ -1,4 +1,5 @@
 
+import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
@@ -29,14 +30,12 @@ import TwnsMrrMyRoomListPanel           from "./MrrMyRoomListPanel";
 import TwnsMrrRoomAdvancedSettingsPage  from "./MrrRoomAdvancedSettingsPage";
 import TwnsMrrRoomBanCoPanel            from "./MrrRoomBanCoPanel";
 import TwnsMrrRoomBasicSettingsPage     from "./MrrRoomBasicSettingsPage";
-import TwnsMrrRoomChooseCoPanel         from "./MrrRoomChooseCoPanel";
 import TwnsMrrRoomMapInfoPage           from "./MrrRoomMapInfoPage";
 import TwnsMrrRoomPlayerInfoPage        from "./MrrRoomPlayerInfoPage";
 
 namespace TwnsMrrRoomInfoPanel {
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MrrRoomBanCoPanel                        = TwnsMrrRoomBanCoPanel.MrrRoomBanCoPanel;
-    import MrrRoomChooseCoPanel                     = TwnsMrrRoomChooseCoPanel.MrrRoomChooseCoPanel;
     import OpenDataForMrrRoomBasicSettingsPage      = TwnsMrrRoomBasicSettingsPage.OpenDataForMrrRoomBasicSettingsPage;
     import MrrRoomBasicSettingsPage                 = TwnsMrrRoomBasicSettingsPage.MrrRoomBasicSettingsPage;
     import OpenDataForMrrRoomMapInfoPage            = TwnsMrrRoomMapInfoPage.OpenDataForMrrRoomMapInfoPage;
@@ -184,12 +183,12 @@ namespace TwnsMrrRoomInfoPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             this.close();
             TwnsMrrMyRoomListPanel.MrrMyRoomListPanel.show();
         }
 
-        private async _onTouchedBtnBanCo(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnBanCo(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
             const roomInfo          = await MrrModel.getRoomInfo(roomId);
             const userId            = UserModel.getSelfUserId();
@@ -199,7 +198,7 @@ namespace TwnsMrrRoomInfoPanel {
             }
         }
 
-        private async _onTouchedBtnChooseCo(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnChooseCo(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
             const roomInfo          = await MrrModel.getRoomInfo(roomId);
             const selfUserId        = UserModel.getSelfUserId();
@@ -208,22 +207,29 @@ namespace TwnsMrrRoomInfoPanel {
                 if (selfPlayerData.isReady) {
                     FloatText.show(Lang.getText(LangTextType.A0207));
                 } else {
-                    MrrRoomChooseCoPanel.show({
-                        coId: MrrSelfSettingsModel.getCoId(),
+                    const currentCoId = MrrSelfSettingsModel.getCoId();
+                    TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                        currentCoId,
+                        availableCoIdArray  : MrrSelfSettingsModel.getAvailableCoIdArray(),
+                        callbackOnConfirm   : (newCoId) => {
+                            if (newCoId !== currentCoId) {
+                                MrrSelfSettingsModel.setCoId(newCoId);
+                            }
+                        },
                     });
                 }
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyTimeTick(e: egret.Event): void {
+        private _onNotifyTimeTick(): void {
             this._updateLabelCountdown();
         }
 
-        private _onNotifyMrrSelfSettingsCoIdChanged(e: egret.Event): void {
+        private _onNotifyMrrSelfSettingsCoIdChanged(): void {
             this._updateBtnChooseCo();
         }
 
@@ -516,10 +522,10 @@ namespace TwnsMrrRoomInfoPanel {
             this._updateState();
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             FloatText.show(Lang.getText(LangTextType.A0209));
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
         private _onNotifyMsgMrrGetRoomPublicInfo(e: egret.Event): void {
@@ -571,7 +577,7 @@ namespace TwnsMrrRoomInfoPanel {
             this._updateImgColor();
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             const data              = this.data;
             const roomInfo          = data ? await MrrModel.getRoomInfo(data.roomId) : null;
             const selfUserId        = UserModel.getSelfUserId();
@@ -593,7 +599,7 @@ namespace TwnsMrrRoomInfoPanel {
                 MrrSelfSettingsModel.setUnitAndTileSkinId(newSkinId);
             }
         }
-        private _onNotifyMrrSelfSettingsSkinIdChanged(e: egret.Event): void {
+        private _onNotifyMrrSelfSettingsSkinIdChanged(): void {
             this._updateImgColor();
         }
 
@@ -627,7 +633,7 @@ namespace TwnsMrrRoomInfoPanel {
             this._updateStateAndImgRed();
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             const data              = this.data;
             const isReady           = data.isReady;
             const roomId            = data.roomId;
@@ -661,7 +667,7 @@ namespace TwnsMrrRoomInfoPanel {
                 }
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
         private _onNotifyMsgMrrGetRoomPublicInfo(e: egret.Event): void {

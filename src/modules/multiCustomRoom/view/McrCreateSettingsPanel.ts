@@ -1,4 +1,5 @@
 
+import TwnsCommonChooseCoPanel              from "../../common/view/CommonChooseCoPanel";
 import McrProxy                             from "../../multiCustomRoom/model/McrProxy";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import ConfigManager                        from "../../tools/helpers/ConfigManager";
@@ -22,7 +23,6 @@ import WarRuleHelpers                       from "../../tools/warHelpers/WarRule
 import McrCreateModel                       from "../model/McrCreateModel";
 import TwnsMcrCreateAdvancedSettingsPage    from "./McrCreateAdvancedSettingsPage";
 import TwnsMcrCreateBasicSettingsPage       from "./McrCreateBasicSettingsPage";
-import TwnsMcrCreateChooseCoPanel           from "./McrCreateChooseCoPanel";
 import TwnsMcrCreateMapInfoPage             from "./McrCreateMapInfoPage";
 import TwnsMcrCreateMapListPanel            from "./McrCreateMapListPanel";
 
@@ -30,7 +30,6 @@ namespace TwnsMcrCreateSettingsPanel {
     import McrCreateAdvancedSettingsPage    = TwnsMcrCreateAdvancedSettingsPage.McrCreateAdvancedSettingsPage;
     import McrCreateBasicSettingsPage       = TwnsMcrCreateBasicSettingsPage.McrCreateBasicSettingsPage;
     import McrCreateMapInfoPage             = TwnsMcrCreateMapInfoPage.McrCreateMapInfoPage;
-    import McrCreateChooseCoPanel           = TwnsMcrCreateChooseCoPanel.McrCreateChooseCoPanel;
     import LangTextType                     = TwnsLangTextType.LangTextType;
     import NotifyType                       = TwnsNotifyType.NotifyType;
 
@@ -134,19 +133,28 @@ namespace TwnsMcrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             this.close();
             TwnsMcrCreateMapListPanel.McrCreateMapListPanel.show();
         }
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private _onTouchedBtnConfirm(): void {
             const data = McrCreateModel.getData();
             McrProxy.reqCreateRoom(data);
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
         }
-        private _onTouchedBtnChooseCo(e: egret.TouchEvent): void {
-            McrCreateChooseCoPanel.show({ coId: McrCreateModel.getSelfCoId() });
+        private _onTouchedBtnChooseCo(): void {
+            const currentCoId = McrCreateModel.getSelfCoId();
+            TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                currentCoId,
+                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(McrCreateModel.getWarRule(), McrCreateModel.getSelfPlayerIndex(), ConfigManager.getLatestFormalVersion()),
+                callbackOnConfirm   : (newCoId) => {
+                    if (newCoId !== currentCoId) {
+                        McrCreateModel.setSelfCoId(newCoId);
+                    }
+                },
+            });
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

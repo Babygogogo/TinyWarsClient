@@ -1,5 +1,6 @@
 
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
+import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import CcrModel                         from "../../coopCustomRoom/model/CcrModel";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
@@ -27,7 +28,6 @@ import CcrProxy                         from "../model/CcrProxy";
 import TwnsCcrMyRoomListPanel           from "./CcrMyRoomListPanel";
 import TwnsCcrRoomAdvancedSettingsPage  from "./CcrRoomAdvancedSettingsPage";
 import TwnsCcrRoomBasicSettingsPage     from "./CcrRoomBasicSettingsPage";
-import TwnsCcrRoomChooseCoPanel         from "./CcrRoomChooseCoPanel";
 import TwnsCcrRoomMapInfoPage           from "./CcrRoomMapInfoPage";
 import TwnsCcrRoomPlayerInfoPage        from "./CcrRoomPlayerInfoPage";
 
@@ -42,7 +42,6 @@ namespace TwnsCcrRoomInfoPanel {
     import CcrRoomAdvancedSettingsPage              = TwnsCcrRoomAdvancedSettingsPage.CcrRoomAdvancedSettingsPage;
     import OpenDataForCcrRoomBasicSettingsPage      = TwnsCcrRoomBasicSettingsPage.OpenDataForCcrRoomBasicSettingsPage;
     import CcrRoomBasicSettingsPage                 = TwnsCcrRoomBasicSettingsPage.CcrRoomBasicSettingsPage;
-    import CcrRoomChooseCoPanel                     = TwnsCcrRoomChooseCoPanel.CcrRoomChooseCoPanel;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import NetMessage                               = ProtoTypes.NetMessage;
@@ -193,9 +192,22 @@ namespace TwnsCcrRoomInfoPanel {
                 if (selfPlayerData.isReady) {
                     FloatText.show(Lang.getText(LangTextType.A0128));
                 } else {
-                    CcrRoomChooseCoPanel.show({
-                        roomId,
-                        playerIndex: selfPlayerData.playerIndex,
+                    const playerIndex       = selfPlayerData.playerIndex;
+                    const currentCoId       = selfPlayerData.coId;
+                    const settingsForCommon = roomInfo.settingsForCommon;
+                    TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                        currentCoId,
+                        availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(settingsForCommon.warRule, playerIndex, settingsForCommon.configVersion),
+                        callbackOnConfirm   : (newCoId) => {
+                            if (newCoId !== currentCoId) {
+                                CcrProxy.reqCcrSetSelfSettings({
+                                    roomId,
+                                    playerIndex,
+                                    coId                : newCoId,
+                                    unitAndTileSkinId   : selfPlayerData.unitAndTileSkinId,
+                                });
+                            }
+                        },
                     });
                 }
             }
@@ -486,7 +498,7 @@ namespace TwnsCcrRoomInfoPanel {
             this._updateState();
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             const data              = this.data;
             const roomId            = data.roomId;
             const roomInfo          = data ? await CcrModel.getRoomInfo(roomId) : null;
@@ -573,7 +585,7 @@ namespace TwnsCcrRoomInfoPanel {
             this._updateImgColor();
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             const data              = this.data;
             const roomId            = data.roomId;
             const roomInfo          = data ? await CcrModel.getRoomInfo(roomId) : null;
@@ -651,7 +663,7 @@ namespace TwnsCcrRoomInfoPanel {
             this._updateStateAndImgRed();
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             const data              = this.data;
             const isReady           = data.isReady;
             const roomId            = data.roomId;
