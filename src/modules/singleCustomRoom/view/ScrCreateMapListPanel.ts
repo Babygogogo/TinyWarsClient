@@ -227,7 +227,6 @@ namespace TwnsScrCreateMapListPanel {
             this._uiMapInfo.setData({
                 mapInfo: {
                     mapId,
-                    configVersion   : ConfigManager.getLatestFormalVersion(),
                 },
             });
         }

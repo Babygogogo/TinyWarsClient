@@ -1,4 +1,5 @@
 
+import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
@@ -15,14 +16,13 @@ import CcrCreateModel                       from "../model/CcrCreateModel";
 import CcrProxy                             from "../model/CcrProxy";
 import TwnsCcrCreateAdvancedSettingsPage    from "./CcrCreateAdvancedSettingsPage";
 import TwnsCcrCreateBasicSettingsPage       from "./CcrCreateBasicSettingsPage";
-import TwnsCcrCreateMapInfoPage             from "./CcrCreateMapInfoPage";
 import TwnsCcrCreateMapListPanel            from "./CcrCreateMapListPanel";
 import TwnsCcrCreatePlayerInfoPage          from "./CcrCreatePlayerInfoPage";
 
 namespace TwnsCcrCreateSettingsPanel {
     import CcrCreateAdvancedSettingsPage    = TwnsCcrCreateAdvancedSettingsPage.CcrCreateAdvancedSettingsPage;
     import CcrCreateBasicSettingsPage       = TwnsCcrCreateBasicSettingsPage.CcrCreateBasicSettingsPage;
-    import CcrCreateMapInfoPage             = TwnsCcrCreateMapInfoPage.CcrCreateMapInfoPage;
+    import OpenDataForCommonMapInfoPage     = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import CcrCreatePlayerInfoPage          = TwnsCcrCreatePlayerInfoPage.CcrCreatePlayerInfoPage;
     import LangTextType                     = TwnsLangTextType.LangTextType;
     import NotifyType                       = TwnsNotifyType.NotifyType;
@@ -42,7 +42,7 @@ namespace TwnsCcrCreateSettingsPanel {
         private readonly _labelRoomSettings     : TwnsUiLabel.UiLabel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonMapInfoPage>;
 
         private readonly _btnBack               : TwnsUiButton.UiButton;
         private readonly _btnConfirm            : TwnsUiButton.UiButton;
@@ -93,7 +93,8 @@ namespace TwnsCcrCreateSettingsPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : CcrCreateMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
             ]);
 
@@ -156,6 +157,13 @@ namespace TwnsCcrCreateSettingsPanel {
             this._labelRoomSettings.text        = Lang.getText(LangTextType.B0571);
             this._btnBack.label                 = Lang.getText(LangTextType.B0146);
             this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+        }
+
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
+            const mapId = CcrCreateModel.getMapId();
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

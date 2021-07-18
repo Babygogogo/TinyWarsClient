@@ -1,4 +1,5 @@
 
+import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import Helpers                              from "../../tools/helpers/Helpers";
@@ -19,15 +20,13 @@ import MrrModel                             from "../model/MrrModel";
 import TwnsMrrMainMenuPanel                 from "./MrrMainMenuPanel";
 import TwnsMrrPreviewAdvancedSettingsPage   from "./MrrPreviewAdvancedSettingsPage";
 import TwnsMrrPreviewBasicSettingsPage      from "./MrrPreviewBasicSettingsPage";
-import TwnsMrrPreviewMapInfoPage            from "./MrrPreviewMapInfoPage";
 
 namespace TwnsMrrPreviewMapListPanel {
     import OpenDataForMrrPreviewAdvancedSettingsPage    = TwnsMrrPreviewAdvancedSettingsPage.OpenDataForMrrPreviewAdvancedSettingsPage;
     import MrrPreviewAdvancedSettingsPage               = TwnsMrrPreviewAdvancedSettingsPage.MrrPreviewAdvancedSettingsPage;
     import OpenDataForMrrPreviewBasicSettingsPage       = TwnsMrrPreviewBasicSettingsPage.OpenDataForMrrPreviewBasicSettingsPage;
     import MrrPreviewBasicSettingsPage                  = TwnsMrrPreviewBasicSettingsPage.MrrPreviewBasicSettingsPage;
-    import OpenDataForMrrPreviewMapInfoPage             = TwnsMrrPreviewMapInfoPage.OpenDataForMrrPreviewMapInfoPage;
-    import MrrPreviewMapInfoPage                        = TwnsMrrPreviewMapInfoPage.MrrPreviewMapInfoPage;
+    import OpenDataForCommonMapInfoPage                 = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import LangTextType                                 = TwnsLangTextType.LangTextType;
     import NotifyType                                   = TwnsNotifyType.NotifyType;
 
@@ -41,7 +40,7 @@ namespace TwnsMrrPreviewMapListPanel {
         private static _instance: MrrPreviewMapListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForMrrPreviewMapInfoPage | OpenDataForMrrPreviewBasicSettingsPage | OpenDataForMrrPreviewAdvancedSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMrrPreviewBasicSettingsPage | OpenDataForMrrPreviewAdvancedSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelRankMatch        : TwnsUiLabel.UiLabel;
@@ -101,7 +100,7 @@ namespace TwnsMrrPreviewMapListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -109,14 +108,14 @@ namespace TwnsMrrPreviewMapListPanel {
             this._updateComponentsForTargetMapInfo();
         }
 
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             this.close();
             TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
 
-        private async _onTouchedBtnSwitch(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnSwitch(): Promise<void> {
             const hasFog = this._getOpenData().hasFog;
             this.close();
             MrrPreviewMapListPanel.show({ hasFog: !hasFog });
@@ -130,8 +129,8 @@ namespace TwnsMrrPreviewMapListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : MrrPreviewMapInfoPage,
-                    pageData    : { mapId: null } as OpenDataForMrrPreviewMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -183,10 +182,14 @@ namespace TwnsMrrPreviewMapListPanel {
 
                 const tab       = this._tabSettings;
                 const hasFog    = this._getOpenData().hasFog;
-                tab.updatePageData(0, { mapId } as OpenDataForMrrPreviewMapInfoPage);
                 tab.updatePageData(1, { hasFog, mapId } as OpenDataForMrrPreviewBasicSettingsPage);
                 tab.updatePageData(2, { hasFog, mapId } as OpenDataForMrrPreviewAdvancedSettingsPage);
+                this._updateCommonMapInfoPage();
             }
+        }
+
+        private _updateCommonMapInfoPage(): void {
+            this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
@@ -223,6 +226,13 @@ namespace TwnsMrrPreviewMapListPanel {
             }
 
             return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
+        }
+
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
+            const mapId = MrrModel.getPreviewingMapId();
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
         }
 
         private _showOpenAnimation(): void {
@@ -318,11 +328,11 @@ namespace TwnsMrrPreviewMapListPanel {
             this._labelName.text = (await WarMapModel.getMapNameInCurrentLanguage(this.data.mapId)) || `??`;
         }
 
-        private _onNotifyMrrPreviewingMapIdChanged(e: egret.Event): void {
+        private _onNotifyMrrPreviewingMapIdChanged(): void {
             this._updateState();
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(): void {
             MrrModel.setPreviewingMapId(this.data.mapId);
         }
 

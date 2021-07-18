@@ -1,4 +1,5 @@
 
+import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import FlowManager                      from "../../tools/helpers/FlowManager";
@@ -20,14 +21,12 @@ import SpmModel                         from "../model/SpmModel";
 import TwnsSpmMainMenuPanel             from "./SpmMainMenuPanel";
 import TwnsSpmWarAdvancedSettingsPage   from "./SpmWarAdvancedSettingsPage";
 import TwnsSpmWarBasicSettingsPage      from "./SpmWarBasicSettingsPage";
-import TwnsSpmWarMapInfoPage            from "./SpmWarMapInfoPage";
 import TwnsSpmWarPlayerInfoPage         from "./SpmWarPlayerInfoPage";
 
 namespace TwnsSpmWarListPanel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
-    import OpenDataForSpmWarMapInfoPage             = TwnsSpmWarMapInfoPage.OpenDataForSpmWarMapInfoPage;
-    import SpmWarMapInfoPage                        = TwnsSpmWarMapInfoPage.SpmWarMapInfoPage;
+    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForSpmWarPlayerInfoPage          = TwnsSpmWarPlayerInfoPage.OpenDataForSpmWarPlayerInfoPage;
     import SpmWarPlayerInfoPage                     = TwnsSpmWarPlayerInfoPage.SpmWarPlayerInfoPage;
     import OpenDataForSpmWarAdvancedSettingsPage    = TwnsSpmWarAdvancedSettingsPage.OpenDataForSpmWarAdvancedSettingsPage;
@@ -42,7 +41,7 @@ namespace TwnsSpmWarListPanel {
         private static _instance: SpmWarListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForSpmWarMapInfoPage | OpenDataForSpmWarPlayerInfoPage | OpenDataForSpmWarAdvancedSettingsPage | OpenDataForSpmWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForSpmWarPlayerInfoPage | OpenDataForSpmWarAdvancedSettingsPage | OpenDataForSpmWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelSinglePlayer     : TwnsUiLabel.UiLabel;
@@ -103,27 +102,27 @@ namespace TwnsSpmWarListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySpmPreviewingWarSaveSlotChanged(e: egret.Event): void {
+        private _onNotifySpmPreviewingWarSaveSlotChanged(): void {
             this._updateComponentsForPreviewingWarInfo();
         }
 
-        private _onNotifyMsgSpmGetWarSaveSlotFullDataArray(e: egret.Event): void {
+        private _onNotifyMsgSpmGetWarSaveSlotFullDataArray(): void {
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onTouchTapBtnBack(): void {
             this.close();
             TwnsSpmMainMenuPanel.SpmMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
 
-        private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
+        private _onTouchedBtnNextStep(): void {
             const slotData = SpmModel.getSlotDict().get(SpmModel.getPreviewingSlotIndex());
             if (slotData != null) {
                 FlowManager.gotoSinglePlayerWar({
@@ -141,8 +140,8 @@ namespace TwnsSpmWarListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : SpmWarMapInfoPage,
-                    pageData    : { slotIndex: null } as OpenDataForSpmWarMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -206,11 +205,15 @@ namespace TwnsSpmWarListPanel {
                 btnNextStep.visible = true;
 
                 const tab = this._tabSettings;
-                tab.updatePageData(0, { slotIndex } as OpenDataForSpmWarMapInfoPage);
                 tab.updatePageData(1, { slotIndex } as OpenDataForSpmWarPlayerInfoPage);
                 tab.updatePageData(2, { slotIndex } as OpenDataForSpmWarBasicSettingsPage);
                 tab.updatePageData(3, { slotIndex } as OpenDataForSpmWarAdvancedSettingsPage);
+                this._updateCommonMapInfoPage();
             }
+        }
+
+        private _updateCommonMapInfoPage(): void {
+            this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
         }
 
         private _createDataForListWar(): DataForWarRenderer[] {
@@ -222,6 +225,29 @@ namespace TwnsSpmWarListPanel {
             }
 
             return dataArray;
+        }
+
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
+            const slotIndex = SpmModel.getPreviewingSlotIndex();
+            const warData   = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex)?.warData;
+            if (warData == null) {
+                return {};
+            }
+
+            const mapId = WarCommonHelpers.getMapId(warData);
+            if (mapId != null) {
+                return { mapInfo: { mapId } };
+            }
+
+            const initialWarData = warData.settingsForSfw?.initialWarData;
+            if (initialWarData) {
+                return { warInfo: {
+                    warData : initialWarData,
+                    players : warData.playerManager.players,
+                } };
+            } else {
+                return {};
+            }
         }
 
         private _showOpenAnimation(): void {
@@ -339,15 +365,15 @@ namespace TwnsSpmWarListPanel {
             }
         }
 
-        private _onNotifySpmPreviewingWarSaveSlotChanged(e: egret.Event): void {
+        private _onNotifySpmPreviewingWarSaveSlotChanged(): void {
             this._updateState();
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(): void {
             SpmModel.setPreviewingSlotIndex(this.data.slotIndex);
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
+        private _onTouchTapBtnNext(): void {
             const slotIndex = this.data.slotIndex;
             const slotData  = SpmModel.getSlotDict().get(slotIndex);
             if (slotData != null) {

@@ -1,5 +1,6 @@
 
-import TwnsUiComponent from "./UiComponent";
+import Logger           from "../helpers/Logger";
+import TwnsUiComponent  from "./UiComponent";
 
 namespace TwnsUiTabPage {
     export abstract class UiTabPage<OpenData> extends TwnsUiComponent.UiComponent {
@@ -18,6 +19,7 @@ namespace TwnsUiTabPage {
             this._setOpenData(data);
             parent.addChild(this);
 
+            Logger.warn("UiTabPage opened: " + this.skinName);
             this._doOpen();
         }
 

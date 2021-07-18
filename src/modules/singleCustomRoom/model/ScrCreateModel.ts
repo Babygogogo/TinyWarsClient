@@ -46,7 +46,7 @@ namespace ScrCreateModel {
         playerInfoList  : [],
     };
 
-    function getMapId(): number | null | undefined {
+    export function getMapId(): number | null | undefined {
         return getData().settingsForScw.mapId;
     }
     function setMapId(mapId: number): void {

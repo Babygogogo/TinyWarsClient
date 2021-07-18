@@ -1,5 +1,6 @@
 
 import TwnsCommonChooseCoPanel              from "../../common/view/CommonChooseCoPanel";
+import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
 import McrProxy                             from "../../multiCustomRoom/model/McrProxy";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import ConfigManager                        from "../../tools/helpers/ConfigManager";
@@ -23,13 +24,12 @@ import WarRuleHelpers                       from "../../tools/warHelpers/WarRule
 import McrCreateModel                       from "../model/McrCreateModel";
 import TwnsMcrCreateAdvancedSettingsPage    from "./McrCreateAdvancedSettingsPage";
 import TwnsMcrCreateBasicSettingsPage       from "./McrCreateBasicSettingsPage";
-import TwnsMcrCreateMapInfoPage             from "./McrCreateMapInfoPage";
 import TwnsMcrCreateMapListPanel            from "./McrCreateMapListPanel";
 
 namespace TwnsMcrCreateSettingsPanel {
     import McrCreateAdvancedSettingsPage    = TwnsMcrCreateAdvancedSettingsPage.McrCreateAdvancedSettingsPage;
     import McrCreateBasicSettingsPage       = TwnsMcrCreateBasicSettingsPage.McrCreateBasicSettingsPage;
-    import McrCreateMapInfoPage             = TwnsMcrCreateMapInfoPage.McrCreateMapInfoPage;
+    import OpenDataForCommonMapInfoPage     = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import LangTextType                     = TwnsLangTextType.LangTextType;
     import NotifyType                       = TwnsNotifyType.NotifyType;
 
@@ -61,7 +61,7 @@ namespace TwnsMcrCreateSettingsPanel {
         private readonly _sclSkinId             : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonMapInfoPage>;
 
         private readonly _btnBack               : TwnsUiButton.UiButton;
         private readonly _btnConfirm            : TwnsUiButton.UiButton;
@@ -112,7 +112,8 @@ namespace TwnsMcrCreateSettingsPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : McrCreateMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
             ]);
 
@@ -157,13 +158,13 @@ namespace TwnsMcrCreateSettingsPanel {
             });
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyMcrCreateSelfCoIdChanged(e: egret.Event): void {
+        private _onNotifyMcrCreateSelfCoIdChanged(): void {
             this._updateBtnChooseCo();
         }
-        private _onNotifyMsgMcrCreateRoom(e: egret.Event): void {
+        private _onNotifyMsgMcrCreateRoom(): void {
             FloatText.show(Lang.getText(LangTextType.A0015));
             FlowManager.gotoLobby();
         }
@@ -222,6 +223,13 @@ namespace TwnsMcrCreateSettingsPanel {
                 });
             }
             this._sclSkinId.bindData(dataArray);
+        }
+
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
+            const mapId = McrCreateModel.getMapId();
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -316,7 +324,7 @@ namespace TwnsMcrCreateSettingsPanel {
             this._updateState();
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             const data = this.data;
             if (data) {
                 const creator       = McrCreateModel;
@@ -329,13 +337,13 @@ namespace TwnsMcrCreateSettingsPanel {
                 }
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
-        private _onNotifyMcrCreateTeamIndexChanged(e: egret.Event): void {
+        private _onNotifyMcrCreateTeamIndexChanged(): void {
             this._updateLabelName();
         }
-        private _onNotifyMcrCreateSelfPlayerIndexChanged(e: egret.Event): void {
+        private _onNotifyMcrCreateSelfPlayerIndexChanged(): void {
             this._updateState();
         }
 
@@ -368,13 +376,13 @@ namespace TwnsMcrCreateSettingsPanel {
             this._updateImgColor();
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             const data = this.data;
             if (data) {
                 McrCreateModel.setSelfUnitAndTileSkinId(data.skinId);
             }
         }
-        private _onNotifyMcrCreateSelfSkinIdChanged(e: egret.Event): void {
+        private _onNotifyMcrCreateSelfSkinIdChanged(): void {
             this._updateImgColor();
         }
 

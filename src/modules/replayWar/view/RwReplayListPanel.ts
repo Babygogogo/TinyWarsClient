@@ -1,5 +1,6 @@
 
 import TwnsCommonBlockPanel         from "../../common/view/CommonBlockPanel";
+import TwnsCommonMapInfoPage        from "../../common/view/CommonMapInfoPage";
 import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
@@ -19,7 +20,6 @@ import TwnsUiTabItemRenderer        from "../../tools/ui/UiTabItemRenderer";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 import RwModel                      from "../model/RwModel";
 import RwProxy                      from "../model/RwProxy";
-import TwnsRwReplayMapInfoPage      from "./RwReplayMapInfoPage";
 import TwnsRwReplayPlayerInfoPage   from "./RwReplayPlayerInfoPage";
 import TwnsRwReplayWarInfoPage      from "./RwReplayWarInfoPage";
 import TwnsRwSearchReplayPanel      from "./RwSearchReplayPanel";
@@ -28,8 +28,7 @@ namespace TwnsRwReplayListPanel {
     import OpenDataForRwReplayWarInfoPage       = TwnsRwReplayWarInfoPage.OpenDataForRwReplayWarInfoPage;
     import RwReplayWarInfoPage                  = TwnsRwReplayWarInfoPage.RwReplayWarInfoPage;
     import RwSearchReplayPanel                  = TwnsRwSearchReplayPanel.RwSearchReplayPanel;
-    import OpenDataForRwReplayMapInfoPage       = TwnsRwReplayMapInfoPage.OpenDataForRwReplayMapInfoPage;
-    import RwReplayMapInfoPage                  = TwnsRwReplayMapInfoPage.RwReplayMapInfoPage;
+    import OpenDataForCommonMapInfoPage         = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForRwReplayPlayerInfoPage    = TwnsRwReplayPlayerInfoPage.OpenDataForRwReplayPlayerInfoPage;
     import RwReplayPlayerInfoPage               = TwnsRwReplayPlayerInfoPage.RwReplayPlayerInfoPage;
     import LangTextType                         = TwnsLangTextType.LangTextType;
@@ -43,7 +42,7 @@ namespace TwnsRwReplayListPanel {
         private static _instance: RwReplayListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForRwReplayMapInfoPage | OpenDataForRwReplayPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForRwReplayPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelReplay           : TwnsUiLabel.UiLabel;
@@ -112,39 +111,39 @@ namespace TwnsRwReplayListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyRwPreviewingReplayIdChanged(e: egret.Event): void {
+        private _onNotifyRwPreviewingReplayIdChanged(): void {
             this._updateComponentsForPreviewingReplayInfo();
         }
 
-        private _onNotifyMsgReplayGetInfoList(e: egret.Event): void {
+        private _onNotifyMsgReplayGetInfoList(): void {
             this._hasReceivedData = true;
             this._updateGroupReplayList();
             this._updateComponentsForPreviewingReplayInfo();
         }
 
-        private _onNotifyMsgReplayGetData(e: egret.Event): void {
+        private _onNotifyMsgReplayGetData(): void {
             const data = RwModel.getReplayData();
             FlowManager.gotoReplayWar(data.encodedWar, data.replayId);
         }
 
-        private _onNotifyMsgReplayGetDataFailed(e: egret.Event): void {
+        private _onNotifyMsgReplayGetDataFailed(): void {
             CommonBlockPanel.hide();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onTouchTapBtnBack(): void {
             this.close();
             TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
-        private _onTouchedBtnSearch(e: egret.TouchEvent): void {
+        private _onTouchedBtnSearch(): void {
             RwSearchReplayPanel.show();
         }
-        private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
+        private _onTouchedBtnNextStep(): void {
             const replayId = RwModel.getPreviewingReplayId();
             if (replayId != null) {
                 CommonBlockPanel.show({
@@ -162,8 +161,8 @@ namespace TwnsRwReplayListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : RwReplayMapInfoPage,
-                    pageData    : { replayId: null } as OpenDataForRwReplayMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -222,10 +221,14 @@ namespace TwnsRwReplayListPanel {
                 btnNextStep.visible = true;
 
                 const tab = this._tabSettings;
-                tab.updatePageData(0, { replayId } as OpenDataForRwReplayMapInfoPage);
                 tab.updatePageData(1, { replayId } as OpenDataForRwReplayPlayerInfoPage);
                 tab.updatePageData(2, { replayId } as OpenDataForRwReplayWarInfoPage);
+                this._updateCommonMapInfoPage();
             }
+        }
+
+        private _updateCommonMapInfoPage(): void {
+            this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
         }
 
         private _createDataForListReplay(): DataForReplayRenderer[] {
@@ -237,6 +240,13 @@ namespace TwnsRwReplayListPanel {
             }
 
             return dataArray.sort((v1, v2) => v2.replayId - v1.replayId);
+        }
+
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
+            const mapId = RwModel.getReplayInfo(RwModel.getPreviewingReplayId())?.replayBriefInfo?.mapId;
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
         }
 
         private _showOpenAnimation(): void {
@@ -358,15 +368,15 @@ namespace TwnsRwReplayListPanel {
             }
         }
 
-        private _onNotifyRwPreviewingReplayIdChanged(e: egret.Event): void {
+        private _onNotifyRwPreviewingReplayIdChanged(): void {
             this._updateState();
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(): void {
             RwModel.setPreviewingReplayId(this.data.replayId);
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
+        private _onTouchTapBtnNext(): void {
             CommonBlockPanel.show({
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0040),

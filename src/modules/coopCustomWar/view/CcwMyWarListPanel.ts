@@ -1,4 +1,5 @@
 
+import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
 import TwnsCcrMainMenuPanel             from "../../coopCustomRoom/view/CcrMainMenuPanel";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
@@ -20,12 +21,10 @@ import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
 import WarMapModel                      from "../../warMap/model/WarMapModel";
 import TwnsCcwWarAdvancedSettingsPage   from "./CcwWarAdvancedSettingsPage";
 import TwnsCcwWarBasicSettingsPage      from "./CcwWarBasicSettingsPage";
-import TwnsCcwWarMapInfoPage            from "./CcwWarMapInfoPage";
 import TwnsCcwWarPlayerInfoPage         from "./CcwWarPlayerInfoPage";
 
 namespace TwnsCcwMyWarListPanel {
-    import CcwWarMapInfoPage                        = TwnsCcwWarMapInfoPage.CcwWarMapInfoPage;
-    import OpenDataForCcwWarMapInfoPage             = TwnsCcwWarMapInfoPage.OpenDataForCcwWarMapInfoPage;
+    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import CcwWarPlayerInfoPage                     = TwnsCcwWarPlayerInfoPage.CcwWarPlayerInfoPage;
     import OpenDataForCcwWarPlayerInfoPage          = TwnsCcwWarPlayerInfoPage.OpenDataForCcwWarPlayerInfoPage;
     import CcwWarAdvancedSettingsPage               = TwnsCcwWarAdvancedSettingsPage.CcwWarAdvancedSettingsPage;
@@ -42,32 +41,20 @@ namespace TwnsCcwMyWarListPanel {
 
         private static _instance: CcwMyWarListPanel;
 
-        // @ts-ignore
         private readonly _groupTab              : eui.Group;
-        // @ts-ignore
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCcwWarMapInfoPage | OpenDataForCcwWarPlayerInfoPage | OpenDataForCcwWarAdvancedSettingsPage | OpenDataForCcwWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCcwWarPlayerInfoPage | OpenDataForCcwWarAdvancedSettingsPage | OpenDataForCcwWarBasicSettingsPage>;
 
-        // @ts-ignore
         private readonly _groupNavigator        : eui.Group;
-        // @ts-ignore
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private readonly _labelMyWar            : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private readonly _labelChooseWar        : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
         private readonly _btnBack               : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnNextStep           : TwnsUiButton.UiButton;
 
-        // @ts-ignore
         private readonly _groupWarList          : eui.Group;
-        // @ts-ignore
         private readonly _listWar               : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
-        // @ts-ignore
         private readonly _labelNoWar            : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
@@ -152,12 +139,12 @@ namespace TwnsCcwMyWarListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _initTabSettings(): void {
+        private async _initTabSettings(): Promise<void> {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : CcwWarMapInfoPage,
-                    pageData    : { warId: null } as OpenDataForCcwWarMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -222,11 +209,15 @@ namespace TwnsCcwMyWarListPanel {
                 btnNextStep.setRedVisible(MpwModel.checkIsRedForMyWar(MpwModel.getMyWarInfo(warId)));
 
                 const tab = this._tabSettings;
-                tab.updatePageData(0, { warId } as OpenDataForCcwWarMapInfoPage);
                 tab.updatePageData(1, { warId } as OpenDataForCcwWarPlayerInfoPage);
                 tab.updatePageData(2, { warId } as OpenDataForCcwWarBasicSettingsPage);
                 tab.updatePageData(3, { warId } as OpenDataForCcwWarAdvancedSettingsPage);
+                this._updateCommonMapInfoPage();
             }
+        }
+
+        private async _updateCommonMapInfoPage(): Promise<void> {
+            this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
         }
 
         private _createDataForListWar(): DataForWarRenderer[] {
@@ -243,6 +234,16 @@ namespace TwnsCcwMyWarListPanel {
             }
 
             return dataArray.sort((v1, v2) => v1.warId - v2.warId);
+        }
+
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
+            const warId = MpwModel.getCcwPreviewingWarId();
+            const mapId = warId == null
+                ? undefined
+                : MpwModel.getMyWarInfo(warId)?.settingsForCcw?.mapId;
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId }, };
         }
 
         private _showOpenAnimation(): void {
@@ -308,7 +309,6 @@ namespace TwnsCcwMyWarListPanel {
         name: string;
     };
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        // @ts-ignore
         private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
@@ -320,13 +320,9 @@ namespace TwnsCcwMyWarListPanel {
         warId: number;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
-        // @ts-ignore
         private readonly _btnChoose     : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnNext       : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _labelName     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private readonly _imgRed        : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {

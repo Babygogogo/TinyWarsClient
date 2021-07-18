@@ -1128,6 +1128,8 @@ namespace WarCommonHelpers {
             return warData.settingsForScw.mapId;
         } else if (warData.settingsForCcw) {
             return warData.settingsForCcw.mapId;
+        } else if (warData.settingsForSrw) {
+            return warData.settingsForSrw.mapId;
         } else {
             return undefined;
         }

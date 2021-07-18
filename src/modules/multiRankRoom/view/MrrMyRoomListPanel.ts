@@ -1,4 +1,5 @@
 
+import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import Helpers                          from "../../tools/helpers/Helpers";
@@ -6,6 +7,7 @@ import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
 import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 import TwnsUiButton                     from "../../tools/ui/UiButton";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
@@ -21,7 +23,6 @@ import TwnsMrrMainMenuPanel             from "./MrrMainMenuPanel";
 import TwnsMrrRoomAdvancedSettingsPage  from "./MrrRoomAdvancedSettingsPage";
 import TwnsMrrRoomBasicSettingsPage     from "./MrrRoomBasicSettingsPage";
 import TwnsMrrRoomInfoPanel             from "./MrrRoomInfoPanel";
-import TwnsMrrRoomMapInfoPage           from "./MrrRoomMapInfoPage";
 import TwnsMrrRoomPlayerInfoPage        from "./MrrRoomPlayerInfoPage";
 
 namespace TwnsMrrMyRoomListPanel {
@@ -30,8 +31,7 @@ namespace TwnsMrrMyRoomListPanel {
     import MrrRoomAdvancedSettingsPage              = TwnsMrrRoomAdvancedSettingsPage.MrrRoomAdvancedSettingsPage;
     import OpenDataForMrrRoomBasicSettingsPage      = TwnsMrrRoomBasicSettingsPage.OpenDataForMrrRoomBasicSettingsPage;
     import MrrRoomBasicSettingsPage                 = TwnsMrrRoomBasicSettingsPage.MrrRoomBasicSettingsPage;
-    import OpenDataForMrrRoomMapInfoPage            = TwnsMrrRoomMapInfoPage.OpenDataForMrrRoomMapInfoPage;
-    import MrrRoomMapInfoPage                       = TwnsMrrRoomMapInfoPage.MrrRoomMapInfoPage;
+    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMrrRoomPlayerInfoPage         = TwnsMrrRoomPlayerInfoPage.OpenDataForMrrRoomPlayerInfoPage;
     import MrrRoomPlayerInfoPage                    = TwnsMrrRoomPlayerInfoPage.MrrRoomPlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
@@ -44,7 +44,7 @@ namespace TwnsMrrMyRoomListPanel {
         private static _instance: MrrMyRoomListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForMrrRoomMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForMrrRoomAdvancedSettingsPage | OpenDataForMrrRoomBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForMrrRoomAdvancedSettingsPage | OpenDataForMrrRoomBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelRankMatch        : TwnsUiLabel.UiLabel;
@@ -80,10 +80,11 @@ namespace TwnsMrrMyRoomListPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MrrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
-                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,      callback: this._onNotifyMsgMrrGetMyRoomPublicInfoList },
-                { type: NotifyType.MsgMrrDeleteRoomByServer,           callback: this._onNotifyMsgMrrDeleteRoomByServer },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MrrJoinedPreviewingRoomIdChanged,    callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
+                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,       callback: this._onNotifyMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgMrrDeleteRoomByServer,            callback: this._onNotifyMsgMrrDeleteRoomByServer },
+                { type: NotifyType.MsgMrrGetRoomPublicInfo,             callback: this._onNotifyMsgMrrGetRoomPublicInfo },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -110,32 +111,39 @@ namespace TwnsMrrMyRoomListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyMrrJoinedPreviewingRoomIdChanged(e: egret.Event): void {
+        private _onNotifyMrrJoinedPreviewingRoomIdChanged(): void {
             this._updateComponentsForPreviewingRoomInfo();
         }
 
-        private _onNotifyMsgMrrGetMyRoomPublicInfoList(e: egret.Event): void {
+        private _onNotifyMsgMrrGetMyRoomPublicInfoList(): void {
             this._hasReceivedData = true;
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
         }
 
-        private _onNotifyMsgMrrDeleteRoomByServer(e: egret.Event): void {
+        private _onNotifyMsgMrrDeleteRoomByServer(): void {
             this._updateGroupRoomList();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onNotifyMsgMrrGetRoomPublicInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS;
+            if (data.roomId === MrrModel.getPreviewingRoomId()) {
+                this._updateCommonMapInfoPage();
+            }
+        }
+
+        private _onTouchTapBtnBack(): void {
             this.close();
             TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
 
-        private async _onTouchedBtnNextStep(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnNextStep(): Promise<void> {
             const roomId = MrrModel.getPreviewingRoomId();
             if (roomId != null) {
                 this.close();
@@ -149,12 +157,12 @@ namespace TwnsMrrMyRoomListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _initTabSettings(): void {
+        private async _initTabSettings(): Promise<void> {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : MrrRoomMapInfoPage,
-                    pageData    : { roomId: null } as OpenDataForMrrRoomMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -217,10 +225,10 @@ namespace TwnsMrrMyRoomListPanel {
                 btnNextStep.visible = true;
 
                 const tab = this._tabSettings;
-                tab.updatePageData(0, { roomId } as OpenDataForMrrRoomMapInfoPage);
                 tab.updatePageData(1, { roomId } as OpenDataForMrrRoomPlayerInfoPage);
                 tab.updatePageData(2, { roomId } as OpenDataForMrrRoomBasicSettingsPage);
                 tab.updatePageData(3, { roomId } as OpenDataForMrrRoomAdvancedSettingsPage);
+                this._updateCommonMapInfoPage();
             }
         }
 
@@ -233,6 +241,17 @@ namespace TwnsMrrMyRoomListPanel {
             }
 
             return dataArray.sort((v1, v2) => v1.roomId - v2.roomId);
+        }
+
+        private async _updateCommonMapInfoPage(): Promise<void> {
+            this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+        }
+
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
+            const mapId = (await MrrModel.getRoomInfo(MrrModel.getPreviewingRoomId()))?.settingsForMrw?.mapId;
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
         }
 
         private _showOpenAnimation(): void {
@@ -334,15 +353,15 @@ namespace TwnsMrrMyRoomListPanel {
             this._labelName.text    = roomInfo ? await WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForMrw.mapId) : null;
         }
 
-        private _onNotifyMrrJoinedPreviewingRoomIdChanged(e: egret.Event): void {
+        private _onNotifyMrrJoinedPreviewingRoomIdChanged(): void {
             this._updateState();
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(): void {
             MrrModel.setPreviewingRoomId(this.data.roomId);
         }
 
-        private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchTapBtnNext(): Promise<void> {
             const roomId = this.data.roomId;
             if (roomId != null) {
                 MrrMyRoomListPanel.hide();

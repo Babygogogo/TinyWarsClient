@@ -1,5 +1,6 @@
 
 import TwnsCommonConfirmPanel               from "../../common/view/CommonConfirmPanel";
+import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
 import SpmModel                             from "../../singlePlayerMode/model/SpmModel";
 import SpmProxy                             from "../../singlePlayerMode/model/SpmProxy";
 import FlowManager                          from "../../tools/helpers/FlowManager";
@@ -17,7 +18,6 @@ import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRender
 import ScrCreateModel                       from "../model/ScrCreateModel";
 import TwnsScrCreateAdvancedSettingsPage    from "./ScrCreateAdvancedSettingsPage";
 import TwnsScrCreateBasicSettingsPage       from "./ScrCreateBasicSettingsPage";
-import TwnsScrCreateMapInfoPage             from "./ScrCreateMapInfoPage";
 import TwnsScrCreateMapListPanel            from "./ScrCreateMapListPanel";
 import TwnsScrCreatePlayerInfoPage          from "./ScrCreatePlayerInfoPage";
 
@@ -25,7 +25,7 @@ namespace TwnsScrCreateSettingsPanel {
     import CommonConfirmPanel               = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import ScrCreateBasicSettingsPage       = TwnsScrCreateBasicSettingsPage.ScrCreateBasicSettingsPage;
     import ScrCreateAdvancedSettingsPage    = TwnsScrCreateAdvancedSettingsPage.ScrCreateAdvancedSettingsPage;
-    import ScrCreateMapInfoPage             = TwnsScrCreateMapInfoPage.ScrCreateMapInfoPage;
+    import OpenDataForCommonMapInfoPage     = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import ScrCreatePlayerInfoPage          = TwnsScrCreatePlayerInfoPage.ScrCreatePlayerInfoPage;
     import LangTextType                     = TwnsLangTextType.LangTextType;
     import NotifyType                       = TwnsNotifyType.NotifyType;
@@ -45,7 +45,7 @@ namespace TwnsScrCreateSettingsPanel {
         private readonly _labelGameSettings     : TwnsUiLabel.UiLabel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonMapInfoPage>;
 
         private readonly _btnBack               : TwnsUiButton.UiButton;
         private readonly _btnConfirm            : TwnsUiButton.UiButton;
@@ -92,7 +92,8 @@ namespace TwnsScrCreateSettingsPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : ScrCreateMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -114,11 +115,11 @@ namespace TwnsScrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             this.close();
             TwnsScrCreateMapListPanel.ScrCreateMapListPanel.show();
         }
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private _onTouchedBtnConfirm(): void {
             const data      = ScrCreateModel.getData();
             const callback  = () => {
                 SpmProxy.reqSpmCreateScw(data);
@@ -136,7 +137,7 @@ namespace TwnsScrCreateSettingsPanel {
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
         private _onNotifyMsgSpmCreateScw(e: egret.Event): void {
@@ -173,6 +174,13 @@ namespace TwnsScrCreateSettingsPanel {
             this._labelGameSettings.text        = Lang.getText(LangTextType.B0604);
             this._btnBack.label                 = Lang.getText(LangTextType.B0146);
             this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+        }
+
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
+            const mapId = ScrCreateModel.getMapId();
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

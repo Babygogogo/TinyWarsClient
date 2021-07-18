@@ -1,5 +1,4 @@
 
-import McrModel             from "../../multiCustomRoom/model/McrModel";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
@@ -10,14 +9,20 @@ import TwnsUiTabPage        from "../../tools/ui/UiTabPage";
 import TwnsUiZoomableMap    from "../../tools/ui/UiZoomableMap";
 import WarMapModel          from "../../warMap/model/WarMapModel";
 
-namespace TwnsMcrRoomMapInfoPage {
+namespace TwnsCommonMapInfoPage {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    export type OpenDataForMcrRoomMapInfoPage = {
-        roomId  : number;
+    export type OpenDataForCommonMapInfoPage = {
+        mapInfo?    : {
+            mapId   : number;
+        };
+        warInfo?    : {
+            warData     : ProtoTypes.WarSerialization.ISerialWar;
+            players?    : ProtoTypes.WarSerialization.ISerialPlayer[];
+        };
     };
-    export class McrRoomMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForMcrRoomMapInfoPage> {
+    export class CommonMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonMapInfoPage> {
         private readonly _zoomMap       : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _uiMapInfo     : TwnsUiMapInfo.UiMapInfo;
         private readonly _labelLoading  : TwnsUiLabel.UiLabel;
@@ -25,13 +30,12 @@ namespace TwnsMcrRoomMapInfoPage {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrRoomMapInfoPage.exml";
+            this.skinName = "resource/skins/common/CommonMapInfoPage.exml";
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMcrGetRoomInfo,  callback: this._onNotifyMsgMcrGetRoomInfo },
             ]);
 
             this.left   = 0;
@@ -43,39 +47,45 @@ namespace TwnsMcrRoomMapInfoPage {
             this._updateComponentsForRoomInfo();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
-        }
-        private _onNotifyMsgMcrGetRoomInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomInfo.IS;
-            if (data.roomId === this._getOpenData().roomId) {
-                this._updateComponentsForRoomInfo();
-            }
         }
 
         private _updateComponentsForLanguage(): void {
             this._labelLoading.text = Lang.getText(LangTextType.A0150);
         }
         private async _updateComponentsForRoomInfo(): Promise<void> {
-            const roomId        = this._getOpenData().roomId;
-            const roomInfo      = await McrModel.getRoomInfo(roomId);
-            const mapRawData    = roomInfo ? await WarMapModel.getRawData(roomInfo.settingsForMcw.mapId) : null;
-            const zoomMap       = this._zoomMap;
-            const uiMapInfo     = this._uiMapInfo;
-            if (!mapRawData) {
-                zoomMap.clearMap();
-                uiMapInfo.setData(null);
-            } else {
-                zoomMap.showMapByMapData(mapRawData);
+            const zoomMap               = this._zoomMap;
+            const uiMapInfo             = this._uiMapInfo;
+            const { mapInfo, warInfo }  = this._getOpenData();
+            if (mapInfo) {
+                const mapId = mapInfo.mapId;
                 uiMapInfo.setData({
                     mapInfo: {
-                        mapId           : mapRawData.mapId,
-                        configVersion   : roomInfo.settingsForCommon.configVersion,
+                        mapId,
                     },
                 });
+
+                const mapRawData = await WarMapModel.getRawData(mapId);
+                if (mapRawData) {
+                    zoomMap.showMapByMapData(mapRawData);
+                } else {
+                    zoomMap.clearMap();
+                }
+
+            } else if (warInfo) {
+                const warData = warInfo.warData;
+                uiMapInfo.setData({
+                    warData,
+                });
+                zoomMap.showMapByWarData(warData, warInfo.players);
+
+            } else {
+                uiMapInfo.setData(undefined);
+                zoomMap.clearMap();
             }
         }
     }
 }
 
-export default TwnsMcrRoomMapInfoPage;
+export default TwnsCommonMapInfoPage;

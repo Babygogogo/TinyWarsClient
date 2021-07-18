@@ -1,6 +1,7 @@
 
 import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
+import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import FloatText                        from "../../tools/helpers/FloatText";
@@ -30,7 +31,6 @@ import TwnsMrrMyRoomListPanel           from "./MrrMyRoomListPanel";
 import TwnsMrrRoomAdvancedSettingsPage  from "./MrrRoomAdvancedSettingsPage";
 import TwnsMrrRoomBanCoPanel            from "./MrrRoomBanCoPanel";
 import TwnsMrrRoomBasicSettingsPage     from "./MrrRoomBasicSettingsPage";
-import TwnsMrrRoomMapInfoPage           from "./MrrRoomMapInfoPage";
 import TwnsMrrRoomPlayerInfoPage        from "./MrrRoomPlayerInfoPage";
 
 namespace TwnsMrrRoomInfoPanel {
@@ -38,8 +38,7 @@ namespace TwnsMrrRoomInfoPanel {
     import MrrRoomBanCoPanel                        = TwnsMrrRoomBanCoPanel.MrrRoomBanCoPanel;
     import OpenDataForMrrRoomBasicSettingsPage      = TwnsMrrRoomBasicSettingsPage.OpenDataForMrrRoomBasicSettingsPage;
     import MrrRoomBasicSettingsPage                 = TwnsMrrRoomBasicSettingsPage.MrrRoomBasicSettingsPage;
-    import OpenDataForMrrRoomMapInfoPage            = TwnsMrrRoomMapInfoPage.OpenDataForMrrRoomMapInfoPage;
-    import MrrRoomMapInfoPage                       = TwnsMrrRoomMapInfoPage.MrrRoomMapInfoPage;
+    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMrrRoomPlayerInfoPage         = TwnsMrrRoomPlayerInfoPage.OpenDataForMrrRoomPlayerInfoPage;
     import MrrRoomPlayerInfoPage                    = TwnsMrrRoomPlayerInfoPage.MrrRoomPlayerInfoPage;
     import OpenDataForMrrRoomAdvancedSettingsPage   = TwnsMrrRoomAdvancedSettingsPage.OpenDataForMrrRoomAdvancedSettingsPage;
@@ -58,7 +57,7 @@ namespace TwnsMrrRoomInfoPanel {
         private static _instance: MrrRoomInfoPanel;
 
         private readonly _groupTab          : eui.Group;
-        private readonly _tabSettings       : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForMrrRoomMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForMrrRoomBasicSettingsPage | OpenDataForMrrRoomAdvancedSettingsPage>;
+        private readonly _tabSettings       : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForMrrRoomBasicSettingsPage | OpenDataForMrrRoomAdvancedSettingsPage>;
 
         private readonly _groupNavigator    : eui.Group;
         private readonly _labelRankMatch    : TwnsUiLabel.UiLabel;
@@ -112,7 +111,7 @@ namespace TwnsMrrRoomInfoPanel {
             this.skinName = "resource/skins/multiRankRoom/MrrRoomInfoPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnBanCo,       callback: this._onTouchedBtnBanCo },
@@ -139,10 +138,8 @@ namespace TwnsMrrRoomInfoPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : MrrRoomMapInfoPage,
-                    pageData    : {
-                        roomId
-                    } as OpenDataForMrrRoomMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -239,6 +236,7 @@ namespace TwnsMrrRoomInfoPanel {
                 this._updateGroupBanCo();
                 this._updateGroupSettings();
                 this._updateGroupState();
+                this._updateCommonMapInfoPage();
             }
         }
 
@@ -417,6 +415,17 @@ namespace TwnsMrrRoomInfoPanel {
                     ? Lang.getText(LangTextType.A0134)
                     : Lang.getText(LangTextType.A0211);
             }
+        }
+
+        private async _updateCommonMapInfoPage(): Promise<void> {
+            this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+        }
+
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
+            const mapId = (await MrrModel.getRoomInfo(this._getOpenData().roomId))?.settingsForMrw?.mapId;
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

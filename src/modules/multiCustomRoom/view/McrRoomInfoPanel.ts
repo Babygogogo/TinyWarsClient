@@ -2,6 +2,7 @@
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
+import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
 import McrModel                         from "../../multiCustomRoom/model/McrModel";
 import McrProxy                         from "../../multiCustomRoom/model/McrProxy";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
@@ -28,7 +29,6 @@ import WarMapModel                      from "../../warMap/model/WarMapModel";
 import TwnsMcrMyRoomListPanel           from "./McrMyRoomListPanel";
 import TwnsMcrRoomAdvancedSettingsPage  from "./McrRoomAdvancedSettingsPage";
 import TwnsMcrRoomBasicSettingsPage     from "./McrRoomBasicSettingsPage";
-import TwnsMcrRoomMapInfoPage           from "./McrRoomMapInfoPage";
 import TwnsMcrRoomPlayerInfoPage        from "./McrRoomPlayerInfoPage";
 
 namespace TwnsMcrRoomInfoPanel {
@@ -38,8 +38,7 @@ namespace TwnsMcrRoomInfoPanel {
     import McrRoomAdvancedSettingsPage              = TwnsMcrRoomAdvancedSettingsPage.McrRoomAdvancedSettingsPage;
     import OpenDataForMcrRoomBasicSettingsPage      = TwnsMcrRoomBasicSettingsPage.OpenDataForMcrRoomBasicSettingsPage;
     import McrRoomBasicSettingsPage                 = TwnsMcrRoomBasicSettingsPage.McrRoomBasicSettingsPage;
-    import OpenDataForMcrRoomMapInfoPage            = TwnsMcrRoomMapInfoPage.OpenDataForMcrRoomMapInfoPage;
-    import McrRoomMapInfoPage                       = TwnsMcrRoomMapInfoPage.McrRoomMapInfoPage;
+    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMcrRoomPlayerInfoPage         = TwnsMcrRoomPlayerInfoPage.OpenDataForMcrRoomPlayerInfoPage;
     import McrRoomPlayerInfoPage                    = TwnsMcrRoomPlayerInfoPage.McrRoomPlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
@@ -56,7 +55,7 @@ namespace TwnsMcrRoomInfoPanel {
         private static _instance: McrRoomInfoPanel;
 
         private readonly _groupTab          : eui.Group;
-        private readonly _tabSettings       : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForMcrRoomMapInfoPage | OpenDataForMcrRoomPlayerInfoPage | OpenDataForMcrRoomBasicSettingsPage | OpenDataForMcrRoomAdvancedSettingsPage>;
+        private readonly _tabSettings       : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMcrRoomPlayerInfoPage | OpenDataForMcrRoomBasicSettingsPage | OpenDataForMcrRoomAdvancedSettingsPage>;
 
         private readonly _groupNavigator    : eui.Group;
         private readonly _labelMultiPlayer  : TwnsUiLabel.UiLabel;
@@ -105,7 +104,7 @@ namespace TwnsMcrRoomInfoPanel {
             this.skinName = "resource/skins/multiCustomRoom/McrRoomInfoPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnChooseCo,    callback: this._onTouchedBtnChooseCo },
@@ -135,10 +134,8 @@ namespace TwnsMcrRoomInfoPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : McrRoomMapInfoPage,
-                    pageData    : {
-                        roomId
-                    } as OpenDataForMcrRoomMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -247,6 +244,7 @@ namespace TwnsMcrRoomInfoPanel {
             if (data.roomId === this._getOpenData().roomId) {
                 this._updateGroupButton();
                 this._updateBtnChooseCo();
+                this._updateCommonMapInfoPage();
             }
         }
 
@@ -396,6 +394,10 @@ namespace TwnsMcrRoomInfoPanel {
             (isSelfOwner) && (groupButton.addChild(btnStartGame));
         }
 
+        private async _updateCommonMapInfoPage(): Promise<void> {
+            this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -455,6 +457,16 @@ namespace TwnsMcrRoomInfoPanel {
                     endProps    : { alpha: 0, },
                 });
             });
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Other functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
+            const mapId = (await McrModel.getRoomInfo(this._getOpenData().roomId))?.settingsForMcw?.mapId;
+            return mapId == null
+                ? {}
+                : { mapInfo : { mapId, }, };
         }
     }
 
@@ -545,7 +557,10 @@ namespace TwnsMcrRoomInfoPanel {
             const data = this.data;
             if (data) {
                 const playerIndex       = data.playerIndex;
-                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex((await McrModel.getRoomInfo(data.roomId)).settingsForCommon.warRule, playerIndex))})`;
+                const warRule           = (await McrModel.getRoomInfo(data.roomId))?.settingsForCommon?.warRule;
+                this._labelName.text    = warRule
+                    ? `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(warRule, playerIndex))})`
+                    : `P${playerIndex} (${CommonConstants.ErrorTextForUndefined})`;
             }
         }
         private async _updateState(): Promise<void> {

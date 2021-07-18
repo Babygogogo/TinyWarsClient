@@ -22,7 +22,6 @@ namespace TwnsUiMapInfo {
     type DataForUiMapInfo = {
         mapInfo?    : {
             mapId           : number;
-            configVersion   : string;
         };
         warData?    : ProtoTypes.WarSerialization.ISerialWar;
     };
@@ -99,7 +98,7 @@ namespace TwnsUiMapInfo {
                 labelRating.text        = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
                 labelPlayedTimes.text   = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)}`;
                 labelMapSize.text       = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
-                this._listTile.bindData(generateDataForListTile(mapRawData.tileDataArray, mapInfo.configVersion));
+                this._listTile.bindData(generateDataForListTile(mapRawData.tileDataArray));
 
                 return;
             }
@@ -114,14 +113,14 @@ namespace TwnsUiMapInfo {
                 labelRating.text        = `--`;
                 labelPlayedTimes.text   = `--`;
                 labelMapSize.text       = `${mapSize.width} x ${mapSize.height}`;
-                this._listTile.bindData(generateDataForListTile(tileMapData.tiles, warData.settingsForCommon.configVersion));
+                this._listTile.bindData(generateDataForListTile(tileMapData.tiles));
 
                 return;
             }
         }
     }
 
-    function generateDataForListTile(tileDataArray: ProtoTypes.WarSerialization.ISerialTile[], configVersion: string): DataForTileRenderer[] {
+    function generateDataForListTile(tileDataArray: ProtoTypes.WarSerialization.ISerialTile[]): DataForTileRenderer[] {
         const tileCountDict = new Map<TileType, number>();
         for (const tile of tileDataArray || []) {
             const tileType = ConfigManager.getTileType(tile.baseType, tile.objectType);
@@ -133,7 +132,6 @@ namespace TwnsUiMapInfo {
         const dataArray: DataForTileRenderer[] = [];
         for (const tileType of TileTypes) {
             dataArray.push({
-                configVersion,
                 tileType,
                 num     : tileCountDict.get(tileType) || 0,
             });
@@ -152,7 +150,6 @@ namespace TwnsUiMapInfo {
         TileType.Radar,
     ];
     type DataForTileRenderer = {
-        configVersion   : string;
         tileType        : Types.TileType;
         num             : number;
     };

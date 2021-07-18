@@ -1,4 +1,5 @@
 
+import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
@@ -23,7 +24,6 @@ import WarRuleHelpers                       from "../../tools/warHelpers/WarRule
 import MfrCreateModel                       from "../model/MfrCreateModel";
 import TwnsMfrCreateAdvancedSettingsPage    from "./MfrCreateAdvancedSettingsPage";
 import TwnsMfrCreateBasicSettingsPage       from "./MfrCreateBasicSettingsPage";
-import TwnsMfrCreateMapInfoPage             from "./MfrCreateMapInfoPage";
 import TwnsMfrCreatePlayerInfoPage          from "./MfrCreatePlayerInfoPage";
 import TwnsMfrMainMenuPanel                 from "./MfrMainMenuPanel";
 
@@ -31,7 +31,7 @@ namespace TwnsMfrCreateSettingsPanel {
     import MfrMainMenuPanel                 = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
     import MfrCreateAdvancedSettingsPage    = TwnsMfrCreateAdvancedSettingsPage.MfrCreateAdvancedSettingsPage;
     import MfrCreateBasicSettingsPage       = TwnsMfrCreateBasicSettingsPage.MfrCreateBasicSettingsPage;
-    import MfrCreateMapInfoPage             = TwnsMfrCreateMapInfoPage.MfrCreateMapInfoPage;
+    import OpenDataForCommonMapInfoPage     = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import MfrCreatePlayerInfoPage          = TwnsMfrCreatePlayerInfoPage.MfrCreatePlayerInfoPage;
     import LangTextType                     = TwnsLangTextType.LangTextType;
     import NotifyType                       = TwnsNotifyType.NotifyType;
@@ -60,7 +60,7 @@ namespace TwnsMfrCreateSettingsPanel {
         private readonly _sclSkinId             : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonMapInfoPage>;
 
         private readonly _btnBack               : TwnsUiButton.UiButton;
         private readonly _btnConfirm            : TwnsUiButton.UiButton;
@@ -113,7 +113,8 @@ namespace TwnsMfrCreateSettingsPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : MfrCreateMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
             ]);
 
@@ -203,6 +204,13 @@ namespace TwnsMfrCreateSettingsPanel {
                 });
             }
             this._sclSkinId.bindData(dataArray);
+        }
+
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
+            const warData = MfrCreateModel.getInitialWarData();
+            return warData == null
+                ? {}
+                : { warInfo: { warData } };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

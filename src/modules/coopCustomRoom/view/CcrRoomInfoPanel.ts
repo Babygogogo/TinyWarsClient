@@ -2,6 +2,7 @@
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
+import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
 import CcrModel                         from "../../coopCustomRoom/model/CcrModel";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
@@ -28,13 +29,11 @@ import CcrProxy                         from "../model/CcrProxy";
 import TwnsCcrMyRoomListPanel           from "./CcrMyRoomListPanel";
 import TwnsCcrRoomAdvancedSettingsPage  from "./CcrRoomAdvancedSettingsPage";
 import TwnsCcrRoomBasicSettingsPage     from "./CcrRoomBasicSettingsPage";
-import TwnsCcrRoomMapInfoPage           from "./CcrRoomMapInfoPage";
 import TwnsCcrRoomPlayerInfoPage        from "./CcrRoomPlayerInfoPage";
 
 namespace TwnsCcrRoomInfoPanel {
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import OpenDataForCcrRoomMapInfoPage            = TwnsCcrRoomMapInfoPage.OpenDataForCcrRoomMapInfoPage;
-    import CcrRoomMapInfoPage                       = TwnsCcrRoomMapInfoPage.CcrRoomMapInfoPage;
+    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCcrRoomPlayerInfoPage         = TwnsCcrRoomPlayerInfoPage.OpenDataForCcrRoomPlayerInfoPage;
     import CcrRoomPlayerInfoPage                    = TwnsCcrRoomPlayerInfoPage.CcrRoomPlayerInfoPage;
     import CcrMyRoomListPanel                       = TwnsCcrMyRoomListPanel.CcrMyRoomListPanel;
@@ -56,7 +55,7 @@ namespace TwnsCcrRoomInfoPanel {
         private static _instance: CcrRoomInfoPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCcrRoomMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCcrRoomBasicSettingsPage | OpenDataForCcrRoomAdvancedSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCcrRoomBasicSettingsPage | OpenDataForCcrRoomAdvancedSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -105,7 +104,7 @@ namespace TwnsCcrRoomInfoPanel {
             this.skinName = "resource/skins/coopCustomRoom/CcrRoomInfoPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnChooseCo,    callback: this._onTouchedBtnChooseCo },
@@ -135,10 +134,8 @@ namespace TwnsCcrRoomInfoPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : CcrRoomMapInfoPage,
-                    pageData    : {
-                        roomId
-                    } as OpenDataForCcrRoomMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -256,6 +253,7 @@ namespace TwnsCcrRoomInfoPanel {
             if (data.roomId === this._getOpenData().roomId) {
                 this._updateGroupButton();
                 this._updateBtnChooseCo();
+                this._updateCommonMapInfoPage();
             }
         }
 
@@ -403,6 +401,17 @@ namespace TwnsCcrRoomInfoPanel {
             groupButton.addChild(this._btnChat);
             (isSelfOwner) && (groupButton.addChild(this._btnDeleteRoom));
             (isSelfOwner) && (groupButton.addChild(btnStartGame));
+        }
+
+        private async _updateCommonMapInfoPage(): Promise<void> {
+            this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+        }
+
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
+            const mapId = (await CcrModel.getRoomInfo(this._getOpenData().roomId))?.settingsForCcw?.mapId;
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

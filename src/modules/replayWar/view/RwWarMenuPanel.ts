@@ -4,6 +4,7 @@ import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
+import TwnsLobbyBackgroundPanel         from "../../lobby/view/LobbyBackgroundPanel";
 import MfrCreateModel                   from "../../multiFreeRoom/model/MfrCreateModel";
 import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
@@ -13,6 +14,7 @@ import ConfigManager                    from "../../tools/helpers/ConfigManager"
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
 import Logger                           from "../../tools/helpers/Logger";
+import StageManager                     from "../../tools/helpers/StageManager";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -138,15 +140,15 @@ namespace TwnsRwWarMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyMcwPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyMcwPlannerStateChanged(): void {
             this._updateListPlayer();
         }
 
-        private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
+        private _onNotifyUnitAndTileTextureVersionChanged(): void {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -164,11 +166,11 @@ namespace TwnsRwWarMenuPanel {
             });
         }
 
-        private _onMsgReplaySetRating(e: egret.Event): void {
+        private _onMsgReplaySetRating(): void {
             FloatText.show(Lang.getText(LangTextType.A0106));
         }
 
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             const type = this._menuType;
             if (type === MenuType.Main) {
                 this.close();
@@ -366,8 +368,10 @@ namespace TwnsRwWarMenuPanel {
                         content : Lang.getText(LangTextType.A0201),
                         callback: () => {
                             MfrCreateModel.resetDataByInitialWarData(warData);
+                            RwModel.unloadWar();
+                            StageManager.closeAllPanels();
+                            TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
                             TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
-                            this.close();
                         }
                     });
                 }
@@ -426,7 +430,7 @@ namespace TwnsRwWarMenuPanel {
             this._updateView();
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             this.data.callback();
         }
 

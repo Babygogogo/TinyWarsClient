@@ -1,4 +1,5 @@
 
+import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
@@ -19,12 +20,10 @@ import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
 import WarMapModel                      from "../../warMap/model/WarMapModel";
 import TwnsMrwWarAdvancedSettingsPage   from "./MrwWarAdvancedSettingsPage";
 import TwnsMrwWarBasicSettingsPage      from "./MrwWarBasicSettingsPage";
-import TwnsMrwWarMapInfoPage            from "./MrwWarMapInfoPage";
 import TwnsMrwWarPlayerInfoPage         from "./MrwWarPlayerInfoPage";
 
 namespace TwnsMrwMyWarListPanel {
-    import OpenDataForMrwWarMapInfoPage             = TwnsMrwWarMapInfoPage.OpenDataForMrwWarMapInfoPage;
-    import MrwWarMapInfoPage                        = TwnsMrwWarMapInfoPage.MrwWarMapInfoPage;
+    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMrwWarPlayerInfoPage          = TwnsMrwWarPlayerInfoPage.OpenDataForMrwWarPlayerInfoPage;
     import MrwWarPlayerInfoPage                     = TwnsMrwWarPlayerInfoPage.MrwWarPlayerInfoPage;
     import OpenDataForMrwWarAdvancedSettingsPage    = TwnsMrwWarAdvancedSettingsPage.OpenDataForMrwWarAdvancedSettingsPage;
@@ -41,7 +40,7 @@ namespace TwnsMrwMyWarListPanel {
         private static _instance: MrwMyWarListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForMrwWarAdvancedSettingsPage | OpenDataForMrwWarBasicSettingsPage | OpenDataForMrwWarMapInfoPage | OpenDataForMrwWarPlayerInfoPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForMrwWarAdvancedSettingsPage | OpenDataForMrwWarBasicSettingsPage | OpenDataForCommonMapInfoPage | OpenDataForMrwWarPlayerInfoPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -107,28 +106,28 @@ namespace TwnsMrwMyWarListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyMrwPreviewingWarIdChanged(e: egret.Event): void {
+        private _onNotifyMrwPreviewingWarIdChanged(): void {
             this._updateComponentsForPreviewingWarInfo();
         }
 
-        private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
+        private _onNotifyMsgMpwCommonGetMyWarInfoList(): void {
             this._hasReceivedData = true;
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onTouchTapBtnBack(): void {
             this.close();
             TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
 
-        private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
+        private _onTouchedBtnNextStep(): void {
             const warId = MpwModel.getMrwPreviewingWarId();
             if (warId != null) {
                 MpwProxy.reqMpwCommonContinueWar(warId);
@@ -142,8 +141,8 @@ namespace TwnsMrwMyWarListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : MrwWarMapInfoPage,
-                    pageData    : { warId: null } as OpenDataForMrwWarMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -208,11 +207,15 @@ namespace TwnsMrwMyWarListPanel {
                 btnNextStep.setRedVisible(MpwModel.checkIsRedForMyWar(MpwModel.getMyWarInfo(warId)));
 
                 const tab = this._tabSettings;
-                tab.updatePageData(0, { warId } as OpenDataForMrwWarMapInfoPage);
                 tab.updatePageData(1, { warId } as OpenDataForMrwWarPlayerInfoPage);
                 tab.updatePageData(2, { warId } as OpenDataForMrwWarBasicSettingsPage);
                 tab.updatePageData(3, { warId } as OpenDataForMrwWarAdvancedSettingsPage);
+                this._updateCommonMapInfoPage();
             }
+        }
+
+        private _updateCommonMapInfoPage(): void {
+            this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
         }
 
         private _createDataForListWar(): DataForWarRenderer[] {
@@ -224,6 +227,13 @@ namespace TwnsMrwMyWarListPanel {
             }
 
             return dataArray.sort((v1, v2) => v1.warId - v2.warId);
+        }
+
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
+            const mapId = MpwModel.getMyWarInfo(MpwModel.getMrwPreviewingWarId())?.settingsForMrw?.mapId;
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
         }
 
         private _showOpenAnimation(): void {
@@ -332,15 +342,15 @@ namespace TwnsMrwMyWarListPanel {
             }
         }
 
-        private _onNotifyMrwPreviewingWarIdChanged(e: egret.Event): void {
+        private _onNotifyMrwPreviewingWarIdChanged(): void {
             this._updateState();
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(): void {
             MpwModel.setMrwPreviewingWarId(this.data.warId);
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
+        private _onTouchTapBtnNext(): void {
             MpwProxy.reqMpwCommonContinueWar(this.data.warId);
         }
 

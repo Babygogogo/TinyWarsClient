@@ -1,6 +1,7 @@
 
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
+import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
 import MfrModel                         from "../../multiFreeRoom/model/MfrModel";
 import MfrProxy                         from "../../multiFreeRoom/model/MfrProxy";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
@@ -26,14 +27,12 @@ import UserModel                        from "../../user/model/UserModel";
 import TwnsMfrMyRoomListPanel           from "./MfrMyRoomListPanel";
 import TwnsMfrRoomAdvancedSettingsPage  from "./MfrRoomAdvancedSettingsPage";
 import TwnsMfrRoomBasicSettingsPage     from "./MfrRoomBasicSettingsPage";
-import TwnsMfrRoomMapInfoPage           from "./MfrRoomMapInfoPage";
 import TwnsMfrRoomPlayerInfoPage        from "./MfrRoomPlayerInfoPage";
 
 namespace TwnsMfrRoomInfoPanel {
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MfrMyRoomListPanel                       = TwnsMfrMyRoomListPanel.MfrMyRoomListPanel;
-    import OpenDataForMfrRoomMapInfoPage            = TwnsMfrRoomMapInfoPage.OpenDataForMfrRoomMapInfoPage;
-    import MfrRoomMapInfoPage                       = TwnsMfrRoomMapInfoPage.MfrRoomMapInfoPage;
+    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMfrRoomPlayerInfoPage         = TwnsMfrRoomPlayerInfoPage.OpenDataForMfrRoomPlayerInfoPage;
     import MfrRoomPlayerInfoPage                    = TwnsMfrRoomPlayerInfoPage.MfrRoomPlayerInfoPage;
     import OpenDataForMfrRoomBasicSettingsPage      = TwnsMfrRoomBasicSettingsPage.OpenDataForMfrRoomBasicSettingsPage;
@@ -54,7 +53,7 @@ namespace TwnsMfrRoomInfoPanel {
         private static _instance: MfrRoomInfoPanel;
 
         private readonly _groupTab          : eui.Group;
-        private readonly _tabSettings       : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForMfrRoomMapInfoPage | OpenDataForMfrRoomAdvancedSettingsPage | OpenDataForMfrRoomBasicSettingsPage | OpenDataForMfrRoomPlayerInfoPage>;
+        private readonly _tabSettings       : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMfrRoomAdvancedSettingsPage | OpenDataForMfrRoomBasicSettingsPage | OpenDataForMfrRoomPlayerInfoPage>;
 
         private readonly _groupNavigator    : eui.Group;
         private readonly _labelMultiPlayer  : TwnsUiLabel.UiLabel;
@@ -103,7 +102,7 @@ namespace TwnsMfrRoomInfoPanel {
             this.skinName = "resource/skins/multiFreeRoom/MfrRoomInfoPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnStartGame,   callback: this._onTouchedBtnStartGame },
@@ -132,10 +131,8 @@ namespace TwnsMfrRoomInfoPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : MfrRoomMapInfoPage,
-                    pageData    : {
-                        roomId
-                    } as OpenDataForMfrRoomMapInfoPage,
+                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -175,19 +172,19 @@ namespace TwnsMfrRoomInfoPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             this.close();
             MfrMyRoomListPanel.show();
         }
 
-        private _onTouchedBtnStartGame(e: egret.TouchEvent): void {
+        private _onTouchedBtnStartGame(): void {
             const roomId = this._getOpenData().roomId;
             if (roomId != null) {
                 MfrProxy.reqMfrStartWar(roomId);
             }
         }
 
-        private _onTouchedBtnDeleteRoom(e: egret.TouchEvent): void {
+        private _onTouchedBtnDeleteRoom(): void {
             const roomId = this._getOpenData().roomId;
             if (roomId != null) {
                 CommonConfirmPanel.show({
@@ -199,13 +196,13 @@ namespace TwnsMfrRoomInfoPanel {
             }
         }
 
-        private _onTouchedBtnChat(e: egret.TouchEvent): void {
+        private _onTouchedBtnChat(): void {
             TwnsChatPanel.ChatPanel.show({
                 toMfrRoomId: this._getOpenData().roomId,
             });
         }
 
-        private async _onTouchedBtnExitRoom(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnExitRoom(): Promise<void> {
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0126),
                 callback: () => {
@@ -214,7 +211,7 @@ namespace TwnsMfrRoomInfoPanel {
             });
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -223,6 +220,7 @@ namespace TwnsMfrRoomInfoPanel {
             if (data.roomId === this._getOpenData().roomId) {
                 this._updateGroupButton();
                 this._updateBtnChooseCo();
+                this._updateCommonMapInfoPage();
             }
         }
 
@@ -372,6 +370,17 @@ namespace TwnsMfrRoomInfoPanel {
             (isSelfOwner) && (groupButton.addChild(btnStartGame));
         }
 
+        private async _updateCommonMapInfoPage(): Promise<void> {
+            this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+        }
+
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
+            const warData = (await MfrModel.getRoomInfo(this._getOpenData().roomId))?.settingsForMfw.initialWarData;
+            return warData == null
+                ? {}
+                : { warInfo: { warData } };
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -465,7 +474,7 @@ namespace TwnsMfrRoomInfoPanel {
             this._updateState();
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             const data              = this.data;
             const roomId            = data.roomId;
             const roomInfo          = data ? await MfrModel.getRoomInfo(roomId) : null;
@@ -494,7 +503,7 @@ namespace TwnsMfrRoomInfoPanel {
                 });
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
         private _onNotifyMsgMfrGetRoomInfo(e: egret.Event): void {
@@ -596,7 +605,7 @@ namespace TwnsMfrRoomInfoPanel {
             this._updateStateAndImgRed();
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             const data              = this.data;
             const isReady           = data.isReady;
             const roomId            = data.roomId;
@@ -608,7 +617,7 @@ namespace TwnsMfrRoomInfoPanel {
                 MfrProxy.reqMfrSetReady(roomId, isReady);
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
         private _onNotifyMsgMfrGetRoomInfo(e: egret.Event): void {
