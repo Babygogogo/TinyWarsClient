@@ -650,6 +650,20 @@ namespace Types {
         Error = 6,
         Off   = 0xFFFFFFFF,
     }
+
+    // eslint-disable-next-line no-shadow
+    export enum WarBasicSettingsType {
+        MapName,
+        WarName,
+        WarPassword,
+        WarComment,
+        WarRuleTitle,
+        HasFog,
+        TimerType,
+        TimerRegularParam,
+        TimerIncrementalParam1,
+        TimerIncrementalParam2,
+    }
 }
 
 export default Types;

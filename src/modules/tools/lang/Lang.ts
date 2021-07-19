@@ -252,6 +252,22 @@ namespace Lang {
         }
     }
 
+    export function getWarBasicSettingsName(type: Types.WarBasicSettingsType): string | undefined {
+        switch (type) {
+            case Types.WarBasicSettingsType.MapName                 : return Lang.getText(LangTextType.B0225);
+            case Types.WarBasicSettingsType.WarName                 : return Lang.getText(LangTextType.B0185);
+            case Types.WarBasicSettingsType.WarPassword             : return Lang.getText(LangTextType.B0186);
+            case Types.WarBasicSettingsType.WarComment              : return Lang.getText(LangTextType.B0187);
+            case Types.WarBasicSettingsType.WarRuleTitle            : return Lang.getText(LangTextType.B0318);
+            case Types.WarBasicSettingsType.HasFog                  : return Lang.getText(LangTextType.B0020);
+            case Types.WarBasicSettingsType.TimerType               : return Lang.getText(LangTextType.B0574);
+            case Types.WarBasicSettingsType.TimerRegularParam       : return Lang.getText(LangTextType.B0021);
+            case Types.WarBasicSettingsType.TimerIncrementalParam1  : return Lang.getText(LangTextType.B0389);
+            case Types.WarBasicSettingsType.TimerIncrementalParam2  : return Lang.getText(LangTextType.B0390);
+            default                                                 : return undefined;
+        }
+    }
+
     export function getMapReviewStatusText(status: Types.MapReviewStatus): string | undefined{
         switch (status) {
             case Types.MapReviewStatus.None         : return getText(LangTextType.B0273);

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<e:Skin class="Skins.Component.Button.ButtonHelp001" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiImage="TwnsUiImage.*">
+    <e:Group horizontalCenter="0" verticalCenter="0">
+        <e:Image source="commonIcon0001" />
+        <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true" textColor="0xffffff" />
+        <TwnsUiImage:UiImage id="_imgExtra" verticalCenter="0" horizontalCenter="0" />
+    </e:Group>
+</e:Skin>
