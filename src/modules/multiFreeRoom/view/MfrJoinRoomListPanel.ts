@@ -1,4 +1,5 @@
 
+import TwnsCommonJoinRoomPasswordPanel  from "../../common/view/CommonJoinRoomPasswordPanel";
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
@@ -20,7 +21,6 @@ import TwnsUiTab                        from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
 import UserModel                        from "../../user/model/UserModel";
 import MfrJoinModel                     from "../model/MfrJoinModel";
-import TwnsMfrJoinPasswordPanel         from "./MfrJoinPasswordPanel";
 import TwnsMfrMainMenuPanel             from "./MfrMainMenuPanel";
 import TwnsMfrRoomAdvancedSettingsPage  from "./MfrRoomAdvancedSettingsPage";
 import TwnsMfrRoomBasicSettingsPage     from "./MfrRoomBasicSettingsPage";
@@ -28,7 +28,6 @@ import TwnsMfrRoomInfoPanel             from "./MfrRoomInfoPanel";
 import TwnsMfrRoomPlayerInfoPage        from "./MfrRoomPlayerInfoPage";
 
 namespace TwnsMfrJoinRoomListPanel {
-    import MfrJoinPasswordPanel                     = TwnsMfrJoinPasswordPanel.MfrJoinPasswordPanel;
     import OpenDataForMfrRoomAdvancedSettingsPage   = TwnsMfrRoomAdvancedSettingsPage.OpenDataForMfrRoomAdvancedSettingsPage;
     import MfrRoomAdvancedSettingsPage              = TwnsMfrRoomAdvancedSettingsPage.MfrRoomAdvancedSettingsPage;
     import OpenDataForMfrRoomBasicSettingsPage      = TwnsMfrRoomBasicSettingsPage.OpenDataForMfrRoomBasicSettingsPage;
@@ -173,9 +172,8 @@ namespace TwnsMfrJoinRoomListPanel {
         private async _onTouchedBtnNextStep(): Promise<void> {
             const roomInfo = await MfrModel.getRoomInfo(MfrJoinModel.getTargetRoomId());
             if (roomInfo) {
-                if (roomInfo.settingsForMfw.warPassword) {
-                    MfrJoinPasswordPanel.show({ roomInfo });
-                } else {
+                const settingsForMfw    = roomInfo.settingsForMfw;
+                const callback          = () => {
                     const joinData = MfrJoinModel.getFastJoinData(roomInfo);
                     if (joinData) {
                         MfrProxy.reqMfrJoinRoom(joinData);
@@ -183,6 +181,16 @@ namespace TwnsMfrJoinRoomListPanel {
                         FloatText.show(Lang.getText(LangTextType.A0145));
                         MfrProxy.reqMfrGetJoinableRoomInfoList();
                     }
+                };
+                if (!settingsForMfw.warPassword) {
+                    callback();
+                } else {
+                    TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
+                        warName             : settingsForMfw.warName,
+                        mapId               : undefined,
+                        password            : settingsForMfw.warPassword,
+                        callbackOnSucceed   : callback,
+                    });
                 }
             }
         }
@@ -404,9 +412,8 @@ namespace TwnsMfrJoinRoomListPanel {
                 return;
             }
 
-            if (roomInfo.settingsForMfw.warPassword) {
-                MfrJoinPasswordPanel.show({ roomInfo });
-            } else {
+            const settingsForMfw    = roomInfo.settingsForMfw;
+            const callback          = () => {
                 const joinData = MfrJoinModel.getFastJoinData(roomInfo);
                 if (joinData) {
                     MfrProxy.reqMfrJoinRoom(joinData);
@@ -414,6 +421,16 @@ namespace TwnsMfrJoinRoomListPanel {
                     FloatText.show(Lang.getText(LangTextType.A0145));
                     MfrProxy.reqMfrGetJoinableRoomInfoList();
                 }
+            };
+            if (!settingsForMfw.warPassword) {
+                callback();
+            } else {
+                TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
+                    warName             : settingsForMfw.warName,
+                    mapId               : undefined,
+                    password            : settingsForMfw.warPassword,
+                    callbackOnSucceed   : callback,
+                });
             }
         }
 

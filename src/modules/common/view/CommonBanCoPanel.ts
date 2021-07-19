@@ -4,10 +4,10 @@ import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
+import Logger                   from "../../tools/helpers/Logger";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import Notify                   from "../../tools/notify/Notify";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import TwnsUiButton             from "../../tools/ui/UiButton";
 import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
@@ -15,21 +15,26 @@ import TwnsUiComponent          from "../../tools/ui/UiComponent";
 import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import McrCreateModel           from "../model/McrCreateModel";
 
-namespace TwnsMcrCreateBanCoPanel {
+namespace TwnsCommonBanCoPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    type OpenDataForMcrCreateBanCoPanel = {
-        playerIndex : number;
+    type OpenDataForCommonBanCoPanel = {
+        playerIndex         : number;
+        configVersion       : string;
+        bannedCoIdArray     : number[];
+        fullCoIdArray       : number[];
+        maxBanCount         : number | undefined;
+        selfCoId            : number | undefined;
+        callbackOnConfirm   : ((bannedCoIdSet: Set<number>) => void) | undefined;
     };
-    export class McrCreateBanCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrCreateBanCoPanel> {
+    export class CommonBanCoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBanCoPanel> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrCreateBanCoPanel;
+        private static _instance: CommonBanCoPanel;
 
         private readonly _imgMask                   : TwnsUiImage.UiImage;
         private readonly _group                     : eui.Group;
@@ -38,25 +43,25 @@ namespace TwnsMcrCreateBanCoPanel {
         private readonly _groupCoNames              : eui.Group;
         private readonly _btnCancel                 : TwnsUiButton.UiButton;
         private readonly _btnConfirm                : TwnsUiButton.UiButton;
+        private readonly _btnClose                  : TwnsUiButton.UiButton;
         private readonly _uiCoInfo                  : TwnsUiCoInfo.UiCoInfo;
 
         // private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
-        private _playerIndex            : number;
         private _bannedCoIdSet          = new Set<number>();
         private _previewCoId            : number;
 
-        public static show(openData: OpenDataForMcrCreateBanCoPanel): void {
-            if (!McrCreateBanCoPanel._instance) {
-                McrCreateBanCoPanel._instance = new McrCreateBanCoPanel();
+        public static show(openData: OpenDataForCommonBanCoPanel): void {
+            if (!CommonBanCoPanel._instance) {
+                CommonBanCoPanel._instance = new CommonBanCoPanel();
             }
-            McrCreateBanCoPanel._instance.open(openData);
+            CommonBanCoPanel._instance.open(openData);
         }
 
         public static async hide(): Promise<void> {
-            if (McrCreateBanCoPanel._instance) {
-                await McrCreateBanCoPanel._instance.close();
+            if (CommonBanCoPanel._instance) {
+                await CommonBanCoPanel._instance.close();
             }
         }
 
@@ -65,13 +70,14 @@ namespace TwnsMcrCreateBanCoPanel {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/multiCustomRoom/McrCreateBanCoPanel.exml";
+            this.skinName = "resource/skins/common/CommonBanCoPanel.exml";
         }
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
+                { ui: this._btnCancel,  callback: this.close },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
+                { ui: this._btnClose,   callback: this.close },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
@@ -79,17 +85,16 @@ namespace TwnsMcrCreateBanCoPanel {
 
             this._showOpenAnimation();
 
-            const playerIndex = this._getOpenData().playerIndex;
-            this._playerIndex = playerIndex;
-
+            const openData      = this._getOpenData();
             const bannedCoIdSet = this._bannedCoIdSet;
             bannedCoIdSet.clear();
-            for (const coId of McrCreateModel.getBannedCoIdArray(playerIndex) || []) {
+            for (const coId of openData.bannedCoIdArray) {
                 bannedCoIdSet.add(coId);
             }
 
             this._updateComponentsForLanguage();
             // this._initGroupCoTiers();
+            this._initButtons();
             this._initGroupCoNames();
             this._initComponentsForPreviewCo();
         }
@@ -118,37 +123,32 @@ namespace TwnsMcrCreateBanCoPanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            this.close();
-        }
-
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const bannedCoIdSet = this._bannedCoIdSet;
-            if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
-                    title   : Lang.getText(LangTextType.B0088),
-                    content : Lang.getText(LangTextType.A0130),
-                });
+        private _onTouchedBtnConfirm(): void {
+            const openData = this._getOpenData();
+            const callback = openData.callbackOnConfirm;
+            if (callback == null) {
+                Logger.error(`CommonBanCoPanel._onTouchedBtnConfirm() empty callback.`);
             } else {
-                const playerIndex   = this._playerIndex;
-                const callback      = () => {
-                    McrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
-                    Notify.dispatch(NotifyType.McrCreateBannedCoIdArrayChanged);
-                    this.close();
-                };
-                if ((playerIndex !== McrCreateModel.getSelfPlayerIndex()) ||
-                    (!bannedCoIdSet.has(McrCreateModel.getSelfCoId()))
-                ) {
-                    callback();
-                } else {
-                    CommonConfirmPanel.show({
-                        content : Lang.getText(LangTextType.A0057),
-                        callback: () => {
-                            McrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
-                            callback();
-                        },
+                const bannedCoIdSet = this._bannedCoIdSet;
+                if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
+                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                        title   : Lang.getText(LangTextType.B0088),
+                        content : Lang.getText(LangTextType.A0130),
                     });
+                    return;
                 }
+
+                const maxBanCount = openData.maxBanCount;
+                if ((maxBanCount != null) && (bannedCoIdSet.size >= maxBanCount)) {
+                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                        title   : Lang.getText(LangTextType.B0088),
+                        content : Lang.getFormattedText(LangTextType.F0031, maxBanCount),
+                    });
+                    return;
+                }
+
+                callback(new Set(bannedCoIdSet));
+                this.close();
             }
         }
 
@@ -189,41 +189,52 @@ namespace TwnsMcrCreateBanCoPanel {
         // }
 
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
-            const renderer      = e.currentTarget as RendererForCoName;
-            const coId          = renderer.getCoId();
-            const bannedCoIdSet = this._bannedCoIdSet;
+            const renderer  = e.currentTarget as RendererForCoName;
+            const coId      = renderer.getCoId();
             this._setPreviewCoId(coId);
 
-            if (!renderer.getIsSelected()) {
+            const openData = this._getOpenData();
+            if (openData.callbackOnConfirm == null) {
+                return;
+            }
+
+            const bannedCoIdSet = this._bannedCoIdSet;
+            if (!renderer.getIsAvailable()) {
                 bannedCoIdSet.delete(coId);
                 // this._updateGroupCoTiers();
                 this._updateGroupCoNames();
+                return;
+            }
 
+            if (coId === CommonConstants.CoEmptyId) {
+                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0130),
+                });
+                return;
+            }
+
+            const maxBanCount = openData.maxBanCount;
+            if ((maxBanCount != null) && (bannedCoIdSet.size >= maxBanCount)) {
+                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getFormattedText(LangTextType.F0031, maxBanCount),
+                });
+                return;
+            }
+
+            const callback = () => {
+                bannedCoIdSet.add(coId);
+                // this._updateGroupCoTiers();
+                this._updateGroupCoNames();
+            };
+            if (openData.selfCoId !== coId) {
+                callback();
             } else {
-                if (coId === CommonConstants.CoEmptyId) {
-                    TwnsCommonAlertPanel.CommonAlertPanel.show({
-                        title   : Lang.getText(LangTextType.B0088),
-                        content : Lang.getText(LangTextType.A0130),
-                    });
-                    return;
-                }
-
-                const callback = () => {
-                    bannedCoIdSet.add(coId);
-                    // this._updateGroupCoTiers();
-                    this._updateGroupCoNames();
-                };
-
-                if ((this._playerIndex !== McrCreateModel.getSelfPlayerIndex()) ||
-                    (coId !== McrCreateModel.getSelfCoId())
-                ) {
-                    callback();
-                } else {
-                    CommonConfirmPanel.show({
-                        content : Lang.getText(LangTextType.A0057),
-                        callback,
-                    });
-                }
+                CommonConfirmPanel.show({
+                    content : Lang.getText(LangTextType.A0057),
+                    callback,
+                });
             }
         }
 
@@ -233,7 +244,8 @@ namespace TwnsMcrCreateBanCoPanel {
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label               = Lang.getText(LangTextType.B0154);
             this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
-            this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._playerIndex})`;
+            this._btnClose.label                = Lang.getText(LangTextType.B0204);
+            this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._getOpenData().playerIndex})`;
 
             this._updateComponentsForPreviewCoId();
         }
@@ -281,11 +293,27 @@ namespace TwnsMcrCreateBanCoPanel {
         //     }
         // }
 
+        private _initButtons(): void {
+            const canModify             = this._getOpenData().callbackOnConfirm != null;
+            this._btnConfirm.visible    = canModify;
+            this._btnCancel.visible     = canModify;
+            this._btnClose.visible      = !canModify;
+        }
+
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestFormalVersion())) {
+            const openData      = this._getOpenData();
+            const configVersion = openData.configVersion;
+            const fullCoIdArray = [...new Set(openData.fullCoIdArray)].sort((v1, v2) => {
+                const name1 = ConfigManager.getCoNameAndTierText(configVersion, v1);
+                const name2 = ConfigManager.getCoNameAndTierText(configVersion, v2);
+                return (name1 || "").localeCompare(name2 || "", "zh");
+            });
+
+            for (const coId of fullCoIdArray) {
                 const renderer = new RendererForCoName();
-                renderer.setCoId(cfg.coId);
-                renderer.setIsSelected(true);
+                renderer.setConfigVersion(configVersion);
+                renderer.setCoId(coId);
+                renderer.setIsAvailable(true);
 
                 renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoNameRenderer, this);
                 this._renderersForCoNames.push(renderer);
@@ -303,7 +331,7 @@ namespace TwnsMcrCreateBanCoPanel {
         private _updateGroupCoNames(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
             for (const renderer of this._renderersForCoNames) {
-                renderer.setIsSelected(!bannedCoIdSet.has(renderer.getCoId()));
+                renderer.setIsAvailable(!bannedCoIdSet.has(renderer.getCoId()));
             }
         }
 
@@ -318,7 +346,7 @@ namespace TwnsMcrCreateBanCoPanel {
             }
 
             this._uiCoInfo.setCoData({
-                configVersion   : ConfigManager.getLatestFormalVersion(),
+                configVersion   : this._getOpenData().configVersion,
                 coId,
             });
         }
@@ -409,8 +437,9 @@ namespace TwnsMcrCreateBanCoPanel {
         private readonly _imgSelected   : TwnsUiImage.UiImage;
         private readonly _labelName     : TwnsUiLabel.UiLabel;
 
+        private _configVersion  : string;
         private _coId           : number;
-        private _isSelected     : boolean;
+        private _isAvailable    : boolean;
 
         public constructor() {
             super();
@@ -422,21 +451,24 @@ namespace TwnsMcrCreateBanCoPanel {
             this._updateView();
         }
 
+        public setConfigVersion(configVersion: string): void {
+            this._configVersion = configVersion;
+        }
+
         public setCoId(coId: number): void {
             this._coId = coId;
-
             this._updateView();
         }
         public getCoId(): number {
             return this._coId;
         }
 
-        public setIsSelected(isSelected: boolean): void {
-            this._isSelected = isSelected;
+        public setIsAvailable(isAvailable: boolean): void {
+            this._isAvailable = isAvailable;
             this._updateView();
         }
-        public getIsSelected(): boolean {
-            return this._isSelected;
+        public getIsAvailable(): boolean {
+            return this._isAvailable;
         }
 
         private _updateView(): void {
@@ -444,14 +476,12 @@ namespace TwnsMcrCreateBanCoPanel {
                 return;
             }
 
-            const coCfg             = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), this._coId);
-            this._labelName.text    = coCfg ? coCfg.name : null;
-
-            const isSelected            = this._isSelected;
-            this._imgSelected.visible   = isSelected;
-            this._imgUnselected.visible = !isSelected;
+            const isAvailable           = this._isAvailable;
+            this._imgSelected.visible   = isAvailable;
+            this._imgUnselected.visible = !isAvailable;
+            this._labelName.text        = ConfigManager.getCoBasicCfg(this._configVersion, this._coId)?.name || CommonConstants.ErrorTextForUndefined;
         }
     }
 }
 
-export default TwnsMcrCreateBanCoPanel;
+export default TwnsCommonBanCoPanel;

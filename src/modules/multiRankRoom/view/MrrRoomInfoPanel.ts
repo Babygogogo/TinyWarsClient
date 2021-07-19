@@ -1,4 +1,5 @@
 
+import TwnsCommonBanCoPanel             from "../../common/view/CommonBanCoPanel";
 import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
@@ -29,13 +30,11 @@ import MrrProxy                         from "../model/MrrProxy";
 import MrrSelfSettingsModel             from "../model/MrrSelfSettingsModel";
 import TwnsMrrMyRoomListPanel           from "./MrrMyRoomListPanel";
 import TwnsMrrRoomAdvancedSettingsPage  from "./MrrRoomAdvancedSettingsPage";
-import TwnsMrrRoomBanCoPanel            from "./MrrRoomBanCoPanel";
 import TwnsMrrRoomBasicSettingsPage     from "./MrrRoomBasicSettingsPage";
 import TwnsMrrRoomPlayerInfoPage        from "./MrrRoomPlayerInfoPage";
 
 namespace TwnsMrrRoomInfoPanel {
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import MrrRoomBanCoPanel                        = TwnsMrrRoomBanCoPanel.MrrRoomBanCoPanel;
     import OpenDataForMrrRoomBasicSettingsPage      = TwnsMrrRoomBasicSettingsPage.OpenDataForMrrRoomBasicSettingsPage;
     import MrrRoomBasicSettingsPage                 = TwnsMrrRoomBasicSettingsPage.MrrRoomBasicSettingsPage;
     import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -191,7 +190,24 @@ namespace TwnsMrrRoomInfoPanel {
             const userId            = UserModel.getSelfUserId();
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList.find(v => v.userId === userId) : null;
             if (selfPlayerData) {
-                MrrRoomBanCoPanel.show({ roomId });
+                const configVersion = roomInfo.settingsForCommon.configVersion;
+                TwnsCommonBanCoPanel.CommonBanCoPanel.show({
+                    configVersion,
+                    playerIndex         : selfPlayerData.playerIndex,
+                    maxBanCount         : CommonConstants.RankMaxBanCoCount,
+                    fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                    bannedCoIdArray     : [],
+                    selfCoId            : undefined,
+                    callbackOnConfirm   : (bannedCoIdSet) => {
+                        CommonConfirmPanel.show({
+                            content : Lang.getText(bannedCoIdSet.size > 0 ? LangTextType.A0138 : LangTextType.A0139),
+                            callback: () => {
+                                MrrProxy.reqMrrSetBannedCoIdList(roomId, [...bannedCoIdSet]);
+                                this.close();
+                            },
+                        });
+                    },
+                });
             }
         }
 

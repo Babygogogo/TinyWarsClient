@@ -1,4 +1,5 @@
 
+import TwnsCommonJoinRoomPasswordPanel  from "../../common/view/CommonJoinRoomPasswordPanel";
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
@@ -21,7 +22,6 @@ import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
 import UserModel                        from "../../user/model/UserModel";
 import WarMapModel                      from "../../warMap/model/WarMapModel";
 import McrJoinModel                     from "../model/McrJoinModel";
-import TwnsMcrJoinPasswordPanel         from "./McrJoinPasswordPanel";
 import TwnsMcrMainMenuPanel             from "./McrMainMenuPanel";
 import TwnsMcrRoomAdvancedSettingsPage  from "./McrRoomAdvancedSettingsPage";
 import TwnsMcrRoomBasicSettingsPage     from "./McrRoomBasicSettingsPage";
@@ -29,7 +29,6 @@ import TwnsMcrRoomInfoPanel             from "./McrRoomInfoPanel";
 import TwnsMcrRoomPlayerInfoPage        from "./McrRoomPlayerInfoPage";
 
 namespace TwnsMcrJoinRoomListPanel {
-    import McrJoinPasswordPanel                     = TwnsMcrJoinPasswordPanel.McrJoinPasswordPanel;
     import McrRoomInfoPanel                         = TwnsMcrRoomInfoPanel.McrRoomInfoPanel;
     import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMcrRoomPlayerInfoPage         = TwnsMcrRoomPlayerInfoPage.OpenDataForMcrRoomPlayerInfoPage;
@@ -175,9 +174,8 @@ namespace TwnsMcrJoinRoomListPanel {
         private async _onTouchedBtnNextStep(): Promise<void> {
             const roomInfo = await McrModel.getRoomInfo(McrJoinModel.getTargetRoomId());
             if (roomInfo) {
-                if (roomInfo.settingsForMcw.warPassword) {
-                    McrJoinPasswordPanel.show({ roomInfo });
-                } else {
+                const settingsForMcw    = roomInfo.settingsForMcw;
+                const callback          = () => {
                     const joinData = McrJoinModel.getFastJoinData(roomInfo);
                     if (joinData) {
                         McrProxy.reqMcrJoinRoom(joinData);
@@ -185,6 +183,16 @@ namespace TwnsMcrJoinRoomListPanel {
                         FloatText.show(Lang.getText(LangTextType.A0145));
                         McrProxy.reqMcrGetJoinableRoomInfoList();
                     }
+                };
+                if (!settingsForMcw.warPassword) {
+                    callback();
+                } else {
+                    TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
+                        mapId               : settingsForMcw.mapId,
+                        warName             : settingsForMcw.warName,
+                        password            : settingsForMcw.warPassword,
+                        callbackOnSucceed   : callback,
+                    });
                 }
             }
         }
@@ -412,9 +420,8 @@ namespace TwnsMcrJoinRoomListPanel {
                 return;
             }
 
-            if (roomInfo.settingsForMcw.warPassword) {
-                McrJoinPasswordPanel.show({ roomInfo });
-            } else {
+            const settingsForMcw    = roomInfo.settingsForMcw;
+            const callback          = () => {
                 const joinData = McrJoinModel.getFastJoinData(roomInfo);
                 if (joinData) {
                     McrProxy.reqMcrJoinRoom(joinData);
@@ -422,6 +429,16 @@ namespace TwnsMcrJoinRoomListPanel {
                     FloatText.show(Lang.getText(LangTextType.A0145));
                     McrProxy.reqMcrGetJoinableRoomInfoList();
                 }
+            };
+            if (!settingsForMcw.warPassword) {
+                callback();
+            } else {
+                TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
+                    mapId               : settingsForMcw.mapId,
+                    warName             : settingsForMcw.warName,
+                    password            : settingsForMcw.warPassword,
+                    callbackOnSucceed   : callback,
+                });
             }
         }
 

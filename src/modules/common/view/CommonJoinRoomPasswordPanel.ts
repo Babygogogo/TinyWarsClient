@@ -9,24 +9,24 @@ import Helpers          from "../../tools/helpers/Helpers";
 import Lang             from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
 import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
 import Types            from "../../tools/helpers/Types";
-import McrProxy         from "../../multiCustomRoom/model/McrProxy";
 import WarMapModel      from "../../warMap/model/WarMapModel";
-import McrJoinModel     from "../model/McrJoinModel";
 
-namespace TwnsMcrJoinPasswordPanel {
+namespace TwnsCommonJoinRoomPasswordPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     type OpenData = {
-        roomInfo: ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
+        warName             : string | undefined;
+        mapId               : number | undefined;
+        password            : string;
+        callbackOnSucceed   : () => void;
     };
-    export class McrJoinPasswordPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonJoinRoomPasswordPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrJoinPasswordPanel;
+        private static _instance: CommonJoinRoomPasswordPanel;
 
         private readonly _imgMask               : TwnsUiImage.UiImage;
         private readonly _group                 : eui.Group;
@@ -39,14 +39,14 @@ namespace TwnsMcrJoinPasswordPanel {
         private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
-            if (!McrJoinPasswordPanel._instance) {
-                McrJoinPasswordPanel._instance = new McrJoinPasswordPanel();
+            if (!CommonJoinRoomPasswordPanel._instance) {
+                CommonJoinRoomPasswordPanel._instance = new CommonJoinRoomPasswordPanel();
             }
-            McrJoinPasswordPanel._instance.open(openData);
+            CommonJoinRoomPasswordPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
-            if (McrJoinPasswordPanel._instance) {
-                await McrJoinPasswordPanel._instance.close();
+            if (CommonJoinRoomPasswordPanel._instance) {
+                await CommonJoinRoomPasswordPanel._instance.close();
             }
         }
 
@@ -55,7 +55,7 @@ namespace TwnsMcrJoinPasswordPanel {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/multiCustomRoom/McrJoinPasswordPanel.exml";
+            this.skinName = "resource/skins/common/CommonJoinRoomPasswordPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -84,38 +84,37 @@ namespace TwnsMcrJoinPasswordPanel {
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
-            const roomInfo = this._getOpenData().roomInfo;
-            if (this._inputWarPassword.text !== roomInfo.settingsForMcw.warPassword) {
+            const openData = this._getOpenData();
+            if (this._inputWarPassword.text !== openData.password) {
                 FloatText.show(Lang.getText(LangTextType.A0017));
             } else {
+                openData.callbackOnSucceed();
                 this.close();
-
-                const joinData = McrJoinModel.getFastJoinData(roomInfo);
-                if (joinData) {
-                    McrProxy.reqMcrJoinRoom(joinData);
-                } else {
-                    FloatText.show(Lang.getText(LangTextType.A0145));
-                    McrProxy.reqMcrGetJoinableRoomInfoList();
-                }
             }
         }
 
         private _updateComponentsForLanguage(): void {
-            const info          = this._getOpenData().roomInfo;
-            const warName       = info.settingsForMcw.warName;
-            const labelWarName  = this._labelWarName;
-            if (warName) {
-                labelWarName.text = warName;
-            } else {
-                labelWarName.text = "";
-                WarMapModel.getMapNameInCurrentLanguage(info.settingsForMcw.mapId).then(v => labelWarName.text = v);
-            }
-
             this._labelTitle.text           = Lang.getText(LangTextType.B0449);
             this._labelRoomTitle.text       = `${Lang.getText(LangTextType.B0405)}:`;
             this._labelPasswordTitle.text   = `${Lang.getText(LangTextType.B0171)}:`;
             this._btnCancel.label           = Lang.getText(LangTextType.B0154);
             this._btnConfirm.label          = Lang.getText(LangTextType.B0026);
+            this._updateLabelWarName();
+        }
+        private async _updateLabelWarName(): Promise<void> {
+            const openData  = this._getOpenData();
+            const warName   = openData.warName;
+            const label     = this._labelWarName;
+            if (warName) {
+                label.text = warName;
+            } else {
+                const mapId = openData.mapId;
+                if (mapId != null) {
+                    label.text = await WarMapModel.getMapNameInCurrentLanguage(mapId);
+                } else {
+                    label.text = Lang.getText(LangTextType.B0555);
+                }
+            }
         }
 
         private _showOpenAnimation(): void {
@@ -149,4 +148,4 @@ namespace TwnsMcrJoinPasswordPanel {
     }
 }
 
-export default TwnsMcrJoinPasswordPanel;
+export default TwnsCommonJoinRoomPasswordPanel;

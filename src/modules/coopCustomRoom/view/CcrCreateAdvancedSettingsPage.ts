@@ -1,4 +1,5 @@
 
+import TwnsCommonBanCoPanel     from "../../common/view/CommonBanCoPanel";
 import TwnsCommonChooseCoPanel  from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
@@ -8,6 +9,7 @@ import FloatText                from "../../tools/helpers/FloatText";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import ProtoTypes               from "../../tools/proto/ProtoTypes";
 import TwnsUiButton             from "../../tools/ui/UiButton";
@@ -17,13 +19,11 @@ import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
 import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
 import CcrCreateModel           from "../model/CcrCreateModel";
-import TwnsCcrCreateBanCoPanel  from "./CcrCreateBanCoPanel";
 
 namespace TwnsCcrCreateAdvancedSettingsPage {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
     import CommonChooseCoPanel  = TwnsCommonChooseCoPanel.CommonChooseCoPanel;
-    import CcrCreateBanCoPanel  = TwnsCcrCreateBanCoPanel.CcrCreateBanCoPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;
@@ -337,7 +337,35 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => CcrCreateBanCoPanel.show({ playerIndex });
+            this._callbackForTouchLabelValue    = () => {
+                const configVersion = ConfigManager.getLatestFormalVersion();
+                const selfCoId      = playerIndex === CcrCreateModel.getSelfPlayerIndex() ? CcrCreateModel.getSelfCoId() : undefined;
+                TwnsCommonBanCoPanel.CommonBanCoPanel.show({
+                    playerIndex,
+                    configVersion,
+                    maxBanCount         : undefined,
+                    fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                    bannedCoIdArray     : CcrCreateModel.getBannedCoIdArray(playerIndex) || [],
+                    selfCoId,
+                    callbackOnConfirm   : (bannedCoIdSet) => {
+                        const callback = () => {
+                            CcrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
+                            Notify.dispatch(NotifyType.CcrCreateBannedCoIdArrayChanged);
+                        };
+                        if (!bannedCoIdSet.has(selfCoId)) {
+                            callback();
+                        } else {
+                            CommonConfirmPanel.show({
+                                content : Lang.getText(LangTextType.A0057),
+                                callback: () => {
+                                    CcrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
+                                    callback();
+                                },
+                            });
+                        }
+                    },
+                });
+            };
         }
         private _updateComponentsForValueAsInitialFund(playerIndex: number): void {
             this._labelValue.visible            = false;

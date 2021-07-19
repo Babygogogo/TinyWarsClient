@@ -1,4 +1,5 @@
 
+import TwnsCommonJoinRoomPasswordPanel  from "../../common/view/CommonJoinRoomPasswordPanel";
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
 import CcrModel                         from "../../coopCustomRoom/model/CcrModel";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
@@ -21,7 +22,6 @@ import UserModel                        from "../../user/model/UserModel";
 import WarMapModel                      from "../../warMap/model/WarMapModel";
 import CcrJoinModel                     from "../model/CcrJoinModel";
 import CcrProxy                         from "../model/CcrProxy";
-import TwnsCcrJoinPasswordPanel         from "./CcrJoinPasswordPanel";
 import TwnsCcrMainMenuPanel             from "./CcrMainMenuPanel";
 import TwnsCcrRoomAdvancedSettingsPage  from "./CcrRoomAdvancedSettingsPage";
 import TwnsCcrRoomBasicSettingsPage     from "./CcrRoomBasicSettingsPage";
@@ -29,7 +29,6 @@ import TwnsCcrRoomInfoPanel             from "./CcrRoomInfoPanel";
 import TwnsCcrRoomPlayerInfoPage        from "./CcrRoomPlayerInfoPage";
 
 namespace TwnsCcrJoinRoomListPanel {
-    import CcrJoinPasswordPanel                     = TwnsCcrJoinPasswordPanel.CcrJoinPasswordPanel;
     import CcrRoomInfoPanel                         = TwnsCcrRoomInfoPanel.CcrRoomInfoPanel;
     import OpenDataForCcrRoomAdvancedSettingsPage   = TwnsCcrRoomAdvancedSettingsPage.OpenDataForCcrRoomAdvancedSettingsPage;
     import CcrRoomAdvancedSettingsPage              = TwnsCcrRoomAdvancedSettingsPage.CcrRoomAdvancedSettingsPage;
@@ -175,9 +174,8 @@ namespace TwnsCcrJoinRoomListPanel {
         private async _onTouchedBtnNextStep(): Promise<void> {
             const roomInfo = await CcrModel.getRoomInfo(CcrJoinModel.getTargetRoomId());
             if (roomInfo) {
-                if (roomInfo.settingsForCcw.warPassword) {
-                    CcrJoinPasswordPanel.show({ roomInfo });
-                } else {
+                const settingsForCcw    = roomInfo.settingsForCcw;
+                const callback          = () => {
                     const joinData = CcrJoinModel.getFastJoinData(roomInfo);
                     if (joinData) {
                         CcrProxy.reqCcrJoinRoom(joinData);
@@ -185,6 +183,16 @@ namespace TwnsCcrJoinRoomListPanel {
                         FloatText.show(Lang.getText(LangTextType.A0145));
                         CcrProxy.reqCcrGetJoinableRoomInfoList();
                     }
+                };
+                if (!settingsForCcw.warPassword) {
+                    callback();
+                } else {
+                    TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
+                        warName             : settingsForCcw.warName,
+                        mapId               : settingsForCcw.mapId,
+                        password            : settingsForCcw.warPassword,
+                        callbackOnSucceed   : callback,
+                    });
                 }
             }
         }
@@ -412,9 +420,8 @@ namespace TwnsCcrJoinRoomListPanel {
                 return;
             }
 
-            if (roomInfo.settingsForCcw.warPassword) {
-                CcrJoinPasswordPanel.show({ roomInfo });
-            } else {
+            const settingsForCcw    = roomInfo.settingsForCcw;
+            const callback          = () => {
                 const joinData = CcrJoinModel.getFastJoinData(roomInfo);
                 if (joinData) {
                     CcrProxy.reqCcrJoinRoom(joinData);
@@ -422,6 +429,16 @@ namespace TwnsCcrJoinRoomListPanel {
                     FloatText.show(Lang.getText(LangTextType.A0145));
                     CcrProxy.reqCcrGetJoinableRoomInfoList();
                 }
+            };
+            if (!settingsForCcw.warPassword) {
+                callback();
+            } else {
+                TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
+                    warName             : settingsForCcw.warName,
+                    mapId               : settingsForCcw.mapId,
+                    password            : settingsForCcw.warPassword,
+                    callbackOnSucceed   : callback,
+                });
             }
         }
 
