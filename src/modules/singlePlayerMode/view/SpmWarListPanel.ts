@@ -74,7 +74,7 @@ namespace TwnsSpmWarListPanel {
             this.skinName = "resource/skins/singlePlayerMode/SpmWarListPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.SpmPreviewingWarSaveSlotChanged,    callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
@@ -89,7 +89,7 @@ namespace TwnsSpmWarListPanel {
 
             this._showOpenAnimation();
 
-            this._initTabSettings();
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();

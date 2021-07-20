@@ -73,7 +73,7 @@ namespace TwnsMfwMyWarListPanel {
             this.skinName = "resource/skins/multiFreeWar/MfwMyWarListPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MfwPreviewingWarIdChanged,      callback: this._onNotifyMfwPreviewingWarIdChanged },
@@ -89,7 +89,7 @@ namespace TwnsMfwMyWarListPanel {
             this._showOpenAnimation();
 
             this._hasReceivedData = false;
-            this._initTabSettings();
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();

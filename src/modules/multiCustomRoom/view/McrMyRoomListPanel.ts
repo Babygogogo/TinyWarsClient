@@ -76,7 +76,7 @@ namespace TwnsMcrMyRoomListPanel {
             this.skinName = "resource/skins/multiCustomRoom/McrMyRoomListPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.McrJoinedPreviewingRoomIdChanged,    callback: this._onNotifyMcrJoinedPreviewingRoomIdChanged },
@@ -98,7 +98,7 @@ namespace TwnsMcrMyRoomListPanel {
             this._showOpenAnimation();
 
             this._hasReceivedData = false;
-            this._initTabSettings();
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();

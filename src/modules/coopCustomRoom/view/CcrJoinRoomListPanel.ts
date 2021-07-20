@@ -81,7 +81,7 @@ namespace TwnsCcrJoinRoomListPanel {
             this.skinName = "resource/skins/coopCustomRoom/CcrJoinRoomListPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.CcrJoinTargetRoomIdChanged,      callback: this._onNotifyCcrJoinTargetRoomIdChanged },
@@ -103,7 +103,7 @@ namespace TwnsCcrJoinRoomListPanel {
             this._showOpenAnimation();
 
             this._hasReceivedData = false;
-            this._initTabSettings();
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupRoomList();
             this._updateComponentsForTargetRoomInfo();

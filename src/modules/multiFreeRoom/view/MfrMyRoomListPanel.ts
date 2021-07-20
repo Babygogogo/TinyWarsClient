@@ -1,5 +1,6 @@
 
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import MfrModel                         from "../../multiFreeRoom/model/MfrModel";
@@ -20,7 +21,6 @@ import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
 import MfrJoinModel                     from "../model/MfrJoinModel";
 import TwnsMfrMainMenuPanel             from "./MfrMainMenuPanel";
 import TwnsMfrRoomAdvancedSettingsPage  from "./MfrRoomAdvancedSettingsPage";
-import TwnsMfrRoomBasicSettingsPage     from "./MfrRoomBasicSettingsPage";
 import TwnsMfrRoomInfoPanel             from "./MfrRoomInfoPanel";
 import TwnsMfrRoomPlayerInfoPage        from "./MfrRoomPlayerInfoPage";
 
@@ -28,8 +28,7 @@ namespace TwnsMfrMyRoomListPanel {
     import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMfrRoomPlayerInfoPage         = TwnsMfrRoomPlayerInfoPage.OpenDataForMfrRoomPlayerInfoPage;
     import MfrRoomPlayerInfoPage                    = TwnsMfrRoomPlayerInfoPage.MfrRoomPlayerInfoPage;
-    import OpenDataForMfrRoomBasicSettingsPage      = TwnsMfrRoomBasicSettingsPage.OpenDataForMfrRoomBasicSettingsPage;
-    import MfrRoomBasicSettingsPage                 = TwnsMfrRoomBasicSettingsPage.MfrRoomBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForMfrRoomAdvancedSettingsPage   = TwnsMfrRoomAdvancedSettingsPage.OpenDataForMfrRoomAdvancedSettingsPage;
     import MfrRoomAdvancedSettingsPage              = TwnsMfrRoomAdvancedSettingsPage.MfrRoomAdvancedSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
@@ -42,7 +41,7 @@ namespace TwnsMfrMyRoomListPanel {
         private static _instance: MfrMyRoomListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMfrRoomPlayerInfoPage | OpenDataForMfrRoomAdvancedSettingsPage | OpenDataForMfrRoomBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMfrRoomPlayerInfoPage | OpenDataForMfrRoomAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -77,7 +76,7 @@ namespace TwnsMfrMyRoomListPanel {
             this.skinName = "resource/skins/multiFreeRoom/MfrMyRoomListPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MfrJoinedPreviewingRoomIdChanged,    callback: this._onNotifyMfrJoinedPreviewingRoomIdChanged },
@@ -99,7 +98,7 @@ namespace TwnsMfrMyRoomListPanel {
             this._showOpenAnimation();
 
             this._hasReceivedData = false;
-            this._initTabSettings();
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
@@ -152,6 +151,7 @@ namespace TwnsMfrMyRoomListPanel {
             const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomInfo.IS;
             if (data.roomId === MfrJoinModel.getJoinedPreviewingRoomId()) {
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
@@ -189,8 +189,8 @@ namespace TwnsMfrMyRoomListPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : MfrRoomBasicSettingsPage,
-                    pageData    : { roomId: null } as OpenDataForMfrRoomBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -245,14 +245,18 @@ namespace TwnsMfrMyRoomListPanel {
 
                 const tab = this._tabSettings;
                 tab.updatePageData(1, { roomId } as OpenDataForMfrRoomPlayerInfoPage);
-                tab.updatePageData(2, { roomId } as OpenDataForMfrRoomBasicSettingsPage);
                 tab.updatePageData(3, { roomId } as OpenDataForMfrRoomAdvancedSettingsPage);
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
         private async _updateCommonMapInfoPage(): Promise<void> {
             this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
         }
 
         private _createDataForListRoom(): DataForRoomRenderer[] {
@@ -271,6 +275,10 @@ namespace TwnsMfrMyRoomListPanel {
             return warData == null
                 ? {}
                 : { warInfo: { warData } };
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            return await MfrModel.createDataForCommonWarBasicSettingsPage(MfrJoinModel.getJoinedPreviewingRoomId(), true);
         }
 
         private _showOpenAnimation(): void {

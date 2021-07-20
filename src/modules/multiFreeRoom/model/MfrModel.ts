@@ -1,16 +1,21 @@
 
-import Helpers              from "../../tools/helpers/Helpers";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
-import MfrProxy             from "../../multiFreeRoom/model/MfrProxy";
-import UserModel            from "../../user/model/UserModel";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
+import MfrProxy                         from "../../multiFreeRoom/model/MfrProxy";
+import Helpers                          from "../../tools/helpers/Helpers";
+import Logger                           from "../../tools/helpers/Logger";
+import Types                            from "../../tools/helpers/Types";
+import Notify                           from "../../tools/notify/Notify";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers                   from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel                        from "../../user/model/UserModel";
 
 namespace MfrModel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import IMfrRoomInfo     = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
-    import NetMessage       = ProtoTypes.NetMessage;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import IMfrRoomInfo                             = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
+    import NetMessage                               = ProtoTypes.NetMessage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const _roomInfoDict         = new Map<number, IMfrRoomInfo>();
     const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgMfrGetRoomInfo.IS | undefined | null) => void)[]>();
@@ -230,6 +235,86 @@ namespace MfrModel {
             && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
             && (playerDataList.length === WarRuleHelpers.getPlayersCount(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule))
             && (playerDataList.every(v => v.isReady));
+    }
+
+    export async function createDataForCommonWarBasicSettingsPage(roomId: number, showPassword: boolean): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return { dataArrayForListSettings: [] };
+        }
+
+        const settingsForMfw    = roomInfo.settingsForMfw;
+        const warRule           = settingsForMfw.initialWarData.settingsForCommon.warRule;
+        const bootTimerParams   = settingsForMfw.bootTimerParams;
+        const warPassword       = settingsForMfw.warPassword;
+        const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const openData          : OpenDataForCommonWarBasicSettingsPage = {
+            dataArrayForListSettings    : [
+                {
+                    settingsType    : WarBasicSettingsType.WarName,
+                    currentValue    : settingsForMfw.warName,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarPassword,
+                    currentValue    : warPassword == null ? undefined : (showPassword ? warPassword : `****`),
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarComment,
+                    currentValue    : settingsForMfw.warComment,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarRuleTitle,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.HasFog,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerType,
+                    currentValue    : timerType,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            ],
+        };
+        if (timerType === Types.BootTimerType.Regular) {
+            openData.dataArrayForListSettings.push({
+                settingsType    : WarBasicSettingsType.TimerRegularParam,
+                currentValue    : bootTimerParams[1],
+                warRule,
+                callbackOnModify: undefined,
+            });
+        } else if (timerType === Types.BootTimerType.Incremental) {
+            openData.dataArrayForListSettings.push(
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                    currentValue    : bootTimerParams[2],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            );
+        } else {
+            Logger.error(`MfrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+        }
+
+        return openData;
     }
 }
 

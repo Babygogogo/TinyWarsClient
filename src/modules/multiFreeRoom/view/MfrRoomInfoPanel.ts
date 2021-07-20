@@ -2,6 +2,7 @@
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
 import MfrModel                         from "../../multiFreeRoom/model/MfrModel";
 import MfrProxy                         from "../../multiFreeRoom/model/MfrProxy";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
@@ -26,7 +27,6 @@ import WarRuleHelpers                   from "../../tools/warHelpers/WarRuleHelp
 import UserModel                        from "../../user/model/UserModel";
 import TwnsMfrMyRoomListPanel           from "./MfrMyRoomListPanel";
 import TwnsMfrRoomAdvancedSettingsPage  from "./MfrRoomAdvancedSettingsPage";
-import TwnsMfrRoomBasicSettingsPage     from "./MfrRoomBasicSettingsPage";
 import TwnsMfrRoomPlayerInfoPage        from "./MfrRoomPlayerInfoPage";
 
 namespace TwnsMfrRoomInfoPanel {
@@ -35,8 +35,7 @@ namespace TwnsMfrRoomInfoPanel {
     import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMfrRoomPlayerInfoPage         = TwnsMfrRoomPlayerInfoPage.OpenDataForMfrRoomPlayerInfoPage;
     import MfrRoomPlayerInfoPage                    = TwnsMfrRoomPlayerInfoPage.MfrRoomPlayerInfoPage;
-    import OpenDataForMfrRoomBasicSettingsPage      = TwnsMfrRoomBasicSettingsPage.OpenDataForMfrRoomBasicSettingsPage;
-    import MfrRoomBasicSettingsPage                 = TwnsMfrRoomBasicSettingsPage.MfrRoomBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForMfrRoomAdvancedSettingsPage   = TwnsMfrRoomAdvancedSettingsPage.OpenDataForMfrRoomAdvancedSettingsPage;
     import MfrRoomAdvancedSettingsPage              = TwnsMfrRoomAdvancedSettingsPage.MfrRoomAdvancedSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
@@ -53,7 +52,7 @@ namespace TwnsMfrRoomInfoPanel {
         private static _instance: MfrRoomInfoPanel;
 
         private readonly _groupTab          : eui.Group;
-        private readonly _tabSettings       : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMfrRoomAdvancedSettingsPage | OpenDataForMfrRoomBasicSettingsPage | OpenDataForMfrRoomPlayerInfoPage>;
+        private readonly _tabSettings       : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMfrRoomAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForMfrRoomPlayerInfoPage>;
 
         private readonly _groupNavigator    : eui.Group;
         private readonly _labelMultiPlayer  : TwnsUiLabel.UiLabel;
@@ -143,10 +142,8 @@ namespace TwnsMfrRoomInfoPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : MfrRoomBasicSettingsPage,
-                    pageData    : {
-                        roomId
-                    } as OpenDataForMfrRoomBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -221,6 +218,7 @@ namespace TwnsMfrRoomInfoPanel {
                 this._updateGroupButton();
                 this._updateBtnChooseCo();
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
@@ -374,11 +372,19 @@ namespace TwnsMfrRoomInfoPanel {
             this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
         }
 
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+        }
+
         private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
             const warData = (await MfrModel.getRoomInfo(this._getOpenData().roomId))?.settingsForMfw.initialWarData;
             return warData == null
                 ? {}
                 : { warInfo: { warData } };
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            return MfrModel.createDataForCommonWarBasicSettingsPage(this._getOpenData().roomId, true);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

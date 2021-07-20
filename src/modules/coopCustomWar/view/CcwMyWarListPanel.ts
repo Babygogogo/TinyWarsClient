@@ -76,7 +76,7 @@ namespace TwnsCcwMyWarListPanel {
             this.skinName = "resource/skins/coopCustomWar/CcwMyWarListPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.CcwPreviewingWarIdChanged,      callback: this._onNotifyCcwPreviewingWarIdChanged },
@@ -92,7 +92,7 @@ namespace TwnsCcwMyWarListPanel {
             this._showOpenAnimation();
 
             this._hasReceivedData = false;
-            this._initTabSettings();
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
