@@ -1,5 +1,6 @@
 
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import TwnsMcrMainMenuPanel             from "../../multiCustomRoom/view/McrMainMenuPanel";
@@ -20,7 +21,6 @@ import TwnsUiTab                        from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
 import WarMapModel                      from "../../warMap/model/WarMapModel";
 import TwnsMcwWarAdvancedSettingsPage   from "./McwWarAdvancedSettingsPage";
-import TwnsMcwWarBasicSettingsPage      from "./McwWarBasicSettingsPage";
 import TwnsMcwWarPlayerInfoPage         from "./McwWarPlayerInfoPage";
 
 namespace TwnsMcwMyWarListPanel {
@@ -29,8 +29,7 @@ namespace TwnsMcwMyWarListPanel {
     import OpenDataForMcwWarPlayerInfoPage          = TwnsMcwWarPlayerInfoPage.OpenDataForMcwWarPlayerInfoPage;
     import McwWarAdvancedSettingsPage               = TwnsMcwWarAdvancedSettingsPage.McwWarAdvancedSettingsPage;
     import OpenDataForMcwWarAdvancedSettingsPage    = TwnsMcwWarAdvancedSettingsPage.OpenDataForMcwWarAdvancedSettingsPage;
-    import McwWarBasicSettingsPage                  = TwnsMcwWarBasicSettingsPage.McwWarBasicSettingsPage;
-    import OpenDataForMcwWarBasicSettingsPage       = TwnsMcwWarBasicSettingsPage.OpenDataForMcwWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import LangTextType                             = TwnsLangTextType.LangTextType;
 
@@ -42,7 +41,7 @@ namespace TwnsMcwMyWarListPanel {
         private static _instance: McwMyWarListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMcwWarPlayerInfoPage | OpenDataForMcwWarAdvancedSettingsPage | OpenDataForMcwWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMcwWarPlayerInfoPage | OpenDataForMcwWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -139,7 +138,7 @@ namespace TwnsMcwMyWarListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _initTabSettings(): void {
+        private async _initTabSettings(): Promise<void> {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
@@ -153,8 +152,8 @@ namespace TwnsMcwMyWarListPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : McwWarBasicSettingsPage,
-                    pageData    : { warId: null } as OpenDataForMcwWarBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -210,14 +209,18 @@ namespace TwnsMcwMyWarListPanel {
 
                 const tab = this._tabSettings;
                 tab.updatePageData(1, { warId } as OpenDataForMcwWarPlayerInfoPage);
-                tab.updatePageData(2, { warId } as OpenDataForMcwWarBasicSettingsPage);
                 tab.updatePageData(3, { warId } as OpenDataForMcwWarAdvancedSettingsPage);
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
         private _updateCommonMapInfoPage(): void {
             this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
         }
 
         private _createDataForListWar(): DataForWarRenderer[] {
@@ -241,6 +244,10 @@ namespace TwnsMcwMyWarListPanel {
             return mapId == null
                 ? {}
                 : { mapInfo: { mapId } };
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            return await MpwModel.createDataForCommonWarBasicSettingsPage(MpwModel.getMcwPreviewingWarId());
         }
 
         private _showOpenAnimation(): void {

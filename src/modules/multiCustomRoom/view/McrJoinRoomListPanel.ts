@@ -1,6 +1,7 @@
 
 import TwnsCommonJoinRoomPasswordPanel  from "../../common/view/CommonJoinRoomPasswordPanel";
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import McrModel                         from "../../multiCustomRoom/model/McrModel";
@@ -24,7 +25,6 @@ import WarMapModel                      from "../../warMap/model/WarMapModel";
 import McrJoinModel                     from "../model/McrJoinModel";
 import TwnsMcrMainMenuPanel             from "./McrMainMenuPanel";
 import TwnsMcrRoomAdvancedSettingsPage  from "./McrRoomAdvancedSettingsPage";
-import TwnsMcrRoomBasicSettingsPage     from "./McrRoomBasicSettingsPage";
 import TwnsMcrRoomInfoPanel             from "./McrRoomInfoPanel";
 import TwnsMcrRoomPlayerInfoPage        from "./McrRoomPlayerInfoPage";
 
@@ -35,8 +35,7 @@ namespace TwnsMcrJoinRoomListPanel {
     import McrRoomPlayerInfoPage                    = TwnsMcrRoomPlayerInfoPage.McrRoomPlayerInfoPage;
     import OpenDataForMcrRoomAdvancedSettingsPage   = TwnsMcrRoomAdvancedSettingsPage.OpenDataForMcrRoomAdvancedSettingsPage;
     import McrRoomAdvancedSettingsPage              = TwnsMcrRoomAdvancedSettingsPage.McrRoomAdvancedSettingsPage;
-    import OpenDataForMcrRoomBasicSettingsPage      = TwnsMcrRoomBasicSettingsPage.OpenDataForMcrRoomBasicSettingsPage;
-    import McrRoomBasicSettingsPage                 = TwnsMcrRoomBasicSettingsPage.McrRoomBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
@@ -47,7 +46,7 @@ namespace TwnsMcrJoinRoomListPanel {
         private static _instance: McrJoinRoomListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMcrRoomPlayerInfoPage | OpenDataForMcrRoomAdvancedSettingsPage | OpenDataForMcrRoomBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMcrRoomPlayerInfoPage | OpenDataForMcrRoomAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -161,6 +160,7 @@ namespace TwnsMcrJoinRoomListPanel {
             const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomInfo.IS;
             if (data.roomId === McrJoinModel.getTargetRoomId()) {
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
@@ -205,7 +205,7 @@ namespace TwnsMcrJoinRoomListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
-                    pageData    : await this._generateDataForCommonMapInfoPage(),
+                    pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -214,8 +214,8 @@ namespace TwnsMcrJoinRoomListPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : McrRoomBasicSettingsPage,
-                    pageData    : { roomId: null } as OpenDataForMcrRoomBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -270,14 +270,18 @@ namespace TwnsMcrJoinRoomListPanel {
 
                 const tab = this._tabSettings;
                 tab.updatePageData(1, { roomId } as OpenDataForMcrRoomPlayerInfoPage);
-                tab.updatePageData(2, { roomId } as OpenDataForMcrRoomBasicSettingsPage);
                 tab.updatePageData(3, { roomId } as OpenDataForMcrRoomAdvancedSettingsPage);
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
         private async _updateCommonMapInfoPage(): Promise<void> {
-            this._tabSettings.updatePageData(0, await this._generateDataForCommonMapInfoPage());
+            this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
         }
 
         private _createDataForListRoom(): DataForRoomRenderer[] {
@@ -291,11 +295,15 @@ namespace TwnsMcrJoinRoomListPanel {
             return dataArray.sort((v1, v2) => v1.roomId - v2.roomId);
         }
 
-        private async _generateDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
             const mapId = (await McrModel.getRoomInfo(McrJoinModel.getTargetRoomId()))?.settingsForMcw?.mapId;
             return mapId == null
                 ? {}
                 : { mapInfo : { mapId, }, };
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            return McrModel.createDataForCommonWarBasicSettingsPage(McrJoinModel.getTargetRoomId(), false);
         }
 
         private _showOpenAnimation(): void {

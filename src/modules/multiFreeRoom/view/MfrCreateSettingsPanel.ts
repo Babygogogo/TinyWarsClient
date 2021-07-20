@@ -1,5 +1,6 @@
 
 import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
@@ -7,6 +8,7 @@ import CommonConstants                      from "../../tools/helpers/CommonCons
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
+import Logger from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
 import TwnsLangTextType                     from "../../tools/lang/LangTextType";
@@ -23,18 +25,18 @@ import WarCommonHelpers                     from "../../tools/warHelpers/WarComm
 import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
 import MfrCreateModel                       from "../model/MfrCreateModel";
 import TwnsMfrCreateAdvancedSettingsPage    from "./MfrCreateAdvancedSettingsPage";
-import TwnsMfrCreateBasicSettingsPage       from "./MfrCreateBasicSettingsPage";
 import TwnsMfrCreatePlayerInfoPage          from "./MfrCreatePlayerInfoPage";
 import TwnsMfrMainMenuPanel                 from "./MfrMainMenuPanel";
 
 namespace TwnsMfrCreateSettingsPanel {
-    import MfrMainMenuPanel                 = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
-    import MfrCreateAdvancedSettingsPage    = TwnsMfrCreateAdvancedSettingsPage.MfrCreateAdvancedSettingsPage;
-    import MfrCreateBasicSettingsPage       = TwnsMfrCreateBasicSettingsPage.MfrCreateBasicSettingsPage;
-    import OpenDataForCommonMapInfoPage     = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
-    import MfrCreatePlayerInfoPage          = TwnsMfrCreatePlayerInfoPage.MfrCreatePlayerInfoPage;
-    import LangTextType                     = TwnsLangTextType.LangTextType;
-    import NotifyType                       = TwnsNotifyType.NotifyType;
+    import MfrMainMenuPanel                         = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
+    import MfrCreateAdvancedSettingsPage            = TwnsMfrCreateAdvancedSettingsPage.MfrCreateAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
+    import MfrCreatePlayerInfoPage                  = TwnsMfrCreatePlayerInfoPage.MfrCreatePlayerInfoPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -60,7 +62,7 @@ namespace TwnsMfrCreateSettingsPanel {
         private readonly _sclSkinId             : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonMapInfoPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonMapInfoPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _btnBack               : TwnsUiButton.UiButton;
         private readonly _btnConfirm            : TwnsUiButton.UiButton;
@@ -101,7 +103,8 @@ namespace TwnsMfrCreateSettingsPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : MfrCreateBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -211,6 +214,104 @@ namespace TwnsMfrCreateSettingsPanel {
             return warData == null
                 ? {}
                 : { warInfo: { warData } };
+        }
+
+        private _updateCommonWarBasicSettingsPage(): void {
+            this._tabSettings.updatePageData(0, this._createDataForCommonWarBasicSettingsPage());
+        }
+
+        private _createDataForCommonWarBasicSettingsPage(): OpenDataForCommonWarBasicSettingsPage {
+            const warRule           = MfrCreateModel.getWarRule();
+            const bootTimerParams   = MfrCreateModel.getBootTimerParams();
+            const timerType         = bootTimerParams[0] as Types.BootTimerType;
+            const openData          : OpenDataForCommonWarBasicSettingsPage = {
+                dataArrayForListSettings: [
+                    {
+                        settingsType    : WarBasicSettingsType.WarName,
+                        currentValue    : MfrCreateModel.getWarName(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            MfrCreateModel.setWarName(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarPassword,
+                        currentValue    : MfrCreateModel.getWarPassword(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            MfrCreateModel.setWarPassword(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarComment,
+                        currentValue    : MfrCreateModel.getWarComment(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            MfrCreateModel.setWarComment(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarRuleTitle,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.HasFog,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerType,
+                        currentValue    : timerType,
+                        warRule,
+                        callbackOnModify: async () => {
+                            MfrCreateModel.tickBootTimerType();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                ],
+            };
+            if (timerType === Types.BootTimerType.Regular) {
+                openData.dataArrayForListSettings.push({
+                    settingsType    : WarBasicSettingsType.TimerRegularParam,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: () => {
+                        MfrCreateModel.tickTimerRegularTime();
+                        this._updateCommonWarBasicSettingsPage();
+                    },
+                });
+            } else if (timerType === Types.BootTimerType.Incremental) {
+                openData.dataArrayForListSettings.push(
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                        currentValue    : bootTimerParams[1],
+                        warRule,
+                        callbackOnModify: (newValue: number) => {
+                            MfrCreateModel.setTimerIncrementalInitialTime(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                        currentValue    : bootTimerParams[2],
+                        warRule,
+                        callbackOnModify: (newValue: number) => {
+                            MfrCreateModel.setTimerIncrementalIncrementalValue(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                );
+            } else {
+                Logger.error(`MfrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            }
+
+            return openData;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

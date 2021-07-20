@@ -1,5 +1,6 @@
 
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import FlowManager                      from "../../tools/helpers/FlowManager";
@@ -20,7 +21,6 @@ import WarMapModel                      from "../../warMap/model/WarMapModel";
 import SpmModel                         from "../model/SpmModel";
 import TwnsSpmMainMenuPanel             from "./SpmMainMenuPanel";
 import TwnsSpmWarAdvancedSettingsPage   from "./SpmWarAdvancedSettingsPage";
-import TwnsSpmWarBasicSettingsPage      from "./SpmWarBasicSettingsPage";
 import TwnsSpmWarPlayerInfoPage         from "./SpmWarPlayerInfoPage";
 
 namespace TwnsSpmWarListPanel {
@@ -31,8 +31,8 @@ namespace TwnsSpmWarListPanel {
     import SpmWarPlayerInfoPage                     = TwnsSpmWarPlayerInfoPage.SpmWarPlayerInfoPage;
     import OpenDataForSpmWarAdvancedSettingsPage    = TwnsSpmWarAdvancedSettingsPage.OpenDataForSpmWarAdvancedSettingsPage;
     import SpmWarAdvancedSettingsPage               = TwnsSpmWarAdvancedSettingsPage.SpmWarAdvancedSettingsPage;
-    import OpenDataForSpmWarBasicSettingsPage       = TwnsSpmWarBasicSettingsPage.OpenDataForSpmWarBasicSettingsPage;
-    import SpmWarBasicSettingsPage                  = TwnsSpmWarBasicSettingsPage.SpmWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     export class SpmWarListPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -41,7 +41,7 @@ namespace TwnsSpmWarListPanel {
         private static _instance: SpmWarListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForSpmWarPlayerInfoPage | OpenDataForSpmWarAdvancedSettingsPage | OpenDataForSpmWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForSpmWarPlayerInfoPage | OpenDataForSpmWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelSinglePlayer     : TwnsUiLabel.UiLabel;
@@ -136,7 +136,7 @@ namespace TwnsSpmWarListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _initTabSettings(): void {
+        private async _initTabSettings(): Promise<void> {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
@@ -150,8 +150,8 @@ namespace TwnsSpmWarListPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : SpmWarBasicSettingsPage,
-                    pageData    : { slotIndex: null } as OpenDataForSpmWarBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -206,14 +206,18 @@ namespace TwnsSpmWarListPanel {
 
                 const tab = this._tabSettings;
                 tab.updatePageData(1, { slotIndex } as OpenDataForSpmWarPlayerInfoPage);
-                tab.updatePageData(2, { slotIndex } as OpenDataForSpmWarBasicSettingsPage);
                 tab.updatePageData(3, { slotIndex } as OpenDataForSpmWarAdvancedSettingsPage);
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
         private _updateCommonMapInfoPage(): void {
             this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
         }
 
         private _createDataForListWar(): DataForWarRenderer[] {
@@ -248,6 +252,50 @@ namespace TwnsSpmWarListPanel {
             } else {
                 return {};
             }
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            const slotIndex = SpmModel.getPreviewingSlotIndex();
+            const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
+            const warData   = slotData?.warData;
+            if (warData == null) {
+                return { dataArrayForListSettings: [] };
+            }
+
+            const warRule   = warData.settingsForCommon.warRule;
+            const mapId     = WarCommonHelpers.getMapId(warData);
+            return { dataArrayForListSettings: [
+                {
+                    settingsType    : WarBasicSettingsType.MapName,
+                    warRule,
+                    currentValue    : mapId == null ? Lang.getText(LangTextType.B0321) : await WarMapModel.getMapNameInCurrentLanguage(mapId),
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
+                    warRule,
+                    currentValue    : slotIndex,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
+                    warRule,
+                    currentValue    : slotData.extraData?.slotComment,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarRuleTitle,
+                    warRule,
+                    currentValue    : undefined,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.HasFog,
+                    warRule,
+                    currentValue    : undefined,
+                    callbackOnModify: undefined,
+                },
+            ] };
         }
 
         private _showOpenAnimation(): void {

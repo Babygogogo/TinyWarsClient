@@ -1,16 +1,22 @@
 
-import Helpers          from "../../tools/helpers/Helpers";
-import Notify           from "../../tools/notify/Notify";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import CcrProxy         from "../../coopCustomRoom/model/CcrProxy";
-import UserModel        from "../../user/model/UserModel";
-import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
+import CcrProxy                         from "../../coopCustomRoom/model/CcrProxy";
+import Helpers                          from "../../tools/helpers/Helpers";
+import Logger                           from "../../tools/helpers/Logger";
+import Types                            from "../../tools/helpers/Types";
+import Notify                           from "../../tools/notify/Notify";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers                   from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel                        from "../../user/model/UserModel";
+import WarMapModel                      from "../../warMap/model/WarMapModel";
 
 namespace CcrModel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import ICcrRoomInfo     = ProtoTypes.CoopCustomRoom.ICcrRoomInfo;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+    import NetMessage                               = ProtoTypes.NetMessage;
+    import ICcrRoomInfo                             = ProtoTypes.CoopCustomRoom.ICcrRoomInfo;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
 
     export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgCcrCreateRoom.IC;
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgCcrJoinRoom.IC;
@@ -231,6 +237,92 @@ namespace CcrModel {
             && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
             && (playerDataList.length == WarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))
             && (playerDataList.every(v => v.isReady));
+    }
+
+    export async function createDataForCommonWarBasicSettingsPage(roomId: number, showPassword: boolean): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return { dataArrayForListSettings: [] };
+        }
+
+        const warRule           = roomInfo.settingsForCommon.warRule;
+        const settingsForCcw    = roomInfo.settingsForCcw;
+        const bootTimerParams   = settingsForCcw.bootTimerParams;
+        const warPassword       = settingsForCcw.warPassword;
+        const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const openData          : OpenDataForCommonWarBasicSettingsPage = {
+            dataArrayForListSettings    : [
+                {
+                    settingsType    : WarBasicSettingsType.MapName,
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(settingsForCcw.mapId),
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarName,
+                    currentValue    : settingsForCcw.warName,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarPassword,
+                    currentValue    : warPassword == null ? undefined : (showPassword ? warPassword : `****`),
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarComment,
+                    currentValue    : settingsForCcw.warComment,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarRuleTitle,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.HasFog,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerType,
+                    currentValue    : timerType,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            ],
+        };
+        if (timerType === Types.BootTimerType.Regular) {
+            openData.dataArrayForListSettings.push({
+                settingsType    : WarBasicSettingsType.TimerRegularParam,
+                currentValue    : bootTimerParams[1],
+                warRule,
+                callbackOnModify: undefined,
+            });
+        } else if (timerType === Types.BootTimerType.Incremental) {
+            openData.dataArrayForListSettings.push(
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                    currentValue    : bootTimerParams[2],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            );
+        } else {
+            Logger.error(`CcrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+        }
+
+        return openData;
     }
 }
 

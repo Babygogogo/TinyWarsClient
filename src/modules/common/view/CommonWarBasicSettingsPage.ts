@@ -1,6 +1,6 @@
 
-import McrModel                 from "../../multiCustomRoom/model/McrModel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Logger                   from "../../tools/helpers/Logger";
 import Types                    from "../../tools/helpers/Types";
@@ -13,9 +13,9 @@ import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
-import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
-import WarMapModel              from "../../warMap/model/WarMapModel";
+import TwnsCommonConfirmPanel   from "./CommonConfirmPanel";
 import TwnsCommonHelpPanel      from "./CommonHelpPanel";
+import TwnsCommonInputPanel     from "./CommonInputPanel";
 
 namespace TwnsCommonWarBasicSettingsPage {
     import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
@@ -24,44 +24,10 @@ namespace TwnsCommonWarBasicSettingsPage {
     import WarBasicSettingsType = Types.WarBasicSettingsType;
 
     export type OpenDataForCommonWarBasicSettingsPage = {
-        roomId  : number | null;
+        dataArrayForListSettings    : DataForSettingsRenderer[];
     };
     export class CommonWarBasicSettingsPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonWarBasicSettingsPage> {
         private readonly _listSettings  : TwnsUiScrollList.UiScrollList<DataForSettingsRenderer>;
-
-        private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
-        private readonly _labelMapName                  : TwnsUiLabel.UiLabel;
-
-        private readonly _labelWarNameTitle             : TwnsUiLabel.UiLabel;
-        private readonly _labelWarName                  : TwnsUiLabel.UiLabel;
-
-        private readonly _labelWarPasswordTitle         : TwnsUiLabel.UiLabel;
-        private readonly _labelWarPassword              : TwnsUiLabel.UiLabel;
-
-        private readonly _labelWarCommentTitle          : TwnsUiLabel.UiLabel;
-        private readonly _labelWarComment               : TwnsUiLabel.UiLabel;
-
-        private readonly _labelWarRuleTitle             : TwnsUiLabel.UiLabel;
-        private readonly _labelWarRule                  : TwnsUiLabel.UiLabel;
-
-        private readonly _labelHasFogTitle              : TwnsUiLabel.UiLabel;
-        private readonly _labelHasFog                   : TwnsUiLabel.UiLabel;
-        private readonly _btnHasFogHelp                 : TwnsUiButton.UiButton;
-
-        private readonly _groupTimer                    : eui.Group;
-        private readonly _labelTimerTypeTitle           : TwnsUiLabel.UiLabel;
-        private readonly _labelTimerType                : TwnsUiLabel.UiLabel;
-        private readonly _btnTimerTypeHelp              : TwnsUiButton.UiButton;
-
-        private readonly _groupTimerRegular             : eui.Group;
-        private readonly _labelTimerRegularTitle        : TwnsUiLabel.UiLabel;
-        private readonly _labelTimerRegular             : TwnsUiLabel.UiLabel;
-
-        private readonly _groupTimerIncremental         : eui.Group;
-        private readonly _labelTimerIncrementalTitle1   : TwnsUiLabel.UiLabel;
-        private readonly _labelTimerIncremental1        : TwnsUiLabel.UiLabel;
-        private readonly _labelTimerIncrementalTitle2   : TwnsUiLabel.UiLabel;
-        private readonly _labelTimerIncremental2        : TwnsUiLabel.UiLabel;
 
         public constructor() {
             super();
@@ -71,8 +37,9 @@ namespace TwnsCommonWarBasicSettingsPage {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.MsgMcrGetRoomInfo,  callback: this._onNotifyMsgMcrGetRoomInfo },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
+
             this._listSettings.setItemRenderer(SettingsRenderer);
             this.left   = 0;
             this.right  = 0;
@@ -82,10 +49,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             this._updateView();
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
-        // Event callbacks.
-        ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyMsgMcrGetRoomInfo(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateView();
         }
 
@@ -93,98 +57,15 @@ namespace TwnsCommonWarBasicSettingsPage {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            this._updateLabelWarName();
-            this._updateLabelWarPassword();
-            this._updateLabelWarComment();
-            this._updateLabelMapName();
-            this._updateLabelWarRule();
-            this._updateLabelHasFog();
-            this._updateGroupTimer();
-        }
-
-        private async _updateLabelWarName(): Promise<void> {
-            const roomInfo          = await this._getRoomInfo();
-            this._labelWarName.text = roomInfo ? roomInfo.settingsForMcw.warName : undefined;
-        }
-
-        private async _updateLabelWarPassword(): Promise<void> {
-            const roomInfo              = await this._getRoomInfo();
-            this._labelWarPassword.text = (roomInfo && roomInfo.settingsForMcw.warPassword) ? `****` : undefined;
-        }
-
-        private async _updateLabelWarComment(): Promise<void> {
-            const roomInfo              = await this._getRoomInfo();
-            this._labelWarComment.text  = roomInfo ? roomInfo.settingsForMcw.warComment : undefined;
-        }
-
-        private async _updateLabelMapName(): Promise<void> {
-            const roomInfo          = await this._getRoomInfo();
-            this._labelMapName.text = roomInfo ? await WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForMcw.mapId) : undefined;
-        }
-
-        private async _updateLabelWarRule(): Promise<void> {
-            const roomInfo          = await this._getRoomInfo();
-            const settingsForCommon = roomInfo ? roomInfo.settingsForCommon : undefined;
-            const label             = this._labelWarRule;
-            if (!settingsForCommon) {
-                label.text      = undefined;
-            } else {
-                label.text      = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
-                label.textColor = settingsForCommon.presetWarRuleId == null ? 0xFFFF00 : 0xFFFFFF;
-            }
-        }
-
-        private async _updateLabelHasFog(): Promise<void> {
-            const roomInfo      = await this._getRoomInfo();
-            const labelHasFog   = this._labelHasFog;
-            if (!roomInfo) {
-                labelHasFog.text = undefined;
-            } else {
-                const hasFog            = !!roomInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
-                labelHasFog.text        = Lang.getText(hasFog ? LangTextType.B0012 : LangTextType.B0013);
-                labelHasFog.textColor   = hasFog ? 0xFFFF00 : 0xFFFFFF;
-            }
-        }
-
-        private async _updateGroupTimer(): Promise<void> {
-            const groupTimer        = this._groupTimer;
-            const groupRegular      = this._groupTimerRegular;
-            const groupIncremental  = this._groupTimerIncremental;
-            (groupRegular.parent) && (groupRegular.parent.removeChild(groupRegular));
-            (groupIncremental.parent) && (groupIncremental.parent.removeChild(groupIncremental));
-
-            const roomInfo          = await this._getRoomInfo();
-            const params            = roomInfo ? roomInfo.settingsForMcw.bootTimerParams : undefined;
-            const labelTimerType    = this._labelTimerType;
-            if (!params) {
-                labelTimerType.text = undefined;
-            } else {
-                const timerType     : Types.BootTimerType = params[0];
-                labelTimerType.text = Lang.getBootTimerTypeName(timerType);
-
-                if (timerType === Types.BootTimerType.Regular) {
-                    groupTimer.addChild(groupRegular);
-                    this._labelTimerRegular.text = Helpers.getTimeDurationText2(params[1]);
-
-                } else if (timerType === Types.BootTimerType.Incremental) {
-                    groupTimer.addChild(groupIncremental);
-                    this._labelTimerIncremental1.text = Helpers.getTimeDurationText2(params[1]);
-                    this._labelTimerIncremental2.text = Helpers.getTimeDurationText2(params[2]);
-                }
-            }
-        }
-
-        private _getRoomInfo(): Promise<ProtoTypes.MultiCustomRoom.IMcrRoomInfo> {
-            return McrModel.getRoomInfo(this._getOpenData().roomId);
+            this._listSettings.bindData(this._getOpenData().dataArrayForListSettings);
         }
     }
 
     type DataForSettingsRenderer = {
-        warType         : Types.WarType;
         settingsType    : WarBasicSettingsType;
         currentValue    : number | string | undefined;
         warRule         : ProtoTypes.WarRule.IWarRule;
-        callbackOnModify: ((newValue: string | number) => void) | undefined;
+        callbackOnModify: ((newValue: string | number | undefined) => void) | undefined;
     };
     class SettingsRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSettingsRenderer> {
         private readonly _labelTitle    : TwnsUiLabel.UiLabel;
@@ -201,7 +82,6 @@ namespace TwnsCommonWarBasicSettingsPage {
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
         }
-
         protected _onDataChanged(): void {
             this._updateView();
         }
@@ -213,28 +93,33 @@ namespace TwnsCommonWarBasicSettingsPage {
                 return;
             }
 
-            // TODO
             const settingsType = data.settingsType;
-            if (settingsType === WarBasicSettingsType.WarName) {
-                this._updateViewAsWarName();
+            if (settingsType === WarBasicSettingsType.MapName) {
+                this._modifyAsMapName();
+            } else if (settingsType === WarBasicSettingsType.WarName) {
+                this._modifyAsWarName();
             } else if (settingsType === WarBasicSettingsType.WarPassword) {
-                this._updateViewAsWarPassword();
+                this._modifyAsWarPassword();
             } else if (settingsType === WarBasicSettingsType.WarComment) {
-                this._updateViewAsWarComment();
+                this._modifyAsWarComment();
             } else if (settingsType === WarBasicSettingsType.WarRuleTitle) {
-                this._updateViewAsWarRuleTitle();
+                this._modifyAsWarRuleTitle();
             } else if (settingsType === WarBasicSettingsType.HasFog) {
-                this._updateViewAsHasFog();
+                this._modifyAsHasFog();
             } else if (settingsType === WarBasicSettingsType.TimerType) {
-                this._updateViewAsTimerType();
+                this._modifyAsTimerType();
             } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
-                this._updateViewAsTimerRegularParam();
+                this._modifyAsTimerRegularParam();
             } else if (settingsType === WarBasicSettingsType.TimerIncrementalParam1) {
-                this._updateViewAsTimerIncrementalParam1();
+                this._modifyAsTimerIncrementalParam1();
             } else if (settingsType === WarBasicSettingsType.TimerIncrementalParam2) {
-                this._updateViewAsTimerIncrementalParam2();
+                this._modifyAsTimerIncrementalParam2();
+            } else if (settingsType === WarBasicSettingsType.SpmSaveSlotIndex) {
+                this._modifyAsSpmSaveSlotIndex();
+            } else if (settingsType === WarBasicSettingsType.SpmSaveSlotComment) {
+                this._modifyAsSpmSaveSlotComment();
             } else {
-                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._updateView() invalid settingsType.`);
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._onTouchedBtnModify() invalid settingsType: ${settingsType}`);
             }
         }
         private _onTouchedBtnHelp(): void {
@@ -281,8 +166,12 @@ namespace TwnsCommonWarBasicSettingsPage {
                 this._updateViewAsTimerIncrementalParam1();
             } else if (settingsType === WarBasicSettingsType.TimerIncrementalParam2) {
                 this._updateViewAsTimerIncrementalParam2();
+            } else if (settingsType === WarBasicSettingsType.SpmSaveSlotIndex) {
+                this._updateViewAsSpmSaveSlotIndex();
+            } else if (settingsType === WarBasicSettingsType.SpmSaveSlotComment) {
+                this._updateViewAsSpmSaveSlotComment();
             } else {
-                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._updateView() invalid settingsType.`);
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._updateView() invalid settingsType: ${settingsType}.`);
             }
         }
         private _updateViewAsMapName(): void {
@@ -292,17 +181,17 @@ namespace TwnsCommonWarBasicSettingsPage {
         }
         private _updateViewAsWarName(): void {
             const data              = this.data;
-            this._labelValue.text   = `${data.currentValue}`;
+            this._labelValue.text   = `${data.currentValue || ``}`;
             this._btnHelp.visible   = false;
         }
         private _updateViewAsWarPassword(): void {
             const data              = this.data;
-            this._labelValue.text   = `${data.currentValue}`;
+            this._labelValue.text   = `${data.currentValue || ``}`;
             this._btnHelp.visible   = false;
         }
         private _updateViewAsWarComment(): void {
             const data              = this.data;
-            this._labelValue.text   = `${data.currentValue}`;
+            this._labelValue.text   = `${data.currentValue || ``}`;
             this._btnHelp.visible   = false;
         }
         private _updateViewAsWarRuleTitle(): void {
@@ -318,7 +207,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             const hasFog            = data.warRule.ruleForGlobalParams.hasFogByDefault;
             const labelValue        = this._labelValue;
             labelValue.text         = Lang.getText(hasFog ? LangTextType.B0012 : LangTextType.B0013);
-            labelValue.textColor    = hasFog == null ? 0xFFFF00 : 0xFFFFFF;
+            labelValue.textColor    = hasFog ? 0xFFFF00 : 0xFFFFFF;
             this._btnHelp.visible   = true;
         }
         private _updateViewAsTimerType(): void {
@@ -340,6 +229,202 @@ namespace TwnsCommonWarBasicSettingsPage {
             const data              = this.data;
             this._labelValue.text   = Helpers.getTimeDurationText2(data.currentValue as number);
             this._btnHelp.visible   = false;
+        }
+        private _updateViewAsSpmSaveSlotIndex(): void {
+            const data              = this.data;
+            this._labelValue.text   = `${data.currentValue}`;
+            this._btnHelp.visible   = false;
+        }
+        private _updateViewAsSpmSaveSlotComment(): void {
+            const data              = this.data;
+            this._labelValue.text   = `${data.currentValue || ``}`;
+            this._btnHelp.visible   = false;
+        }
+
+        private _modifyAsMapName(): void {
+            // nothing to do
+        }
+        private _modifyAsWarName(): void {
+            const data      = this.data;
+            const callback  = data.callbackOnModify;
+            if (callback == null) {
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._modifyAsWarName() empty callback.`);
+                return;
+            }
+
+            const currentValue = data.currentValue;
+            TwnsCommonInputPanel.CommonInputPanel.show({
+                title           : Lang.getText(LangTextType.B0185),
+                currentValue    : `${currentValue}`,
+                maxChars        : CommonConstants.WarNameMaxLength,
+                charRestrict    : undefined,
+                tips            : undefined,
+                callback        : panel => {
+                    const newValue = panel.getInputText() || undefined;
+                    if (newValue != currentValue) {
+                        callback(newValue);
+                    }
+                },
+            });
+        }
+        private _modifyAsWarPassword(): void {
+            const data      = this.data;
+            const callback  = data.callbackOnModify;
+            if (callback == null) {
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._modifyAsWarPassword() empty callback.`);
+                return;
+            }
+
+            const currentValue = data.currentValue;
+            TwnsCommonInputPanel.CommonInputPanel.show({
+                title           : Lang.getText(LangTextType.B0186),
+                currentValue    : `${currentValue}`,
+                maxChars        : CommonConstants.WarPasswordMaxLength,
+                charRestrict    : `0-9`,
+                tips            : Lang.getFormattedText(LangTextType.F0068, CommonConstants.WarPasswordMaxLength),
+                callback        : panel => {
+                    const newValue = panel.getInputText() || undefined;
+                    if (newValue != currentValue) {
+                        callback(newValue);
+                    }
+                },
+            });
+        }
+        private _modifyAsWarComment(): void {
+            const data      = this.data;
+            const callback  = data.callbackOnModify;
+            if (callback == null) {
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._modifyAsWarComment() empty callback.`);
+                return;
+            }
+
+            const currentValue = data.currentValue;
+            TwnsCommonInputPanel.CommonInputPanel.show({
+                title           : Lang.getText(LangTextType.B0187),
+                currentValue    : `${currentValue}`,
+                maxChars        : CommonConstants.WarCommentMaxLength,
+                charRestrict    : undefined,
+                tips            : undefined,
+                callback        : panel => {
+                    const newValue = panel.getInputText() || undefined;
+                    if (newValue != currentValue) {
+                        callback(newValue);
+                    }
+                },
+            });
+        }
+        private _modifyAsWarRuleTitle(): void {
+            const data      = this.data;
+            const callback  = data.callbackOnModify;
+            if (callback == null) {
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._modifyAsWarRuleTitle() empty callback.`);
+                return;
+            }
+
+            callback(undefined);
+        }
+        private _modifyAsHasFog(): void {
+            const data      = this.data;
+            const callback  = data.callbackOnModify;
+            if (callback == null) {
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._modifyAsHasFog() empty callback.`);
+                return;
+            }
+
+            if (data.warRule.ruleId == null) {
+                callback(undefined);
+            } else {
+                TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                    content : Lang.getText(LangTextType.A0129),
+                    callback: () => callback(undefined),
+                });
+            }
+        }
+        private _modifyAsTimerType(): void {
+            const data      = this.data;
+            const callback  = data.callbackOnModify;
+            if (callback == null) {
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._modifyAsTimerType() empty callback.`);
+                return;
+            }
+
+            callback(undefined);
+        }
+        private _modifyAsTimerRegularParam(): void {
+            const data      = this.data;
+            const callback  = data.callbackOnModify;
+            if (callback == null) {
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._modifyAsTimerRegularParam() empty callback.`);
+                return;
+            }
+
+            callback(undefined);
+        }
+        private _modifyAsTimerIncrementalParam1(): void {
+            const data      = this.data;
+            const callback  = data.callbackOnModify;
+            if (callback == null) {
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._modifyAsTimerIncrementalParam1() empty callback.`);
+                return;
+            }
+
+            const minValue      = 1;
+            const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
+            const currentValue  = data.currentValue;
+            TwnsCommonInputPanel.CommonInputPanel.show({
+                title           : Lang.getText(LangTextType.B0389),
+                currentValue    : `${currentValue}`,
+                maxChars        : 5,
+                charRestrict    : `0-9`,
+                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
+                callback        : panel => {
+                    const text  = panel.getInputText();
+                    const value = text ? Number(text) : NaN;
+                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                        FloatText.show(Lang.getText(LangTextType.A0098));
+                    } else {
+                        if (value !== currentValue) {
+                            callback(value);
+                        }
+                    }
+                },
+            });
+        }
+        private _modifyAsTimerIncrementalParam2(): void {
+            const data      = this.data;
+            const callback  = data.callbackOnModify;
+            if (callback == null) {
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._modifyAsTimerIncrementalParam2() empty callback.`);
+                return;
+            }
+
+            const minValue      = 0;
+            const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
+            const currentValue  = data.currentValue;
+            TwnsCommonInputPanel.CommonInputPanel.show({
+                title           : Lang.getText(LangTextType.B0390),
+                currentValue    : `${currentValue}`,
+                maxChars        : 5,
+                charRestrict    : `0-9`,
+                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
+                callback        : panel => {
+                    const text  = panel.getInputText();
+                    const value = text ? Number(text) : NaN;
+                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                        FloatText.show(Lang.getText(LangTextType.A0098));
+                    } else {
+                        if (value !== currentValue) {
+                            callback(value);
+                        }
+                    }
+                },
+            });
+        }
+        private _modifyAsSpmSaveSlotIndex(): void {
+            FloatText.show("TODO");
+        }
+        private _modifyAsSpmSaveSlotComment(): void {
+            FloatText.show("TODO");
         }
     }
 }

@@ -1,16 +1,22 @@
 
-import Logger               from "../../tools/helpers/Logger";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import UserModel            from "../../user/model/UserModel";
-import MrrProxy             from "./MrrProxy";
-import MrrSelfSettingsModel from "./MrrSelfSettingsModel";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
+import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import Logger                           from "../../tools/helpers/Logger";
+import Types                            from "../../tools/helpers/Types";
+import Notify                           from "../../tools/notify/Notify";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+import UserModel                        from "../../user/model/UserModel";
+import WarMapModel                      from "../../warMap/model/WarMapModel";
+import MrrProxy                         from "./MrrProxy";
+import MrrSelfSettingsModel             from "./MrrSelfSettingsModel";
 
 namespace MrrModel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+    import NetMessage                               = ProtoTypes.NetMessage;
+    import IMrrRoomInfo                             = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
 
     let _previewingRoomId           : number;
     let _previewingMapId            : number;
@@ -35,7 +41,7 @@ namespace MrrModel {
     }
     export function getRoomInfo(roomId: number): Promise<IMrrRoomInfo | undefined | null> {
         if (roomId == null) {
-            return new Promise((resolve, reject) => resolve(null));
+            return new Promise((resolve) => resolve(null));
         }
 
         const localData = _allRoomDict.get(roomId);
@@ -44,12 +50,12 @@ namespace MrrModel {
         }
 
         if (_roomInfoRequests.has(roomId)) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 _roomInfoRequests.get(roomId).push(info => resolve(info.roomInfo));
             });
         }
 
-        new Promise<void>((resolve, reject) => {
+        new Promise<void>((resolve) => {
             const callbackOnSucceed = (e: egret.Event): void => {
                 const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
                 if (data.roomId === roomId) {
@@ -85,7 +91,7 @@ namespace MrrModel {
             MrrProxy.reqMrrGetRoomPublicInfo(roomId);
         });
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo)]);
         });
     }
@@ -236,6 +242,73 @@ namespace MrrModel {
             _previewingMapId = mapId;
             Notify.dispatch(NotifyType.MrrPreviewingMapIdChanged);
         }
+    }
+
+    export async function createDataForCommonWarBasicSettingsPage(roomId: number): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return { dataArrayForListSettings: [] };
+        }
+
+        const warRule           = roomInfo.settingsForCommon.warRule;
+        const settingsForMrw    = roomInfo.settingsForMrw;
+        const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+        const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const openData          : OpenDataForCommonWarBasicSettingsPage = {
+            dataArrayForListSettings    : [
+                {
+                    settingsType    : WarBasicSettingsType.MapName,
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(settingsForMrw.mapId),
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarRuleTitle,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.HasFog,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerType,
+                    currentValue    : timerType,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            ],
+        };
+        if (timerType === Types.BootTimerType.Regular) {
+            openData.dataArrayForListSettings.push({
+                settingsType    : WarBasicSettingsType.TimerRegularParam,
+                currentValue    : bootTimerParams[1],
+                warRule,
+                callbackOnModify: undefined,
+            });
+        } else if (timerType === Types.BootTimerType.Incremental) {
+            openData.dataArrayForListSettings.push(
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                    currentValue    : bootTimerParams[2],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            );
+        } else {
+            Logger.error(`MrrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+        }
+
+        return openData;
     }
 
     function checkIsMyRoom(roomInfo: IMrrRoomInfo): boolean {

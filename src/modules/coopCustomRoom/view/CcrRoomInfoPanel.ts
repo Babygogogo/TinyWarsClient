@@ -3,6 +3,7 @@ import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
 import CcrModel                         from "../../coopCustomRoom/model/CcrModel";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
@@ -28,7 +29,6 @@ import WarMapModel                      from "../../warMap/model/WarMapModel";
 import CcrProxy                         from "../model/CcrProxy";
 import TwnsCcrMyRoomListPanel           from "./CcrMyRoomListPanel";
 import TwnsCcrRoomAdvancedSettingsPage  from "./CcrRoomAdvancedSettingsPage";
-import TwnsCcrRoomBasicSettingsPage     from "./CcrRoomBasicSettingsPage";
 import TwnsCcrRoomPlayerInfoPage        from "./CcrRoomPlayerInfoPage";
 
 namespace TwnsCcrRoomInfoPanel {
@@ -39,8 +39,7 @@ namespace TwnsCcrRoomInfoPanel {
     import CcrMyRoomListPanel                       = TwnsCcrMyRoomListPanel.CcrMyRoomListPanel;
     import OpenDataForCcrRoomAdvancedSettingsPage   = TwnsCcrRoomAdvancedSettingsPage.OpenDataForCcrRoomAdvancedSettingsPage;
     import CcrRoomAdvancedSettingsPage              = TwnsCcrRoomAdvancedSettingsPage.CcrRoomAdvancedSettingsPage;
-    import OpenDataForCcrRoomBasicSettingsPage      = TwnsCcrRoomBasicSettingsPage.OpenDataForCcrRoomBasicSettingsPage;
-    import CcrRoomBasicSettingsPage                 = TwnsCcrRoomBasicSettingsPage.CcrRoomBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import NetMessage                               = ProtoTypes.NetMessage;
@@ -55,7 +54,7 @@ namespace TwnsCcrRoomInfoPanel {
         private static _instance: CcrRoomInfoPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCcrRoomBasicSettingsPage | OpenDataForCcrRoomAdvancedSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCcrRoomAdvancedSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -146,10 +145,8 @@ namespace TwnsCcrRoomInfoPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : CcrRoomBasicSettingsPage,
-                    pageData    : {
-                        roomId
-                    } as OpenDataForCcrRoomBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -254,6 +251,7 @@ namespace TwnsCcrRoomInfoPanel {
                 this._updateGroupButton();
                 this._updateBtnChooseCo();
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
@@ -407,11 +405,19 @@ namespace TwnsCcrRoomInfoPanel {
             this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
         }
 
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+        }
+
         private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
             const mapId = (await CcrModel.getRoomInfo(this._getOpenData().roomId))?.settingsForCcw?.mapId;
             return mapId == null
                 ? {}
                 : { mapInfo: { mapId } };
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            return CcrModel.createDataForCommonWarBasicSettingsPage(this._getOpenData().roomId, true);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

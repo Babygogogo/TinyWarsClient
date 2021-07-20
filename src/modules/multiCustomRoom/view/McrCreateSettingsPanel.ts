@@ -1,12 +1,14 @@
 
 import TwnsCommonChooseCoPanel              from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import McrProxy                             from "../../multiCustomRoom/model/McrProxy";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import ConfigManager                        from "../../tools/helpers/ConfigManager";
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
+import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
 import TwnsLangTextType                     from "../../tools/lang/LangTextType";
@@ -21,17 +23,18 @@ import TwnsUiTab                            from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
 import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
 import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
 import McrCreateModel                       from "../model/McrCreateModel";
 import TwnsMcrCreateAdvancedSettingsPage    from "./McrCreateAdvancedSettingsPage";
-import TwnsMcrCreateBasicSettingsPage       from "./McrCreateBasicSettingsPage";
 import TwnsMcrCreateMapListPanel            from "./McrCreateMapListPanel";
 
 namespace TwnsMcrCreateSettingsPanel {
-    import McrCreateAdvancedSettingsPage    = TwnsMcrCreateAdvancedSettingsPage.McrCreateAdvancedSettingsPage;
-    import McrCreateBasicSettingsPage       = TwnsMcrCreateBasicSettingsPage.McrCreateBasicSettingsPage;
-    import OpenDataForCommonMapInfoPage     = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
-    import LangTextType                     = TwnsLangTextType.LangTextType;
-    import NotifyType                       = TwnsNotifyType.NotifyType;
+    import McrCreateAdvancedSettingsPage            = TwnsMcrCreateAdvancedSettingsPage.McrCreateAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -61,7 +64,7 @@ namespace TwnsMcrCreateSettingsPanel {
         private readonly _sclSkinId             : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonMapInfoPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonMapInfoPage>;
 
         private readonly _btnBack               : TwnsUiButton.UiButton;
         private readonly _btnConfirm            : TwnsUiButton.UiButton;
@@ -86,7 +89,7 @@ namespace TwnsMcrCreateSettingsPanel {
             this.skinName = "resource/skins/multiCustomRoom/McrCreateSettingsPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
@@ -104,7 +107,8 @@ namespace TwnsMcrCreateSettingsPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : McrCreateBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -225,6 +229,116 @@ namespace TwnsMcrCreateSettingsPanel {
             this._sclSkinId.bindData(dataArray);
         }
 
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            const warRule           = McrCreateModel.getWarRule();
+            const bootTimerParams   = McrCreateModel.getBootTimerParams();
+            const timerType         = bootTimerParams[0] as Types.BootTimerType;
+            const openData          : OpenDataForCommonWarBasicSettingsPage = {
+                dataArrayForListSettings: [
+                    {
+                        settingsType    : WarBasicSettingsType.MapName,
+                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(McrCreateModel.getMapId()),
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarName,
+                        currentValue    : McrCreateModel.getWarName(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            McrCreateModel.setWarName(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarPassword,
+                        currentValue    : McrCreateModel.getWarPassword(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            McrCreateModel.setWarPassword(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarComment,
+                        currentValue    : McrCreateModel.getWarComment(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            McrCreateModel.setWarComment(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarRuleTitle,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: async () => {
+                            await McrCreateModel.tickPresetWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.HasFog,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: () => {
+                            McrCreateModel.setHasFog(!McrCreateModel.getHasFog());
+                            McrCreateModel.setCustomWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerType,
+                        currentValue    : timerType,
+                        warRule,
+                        callbackOnModify: async () => {
+                            McrCreateModel.tickBootTimerType();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                ],
+            };
+            if (timerType === Types.BootTimerType.Regular) {
+                openData.dataArrayForListSettings.push({
+                    settingsType    : WarBasicSettingsType.TimerRegularParam,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: () => {
+                        McrCreateModel.tickTimerRegularTime();
+                        this._updateCommonWarBasicSettingsPage();
+                    },
+                });
+            } else if (timerType === Types.BootTimerType.Incremental) {
+                openData.dataArrayForListSettings.push(
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                        currentValue    : bootTimerParams[1],
+                        warRule,
+                        callbackOnModify: (newValue: number) => {
+                            McrCreateModel.setTimerIncrementalInitialTime(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                        currentValue    : bootTimerParams[2],
+                        warRule,
+                        callbackOnModify: (newValue: number) => {
+                            McrCreateModel.setTimerIncrementalIncrementalValue(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                );
+            } else {
+                Logger.error(`McrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            }
+
+            return openData;
+        }
         private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
             const mapId = McrCreateModel.getMapId();
             return mapId == null

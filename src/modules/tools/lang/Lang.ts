@@ -264,6 +264,8 @@ namespace Lang {
             case Types.WarBasicSettingsType.TimerRegularParam       : return Lang.getText(LangTextType.B0021);
             case Types.WarBasicSettingsType.TimerIncrementalParam1  : return Lang.getText(LangTextType.B0389);
             case Types.WarBasicSettingsType.TimerIncrementalParam2  : return Lang.getText(LangTextType.B0390);
+            case Types.WarBasicSettingsType.SpmSaveSlotIndex        : return Lang.getText(LangTextType.B0255);
+            case Types.WarBasicSettingsType.SpmSaveSlotComment      : return Lang.getText(LangTextType.B0605);
             default                                                 : return undefined;
         }
     }

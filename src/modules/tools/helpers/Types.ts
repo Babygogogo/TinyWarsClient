@@ -663,6 +663,8 @@ namespace Types {
         TimerRegularParam,
         TimerIncrementalParam1,
         TimerIncrementalParam2,
+        SpmSaveSlotIndex,
+        SpmSaveSlotComment,
     }
 }
 

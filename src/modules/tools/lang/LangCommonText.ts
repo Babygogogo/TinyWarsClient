@@ -4045,6 +4045,10 @@ namespace TwnsLangCommonText {
             `无法在 %s 上放置部队。`,
             `It's not allowed to place units on %s.`,
         ],
+        [LangTextType.F0068]: [
+            `请输入数字，最多 %d 位`,
+            `Please enter a number, up to %d digits.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Rich strings.

@@ -1,6 +1,7 @@
 
 import TwnsCommonJoinRoomPasswordPanel  from "../../common/view/CommonJoinRoomPasswordPanel";
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
 import CcrModel                         from "../../coopCustomRoom/model/CcrModel";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
@@ -24,7 +25,6 @@ import CcrJoinModel                     from "../model/CcrJoinModel";
 import CcrProxy                         from "../model/CcrProxy";
 import TwnsCcrMainMenuPanel             from "./CcrMainMenuPanel";
 import TwnsCcrRoomAdvancedSettingsPage  from "./CcrRoomAdvancedSettingsPage";
-import TwnsCcrRoomBasicSettingsPage     from "./CcrRoomBasicSettingsPage";
 import TwnsCcrRoomInfoPanel             from "./CcrRoomInfoPanel";
 import TwnsCcrRoomPlayerInfoPage        from "./CcrRoomPlayerInfoPage";
 
@@ -32,8 +32,7 @@ namespace TwnsCcrJoinRoomListPanel {
     import CcrRoomInfoPanel                         = TwnsCcrRoomInfoPanel.CcrRoomInfoPanel;
     import OpenDataForCcrRoomAdvancedSettingsPage   = TwnsCcrRoomAdvancedSettingsPage.OpenDataForCcrRoomAdvancedSettingsPage;
     import CcrRoomAdvancedSettingsPage              = TwnsCcrRoomAdvancedSettingsPage.CcrRoomAdvancedSettingsPage;
-    import OpenDataForCcrRoomBasicSettingsPage      = TwnsCcrRoomBasicSettingsPage.OpenDataForCcrRoomBasicSettingsPage;
-    import CcrRoomBasicSettingsPage                 = TwnsCcrRoomBasicSettingsPage.CcrRoomBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCcrRoomPlayerInfoPage         = TwnsCcrRoomPlayerInfoPage.OpenDataForCcrRoomPlayerInfoPage;
     import CcrRoomPlayerInfoPage                    = TwnsCcrRoomPlayerInfoPage.CcrRoomPlayerInfoPage;
@@ -47,7 +46,7 @@ namespace TwnsCcrJoinRoomListPanel {
         private static _instance: CcrJoinRoomListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCcrRoomAdvancedSettingsPage | OpenDataForCcrRoomBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCcrRoomAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -214,8 +213,8 @@ namespace TwnsCcrJoinRoomListPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : CcrRoomBasicSettingsPage,
-                    pageData    : { roomId: null } as OpenDataForCcrRoomBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -270,14 +269,18 @@ namespace TwnsCcrJoinRoomListPanel {
 
                 const tab = this._tabSettings;
                 tab.updatePageData(1, { roomId } as OpenDataForCcrRoomPlayerInfoPage);
-                tab.updatePageData(2, { roomId } as OpenDataForCcrRoomBasicSettingsPage);
                 tab.updatePageData(3, { roomId } as OpenDataForCcrRoomAdvancedSettingsPage);
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
         private async _updateCommonMapInfoPage(): Promise<void> {
             this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
         }
 
         private _createDataForListRoom(): DataForRoomRenderer[] {
@@ -296,6 +299,10 @@ namespace TwnsCcrJoinRoomListPanel {
             return mapId == null
                 ? {}
                 : { mapInfo: { mapId } };
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            return await CcrModel.createDataForCommonWarBasicSettingsPage(CcrJoinModel.getTargetRoomId(), false);
         }
 
         private _showOpenAnimation(): void {

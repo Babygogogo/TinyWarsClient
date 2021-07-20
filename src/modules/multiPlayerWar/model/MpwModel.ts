@@ -1,36 +1,46 @@
 
-import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
-import TwnsCcwWar               from "../../coopCustomWar/model/CcwWar";
-import TwnsMcwWar               from "../../multiCustomWar/model/McwWar";
-import TwnsMfwWar               from "../../multiFreeWar/model/MfwWar";
-import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
-import TwnsMrwWar               from "../../multiRankWar/model/MrwWar";
-import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
-import FloatText                from "../../tools/helpers/FloatText";
-import FlowManager              from "../../tools/helpers/FlowManager";
-import Logger                   from "../../tools/helpers/Logger";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import Notify                   from "../../tools/notify/Notify";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import WarActionExecutor        from "../../tools/warHelpers/WarActionExecutor";
-import UserModel                from "../../user/model/UserModel";
-import TwnsMpwWar               from "./MpwWar";
+import TwnsCommonAlertPanel             from "../../common/view/CommonAlertPanel";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCcwWar                       from "../../coopCustomWar/model/CcwWar";
+import TwnsMcwWar                       from "../../multiCustomWar/model/McwWar";
+import TwnsMfwWar                       from "../../multiFreeWar/model/MfwWar";
+import MpwProxy                         from "../../multiPlayerWar/model/MpwProxy";
+import TwnsMrwWar                       from "../../multiRankWar/model/MrwWar";
+import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
+import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import FloatText                        from "../../tools/helpers/FloatText";
+import FlowManager                      from "../../tools/helpers/FlowManager";
+import Logger                           from "../../tools/helpers/Logger";
+import Types                            from "../../tools/helpers/Types";
+import Lang                             from "../../tools/lang/Lang";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import Notify                           from "../../tools/notify/Notify";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+import WarActionExecutor                from "../../tools/warHelpers/WarActionExecutor";
+import UserModel                        from "../../user/model/UserModel";
+import WarMapModel                      from "../../warMap/model/WarMapModel";
+import TwnsMpwWar                       from "./MpwWar";
 
 namespace MpwModel {
-    import MpwWar               = TwnsMpwWar.MpwWar;
-    import CcwWar               = TwnsCcwWar.CcwWar;
-    import McwWar               = TwnsMcwWar.McwWar;
-    import MfwWar               = TwnsMfwWar.MfwWar;
-    import MrwWar               = TwnsMrwWar.MrwWar;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import IMpwWarInfo          = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
-    import IMpwWatchInfo        = ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
-    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import MpwWar                                   = TwnsMpwWar.MpwWar;
+    import CcwWar                                   = TwnsCcwWar.CcwWar;
+    import McwWar                                   = TwnsMcwWar.McwWar;
+    import MfwWar                                   = TwnsMfwWar.MfwWar;
+    import MrwWar                                   = TwnsMrwWar.MrwWar;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+    import IMpwWarInfo                              = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
+    import IMpwWatchInfo                            = ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+    import IWarActionContainer                      = ProtoTypes.WarAction.IWarActionContainer;
+    import IWarRule                                 = ProtoTypes.WarRule.IWarRule;
+    import ISettingsForMcw                          = ProtoTypes.WarSettings.ISettingsForMcw;
+    import ISettingsForCcw                          = ProtoTypes.WarSettings.ISettingsForCcw;
+    import ISettingsForMrw                          = ProtoTypes.WarSettings.ISettingsForMrw;
+    import ISettingsForMfw                          = ProtoTypes.WarSettings.ISettingsForMfw;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
 
     let _allWarInfoList         : IMpwWarInfo[] = [];
     let _unwatchedWarInfos      : IMpwWatchInfo[];
@@ -134,6 +144,314 @@ namespace MpwModel {
         return wars.some(warInfo => checkIsRedForMyWar(warInfo));
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export async function createDataForCommonWarBasicSettingsPage(warId: number): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const warInfo = getMyWarInfo(warId);
+        if (warInfo == null) {
+            return { dataArrayForListSettings: [] };
+        }
+
+        const warRule                                                               = warInfo.settingsForCommon.warRule;
+        const { settingsForCcw, settingsForMcw, settingsForMfw, settingsForMrw }    = warInfo;
+        if (settingsForMcw) {
+            return await createDataForCommonWarBasicSettingsPageForMcw(warRule, settingsForMcw);
+        } else if (settingsForCcw) {
+            return await createDataForCommonWarBasicSettingsPageForCcw(warRule, settingsForCcw);
+        } else if (settingsForMrw) {
+            return await createDataForCommonWarBasicSettingsPageForMrw(warRule, settingsForMrw);
+        } else if (settingsForMfw) {
+            return await createDataForCommonWarBasicSettingsPageForMfw(warRule, settingsForMfw);
+        } else {
+            Logger.error(`MpwModel.createDataForCommonWarBasicSettingsPage() invalid warInfo.`);
+            return { dataArrayForListSettings: [] };
+        }
+    }
+    async function createDataForCommonWarBasicSettingsPageForMcw(warRule: IWarRule, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const bootTimerParams   = settingsForMcw.bootTimerParams;
+        const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const openData          : OpenDataForCommonWarBasicSettingsPage = {
+            dataArrayForListSettings    : [
+                {
+                    settingsType    : WarBasicSettingsType.MapName,
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(settingsForMcw.mapId),
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarName,
+                    currentValue    : settingsForMcw.warName,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarPassword,
+                    currentValue    : settingsForMcw.warPassword,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarComment,
+                    currentValue    : settingsForMcw.warComment,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarRuleTitle,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.HasFog,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerType,
+                    currentValue    : timerType,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            ],
+        };
+        if (timerType === Types.BootTimerType.Regular) {
+            openData.dataArrayForListSettings.push({
+                settingsType    : WarBasicSettingsType.TimerRegularParam,
+                currentValue    : bootTimerParams[1],
+                warRule,
+                callbackOnModify: undefined,
+            });
+        } else if (timerType === Types.BootTimerType.Incremental) {
+            openData.dataArrayForListSettings.push(
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                    currentValue    : bootTimerParams[2],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            );
+        } else {
+            Logger.error(`MpwModel.createDataForCommonWarBasicSettingsPageForMcw() invalid timerType.`);
+        }
+
+        return openData;
+    }
+    async function createDataForCommonWarBasicSettingsPageForCcw(warRule: IWarRule, settingsForCcw: ISettingsForCcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const bootTimerParams   = settingsForCcw.bootTimerParams;
+        const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const openData          : OpenDataForCommonWarBasicSettingsPage = {
+            dataArrayForListSettings    : [
+                {
+                    settingsType    : WarBasicSettingsType.MapName,
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(settingsForCcw.mapId),
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarName,
+                    currentValue    : settingsForCcw.warName,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarPassword,
+                    currentValue    : settingsForCcw.warPassword,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarComment,
+                    currentValue    : settingsForCcw.warComment,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarRuleTitle,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.HasFog,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerType,
+                    currentValue    : timerType,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            ],
+        };
+        if (timerType === Types.BootTimerType.Regular) {
+            openData.dataArrayForListSettings.push({
+                settingsType    : WarBasicSettingsType.TimerRegularParam,
+                currentValue    : bootTimerParams[1],
+                warRule,
+                callbackOnModify: undefined,
+            });
+        } else if (timerType === Types.BootTimerType.Incremental) {
+            openData.dataArrayForListSettings.push(
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                    currentValue    : bootTimerParams[2],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            );
+        } else {
+            Logger.error(`MpwModel.createDataForCommonWarBasicSettingsPageForCcw() invalid timerType.`);
+        }
+
+        return openData;
+    }
+    async function createDataForCommonWarBasicSettingsPageForMrw(warRule: IWarRule, settingsForMrw: ISettingsForMrw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+        const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const openData          : OpenDataForCommonWarBasicSettingsPage = {
+            dataArrayForListSettings    : [
+                {
+                    settingsType    : WarBasicSettingsType.MapName,
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(settingsForMrw.mapId),
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarRuleTitle,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.HasFog,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerType,
+                    currentValue    : timerType,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            ],
+        };
+        if (timerType === Types.BootTimerType.Regular) {
+            openData.dataArrayForListSettings.push({
+                settingsType    : WarBasicSettingsType.TimerRegularParam,
+                currentValue    : bootTimerParams[1],
+                warRule,
+                callbackOnModify: undefined,
+            });
+        } else if (timerType === Types.BootTimerType.Incremental) {
+            openData.dataArrayForListSettings.push(
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                    currentValue    : bootTimerParams[2],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            );
+        } else {
+            Logger.error(`MpwModel.createDataForCommonWarBasicSettingsPageForMrw() invalid timerType.`);
+        }
+
+        return openData;
+    }
+    async function createDataForCommonWarBasicSettingsPageForMfw(warRule: IWarRule, settingsForMfw: ISettingsForMfw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const bootTimerParams   = settingsForMfw.bootTimerParams;
+        const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const openData          : OpenDataForCommonWarBasicSettingsPage = {
+            dataArrayForListSettings    : [
+                {
+                    settingsType    : WarBasicSettingsType.WarName,
+                    currentValue    : settingsForMfw.warName,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarPassword,
+                    currentValue    : settingsForMfw.warPassword,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarComment,
+                    currentValue    : settingsForMfw.warComment,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarRuleTitle,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.HasFog,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerType,
+                    currentValue    : timerType,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            ],
+        };
+        if (timerType === Types.BootTimerType.Regular) {
+            openData.dataArrayForListSettings.push({
+                settingsType    : WarBasicSettingsType.TimerRegularParam,
+                currentValue    : bootTimerParams[1],
+                warRule,
+                callbackOnModify: undefined,
+            });
+        } else if (timerType === Types.BootTimerType.Incremental) {
+            openData.dataArrayForListSettings.push(
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                    currentValue    : bootTimerParams[2],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            );
+        } else {
+            Logger.error(`MpwModel.createDataForCommonWarBasicSettingsPageForMfw() invalid timerType.`);
+        }
+
+        return openData;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function setUnwatchedWarInfos(infos: IMpwWatchInfo[]): void {
         _unwatchedWarInfos = infos;
     }

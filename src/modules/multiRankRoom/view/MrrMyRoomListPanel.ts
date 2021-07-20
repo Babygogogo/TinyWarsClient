@@ -1,5 +1,6 @@
 
 import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
 import Helpers                          from "../../tools/helpers/Helpers";
@@ -21,7 +22,6 @@ import MrrProxy                         from "../model/MrrProxy";
 import MrrSelfSettingsModel             from "../model/MrrSelfSettingsModel";
 import TwnsMrrMainMenuPanel             from "./MrrMainMenuPanel";
 import TwnsMrrRoomAdvancedSettingsPage  from "./MrrRoomAdvancedSettingsPage";
-import TwnsMrrRoomBasicSettingsPage     from "./MrrRoomBasicSettingsPage";
 import TwnsMrrRoomInfoPanel             from "./MrrRoomInfoPanel";
 import TwnsMrrRoomPlayerInfoPage        from "./MrrRoomPlayerInfoPage";
 
@@ -29,8 +29,7 @@ namespace TwnsMrrMyRoomListPanel {
     import MrrRoomInfoPanel                         = TwnsMrrRoomInfoPanel.MrrRoomInfoPanel;
     import OpenDataForMrrRoomAdvancedSettingsPage   = TwnsMrrRoomAdvancedSettingsPage.OpenDataForMrrRoomAdvancedSettingsPage;
     import MrrRoomAdvancedSettingsPage              = TwnsMrrRoomAdvancedSettingsPage.MrrRoomAdvancedSettingsPage;
-    import OpenDataForMrrRoomBasicSettingsPage      = TwnsMrrRoomBasicSettingsPage.OpenDataForMrrRoomBasicSettingsPage;
-    import MrrRoomBasicSettingsPage                 = TwnsMrrRoomBasicSettingsPage.MrrRoomBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMrrRoomPlayerInfoPage         = TwnsMrrRoomPlayerInfoPage.OpenDataForMrrRoomPlayerInfoPage;
     import MrrRoomPlayerInfoPage                    = TwnsMrrRoomPlayerInfoPage.MrrRoomPlayerInfoPage;
@@ -44,7 +43,7 @@ namespace TwnsMrrMyRoomListPanel {
         private static _instance: MrrMyRoomListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForMrrRoomAdvancedSettingsPage | OpenDataForMrrRoomBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForMrrRoomAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelRankMatch        : TwnsUiLabel.UiLabel;
@@ -133,6 +132,7 @@ namespace TwnsMrrMyRoomListPanel {
             const data = e.data as ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS;
             if (data.roomId === MrrModel.getPreviewingRoomId()) {
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
@@ -171,8 +171,8 @@ namespace TwnsMrrMyRoomListPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : MrrRoomBasicSettingsPage,
-                    pageData    : { roomId: null } as OpenDataForMrrRoomBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -226,9 +226,9 @@ namespace TwnsMrrMyRoomListPanel {
 
                 const tab = this._tabSettings;
                 tab.updatePageData(1, { roomId } as OpenDataForMrrRoomPlayerInfoPage);
-                tab.updatePageData(2, { roomId } as OpenDataForMrrRoomBasicSettingsPage);
                 tab.updatePageData(3, { roomId } as OpenDataForMrrRoomAdvancedSettingsPage);
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
@@ -247,11 +247,19 @@ namespace TwnsMrrMyRoomListPanel {
             this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
         }
 
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+        }
+
         private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
             const mapId = (await MrrModel.getRoomInfo(MrrModel.getPreviewingRoomId()))?.settingsForMrw?.mapId;
             return mapId == null
                 ? {}
                 : { mapInfo: { mapId } };
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            return await MrrModel.createDataForCommonWarBasicSettingsPage(MrrModel.getPreviewingRoomId());
         }
 
         private _showOpenAnimation(): void {
