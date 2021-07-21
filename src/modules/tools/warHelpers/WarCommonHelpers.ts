@@ -1135,9 +1135,8 @@ namespace WarCommonHelpers {
         }
     }
     export function getWarType(warData: ISerialWar): WarType {
-        const settingsForCommon = warData.settingsForCommon;
-        const warRule           = settingsForCommon ? settingsForCommon.warRule : null;
-        const hasFog            = warRule ? WarRuleHelpers.getHasFogByDefault(warRule) : null;
+        const warRule   = warData.settingsForCommon?.warRule;
+        const hasFog    = warRule ? WarRuleHelpers.getHasFogByDefault(warRule) : null;
         if (hasFog == null) {
             return WarType.Undefined;
         }
@@ -1152,6 +1151,10 @@ namespace WarCommonHelpers {
             return hasFog ? WarType.ScwFog : WarType.ScwStd;
         } else if (warData.settingsForSfw) {
             return hasFog ? WarType.SfwFog : WarType.SfwStd;
+        } else if (warData.settingsForCcw) {
+            return hasFog ? WarType.CcwFog : WarType.CcwStd;
+        } else if (warData.settingsForSrw) {
+            return hasFog ? WarType.SrwFog : WarType.SrwStd;
         } else {
             return WarType.Undefined;
         }

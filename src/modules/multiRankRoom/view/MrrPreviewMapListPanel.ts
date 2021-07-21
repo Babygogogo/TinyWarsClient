@@ -1,9 +1,11 @@
 
 import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
+import ConfigManager                        from "../../tools/helpers/ConfigManager";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
@@ -21,11 +23,9 @@ import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRender
 import WarMapModel                          from "../../warMap/model/WarMapModel";
 import MrrModel                             from "../model/MrrModel";
 import TwnsMrrMainMenuPanel                 from "./MrrMainMenuPanel";
-import TwnsMrrPreviewAdvancedSettingsPage   from "./MrrPreviewAdvancedSettingsPage";
 
 namespace TwnsMrrPreviewMapListPanel {
-    import OpenDataForMrrPreviewAdvancedSettingsPage    = TwnsMrrPreviewAdvancedSettingsPage.OpenDataForMrrPreviewAdvancedSettingsPage;
-    import MrrPreviewAdvancedSettingsPage               = TwnsMrrPreviewAdvancedSettingsPage.MrrPreviewAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage     = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage        = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonMapInfoPage                 = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import LangTextType                                 = TwnsLangTextType.LangTextType;
@@ -42,7 +42,7 @@ namespace TwnsMrrPreviewMapListPanel {
         private static _instance: MrrPreviewMapListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForMrrPreviewAdvancedSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelRankMatch        : TwnsUiLabel.UiLabel;
@@ -127,7 +127,6 @@ namespace TwnsMrrPreviewMapListPanel {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private async _initTabSettings(): Promise<void> {
-            const hasFog = this._getOpenData().hasFog;
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
@@ -141,8 +140,8 @@ namespace TwnsMrrPreviewMapListPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : MrrPreviewAdvancedSettingsPage,
-                    pageData    : { hasFog, mapId: null } as OpenDataForMrrPreviewAdvancedSettingsPage,
+                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
         }
@@ -182,11 +181,9 @@ namespace TwnsMrrPreviewMapListPanel {
             } else {
                 groupTab.visible    = true;
 
-                const tab       = this._tabSettings;
-                const hasFog    = this._getOpenData().hasFog;
-                tab.updatePageData(2, { hasFog, mapId } as OpenDataForMrrPreviewAdvancedSettingsPage);
                 this._updateCommonMapInfoPage();
                 this._updateCommonWarBasicSettingsPage();
+                this._updateCommonWarAdvancedSettingsPage();
             }
         }
 
@@ -196,6 +193,10 @@ namespace TwnsMrrPreviewMapListPanel {
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             this._tabSettings.updatePageData(1, await this._createDataForCommonWarBasicSettingsPage());
+        }
+
+        private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(2, await this._createDataForCommonWarAdvancedSettingsPage());
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
@@ -252,7 +253,7 @@ namespace TwnsMrrPreviewMapListPanel {
             const warRuleArray  = mapRawData.warRuleArray.filter(v => {
                 return (v.ruleAvailability.canMrw) && (hasFog === v.ruleForGlobalParams.hasFogByDefault);
             });
-            if (warRuleArray.length) {
+            if (!warRuleArray.length) {
                 return { dataArrayForListSettings: [] };
             }
 
@@ -314,6 +315,27 @@ namespace TwnsMrrPreviewMapListPanel {
             }
 
             return openData;
+        }
+
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage | undefined> {
+            const mapRawData = await WarMapModel.getRawData(MrrModel.getPreviewingMapId());
+            if (mapRawData == null) {
+                return undefined;
+            }
+
+            const hasFog        = this._getOpenData().hasFog;
+            const warRuleArray  = mapRawData.warRuleArray.filter(v => {
+                return (v.ruleAvailability.canMrw) && (hasFog === v.ruleForGlobalParams.hasFogByDefault);
+            });
+            if (!warRuleArray.length) {
+                return undefined;
+            }
+
+            return {
+                configVersion   : ConfigManager.getLatestFormalVersion(),
+                warRule         : warRuleArray[0],
+                warType         : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+            };
         }
 
         private _showOpenAnimation(): void {

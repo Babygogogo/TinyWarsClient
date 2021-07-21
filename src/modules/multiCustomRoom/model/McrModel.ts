@@ -23,7 +23,7 @@ namespace McrModel {
     export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgMcrCreateRoom.IC;
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMcrJoinRoom.IC;
 
-    const _roomInfoDict         = new Map<number, IMcrRoomInfo>();
+    const _roomInfoDict         = new Map<number, IMcrRoomInfo | undefined>();
     const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgMcrGetRoomInfo.IS | undefined | null) => void)[]>();
 
     const _unjoinedRoomIdSet    = new Set<number>();
@@ -36,10 +36,8 @@ namespace McrModel {
         if (roomId == null) {
             return new Promise((resolve) => resolve(null));
         }
-
-        const localData = _roomInfoDict.get(roomId);
-        if (localData) {
-            return new Promise(resolve => resolve(localData));
+        if (_roomInfoDict.has(roomId)) {
+            return new Promise(resolve => resolve(_roomInfoDict.get(roomId)));
         }
 
         if (_roomInfoRequests.has(roomId)) {

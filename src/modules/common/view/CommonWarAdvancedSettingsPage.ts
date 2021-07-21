@@ -36,7 +36,7 @@ namespace TwnsCommonWarAdvancedSettingsPage {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/CommonWarAdvancedSettingsPage.exml";
+            this.skinName = "resource/skins/common/CommonWarAdvancedSettingsPage.exml";
         }
 
         protected _onOpened(): void {
@@ -242,7 +242,7 @@ namespace TwnsCommonWarAdvancedSettingsPage {
             labelValue.textColor    = 0xFFFFFF;
         }
         private _updateViewAsBannedCoIdArray(): void {
-            const currValue         = this.data.playerRule.bannedCoIdArray.length;
+            const currValue         = (this.data.playerRule.bannedCoIdArray || []).length;
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;

@@ -36,10 +36,8 @@ namespace CcrModel {
         if (roomId == null) {
             return new Promise((resolve) => resolve(null));
         }
-
-        const localData = _roomInfoDict.get(roomId);
-        if (localData) {
-            return new Promise(resolve => resolve(localData));
+        if (_roomInfoDict.has(roomId)) {
+            return new Promise(resolve => resolve(_roomInfoDict.get(roomId)));
         }
 
         if (_roomInfoRequests.has(roomId)) {
