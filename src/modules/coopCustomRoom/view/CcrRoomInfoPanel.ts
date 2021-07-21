@@ -1,35 +1,35 @@
 
-import TwnsChatPanel                    from "../../chat/view/ChatPanel";
-import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
-import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
-import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
-import CcrModel                         from "../../coopCustomRoom/model/CcrModel";
-import CommonConstants                  from "../../tools/helpers/CommonConstants";
-import ConfigManager                    from "../../tools/helpers/ConfigManager";
-import FloatText                        from "../../tools/helpers/FloatText";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Types                            from "../../tools/helpers/Types";
-import Lang                             from "../../tools/lang/Lang";
-import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                     from "../../tools/ui/UiButton";
-import TwnsUiImage                      from "../../tools/ui/UiImage";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import TwnsUiTab                        from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
-import WarCommonHelpers                 from "../../tools/warHelpers/WarCommonHelpers";
-import WarRuleHelpers                   from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel                        from "../../user/model/UserModel";
-import WarMapModel                      from "../../warMap/model/WarMapModel";
-import CcrProxy                         from "../model/CcrProxy";
-import TwnsCcrMyRoomListPanel           from "./CcrMyRoomListPanel";
-import TwnsCcrRoomAdvancedSettingsPage  from "./CcrRoomAdvancedSettingsPage";
-import TwnsCcrRoomPlayerInfoPage        from "./CcrRoomPlayerInfoPage";
+import TwnsChatPanel                        from "../../chat/view/ChatPanel";
+import TwnsCommonChooseCoPanel              from "../../common/view/CommonChooseCoPanel";
+import TwnsCommonConfirmPanel               from "../../common/view/CommonConfirmPanel";
+import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import CcrModel                             from "../../coopCustomRoom/model/CcrModel";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
+import ConfigManager                        from "../../tools/helpers/ConfigManager";
+import FloatText                            from "../../tools/helpers/FloatText";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiImage                          from "../../tools/ui/UiImage";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel                            from "../../user/model/UserModel";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import CcrProxy                             from "../model/CcrProxy";
+import TwnsCcrMyRoomListPanel               from "./CcrMyRoomListPanel";
+import TwnsCcrRoomPlayerInfoPage            from "./CcrRoomPlayerInfoPage";
 
 namespace TwnsCcrRoomInfoPanel {
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -37,9 +37,8 @@ namespace TwnsCcrRoomInfoPanel {
     import OpenDataForCcrRoomPlayerInfoPage         = TwnsCcrRoomPlayerInfoPage.OpenDataForCcrRoomPlayerInfoPage;
     import CcrRoomPlayerInfoPage                    = TwnsCcrRoomPlayerInfoPage.CcrRoomPlayerInfoPage;
     import CcrMyRoomListPanel                       = TwnsCcrMyRoomListPanel.CcrMyRoomListPanel;
-    import OpenDataForCcrRoomAdvancedSettingsPage   = TwnsCcrRoomAdvancedSettingsPage.OpenDataForCcrRoomAdvancedSettingsPage;
-    import CcrRoomAdvancedSettingsPage              = TwnsCcrRoomAdvancedSettingsPage.CcrRoomAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import NetMessage                               = ProtoTypes.NetMessage;
@@ -54,7 +53,7 @@ namespace TwnsCcrRoomInfoPanel {
         private static _instance: CcrRoomInfoPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCcrRoomAdvancedSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -150,10 +149,8 @@ namespace TwnsCcrRoomInfoPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : CcrRoomAdvancedSettingsPage,
-                    pageData    : {
-                        roomId
-                    } as OpenDataForCcrRoomAdvancedSettingsPage,
+                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
 
@@ -252,6 +249,7 @@ namespace TwnsCcrRoomInfoPanel {
                 this._updateBtnChooseCo();
                 this._updateCommonMapInfoPage();
                 this._updateCommonWarBasicSettingsPage();
+                this._updateCommonWarAdvancedSettingsPage();
             }
         }
 
@@ -409,6 +407,10 @@ namespace TwnsCcrRoomInfoPanel {
             this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
         }
 
+        private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
+        }
+
         private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
             const mapId = (await CcrModel.getRoomInfo(this._getOpenData().roomId))?.settingsForCcw?.mapId;
             return mapId == null
@@ -418,6 +420,10 @@ namespace TwnsCcrRoomInfoPanel {
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
             return CcrModel.createDataForCommonWarBasicSettingsPage(this._getOpenData().roomId, true);
+        }
+
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+            return CcrModel.createDataForCommonWarAdvancedSettingsPage(this._getOpenData().roomId);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

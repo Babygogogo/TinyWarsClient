@@ -1,37 +1,36 @@
 
-import TwnsCommonJoinRoomPasswordPanel  from "../../common/view/CommonJoinRoomPasswordPanel";
-import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
-import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
-import CcrModel                         from "../../coopCustomRoom/model/CcrModel";
-import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
-import FloatText                        from "../../tools/helpers/FloatText";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Types                            from "../../tools/helpers/Types";
-import Lang                             from "../../tools/lang/Lang";
-import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                     from "../../tools/ui/UiButton";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import TwnsUiTab                        from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
-import UserModel                        from "../../user/model/UserModel";
-import WarMapModel                      from "../../warMap/model/WarMapModel";
-import CcrJoinModel                     from "../model/CcrJoinModel";
-import CcrProxy                         from "../model/CcrProxy";
-import TwnsCcrMainMenuPanel             from "./CcrMainMenuPanel";
-import TwnsCcrRoomAdvancedSettingsPage  from "./CcrRoomAdvancedSettingsPage";
-import TwnsCcrRoomInfoPanel             from "./CcrRoomInfoPanel";
-import TwnsCcrRoomPlayerInfoPage        from "./CcrRoomPlayerInfoPage";
+import TwnsCommonJoinRoomPasswordPanel      from "../../common/view/CommonJoinRoomPasswordPanel";
+import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import CcrModel                             from "../../coopCustomRoom/model/CcrModel";
+import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import FloatText                            from "../../tools/helpers/FloatText";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import UserModel                            from "../../user/model/UserModel";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import CcrJoinModel                         from "../model/CcrJoinModel";
+import CcrProxy                             from "../model/CcrProxy";
+import TwnsCcrMainMenuPanel                 from "./CcrMainMenuPanel";
+import TwnsCcrRoomInfoPanel                 from "./CcrRoomInfoPanel";
+import TwnsCcrRoomPlayerInfoPage            from "./CcrRoomPlayerInfoPage";
 
 namespace TwnsCcrJoinRoomListPanel {
     import CcrRoomInfoPanel                         = TwnsCcrRoomInfoPanel.CcrRoomInfoPanel;
-    import OpenDataForCcrRoomAdvancedSettingsPage   = TwnsCcrRoomAdvancedSettingsPage.OpenDataForCcrRoomAdvancedSettingsPage;
-    import CcrRoomAdvancedSettingsPage              = TwnsCcrRoomAdvancedSettingsPage.CcrRoomAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCcrRoomPlayerInfoPage         = TwnsCcrRoomPlayerInfoPage.OpenDataForCcrRoomPlayerInfoPage;
@@ -46,7 +45,7 @@ namespace TwnsCcrJoinRoomListPanel {
         private static _instance: CcrJoinRoomListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCcrRoomAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -218,8 +217,8 @@ namespace TwnsCcrJoinRoomListPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : CcrRoomAdvancedSettingsPage,
-                    pageData    : { roomId: null } as OpenDataForCcrRoomAdvancedSettingsPage,
+                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
         }
@@ -269,9 +268,9 @@ namespace TwnsCcrJoinRoomListPanel {
 
                 const tab = this._tabSettings;
                 tab.updatePageData(1, { roomId } as OpenDataForCcrRoomPlayerInfoPage);
-                tab.updatePageData(3, { roomId } as OpenDataForCcrRoomAdvancedSettingsPage);
                 this._updateCommonMapInfoPage();
                 this._updateCommonWarBasicSettingsPage();
+                this._updateCommonWarAdvancedSettingsPage();
             }
         }
 
@@ -281,6 +280,10 @@ namespace TwnsCcrJoinRoomListPanel {
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+        }
+
+        private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
         }
 
         private _createDataForListRoom(): DataForRoomRenderer[] {
@@ -303,6 +306,10 @@ namespace TwnsCcrJoinRoomListPanel {
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
             return await CcrModel.createDataForCommonWarBasicSettingsPage(CcrJoinModel.getTargetRoomId(), false);
+        }
+
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+            return await CcrModel.createDataForCommonWarAdvancedSettingsPage(CcrJoinModel.getTargetRoomId());
         }
 
         private _showOpenAnimation(): void {

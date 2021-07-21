@@ -1,26 +1,27 @@
 
-import TwnsCommonAlertPanel             from "../../common/view/CommonAlertPanel";
-import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
-import TwnsCcwWar                       from "../../coopCustomWar/model/CcwWar";
-import TwnsMcwWar                       from "../../multiCustomWar/model/McwWar";
-import TwnsMfwWar                       from "../../multiFreeWar/model/MfwWar";
-import MpwProxy                         from "../../multiPlayerWar/model/MpwProxy";
-import TwnsMrwWar                       from "../../multiRankWar/model/MrwWar";
-import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
-import CommonConstants                  from "../../tools/helpers/CommonConstants";
-import FloatText                        from "../../tools/helpers/FloatText";
-import FlowManager                      from "../../tools/helpers/FlowManager";
-import Logger                           from "../../tools/helpers/Logger";
-import Types                            from "../../tools/helpers/Types";
-import Lang                             from "../../tools/lang/Lang";
-import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-import Notify                           from "../../tools/notify/Notify";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import WarActionExecutor                from "../../tools/warHelpers/WarActionExecutor";
-import UserModel                        from "../../user/model/UserModel";
-import WarMapModel                      from "../../warMap/model/WarMapModel";
-import TwnsMpwWar                       from "./MpwWar";
+import TwnsCommonAlertPanel                 from "../../common/view/CommonAlertPanel";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCcwWar                           from "../../coopCustomWar/model/CcwWar";
+import TwnsMcwWar                           from "../../multiCustomWar/model/McwWar";
+import TwnsMfwWar                           from "../../multiFreeWar/model/MfwWar";
+import MpwProxy                             from "../../multiPlayerWar/model/MpwProxy";
+import TwnsMrwWar                           from "../../multiRankWar/model/MrwWar";
+import TwnsClientErrorCode                  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
+import FloatText                            from "../../tools/helpers/FloatText";
+import FlowManager                          from "../../tools/helpers/FlowManager";
+import Logger                               from "../../tools/helpers/Logger";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import Notify                               from "../../tools/notify/Notify";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import WarActionExecutor                    from "../../tools/warHelpers/WarActionExecutor";
+import UserModel                            from "../../user/model/UserModel";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import TwnsMpwWar                           from "./MpwWar";
 
 namespace MpwModel {
     import MpwWar                                   = TwnsMpwWar.MpwWar;
@@ -41,6 +42,7 @@ namespace MpwModel {
     import ISettingsForMrw                          = ProtoTypes.WarSettings.ISettingsForMrw;
     import ISettingsForMfw                          = ProtoTypes.WarSettings.ISettingsForMfw;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
 
     let _allWarInfoList         : IMpwWarInfo[] = [];
     let _unwatchedWarInfos      : IMpwWatchInfo[];
@@ -449,6 +451,46 @@ namespace MpwModel {
         }
 
         return openData;
+    }
+
+    export async function createDataForCommonWarAdvancedSettingsPage(warId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage | undefined> {
+        const warInfo = getMyWarInfo(warId);
+        if (warInfo == null) {
+            return undefined;
+        }
+
+        const settingsForCommon                                                     = warInfo.settingsForCommon;
+        const { warRule, configVersion }                                            = settingsForCommon;
+        const { settingsForCcw, settingsForMcw, settingsForMfw, settingsForMrw }    = warInfo;
+        const hasFog                                                                = warRule.ruleForGlobalParams.hasFogByDefault;
+        if (settingsForCcw) {
+            return {
+                configVersion,
+                warRule,
+                warType     : hasFog ? Types.WarType.CcwFog : Types.WarType.CcwStd,
+            };
+        } else if (settingsForMcw) {
+            return {
+                configVersion,
+                warRule,
+                warType     : hasFog ? Types.WarType.McwFog : Types.WarType.McwStd,
+            };
+        } else if (settingsForMfw) {
+            return {
+                configVersion,
+                warRule,
+                warType     : hasFog ? Types.WarType.MfwFog : Types.WarType.MfwStd,
+            };
+        } else if (settingsForMrw) {
+            return {
+                configVersion,
+                warRule,
+                warType     : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+            };
+        } else {
+            Logger.error(`MpwModel.createDataForCommonWarAdvancedSettingsPage() invalid warInfo.`);
+            return undefined;
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

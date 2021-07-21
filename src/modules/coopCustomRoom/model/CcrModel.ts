@@ -1,15 +1,16 @@
 
-import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
-import CcrProxy                         from "../../coopCustomRoom/model/CcrProxy";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Logger                           from "../../tools/helpers/Logger";
-import Types                            from "../../tools/helpers/Types";
-import Notify                           from "../../tools/notify/Notify";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers                   from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel                        from "../../user/model/UserModel";
-import WarMapModel                      from "../../warMap/model/WarMapModel";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import CcrProxy                             from "../../coopCustomRoom/model/CcrProxy";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Logger                               from "../../tools/helpers/Logger";
+import Types                                from "../../tools/helpers/Types";
+import Notify                               from "../../tools/notify/Notify";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel                            from "../../user/model/UserModel";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
 
 namespace CcrModel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
@@ -17,6 +18,7 @@ namespace CcrModel {
     import NetMessage                               = ProtoTypes.NetMessage;
     import ICcrRoomInfo                             = ProtoTypes.CoopCustomRoom.ICcrRoomInfo;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
 
     export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgCcrCreateRoom.IC;
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgCcrJoinRoom.IC;
@@ -323,6 +325,21 @@ namespace CcrModel {
         }
 
         return openData;
+    }
+
+    export async function createDataForCommonWarAdvancedSettingsPage(roomId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage | undefined> {
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return undefined;
+        }
+
+        const settingsForCommon = roomInfo.settingsForCommon;
+        const warRule           = settingsForCommon.warRule;
+        return {
+            configVersion   : settingsForCommon.configVersion,
+            warRule,
+            warType         : warRule.ruleForGlobalParams.hasFogByDefault ? Types.WarType.CcwFog : Types.WarType.CcwStd,
+        };
     }
 }
 

@@ -1,41 +1,40 @@
 
-import TwnsChatPanel                    from "../../chat/view/ChatPanel";
-import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
-import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
-import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
-import McrModel                         from "../../multiCustomRoom/model/McrModel";
-import McrProxy                         from "../../multiCustomRoom/model/McrProxy";
-import CommonConstants                  from "../../tools/helpers/CommonConstants";
-import ConfigManager                    from "../../tools/helpers/ConfigManager";
-import FloatText                        from "../../tools/helpers/FloatText";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Types                            from "../../tools/helpers/Types";
-import Lang                             from "../../tools/lang/Lang";
-import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                     from "../../tools/ui/UiButton";
-import TwnsUiImage                      from "../../tools/ui/UiImage";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import TwnsUiTab                        from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
-import WarCommonHelpers                 from "../../tools/warHelpers/WarCommonHelpers";
-import WarRuleHelpers                   from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel                        from "../../user/model/UserModel";
-import WarMapModel                      from "../../warMap/model/WarMapModel";
-import TwnsMcrMyRoomListPanel           from "./McrMyRoomListPanel";
-import TwnsMcrRoomAdvancedSettingsPage  from "./McrRoomAdvancedSettingsPage";
-import TwnsMcrRoomPlayerInfoPage        from "./McrRoomPlayerInfoPage";
+import TwnsChatPanel                        from "../../chat/view/ChatPanel";
+import TwnsCommonChooseCoPanel              from "../../common/view/CommonChooseCoPanel";
+import TwnsCommonConfirmPanel               from "../../common/view/CommonConfirmPanel";
+import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import McrModel                             from "../../multiCustomRoom/model/McrModel";
+import McrProxy                             from "../../multiCustomRoom/model/McrProxy";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
+import ConfigManager                        from "../../tools/helpers/ConfigManager";
+import FloatText                            from "../../tools/helpers/FloatText";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiImage                          from "../../tools/ui/UiImage";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel                            from "../../user/model/UserModel";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import TwnsMcrMyRoomListPanel               from "./McrMyRoomListPanel";
+import TwnsMcrRoomPlayerInfoPage            from "./McrRoomPlayerInfoPage";
 
 namespace TwnsMcrRoomInfoPanel {
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import McrMyRoomListPanel                       = TwnsMcrMyRoomListPanel.McrMyRoomListPanel;
-    import OpenDataForMcrRoomAdvancedSettingsPage   = TwnsMcrRoomAdvancedSettingsPage.OpenDataForMcrRoomAdvancedSettingsPage;
-    import McrRoomAdvancedSettingsPage              = TwnsMcrRoomAdvancedSettingsPage.McrRoomAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMcrRoomPlayerInfoPage         = TwnsMcrRoomPlayerInfoPage.OpenDataForMcrRoomPlayerInfoPage;
@@ -54,7 +53,7 @@ namespace TwnsMcrRoomInfoPanel {
         private static _instance: McrRoomInfoPanel;
 
         private readonly _groupTab          : eui.Group;
-        private readonly _tabSettings       : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMcrRoomPlayerInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForMcrRoomAdvancedSettingsPage>;
+        private readonly _tabSettings       : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMcrRoomPlayerInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
         private readonly _groupNavigator    : eui.Group;
         private readonly _labelMultiPlayer  : TwnsUiLabel.UiLabel;
@@ -150,10 +149,8 @@ namespace TwnsMcrRoomInfoPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : McrRoomAdvancedSettingsPage,
-                    pageData    : {
-                        roomId
-                    } as OpenDataForMcrRoomAdvancedSettingsPage,
+                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
 
@@ -243,6 +240,7 @@ namespace TwnsMcrRoomInfoPanel {
                 this._updateBtnChooseCo();
                 this._updateCommonMapInfoPage();
                 this._updateCommonWarBasicSettingsPage();
+                this._updateCommonWarAdvancedSettingsPage();
             }
         }
 
@@ -400,6 +398,10 @@ namespace TwnsMcrRoomInfoPanel {
             this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
         }
 
+        private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -472,7 +474,11 @@ namespace TwnsMcrRoomInfoPanel {
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            return McrModel.createDataForCommonWarBasicSettingsPage(this._getOpenData().roomId, true);
+            return await McrModel.createDataForCommonWarBasicSettingsPage(this._getOpenData().roomId, true);
+        }
+
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+            return await McrModel.createDataForCommonWarAdvancedSettingsPage(this._getOpenData().roomId);
         }
     }
 

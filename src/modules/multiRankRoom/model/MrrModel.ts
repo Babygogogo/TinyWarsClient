@@ -1,15 +1,16 @@
 
-import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
-import CommonConstants                  from "../../tools/helpers/CommonConstants";
-import Logger                           from "../../tools/helpers/Logger";
-import Types                            from "../../tools/helpers/Types";
-import Notify                           from "../../tools/notify/Notify";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import UserModel                        from "../../user/model/UserModel";
-import WarMapModel                      from "../../warMap/model/WarMapModel";
-import MrrProxy                         from "./MrrProxy";
-import MrrSelfSettingsModel             from "./MrrSelfSettingsModel";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
+import Logger                               from "../../tools/helpers/Logger";
+import Types                                from "../../tools/helpers/Types";
+import Notify                               from "../../tools/notify/Notify";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import UserModel                            from "../../user/model/UserModel";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import MrrProxy                             from "./MrrProxy";
+import MrrSelfSettingsModel                 from "./MrrSelfSettingsModel";
 
 namespace MrrModel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
@@ -17,6 +18,7 @@ namespace MrrModel {
     import NetMessage                               = ProtoTypes.NetMessage;
     import IMrrRoomInfo                             = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
 
     let _previewingRoomId           : number;
     let _previewingMapId            : number;
@@ -309,6 +311,21 @@ namespace MrrModel {
         }
 
         return openData;
+    }
+
+    export async function createDataForCommonWarAdvancedSettingsPage(roomId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage | undefined> {
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return undefined;
+        }
+
+        const settingsForCommon = roomInfo.settingsForCommon;
+        const warRule           = settingsForCommon.warRule;
+        return {
+            configVersion   : settingsForCommon.configVersion,
+            warRule,
+            warType         : warRule.ruleForGlobalParams.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+        };
     }
 
     function checkIsMyRoom(roomInfo: IMrrRoomInfo): boolean {

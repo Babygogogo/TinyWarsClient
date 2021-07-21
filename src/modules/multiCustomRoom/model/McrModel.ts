@@ -1,15 +1,16 @@
 
-import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
-import McrProxy                         from "../../multiCustomRoom/model/McrProxy";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Logger                           from "../../tools/helpers/Logger";
-import Types                            from "../../tools/helpers/Types";
-import Notify                           from "../../tools/notify/Notify";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers                   from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel                        from "../../user/model/UserModel";
-import WarMapModel                      from "../../warMap/model/WarMapModel";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import McrProxy                             from "../../multiCustomRoom/model/McrProxy";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Logger                               from "../../tools/helpers/Logger";
+import Types                                from "../../tools/helpers/Types";
+import Notify                               from "../../tools/notify/Notify";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel                            from "../../user/model/UserModel";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
 
 namespace McrModel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
@@ -17,6 +18,7 @@ namespace McrModel {
     import IMcrRoomInfo                             = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
 
     export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgMcrCreateRoom.IC;
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMcrJoinRoom.IC;
@@ -323,6 +325,21 @@ namespace McrModel {
         }
 
         return openData;
+    }
+
+    export async function createDataForCommonWarAdvancedSettingsPage(roomId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage | undefined> {
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return undefined;
+        }
+
+        const settingsForCommon = roomInfo.settingsForCommon;
+        const warRule           = settingsForCommon.warRule;
+        return {
+            configVersion   : settingsForCommon.configVersion,
+            warRule,
+            warType         : warRule.ruleForGlobalParams.hasFogByDefault ? Types.WarType.McwFog : Types.WarType.McwStd,
+        };
     }
 }
 

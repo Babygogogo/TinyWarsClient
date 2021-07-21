@@ -1,34 +1,33 @@
 
-import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
-import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
-import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
-import TwnsMcrMainMenuPanel             from "../../multiCustomRoom/view/McrMainMenuPanel";
-import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
-import MpwProxy                         from "../../multiPlayerWar/model/MpwProxy";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Logger                           from "../../tools/helpers/Logger";
-import Types                            from "../../tools/helpers/Types";
-import Lang                             from "../../tools/lang/Lang";
-import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import TwnsUiButton                     from "../../tools/ui/UiButton";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import TwnsUiTab                        from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
-import WarMapModel                      from "../../warMap/model/WarMapModel";
-import TwnsMcwWarAdvancedSettingsPage   from "./McwWarAdvancedSettingsPage";
-import TwnsMcwWarPlayerInfoPage         from "./McwWarPlayerInfoPage";
+import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import TwnsMcrMainMenuPanel                 from "../../multiCustomRoom/view/McrMainMenuPanel";
+import MpwModel                             from "../../multiPlayerWar/model/MpwModel";
+import MpwProxy                             from "../../multiPlayerWar/model/MpwProxy";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Logger                               from "../../tools/helpers/Logger";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import TwnsMcwWarPlayerInfoPage             from "./McwWarPlayerInfoPage";
 
 namespace TwnsMcwMyWarListPanel {
     import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import McwWarPlayerInfoPage                     = TwnsMcwWarPlayerInfoPage.McwWarPlayerInfoPage;
     import OpenDataForMcwWarPlayerInfoPage          = TwnsMcwWarPlayerInfoPage.OpenDataForMcwWarPlayerInfoPage;
-    import McwWarAdvancedSettingsPage               = TwnsMcwWarAdvancedSettingsPage.McwWarAdvancedSettingsPage;
-    import OpenDataForMcwWarAdvancedSettingsPage    = TwnsMcwWarAdvancedSettingsPage.OpenDataForMcwWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import LangTextType                             = TwnsLangTextType.LangTextType;
@@ -41,7 +40,7 @@ namespace TwnsMcwMyWarListPanel {
         private static _instance: McwMyWarListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMcwWarPlayerInfoPage | OpenDataForMcwWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMcwWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -157,8 +156,8 @@ namespace TwnsMcwMyWarListPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : McwWarAdvancedSettingsPage,
-                    pageData    : { warId: null } as OpenDataForMcwWarAdvancedSettingsPage,
+                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
         }
@@ -209,9 +208,9 @@ namespace TwnsMcwMyWarListPanel {
 
                 const tab = this._tabSettings;
                 tab.updatePageData(1, { warId } as OpenDataForMcwWarPlayerInfoPage);
-                tab.updatePageData(3, { warId } as OpenDataForMcwWarAdvancedSettingsPage);
                 this._updateCommonMapInfoPage();
                 this._updateCommonWarBasicSettingsPage();
+                this._updateCommonWarAdvancedSettingsPage();
             }
         }
 
@@ -221,6 +220,10 @@ namespace TwnsMcwMyWarListPanel {
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+        }
+
+        private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
         }
 
         private _createDataForListWar(): DataForWarRenderer[] {
@@ -248,6 +251,10 @@ namespace TwnsMcwMyWarListPanel {
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
             return await MpwModel.createDataForCommonWarBasicSettingsPage(MpwModel.getMcwPreviewingWarId());
+        }
+
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+            return await MpwModel.createDataForCommonWarAdvancedSettingsPage(MpwModel.getMcwPreviewingWarId());
         }
 
         private _showOpenAnimation(): void {

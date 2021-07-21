@@ -1,34 +1,33 @@
 
-import TwnsCommonMapInfoPage            from "../../common/view/CommonMapInfoPage";
-import TwnsCommonWarBasicSettingsPage   from "../../common/view/CommonWarBasicSettingsPage";
-import TwnsLobbyBottomPanel             from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                from "../../lobby/view/LobbyTopPanel";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Types                            from "../../tools/helpers/Types";
-import Lang                             from "../../tools/lang/Lang";
-import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                     from "../../tools/ui/UiButton";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import TwnsUiTab                        from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
-import WarMapModel                      from "../../warMap/model/WarMapModel";
-import MrrModel                         from "../model/MrrModel";
-import MrrProxy                         from "../model/MrrProxy";
-import MrrSelfSettingsModel             from "../model/MrrSelfSettingsModel";
-import TwnsMrrMainMenuPanel             from "./MrrMainMenuPanel";
-import TwnsMrrRoomAdvancedSettingsPage  from "./MrrRoomAdvancedSettingsPage";
-import TwnsMrrRoomInfoPanel             from "./MrrRoomInfoPanel";
-import TwnsMrrRoomPlayerInfoPage        from "./MrrRoomPlayerInfoPage";
+import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import MrrModel                             from "../model/MrrModel";
+import MrrProxy                             from "../model/MrrProxy";
+import MrrSelfSettingsModel                 from "../model/MrrSelfSettingsModel";
+import TwnsMrrMainMenuPanel                 from "./MrrMainMenuPanel";
+import TwnsMrrRoomInfoPanel                 from "./MrrRoomInfoPanel";
+import TwnsMrrRoomPlayerInfoPage            from "./MrrRoomPlayerInfoPage";
 
 namespace TwnsMrrMyRoomListPanel {
     import MrrRoomInfoPanel                         = TwnsMrrRoomInfoPanel.MrrRoomInfoPanel;
-    import OpenDataForMrrRoomAdvancedSettingsPage   = TwnsMrrRoomAdvancedSettingsPage.OpenDataForMrrRoomAdvancedSettingsPage;
-    import MrrRoomAdvancedSettingsPage              = TwnsMrrRoomAdvancedSettingsPage.MrrRoomAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMrrRoomPlayerInfoPage         = TwnsMrrRoomPlayerInfoPage.OpenDataForMrrRoomPlayerInfoPage;
@@ -43,7 +42,7 @@ namespace TwnsMrrMyRoomListPanel {
         private static _instance: MrrMyRoomListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForMrrRoomAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelRankMatch        : TwnsUiLabel.UiLabel;
@@ -133,6 +132,7 @@ namespace TwnsMrrMyRoomListPanel {
             if (data.roomId === MrrModel.getPreviewingRoomId()) {
                 this._updateCommonMapInfoPage();
                 this._updateCommonWarBasicSettingsPage();
+                this._updateCommonWarAdvancedSettingsPage();
             }
         }
 
@@ -176,8 +176,8 @@ namespace TwnsMrrMyRoomListPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : MrrRoomAdvancedSettingsPage,
-                    pageData    : { roomId: null } as OpenDataForMrrRoomAdvancedSettingsPage,
+                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
         }
@@ -226,9 +226,9 @@ namespace TwnsMrrMyRoomListPanel {
 
                 const tab = this._tabSettings;
                 tab.updatePageData(1, { roomId } as OpenDataForMrrRoomPlayerInfoPage);
-                tab.updatePageData(3, { roomId } as OpenDataForMrrRoomAdvancedSettingsPage);
                 this._updateCommonMapInfoPage();
                 this._updateCommonWarBasicSettingsPage();
+                this._updateCommonWarAdvancedSettingsPage();
             }
         }
 
@@ -251,6 +251,10 @@ namespace TwnsMrrMyRoomListPanel {
             this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
         }
 
+        private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
+        }
+
         private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
             const mapId = (await MrrModel.getRoomInfo(MrrModel.getPreviewingRoomId()))?.settingsForMrw?.mapId;
             return mapId == null
@@ -260,6 +264,10 @@ namespace TwnsMrrMyRoomListPanel {
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
             return await MrrModel.createDataForCommonWarBasicSettingsPage(MrrModel.getPreviewingRoomId());
+        }
+
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+            return await MrrModel.createDataForCommonWarAdvancedSettingsPage(MrrModel.getPreviewingRoomId());
         }
 
         private _showOpenAnimation(): void {
