@@ -255,7 +255,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             const currentValue = data.currentValue;
             TwnsCommonInputPanel.CommonInputPanel.show({
                 title           : Lang.getText(LangTextType.B0185),
-                currentValue    : `${currentValue}`,
+                currentValue    : `${currentValue || ``}`,
                 maxChars        : CommonConstants.WarNameMaxLength,
                 charRestrict    : undefined,
                 tips            : undefined,
@@ -278,7 +278,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             const currentValue = data.currentValue;
             TwnsCommonInputPanel.CommonInputPanel.show({
                 title           : Lang.getText(LangTextType.B0186),
-                currentValue    : `${currentValue}`,
+                currentValue    : `${currentValue || ``}`,
                 maxChars        : CommonConstants.WarPasswordMaxLength,
                 charRestrict    : `0-9`,
                 tips            : Lang.getFormattedText(LangTextType.F0068, CommonConstants.WarPasswordMaxLength),
@@ -301,7 +301,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             const currentValue = data.currentValue;
             TwnsCommonInputPanel.CommonInputPanel.show({
                 title           : Lang.getText(LangTextType.B0187),
-                currentValue    : `${currentValue}`,
+                currentValue    : `${currentValue || ``}`,
                 maxChars        : CommonConstants.WarCommentMaxLength,
                 charRestrict    : undefined,
                 tips            : undefined,
@@ -421,10 +421,37 @@ namespace TwnsCommonWarBasicSettingsPage {
             });
         }
         private _modifyAsSpmSaveSlotIndex(): void {
-            FloatText.show("TODO");
+            const data      = this.data;
+            const callback  = data.callbackOnModify;
+            if (callback == null) {
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._modifyAsSpmSaveSlotIndex() empty callback.`);
+                return;
+            }
+
+            callback(undefined);
         }
         private _modifyAsSpmSaveSlotComment(): void {
-            FloatText.show("TODO");
+            const data      = this.data;
+            const callback  = data.callbackOnModify;
+            if (callback == null) {
+                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._modifyAsSpmSaveSlotComment() empty callback.`);
+                return;
+            }
+
+            const currentValue = data.currentValue;
+            TwnsCommonInputPanel.CommonInputPanel.show({
+                title           : Lang.getText(LangTextType.B0605),
+                currentValue    : `${currentValue || ``}`,
+                maxChars        : CommonConstants.SpmSaveSlotCommentMaxLength,
+                charRestrict    : undefined,
+                tips            : undefined,
+                callback        : panel => {
+                    const newValue = panel.getInputText() || undefined;
+                    if (newValue != currentValue) {
+                        callback(newValue);
+                    }
+                },
+            });
         }
     }
 }

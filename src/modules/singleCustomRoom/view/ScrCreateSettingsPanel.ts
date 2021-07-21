@@ -1,6 +1,7 @@
 
 import TwnsCommonConfirmPanel               from "../../common/view/CommonConfirmPanel";
 import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import SpmModel                             from "../../singlePlayerMode/model/SpmModel";
 import SpmProxy                             from "../../singlePlayerMode/model/SpmProxy";
 import FlowManager                          from "../../tools/helpers/FlowManager";
@@ -15,20 +16,22 @@ import TwnsUiLabel                          from "../../tools/ui/UiLabel";
 import TwnsUiPanel                          from "../../tools/ui/UiPanel";
 import TwnsUiTab                            from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
 import ScrCreateModel                       from "../model/ScrCreateModel";
 import TwnsScrCreateAdvancedSettingsPage    from "./ScrCreateAdvancedSettingsPage";
-import TwnsScrCreateBasicSettingsPage       from "./ScrCreateBasicSettingsPage";
 import TwnsScrCreateMapListPanel            from "./ScrCreateMapListPanel";
 import TwnsScrCreatePlayerInfoPage          from "./ScrCreatePlayerInfoPage";
+import TwnsScrCreateSaveSlotsPanel          from "./ScrCreateSaveSlotsPanel";
 
 namespace TwnsScrCreateSettingsPanel {
-    import CommonConfirmPanel               = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import ScrCreateBasicSettingsPage       = TwnsScrCreateBasicSettingsPage.ScrCreateBasicSettingsPage;
-    import ScrCreateAdvancedSettingsPage    = TwnsScrCreateAdvancedSettingsPage.ScrCreateAdvancedSettingsPage;
-    import OpenDataForCommonMapInfoPage     = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
-    import ScrCreatePlayerInfoPage          = TwnsScrCreatePlayerInfoPage.ScrCreatePlayerInfoPage;
-    import LangTextType                     = TwnsLangTextType.LangTextType;
-    import NotifyType                       = TwnsNotifyType.NotifyType;
+    import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import ScrCreateAdvancedSettingsPage            = TwnsScrCreateAdvancedSettingsPage.ScrCreateAdvancedSettingsPage;
+    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
+    import ScrCreatePlayerInfoPage                  = TwnsScrCreatePlayerInfoPage.ScrCreatePlayerInfoPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -45,7 +48,7 @@ namespace TwnsScrCreateSettingsPanel {
         private readonly _labelGameSettings     : TwnsUiLabel.UiLabel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonMapInfoPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonMapInfoPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _btnBack               : TwnsUiButton.UiButton;
         private readonly _btnConfirm            : TwnsUiButton.UiButton;
@@ -70,21 +73,23 @@ namespace TwnsScrCreateSettingsPanel {
             this.skinName = "resource/skins/singleCustomRoom/ScrCreateSettingsPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgSpmCreateScw,    callback: this._onNotifyMsgSpmCreateScw },
+                { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgSpmCreateScw,                 callback: this._onNotifyMsgSpmCreateScw },
+                { type: NotifyType.ScrCreateWarSaveSlotChanged,     callback: this._onNotifyScrCreateWarSaveSlotChanged },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : ScrCreateBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -148,6 +153,9 @@ namespace TwnsScrCreateSettingsPanel {
                 slotIndex       : data.slotIndex,
             });
         }
+        private _onNotifyScrCreateWarSaveSlotChanged(): void {
+            this._updateCommonWarBasicSettingsPage();
+        }
 
         private _resetTimeoutForBtnConfirm(): void {
             this._clearTimeoutForBtnConfirm();
@@ -176,11 +184,67 @@ namespace TwnsScrCreateSettingsPanel {
             this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
         }
 
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
+        }
+
         private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
             const mapId = ScrCreateModel.getMapId();
             return mapId == null
                 ? {}
                 : { mapInfo: { mapId } };
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            const warRule   = ScrCreateModel.getWarRule();
+            const openData  : OpenDataForCommonWarBasicSettingsPage = {
+                dataArrayForListSettings: [
+                    {
+                        settingsType    : WarBasicSettingsType.MapName,
+                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(ScrCreateModel.getMapId()),
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarRuleTitle,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: async () => {
+                            await ScrCreateModel.tickPresetWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.HasFog,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: () => {
+                            ScrCreateModel.setHasFog(!ScrCreateModel.getHasFog());
+                            ScrCreateModel.setCustomWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
+                        currentValue    : ScrCreateModel.getSaveSlotIndex(),
+                        warRule,
+                        callbackOnModify: () => {
+                            TwnsScrCreateSaveSlotsPanel.ScrCreateSaveSlotsPanel.show();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
+                        currentValue    : ScrCreateModel.getSlotComment(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            ScrCreateModel.setSlotComment(newValue || undefined);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                ],
+            };
+
+            return openData;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

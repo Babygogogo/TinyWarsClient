@@ -1,8 +1,11 @@
 
 import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import Helpers                              from "../../tools/helpers/Helpers";
+import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
 import TwnsLangTextType                     from "../../tools/lang/LangTextType";
@@ -19,16 +22,15 @@ import WarMapModel                          from "../../warMap/model/WarMapModel
 import MrrModel                             from "../model/MrrModel";
 import TwnsMrrMainMenuPanel                 from "./MrrMainMenuPanel";
 import TwnsMrrPreviewAdvancedSettingsPage   from "./MrrPreviewAdvancedSettingsPage";
-import TwnsMrrPreviewBasicSettingsPage      from "./MrrPreviewBasicSettingsPage";
 
 namespace TwnsMrrPreviewMapListPanel {
     import OpenDataForMrrPreviewAdvancedSettingsPage    = TwnsMrrPreviewAdvancedSettingsPage.OpenDataForMrrPreviewAdvancedSettingsPage;
     import MrrPreviewAdvancedSettingsPage               = TwnsMrrPreviewAdvancedSettingsPage.MrrPreviewAdvancedSettingsPage;
-    import OpenDataForMrrPreviewBasicSettingsPage       = TwnsMrrPreviewBasicSettingsPage.OpenDataForMrrPreviewBasicSettingsPage;
-    import MrrPreviewBasicSettingsPage                  = TwnsMrrPreviewBasicSettingsPage.MrrPreviewBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage        = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonMapInfoPage                 = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
     import LangTextType                                 = TwnsLangTextType.LangTextType;
     import NotifyType                                   = TwnsNotifyType.NotifyType;
+    import WarBasicSettingsType                         = Types.WarBasicSettingsType;
 
     type OpenDataForMrrPreviewMapListPanel = {
         hasFog: boolean;
@@ -40,7 +42,7 @@ namespace TwnsMrrPreviewMapListPanel {
         private static _instance: MrrPreviewMapListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMrrPreviewBasicSettingsPage | OpenDataForMrrPreviewAdvancedSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForMrrPreviewAdvancedSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelRankMatch        : TwnsUiLabel.UiLabel;
@@ -73,7 +75,7 @@ namespace TwnsMrrPreviewMapListPanel {
             this.skinName = "resource/skins/multiRankRoom/MrrPreviewMapListPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MrrPreviewingMapIdChanged,  callback: this._onNotifyMrrPreviewingMapIdChanged },
@@ -87,7 +89,7 @@ namespace TwnsMrrPreviewMapListPanel {
 
             this._showOpenAnimation();
 
-            this._initTabSettings();
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupMapList();
             this._updateComponentsForTargetMapInfo();
@@ -124,7 +126,7 @@ namespace TwnsMrrPreviewMapListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _initTabSettings(): void {
+        private async _initTabSettings(): Promise<void> {
             const hasFog = this._getOpenData().hasFog;
             this._tabSettings.bindData([
                 {
@@ -134,8 +136,8 @@ namespace TwnsMrrPreviewMapListPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : MrrPreviewBasicSettingsPage,
-                    pageData    : { hasFog, mapId: null } as OpenDataForMrrPreviewBasicSettingsPage,
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -182,14 +184,18 @@ namespace TwnsMrrPreviewMapListPanel {
 
                 const tab       = this._tabSettings;
                 const hasFog    = this._getOpenData().hasFog;
-                tab.updatePageData(1, { hasFog, mapId } as OpenDataForMrrPreviewBasicSettingsPage);
                 tab.updatePageData(2, { hasFog, mapId } as OpenDataForMrrPreviewAdvancedSettingsPage);
                 this._updateCommonMapInfoPage();
+                this._updateCommonWarBasicSettingsPage();
             }
         }
 
         private _updateCommonMapInfoPage(): void {
             this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            this._tabSettings.updatePageData(1, await this._createDataForCommonWarBasicSettingsPage());
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
@@ -233,6 +239,81 @@ namespace TwnsMrrPreviewMapListPanel {
             return mapId == null
                 ? {}
                 : { mapInfo: { mapId } };
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            const mapId         = MrrModel.getPreviewingMapId();
+            const mapRawData    = await WarMapModel.getRawData(mapId);
+            if (mapRawData == null) {
+                return { dataArrayForListSettings: [] };
+            }
+
+            const hasFog        = this._getOpenData().hasFog;
+            const warRuleArray  = mapRawData.warRuleArray.filter(v => {
+                return (v.ruleAvailability.canMrw) && (hasFog === v.ruleForGlobalParams.hasFogByDefault);
+            });
+            if (warRuleArray.length) {
+                return { dataArrayForListSettings: [] };
+            }
+
+            const warRule           = warRuleArray[0];
+            const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+            const timerType         = bootTimerParams[0] as Types.BootTimerType;
+            const openData          : OpenDataForCommonWarBasicSettingsPage = {
+                dataArrayForListSettings    : [
+                    {
+                        settingsType    : WarBasicSettingsType.MapName,
+                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(mapId),
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarRuleTitle,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.HasFog,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerType,
+                        currentValue    : timerType,
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                ],
+            };
+            if (timerType === Types.BootTimerType.Regular) {
+                openData.dataArrayForListSettings.push({
+                    settingsType    : WarBasicSettingsType.TimerRegularParam,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: undefined,
+                });
+            } else if (timerType === Types.BootTimerType.Incremental) {
+                openData.dataArrayForListSettings.push(
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                        currentValue    : bootTimerParams[1],
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                        currentValue    : bootTimerParams[2],
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                );
+            } else {
+                Logger.error(`MrrPreviewMapListPanel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            }
+
+            return openData;
         }
 
         private _showOpenAnimation(): void {
