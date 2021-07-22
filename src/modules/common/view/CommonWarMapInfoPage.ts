@@ -9,7 +9,7 @@ import TwnsUiTabPage        from "../../tools/ui/UiTabPage";
 import TwnsUiZoomableMap    from "../../tools/ui/UiZoomableMap";
 import WarMapModel          from "../../warMap/model/WarMapModel";
 
-namespace TwnsCommonMapInfoPage {
+namespace TwnsCommonWarMapInfoPage {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
@@ -22,7 +22,7 @@ namespace TwnsCommonMapInfoPage {
             players?    : ProtoTypes.WarSerialization.ISerialPlayer[];
         };
     };
-    export class CommonMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonMapInfoPage> {
+    export class CommonWarMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonMapInfoPage> {
         private readonly _zoomMap       : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _uiMapInfo     : TwnsUiMapInfo.UiMapInfo;
         private readonly _labelLoading  : TwnsUiLabel.UiLabel;
@@ -30,7 +30,7 @@ namespace TwnsCommonMapInfoPage {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/common/CommonMapInfoPage.exml";
+            this.skinName = "resource/skins/common/CommonWarMapInfoPage.exml";
         }
 
         protected _onOpened(): void {
@@ -88,4 +88,4 @@ namespace TwnsCommonMapInfoPage {
     }
 }
 
-export default TwnsCommonMapInfoPage;
+export default TwnsCommonWarMapInfoPage;

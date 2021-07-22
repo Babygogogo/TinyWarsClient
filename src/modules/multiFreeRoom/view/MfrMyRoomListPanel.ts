@@ -1,5 +1,5 @@
 
-import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
@@ -25,7 +25,7 @@ import TwnsMfrRoomInfoPanel                 from "./MfrRoomInfoPanel";
 import TwnsMfrRoomPlayerInfoPage            from "./MfrRoomPlayerInfoPage";
 
 namespace TwnsMfrMyRoomListPanel {
-    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForMfrRoomPlayerInfoPage         = TwnsMfrRoomPlayerInfoPage.OpenDataForMfrRoomPlayerInfoPage;
     import MfrRoomPlayerInfoPage                    = TwnsMfrRoomPlayerInfoPage.MfrRoomPlayerInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
@@ -40,7 +40,7 @@ namespace TwnsMfrMyRoomListPanel {
         private static _instance: MfrMyRoomListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForMfrRoomPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForMfrRoomPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -181,7 +181,7 @@ namespace TwnsMfrMyRoomListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
@@ -283,7 +283,7 @@ namespace TwnsMfrMyRoomListPanel {
             return dataArray.sort((v1, v2) => v1.roomId - v2.roomId);
         }
 
-        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const warData = (await MfrModel.getRoomInfo(MfrJoinModel.getJoinedPreviewingRoomId()))?.settingsForMfw.initialWarData;
             return warData == null
                 ? {}

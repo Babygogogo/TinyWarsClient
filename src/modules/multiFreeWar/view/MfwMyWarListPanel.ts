@@ -1,5 +1,5 @@
 
-import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
@@ -26,7 +26,7 @@ namespace TwnsMfwMyWarListPanel {
     import OpenDataForMfwWarPlayerInfoPage          = TwnsMfwWarPlayerInfoPage.OpenDataForMfwWarPlayerInfoPage;
     import MfwWarPlayerInfoPage                     = TwnsMfwWarPlayerInfoPage.MfwWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonMapInfoPage             = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
@@ -37,7 +37,7 @@ namespace TwnsMfwMyWarListPanel {
         private static _instance: MfwMyWarListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForMfwWarPlayerInfoPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForMfwWarPlayerInfoPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -140,7 +140,7 @@ namespace TwnsMfwMyWarListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
                     pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
@@ -243,7 +243,7 @@ namespace TwnsMfwMyWarListPanel {
             return dataArray.sort((v1, v2) => v1.warId - v2.warId);
         }
 
-        private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
             const warData = MpwModel.getMyWarInfo(MpwModel.getMfwPreviewingWarId())?.settingsForMfw?.initialWarData;
             return warData == null
                 ? {}

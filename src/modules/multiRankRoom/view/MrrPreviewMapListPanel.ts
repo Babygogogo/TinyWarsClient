@@ -1,5 +1,5 @@
 
-import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
@@ -27,7 +27,7 @@ import TwnsMrrMainMenuPanel                 from "./MrrMainMenuPanel";
 namespace TwnsMrrPreviewMapListPanel {
     import OpenDataForCommonWarAdvancedSettingsPage     = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage        = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonMapInfoPage                 = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarMapInfoPage              = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import LangTextType                                 = TwnsLangTextType.LangTextType;
     import NotifyType                                   = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                         = Types.WarBasicSettingsType;
@@ -42,7 +42,7 @@ namespace TwnsMrrPreviewMapListPanel {
         private static _instance: MrrPreviewMapListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelRankMatch        : TwnsUiLabel.UiLabel;
@@ -133,7 +133,7 @@ namespace TwnsMrrPreviewMapListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
                     pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
@@ -245,7 +245,7 @@ namespace TwnsMrrPreviewMapListPanel {
             return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
-        private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
             const mapId = MrrModel.getPreviewingMapId();
             return mapId == null
                 ? {}

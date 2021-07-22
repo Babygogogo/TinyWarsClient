@@ -1,6 +1,6 @@
 
 import TwnsCommonBlockPanel         from "../../common/view/CommonBlockPanel";
-import TwnsCommonMapInfoPage        from "../../common/view/CommonMapInfoPage";
+import TwnsCommonWarMapInfoPage     from "../../common/view/CommonWarMapInfoPage";
 import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
@@ -28,7 +28,7 @@ namespace TwnsRwReplayListPanel {
     import OpenDataForRwReplayWarInfoPage       = TwnsRwReplayWarInfoPage.OpenDataForRwReplayWarInfoPage;
     import RwReplayWarInfoPage                  = TwnsRwReplayWarInfoPage.RwReplayWarInfoPage;
     import RwSearchReplayPanel                  = TwnsRwSearchReplayPanel.RwSearchReplayPanel;
-    import OpenDataForCommonMapInfoPage         = TwnsCommonMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarMapInfoPage      = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForRwReplayPlayerInfoPage    = TwnsRwReplayPlayerInfoPage.OpenDataForRwReplayPlayerInfoPage;
     import RwReplayPlayerInfoPage               = TwnsRwReplayPlayerInfoPage.RwReplayPlayerInfoPage;
     import LangTextType                         = TwnsLangTextType.LangTextType;
@@ -42,7 +42,7 @@ namespace TwnsRwReplayListPanel {
         private static _instance: RwReplayListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonMapInfoPage | OpenDataForRwReplayPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForRwReplayPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelReplay           : TwnsUiLabel.UiLabel;
@@ -163,7 +163,7 @@ namespace TwnsRwReplayListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonMapInfoPage.CommonMapInfoPage,
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
                     pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
@@ -247,7 +247,7 @@ namespace TwnsRwReplayListPanel {
             return dataArray.sort((v1, v2) => v2.replayId - v1.replayId);
         }
 
-        private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
             const mapId = RwModel.getReplayInfo(RwModel.getPreviewingReplayId())?.replayBriefInfo?.mapId;
             return mapId == null
                 ? {}
