@@ -201,7 +201,7 @@ namespace TwnsMrrRoomInfoPanel {
                             content : Lang.getText(bannedCoIdSet.size > 0 ? LangTextType.A0138 : LangTextType.A0139),
                             callback: () => {
                                 MrrProxy.reqMrrSetBannedCoIdList(roomId, [...bannedCoIdSet]);
-                                this.close();
+                                TwnsCommonBanCoPanel.CommonBanCoPanel.hide();
                             },
                         });
                     },

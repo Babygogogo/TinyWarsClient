@@ -339,6 +339,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                         const callback = () => {
                             ScrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
                             Notify.dispatch(NotifyType.ScrCreateBannedCoIdArrayChanged);
+                            TwnsCommonBanCoPanel.CommonBanCoPanel.hide();
                         };
                         if (!bannedCoIdSet.has(selfCoId)) {
                             callback();

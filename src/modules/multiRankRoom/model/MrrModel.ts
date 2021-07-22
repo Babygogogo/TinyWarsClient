@@ -327,9 +327,9 @@ namespace MrrModel {
         };
     }
 
-    function checkIsMyRoom(roomInfo: IMrrRoomInfo): boolean {
+    function checkIsMyRoom(roomInfo: IMrrRoomInfo | undefined): boolean {
         const selfUserId = UserModel.getSelfUserId();
-        return roomInfo.playerDataList.some(v => v.userId === selfUserId);
+        return roomInfo?.playerDataList?.some(v => v.userId === selfUserId);
     }
 }
 

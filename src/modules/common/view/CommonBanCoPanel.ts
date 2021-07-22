@@ -139,7 +139,7 @@ namespace TwnsCommonBanCoPanel {
                 }
 
                 const maxBanCount = openData.maxBanCount;
-                if ((maxBanCount != null) && (bannedCoIdSet.size >= maxBanCount)) {
+                if ((maxBanCount != null) && (bannedCoIdSet.size > maxBanCount)) {
                     TwnsCommonAlertPanel.CommonAlertPanel.show({
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getFormattedText(LangTextType.F0031, maxBanCount),
@@ -148,7 +148,6 @@ namespace TwnsCommonBanCoPanel {
                 }
 
                 callback(new Set(bannedCoIdSet));
-                this.close();
             }
         }
 
