@@ -61,6 +61,7 @@ namespace TwnsCcrJoinRoomListPanel {
         private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
+        private _isTabInitialized   = false;
 
         public static show(): void {
             if (!CcrJoinRoomListPanel._instance) {
@@ -101,7 +102,8 @@ namespace TwnsCcrJoinRoomListPanel {
 
             this._showOpenAnimation();
 
-            this._hasReceivedData = false;
+            this._hasReceivedData   = false;
+            this._isTabInitialized  = false;
             await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupRoomList();
@@ -221,6 +223,7 @@ namespace TwnsCcrJoinRoomListPanel {
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
+            this._isTabInitialized = true;
         }
 
         private _updateComponentsForLanguage(): void {
@@ -275,15 +278,21 @@ namespace TwnsCcrJoinRoomListPanel {
         }
 
         private async _updateCommonMapInfoPage(): Promise<void> {
-            this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+            }
         }
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
-            this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+            }
         }
 
         private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
-            this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
+            }
         }
 
         private _createDataForListRoom(): DataForRoomRenderer[] {

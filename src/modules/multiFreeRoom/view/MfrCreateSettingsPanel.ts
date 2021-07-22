@@ -1,6 +1,6 @@
 
 import TwnsCommonMapInfoPage                from "../../common/view/CommonMapInfoPage";
-import TwnsCommonWarBasicSettingsPage from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
@@ -8,7 +8,7 @@ import CommonConstants                      from "../../tools/helpers/CommonCons
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
-import Logger from "../../tools/helpers/Logger";
+import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
 import TwnsLangTextType                     from "../../tools/lang/LangTextType";
@@ -67,7 +67,8 @@ namespace TwnsMfrCreateSettingsPanel {
         private readonly _btnBack               : TwnsUiButton.UiButton;
         private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
-        private _timeoutIdForBtnConfirm: number;
+        private _timeoutIdForBtnConfirm : number;
+        private _isTabInitialized       = false;
 
         public static show(): void {
             if (!MfrCreateSettingsPanel._instance) {
@@ -100,6 +101,7 @@ namespace TwnsMfrCreateSettingsPanel {
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
             this._sclSkinId.setItemRenderer(SkinIdRenderer);
 
+            this._isTabInitialized = false;
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -120,6 +122,7 @@ namespace TwnsMfrCreateSettingsPanel {
                     pageData    : this._createDataForCommonMapInfoPage(),
                 },
             ]);
+            this._isTabInitialized = true;
 
             this._showOpenAnimation();
 
@@ -217,7 +220,9 @@ namespace TwnsMfrCreateSettingsPanel {
         }
 
         private _updateCommonWarBasicSettingsPage(): void {
-            this._tabSettings.updatePageData(0, this._createDataForCommonWarBasicSettingsPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, this._createDataForCommonWarBasicSettingsPage());
+            }
         }
 
         private _createDataForCommonWarBasicSettingsPage(): OpenDataForCommonWarBasicSettingsPage {

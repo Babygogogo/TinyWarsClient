@@ -53,7 +53,8 @@ namespace TwnsScrCreateSettingsPanel {
         private readonly _btnBack               : TwnsUiButton.UiButton;
         private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
-        private _timeoutIdForBtnConfirm: number;
+        private _timeoutIdForBtnConfirm : number;
+        private _isTabInitialized       = false;
 
         public static show(): void {
             if (!ScrCreateSettingsPanel._instance) {
@@ -85,6 +86,7 @@ namespace TwnsScrCreateSettingsPanel {
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
+            this._isTabInitialized = false;
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -105,6 +107,7 @@ namespace TwnsScrCreateSettingsPanel {
                     pageClass   : ScrCreatePlayerInfoPage,
                 },
             ]);
+            this._isTabInitialized = true;
 
             this._showOpenAnimation();
 
@@ -185,7 +188,9 @@ namespace TwnsScrCreateSettingsPanel {
         }
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
-            this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
+            }
         }
 
         private _createDataForCommonMapInfoPage(): OpenDataForCommonMapInfoPage {

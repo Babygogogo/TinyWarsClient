@@ -82,6 +82,8 @@ namespace TwnsMfrRoomInfoPanel {
 
         private readonly _btnBack           : TwnsUiButton.UiButton;
 
+        private _isTabInitialized = false;
+
         public static show(openData: OpenDataForMfrRoomInfoPanel): void {
             if (!MfrRoomInfoPanel._instance) {
                 MfrRoomInfoPanel._instance = new MfrRoomInfoPanel();
@@ -125,7 +127,8 @@ namespace TwnsMfrRoomInfoPanel {
 
             this._showOpenAnimation();
 
-            const roomId = this._getOpenData().roomId;
+            const roomId            = this._getOpenData().roomId;
+            this._isTabInitialized  = false;
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
@@ -150,6 +153,7 @@ namespace TwnsMfrRoomInfoPanel {
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
+            this._isTabInitialized = true;
 
             this._initSclPlayerIndex();
             this._initSclSkinId();
@@ -367,15 +371,21 @@ namespace TwnsMfrRoomInfoPanel {
         }
 
         private async _updateCommonMapInfoPage(): Promise<void> {
-            this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+            }
         }
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
-            this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+            }
         }
 
         private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
-            this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
+            }
         }
 
         private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonMapInfoPage> {

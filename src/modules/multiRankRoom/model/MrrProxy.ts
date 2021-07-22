@@ -108,7 +108,7 @@ namespace MrrProxy {
 
     function _onMsgMrrDeleteRoomByServer(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrDeleteRoomByServer.IS;
-        MrrModel.deleteRoomInfo(data.roomId);
+        MrrModel.updateOnMsgMrrDeleteRoomByServer(data);
         Notify.dispatch(NotifyType.MsgMrrDeleteRoomByServer, data);
     }
 }

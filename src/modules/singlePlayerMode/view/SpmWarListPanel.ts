@@ -55,6 +55,8 @@ namespace TwnsSpmWarListPanel {
         private readonly _labelNoWar            : TwnsUiLabel.UiLabel;
         private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
+        private _isTabInitialized = false;
+
         public static show(): void {
             if (!SpmWarListPanel._instance) {
                 SpmWarListPanel._instance = new SpmWarListPanel();
@@ -88,6 +90,7 @@ namespace TwnsSpmWarListPanel {
 
             this._showOpenAnimation();
 
+            this._isTabInitialized = false;
             await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupWarList();
@@ -158,6 +161,7 @@ namespace TwnsSpmWarListPanel {
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
+            this._isTabInitialized = true;
         }
 
         private _updateComponentsForLanguage(): void {
@@ -212,15 +216,21 @@ namespace TwnsSpmWarListPanel {
         }
 
         private _updateCommonMapInfoPage(): void {
-            this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+            }
         }
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
-            this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+            }
         }
 
         private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
-            this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
+            }
         }
 
         private _createDataForListWar(): DataForWarRenderer[] {

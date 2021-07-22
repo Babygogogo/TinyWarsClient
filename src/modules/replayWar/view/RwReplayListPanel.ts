@@ -58,6 +58,7 @@ namespace TwnsRwReplayListPanel {
         private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
+        private _isTabInitialized   = false;
 
         public static show(): void {
             if (!RwReplayListPanel._instance) {
@@ -95,7 +96,8 @@ namespace TwnsRwReplayListPanel {
 
             this._showOpenAnimation();
 
-            this._hasReceivedData = false;
+            this._hasReceivedData   = false;
+            this._isTabInitialized  = false;
             this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupReplayList();
@@ -175,6 +177,7 @@ namespace TwnsRwReplayListPanel {
                     pageData    : { replayId: null } as OpenDataForRwReplayWarInfoPage,
                 },
             ]);
+            this._isTabInitialized = true;
         }
 
         private _updateComponentsForLanguage(): void {
@@ -228,7 +231,9 @@ namespace TwnsRwReplayListPanel {
         }
 
         private _updateCommonMapInfoPage(): void {
-            this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+            }
         }
 
         private _createDataForListReplay(): DataForReplayRenderer[] {

@@ -86,20 +86,16 @@ namespace CcrModel {
             _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo)]);
         });
     }
-    export function setRoomInfo(info: ICcrRoomInfo): void {
-        _roomInfoDict.set(info.roomId, info);
-    }
-    export function deleteRoomInfo(roomId: number): void {
-        _roomInfoDict.delete(roomId);
-        _unjoinedRoomIdSet.delete(roomId);
-        _joinedRoomIdSet.delete(roomId);
+    function setRoomInfo(roomId: number, info: ICcrRoomInfo | undefined): void {
+        _roomInfoDict.set(roomId, info);
     }
 
     export function setJoinableRoomInfoList(infoList: ICcrRoomInfo[]): void {
         _unjoinedRoomIdSet.clear();
         for (const roomInfo of infoList || []) {
-            _unjoinedRoomIdSet.add(roomInfo.roomId);
-            setRoomInfo(roomInfo);
+            const roomId = roomInfo.roomId;
+            _unjoinedRoomIdSet.add(roomId);
+            setRoomInfo(roomId, roomInfo);
         }
     }
     export function getUnjoinedRoomIdSet(): Set<number> {
@@ -109,14 +105,25 @@ namespace CcrModel {
     export function setJoinedRoomInfoList(infoList: ICcrRoomInfo[]): void {
         _joinedRoomIdSet.clear();
         for (const roomInfo of infoList || []) {
-            _joinedRoomIdSet.add(roomInfo.roomId);
-            setRoomInfo(roomInfo);
+            const roomId = roomInfo.roomId;
+            _joinedRoomIdSet.add(roomId);
+            setRoomInfo(roomId, roomInfo);
         }
     }
     export function getJoinedRoomIdSet(): Set<number> {
         return _joinedRoomIdSet;
     }
 
+    export function updateOnMsgCcrGetRoomInfo(data: ProtoTypes.NetMessage.MsgCcrGetRoomInfo.IS): void {
+        const roomInfo  = data.roomInfo;
+        const roomId    = data.roomId;
+        setRoomInfo(roomId, roomInfo);
+
+        if (roomInfo == null) {
+            _unjoinedRoomIdSet.delete(roomId);
+            _joinedRoomIdSet.delete(roomId);
+        }
+    }
     export async function updateOnMsgCcrDeletePlayer(data: ProtoTypes.NetMessage.MsgCcrDeletePlayer.IS): Promise<void> {
         const roomId    = data.roomId;
         const roomInfo  = await getRoomInfo(roomId);
@@ -194,6 +201,12 @@ namespace CcrModel {
                 _joinedRoomIdSet.delete(roomId);
             }
         }
+    }
+    export function updateOnMsgCcrDeleteRoomByServer(data: ProtoTypes.NetMessage.MsgCcrDeleteRoomByServer.IS): void {
+        const roomId = data.roomId;
+        setRoomInfo(roomId, undefined);
+        _unjoinedRoomIdSet.delete(roomId);
+        _joinedRoomIdSet.delete(roomId);
     }
 
     export async function checkIsRed(): Promise<boolean> {

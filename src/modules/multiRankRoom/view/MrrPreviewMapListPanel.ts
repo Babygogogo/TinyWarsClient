@@ -57,6 +57,8 @@ namespace TwnsMrrPreviewMapListPanel {
         private readonly _labelNoMap            : TwnsUiLabel.UiLabel;
         private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
+        private _isTabInitialized = false;
+
         public static show(openData: OpenDataForMrrPreviewMapListPanel): void {
             if (!MrrPreviewMapListPanel._instance) {
                 MrrPreviewMapListPanel._instance = new MrrPreviewMapListPanel();
@@ -89,6 +91,7 @@ namespace TwnsMrrPreviewMapListPanel {
 
             this._showOpenAnimation();
 
+            this._isTabInitialized = false;
             await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupMapList();
@@ -144,6 +147,7 @@ namespace TwnsMrrPreviewMapListPanel {
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
+            this._isTabInitialized = true;
         }
 
         private _updateComponentsForLanguage(): void {
@@ -188,15 +192,21 @@ namespace TwnsMrrPreviewMapListPanel {
         }
 
         private _updateCommonMapInfoPage(): void {
-            this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+            }
         }
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
-            this._tabSettings.updatePageData(1, await this._createDataForCommonWarBasicSettingsPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarBasicSettingsPage());
+            }
         }
 
         private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
-            this._tabSettings.updatePageData(2, await this._createDataForCommonWarAdvancedSettingsPage());
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarAdvancedSettingsPage());
+            }
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {

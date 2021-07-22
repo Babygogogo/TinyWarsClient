@@ -24,7 +24,7 @@ namespace MrrModel {
     let _previewingMapId            : number;
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;
-    const _allRoomDict              = new Map<number, IMrrRoomInfo>();
+    const _roomInfoDict             = new Map<number, IMrrRoomInfo>();
     const _roomInfoRequests         = new Map<number, ((info: NetMessage.MsgMrrGetRoomPublicInfo.IS | undefined | null) => void)[]>();
 
     export function setMaxConcurrentCount(hasFog: boolean, count: number): void {
@@ -38,17 +38,15 @@ namespace MrrModel {
         return hasFog ? _maxConcurrentCountForFog : _maxConcurrentCountForStd;
     }
 
-    export function setRoomInfo(roomInfo: IMrrRoomInfo): void {
-        _allRoomDict.set(roomInfo.roomId, roomInfo);
+    function setRoomInfo(roomId: number, roomInfo: IMrrRoomInfo | undefined): void {
+        _roomInfoDict.set(roomId, roomInfo);
     }
     export function getRoomInfo(roomId: number): Promise<IMrrRoomInfo | undefined | null> {
         if (roomId == null) {
             return new Promise((resolve) => resolve(null));
         }
-
-        const localData = _allRoomDict.get(roomId);
-        if (localData) {
-            return new Promise(resolve => resolve(localData));
+        if (_roomInfoDict.has(roomId)) {
+            return new Promise(resolve => resolve(_roomInfoDict.get(roomId)));
         }
 
         if (_roomInfoRequests.has(roomId)) {
@@ -97,23 +95,15 @@ namespace MrrModel {
             _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo)]);
         });
     }
-    export function deleteRoomInfo(roomId: number): void {
-        const roomInfo = _allRoomDict.get(roomId);
-        _allRoomDict.delete(roomId);
-
-        if ((roomInfo) && (checkIsMyRoom(roomInfo))) {
-            Notify.dispatch(NotifyType.MrrMyRoomDeleted);
-        }
-    }
 
     export function updateWithMyRoomInfoList(roomList: IMrrRoomInfo[]): void {
         for (const roomInfo of roomList || []) {
-            setRoomInfo(roomInfo);
+            setRoomInfo(roomInfo.roomId, roomInfo);
         }
     }
     export function getMyRoomIdArray(): number[] {
         const idArray: number[] = [];
-        for (const [roomId, roomInfo] of _allRoomDict) {
+        for (const [roomId, roomInfo] of _roomInfoDict) {
             if (checkIsMyRoom(roomInfo)) {
                 idArray.push(roomId);
             }
@@ -122,10 +112,10 @@ namespace MrrModel {
     }
 
     export async function updateOnMsgMrrGetRoomPublicInfo(data: ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS): Promise<void> {
-        const roomInfo = data.roomInfo;
-        setRoomInfo(data.roomInfo);
+        const roomInfo  = data.roomInfo;
+        const roomId    = roomInfo.roomId;
+        setRoomInfo(roomId, roomInfo);
 
-        const roomId = roomInfo.roomId;
         if (MrrSelfSettingsModel.getRoomId() === roomId) {
             await MrrSelfSettingsModel.resetData(roomId);
         }
@@ -193,6 +183,15 @@ namespace MrrModel {
                     isReady             : true,
                 });
             }
+        }
+    }
+    export function updateOnMsgMrrDeleteRoomByServer(data: ProtoTypes.NetMessage.MsgMrrDeleteRoomByServer.IS): void {
+        const roomId        = data.roomId;
+        const oldRoomInfo   = _roomInfoDict.get(roomId);
+        setRoomInfo(roomId, undefined);
+
+        if ((oldRoomInfo) && (checkIsMyRoom(oldRoomInfo))) {
+            Notify.dispatch(NotifyType.MrrMyRoomDeleted);
         }
     }
 

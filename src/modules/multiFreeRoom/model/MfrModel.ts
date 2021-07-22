@@ -32,10 +32,8 @@ namespace MfrModel {
         if (roomId == null) {
             return new Promise((resolve) => resolve(null));
         }
-
-        const localData = _roomInfoDict.get(roomId);
-        if (localData) {
-            return new Promise(resolve => resolve(localData));
+        if (_roomInfoDict.has(roomId)) {
+            return new Promise(resolve => resolve(_roomInfoDict.get(roomId)));
         }
 
         if (_roomInfoRequests.has(roomId)) {
@@ -84,20 +82,16 @@ namespace MfrModel {
             _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo)]);
         });
     }
-    export function setRoomInfo(info: IMfrRoomInfo): void {
-        _roomInfoDict.set(info.roomId, info);
-    }
-    export function deleteRoomInfo(roomId: number): void {
-        _roomInfoDict.delete(roomId);
-        _unjoinedRoomIdSet.delete(roomId);
-        _joinedRoomIdSet.delete(roomId);
+    function setRoomInfo(roomId: number, info: IMfrRoomInfo): void {
+        _roomInfoDict.set(roomId, info);
     }
 
     export function setJoinableRoomInfoList(infoList: IMfrRoomInfo[]): void {
         _unjoinedRoomIdSet.clear();
         for (const roomInfo of infoList || []) {
-            _unjoinedRoomIdSet.add(roomInfo.roomId);
-            setRoomInfo(roomInfo);
+            const roomId = roomInfo.roomId;
+            _unjoinedRoomIdSet.add(roomId);
+            setRoomInfo(roomId, roomInfo);
         }
     }
     export function getUnjoinedRoomIdSet(): Set<number> {
@@ -107,14 +101,25 @@ namespace MfrModel {
     export function setJoinedRoomInfoList(infoList: IMfrRoomInfo[]): void {
         _joinedRoomIdSet.clear();
         for (const roomInfo of infoList || []) {
-            _joinedRoomIdSet.add(roomInfo.roomId);
-            setRoomInfo(roomInfo);
+            const roomId = roomInfo.roomId;
+            _joinedRoomIdSet.add(roomId);
+            setRoomInfo(roomId, roomInfo);
         }
     }
     export function getJoinedRoomIdSet(): Set<number> {
         return _joinedRoomIdSet;
     }
 
+    export function updateOnMsgMfrGetRoomInfo(data: ProtoTypes.NetMessage.MsgMfrGetRoomInfo.IS): void {
+        const roomInfo  = data.roomInfo;
+        const roomId    = data.roomId;
+        setRoomInfo(roomId, roomInfo);
+
+        if (roomInfo == null) {
+            _unjoinedRoomIdSet.delete(roomId);
+            _joinedRoomIdSet.delete(roomId);
+        }
+    }
     export async function updateOnMsgMfrDeletePlayer(data: ProtoTypes.NetMessage.MsgMfrDeletePlayer.IS): Promise<void> {
         const roomId    = data.roomId;
         const roomInfo  = await getRoomInfo(roomId);
@@ -194,6 +199,12 @@ namespace MfrModel {
                 _joinedRoomIdSet.delete(roomId);
             }
         }
+    }
+    export function updateOnMsgMfrDeleteRoomByServer(data: ProtoTypes.NetMessage.MsgMfrDeleteRoomByServer.IS): void {
+        const roomId = data.roomId;
+        setRoomInfo(roomId, undefined);
+        _unjoinedRoomIdSet.delete(roomId);
+        _joinedRoomIdSet.delete(roomId);
     }
 
     export async function checkIsRed(): Promise<boolean> {

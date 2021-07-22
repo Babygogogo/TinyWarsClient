@@ -71,7 +71,7 @@ namespace McrProxy {
     function _onMsgMcrDeleteRoomByServer(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrDeleteRoomByServer.IS;
         if (!data.errorCode) {
-            McrModel.deleteRoomInfo(data.roomId);
+            McrModel.updateOnMsgMcrDeleteRoomByServer(data);
             Notify.dispatch(NotifyType.MsgMcrDeleteRoomByServer, data);
         }
     }
@@ -168,14 +168,7 @@ namespace McrProxy {
         if (data.errorCode) {
             Notify.dispatch(NotifyType.MsgMcrGetRoomInfoFailed, data);
         } else {
-            const roomInfo  = data.roomInfo;
-            const roomId    = data.roomId;
-            if (roomInfo) {
-                McrModel.setRoomInfo(roomInfo);
-            } else {
-                McrModel.deleteRoomInfo(roomId);
-            }
-
+            McrModel.updateOnMsgMcrGetRoomInfo(data);
             Notify.dispatch(NotifyType.MsgMcrGetRoomInfo, data);
         }
     }
