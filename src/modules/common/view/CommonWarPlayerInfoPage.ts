@@ -1,6 +1,5 @@
 
 import TwnsChatPanel            from "../../chat/view/ChatPanel";
-import McrModel                 from "../../multiCustomRoom/model/McrModel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
@@ -8,17 +7,14 @@ import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
 import TwnsUiButton             from "../../tools/ui/UiButton";
 import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 import UserModel                from "../../user/model/UserModel";
 import TwnsUserPanel            from "../../user/view/UserPanel";
-import WarMapModel              from "../../warMap/model/WarMapModel";
 import TwnsCommonCoInfoPanel    from "./CommonCoInfoPanel";
 import TwnsCommonConfirmPanel   from "./CommonConfirmPanel";
 
@@ -28,18 +24,20 @@ namespace TwnsCommonWarPlayerInfoPage {
     import UserPanel            = TwnsUserPanel.UserPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import IWarRule             = ProtoTypes.WarRule.IWarRule;
 
     export type PlayerInfo = {
         playerIndex         : number;
+        teamIndex           : number;
         userId              : number | undefined;
         coId                : number | undefined;
         unitAndTileSkinId   : number | undefined;
         isReady             : boolean | undefined;
+        isInTurn            : boolean | undefined;
+        isDefeat            : boolean | undefined;
     };
     export type OpenDataForCommonWarPlayerInfoPage = {
         configVersion           : string;
-        warRule                 : IWarRule;
+        playersCountUnneutral   : number;
         roomOwnerPlayerIndex    : number | undefined;           // undefined == not a room
         callbackOnExitRoom      : (() => void) | undefined;
         callbackOnDeletePlayer  : ((playerIndex: number) => void) | undefined;
@@ -66,33 +64,50 @@ namespace TwnsCommonWarPlayerInfoPage {
             this._updateListPlayer();
         }
 
-        private async _updateListPlayer(): Promise<void> {
-            const roomInfo      = await McrModel.getRoomInfo(this._getOpenData().roomId);
-            const mapRawData    = roomInfo ? await WarMapModel.getRawData(roomInfo.settingsForMcw.mapId) : null;
+        private _updateListPlayer(): void {
+            const openData      = this._getOpenData();
             const listPlayer    = this._listPlayer;
-            if (mapRawData) {
-                listPlayer.bindData(this._createDataForListPlayer(roomInfo, mapRawData.playersCountUnneutral));
-            } else {
+            if (openData == null) {
                 listPlayer.clear();
+                return;
             }
-        }
 
-        private _createDataForListPlayer(roomInfo: ProtoTypes.MultiCustomRoom.IMcrRoomInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
-            const dataList: DataForPlayerRenderer[] = [];
-            for (let playerIndex = 1; playerIndex <= mapPlayersCount; ++playerIndex) {
-                dataList.push({
-                    roomId      : roomInfo.roomId,
-                    playerIndex,
+            const {
+                configVersion,
+                callbackOnExitRoom,
+                callbackOnDeletePlayer,
+                roomOwnerPlayerIndex,
+                playersCountUnneutral,
+                playerInfoArray,
+            } = openData;
+            const isRoomOwnedBySelf = playerInfoArray.find(v => v.playerIndex === roomOwnerPlayerIndex)?.userId === UserModel.getSelfUserId();
+            const dataArray         : DataForPlayerRenderer[] = [];
+            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+                const rawPlayerInfo = playerInfoArray.find(v => v.playerIndex === playerIndex);
+                dataArray.push({
+                    configVersion,
+                    isRoomOwnedBySelf,
+                    callbackOnExitRoom,
+                    callbackOnDeletePlayer,
+                    playerInfo  : {
+                        playerIndex,
+                        teamIndex           : rawPlayerInfo.teamIndex,
+                        userId              : rawPlayerInfo?.userId,
+                        coId                : rawPlayerInfo?.coId,
+                        unitAndTileSkinId   : rawPlayerInfo?.unitAndTileSkinId,
+                        isReady             : rawPlayerInfo?.isReady,
+                        isInTurn            : rawPlayerInfo?.isInTurn,
+                        isDefeat            : rawPlayerInfo?.isDefeat,
+                    },
                 });
             }
 
-            return dataList;
+            listPlayer.bindData(dataArray);
         }
     }
 
     type DataForPlayerRenderer = {
         configVersion           : string;
-        warRule                 : IWarRule;
         isRoomOwnedBySelf       : boolean;
         callbackOnExitRoom      : (() => void) | undefined;
         callbackOnDeletePlayer  : ((playerIndex: number) => void) | undefined;
@@ -209,7 +224,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             const playerInfo            = data.playerInfo;
             const playerIndex           = playerInfo.playerIndex;
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarCommonHelpers.getTeamIndexByRuleForPlayers(data.warRule.ruleForPlayers, playerIndex));
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerInfo.teamIndex);
             this._imgSkin.source        = getSourceForImgSkin(playerInfo.unitAndTileSkinId);
 
             const coId                  = playerInfo.coId;
@@ -245,7 +260,11 @@ namespace TwnsCommonWarPlayerInfoPage {
             const playerInfo    = this.data.playerInfo;
             const label         = this._labelStatus;
             if (playerInfo.isReady) {
-                label.text = `Ready!`;
+                label.text = Lang.getText(LangTextType.B0402);
+            } else if (playerInfo.isInTurn) {
+                label.text = Lang.getText(LangTextType.B0086);
+            } else if (playerInfo.isDefeat != null) {
+                label.text = Lang.getText(playerInfo.isDefeat ? LangTextType.B0472 : LangTextType.B0471);
             } else {
                 // TODO
                 label.text = ``;

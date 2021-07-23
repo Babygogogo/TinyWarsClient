@@ -1,6 +1,7 @@
 
 import TwnsCommonBlockPanel         from "../../common/view/CommonBlockPanel";
 import TwnsCommonWarMapInfoPage     from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonWarPlayerInfoPage  from "../../common/view/CommonWarPlayerInfoPage";
 import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
@@ -20,17 +21,15 @@ import TwnsUiTabItemRenderer        from "../../tools/ui/UiTabItemRenderer";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 import RwModel                      from "../model/RwModel";
 import RwProxy                      from "../model/RwProxy";
-import TwnsRwReplayPlayerInfoPage   from "./RwReplayPlayerInfoPage";
 import TwnsRwReplayWarInfoPage      from "./RwReplayWarInfoPage";
 import TwnsRwSearchReplayPanel      from "./RwSearchReplayPanel";
 
 namespace TwnsRwReplayListPanel {
     import OpenDataForRwReplayWarInfoPage       = TwnsRwReplayWarInfoPage.OpenDataForRwReplayWarInfoPage;
+    import OpenDataForCommonWarMapInfoPage      = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage   = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import RwReplayWarInfoPage                  = TwnsRwReplayWarInfoPage.RwReplayWarInfoPage;
     import RwSearchReplayPanel                  = TwnsRwSearchReplayPanel.RwSearchReplayPanel;
-    import OpenDataForCommonWarMapInfoPage      = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForRwReplayPlayerInfoPage    = TwnsRwReplayPlayerInfoPage.OpenDataForRwReplayPlayerInfoPage;
-    import RwReplayPlayerInfoPage               = TwnsRwReplayPlayerInfoPage.RwReplayPlayerInfoPage;
     import LangTextType                         = TwnsLangTextType.LangTextType;
     import NotifyType                           = TwnsNotifyType.NotifyType;
     import CommonBlockPanel                     = TwnsCommonBlockPanel.CommonBlockPanel;
@@ -42,7 +41,7 @@ namespace TwnsRwReplayListPanel {
         private static _instance: RwReplayListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForRwReplayPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelReplay           : TwnsUiLabel.UiLabel;
@@ -164,12 +163,12 @@ namespace TwnsRwReplayListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : this._createDataForCommonMapInfoPage(),
+                    pageData    : this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : RwReplayPlayerInfoPage,
-                    pageData    : { replayId: null } as OpenDataForRwReplayPlayerInfoPage,
+                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageData    : this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -224,15 +223,21 @@ namespace TwnsRwReplayListPanel {
                 btnNextStep.visible = true;
 
                 const tab = this._tabSettings;
-                tab.updatePageData(1, { replayId } as OpenDataForRwReplayPlayerInfoPage);
                 tab.updatePageData(2, { replayId } as OpenDataForRwReplayWarInfoPage);
-                this._updateCommonMapInfoPage();
+                this._updateCommonWarMapInfoPage();
+                this._updateCommonWarPlayerInfoPage();
             }
         }
 
-        private _updateCommonMapInfoPage(): void {
+        private _updateCommonWarMapInfoPage(): void {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+                this._tabSettings.updatePageData(0, this._createDataForCommonWarMapInfoPage());
+            }
+        }
+
+        private _updateCommonWarPlayerInfoPage(): void {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(1, this._createDataForCommonWarPlayerInfoPage());
             }
         }
 
@@ -247,11 +252,42 @@ namespace TwnsRwReplayListPanel {
             return dataArray.sort((v1, v2) => v2.replayId - v1.replayId);
         }
 
-        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+        private _createDataForCommonWarMapInfoPage(): OpenDataForCommonWarMapInfoPage {
             const mapId = RwModel.getReplayInfo(RwModel.getPreviewingReplayId())?.replayBriefInfo?.mapId;
             return mapId == null
                 ? {}
                 : { mapInfo: { mapId } };
+        }
+
+        private _createDataForCommonWarPlayerInfoPage(): OpenDataForCommonWarPlayerInfoPage | undefined {
+            const replayInfo = RwModel.getReplayInfo(RwModel.getPreviewingReplayId());
+            if (replayInfo == null) {
+                return undefined;
+            }
+
+            const replayBriefInfo   = replayInfo.replayBriefInfo;
+            const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+            for (const playerInfo of replayBriefInfo.playerInfoList || []) {
+                playerInfoArray.push({
+                    playerIndex         : playerInfo.playerIndex,
+                    teamIndex           : playerInfo.teamIndex,
+                    userId              : playerInfo.userId,
+                    coId                : playerInfo.coId,
+                    unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
+                    isReady             : undefined,
+                    isInTurn            : undefined,
+                    isDefeat            : !playerInfo.isAlive,
+                });
+            }
+
+            return {
+                configVersion           : replayBriefInfo.configVersion,
+                playersCountUnneutral   : playerInfoArray.length,
+                roomOwnerPlayerIndex    : undefined,
+                callbackOnExitRoom      : undefined,
+                callbackOnDeletePlayer  : undefined,
+                playerInfoArray,
+            };
         }
 
         private _showOpenAnimation(): void {

@@ -2,6 +2,7 @@
 import TwnsCommonAlertPanel                 from "../../common/view/CommonAlertPanel";
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import TwnsCcwWar                           from "../../coopCustomWar/model/CcwWar";
 import TwnsMcwWar                           from "../../multiCustomWar/model/McwWar";
 import TwnsMfwWar                           from "../../multiFreeWar/model/MfwWar";
@@ -19,6 +20,7 @@ import Notify                               from "../../tools/notify/Notify";
 import TwnsNotifyType                       from "../../tools/notify/NotifyType";
 import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 import WarActionExecutor                    from "../../tools/warHelpers/WarActionExecutor";
+import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
 import UserModel                            from "../../user/model/UserModel";
 import WarMapModel                          from "../../warMap/model/WarMapModel";
 import TwnsMpwWar                           from "./MpwWar";
@@ -43,6 +45,7 @@ namespace MpwModel {
     import ISettingsForMfw                          = ProtoTypes.WarSettings.ISettingsForMfw;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
     let _allWarInfoList         : IMpwWarInfo[] = [];
     let _unwatchedWarInfos      : IMpwWatchInfo[];
@@ -491,6 +494,39 @@ namespace MpwModel {
             Logger.error(`MpwModel.createDataForCommonWarAdvancedSettingsPage() invalid warInfo.`);
             return undefined;
         }
+    }
+
+    export async function createDataForCommonWarPlayerInfoPage(warId: number): Promise<OpenDataForCommonWarPlayerInfoPage | undefined> {
+        const warInfo = getMyWarInfo(warId);
+        if (warInfo == null) {
+            return undefined;
+        }
+
+        const settingsForCommon = warInfo.settingsForCommon;
+        const warRule           = settingsForCommon.warRule;
+        const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        for (const playerInfo of warInfo.playerInfoList || []) {
+            const playerIndex = playerInfo.playerIndex;
+            playerInfoArray.push({
+                playerIndex,
+                teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                userId              : playerInfo.userId,
+                coId                : playerInfo.coId,
+                unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
+                isReady             : undefined,
+                isInTurn            : playerIndex === warInfo.playerIndexInTurn,
+                isDefeat            : !playerInfo.isAlive,
+            });
+        }
+
+        return {
+            configVersion           : settingsForCommon.configVersion,
+            playersCountUnneutral   : WarRuleHelpers.getPlayersCount(warRule),
+            roomOwnerPlayerIndex    : undefined,
+            callbackOnDeletePlayer  : undefined,
+            callbackOnExitRoom      : undefined,
+            playerInfoArray,
+        };
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
