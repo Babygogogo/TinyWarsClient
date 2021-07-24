@@ -558,7 +558,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0132]: [
             `请设定您愿意同时进行的排位赛的数量上限（设置为0等同于您不参加对应模式的排位赛）。`,
-            `Please set the maximum number of qualifying matches you are willing to play at the same time. Setting it to 0 is equivalent to not participating in qualifying matches.`
+            `Please set the maximum number of ranking matches you are willing to play at the same time. Setting it to 0 is equivalent to not participating in ranking matches.`
         ],
         [LangTextType.A0133]: [
             `正在等待对战各方禁用CO。`,
@@ -935,8 +935,8 @@ namespace TwnsLangCommonText {
             `Please make sure that there is at least one preset war rule.`,
         ],
         [LangTextType.A0224]: [
-            `这是《高级战争》1、2、DS版的网络对战版。主要维护者：Amarriner、Walker、Matsuzen。`,
-            `This is a web version of Advance Wars 1/2/Dual Strike. Maintained by Amarriner, Walker and Matsuzen.`,
+            `这是《高级战争》1、2、DS版的网络对战版，独立于Tiny Wars。主要开发维护者：Amarriner、Walker、Matsuzen。`,
+            `This is a web version of Advance Wars 1/2/Dual Strike, and is independent of Tiny Wars. Mainly developed/maintained by Amarriner, Walker and Matsuzen.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

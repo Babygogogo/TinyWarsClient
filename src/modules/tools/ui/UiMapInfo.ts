@@ -75,17 +75,25 @@ namespace TwnsUiMapInfo {
         }
 
         private async _updateComponentsForMapInfo(): Promise<void> {
-            const data = this._data;
-            if (!data) {
-                return;
-            }
-
+            const data              = this._data;
             const labelMapName      = this._labelMapName;
             const labelDesigner     = this._labelDesigner;
             const labelPlayersCount = this._labelPlayersCount;
             const labelRating       = this._labelRating;
             const labelPlayedTimes  = this._labelPlayedTimes;
             const labelMapSize      = this._labelMapSize;
+
+            if (data == null) {
+                labelMapName.text       = `--`;
+                labelDesigner.text      = `--`;
+                labelPlayersCount.text  = `--`;
+                labelRating.text        = `--`;
+                labelPlayedTimes.text   = `--`;
+                labelMapSize.text       = `--`;
+
+                return;
+            }
+
 
             const mapInfo = data.mapInfo;
             if (mapInfo) {

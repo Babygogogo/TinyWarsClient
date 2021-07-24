@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
         xmlns:TwnsUiMapInfo="TwnsUiMapInfo.*" xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing" xmlns:TwnsUiZoomableMap="TwnsUiZoomableMap.*">
     <e:Group left="0" right="0" top="0" bottom="0">
@@ -8,9 +9,9 @@
                                  textAlign="center" horizontalCenter="0" verticalCenter="0" />
             <TwnsUiZoomableMap:UiZoomableMap id="_zoomMap" left="0" right="0" top="0" bottom="0" />
         </e:Group>
-        <TwnsUiButton:UiButton id="_btnBack" label="Back" y="20" height="30" width="80"
+        <TwnsUiButton:UiButton id="_btnBack" label="Back" y="20" height="30" width="220"
                                skinName="Skins.Component.Button.ButtonYellow001" left="0" />
-        <e:Group id="_groupNavigator" x="100" y="20">
+        <e:Group id="_groupNavigator" x="240" y="20">
             <e:Group x="0" y="0">
                 <TwnsUiLabel:UiLabel id="_labelSinglePlayer" text="Single Player" size="14" width="80" wordWrap="true"
                                      textAlign="center" x="0" y="0" textColor="0xAAAAAA" />
@@ -36,7 +37,7 @@
                 <e:VerticalLayout horizontalAlign="center" gap="4" />
             </e:layout>
         </e:Group>
-        <TwnsUiButton:UiButton id="_btnSearch" label="Filter" x="20" y="80" height="30" width="80">
+        <TwnsUiButton:UiButton id="_btnSearch" label="Filter" x="20" y="80" height="30" width="200">
             <TwnsUiButton:skinName>
                 <e:Skin>
                     <e:Group left="0" right="0" top="0" bottom="0">
@@ -99,7 +100,7 @@
             </TwnsUiScrollList:UiScrollList>
         </e:Group>
         <TwnsUiMapInfo:UiMapInfo id="_uiMapInfo" skinName="Skins.Component.MapInfo.MapInfo001" right="0" bottom="20" />
-        <TwnsUiButton:UiButton id="_btnNextStep" label="下一步" height="30" width="160" bottom="20"
+        <TwnsUiButton:UiButton id="_btnNextStep" label="下一步" height="30" width="200" bottom="20"
                                skinName="Skins.Component.Button.ButtonYellow001" left="20"></TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>

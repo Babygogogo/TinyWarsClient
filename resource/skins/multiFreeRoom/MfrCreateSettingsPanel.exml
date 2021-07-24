@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0">
         <e:Group id="_groupTab" top="80" left="200" right="0" bottom="0">
             <TwnsUiTab:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
@@ -12,14 +13,15 @@
                                 <e:itemRendererSkinName>
                                     <e:Skin states="up,down,disabled" height="30" width="100">
                                         <e:Group left="0" top="0" bottom="0" right="0">
-                                            <TwnsUiImage:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1" left="0"
-                                                            right="0" top="0" bottom="0" x="0" y="0" visible.up="false" />
-                                            <TwnsUiImage:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001" left="0"
-                                                            right="0" top="0" bottom="0" x="0" y="0" visible.up="true"
-                                                            visible.down="false" />
+                                            <TwnsUiImage:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1"
+                                                                 left="0" right="0" top="0" bottom="0" x="0" y="0"
+                                                                 visible.up="false" />
+                                            <TwnsUiImage:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001"
+                                                                 left="0" right="0" top="0" bottom="0" x="0" y="0"
+                                                                 visible.up="true" visible.down="false" />
                                             <TwnsUiLabel:UiLabel id="_labelName" text="Advanced Settings" size="12"
-                                                            textColor="0xCCCCCC" wordWrap="true" left="4" right="4"
-                                                            textAlign="center" verticalCenter="1" />
+                                                                 textColor="0xCCCCCC" wordWrap="true" left="4" right="4"
+                                                                 textAlign="center" verticalCenter="1" />
                                         </e:Group>
                                     </e:Skin>
                                 </e:itemRendererSkinName>
@@ -32,16 +34,16 @@
                 </e:skinName>
             </TwnsUiTab:UiTab>
         </e:Group>
-        <e:Group id="_groupNavigator" x="100" y="20">
+        <e:Group id="_groupNavigator" x="200" y="20">
             <e:Group x="0" y="0">
                 <TwnsUiLabel:UiLabel id="_labelMultiPlayer" text="Multi Player" size="14" width="80" wordWrap="true"
-                                textAlign="center" x="0" y="0" textColor="0xAAAAAA" />
+                                     textAlign="center" x="0" y="0" textColor="0xAAAAAA" />
                 <TwnsUiLabel:UiLabel text="Free Mode" size="14" id="_labelFreeMode" width="80" wordWrap="true"
-                                textAlign="center" x="92" y="0" textColor="0xAAAAAA" />
+                                     textAlign="center" x="92" y="0" textColor="0xAAAAAA" />
                 <TwnsUiLabel:UiLabel text="Create Rooms" size="14" id="_labelCreateRoom" width="80" wordWrap="true"
-                                textAlign="center" x="102" y="10" textColor="0xAAAAAA" />
+                                     textAlign="center" x="102" y="10" textColor="0xAAAAAA" />
                 <TwnsUiLabel:UiLabel text="Room Settings" size="14" id="_labelRoomSettings" width="80" wordWrap="true"
-                                textAlign="center" x="112" y="20" bold="true" />
+                                     textAlign="center" x="112" y="20" bold="true" />
                 <e:layout>
                     <e:HorizontalLayout verticalAlign="bottom" gap="12" />
                 </e:layout>
@@ -62,8 +64,8 @@
                 <e:VerticalLayout horizontalAlign="center" gap="4" />
             </e:layout>
         </e:Group>
-        <TwnsUiButton:UiButton id="_btnBack" label="Back" y="20" height="30" width="80"
-                         skinName="Skins.Component.Button.ButtonYellow001" left="0"></TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnBack" label="Back" y="20" height="30" width="180"
+                               skinName="Skins.Component.Button.ButtonYellow001" left="0"></TwnsUiButton:UiButton>
         <e:Group id="_groupSettings" left="20" top="80">
             <e:Group id="_groupChoosePlayerIndex" x="0" y="84" locked="true">
                 <TwnsUiLabel:UiLabel id="_labelChoosePlayerIndex" text="选择势力" x="0" y="-82" bold="true" size="20" />
@@ -72,13 +74,13 @@
                         <e:itemRendererSkinName>
                             <e:Skin height="24" width="80" currentState="up" states="up,down">
                                 <e:Group left="0" top="0" bottom="0" right="0">
-                                    <TwnsUiImage:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1" left="0" right="0"
-                                                    top="0" bottom="0" x="0" y="0" visible.up="false" />
-                                    <TwnsUiImage:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001" left="0" right="0"
-                                                    top="0" bottom="0" x="0" y="0" visible.up="true"
-                                                    visible.down="false" />
+                                    <TwnsUiImage:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1" left="0"
+                                                         right="0" top="0" bottom="0" x="0" y="0" visible.up="false" />
+                                    <TwnsUiImage:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001" left="0"
+                                                         right="0" top="0" bottom="0" x="0" y="0" visible.up="true"
+                                                         visible.down="false" />
                                     <TwnsUiLabel:UiLabel id="_labelName" text="P1" size="12" textColor="0xCCCCCC"
-                                                    horizontalCenter="0" verticalCenter="1" x="90" y="7" />
+                                                         horizontalCenter="0" verticalCenter="1" x="90" y="7" />
                                 </e:Group>
                             </e:Skin>
                         </e:itemRendererSkinName>
@@ -99,9 +101,9 @@
                             <e:Skin height="24" width="40" currentState="up">
                                 <e:Group left="0" top="0" bottom="0" right="0">
                                     <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" x="0" y="0"
-                                                    source="commonColorTransparent0000" />
+                                                         source="commonColorTransparent0000" />
                                     <TwnsUiImage:UiImage id="_imgColor" source="commonCircle0000" horizontalCenter="0"
-                                                    verticalCenter="0" />
+                                                         verticalCenter="0" />
                                 </e:Group>
                             </e:Skin>
                         </e:itemRendererSkinName>
@@ -119,6 +121,6 @@
             </e:layout>
         </e:Group>
         <TwnsUiButton:UiButton id="_btnConfirm" label="确定" height="30" width="160" bottom="20" left="20"
-                         skinName="Skins.Component.Button.ButtonYellow001"></TwnsUiButton:UiButton>
+                               skinName="Skins.Component.Button.ButtonYellow001"></TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>
