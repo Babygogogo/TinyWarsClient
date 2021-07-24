@@ -2,6 +2,7 @@
 import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import CcrModel                             from "../../coopCustomRoom/model/CcrModel";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
@@ -23,14 +24,12 @@ import CcrJoinModel                         from "../model/CcrJoinModel";
 import CcrProxy                             from "../model/CcrProxy";
 import TwnsCcrMainMenuPanel                 from "./CcrMainMenuPanel";
 import TwnsCcrRoomInfoPanel                 from "./CcrRoomInfoPanel";
-import TwnsCcrRoomPlayerInfoPage            from "./CcrRoomPlayerInfoPage";
 
 namespace TwnsCcrMyRoomListPanel {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCcrRoomPlayerInfoPage         = TwnsCcrRoomPlayerInfoPage.OpenDataForCcrRoomPlayerInfoPage;
-    import CcrRoomPlayerInfoPage                    = TwnsCcrRoomPlayerInfoPage.CcrRoomPlayerInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
@@ -41,7 +40,7 @@ namespace TwnsCcrMyRoomListPanel {
         private static _instance: CcrMyRoomListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
@@ -87,6 +86,9 @@ namespace TwnsCcrMyRoomListPanel {
                 { type: NotifyType.MsgCcrDeletePlayer,                  callback: this._onNotifyMsgCcrDeletePlayer },
                 { type: NotifyType.MsgCcrExitRoom,                      callback: this._onNotifyMsgCcrExitRoom },
                 { type: NotifyType.MsgCcrGetRoomInfo,                   callback: this._onNotifyMsgCcrGetRoomInfo },
+                { type: NotifyType.MsgCcrSetSelfSettings,               callback: this._onNotifyMsgCcrSetSelfSettings },
+                { type: NotifyType.MsgCcrSetReady,                      callback: this._onNotifyMsgCcrSetReady },
+                { type: NotifyType.MsgCcrGetOwnerPlayerIndex,           callback: this._onNotifyMsgCcrGetOwnerPlayerIndex },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -136,15 +138,30 @@ namespace TwnsCcrMyRoomListPanel {
             this._updateGroupRoomList();
         }
 
-        private _onNotifyMsgCcrJoinRoom(): void {
+        private _onNotifyMsgCcrJoinRoom(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrJoinRoom.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+
             this._updateGroupRoomList();
         }
 
-        private _onNotifyMsgCcrDeletePlayer(): void {
+        private _onNotifyMsgCcrDeletePlayer(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrDeletePlayer.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+
             this._updateGroupRoomList();
         }
 
-        private _onNotifyMsgCcrExitRoom(): void {
+        private _onNotifyMsgCcrExitRoom(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrExitRoom.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+
             this._updateGroupRoomList();
         }
 
@@ -152,6 +169,27 @@ namespace TwnsCcrMyRoomListPanel {
             const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomInfo.IS;
             if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
                 this._updateComponentsForPreviewingRoomInfo();
+            }
+        }
+
+        private _onNotifyMsgCcrSetSelfSettings(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrSetSelfSettings.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+        }
+
+        private _onNotifyMsgCcrSetReady(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrSetReady.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+        }
+
+        private _onNotifyMsgCcrGetOwnerPlayerIndex(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrGetOwnerPlayerIndex.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
             }
         }
 
@@ -180,12 +218,12 @@ namespace TwnsCcrMyRoomListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : await this._createDataForCommonMapInfoPage(),
+                    pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : CcrRoomPlayerInfoPage,
-                    pageData    : { roomId: null } as OpenDataForCcrRoomPlayerInfoPage,
+                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -243,17 +281,22 @@ namespace TwnsCcrMyRoomListPanel {
                 groupTab.visible    = true;
                 btnNextStep.visible = true;
 
-                const tab = this._tabSettings;
-                tab.updatePageData(1, { roomId } as OpenDataForCcrRoomPlayerInfoPage);
-                this._updateCommonMapInfoPage();
+                this._updateCommonWarMapInfoPage();
+                this._updateCommonWarPlayerInfoPage();
                 this._updateCommonWarBasicSettingsPage();
                 this._updateCommonWarAdvancedSettingsPage();
             }
         }
 
-        private async _updateCommonMapInfoPage(): Promise<void> {
+        private async _updateCommonWarMapInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
+            }
+        }
+
+        private async _updateCommonWarPlayerInfoPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage());
             }
         }
 
@@ -280,11 +323,15 @@ namespace TwnsCcrMyRoomListPanel {
             return dataArray.sort((v1, v2) => v1.roomId - v2.roomId);
         }
 
-        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
+        private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const mapId = (await CcrModel.getRoomInfo(CcrJoinModel.getJoinedPreviewingRoomId()))?.settingsForCcw?.mapId;
             return mapId == null
                 ? {}
                 : { mapInfo: { mapId } };
+        }
+
+        private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
+            return await CcrModel.createDataForCommonWarPlayerInfoPage(CcrJoinModel.getJoinedPreviewingRoomId());
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {

@@ -1,7 +1,8 @@
 
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import FlowManager                          from "../../tools/helpers/FlowManager";
@@ -18,17 +19,16 @@ import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
 import TwnsUiTab                            from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
 import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
 import WarMapModel                          from "../../warMap/model/WarMapModel";
 import SpmModel                             from "../model/SpmModel";
 import TwnsSpmMainMenuPanel                 from "./SpmMainMenuPanel";
-import TwnsSpmWarPlayerInfoPage             from "./SpmWarPlayerInfoPage";
 
 namespace TwnsSpmWarListPanel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForSpmWarPlayerInfoPage          = TwnsSpmWarPlayerInfoPage.OpenDataForSpmWarPlayerInfoPage;
-    import SpmWarPlayerInfoPage                     = TwnsSpmWarPlayerInfoPage.SpmWarPlayerInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
@@ -40,7 +40,7 @@ namespace TwnsSpmWarListPanel {
         private static _instance: SpmWarListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForSpmWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelSinglePlayer     : TwnsUiLabel.UiLabel;
@@ -143,12 +143,12 @@ namespace TwnsSpmWarListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : this._createDataForCommonMapInfoPage(),
+                    pageData    : this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : SpmWarPlayerInfoPage,
-                    pageData    : { slotIndex: null } as OpenDataForSpmWarPlayerInfoPage,
+                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageData    : this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -207,17 +207,22 @@ namespace TwnsSpmWarListPanel {
                 groupTab.visible    = true;
                 btnNextStep.visible = true;
 
-                const tab = this._tabSettings;
-                tab.updatePageData(1, { slotIndex } as OpenDataForSpmWarPlayerInfoPage);
-                this._updateCommonMapInfoPage();
+                this._updateCommonWarMapInfoPage();
+                this._updateCommonWarPlayerInfoPage();
                 this._updateCommonWarBasicSettingsPage();
                 this._updateCommonWarAdvancedSettingsPage();
             }
         }
 
-        private _updateCommonMapInfoPage(): void {
+        private _updateCommonWarMapInfoPage(): void {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+                this._tabSettings.updatePageData(0, this._createDataForCommonWarMapInfoPage());
+            }
+        }
+
+        private _updateCommonWarPlayerInfoPage(): void {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(1, this._createDataForCommonWarPlayerInfoPage());
             }
         }
 
@@ -244,7 +249,7 @@ namespace TwnsSpmWarListPanel {
             return dataArray;
         }
 
-        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+        private _createDataForCommonWarMapInfoPage(): OpenDataForCommonWarMapInfoPage {
             const slotIndex = SpmModel.getPreviewingSlotIndex();
             const warData   = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex)?.warData;
             if (warData == null) {
@@ -265,6 +270,42 @@ namespace TwnsSpmWarListPanel {
             } else {
                 return {};
             }
+        }
+
+        private _createDataForCommonWarPlayerInfoPage(): OpenDataForCommonWarPlayerInfoPage {
+            const slotIndex = SpmModel.getPreviewingSlotIndex();
+            const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
+            const warData   = slotData?.warData;
+            if (warData == null) {
+                return undefined;
+            }
+
+            const settingsForCommon = warData.settingsForCommon;
+            const warRule           = settingsForCommon.warRule;
+            const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+            for (const playerInfo of warData.playerManager.players) {
+                const { playerIndex, userId } = playerInfo;
+                playerInfoArray.push({
+                    playerIndex,
+                    teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                    isAi                : userId == null,
+                    userId,
+                    coId                : playerInfo.coId,
+                    unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
+                    isReady             : undefined,
+                    isInTurn            : undefined,
+                    isDefeat            : playerInfo.aliveState === Types.PlayerAliveState.Dead,
+                });
+            }
+
+            return {
+                configVersion           : settingsForCommon.configVersion,
+                playersCountUnneutral   : WarRuleHelpers.getPlayersCount(warRule),
+                roomOwnerPlayerIndex    : undefined,
+                callbackOnDeletePlayer  : undefined,
+                callbackOnExitRoom      : undefined,
+                playerInfoArray,
+            };
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {

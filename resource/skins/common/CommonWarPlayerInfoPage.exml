@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*"
+        xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*"
+        xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0">
         <TwnsUiScrollList:UiScrollList id="_listPlayer" left="0" right="20" top="0" bottom="20">
             <e:List>
@@ -7,26 +9,29 @@
                     <e:Skin width="140" currentState="up" states="up,down">
                         <e:Group left="0" right="0" top="0" bottom="0">
                             <TwnsUiImage:UiImage scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0"
-                                            source="commonColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
+                                                 source="commonColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
                             <e:Group left="0" right="0" top="0" bottom="0" x="0" y="0" scaleX="1" scaleY="1">
                                 <e:Group id="_groupCo" horizontalCenter="0" y="20">
                                     <e:Group horizontalCenter="0">
-                                        <TwnsUiImage:UiImage id="_imgSkin" scaleX="1" scaleY="1" source="commonRectangle0002"
-                                                        scale9Grid="2,2,1,1" width="100" height="100"
-                                                        horizontalCenter="0" verticalCenter="0" />
-                                        <TwnsUiImage:UiImage id="_imgCoHead" scaleX="0.98" scaleY="0.98" horizontalCenter="0"
-                                                        verticalCenter="0" source="coHead0001" />
+                                        <TwnsUiImage:UiImage id="_imgSkin" scaleX="1" scaleY="1"
+                                                             source="commonRectangle0002" scale9Grid="2,2,1,1"
+                                                             width="100" height="100" horizontalCenter="0"
+                                                             verticalCenter="0" />
+                                        <TwnsUiImage:UiImage id="_imgCoHead" scaleX="0.98" scaleY="0.98"
+                                                             horizontalCenter="0" verticalCenter="0" source="coHead0001" />
                                     </e:Group>
-                                    <TwnsUiImage:UiImage id="_imgCoInfo" scaleX="1" scaleY="1" source="commonIcon0001" x="96"
-                                                    y="-6" />
-                                    <TwnsUiLabel:UiLabel id="_labelStatus" text="Ready!" size="26" stroke="2"
-                                                    textColor="0xfad804" bold="true" horizontalCenter="0" bottom="26" />
+                                    <TwnsUiImage:UiImage id="_imgCoInfo" scaleX="1" scaleY="1" source="commonIcon0001"
+                                                         x="96" y="-6" />
+                                    <TwnsUiLabel:UiLabel id="_labelStatus" text="Ready!" size="18" stroke="2"
+                                                         textColor="0xfad804" bold="true" horizontalCenter="0"
+                                                         bottom="22" />
                                     <e:Group width="120" height="24" y="88" horizontalCenter="0">
                                         <TwnsUiImage:UiImage scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0"
-                                                        scale9Grid="1,1,2,2" x="0" y="228" source="commonColorBlack0000"
-                                                        locked="true" />
+                                                             scale9Grid="1,1,2,2" x="0" y="228"
+                                                             source="commonColorBlack0000" locked="true" />
                                         <TwnsUiLabel:UiLabel id="_labelCo" text="zhaotiantong" size="16" scaleX="1"
-                                                        scaleY="1" verticalCenter="0" bold="true" horizontalCenter="0" />
+                                                             scaleY="1" verticalCenter="0" bold="true"
+                                                             horizontalCenter="0" />
                                     </e:Group>
                                 </e:Group>
                                 <e:Group x="20" y="140">
@@ -37,23 +42,23 @@
                                     </e:layout>
                                 </e:Group>
                                 <TwnsUiLabel:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="20" size="16" y="158"
-                                                bold="true" />
+                                                     bold="true" maxTextWidth="100" />
                                 <TwnsUiImage:UiImage width="100" height="1" y="180" source="commonColorWhite0000"
-                                                horizontalCenter="0" />
+                                                     horizontalCenter="0" />
                                 <e:Group x="20" y="190">
                                     <TwnsUiLabel:UiLabel id="_labelRankStdTitle" text="明战排位" size="12" x="0" y="0"
-                                                    textColor="0xaaaaaa" />
+                                                         textColor="0xaaaaaa" />
                                     <TwnsUiLabel:UiLabel id="_labelRankStd" text="红方" size="16" x="10" y="0"
-                                                    textColor="0x34a7de" bold="true" />
+                                                         textColor="0x34a7de" bold="true" />
                                     <e:layout>
                                         <e:VerticalLayout gap="2" />
                                     </e:layout>
                                 </e:Group>
                                 <e:Group x="20" y="230">
                                     <TwnsUiLabel:UiLabel id="_labelRankFogTitle" text="雾战排位" size="12" x="0" y="0"
-                                                    textColor="0xaaaaaa" />
+                                                         textColor="0xaaaaaa" />
                                     <TwnsUiLabel:UiLabel id="_labelRankFog" text="红方" size="16" x="10" y="0" bold="true"
-                                                    textColor="0xb140d1" />
+                                                         textColor="0xb140d1" />
                                     <e:layout>
                                         <e:VerticalLayout gap="2" />
                                     </e:layout>

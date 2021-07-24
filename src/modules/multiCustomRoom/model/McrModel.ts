@@ -269,6 +269,7 @@ namespace McrModel {
             playerInfoArray.push({
                 playerIndex,
                 teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                isAi                : false,
                 userId              : playerInfo.userId,
                 coId                : playerInfo.coId,
                 unitAndTileSkinId   : playerInfo.unitAndTileSkinId,

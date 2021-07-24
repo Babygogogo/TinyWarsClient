@@ -1,6 +1,7 @@
 
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Logger                               from "../../tools/helpers/Logger";
@@ -17,6 +18,7 @@ namespace MfrModel {
     import NetMessage                               = ProtoTypes.NetMessage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const _roomInfoDict         = new Map<number, IMfrRoomInfo>();
@@ -248,6 +250,41 @@ namespace MfrModel {
             && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
             && (playerDataList.length === WarRuleHelpers.getPlayersCount(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule))
             && (playerDataList.every(v => v.isReady));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export async function createDataForCommonWarPlayerInfoPage(roomId: number): Promise<OpenDataForCommonWarPlayerInfoPage | undefined> {
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return undefined;
+        }
+
+        const settingsForCommon = roomInfo.settingsForMfw.initialWarData.settingsForCommon;
+        const warRule           = settingsForCommon.warRule;
+        const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        for (const playerInfo of (roomInfo.playerDataList || [])) {
+            const { playerIndex, userId, isReady } = playerInfo;
+            playerInfoArray.push({
+                playerIndex,
+                teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                isAi                : (userId == null) && (isReady),
+                userId,
+                coId                : playerInfo.coId,
+                unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
+                isReady,
+                isInTurn            : undefined,
+                isDefeat            : undefined,
+            });
+        }
+
+        return {
+            configVersion           : settingsForCommon.configVersion,
+            playersCountUnneutral   : WarRuleHelpers.getPlayersCount(warRule),
+            roomOwnerPlayerIndex    : roomInfo.ownerPlayerIndex,
+            callbackOnExitRoom      : () => MfrProxy.reqMfrExitRoom(roomId),
+            callbackOnDeletePlayer  : (playerIndex) => MfrProxy.reqMfrDeletePlayer(roomId, playerIndex),
+            playerInfoArray,
+        };
     }
 
     export async function createDataForCommonWarBasicSettingsPage(roomId: number, showPassword: boolean): Promise<OpenDataForCommonWarBasicSettingsPage> {

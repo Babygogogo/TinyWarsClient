@@ -506,11 +506,12 @@ namespace MpwModel {
         const warRule           = settingsForCommon.warRule;
         const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
         for (const playerInfo of warInfo.playerInfoList || []) {
-            const playerIndex = playerInfo.playerIndex;
+            const { playerIndex, userId } = playerInfo;
             playerInfoArray.push({
                 playerIndex,
                 teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
-                userId              : playerInfo.userId,
+                isAi                : userId == null,
+                userId,
                 coId                : playerInfo.coId,
                 unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
                 isReady             : undefined,

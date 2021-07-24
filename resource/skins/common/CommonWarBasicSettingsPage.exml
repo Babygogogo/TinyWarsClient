@@ -10,8 +10,10 @@
                             <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000"
                                                  scale9Grid="1,1,2,2" />
                             <TwnsUiLabel:UiLabel id="_labelTitle" text="War Password" textColor="0xFFFFFF" size="16"
-                                                 maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                            <e:Group verticalCenter="0" height="32" right="6" width="300">
+                                                 maxTextWidth="120" x="10" verticalCenter="0" bold="true" />
+                            <TwnsUiButton:UiButton id="_btnHelp" x="140" verticalCenter="0"
+                                                   skinName="Skins.Component.Button.ButtonHelp001" />
+                            <e:Group verticalCenter="0" height="32" x="170" width="300">
                                 <TwnsUiImage:UiImage source="commonRectangle0001" scale9Grid="2,2,1,1" left="0"
                                                      right="0" top="0" bottom="0" />
                                 <TwnsUiLabel:UiLabel id="_labelValue" size="16" touchEnabled="false" text="Yes" x="10"
@@ -19,12 +21,11 @@
                                 <TwnsUiButton:UiButton id="_btnModify" top="0" bottom="0" width="50" right="0"
                                                        skinName="Skins.Component.Button.ButtonTriangle002" />
                             </e:Group>
-                            <TwnsUiButton:UiButton id="_btnHelp" x="120" verticalCenter="0" skinName="Skins.Component.Button.ButtonHelp001"></TwnsUiButton:UiButton>
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:layout>
-                    <e:VerticalLayout gap="4" />
+                    <e:VerticalLayout gap="4" horizontalAlign="contentJustify" />
                 </e:layout>
             </e:List>
         </TwnsUiScrollList:UiScrollList>

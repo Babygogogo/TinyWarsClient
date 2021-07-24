@@ -268,10 +268,12 @@ namespace TwnsRwReplayListPanel {
             const replayBriefInfo   = replayInfo.replayBriefInfo;
             const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
             for (const playerInfo of replayBriefInfo.playerInfoList || []) {
+                const userId = playerInfo.userId;
                 playerInfoArray.push({
                     playerIndex         : playerInfo.playerIndex,
                     teamIndex           : playerInfo.teamIndex,
-                    userId              : playerInfo.userId,
+                    isAi                : userId == null,
+                    userId,
                     coId                : playerInfo.coId,
                     unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
                     isReady             : undefined,

@@ -28,6 +28,7 @@ namespace TwnsCommonWarPlayerInfoPage {
     export type PlayerInfo = {
         playerIndex         : number;
         teamIndex           : number;
+        isAi                : boolean;
         userId              : number | undefined;
         coId                : number | undefined;
         unitAndTileSkinId   : number | undefined;
@@ -38,7 +39,7 @@ namespace TwnsCommonWarPlayerInfoPage {
     export type OpenDataForCommonWarPlayerInfoPage = {
         configVersion           : string;
         playersCountUnneutral   : number;
-        roomOwnerPlayerIndex    : number | undefined;           // undefined == not a room
+        roomOwnerPlayerIndex    : number | undefined;
         callbackOnExitRoom      : (() => void) | undefined;
         callbackOnDeletePlayer  : ((playerIndex: number) => void) | undefined;
         playerInfoArray         : PlayerInfo[];
@@ -83,22 +84,13 @@ namespace TwnsCommonWarPlayerInfoPage {
             const isRoomOwnedBySelf = playerInfoArray.find(v => v.playerIndex === roomOwnerPlayerIndex)?.userId === UserModel.getSelfUserId();
             const dataArray         : DataForPlayerRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
-                const rawPlayerInfo = playerInfoArray.find(v => v.playerIndex === playerIndex);
+                const playerInfo = playerInfoArray.find(v => v.playerIndex === playerIndex);
                 dataArray.push({
                     configVersion,
                     isRoomOwnedBySelf,
                     callbackOnExitRoom,
                     callbackOnDeletePlayer,
-                    playerInfo  : {
-                        playerIndex,
-                        teamIndex           : rawPlayerInfo.teamIndex,
-                        userId              : rawPlayerInfo?.userId,
-                        coId                : rawPlayerInfo?.coId,
-                        unitAndTileSkinId   : rawPlayerInfo?.unitAndTileSkinId,
-                        isReady             : rawPlayerInfo?.isReady,
-                        isInTurn            : rawPlayerInfo?.isInTurn,
-                        isDefeat            : rawPlayerInfo?.isDefeat,
-                    },
+                    playerInfo,
                 });
             }
 
@@ -233,10 +225,14 @@ namespace TwnsCommonWarPlayerInfoPage {
             this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
-            const userId                = playerInfo.userId;
-            const isAi                  = (userId == null) && (!!playerInfo.isReady);
-            const userInfo              = userId == null ? null : await UserModel.getUserPublicInfo(userId);
-            this._labelNickname.text    = isAi ? (Lang.getText(LangTextType.B0607)) : (userInfo ? userInfo.nickname : `??`);
+            const userId        = playerInfo.userId;
+            const userInfo      = userId == null ? null : await UserModel.getUserPublicInfo(userId);
+            const labelNickname = this._labelNickname;
+            if (userInfo) {
+                labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
+            } else {
+                labelNickname.text = playerInfo.isAi ? Lang.getText(LangTextType.B0607) : `??`;
+            }
 
             const groupButton = this._groupButton;
             groupButton.removeChildren();
