@@ -1,6 +1,6 @@
 
-import MpwModel                             from "../../multiPlayerWar/model/MpwModel";
-import MpwProxy                             from "../../multiPlayerWar/model/MpwProxy";
+import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import ConfigManager                        from "../../tools/helpers/ConfigManager";
 import FloatText                            from "../../tools/helpers/FloatText";
 import Types                                from "../../tools/helpers/Types";
@@ -16,23 +16,25 @@ import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
 import TwnsUiZoomableMap                    from "../../tools/ui/UiZoomableMap";
 import UserModel                            from "../../user/model/UserModel";
 import WarMapModel                          from "../../warMap/model/WarMapModel";
-import TwnsMcrWatchHandleRequestDetailPanel from "./McrWatchHandleRequestDetailPanel";
-import TwnsMcrWatchMainMenuPanel            from "./McrWatchMainMenuPanel";
+import WwModel                              from "../model/WwModel";
+import WwProxy                              from "../model/WwProxy";
+import TwnsWwMainMenuPanel                  from "./WwMainMenuPanel";
+import TwnsWwMakeRequestDetailPanel         from "./WwMakeRequestDetailPanel";
 
-namespace TwnsMcrWatchHandleRequestWarsPanel {
-    import McrWatchHandleRequestDetailPanel = TwnsMcrWatchHandleRequestDetailPanel.McrWatchHandleRequestDetailPanel;
+namespace TwnsWwMakeRequestWarsPanel {
+    import McrWatchMakeRequestDetailPanel   = TwnsWwMakeRequestDetailPanel.WwMakeRequestDetailPanel;
     import LangTextType                     = TwnsLangTextType.LangTextType;
     import NotifyType                       = TwnsNotifyType.NotifyType;
 
-    export class McrWatchHandleRequestWarsPanel extends TwnsUiPanel.UiPanel<void> {
+    export class WwMakeRequestWarsPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrWatchHandleRequestWarsPanel;
+        private static _instance: WwMakeRequestWarsPanel;
 
-        private _labelMenuTitle     : TwnsUiLabel.UiLabel;
         private _labelPlayersTitle  : TwnsUiLabel.UiLabel;
         private _labelCommentTitle  : TwnsUiLabel.UiLabel;
+        private _labelMenuTitle     : TwnsUiLabel.UiLabel;
         private _listWar            : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
         private _labelNoWar         : TwnsUiLabel.UiLabel;
         private _zoomMap            : TwnsUiZoomableMap.UiZoomableMap;
@@ -49,28 +51,28 @@ namespace TwnsMcrWatchHandleRequestWarsPanel {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!McrWatchHandleRequestWarsPanel._instance) {
-                McrWatchHandleRequestWarsPanel._instance = new McrWatchHandleRequestWarsPanel();
+            if (!WwMakeRequestWarsPanel._instance) {
+                WwMakeRequestWarsPanel._instance = new WwMakeRequestWarsPanel();
             }
-            McrWatchHandleRequestWarsPanel._instance.open(undefined);
+            WwMakeRequestWarsPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (McrWatchHandleRequestWarsPanel._instance) {
-                await McrWatchHandleRequestWarsPanel._instance.close();
+            if (WwMakeRequestWarsPanel._instance) {
+                await WwMakeRequestWarsPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrWatchHandleRequestWarsPanel.exml";
+            this.skinName = "resource/skins/watchWar/WwMakeRequestWarsPanel.exml";
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMpwWatchGetRequestedWarInfos,  callback: this._onNotifySMcwWatchGetRequestedWarInfos },
-                { type: NotifyType.MsgMpwWatchHandleRequest,         callback: this._onNotifySMcwWatchHandleRequest },
+                { type: NotifyType.MsgMpwWatchGetUnwatchedWarInfos,  callback: this._onNotifySMcwWatchGetUnwatchedWarInfos },
+                { type: NotifyType.MsgMpwWatchMakeRequest,           callback: this._onNotifySMcwWatchMakeRequest },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -81,7 +83,7 @@ namespace TwnsMcrWatchHandleRequestWarsPanel {
             this._groupInfo.visible = false;
             this._updateComponentsForLanguage();
 
-            MpwProxy.reqWatchRequestedWarInfos();
+            WwProxy.reqUnwatchedWarInfos();
         }
 
         protected async _onClosed(): Promise<void> {
@@ -112,12 +114,12 @@ namespace TwnsMcrWatchHandleRequestWarsPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySMcwWatchGetRequestedWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(MpwModel.getWatchRequestedWarInfos());
+        private _onNotifySMcwWatchGetUnwatchedWarInfos(): void {
+            const newData        = this._createDataForListWar(WwModel.getUnwatchedWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -130,14 +132,16 @@ namespace TwnsMcrWatchHandleRequestWarsPanel {
             this.setSelectedIndex(0);
         }
 
-        private _onNotifySMcwWatchHandleRequest(e: egret.Event): void {
-            FloatText.show(Lang.getText(LangTextType.A0061));
-            MpwProxy.reqWatchRequestedWarInfos();
+        private _onNotifySMcwWatchMakeRequest(): void {
+            FloatText.show(Lang.getText(LangTextType.A0060));
+            WwProxy.reqUnwatchedWarInfos();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsMcrWatchMainMenuPanel.McrWatchMainMenuPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+            TwnsWwMainMenuPanel.WwMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -173,7 +177,7 @@ namespace TwnsMcrWatchHandleRequestWarsPanel {
         }
 
         private async _showMap(index: number): Promise<void> {
-            const warInfo               = this._dataForListWar[index].info.warInfo;
+            const warInfo           = this._dataForListWar[index].info.warInfo;
             const settingsForMfw    = warInfo.settingsForMfw;
             if (settingsForMfw) {
                 const warData               = settingsForMfw.initialWarData;
@@ -202,18 +206,18 @@ namespace TwnsMcrWatchHandleRequestWarsPanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text       = Lang.getText(LangTextType.B0208);
-            this._labelNoWar.text           = Lang.getText(LangTextType.B0209);
+            this._labelMenuTitle.text       = Lang.getText(LangTextType.B0207);
             this._labelPlayersTitle.text    = `${Lang.getText(LangTextType.B0031)}:`;
             this._labelCommentTitle.text    = `${Lang.getText(LangTextType.B0187)}:`;
             this._btnBack.label             = Lang.getText(LangTextType.B0146);
+            this._labelNoWar.text           = Lang.getText(LangTextType.B0210);
         }
     }
 
     type DataForWarRenderer = {
         info    : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         index   : number;
-        panel   : McrWatchHandleRequestWarsPanel;
+        panel   : WwMakeRequestWarsPanel;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
         private _btnChoose      : TwnsUiButton.UiButton;
@@ -248,13 +252,13 @@ namespace TwnsMcrWatchHandleRequestWarsPanel {
             }
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(): void {
             const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
-        private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            McrWatchHandleRequestDetailPanel.show({ watchInfo: this.data.info });
+        private async _onTouchTapBtnNext(): Promise<void> {
+            McrWatchMakeRequestDetailPanel.show({ watchInfo: this.data.info });
         }
     }
 
@@ -273,10 +277,10 @@ namespace TwnsMcrWatchHandleRequestWarsPanel {
             this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
             UserModel.getUserNickname(playerInfo.userId).then(name => {
-                this._labelName.text = name + ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
+                this._labelName.text = `${name} ${ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId)}`;
             });
         }
     }
 }
 
-export default TwnsMcrWatchHandleRequestWarsPanel;
+export default TwnsWwMakeRequestWarsPanel;

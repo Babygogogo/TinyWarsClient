@@ -42,17 +42,17 @@
     </e:Group>
     <e:Group id="_groupLeft" verticalCenter="0" scaleX="0.9" scaleY="0.9" left="0">
         <e:Group x="168" y="43">
-            <TwnsUiButton:UiButton id="_btnCreateRoom" label="" top="0" left="0">
+            <TwnsUiButton:UiButton id="_btnMakeRequest" label="" top="0" left="0">
                 <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
                             <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <TwnsUiLabel:UiLabel size="20" text="Create Rooms" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="20" text="Make Requests" textAlign="center"
                                                      verticalAlign="middle" wordWrap="true" y="2" x="-172"
                                                      textColor="0xaaaaaa" />
-                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="创建房间" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="发起请求" textAlign="center"
                                                      verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
@@ -64,17 +64,17 @@
             </TwnsUiButton:UiButton>
         </e:Group>
         <e:Group x="142" y="211">
-            <TwnsUiButton:UiButton id="_btnJoinRoom" label="" top="0" left="0">
+            <TwnsUiButton:UiButton id="_btnHandleRequest" label="" top="0" left="0">
                 <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
                             <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <TwnsUiLabel:UiLabel size="20" text="Join Rooms" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="20" text="Handle Requests" textAlign="center"
                                                      verticalAlign="middle" wordWrap="true" y="2" x="-172"
                                                      textColor="0xaaaaaa" />
-                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="加入房间" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="处理请求" textAlign="center"
                                                      verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
@@ -86,16 +86,17 @@
             </TwnsUiButton:UiButton>
         </e:Group>
         <e:Group x="102" y="202">
-            <TwnsUiButton:UiButton id="_btnMyRoom" label="" top="0" left="0">
+            <TwnsUiButton:UiButton id="_btnDeleteWatcher" label="" top="0" left="0">
                 <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
+                            <e:Image width="480" height="34" scale9Grid="3,3,1,1" source="common0003" />
                             <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <TwnsUiLabel:UiLabel size="20" text="My Rooms" textAlign="center" verticalAlign="middle"
-                                                     wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
-                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="我的房间" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="20" text="Delete Spectators" textAlign="center"
+                                                     verticalAlign="middle" wordWrap="true" y="2" x="-172"
+                                                     textColor="0xaaaaaa" />
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="删除观众" textAlign="center"
                                                      verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
@@ -114,10 +115,10 @@
                             <e:Image scale9Grid="9,9,2,2" source="common0002" />
                             <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <TwnsUiLabel:UiLabel size="20" text="Continue Wars" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="20" text="Continue Spectating" textAlign="center"
                                                      verticalAlign="middle" wordWrap="true" y="2" x="-172"
                                                      textColor="0xaaaaaa" />
-                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="继续战斗" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="进入观战" textAlign="center"
                                                      verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
@@ -128,83 +129,17 @@
                 </TwnsUiButton:skinName>
             </TwnsUiButton:UiButton>
         </e:Group>
-        <e:Group x="122" y="222">
-            <TwnsUiButton:UiButton id="_btnWatchWar" label="" top="0" left="0">
+        <e:Group x="168" y="43">
+            <TwnsUiButton:UiButton id="_btnBack" label="" top="0" left="0">
                 <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" source="common0003" />
+                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <TwnsUiLabel:UiLabel size="20" text="Spectate Wars" textAlign="center"
-                                                     verticalAlign="middle" wordWrap="true" y="2" x="-172"
-                                                     textColor="0xaaaaaa" />
-                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="观战" textAlign="center"
-                                                     verticalAlign="middle" wordWrap="true" y="12" x="-162" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="bottom" gap="10" />
-                                </e:layout>
-                            </e:Group>
-                        </e:Group>
-                    </e:Skin>
-                </TwnsUiButton:skinName>
-            </TwnsUiButton:UiButton>
-        </e:Group>
-        <e:Group x="132" y="232">
-            <TwnsUiButton:UiButton id="_btnReplayWar" label="" top="0" left="0">
-                <TwnsUiButton:skinName>
-                    <e:Skin>
-                        <e:Group left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" source="common0003" />
-                            <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
-                            <e:Group verticalCenter="0" right="40">
-                                <TwnsUiLabel:UiLabel size="20" text="Replays" textAlign="center" verticalAlign="middle"
+                                <TwnsUiLabel:UiLabel size="20" text="Back" textAlign="center" verticalAlign="middle"
                                                      wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
-                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="观看回放" textAlign="center"
-                                                     verticalAlign="middle" wordWrap="true" y="12" x="-162" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="bottom" gap="10" />
-                                </e:layout>
-                            </e:Group>
-                        </e:Group>
-                    </e:Skin>
-                </TwnsUiButton:skinName>
-            </TwnsUiButton:UiButton>
-        </e:Group>
-        <e:Group x="168" y="43">
-            <TwnsUiButton:UiButton id="_btnCoopMode" label="" top="0" left="0">
-                <TwnsUiButton:skinName>
-                    <e:Skin>
-                        <e:Group left="0" right="0" y="0">
-                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
-                            <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
-                            <e:Group verticalCenter="0" right="40">
-                                <TwnsUiLabel:UiLabel size="20" text="Coop Mode" textAlign="center"
-                                                     verticalAlign="middle" wordWrap="true" y="2" x="-172"
-                                                     textColor="0xaaaaaa" />
-                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="合作模式" textAlign="center"
-                                                     verticalAlign="middle" wordWrap="true" y="12" x="-162" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="bottom" gap="10" />
-                                </e:layout>
-                            </e:Group>
-                        </e:Group>
-                    </e:Skin>
-                </TwnsUiButton:skinName>
-            </TwnsUiButton:UiButton>
-        </e:Group>
-        <e:Group x="168" y="43">
-            <TwnsUiButton:UiButton id="_btnFreeMode" label="" top="0" left="0">
-                <TwnsUiButton:skinName>
-                    <e:Skin>
-                        <e:Group left="0" right="0" y="0">
-                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
-                            <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
-                            <e:Group verticalCenter="0" right="40">
-                                <TwnsUiLabel:UiLabel size="20" text="Free Mode" textAlign="center"
-                                                     verticalAlign="middle" wordWrap="true" y="2" x="-172"
-                                                     textColor="0xaaaaaa" />
-                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="自由模式" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="返回" textAlign="center"
                                                      verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />

@@ -1,34 +1,36 @@
 
-import MpwModel                             from "../../multiPlayerWar/model/MpwModel";
-import MpwProxy                             from "../../multiPlayerWar/model/MpwProxy";
-import ConfigManager                        from "../../tools/helpers/ConfigManager";
-import FloatText                            from "../../tools/helpers/FloatText";
-import Types                                from "../../tools/helpers/Types";
-import Lang                                 from "../../tools/lang/Lang";
-import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-import TwnsNotifyType                       from "../../tools/notify/NotifyType";
-import ProtoTypes                           from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                         from "../../tools/ui/UiButton";
-import TwnsUiLabel                          from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                          from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
-import TwnsUiZoomableMap                    from "../../tools/ui/UiZoomableMap";
-import UserModel                            from "../../user/model/UserModel";
-import WarMapModel                          from "../../warMap/model/WarMapModel";
-import TwnsMcrWatchDeleteWatcherDetailPanel from "./McrWatchDeleteWatcherDetailPanel";
-import TwnsMcrWatchMainMenuPanel            from "./McrWatchMainMenuPanel";
+import TwnsCommonBlockPanel         from "../../common/view/CommonBlockPanel";
+import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import FlowManager                  from "../../tools/helpers/FlowManager";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+import TwnsUiZoomableMap            from "../../tools/ui/UiZoomableMap";
+import UserModel                    from "../../user/model/UserModel";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
+import WwModel                      from "../model/WwModel";
+import WwProxy                      from "../model/WwProxy";
+import TwnsWwMainMenuPanel          from "./WwMainMenuPanel";
 
-namespace TwnsMcrWatchDeleteWatcherWarsPanel {
-    import McrWatchDeleteWatcherDetailPanel = TwnsMcrWatchDeleteWatcherDetailPanel.McrWatchDeleteWatcherDetailPanel;
-    import LangTextType                     = TwnsLangTextType.LangTextType;
-    import NotifyType                       = TwnsNotifyType.NotifyType;
+namespace TwnsWwOngoingWarsPanel {
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import CommonBlockPanel         = TwnsCommonBlockPanel.CommonBlockPanel;
 
-    export class McrWatchDeleteWatcherWarsPanel extends TwnsUiPanel.UiPanel<void> {
+    export class McrWatchOngoingWarsPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrWatchDeleteWatcherWarsPanel;
+        private static _instance: McrWatchOngoingWarsPanel;
 
         private _labelMenuTitle     : TwnsUiLabel.UiLabel;
         private _labelPlayersTitle  : TwnsUiLabel.UiLabel;
@@ -49,28 +51,29 @@ namespace TwnsMcrWatchDeleteWatcherWarsPanel {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!McrWatchDeleteWatcherWarsPanel._instance) {
-                McrWatchDeleteWatcherWarsPanel._instance = new McrWatchDeleteWatcherWarsPanel();
+            if (!McrWatchOngoingWarsPanel._instance) {
+                McrWatchOngoingWarsPanel._instance = new McrWatchOngoingWarsPanel();
             }
-            McrWatchDeleteWatcherWarsPanel._instance.open(undefined);
+            McrWatchOngoingWarsPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (McrWatchDeleteWatcherWarsPanel._instance) {
-                await McrWatchDeleteWatcherWarsPanel._instance.close();
+            if (McrWatchOngoingWarsPanel._instance) {
+                await McrWatchOngoingWarsPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrWatchDeleteWatcherWarsPanel.exml";
+            this.skinName = "resource/skins/watchWar/WwOngoingWarsPanel.exml";
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMpwWatchGetWatchedWarInfos,  callback: this._onNotifySMcwWatchGetWatchedWarInfos },
-                { type: NotifyType.MsgMpwWatchDeleteWatcher,       callback: this._onNotifySMcwWatchDeleteWatcher },
+                { type: NotifyType.MsgMpwWatchGetOngoingWarInfos,    callback: this._onNotifySMcwWatchGetOngoingWarInfos },
+                { type: NotifyType.MsgMpwWatchContinueWar,           callback: this._onNotifySMcwWatchContinueWar },
+                { type: NotifyType.MsgMpwWatchContinueWarFailed,     callback: this._onNotifySMcwWatchContinueWarFailed },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -81,7 +84,7 @@ namespace TwnsMcrWatchDeleteWatcherWarsPanel {
             this._groupInfo.visible = false;
             this._updateComponentsForLanguage();
 
-            MpwProxy.reqWatchedWarInfos();
+            WwProxy.reqWatchGetOngoingWarInfos();
         }
 
         protected async _onClosed(): Promise<void> {
@@ -112,12 +115,12 @@ namespace TwnsMcrWatchDeleteWatcherWarsPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySMcwWatchGetWatchedWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(MpwModel.getWatchedWarInfos());
+        private _onNotifySMcwWatchGetOngoingWarInfos(): void {
+            const newData        = this._createDataForListWar(WwModel.getWatchOngoingWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -130,14 +133,20 @@ namespace TwnsMcrWatchDeleteWatcherWarsPanel {
             this.setSelectedIndex(0);
         }
 
-        private _onNotifySMcwWatchDeleteWatcher(e: egret.Event): void {
-            FloatText.show(Lang.getText(LangTextType.A0062));
-            MpwProxy.reqWatchedWarInfos();
+        private _onNotifySMcwWatchContinueWar(e: egret.Event): void {
+            FlowManager.gotoMultiPlayerWar((e.data as ProtoTypes.NetMessage.MsgMpwWatchContinueWar.IS).war);
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onNotifySMcwWatchContinueWarFailed(): void {
+            CommonBlockPanel.hide();
+            WwProxy.reqWatchGetOngoingWarInfos();
+        }
+
+        private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsMcrWatchMainMenuPanel.McrWatchMainMenuPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+            TwnsWwMainMenuPanel.WwMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -159,7 +168,7 @@ namespace TwnsMcrWatchDeleteWatcherWarsPanel {
         }
 
         private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
-            const configVersion = warInfo.settingsForCommon.configVersion;
+            const configVersion     = warInfo.settingsForCommon.configVersion;
             const playerInfoList    = warInfo.playerInfoList;
             const dataList          : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= mapPlayersCount; ++playerIndex) {
@@ -202,7 +211,7 @@ namespace TwnsMcrWatchDeleteWatcherWarsPanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text       = Lang.getText(LangTextType.B0219);
+            this._labelMenuTitle.text       = Lang.getText(LangTextType.B0222);
             this._labelNoWar.text           = Lang.getText(LangTextType.B0210);
             this._labelPlayersTitle.text    = `${Lang.getText(LangTextType.B0031)}:`;
             this._labelCommentTitle.text    = `${Lang.getText(LangTextType.B0187)}:`;
@@ -213,7 +222,7 @@ namespace TwnsMcrWatchDeleteWatcherWarsPanel {
     type DataForWarRenderer = {
         info    : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         index   : number;
-        panel   : McrWatchDeleteWatcherWarsPanel;
+        panel   : McrWatchOngoingWarsPanel;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
         private _btnChoose      : TwnsUiButton.UiButton;
@@ -228,9 +237,9 @@ namespace TwnsMcrWatchDeleteWatcherWarsPanel {
         }
 
         protected _onDataChanged(): void {
-            const data          = this.data;
-            const warInfo       = data.info.warInfo;
-            this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            const data              = this.data;
+            const warInfo           = data.info.warInfo;
+            this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
 
             const labelName         = this._labelName;
             const settingsForMfw    = warInfo.settingsForMfw;
@@ -248,13 +257,13 @@ namespace TwnsMcrWatchDeleteWatcherWarsPanel {
             }
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(): void {
             const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
-        private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            McrWatchDeleteWatcherDetailPanel.show({ watchInfo: this.data.info });
+        private async _onTouchTapBtnNext(): Promise<void> {
+            WwProxy.reqWatchContinueWar(this.data.info.warInfo.warId);
         }
     }
 
@@ -262,6 +271,7 @@ namespace TwnsMcrWatchDeleteWatcherWarsPanel {
         playerInfo      : ProtoTypes.Structure.IWarPlayerInfo;
         configVersion   : string;
     };
+
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelName : TwnsUiLabel.UiLabel;
         private _labelIndex: TwnsUiLabel.UiLabel;
@@ -279,4 +289,4 @@ namespace TwnsMcrWatchDeleteWatcherWarsPanel {
     }
 }
 
-export default TwnsMcrWatchDeleteWatcherWarsPanel;
+export default TwnsWwOngoingWarsPanel;

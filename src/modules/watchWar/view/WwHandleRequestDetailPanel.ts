@@ -1,5 +1,4 @@
 
-import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -12,23 +11,24 @@ import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 import UserModel                from "../../user/model/UserModel";
+import WwProxy                  from "../model/WwProxy";
 
-namespace TwnsMcrWatchDeleteWatcherDetailPanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+namespace TwnsWwHandleRequestDetailPanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
-    type OpenDataForMcrWatchDeleteWatcherDetailPanel = {
+    type OpenDataForMcrWatchHandleRequestDetailPanel = {
         watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     };
-    export class McrWatchDeleteWatcherDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrWatchDeleteWatcherDetailPanel> {
+    export class WwHandleRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrWatchHandleRequestDetailPanel> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: McrWatchDeleteWatcherDetailPanel;
+        private static _instance: WwHandleRequestDetailPanel;
 
         private _labelMenuTitle         : TwnsUiLabel.UiLabel;
-        private _labelDelete            : TwnsUiLabel.UiLabel;
-        private _labelKeep              : TwnsUiLabel.UiLabel;
+        private _labelYes               : TwnsUiLabel.UiLabel;
+        private _labelNo                : TwnsUiLabel.UiLabel;
         private _labelIsOpponent        : TwnsUiLabel.UiLabel;
         private _labelIsWatchingOthers  : TwnsUiLabel.UiLabel;
         private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForRequesterRenderer>;
@@ -37,15 +37,15 @@ namespace TwnsMcrWatchDeleteWatcherDetailPanel {
 
         private _dataForListPlayer  : DataForRequesterRenderer[];
 
-        public static show(openData: OpenDataForMcrWatchDeleteWatcherDetailPanel): void {
-            if (!McrWatchDeleteWatcherDetailPanel._instance) {
-                McrWatchDeleteWatcherDetailPanel._instance = new McrWatchDeleteWatcherDetailPanel();
+        public static show(openData: OpenDataForMcrWatchHandleRequestDetailPanel): void {
+            if (!WwHandleRequestDetailPanel._instance) {
+                WwHandleRequestDetailPanel._instance = new WwHandleRequestDetailPanel();
             }
-            McrWatchDeleteWatcherDetailPanel._instance.open(openData);
+            WwHandleRequestDetailPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
-            if (McrWatchDeleteWatcherDetailPanel._instance) {
-                await McrWatchDeleteWatcherDetailPanel._instance.close();
+            if (WwHandleRequestDetailPanel._instance) {
+                await WwHandleRequestDetailPanel._instance.close();
             }
         }
 
@@ -54,7 +54,7 @@ namespace TwnsMcrWatchDeleteWatcherDetailPanel {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/multiCustomRoom/McrWatchDeleteWatcherDetailPanel.exml";
+            this.skinName = "resource/skins/watchWar/WwHandleRequestDetailPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -78,27 +78,28 @@ namespace TwnsMcrWatchDeleteWatcherDetailPanel {
         public setRequesterSelected(index: number, selected: boolean): void {
             const dataList  = this._dataForListPlayer;
             const data      = dataList[index];
-            data.isDelete   = selected;
+            data.isAccept   = selected;
             this._listPlayer.updateSingleData(index, data);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const deleteUserIds : number[] = [];
+        private _onTouchedBtnConfirm(): void {
+            const acceptUserIds : number[] = [];
+            const declineUserIds: number[] = [];
             for (const data of this._dataForListPlayer) {
-                if (data.isDelete) {
-                    deleteUserIds.push(data.userId);
+                if (data.isAccept) {
+                    acceptUserIds.push(data.userId);
+                } else {
+                    declineUserIds.push(data.userId);
                 }
             }
-            if (deleteUserIds.length) {
-                MpwProxy.reqWatchDeleteWatcher(this._getOpenData().watchInfo.warInfo.warId, deleteUserIds);
-            }
+            WwProxy.reqWatchHandleRequest(this._getOpenData().watchInfo.warInfo.warId, acceptUserIds, declineUserIds);
             this.close();
         }
 
@@ -111,9 +112,9 @@ namespace TwnsMcrWatchDeleteWatcherDetailPanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text           = Lang.getText(LangTextType.B0219);
-            this._labelDelete.text              = Lang.getText(LangTextType.B0220);
-            this._labelKeep.text                = Lang.getText(LangTextType.B0221);
+            this._labelMenuTitle.text           = Lang.getText(LangTextType.B0208);
+            this._labelYes.text                 = Lang.getText(LangTextType.B0214);
+            this._labelNo.text                  = Lang.getText(LangTextType.B0215);
             this._labelIsOpponent.text          = Lang.getText(LangTextType.B0217);
             this._labelIsWatchingOthers.text    = Lang.getText(LangTextType.B0218);
             this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
@@ -132,7 +133,7 @@ namespace TwnsMcrWatchDeleteWatcherDetailPanel {
                     userId,
                     isWatchingOthers: !!info.isRequestingOthers || !!info.isWatchingOthers,
                     isOpponent      : playerInfoList.some(v => v.userId === userId),
-                    isDelete        : false,
+                    isAccept        : false,
                 });
             }
 
@@ -141,35 +142,35 @@ namespace TwnsMcrWatchDeleteWatcherDetailPanel {
     }
 
     type DataForRequesterRenderer = {
-        panel           : McrWatchDeleteWatcherDetailPanel;
+        panel           : WwHandleRequestDetailPanel;
         userId          : number;
         isWatchingOthers: boolean;
         isOpponent      : boolean;
-        isDelete        : boolean;
+        isAccept        : boolean;
     };
     class RequesterRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRequesterRenderer> {
         private _labelName              : TwnsUiLabel.UiLabel;
         private _labelIsOpponent        : TwnsUiLabel.UiLabel;
         private _labelIsWatchingOthers  : TwnsUiLabel.UiLabel;
-        private _imgDelete              : TwnsUiImage.UiImage;
-        private _imgKeep                : TwnsUiImage.UiImage;
+        private _imgAccept              : TwnsUiImage.UiImage;
+        private _imgDecline             : TwnsUiImage.UiImage;
 
         protected _onDataChanged(): void {
             const data                          = this.data;
             this._labelIsOpponent.text          = data.isOpponent ? Lang.getText(LangTextType.B0012) : "";
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(LangTextType.B0012) : "";
-            this._imgDelete.visible             = data.isDelete;
-            this._imgKeep.visible               = !data.isDelete;
+            this._imgAccept.visible             = data.isAccept;
+            this._imgDecline.visible            = !data.isAccept;
             UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name);
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            if ((this._imgDelete.visible) || (this._imgKeep.visible)) {
+            if ((this._imgAccept.visible) || (this._imgDecline.visible)) {
                 const data = this.data;
-                data.panel.setRequesterSelected(e.itemIndex, !data.isDelete);
+                data.panel.setRequesterSelected(e.itemIndex, !data.isAccept);
             }
         }
     }
 }
 
-export default TwnsMcrWatchDeleteWatcherDetailPanel;
+export default TwnsWwHandleRequestDetailPanel;

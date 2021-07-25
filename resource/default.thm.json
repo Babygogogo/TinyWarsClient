@@ -120,14 +120,6 @@
 		"resource/skins/multiCustomRoom/McrMainMenuPanel.exml",
 		"resource/skins/multiCustomRoom/McrMyRoomListPanel.exml",
 		"resource/skins/multiCustomRoom/McrRoomInfoPanel.exml",
-		"resource/skins/multiCustomRoom/McrWatchDeleteWatcherDetailPanel.exml",
-		"resource/skins/multiCustomRoom/McrWatchDeleteWatcherWarsPanel.exml",
-		"resource/skins/multiCustomRoom/McrWatchHandleRequestDetailPanel.exml",
-		"resource/skins/multiCustomRoom/McrWatchHandleRequestWarsPanel.exml",
-		"resource/skins/multiCustomRoom/McrWatchMainMenuPanel.exml",
-		"resource/skins/multiCustomRoom/McrWatchMakeRequestDetailPanel.exml",
-		"resource/skins/multiCustomRoom/McrWatchMakeRequestWarsPanel.exml",
-		"resource/skins/multiCustomRoom/McrWatchOngoingWarsPanel.exml",
 		"resource/skins/multiCustomWar/McwMyWarListPanel.exml",
 		"resource/skins/multiFreeRoom/MfrCreateAdvancedSettingsPage.exml",
 		"resource/skins/multiFreeRoom/MfrCreatePlayerInfoPage.exml",
@@ -198,7 +190,15 @@
 		"resource/skins/warEvent/WeEventListPanel.exml",
 		"resource/skins/warEvent/WeEventRenamePanel.exml",
 		"resource/skins/warEvent/WeNodeReplacePanel.exml",
-		"resource/skins/warMap/WarMapBuildingListPanel.exml"
+		"resource/skins/warMap/WarMapBuildingListPanel.exml",
+		"resource/skins/watchWar/WwDeleteWatcherDetailPanel.exml",
+		"resource/skins/watchWar/WwDeleteWatcherWarsPanel.exml",
+		"resource/skins/watchWar/WwHandleRequestDetailPanel.exml",
+		"resource/skins/watchWar/WwHandleRequestWarsPanel.exml",
+		"resource/skins/watchWar/WwMainMenuPanel.exml",
+		"resource/skins/watchWar/WwMakeRequestDetailPanel.exml",
+		"resource/skins/watchWar/WwMakeRequestWarsPanel.exml",
+		"resource/skins/watchWar/WwOngoingWarsPanel.exml"
 	],
 	"path": "resource/default.thm.json"
 }

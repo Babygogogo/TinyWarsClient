@@ -36,7 +36,6 @@ namespace MpwModel {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import IMpwWarInfo                              = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
-    import IMpwWatchInfo                            = ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     import IWarActionContainer                      = ProtoTypes.WarAction.IWarActionContainer;
     import IWarRule                                 = ProtoTypes.WarRule.IWarRule;
     import ISettingsForMcw                          = ProtoTypes.WarSettings.ISettingsForMcw;
@@ -48,10 +47,6 @@ namespace MpwModel {
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
     let _allWarInfoList         : IMpwWarInfo[] = [];
-    let _unwatchedWarInfos      : IMpwWatchInfo[];
-    let _watchOngoingWarInfos   : IMpwWatchInfo[];
-    let _watchRequestedWarInfos : IMpwWatchInfo[];
-    let _watchedWarInfos        : IMpwWatchInfo[];
     let _mcwPreviewingWarId     : number | undefined;
     let _mrwPreviewingWarId     : number | undefined;
     let _mfwPreviewingWarId     : number | undefined;
@@ -528,35 +523,6 @@ namespace MpwModel {
             callbackOnExitRoom      : undefined,
             playerInfoArray,
         };
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function setUnwatchedWarInfos(infos: IMpwWatchInfo[]): void {
-        _unwatchedWarInfos = infos;
-    }
-    export function getUnwatchedWarInfos(): IMpwWatchInfo[] | null {
-        return _unwatchedWarInfos;
-    }
-
-    export function setWatchOngoingWarInfos(infos: IMpwWatchInfo[]): void {
-        _watchOngoingWarInfos = infos;
-    }
-    export function getWatchOngoingWarInfos(): IMpwWatchInfo[] | null {
-        return _watchOngoingWarInfos;
-    }
-
-    export function setWatchRequestedWarInfos(infos: IMpwWatchInfo[]): void {
-        _watchRequestedWarInfos = infos;
-    }
-    export function getWatchRequestedWarInfos(): IMpwWatchInfo[] | null {
-        return _watchRequestedWarInfos;
-    }
-
-    export function setWatchedWarInfos(infos: IMpwWatchInfo[]): void {
-        _watchedWarInfos = infos;
-    }
-    export function getWatchedWarInfos(): IMpwWatchInfo[] | null {
-        return _watchedWarInfos;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

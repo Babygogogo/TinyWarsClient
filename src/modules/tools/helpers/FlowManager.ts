@@ -42,6 +42,7 @@ import TwnsUserLoginBackgroundPanel from "../../user/view/UserLoginBackgroundPan
 import TwnsUserLoginPanel           from "../../user/view/UserLoginPanel";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 import WarMapProxy                  from "../../warMap/model/WarMapProxy";
+import WwProxy                      from "../../watchWar/model/WwProxy";
 import Lang                         from "../lang/Lang";
 import TwnsLangTextType             from "../lang/LangTextType";
 import NetManager                   from "../network/NetManager";
@@ -104,6 +105,7 @@ namespace FlowManager {
         MrrProxy.init();
         MfrProxy.init();
         CcrProxy.init();
+        WwProxy.init();
         RwProxy.init();
         RwModel.init();
         SpmProxy.init();
