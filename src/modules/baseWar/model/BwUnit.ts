@@ -1585,7 +1585,7 @@ namespace TwnsBwUnit {
         }
 
         public checkCanLoadCoAfterMovePath(movePath: GridIndex[]): boolean | undefined {
-            if (CommonConstants.GameMode !== Types.GameMode.ZonedCo) {
+            if (CommonConstants.GameMode as number !== Types.GameMode.ZonedCo) {
                 return false;
             }
 
@@ -1681,7 +1681,7 @@ namespace TwnsBwUnit {
         }
 
         public checkCanUseCoSkill(skillType: Types.CoSkillType): boolean | undefined {
-            if (CommonConstants.GameMode !== Types.GameMode.ZonedCo) {
+            if (CommonConstants.GameMode as number !== Types.GameMode.ZonedCo) {
                 return false;
             }
 

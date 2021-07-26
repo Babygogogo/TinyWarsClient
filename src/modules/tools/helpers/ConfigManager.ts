@@ -610,14 +610,22 @@ namespace ConfigManager {
     }
 
     export function getCoBustImageSource(coId: number): string {
-        return coId == null
-            ? null
-            : `coBust${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+        if (CommonConstants.GameMode as number === Types.GameMode.ZonedCo) {
+            return coId == null
+                ? null
+                : `coBust${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+        } else {
+            return `coBust0012`;
+        }
     }
     export function getCoHeadImageSource(coId: number): string {
-        return coId == null
-            ? null
-            : `coHead${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+        if (CommonConstants.GameMode as number === Types.GameMode.ZonedCo) {
+            return coId == null
+                ? null
+                : `coHead${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+        } else {
+            return `coHead0012`;
+        }
     }
 
     export function checkIsUnitDivingByDefault(version: string, unitType: UnitType): boolean | undefined {

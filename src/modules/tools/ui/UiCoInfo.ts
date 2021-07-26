@@ -1,14 +1,16 @@
 
-import TwnsUiImage              from "./UiImage";
-import TwnsUiListItemRenderer   from "./UiListItemRenderer";
-import TwnsUiComponent          from "./UiComponent";
-import TwnsUiLabel              from "./UiLabel";
-import TwnsUiScrollList         from "./UiScrollList";
+import CommonConstants          from "../helpers/CommonConstants";
 import ConfigManager            from "../helpers/ConfigManager";
+import Logger                   from "../helpers/Logger";
+import Types                    from "../helpers/Types";
 import Lang                     from "../lang/Lang";
 import TwnsLangTextType         from "../lang/LangTextType";
 import TwnsNotifyType           from "../notify/NotifyType";
-import Types                    from "../helpers/Types";
+import TwnsUiComponent          from "./UiComponent";
+import TwnsUiImage              from "./UiImage";
+import TwnsUiLabel              from "./UiLabel";
+import TwnsUiListItemRenderer   from "./UiListItemRenderer";
+import TwnsUiScrollList         from "./UiScrollList";
 
 namespace TwnsUiCoInfo {
     import CoSkillType      = Types.CoSkillType;
@@ -21,6 +23,8 @@ namespace TwnsUiCoInfo {
     };
     export class UiCoInfo extends TwnsUiComponent.UiComponent {
         private readonly _labelCoName                   : TwnsUiLabel.UiLabel;
+        private readonly _groupInfo                     : eui.Group;
+        private readonly _groupZoneInfo                 : eui.Group;
         private readonly _labelDesignerTitle            : TwnsUiLabel.UiLabel;
         private readonly _labelDesigner                 : TwnsUiLabel.UiLabel;
         private readonly _imgCoPortrait                 : TwnsUiImage.UiImage;
@@ -128,9 +132,23 @@ namespace TwnsUiCoInfo {
             this._imgCoPortrait.source          = ConfigManager.getCoBustImageSource(coId);
             this._labelCoName.text              = cfg.name;
             this._labelDesigner.text            = cfg.designer;
-            this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
-            this._labelZoneRadius.text          = `${cfg.zoneRadius}`;
-            this._labelEnergyBar.text           = (cfg.zoneExpansionEnergyList || []).join(` / `) || `--`;
+
+            const gameMode      = CommonConstants.GameMode as number;
+            const groupZoneInfo = this._groupZoneInfo;
+            (groupZoneInfo.parent) && (groupZoneInfo.parent.removeChild(groupZoneInfo));
+            if (gameMode === Types.GameMode.ZonedCo) {
+                this._groupInfo.addChildAt(groupZoneInfo, 0);
+
+                this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
+                this._labelZoneRadius.text          = `${cfg.zoneRadius}`;
+                this._labelEnergyBar.text           = (cfg.zoneExpansionEnergyList || []).join(` / `) || `--`;
+
+            } else if (gameMode === Types.GameMode.GlobalCo) {
+                // nothing to do
+
+            } else {
+                Logger.error(`UiCoInfo._updateComponentsForCoInfo() invalid gameMode.`);
+            }
 
             this._updateComponentsForSkill();
         }
