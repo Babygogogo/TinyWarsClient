@@ -1,40 +1,50 @@
 
-namespace TinyWars.User {
-    import Notify       = Utility.Notify;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import FloatText    = Utility.FloatText;
-    import Lang         = Utility.Lang;
+import FloatText        from "../../tools/helpers/FloatText";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
+import UserProxy        from "../../user/model/UserProxy";
+
+namespace TwnsUserSetPrivilegePanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     type OpenDataForUserSetPrivilegePanel = {
         userId  : number;
-    }
-
-    export class UserSetPrivilegePanel extends GameUi.UiPanel<OpenDataForUserSetPrivilegePanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+    };
+    export class UserSetPrivilegePanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetPrivilegePanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: UserSetPrivilegePanel;
 
-        private _btnGetInfo             : TinyWars.GameUi.UiButton;
-        private _inputUserId            : TinyWars.GameUi.UiTextInput;
-        private _labelUserName          : TinyWars.GameUi.UiLabel;
+        private _btnGetInfo             : TwnsUiButton.UiButton;
+        private _inputUserId            : TwnsUiTextInput.UiTextInput;
+        private _labelUserName          : TwnsUiLabel.UiLabel;
         private _groupIsAdmin           : eui.Group;
-        private _imgIsAdmin             : TinyWars.GameUi.UiImage;
-        private _labelIsAdmin           : TinyWars.GameUi.UiLabel;
+        private _imgIsAdmin             : TwnsUiImage.UiImage;
+        private _labelIsAdmin           : TwnsUiLabel.UiLabel;
         private _groupCanLogin          : eui.Group;
-        private _imgCanLogin            : TinyWars.GameUi.UiImage;
-        private _labelCanLogin          : TinyWars.GameUi.UiLabel;
+        private _imgCanLogin            : TwnsUiImage.UiImage;
+        private _labelCanLogin          : TwnsUiLabel.UiLabel;
         private _groupIsMapCommittee    : eui.Group;
-        private _imgIsMapCommittee      : TinyWars.GameUi.UiImage;
-        private _labelIsMapCommittee    : TinyWars.GameUi.UiLabel;
+        private _imgIsMapCommittee      : TwnsUiImage.UiImage;
+        private _labelIsMapCommittee    : TwnsUiLabel.UiLabel;
         private _groupIsChangeLogEditor : eui.Group;
-        private _imgIsChangeLogEditor   : TinyWars.GameUi.UiImage;
-        private _labelIsChangeLogEditor : TinyWars.GameUi.UiLabel;
+        private _imgIsChangeLogEditor   : TwnsUiImage.UiImage;
+        private _labelIsChangeLogEditor : TwnsUiLabel.UiLabel;
         private _groupCanChat           : eui.Group;
-        private _imgCanChat             : TinyWars.GameUi.UiImage;
-        private _labelCanChat           : TinyWars.GameUi.UiLabel;
-        private _btnCancel              : TinyWars.GameUi.UiButton;
-        private _btnConfirm             : TinyWars.GameUi.UiButton;
+        private _imgCanChat             : TwnsUiImage.UiImage;
+        private _labelCanChat           : TwnsUiLabel.UiLabel;
+        private _btnCancel              : TwnsUiButton.UiButton;
+        private _btnConfirm             : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForUserSetPrivilegePanel): void {
             if (!UserSetPrivilegePanel._instance) {
@@ -59,8 +69,8 @@ namespace TinyWars.User {
 
         public _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.MsgUserGetPublicInfo,   callback: this._onNotifyMsgUserGetPublicInfo },
-                { type: Notify.Type.MsgUserSetPrivilege,    callback: this._onNotifyMsgUserSetPrivilege },
+                { type: NotifyType.MsgUserGetPublicInfo,   callback: this._onNotifyMsgUserGetPublicInfo },
+                { type: NotifyType.MsgUserSetPrivilege,    callback: this._onNotifyMsgUserSetPrivilege },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnGetInfo,             callback: this._onTouchedBtnGetInfo },
@@ -93,7 +103,7 @@ namespace TinyWars.User {
         }
 
         private _onNotifyMsgUserSetPrivilege(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0157));
+            FloatText.show(Lang.getText(LangTextType.A0157));
             this.close();
         }
 
@@ -141,3 +151,5 @@ namespace TinyWars.User {
         }
     }
 }
+
+export default TwnsUserSetPrivilegePanel;

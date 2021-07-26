@@ -1,17 +1,28 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.BaseWar {
-    import Types                = Utility.Types;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import Helpers              = Utility.Helpers;
-    import Notify               = Utility.Notify;
-    import Lang                 = Utility.Lang;
-    import DamageCalculator     = Utility.DamageCalculator;
-    import Logger               = Utility.Logger;
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import WarDamageCalculator  from "../../tools/warHelpers/WarDamageCalculator";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Lang                 from "../../tools/lang/Lang";
+import NotifyData           from "../../tools/notify/NotifyData";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import Logger               from "../../tools/helpers/Logger";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Types                from "../../tools/helpers/Types";
+import TwnsBwActionPlanner  from "../model/BwActionPlanner";
+import TwnsBwCursor         from "../model/BwCursor";
+
+namespace TwnsBwCursorView {
     import GridIndex            = Types.GridIndex;
     import ActionPlannerState   = Types.ActionPlannerState;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import BwCursor             = TwnsBwCursor.BwCursor;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.CommonConstants.GridSize;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
     const _PULSE_IN_DURATION                    = 150;
     const _PULSE_OUT_DURATION                   = 150;
     const _PULSE_INTERVAL_DURATION              = 300;
@@ -48,7 +59,7 @@ namespace TinyWars.BaseWar {
     export class BwCursorView extends eui.Group {
         private _cursor                 : BwCursor;
         private _mapSize                : Types.MapSize;
-        private _actionPlanner          : BwActionPlanner;
+        private _actionPlanner          : TwnsBwActionPlanner.BwActionPlanner;
         private _frameIndexForImgTarget = 0;
 
         private _currGlobalTouchPoints      = new Map<number, Types.Point>();
@@ -62,13 +73,13 @@ namespace TinyWars.BaseWar {
         private _conForTarget           = new egret.DisplayObjectContainer();
         private _conForSiloArea         = new egret.DisplayObjectContainer();
         private _conForDamage           = new egret.DisplayObjectContainer();
-        private _imgUpperLeftCorner     = new GameUi.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
-        private _imgUpperRightCorner    = new GameUi.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
-        private _imgLowerLeftCorner     = new GameUi.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
-        private _imgLowerRightCorner    = new GameUi.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
-        private _imgTarget              = new GameUi.UiImage(_IMG_SOURCES_FOR_TARGET[this._frameIndexForImgTarget]);
-        private _imgSiloArea            = new GameUi.UiImage(`c04_t03_s03_f01`);
-        private _labelDamage            = new GameUi.UiLabel();
+        private _imgUpperLeftCorner     = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
+        private _imgUpperRightCorner    = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
+        private _imgLowerLeftCorner     = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
+        private _imgLowerRightCorner    = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
+        private _imgTarget              = new TwnsUiImage.UiImage(_IMG_SOURCES_FOR_TARGET[this._frameIndexForImgTarget]);
+        private _imgSiloArea            = new TwnsUiImage.UiImage(`c04_t03_s03_f01`);
+        private _labelDamage            = new TwnsUiLabel.UiLabel();
 
         public constructor() {
             super();
@@ -96,7 +107,7 @@ namespace TinyWars.BaseWar {
             const field         = this._cursor.getWar().getField();
             this._actionPlanner = field.getActionPlanner();
 
-            Notify.addEventListener(Notify.Type.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
+            Notify.addEventListener(NotifyType.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,             this._onTouchBegin,             this);
             this.addEventListener(egret.TouchEvent.TOUCH_CANCEL,            this._onTouchCancel,            this);
             this.addEventListener(egret.TouchEvent.TOUCH_END,               this._onTouchEnd,               this);
@@ -111,7 +122,7 @@ namespace TinyWars.BaseWar {
             this._stopNormalAnimation();
             this._stopTargetAnimation();
 
-            Notify.removeEventListener(Notify.Type.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
+            Notify.removeEventListener(NotifyType.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
             this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,              this._onTouchBegin,             this);
             this.removeEventListener(egret.TouchEvent.TOUCH_CANCEL,             this._onTouchCancel,            this);
             this.removeEventListener(egret.TouchEvent.TOUCH_END,                this._onTouchEnd,               this);
@@ -154,10 +165,10 @@ namespace TinyWars.BaseWar {
                 const currGridIndex = this._cursor.getGridIndex();
                 if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
                     this._isTouchMovedOrMultiple = true;
-                    Notify.dispatch(Notify.Type.BwCursorDragged, {
+                    Notify.dispatch(NotifyType.BwCursorDragged, {
                         current     : currGridIndex,
                         draggedTo   : gridIndex,
-                    } as Notify.Data.BwCursorDragged);
+                    } as NotifyData.BwCursorDragged);
                 }
             }
         }
@@ -199,27 +210,27 @@ namespace TinyWars.BaseWar {
                 currGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
 
                 if (currGlobalTouchPoints.size > 1) {
-                    Notify.dispatch(Notify.Type.BwFieldZoomed, {
+                    Notify.dispatch(NotifyType.BwFieldZoomed, {
                         current : currGlobalTouchPoints,
                         previous: this._prevGlobalTouchPoints,
-                    } as Notify.Data.BwFieldZoomed);
+                    } as NotifyData.BwFieldZoomed);
                 } else {
                     if (this._touchIdForTouchingCursor != null) {
                         const gridIndex     = this._getGridIndexByLocalXY(e.localX, e.localY);
                         const currGridIndex = this._cursor.getGridIndex();
                         if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
                             this._isTouchMovedOrMultiple = true;
-                            Notify.dispatch(Notify.Type.BwCursorDragged, {
+                            Notify.dispatch(NotifyType.BwCursorDragged, {
                                 current     : currGridIndex,
                                 draggedTo   : gridIndex,
-                            } as Notify.Data.BwCursorDragged);
+                            } as NotifyData.BwCursorDragged);
                         }
                     } else {
                         if (this._isTouchMovedOrMultiple) {
-                            Notify.dispatch(Notify.Type.BwFieldDragged, {
+                            Notify.dispatch(NotifyType.BwFieldDragged, {
                                 current : currGlobalTouchPoints.values().next().value,
                                 previous: this._prevGlobalTouchPoints.values().next().value,
-                            } as Notify.Data.BwFieldDragged);
+                            } as NotifyData.BwFieldDragged);
                         }
                     }
                 }
@@ -241,13 +252,13 @@ namespace TinyWars.BaseWar {
                 if (!currGlobalTouchPoints.size) {
                     this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
                     if (!this._isTouchMovedOrMultiple) {
-                        Notify.dispatch(Notify.Type.BwCursorTapped, {
+                        Notify.dispatch(NotifyType.BwCursorTapped, {
                             current : this._cursor.getGridIndex(),
                             tappedOn: this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y),
-                        } as Notify.Data.BwCursorTapped);
+                        } as NotifyData.BwCursorTapped);
                     } else {
                         if (hasTouchedCursor) {
-                            Notify.dispatch(Notify.Type.BwCursorDragEnded);
+                            Notify.dispatch(NotifyType.BwCursorDragEnded);
                         }
                     }
                     this._initialGlobalTouchPoint = null;
@@ -420,7 +431,7 @@ namespace TinyWars.BaseWar {
                         con.visible = false;
                     } else {
                         const attackerUnitId                        = attackerUnit.getUnitId();
-                        const { errorCode, battleDamageInfoArray }  = DamageCalculator.getEstimatedBattleDamage({
+                        const { errorCode, battleDamageInfoArray }  = WarDamageCalculator.getEstimatedBattleDamage({
                             war,
                             attackerMovePath: movePath,
                             launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
@@ -435,7 +446,7 @@ namespace TinyWars.BaseWar {
                         } else {
                             con.visible = true;
 
-                            const { errorCode: errorCodeForDamages, damages } = DamageCalculator.getAttackAndCounterDamage({
+                            const { errorCode: errorCodeForDamages, damages } = WarDamageCalculator.getAttackAndCounterDamage({
                                 battleDamageInfoArray,
                                 attackerUnitId,
                                 targetGridIndex     : gridIndex,
@@ -453,8 +464,8 @@ namespace TinyWars.BaseWar {
 
                             const { attackDamage, counterDamage } = damages;
                             const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
-                            labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
-                                + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
+                            labelDamage.text    = `${Lang.getText(LangTextType.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
+                                + `${Lang.getText(LangTextType.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
                             this._updatePositionForConForDamage();
                         }
                     }
@@ -468,7 +479,7 @@ namespace TinyWars.BaseWar {
                         con.visible = false;
                     } else {
                         const attackerUnitId                        = attackerUnit.getUnitId();
-                        const { errorCode, battleDamageInfoArray }  = DamageCalculator.getEstimatedBattleDamage({
+                        const { errorCode, battleDamageInfoArray }  = WarDamageCalculator.getEstimatedBattleDamage({
                             war,
                             attackerMovePath: movePath,
                             launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
@@ -483,7 +494,7 @@ namespace TinyWars.BaseWar {
                         } else {
                             con.visible = true;
 
-                            const { errorCode: errorCodeForDamages, damages } = DamageCalculator.getAttackAndCounterDamage({
+                            const { errorCode: errorCodeForDamages, damages } = WarDamageCalculator.getAttackAndCounterDamage({
                                 battleDamageInfoArray,
                                 attackerUnitId,
                                 targetGridIndex     : gridIndex,
@@ -501,8 +512,8 @@ namespace TinyWars.BaseWar {
 
                             const { attackDamage, counterDamage } = damages;
                             const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
-                            labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
-                                + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
+                            labelDamage.text    = `${Lang.getText(LangTextType.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
+                                + `${Lang.getText(LangTextType.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
                             this._updatePositionForConForDamage();
                         }
                     }
@@ -550,7 +561,7 @@ namespace TinyWars.BaseWar {
             this._conForAll.addChild(this._conForSiloArea);
         }
         private _initConForDamage(): void {
-            const imgBg         = new GameUi.UiImage("c04_t01_s02_f01");
+            const imgBg         = new TwnsUiImage.UiImage("c04_t01_s02_f01");
             imgBg.scale9Grid    = new egret.Rectangle(9, 9, 2, 2);
             imgBg.width         = _DAMAGE_CON_WIDTH;
             imgBg.height        = _DAMAGE_CON_HEIGHT;
@@ -650,10 +661,10 @@ namespace TinyWars.BaseWar {
         protected _getConForDamage(): egret.DisplayObjectContainer {
             return this._conForDamage;
         }
-        protected _getLabelDamage(): GameUi.UiLabel {
+        protected _getLabelDamage(): TwnsUiLabel.UiLabel {
             return this._labelDamage;
         }
-        protected _getActionPlanner(): BwActionPlanner {
+        protected _getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
             return this._actionPlanner;
         }
 
@@ -664,3 +675,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwCursorView;

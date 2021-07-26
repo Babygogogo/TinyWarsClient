@@ -1,27 +1,40 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapEditor.MeUtility {
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Types                = Utility.Types;
-    import Lang                 = Utility.Lang;
-    import Helpers              = Utility.Helpers;
-    import ConfigManager        = Utility.ConfigManager;
-    import ClientErrorCode      = Utility.ClientErrorCode;
-    import BwWarRuleHelper      = BaseWar.BwWarRuleHelper;
-    import BwHelpers            = BaseWar.BwHelpers;
-    import BwTile               = BaseWar.BwTile;
-    import WarEventHelper       = WarEvent.WarEventHelper;
-    import GridIndex            = Types.GridIndex;
-    import TileObjectType       = Types.TileObjectType;
-    import TileBaseType         = Types.TileBaseType;
-    import SymmetryType         = Types.SymmetryType;
-    import LanguageType         = Types.LanguageType;
-    import IMapRawData          = ProtoTypes.Map.IMapRawData;
-    import WarSerialization     = ProtoTypes.WarSerialization;
-    import ISerialTile          = WarSerialization.ISerialTile;
-    import ISerialUnit          = WarSerialization.ISerialUnit;
-    import ISerialPlayer        = WarSerialization.ISerialPlayer;
-    import CommonConstants      = Utility.CommonConstants;
+import TwnsBwTile           from "../../baseWar/model/BwTile";
+import TwnsBwUnit           from "../../baseWar/model/BwUnit";
+import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
+import TwnsTwWar            from "../../testWar/model/TwWar";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
+import Timer                from "../../tools/helpers/Timer";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel            from "../../user/model/UserModel";
+import WarEventHelper       from "../../warEvent/model/WarEventHelper";
+import TwnsMeWar            from "./MeWar";
+
+namespace MeUtility {
+    import BwTile           = TwnsBwTile.BwTile;
+    import MeWar            = TwnsMeWar.MeWar;
+    import TwWar            = TwnsTwWar.TwWar;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import GridIndex        = Types.GridIndex;
+    import TileObjectType   = Types.TileObjectType;
+    import TileBaseType     = Types.TileBaseType;
+    import SymmetryType     = Types.SymmetryType;
+    import LanguageType     = Types.LanguageType;
+    import IMapRawData      = ProtoTypes.Map.IMapRawData;
+    import WarSerialization = ProtoTypes.WarSerialization;
+    import ISerialTile      = WarSerialization.ISerialTile;
+    import ISerialUnit      = WarSerialization.ISerialUnit;
+    import ISerialPlayer    = WarSerialization.ISerialPlayer;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
 
     export type AsymmetricalCounters = {
         UpToDown            : number | null;
@@ -36,16 +49,16 @@ namespace TinyWars.MapEditor.MeUtility {
         const mapWidth  = 20;
         const mapHeight = 15;
         return {
-            designerName            : await User.UserModel.getSelfNickname(),
-            designerUserId          : User.UserModel.getSelfUserId(),
+            designerName            : await UserModel.getSelfNickname(),
+            designerUserId          : UserModel.getSelfUserId(),
             mapNameArray            : [
-                { languageType: LanguageType.Chinese, text: `${Lang.getText(Lang.Type.B0279, LanguageType.Chinese)} - ${slotIndex}`},
-                { languageType: LanguageType.English, text: `${Lang.getText(Lang.Type.B0279, LanguageType.English)} - ${slotIndex}`},
+                { languageType: LanguageType.Chinese, text: `${Lang.getText(LangTextType.B0279, LanguageType.Chinese)} - ${slotIndex}`},
+                { languageType: LanguageType.English, text: `${Lang.getText(LangTextType.B0279, LanguageType.English)} - ${slotIndex}`},
             ],
             mapWidth,
             mapHeight,
             playersCountUnneutral   : 2,
-            modifiedTime            : Time.TimeModel.getServerTimestamp(),
+            modifiedTime            : Timer.getServerTimestamp(),
             tileDataArray           : createDefaultTileDataArray(mapWidth, mapHeight, TileBaseType.Plain),
             unitDataArray           : [],
             warEventFullData        : {
@@ -79,15 +92,15 @@ namespace TinyWars.MapEditor.MeUtility {
         const mapRawData        = data.mapRawData;
         const warRuleArray      = mapRawData.warRuleArray;
         const unitDataArray     = mapRawData.unitDataArray || [];
-        const warRule           = (warRuleArray ? warRuleArray[0] : null) || BwWarRuleHelper.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
+        const warRule           = (warRuleArray ? warRuleArray[0] : null) || WarRuleHelpers.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
         const ruleForPlayers    = warRule.ruleForPlayers;
         if (ruleForPlayers.playerRuleDataArray == null) {
-            ruleForPlayers.playerRuleDataArray = BwWarRuleHelper.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex);
+            ruleForPlayers.playerRuleDataArray = WarRuleHelpers.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex);
         } else {
             const playerRules = ruleForPlayers.playerRuleDataArray;
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                 if (playerRules.find(v => v.playerIndex === playerIndex) == null) {
-                    playerRules.push(BwWarRuleHelper.createDefaultPlayerRule(playerIndex));
+                    playerRules.push(WarRuleHelpers.createDefaultPlayerRule(playerIndex));
                 }
             }
         }
@@ -145,7 +158,7 @@ namespace TinyWars.MapEditor.MeUtility {
             hasVotedForDraw             : false,
             aliveState                  : Types.PlayerAliveState.Alive,
             playerIndex,
-            userId                      : playerIndex > 0 ? User.UserModel.getSelfUserId() : null,
+            userId                      : playerIndex > 0 ? UserModel.getSelfUserId() : null,
             coId                        : 0,
             coCurrentEnergy             : null,
             coUsingSkillType            : Types.CoSkillType.Passive,
@@ -168,7 +181,7 @@ namespace TinyWars.MapEditor.MeUtility {
             mapHeight               : newHeight,
             playersCountUnneutral   : mapRawData.playersCountUnneutral,
             warEventFullData        : mapRawData.warEventFullData,
-            modifiedTime            : Time.TimeModel.getServerTimestamp(),
+            modifiedTime            : Timer.getServerTimestamp(),
             tileDataArray           : createDefaultTileDataArray(newWidth, newHeight, TileBaseType.Plain),
             unitDataArray           : null,
             warRuleArray            : mapRawData.warRuleArray,
@@ -184,7 +197,7 @@ namespace TinyWars.MapEditor.MeUtility {
             mapHeight               : newHeight,
             playersCountUnneutral   : mapRawData.playersCountUnneutral,
             warEventFullData        : mapRawData.warEventFullData,
-            modifiedTime            : Time.TimeModel.getServerTimestamp(),
+            modifiedTime            : Timer.getServerTimestamp(),
             tileDataArray           : getNewTileDataListForResize(mapRawData, newWidth, newHeight),
             unitDataArray           : getNewUnitDataListForResize(mapRawData, newWidth, newHeight),
             warRuleArray            : mapRawData.warRuleArray,
@@ -233,7 +246,7 @@ namespace TinyWars.MapEditor.MeUtility {
             mapWidth                : mapRawData.mapWidth,
             mapHeight               : mapRawData.mapHeight,
             playersCountUnneutral   : mapRawData.playersCountUnneutral,
-            modifiedTime            : Time.TimeModel.getServerTimestamp(),
+            modifiedTime            : Timer.getServerTimestamp(),
             tileDataArray           : getNewTileDataListForOffset(mapRawData, offsetX, offsetY),
             unitDataArray           : getNewUnitDataListForOffset(mapRawData, offsetX, offsetY),
             warRuleArray            : mapRawData.warRuleArray,
@@ -304,8 +317,8 @@ namespace TinyWars.MapEditor.MeUtility {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function reviseAllUnitIds(unitMap: BaseWar.BwUnitMap): void {
-        const allUnits  = new Map<number, { unit: BaseWar.BwUnit, newUnitId: number }>();
+    export function reviseAllUnitIds(unitMap: BwUnitMap): void {
+        const allUnits  = new Map<number, { unit: TwnsBwUnit.BwUnit, newUnitId: number }>();
         let nextUnitId  = 0;
         for (const unit of unitMap.getAllUnits()) {
             allUnits.set(unit.getUnitId(), { unit, newUnitId: nextUnitId } );
@@ -453,7 +466,7 @@ namespace TinyWars.MapEditor.MeUtility {
             return playersCountUnneutralError;
         }
 
-        const warRuleError = BwWarRuleHelper.getErrorCodeForWarRuleArray({
+        const warRuleError = WarRuleHelpers.getErrorCodeForWarRuleArray({
             ruleList                : mapRawData.warRuleArray,
             playersCountUnneutral   : mapRawData.playersCountUnneutral!,
             allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(mapRawData.warEventFullData),
@@ -468,7 +481,7 @@ namespace TinyWars.MapEditor.MeUtility {
             return warEventError;
         }
 
-        const testWarError = await new TestWar.TwWar().initByMapRawData(mapRawData);
+        const testWarError = await new TwWar().initByMapRawData(mapRawData);
         if (testWarError) {
             return testWarError;
         }
@@ -498,7 +511,7 @@ namespace TinyWars.MapEditor.MeUtility {
         return ClientErrorCode.NoError;
     }
     function getErrorCodeForUnitArray(unitArray: ProtoTypes.WarSerialization.ISerialUnit[] | null | undefined): ClientErrorCode {
-        if (!BwHelpers.checkIsUnitIdCompact(unitArray)) {
+        if (!WarCommonHelpers.checkIsUnitIdCompact(unitArray)) {
             return ClientErrorCode.MapRawDataValidation03;
         }
 
@@ -550,3 +563,5 @@ namespace TinyWars.MapEditor.MeUtility {
         return ClientErrorCode.NoError;
     }
 }
+
+export default MeUtility;

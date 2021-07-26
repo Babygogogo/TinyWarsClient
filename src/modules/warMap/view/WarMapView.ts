@@ -1,20 +1,27 @@
 
-namespace TinyWars.WarMap {
-    import CommonModel      = Common.CommonModel;
-    import UiImage          = GameUi.UiImage;
-    import TimeModel        = Time.TimeModel;
-    import Notify           = Utility.Notify;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
-    import Types            = Utility.Types;
-    import Helpers          = Utility.Helpers;
-    import CommonConstants  = Utility.CommonConstants;
+import CommonModel          from "../../common/model/CommonModel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
+import Timer                from "../../tools/helpers/Timer";
+import Types                from "../../tools/helpers/Types";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import UserModel            from "../../user/model/UserModel";
+import TwnsWarMapUnitView   from "./WarMapUnitView";
+
+namespace TwnsWarMapView {
+    import NotifyType       = TwnsNotifyType.NotifyType;
     import MapSize          = Types.MapSize;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
     import WarSerialization = ProtoTypes.WarSerialization;
     import ISerialWar       = WarSerialization.ISerialWar;
     import ISerialTile      = WarSerialization.ISerialTile;
     import ISerialPlayer    = WarSerialization.ISerialPlayer;
+    import WarMapUnitView   = TwnsWarMapUnitView.WarMapUnitView;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -41,7 +48,7 @@ namespace TinyWars.WarMap {
         public showMapByWarData(warData: ISerialWar, players?: ISerialPlayer[]): void {
             const field     = warData.field;
             const tileMap   = field.tileMap;
-            const mapSize   = BaseWar.BwHelpers.getMapSize(tileMap);
+            const mapSize   = WarCommonHelpers.getMapSize(tileMap);
             this.width      = GRID_WIDTH * mapSize.width;
             this.height     = GRID_HEIGHT * mapSize.height;
 
@@ -65,8 +72,8 @@ namespace TinyWars.WarMap {
         private readonly _objectLayer           = new TileObjectLayer();
 
         private readonly _notifyListenerArray   : Notify.Listener[] = [
-            { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
-            { type: Notify.Type.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
+            { type: NotifyType.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+            { type: NotifyType.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
         ];
 
         public constructor() {
@@ -116,14 +123,14 @@ namespace TinyWars.WarMap {
             const gridBorderLayer                           = this._gridBorderLayer;
             gridBorderLayer.removeChildren();
             for (let x = 0; x <= mapWidth; ++x) {
-                const img   = new GameUi.UiImage(`commonColorBlack0000`);
+                const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
                 img.width   = 2;
                 img.height  = borderHeight;
                 img.x       = (x * GRID_WIDTH) - 1;
                 gridBorderLayer.addChild(img);
             }
             for (let y = 0; y <= mapHeight; ++y) {
-                const img   = new GameUi.UiImage(`commonColorBlack0000`);
+                const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
                 img.width   = borderWidth;
                 img.height  = 2;
                 img.y       = (y * GRID_HEIGHT) - 1;
@@ -132,13 +139,13 @@ namespace TinyWars.WarMap {
             this._updateGridBorderLayerVisible();
         }
         private _updateGridBorderLayerVisible(): void {
-            this._gridBorderLayer.visible = User.UserModel.getSelfSettingsIsShowGridBorder();
+            this._gridBorderLayer.visible = UserModel.getSelfSettingsIsShowGridBorder();
         }
     }
 
     abstract class TileLayerBase extends eui.Component {
         private readonly _tileDataMap   : Types.WarMapTileViewData[][] = [];
-        private readonly _imageMap      : UiImage[][] = [];
+        private readonly _imageMap      : TwnsUiImage.UiImage[][] = [];
 
         public updateWithTileDataList(tileDataArray: ISerialTile[], players?: ISerialPlayer[]): void {
             const mapSize = getMapSize(tileDataArray);
@@ -153,7 +160,7 @@ namespace TinyWars.WarMap {
             const tileDataMap   = this._tileDataMap;
             const width         = tileDataMap.length;
             const height        = width > 0 ? tileDataMap[0].length : 0;
-            const tickCount     = Time.TimeModel.getTileAnimationTickCount();
+            const tickCount     = Timer.getTileAnimationTickCount();
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
                     imageMap[x][y].source = this._getImageSource(tileDataMap[x][y], tickCount);
@@ -208,7 +215,7 @@ namespace TinyWars.WarMap {
 
                 for (let y = 0; y < height; ++y) {
                     if (column[y] == null) {
-                        const img   = new UiImage();
+                        const img   = new TwnsUiImage.UiImage();
                         img.x       = GRID_WIDTH * x;
                         img.y       = this._getImageY(y);
                         column[y]   = img;
@@ -227,7 +234,7 @@ namespace TinyWars.WarMap {
             return tileData == null
                 ? undefined
                 : CommonModel.getCachedTileBaseImageSource({
-                    version : User.UserModel.getSelfSettingsTextureVersion(),
+                    version : UserModel.getSelfSettingsTextureVersion(),
                     baseType: tileData.baseType,
                     shapeId : tileData.baseShapeId || 0,
                     isDark  : false,
@@ -246,7 +253,7 @@ namespace TinyWars.WarMap {
             return tileData == null
                 ? undefined
                 : CommonModel.getCachedTileObjectImageSource({
-                    version     : User.UserModel.getSelfSettingsTextureVersion(),
+                    version     : UserModel.getSelfSettingsTextureVersion(),
                     objectType  : tileData.objectType,
                     shapeId     : tileData.objectShapeId || 0,
                     isDark      : false,
@@ -278,7 +285,7 @@ namespace TinyWars.WarMap {
         private readonly _groundLayer           = new egret.DisplayObjectContainer();
         private readonly _seaLayer              = new egret.DisplayObjectContainer();
         private readonly _notifyListenerArray   : Notify.Listener[] = [
-            { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
+            { type: NotifyType.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
         ];
 
         public constructor() {
@@ -299,7 +306,7 @@ namespace TinyWars.WarMap {
         private _initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
             this.clear();
 
-            const tickCount = TimeModel.getUnitAnimationTickCount();
+            const tickCount = Timer.getUnitAnimationTickCount();
             for (const data of dataList) {
                 this._addUnit(data, tickCount);
             }
@@ -325,7 +332,7 @@ namespace TinyWars.WarMap {
             Notify.removeEventListeners(this._notifyListenerArray, this);
         }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const tickCount = TimeModel.getUnitAnimationTickCount();
+            const tickCount = Timer.getUnitAnimationTickCount();
             for (const view of this._unitViews) {
                 view.updateOnAnimationTick(tickCount);
             }
@@ -348,7 +355,7 @@ namespace TinyWars.WarMap {
                 const y1 = g1.y;
                 const y2 = g2.y;
                 return y1 !== y2 ? y1 - y2 : g1.x - g2.x;
-            })
+            });
 
             for (let i = 0; i < unitsCount; ++i) {
                 layer.addChildAt(unitViews[i], i);
@@ -403,3 +410,5 @@ namespace TinyWars.WarMap {
         return dataArray;
     }
 }
+
+export default TwnsWarMapView;

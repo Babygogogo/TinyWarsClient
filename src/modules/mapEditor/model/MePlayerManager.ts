@@ -1,22 +1,38 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapEditor {
-    import ProtoTypes           = Utility.ProtoTypes;
+import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsMeField          from "./MeField";
+import MeUtility            from "./MeUtility";
+
+namespace TwnsMePlayerManager {
+    import BwPlayerManager      = TwnsBwPlayerManager.BwPlayerManager;
+    import MeField              = TwnsMeField.MeField;
     import WarSerialization     = ProtoTypes.WarSerialization;
     import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
 
-    export class MePlayerManager extends BaseWar.BwPlayerManager {
+    export class MePlayerManager extends BwPlayerManager {
         public serializeForCreateSfw(): ISerialPlayerManager {
             const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
             const players           : ISerialPlayer[] = [];
-            for (let playerIndex = 0; playerIndex <= maxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
                 players.push(MeUtility.createDefaultISerialPlayer(playerIndex));
             }
 
             return {
                 players,
             };
+        }
+
+        public serializeForCreateMfr(): ISerialPlayerManager | undefined {
+            const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
+            const players           : ISerialPlayer[] = [];
+            for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
+                players.push(this.getPlayer(playerIndex).serializeForCreateMfr());
+            }
+
+            return { players };
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -27,3 +43,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMePlayerManager;

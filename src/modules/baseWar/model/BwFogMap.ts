@@ -1,12 +1,16 @@
 
-namespace TinyWars.BaseWar {
-    import Logger                   = Utility.Logger;
-    import Types                    = Utility.Types;
-    import Helpers                  = Utility.Helpers;
-    import GridIndexHelpers         = Utility.GridIndexHelpers;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import ClientErrorCode          = Utility.ClientErrorCode;
-    import CommonConstants          = Utility.CommonConstants;
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import TwnsBwUnit           from "./BwUnit";
+import TwnsBwWar            from "./BwWar";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+
+namespace TwnsBwFogMap {
     import ForceFogCode             = Types.ForceFogCode;
     import GridIndex                = Types.GridIndex;
     import MapSize                  = Types.MapSize;
@@ -14,6 +18,8 @@ namespace TinyWars.BaseWar {
     import WarSerialization         = ProtoTypes.WarSerialization;
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar                    = TwnsBwWar.BwWar;
 
     export abstract class BwFogMap {
         private _forceFogCode           : ForceFogCode;
@@ -56,7 +62,7 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwFogMapInit03;
             }
 
-            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+            if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 return ClientErrorCode.BwFogMapInit04;
             }
 
@@ -124,7 +130,7 @@ namespace TinyWars.BaseWar {
 
             const serialMapsFromPath: IDataForFogMapFromPath[] = [];
             for (const [playerIndex, map] of allMapsFromPath) {
-                const visibilityArray = BwHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                const visibilityArray = WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                 if (visibilityArray != null) {
                     serialMapsFromPath.push({
                         playerIndex,
@@ -152,7 +158,7 @@ namespace TinyWars.BaseWar {
                     (player.getAliveState() === Types.PlayerAliveState.Alive)   &&
                     (targetTeamIndexes.has(player.getTeamIndex()))
                 ) {
-                    const visibilityArray = BwHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                    const visibilityArray = WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                     if (visibilityArray != null) {
                         mapsFromPath.push({
                             playerIndex,
@@ -252,7 +258,7 @@ namespace TinyWars.BaseWar {
                 }
             }
         }
-        public updateMapFromPathsByUnitAndPath(unit: BwUnit, path: GridIndex[]): void {
+        public updateMapFromPathsByUnitAndPath(unit: TwnsBwUnit.BwUnit, path: GridIndex[]): void {
             const playerIndex = unit.getPlayerIndex();
             if (playerIndex == null) {
                 Logger.error(`BwFogMap.updateMapFromPathsByUnitAndPath() empty playerIndex.`);
@@ -535,3 +541,5 @@ namespace TinyWars.BaseWar {
         return ClientErrorCode.NoError;
     }
 }
+
+export default TwnsBwFogMap;

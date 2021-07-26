@@ -1,11 +1,16 @@
 
-namespace TinyWars.BaseWar {
-    import Types            = Utility.Types;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import Helpers          = Utility.Helpers;
-    import GridIndex        = Types.GridIndex;
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsBwGridVisualEffect   from "../model/BwGridVisualEffect";
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.CommonConstants.GridSize;
+namespace TwnsBwGridVisualEffectView {
+    import GridIndex            = Types.GridIndex;
+    import BwGridVisualEffect   = TwnsBwGridVisualEffect.BwGridVisualEffect;
+
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
     const BLOCK_OFFSET_X            = Math.floor(_GRID_WIDTH * 0.3);
     const BLOCK_OFFSET_Y            = Math.floor(_GRID_HEIGHT * 0.3);
     const DIVE_OFFSET_X             = -_GRID_WIDTH;
@@ -56,8 +61,10 @@ namespace TinyWars.BaseWar {
         }
 
         public startRunningView(): void {
+            // nothing to do
         }
         public stopRunningView(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +112,7 @@ namespace TinyWars.BaseWar {
     }
 
     function createEffectBlock(gridIndex: GridIndex): egret.DisplayObject {
-        const img           = new GameUi.UiImage(`c04_t08_s05_f01`);
+        const img           = new TwnsUiImage.UiImage(`c04_t08_s05_f01`);
         img.anchorOffsetX   = 174;
         img.anchorOffsetY   = 54;
         img.scaleX          = 2;
@@ -124,7 +131,7 @@ namespace TinyWars.BaseWar {
     }
 
     function createEffectDive(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new GameUi.UiImage(`c04_t08_s07_f01`);
+        const img   = new TwnsUiImage.UiImage(`c04_t08_s07_f01`);
         const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = DIVE_OFFSET_X + pos.x;
         img.y       = DIVE_OFFSET_Y + pos.y;
@@ -139,7 +146,7 @@ namespace TinyWars.BaseWar {
     }
 
     function createEffectExplosion(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new GameUi.UiImage(`c04_t08_s01_f01`);
+        const img   = new TwnsUiImage.UiImage(`c04_t08_s01_f01`);
         const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = EXPLOSION_OFFSET_X + pos.x;
         img.y       = EXPLOSION_OFFSET_Y + pos.y;
@@ -158,7 +165,7 @@ namespace TinyWars.BaseWar {
     }
 
     function createEffectDamage(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new GameUi.UiImage(`c04_t08_s02_f01`);
+        const img   = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
         const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = DAMAGE_OFFSET_X + pos.x;
         img.y       = DAMAGE_OFFSET_Y + pos.y;
@@ -173,7 +180,7 @@ namespace TinyWars.BaseWar {
     }
 
     function createEffectSupply(gridIndex: GridIndex): egret.DisplayObject {
-        const img           = new GameUi.UiImage("c04_t08_s03_f01");
+        const img           = new TwnsUiImage.UiImage("c04_t08_s03_f01");
         img.anchorOffsetX   = 180;
         img.anchorOffsetY   = 54;
         img.scaleX          = 2;
@@ -192,7 +199,7 @@ namespace TinyWars.BaseWar {
     }
 
     function createEffectRepair(gridIndex: GridIndex): egret.DisplayObject {
-        const img           = new GameUi.UiImage("c04_t08_s04_f01");
+        const img           = new TwnsUiImage.UiImage("c04_t08_s04_f01");
         img.anchorOffsetX   = 180;
         img.anchorOffsetY   = 54;
         img.scaleX          = 2;
@@ -211,7 +218,7 @@ namespace TinyWars.BaseWar {
     }
 
     function createEffectSiloExplosion(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new GameUi.UiImage(`c04_t08_s02_f01`);
+        const img   = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
         const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = DAMAGE_OFFSET_X + pos.x;
         img.y       = DAMAGE_OFFSET_Y + pos.y;
@@ -232,7 +239,7 @@ namespace TinyWars.BaseWar {
     }
 
     function createEffectSkillActivation(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new GameUi.UiImage(`c04_t08_s06_f01`);
+        const img   = new TwnsUiImage.UiImage(`c04_t08_s06_f01`);
         const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = SKILL_ACTIVATION_OFFSET_X + pos.x;
         img.y       = SKILL_ACTIVATION_OFFSET_Y + pos.y;
@@ -247,7 +254,7 @@ namespace TinyWars.BaseWar {
     }
 
     function createEffectSurface(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new GameUi.UiImage(`c04_t08_s08_f01`);
+        const img   = new TwnsUiImage.UiImage(`c04_t08_s08_f01`);
         const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = DAMAGE_OFFSET_X + pos.x;
         img.y       = DAMAGE_OFFSET_Y + pos.y;
@@ -261,3 +268,5 @@ namespace TinyWars.BaseWar {
         return img;
     }
 }
+
+export default TwnsBwGridVisualEffectView;

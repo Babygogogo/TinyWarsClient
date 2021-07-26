@@ -1,26 +1,35 @@
 
-namespace TinyWars.WarMap {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
-    import ConfigManager    = Utility.ConfigManager;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import CommonConstants  = Utility.CommonConstants;
+import TwnsMeTileSimpleView     from "../../mapEditor/view/MeTileSimpleView";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+
+namespace TwnsWarMapBuildingListPanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     type OpenDataForBuildingListPanel = {
         configVersion           : string;
         tileDataArray           : ProtoTypes.WarSerialization.ISerialTile[];
         playersCountUnneutral   : number;
-    }
+    };
 
-    export class WarMapBuildingListPanel extends GameUi.UiPanel<OpenDataForBuildingListPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
+    export class WarMapBuildingListPanel extends TwnsUiPanel.UiPanel<OpenDataForBuildingListPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: WarMapBuildingListPanel;
 
-        private readonly _labelTitle    : GameUi.UiLabel;
-        private readonly _listTile      : GameUi.UiScrollList<DataForTileRenderer>;
+        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
+        private readonly _listTile      : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
 
         public static show(openData: OpenDataForBuildingListPanel): void {
             if (!WarMapBuildingListPanel._instance) {
@@ -45,7 +54,7 @@ namespace TinyWars.WarMap {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._listTile.setItemRenderer(TileRenderer);
 
@@ -58,7 +67,7 @@ namespace TinyWars.WarMap {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text = Lang.getText(Lang.Type.B0333);
+            this._labelTitle.text = Lang.getText(LangTextType.B0333);
         }
 
         private _updateListTile(): void {
@@ -97,25 +106,24 @@ namespace TinyWars.WarMap {
         maxPlayerIndex  : number;
         tileType        : Types.TileType;
         dict            : Map<number, number>;
-    }
-
-    class TileRenderer extends GameUi.UiListItemRenderer<DataForTileRenderer> {
+    };
+    class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
-        private _labelNum0      : TinyWars.GameUi.UiLabel;
-        private _labelNum1      : TinyWars.GameUi.UiLabel;
-        private _labelNum2      : TinyWars.GameUi.UiLabel;
-        private _labelNum3      : TinyWars.GameUi.UiLabel;
-        private _labelNum4      : TinyWars.GameUi.UiLabel;
-        private _labelTotalNum  : TinyWars.GameUi.UiLabel;
+        private _labelNum0      : TwnsUiLabel.UiLabel;
+        private _labelNum1      : TwnsUiLabel.UiLabel;
+        private _labelNum2      : TwnsUiLabel.UiLabel;
+        private _labelNum3      : TwnsUiLabel.UiLabel;
+        private _labelNum4      : TwnsUiLabel.UiLabel;
+        private _labelTotalNum  : TwnsUiLabel.UiLabel;
 
-        private _tileView   = new MapEditor.MeTileSimpleView();
+        private _tileView       = new TwnsMeTileSimpleView.MeTileSimpleView();
 
-        private _labelNumList   : GameUi.UiLabel[];
+        private _labelNumList   : TwnsUiLabel.UiLabel[];
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+                { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
 
             const tileView = this._tileView;
@@ -148,7 +156,7 @@ namespace TinyWars.WarMap {
             }
             this._labelTotalNum.text = `${totalNum}`;
 
-            const tileObjectType = Utility.ConfigManager.getTileObjectTypeByTileType(data.tileType);
+            const tileObjectType = ConfigManager.getTileObjectTypeByTileType(data.tileType);
             this._tileView.init({
                 tileBaseType        : null,
                 tileBaseShapeId     : null,
@@ -162,3 +170,5 @@ namespace TinyWars.WarMap {
         }
     }
 }
+
+export default TwnsWarMapBuildingListPanel;

@@ -1,19 +1,37 @@
 
-namespace TinyWars.SingleCustomRoom {
-    import ProtoTypes       = Utility.ProtoTypes;
-    import FloatText        = Utility.FloatText;
-    import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
-    import CommonConstants  = Utility.CommonConstants;
-    import Notify           = Utility.Notify;
-    import PlayerRuleType   = Types.PlayerRuleType;
+import TwnsCommonBanCoPanel     from "../../common/view/CommonBanCoPanel";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import FloatText                from "../../tools/helpers/FloatText";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
+import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
+import ScrCreateModel           from "../model/ScrCreateModel";
 
-    export class ScrCreateAdvancedSettingsPage extends GameUi.UiTabPage<void> {
+namespace TwnsScrCreateAdvancedSettingsPage {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import PlayerRuleType       = Types.PlayerRuleType;
+
+    export class ScrCreateAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _scroller      : eui.Scroller;
-        private readonly _btnReset      : GameUi.UiButton;
-        private readonly _btnCustomize  : GameUi.UiButton;
-        private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer>;
-        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private readonly _btnReset      : TwnsUiButton.UiButton;
+        private readonly _btnCustomize  : TwnsUiButton.UiButton;
+        private readonly _listSetting   : TwnsUiScrollList.UiScrollList<DataForSettingRenderer>;
+        private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         private _initialWarRuleId   : number;
         private _mapRawData         : ProtoTypes.Map.IMapRawData;
@@ -26,8 +44,8 @@ namespace TinyWars.SingleCustomRoom {
 
         protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.ScrCreatePresetWarRuleIdChanged,    callback: this._onNotifyScrCreatePresetWarRuleIdChanged },
+                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.ScrCreatePresetWarRuleIdChanged,    callback: this._onNotifyScrCreatePresetWarRuleIdChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnReset,       callback: this._onTouchedBtnReset },
@@ -41,8 +59,8 @@ namespace TinyWars.SingleCustomRoom {
             this.top    = 0;
             this.bottom = 0;
 
-            this._initialWarRuleId  = ScrModel.Create.getPresetWarRuleId();
-            this._mapRawData        = await ScrModel.Create.getMapRawData();
+            this._initialWarRuleId  = ScrCreateModel.getPresetWarRuleId();
+            this._mapRawData        = await ScrCreateModel.getMapRawData();
 
             this._updateComponentsForLanguage();
             this._initListSetting();
@@ -62,13 +80,13 @@ namespace TinyWars.SingleCustomRoom {
             this._updateBtnCustomize();
         }
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
-            ScrModel.Create.resetDataByWarRuleId(this._initialWarRuleId);
+            ScrCreateModel.resetDataByWarRuleId(this._initialWarRuleId);
         }
         private _onTouchedBtnCustomize(e: egret.TouchEvent): void {
-            Common.CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0129),
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    ScrModel.Create.setCustomWarRuleId();
+                    ScrCreateModel.setCustomWarRuleId();
                 },
             });
         }
@@ -77,15 +95,15 @@ namespace TinyWars.SingleCustomRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnReset.label        = Lang.getText(Lang.Type.B0567);
-            this._btnCustomize.label    = Lang.getText(Lang.Type.B0575);
+            this._btnReset.label        = Lang.getText(LangTextType.B0567);
+            this._btnCustomize.label    = Lang.getText(LangTextType.B0575);
         }
 
         private _updateBtnReset(): void {
-            this._btnReset.visible = (this._initialWarRuleId != null) && (ScrModel.Create.getPresetWarRuleId() == null);
+            this._btnReset.visible = (this._initialWarRuleId != null) && (ScrCreateModel.getPresetWarRuleId() == null);
         }
         private _updateBtnCustomize(): void {
-            this._btnCustomize.visible = ScrModel.Create.getPresetWarRuleId() != null;
+            this._btnCustomize.visible = ScrCreateModel.getPresetWarRuleId() != null;
         }
 
         private _initListSetting(): void {
@@ -119,10 +137,10 @@ namespace TinyWars.SingleCustomRoom {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForSettingRenderer = {
         playerRuleType  : PlayerRuleType;
-    }
-    class SettingRenderer extends GameUi.UiListItemRenderer<DataForSettingRenderer> {
-        private readonly _labelName : GameUi.UiLabel;
-        private readonly _btnHelp   : GameUi.UiButton;
+    };
+    class SettingRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSettingRenderer> {
+        private readonly _labelName : TwnsUiLabel.UiLabel;
+        private readonly _btnHelp   : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -143,9 +161,9 @@ namespace TinyWars.SingleCustomRoom {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                Common.CommonHelpPanel.show({
+                CommonHelpPanel.show({
                     title   : `CO`,
-                    content : Lang.getText(Lang.Type.R0004),
+                    content : Lang.getText(LangTextType.R0004),
                 });
             }
         }
@@ -156,10 +174,10 @@ namespace TinyWars.SingleCustomRoom {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForPlayerRenderer = {
         playerIndex : number;
-    }
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _labelPlayerIndex   : GameUi.UiLabel;
-        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
+    };
+    class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
+        private _labelPlayerIndex   : TwnsUiLabel.UiLabel;
+        private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -204,11 +222,11 @@ namespace TinyWars.SingleCustomRoom {
         infoText?               : string;
         infoColor?              : number;
         callbackOnTouchedTitle? : (() => void) | null;
-    }
-    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
-        private readonly _btnCustom     : GameUi.UiButton;
-        private readonly _inputValue    : GameUi.UiTextInput;
-        private readonly _labelValue    : GameUi.UiLabel;
+    };
+    class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+        private readonly _btnCustom     : TwnsUiButton.UiButton;
+        private readonly _inputValue    : TwnsUiTextInput.UiTextInput;
+        private readonly _labelValue    : TwnsUiLabel.UiLabel;
 
         private _callbackForTouchLabelValue     : () => void;
         private _callbackForFocusOutInputValue  : () => void;
@@ -220,8 +238,8 @@ namespace TinyWars.SingleCustomRoom {
                 { ui: this._inputValue, callback: this._onFocusOutInputValue, eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.ScrCreatePresetWarRuleIdChanged,    callback: this._onNotifyScrCreatePresetWarRuleIdChanged },
-                { type: Notify.Type.ScrCreateBannedCoIdArrayChanged,    callback: this._onNotifyScrCreateBannedCoIdArrayChanged },
+                { type: NotifyType.ScrCreatePresetWarRuleIdChanged,    callback: this._onNotifyScrCreatePresetWarRuleIdChanged },
+                { type: NotifyType.ScrCreateBannedCoIdArrayChanged,    callback: this._onNotifyScrCreateBannedCoIdArrayChanged },
             ]);
             this._labelValue.touchEnabled = true;
         }
@@ -236,10 +254,10 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedBtnCustom(e: egret.TouchEvent): void {
-            Common.CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0129),
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    ScrModel.Create.setCustomWarRuleId();
+                    ScrCreateModel.setCustomWarRuleId();
                 },
             });
         }
@@ -266,7 +284,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateBtnCustom(): void {
-            this._btnCustom.visible = ScrModel.Create.getPresetWarRuleId() != null;
+            this._btnCustom.visible = ScrCreateModel.getPresetWarRuleId() != null;
         }
         private _updateComponentsForValue(): void {
             const data = this.data;
@@ -294,27 +312,56 @@ namespace TinyWars.SingleCustomRoom {
 
             const labelValue                    = this._labelValue;
             labelValue.visible                  = true;
-            labelValue.text                     = Lang.getPlayerTeamName(ScrModel.Create.getTeamIndex(playerIndex));
+            labelValue.text                     = Lang.getPlayerTeamName(ScrCreateModel.getTeamIndex(playerIndex));
             labelValue.textColor                = 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => ScrModel.Create.tickTeamIndex(playerIndex);
+            this._callbackForTouchLabelValue    = () => ScrCreateModel.tickTeamIndex(playerIndex);
         }
         private _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): void {
             this._inputValue.visible            = false;
             this._callbackForFocusOutInputValue = null;
 
             const labelValue                    = this._labelValue;
-            const currValue                     = (ScrModel.Create.getBannedCoIdArray(playerIndex) || []).length;
+            const currValue                     = (ScrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => ScrCreateBanCoPanel.show({ playerIndex });
+            this._callbackForTouchLabelValue    = () => {
+                const configVersion = ConfigManager.getLatestFormalVersion();
+                const selfCoId      = ScrCreateModel.getCoId(playerIndex);
+                TwnsCommonBanCoPanel.CommonBanCoPanel.show({
+                    playerIndex,
+                    configVersion,
+                    bannedCoIdArray     : ScrCreateModel.getBannedCoIdArray(playerIndex) || [],
+                    fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                    maxBanCount         : undefined,
+                    selfCoId,
+                    callbackOnConfirm   : (bannedCoIdSet) => {
+                        const callback = () => {
+                            ScrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
+                            Notify.dispatch(NotifyType.ScrCreateBannedCoIdArrayChanged);
+                            TwnsCommonBanCoPanel.CommonBanCoPanel.hide();
+                        };
+                        if (!bannedCoIdSet.has(selfCoId)) {
+                            callback();
+                        } else {
+                            CommonConfirmPanel.show({
+                                content : Lang.getText(LangTextType.A0057),
+                                callback: () => {
+                                    ScrCreateModel.setCoId(playerIndex, CommonConstants.CoEmptyId);
+                                    callback();
+                                },
+                            });
+                        }
+                    },
+                });
+            };
         }
         private _updateComponentsForValueAsInitialFund(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrModel.Create.getInitialFund(playerIndex);
+            const currValue                     = ScrCreateModel.getInitialFund(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
@@ -327,18 +374,18 @@ namespace TinyWars.SingleCustomRoom {
                     (value > CommonConstants.WarRuleInitialFundMaxLimit)    ||
                     (value < CommonConstants.WarRuleInitialFundMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrModel.Create.setInitialFund(playerIndex, value);
+                    ScrCreateModel.setInitialFund(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsIncomeMultiplier(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrModel.Create.getIncomeMultiplier(playerIndex);
+            const currValue                     = ScrCreateModel.getIncomeMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
@@ -351,18 +398,18 @@ namespace TinyWars.SingleCustomRoom {
                     (value > CommonConstants.WarRuleIncomeMultiplierMaxLimit)   ||
                     (value < CommonConstants.WarRuleIncomeMultiplierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrModel.Create.setIncomeMultiplier(playerIndex, value);
+                    ScrCreateModel.setIncomeMultiplier(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrModel.Create.getEnergyAddPctOnLoadCo(playerIndex);
+            const currValue                     = ScrCreateModel.getEnergyAddPctOnLoadCo(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
@@ -375,18 +422,18 @@ namespace TinyWars.SingleCustomRoom {
                     (value > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
                     (value < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrModel.Create.setEnergyAddPctOnLoadCo(playerIndex, value);
+                    ScrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrModel.Create.getEnergyGrowthMultiplier(playerIndex);
+            const currValue                     = ScrCreateModel.getEnergyGrowthMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
@@ -399,18 +446,18 @@ namespace TinyWars.SingleCustomRoom {
                     (value > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit) ||
                     (value < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrModel.Create.setEnergyGrowthMultiplier(playerIndex, value);
+                    ScrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsMoveRangeModifier(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrModel.Create.getMoveRangeModifier(playerIndex);
+            const currValue                     = ScrCreateModel.getMoveRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
@@ -423,18 +470,18 @@ namespace TinyWars.SingleCustomRoom {
                     (value > CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
                     (value < CommonConstants.WarRuleMoveRangeModifierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrModel.Create.setMoveRangeModifier(playerIndex, value);
+                    ScrCreateModel.setMoveRangeModifier(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsAttackPowerModifier(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrModel.Create.getAttackPowerModifier(playerIndex);
+            const currValue                     = ScrCreateModel.getAttackPowerModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
@@ -447,18 +494,18 @@ namespace TinyWars.SingleCustomRoom {
                     (value > CommonConstants.WarRuleOffenseBonusMaxLimit)   ||
                     (value < CommonConstants.WarRuleOffenseBonusMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrModel.Create.setAttackPowerModifier(playerIndex, value);
+                    ScrCreateModel.setAttackPowerModifier(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsVisionRangeModifier(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrModel.Create.getVisionRangeModifier(playerIndex);
+            const currValue                     = ScrCreateModel.getVisionRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
@@ -471,18 +518,18 @@ namespace TinyWars.SingleCustomRoom {
                     (value > CommonConstants.WarRuleVisionRangeModifierMaxLimit)    ||
                     (value < CommonConstants.WarRuleVisionRangeModifierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrModel.Create.setVisionRangeModifier(playerIndex, value);
+                    ScrCreateModel.setVisionRangeModifier(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsLuckLowerLimit(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrModel.Create.getLuckLowerLimit(playerIndex);
+            const currValue                     = ScrCreateModel.getLuckLowerLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
@@ -494,20 +541,20 @@ namespace TinyWars.SingleCustomRoom {
                 if ((isNaN(value))                                          ||
                     (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                     (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                    (value > ScrModel.Create.getLuckUpperLimit(playerIndex))
+                    (value > ScrCreateModel.getLuckUpperLimit(playerIndex))
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrModel.Create.setLuckLowerLimit(playerIndex, value);
+                    ScrCreateModel.setLuckLowerLimit(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsLuckUpperLimit(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrModel.Create.getLuckUpperLimit(playerIndex);
+            const currValue                     = ScrCreateModel.getLuckUpperLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
@@ -519,13 +566,13 @@ namespace TinyWars.SingleCustomRoom {
                 if ((isNaN(value))                                          ||
                     (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                     (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                    (value < ScrModel.Create.getLuckLowerLimit(playerIndex))
+                    (value < ScrCreateModel.getLuckLowerLimit(playerIndex))
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrModel.Create.setLuckUpperLimit(playerIndex, value);
+                    ScrCreateModel.setLuckUpperLimit(playerIndex, value);
                 }
-            }
+            };
         }
     }
 
@@ -539,3 +586,5 @@ namespace TinyWars.SingleCustomRoom {
         }
     }
 }
+
+export default TwnsScrCreateAdvancedSettingsPage;

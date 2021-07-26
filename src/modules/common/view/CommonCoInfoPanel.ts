@@ -1,24 +1,27 @@
 
-namespace TinyWars.Common {
-    import Lang     = Utility.Lang;
-    import Notify   = Utility.Notify;
-    import Types    = Utility.Types;
-    import Helpers  = Utility.Helpers;
+import Helpers          from "../../tools/helpers/Helpers";
+import Types            from "../../tools/helpers/Types";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import TwnsUiCoInfo     from "../../tools/ui/UiCoInfo";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+
+namespace TwnsCommonCoInfoPanel {
+    import NotifyType   = TwnsNotifyType.NotifyType;
 
     type OpenDataForCommonCoInfoPanel = {
         configVersion   : string;
         coId            : number;
-    }
-
-    export class CommonCoInfoPanel extends GameUi.UiPanel<OpenDataForCommonCoInfoPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
+    };
+    export class CommonCoInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonCoInfoPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CommonCoInfoPanel;
 
-        private readonly _imgMask       : GameUi.UiImage;
+        private readonly _imgMask       : TwnsUiImage.UiImage;
         private readonly _group         : eui.Group;
-        private readonly _uiCoInfo      : GameUi.UiCoInfo;
+        private readonly _uiCoInfo      : TwnsUiCoInfo.UiCoInfo;
 
         public static show(openData: OpenDataForCommonCoInfoPanel): void {
             if (!CommonCoInfoPanel._instance) {
@@ -43,7 +46,7 @@ namespace TinyWars.Common {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
 
             this._showOpenAnimation();
@@ -66,6 +69,7 @@ namespace TinyWars.Common {
         }
 
         private _updateComponentsForLanguage(): void {
+            // nothing to do
         }
 
         private _showOpenAnimation(): void {
@@ -98,3 +102,5 @@ namespace TinyWars.Common {
         }
     }
 }
+
+export default TwnsCommonCoInfoPanel;

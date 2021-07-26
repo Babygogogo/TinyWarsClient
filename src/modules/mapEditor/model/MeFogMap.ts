@@ -1,12 +1,20 @@
 
-namespace TinyWars.MapEditor {
-    import Logger                   = Utility.Logger;
-    import ProtoTypes               = Utility.ProtoTypes;
+import TwnsBwFogMap     from "../../baseWar/model/BwFogMap";
+import TwnsBwWar        from "../../baseWar/model/BwWar";
+import Logger           from "../../tools/helpers/Logger";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsMeField      from "./MeField";
+
+namespace TwnsMeFogMap {
+    import BwFogMap                 = TwnsBwFogMap.BwFogMap;
+    import MeField                  = TwnsMeField.MeField;
     import WarSerialization         = ProtoTypes.WarSerialization;
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
+    import BwWar                    = TwnsBwWar.BwWar;
 
-    export class MeFogMap extends BaseWar.BwFogMap {
+    export class MeFogMap extends BwFogMap {
         public serializeForCreateSfw(): ISerialFogMap | undefined {
             const mapSize = this.getMapSize();
             if (mapSize == null) {
@@ -33,7 +41,7 @@ namespace TinyWars.MapEditor {
                     continue;
                 }
 
-                const visibilityArray = BaseWar.BwHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                const visibilityArray = WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                 if (visibilityArray != null) {
                     serialMapsFromPath.push({
                         playerIndex,
@@ -50,7 +58,7 @@ namespace TinyWars.MapEditor {
             };
         }
 
-        public startRunning(war: BaseWar.BwWar): void {
+        public startRunning(war: BwWar): void {
             this._setWar(war);
 
             for (const tile of war.getTileMap().getAllTiles()) {
@@ -59,3 +67,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeFogMap;

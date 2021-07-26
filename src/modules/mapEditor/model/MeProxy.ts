@@ -1,17 +1,22 @@
 
-namespace TinyWars.MapEditor.MeProxy {
-    import NetManager   = Network.NetManager;
-    import NetCodes     = Network.Codes;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Notify       = Utility.Notify;
-    import NetMessage   = ProtoTypes.NetMessage;
+import TwnsNetMessageCodes          from "../../tools/network/NetMessageCodes";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import MeModel                      from "./MeModel";
+import NetManager                   from "../../tools/network/NetManager";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+
+namespace MeProxy {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetCodes.MsgMeGetMapDataList,    callback: _onMsgMeGetMapDataList    },
-            { msgCode: NetCodes.MsgMeGetMapData,        callback: _onMsgMeGetMapData        },
-            { msgCode: NetCodes.MsgMeSubmitMap,         callback: _onMsgMeSubmitMap         },
-        ], MeProxy);
+            { msgCode: NetMessageCodes.MsgMeGetMapDataList,    callback: _onMsgMeGetMapDataList    },
+            { msgCode: NetMessageCodes.MsgMeGetMapData,        callback: _onMsgMeGetMapData        },
+            { msgCode: NetMessageCodes.MsgMeSubmitMap,         callback: _onMsgMeSubmitMap         },
+        ], undefined);
     }
 
     export function reqMeGetMapDataList(): void {
@@ -23,7 +28,7 @@ namespace TinyWars.MapEditor.MeProxy {
         const data = e.data as NetMessage.MsgMeGetMapDataList.IS;
         if (!data.errorCode) {
             await MeModel.resetDataList(data.dataList);
-            Notify.dispatch(Notify.Type.MsgMeGetDataList, data);
+            Notify.dispatch(NotifyType.MsgMeGetDataList, data);
         }
     }
 
@@ -38,7 +43,7 @@ namespace TinyWars.MapEditor.MeProxy {
         const data = e.data as NetMessage.MsgMeGetMapData.IS;
         if (!data.errorCode) {
             MeModel.updateData(data.slotIndex, data.data);
-            Notify.dispatch(Notify.Type.MsgMeGetData, data);
+            Notify.dispatch(NotifyType.MsgMeGetData, data);
         }
     }
 
@@ -54,7 +59,9 @@ namespace TinyWars.MapEditor.MeProxy {
     function _onMsgMeSubmitMap(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMeSubmitMap.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgMeSubmitMap, data);
+            Notify.dispatch(NotifyType.MsgMeSubmitMap, data);
         }
     }
 }
+
+export default MeProxy;

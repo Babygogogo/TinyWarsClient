@@ -1,72 +1,110 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.User {
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import Helpers          = Utility.Helpers;
-    import Logger           = Utility.Logger;
-    import Types            = Utility.Types;
-    import LocalStorage     = Utility.LocalStorage;
-    import CommonConstants  = Utility.CommonConstants;
+import TwnsChangeLogPanel           from "../../changeLog/view/ChangeLogPanel";
+import TwnsChatPanel                from "../../chat/view/ChatPanel";
+import TwnsCommonChangeVersionPanel from "../../common/view/CommonChangeVersionPanel";
+import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
+import TwnsCommonRankListPanel      from "../../common/view/CommonRankListPanel";
+import TwnsCommonServerStatusPanel  from "../../common/view/CommonServerStatusPanel";
+import TwnsLobbyBackgroundPanel     from "../../lobby/view/LobbyBackgroundPanel";
+import TwnsMmMainMenuPanel          from "../../mapManagement/view/MmMainMenuPanel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
+import LocalStorage                 from "../../tools/helpers/LocalStorage";
+import Logger                       from "../../tools/helpers/Logger";
+import StageManager                 from "../../tools/helpers/StageManager";
+import Timer                        from "../../tools/helpers/Timer";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiImage                  from "../../tools/ui/UiImage";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiRadioButton            from "../../tools/ui/UiRadioButton";
+import UserModel                    from "../../user/model/UserModel";
+import UserProxy                    from "../../user/model/UserProxy";
+import TwnsUserChangeDiscordIdPanel from "./UserChangeDiscordIdPanel";
+import TwnsUserChangeNicknamePanel  from "./UserChangeNicknamePanel";
+import TwnsUserOnlineUsersPanel     from "./UserOnlineUsersPanel";
+import TwnsUserSetPasswordPanel     from "./UserSetPasswordPanel";
+import TwnsUserSetPrivilegePanel    from "./UserSetPrivilegePanel";
+import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
+import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
 
-    export class UserSettingsPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsUserSettingsPanel {
+    import UserChangeNicknamePanel  = TwnsUserChangeNicknamePanel.UserChangeNicknamePanel;
+    import UserSetPasswordPanel     = TwnsUserSetPasswordPanel.UserSetPasswordPanel;
+    import UserChangeDiscordIdPanel = TwnsUserChangeDiscordIdPanel.UserChangeDiscordIdPanel;
+    import UserOnlineUsersPanel     = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
+    import UserSetSoundPanel        = TwnsUserSetSoundPanel.UserSetSoundPanel;
+    import UserSetStageScalePanel   = TwnsUserSetStageScalePanel.UserSetStageScalePanel;
+    import UserSetPrivilegePanel    = TwnsUserSetPrivilegePanel.UserSetPrivilegePanel;
+    import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
+    import MmMainMenuPanel          = TwnsMmMainMenuPanel.MmMainMenuPanel;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import CommonChangeVersionPanel = TwnsCommonChangeVersionPanel.CommonChangeVersionPanel;
+
+    export class UserSettingsPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: UserSettingsPanel;
 
         // @ts-ignore
-        private readonly _imgMask               : GameUi.UiImage;
+        private readonly _imgMask               : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _labelTitle            : GameUi.UiLabel;
+        private readonly _labelTitle            : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _btnClose              : GameUi.UiButton;
+        private readonly _btnClose              : TwnsUiButton.UiButton;
         // @ts-ignore
         private readonly _group                 : eui.Group;
         // @ts-ignore
         private readonly _scroller              : eui.Scroller;
 
         // @ts-ignore
-        private readonly _uiRadioLanguage       : GameUi.UiRadioButton;
+        private readonly _uiRadioLanguage       : TwnsUiRadioButton.UiRadioButton;
         // @ts-ignore
-        private readonly _uiRadioTexture        : GameUi.UiRadioButton;
+        private readonly _uiRadioTexture        : TwnsUiRadioButton.UiRadioButton;
         // @ts-ignore
-        private readonly _uiRadioUnitAnimation  : GameUi.UiRadioButton;
+        private readonly _uiRadioUnitAnimation  : TwnsUiRadioButton.UiRadioButton;
         // @ts-ignore
-        private readonly _uiRadioTileAnimation  : GameUi.UiRadioButton;
+        private readonly _uiRadioTileAnimation  : TwnsUiRadioButton.UiRadioButton;
         // @ts-ignore
-        private readonly _uiRadioShowGridBorder : GameUi.UiRadioButton;
+        private readonly _uiRadioShowGridBorder : TwnsUiRadioButton.UiRadioButton;
 
         // @ts-ignore
         private readonly _groupButtons          : eui.Group;
         // @ts-ignore
-        private readonly _btnChangeNickname     : GameUi.UiButton;
+        private readonly _btnChangeNickname     : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnChangePassword     : GameUi.UiButton;
+        private readonly _btnChangePassword     : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnChangeDiscordId    : GameUi.UiButton;
+        private readonly _btnChangeDiscordId    : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnChangeGameVersion  : GameUi.UiButton;
+        private readonly _btnChangeGameVersion  : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnRankList           : GameUi.UiButton;
+        private readonly _btnRankList           : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnShowOnlineUsers    : GameUi.UiButton;
+        private readonly _btnShowOnlineUsers    : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnSetSound           : GameUi.UiButton;
+        private readonly _btnSetSound           : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnSetStageScaler     : GameUi.UiButton;
+        private readonly _btnSetStageScaler     : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnServerStatus       : GameUi.UiButton;
+        private readonly _btnServerStatus       : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnComplaint          : GameUi.UiButton;
+        private readonly _btnComplaint          : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnUnitsInfo          : GameUi.UiButton;
+        private readonly _btnUnitsInfo          : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnChangeLog          : GameUi.UiButton;
+        private readonly _btnChangeLog          : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnSetPrivilege       : GameUi.UiButton;
+        private readonly _btnSetPrivilege       : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnMapManagement      : GameUi.UiButton;
+        private readonly _btnMapManagement      : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!UserSettingsPanel._instance) {
@@ -91,12 +129,12 @@ namespace TinyWars.User {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: Notify.Type.IsShowGridBorderChanged,            callback: this._onNotifyIsShowGridBorderChanged },
-                { type: Notify.Type.MsgUserGetPublicInfo,               callback: this._onMsgUserGetPublicInfo },
-                { type: Notify.Type.MsgUserSetNickname,                 callback: this._onMsgUserSetNickname },
-                { type: Notify.Type.MsgUserSetDiscordId,                callback: this._onMsgUserSetDiscordId },
+                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: NotifyType.IsShowGridBorderChanged,            callback: this._onNotifyIsShowGridBorderChanged },
+                { type: NotifyType.MsgUserGetPublicInfo,               callback: this._onMsgUserGetPublicInfo },
+                { type: NotifyType.MsgUserSetNickname,                 callback: this._onMsgUserSetNickname },
+                { type: NotifyType.MsgUserSetDiscordId,                callback: this._onMsgUserSetDiscordId },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,               callback: this.close },
@@ -117,95 +155,95 @@ namespace TinyWars.User {
             ]);
 
             this._uiRadioLanguage.setData({
-                titleTextType   : Lang.Type.B0627,
-                leftTextType    : Lang.Type.B0624,
+                titleTextType   : LangTextType.B0627,
+                leftTextType    : LangTextType.B0624,
                 leftLangType    : Types.LanguageType.Chinese,
-                rightTextType   : Lang.Type.B0625,
+                rightTextType   : LangTextType.B0625,
                 rightLangType   : Types.LanguageType.English,
                 callbackOnLeft  : () => {
                     const languageType = Types.LanguageType.Chinese;
                     Lang.setLanguageType(languageType);
                     LocalStorage.setLanguageType(languageType);
 
-                    Notify.dispatch(Notify.Type.LanguageChanged);
+                    Notify.dispatch(NotifyType.LanguageChanged);
                 },
                 callbackOnRight : () => {
                     const languageType = Types.LanguageType.English;
                     Lang.setLanguageType(languageType);
                     LocalStorage.setLanguageType(languageType);
 
-                    Notify.dispatch(Notify.Type.LanguageChanged);
+                    Notify.dispatch(NotifyType.LanguageChanged);
                 },
                 checkerForLeftOn: () => {
                     return Lang.getCurrentLanguageType() === Types.LanguageType.Chinese;
                 },
             });
             this._uiRadioTexture.setData({
-                titleTextType   : Lang.Type.B0628,
-                leftTextType    : Lang.Type.B0385,
-                rightTextType   : Lang.Type.B0386,
+                titleTextType   : LangTextType.B0628,
+                leftTextType    : LangTextType.B0385,
+                rightTextType   : LangTextType.B0386,
                 callbackOnLeft  : () => {
-                    User.UserProxy.reqUserSetSettings({
+                    UserProxy.reqUserSetSettings({
                         unitAndTileTextureVersion: Types.UnitAndTileTextureVersion.V0,
                     });
                 },
                 callbackOnRight : () => {
-                    User.UserProxy.reqUserSetSettings({
+                    UserProxy.reqUserSetSettings({
                         unitAndTileTextureVersion: Types.UnitAndTileTextureVersion.V1,
                     });
                 },
                 checkerForLeftOn: () => {
-                    return User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0;
+                    return UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0;
                 },
             });
             this._uiRadioUnitAnimation.setData({
-                titleTextType   : Lang.Type.B0629,
-                leftTextType    : Lang.Type.B0561,
-                rightTextType   : Lang.Type.B0562,
+                titleTextType   : LangTextType.B0629,
+                leftTextType    : LangTextType.B0561,
+                rightTextType   : LangTextType.B0562,
                 callbackOnLeft  : () => {
-                    Time.TimeModel.startUnitAnimationTick();
+                    Timer.startUnitAnimationTick();
                     LocalStorage.setShowUnitAnimation(true);
                 },
                 callbackOnRight : () => {
-                    Time.TimeModel.stopUnitAnimationTick();
+                    Timer.stopUnitAnimationTick();
                     LocalStorage.setShowUnitAnimation(false);
                 },
                 checkerForLeftOn: () => {
-                    return Time.TimeModel.checkIsUnitAnimationTicking();
+                    return Timer.checkIsUnitAnimationTicking();
                 },
             });
             this._uiRadioTileAnimation.setData({
-                titleTextType   : Lang.Type.B0630,
-                leftTextType    : Lang.Type.B0561,
-                rightTextType   : Lang.Type.B0562,
+                titleTextType   : LangTextType.B0630,
+                leftTextType    : LangTextType.B0561,
+                rightTextType   : LangTextType.B0562,
                 callbackOnLeft  : () => {
-                    Time.TimeModel.startTileAnimationTick();
+                    Timer.startTileAnimationTick();
                     LocalStorage.setShowTileAnimation(true);
                 },
                 callbackOnRight : () => {
-                    Time.TimeModel.stopTileAnimationTick();
+                    Timer.stopTileAnimationTick();
                     LocalStorage.setShowTileAnimation(false);
                 },
                 checkerForLeftOn: () => {
-                    return Time.TimeModel.checkIsTileAnimationTicking();
+                    return Timer.checkIsTileAnimationTicking();
                 },
             });
             this._uiRadioShowGridBorder.setData({
-                titleTextType   : Lang.Type.B0584,
-                leftTextType    : Lang.Type.B0561,
-                rightTextType   : Lang.Type.B0562,
+                titleTextType   : LangTextType.B0584,
+                leftTextType    : LangTextType.B0561,
+                rightTextType   : LangTextType.B0562,
                 callbackOnLeft  : () => {
-                    User.UserProxy.reqUserSetSettings({
+                    UserProxy.reqUserSetSettings({
                         isShowGridBorder: true,
                     });
                 },
                 callbackOnRight : () => {
-                    User.UserProxy.reqUserSetSettings({
+                    UserProxy.reqUserSetSettings({
                         isShowGridBorder: false,
                     });
                 },
                 checkerForLeftOn: () => {
-                    return User.UserModel.getSelfSettingsIsShowGridBorder();
+                    return UserModel.getSelfSettingsIsShowGridBorder();
                 },
             });
 
@@ -263,10 +301,10 @@ namespace TinyWars.User {
             UserChangeDiscordIdPanel.show();
         }
         private _onTouchedBtnChangeGameVersion(): void {
-            Common.CommonChangeVersionPanel.show();
+            CommonChangeVersionPanel.show();
         }
         private _onTouchedBtnRankList(): void {
-            Common.CommonRankListPanel.show();
+            TwnsCommonRankListPanel.CommonRankListPanel.show();
         }
         private _onTouchedBtnShowOnlineUsers(): void {
             UserOnlineUsersPanel.show();
@@ -278,17 +316,17 @@ namespace TinyWars.User {
             UserSetStageScalePanel.show();
         }
         private _onTouchedBtnServerStatus(): void {
-            Common.CommonServerStatusPanel.show();
+            TwnsCommonServerStatusPanel.CommonServerStatusPanel.show();
         }
         private _onTouchedBtnComplaint(): void {
             this.close();
-            Chat.ChatPanel.show({ toUserId: CommonConstants.AdminUserId });
+            TwnsChatPanel.ChatPanel.show({ toUserId: CommonConstants.AdminUserId });
         }
         private _onTouchedBtnUnitsInfo(): void {
-            Common.CommonDamageChartPanel.show();
+            CommonDamageChartPanel.show();
         }
         private _onTouchedBtnChangeLog(): void {
-            ChangeLog.ChangeLogPanel.show();
+            TwnsChangeLogPanel.ChangeLogPanel.show();
         }
         private _onTouchedBtnSetPrivilege(): void {
             const selfUserId = UserModel.getSelfUserId();
@@ -299,9 +337,9 @@ namespace TinyWars.User {
             }
         }
         private _onTouchedBtnMapManagement(): void {
-            Utility.StageManager.closeAllPanels();
-            Lobby.LobbyBackgroundPanel.show();
-            MapManagement.MmMainMenuPanel.show();
+            StageManager.closeAllPanels();
+            TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+            MmMainMenuPanel.show();
         }
 
         private _showOpenAnimation(): void {
@@ -361,7 +399,7 @@ namespace TinyWars.User {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text = Lang.getText(Lang.Type.B0560);
+            this._labelTitle.text = Lang.getText(LangTextType.B0560);
             this._updateBtnChangeNickname();
             this._updateBtnChangePassword();
             this._updateBtnChangeDiscordId();
@@ -379,46 +417,48 @@ namespace TinyWars.User {
         }
 
         private _updateBtnChangeNickname(): void {
-            this._btnChangeNickname.label = Lang.getText(Lang.Type.B0149);
+            this._btnChangeNickname.label = Lang.getText(LangTextType.B0149);
         }
         private _updateBtnChangePassword(): void {
-            this._btnChangePassword.label = Lang.getText(Lang.Type.B0426);
+            this._btnChangePassword.label = Lang.getText(LangTextType.B0426);
         }
         private _updateBtnChangeDiscordId(): void {
-            this._btnChangeDiscordId.label = Lang.getText(Lang.Type.B0150);
+            this._btnChangeDiscordId.label = Lang.getText(LangTextType.B0150);
         }
         private _updateBtnChangeGameVersion(): void {
-            this._btnChangeGameVersion.label = Lang.getText(Lang.Type.B0620);
+            this._btnChangeGameVersion.label = Lang.getText(LangTextType.B0620);
         }
         private _updateBtnRankList(): void {
-            this._btnRankList.label = Lang.getText(Lang.Type.B0436);
+            this._btnRankList.label = Lang.getText(LangTextType.B0436);
         }
         private _updateBtnShowOnlineUsers(): void {
-            this._btnShowOnlineUsers.label = Lang.getText(Lang.Type.B0151);
+            this._btnShowOnlineUsers.label = Lang.getText(LangTextType.B0151);
         }
         private _updateBtnSetSound(): void {
-            this._btnSetSound.label = Lang.getText(Lang.Type.B0540);
+            this._btnSetSound.label = Lang.getText(LangTextType.B0540);
         }
         private _updateBtnSetStageScaler(): void {
-            this._btnSetStageScaler.label = Lang.getText(Lang.Type.B0558);
+            this._btnSetStageScaler.label = Lang.getText(LangTextType.B0558);
         }
         private _updateBtnUnitsInfo(): void {
-            this._btnUnitsInfo.label = Lang.getText(Lang.Type.B0440);
+            this._btnUnitsInfo.label = Lang.getText(LangTextType.B0440);
         }
         private _updateBtnChangeLog(): void {
-            this._btnChangeLog.label = Lang.getText(Lang.Type.B0457);
+            this._btnChangeLog.label = Lang.getText(LangTextType.B0457);
         }
         private _updateBtnSetPrivilege(): void {
-            this._btnSetPrivilege.label = Lang.getText(Lang.Type.B0460);
+            this._btnSetPrivilege.label = Lang.getText(LangTextType.B0460);
         }
         private _updateBtnServerStatus(): void {
-            this._btnServerStatus.label = Lang.getText(Lang.Type.B0327);
+            this._btnServerStatus.label = Lang.getText(LangTextType.B0327);
         }
         private _updateBtnComplaint(): void {
-            this._btnComplaint.label = Lang.getText(Lang.Type.B0453);
+            this._btnComplaint.label = Lang.getText(LangTextType.B0453);
         }
         private _updateBtnMapManagement(): void {
-            this._btnMapManagement.label = Lang.getText(Lang.Type.B0192);
+            this._btnMapManagement.label = Lang.getText(LangTextType.B0192);
         }
     }
 }
+
+export default TwnsUserSettingsPanel;

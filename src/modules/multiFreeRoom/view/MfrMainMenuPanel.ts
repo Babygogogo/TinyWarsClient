@@ -1,14 +1,36 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MultiFreeRoom {
-    import Tween    = egret.Tween;
-    import Lang     = Utility.Lang;
-    import Notify   = Utility.Notify;
-    import Helpers  = Utility.Helpers;
-    import MpwModel = MultiPlayerWar.MpwModel;
+import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
+import CcrModel                 from "../../coopCustomRoom/model/CcrModel";
+import TwnsCcrMainMenuPanel     from "../../coopCustomRoom/view/CcrMainMenuPanel";
+import TwnsLobbyBottomPanel     from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel        from "../../lobby/view/LobbyTopPanel";
+import McrModel                 from "../../multiCustomRoom/model/McrModel";
+import TwnsMcrMainMenuPanel     from "../../multiCustomRoom/view/McrMainMenuPanel";
+import MfrModel                 from "../../multiFreeRoom/model/MfrModel";
+import TwnsMfwMyWarListPanel    from "../../multiFreeWar/view/MfwMyWarListPanel";
+import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
+import TwnsMrrMainMenuPanel     from "../../multiRankRoom/view/MrrMainMenuPanel";
+import TwnsSpmMainMenuPanel     from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsMfrJoinRoomListPanel from "./MfrJoinRoomListPanel";
+import TwnsMfrMyRoomListPanel   from "./MfrMyRoomListPanel";
 
-    export class MfrMainMenuPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+namespace TwnsMfrMainMenuPanel {
+    import MfrJoinRoomListPanel = TwnsMfrJoinRoomListPanel.MfrJoinRoomListPanel;
+    import MfrMyRoomListPanel   = TwnsMfrMyRoomListPanel.MfrMyRoomListPanel;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import Tween                = egret.Tween;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+
+    export class MfrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MfrMainMenuPanel;
@@ -16,28 +38,28 @@ namespace TinyWars.MultiFreeRoom {
         // @ts-ignore
         private readonly _group             : eui.Group;
         // @ts-ignore
-        private readonly _btnMultiPlayer    : GameUi.UiButton;
+        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnRanking        : GameUi.UiButton;
+        private readonly _btnRanking        : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnSinglePlayer   : GameUi.UiButton;
+        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
 
         // @ts-ignore
         private readonly _groupLeft         : eui.Group;
         // @ts-ignore
-        private readonly _btnCreateRoom     : GameUi.UiButton;
+        private readonly _btnCreateRoom     : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnJoinRoom       : GameUi.UiButton;
+        private readonly _btnJoinRoom       : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnMyRoom         : GameUi.UiButton;
+        private readonly _btnMyRoom         : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnContinueWar    : GameUi.UiButton;
+        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnHelp           : GameUi.UiButton;
+        private readonly _btnHelp           : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnNormalMode     : GameUi.UiButton;
+        private readonly _btnNormalMode     : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnCoopMode       : GameUi.UiButton;
+        private readonly _btnCoopMode       : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MfrMainMenuPanel._instance) {
@@ -71,7 +93,7 @@ namespace TinyWars.MultiFreeRoom {
                 { ui: this._btnCoopMode,        callback: this._onTouchedBtnCoopMode },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
             ]);
 
             this._showOpenAnimation();
@@ -88,15 +110,15 @@ namespace TinyWars.MultiFreeRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnRanking(): void {
             this.close();
-            MultiRankRoom.MrrMainMenuPanel.show();
+            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            SinglePlayerMode.SpmMainMenuPanel.show();
+            TwnsSpmMainMenuPanel.SpmMainMenuPanel.show();
         }
         private _onTouchedBtnCreateRoom(): void {
-            Utility.FloatText.show(Lang.getText(Lang.Type.A0053));
-            Utility.FloatText.show(Lang.getText(Lang.Type.A0198));
+            FloatText.show(Lang.getText(LangTextType.A0053));
+            FloatText.show(Lang.getText(LangTextType.A0198));
             // this.close();
             // Lobby.LobbyTopPanel.hide();
             // Lobby.LobbyBottomPanel.hide();
@@ -104,35 +126,35 @@ namespace TinyWars.MultiFreeRoom {
         }
         private _onTouchedBtnJoinRoom(): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             MfrJoinRoomListPanel.show();
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             MfrMyRoomListPanel.show();
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
-            MultiFreeWar.MfwMyWarListPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+            TwnsMfwMyWarListPanel.MfwMyWarListPanel.show();
         }
         private _onTouchedBtnHelp(): void {
-            Common.CommonAlertPanel.show({
-                title   : Lang.getText(Lang.Type.B0143),
-                content : Lang.getText(Lang.Type.R0007),
+            TwnsCommonAlertPanel.CommonAlertPanel.show({
+                title   : Lang.getText(LangTextType.B0143),
+                content : Lang.getText(LangTextType.R0007),
             });
         }
         private _onTouchedBtnNormalMode(): void {
             this.close();
-            MultiCustomRoom.McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
         }
         private _onTouchedBtnCoopMode(): void {
             this.close();
-            CoopCustomRoom.CcrMainMenuPanel.show();
+            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
         }
 
         private _onMsgUserLogout(): void {
@@ -232,8 +254,10 @@ namespace TinyWars.MultiFreeRoom {
         private async _updateView(): Promise<void> {
             this._btnMyRoom.setRedVisible(await MfrModel.checkIsRed());
             this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMfwWars());
-            this._btnNormalMode.setRedVisible((MpwModel.checkIsRedForMyMcwWars()) || (await MultiCustomRoom.McrModel.checkIsRed()));
-            this._btnCoopMode.setRedVisible((MpwModel.checkIsRedForMyCcwWars()) || (await CoopCustomRoom.CcrModel.checkIsRed()));
+            this._btnNormalMode.setRedVisible((MpwModel.checkIsRedForMyMcwWars()) || (await McrModel.checkIsRed()));
+            this._btnCoopMode.setRedVisible((MpwModel.checkIsRedForMyCcwWars()) || (await CcrModel.checkIsRed()));
         }
     }
 }
+
+export default TwnsMfrMainMenuPanel;

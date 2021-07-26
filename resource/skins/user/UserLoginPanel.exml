@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="400" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <e:Group left="0" right="0" top="0" bottom="0" touchThrough="true">
+        <TwnsUiImage:UiImage id="_imgTitle" source="login_title_001" horizontalCenter="0" verticalCenter="-120" />
+        <e:Group width="280" horizontalCenter="0" verticalCenter="80" height="170">
+            <e:Group horizontalCenter="0">
+                <e:Group width="280" x="0" id="_groupAccount">
+                    <TwnsUiLabel:UiLabel id="_labelAccount" text="账号" size="18" textColor="0xFFFFFF" verticalCenter="0"
+                                    left="0" />
+                    <TwnsUiTextInput:UiTextInput id="_inputAccount" anchorOffsetX="0" anchorOffsetY="0" restrict="A-Za-z0-9_"
+                                        maxChars="20" left="90" right="0" top="0" bottom="0"
+                                        skinName="Skins.Component.TextInput.TextInput003" />
+                </e:Group>
+            </e:Group>
+            <e:Group y="44" horizontalCenter="0">
+                <e:Group width="280" id="_groupPassword">
+                    <TwnsUiLabel:UiLabel id="_labelPassword" text="密码" size="18" textColor="0xFFFFFF" verticalCenter="0"
+                                    left="0" x="10" y="17" />
+                    <TwnsUiTextInput:UiTextInput id="_inputPassword" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                                        restrict="A-Za-z0-9_" maxChars="20" displayAsPassword="true" left="90" right="0"
+                                        skinName="Skins.Component.TextInput.TextInput003" />
+                </e:Group>
+            </e:Group>
+            <e:Group y="94" horizontalCenter="0">
+                <e:Group width="280" id="_groupPasswordCommand" horizontalCenter="0">
+                    <e:Group id="_groupRememberPassword" bottom="0">
+                        <e:Group x="0" y="0" scaleX="0.5" scaleY="0.5">
+                            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" x="0" y="0" source="commonCheckbox0000" />
+                            <TwnsUiImage:UiImage id="_imgRememberPasswordCheck" anchorOffsetX="0" anchorOffsetY="0" x="0"
+                                            y="0" source="commonCheckbox0001" />
+                        </e:Group>
+                        <TwnsUiLabel:UiLabel id="_labelRememberPassword" text="记住密码" x="20" size="16" textColor="0xFFFFFF"
+                                        y="1" />
+                    </e:Group>
+                    <TwnsUiButton:UiButton id="_btnForgetPassword" label="找回密码" right="0" bottom="0">
+                        <TwnsUiButton:skinName>
+                            <e:Skin states="up,down,disabled">
+                                <e:Image id="_imgDisplay" width="100%" height="100%" source="commonColorTransparent0000" />
+                                <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="12" />
+                            </e:Skin>
+                        </TwnsUiButton:skinName>
+                    </TwnsUiButton:UiButton>
+                </e:Group>
+            </e:Group>
+            <e:Group y="130" horizontalCenter="0">
+                <e:Group id="_groupButton">
+                    <TwnsUiButton:UiButton id="_btnLogin" label="登录" y="0" x="0" width="110" height="40"
+                                     skinName="Skins.Component.Button.ButtonYellow002"></TwnsUiButton:UiButton>
+                    <TwnsUiButton:UiButton id="_btnRegister" label="登录" x="170" width="110" height="40"
+                                     skinName="Skins.Component.Button.ButtonGrey002"></TwnsUiButton:UiButton>
+                </e:Group>
+            </e:Group>
+        </e:Group>
+    </e:Group>
+</e:Skin>

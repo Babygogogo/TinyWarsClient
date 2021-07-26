@@ -1,18 +1,21 @@
 
-namespace TinyWars.Common {
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import Types                        from "../../tools/helpers/Types";
+
+namespace TwnsCommonBlockPanel {
     type OpenDataForCommonBlockPanel = {
         title  : string;
         content: string;
-    }
-
-    export class CommonBlockPanel extends GameUi.UiPanel<OpenDataForCommonBlockPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
+    };
+    export class CommonBlockPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBlockPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CommonBlockPanel;
 
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelContent   : GameUi.UiLabel;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
+        private _labelContent   : TwnsUiLabel.UiLabel;
 
         public static show(openData: OpenDataForCommonBlockPanel): void {
             if (!CommonBlockPanel._instance) {
@@ -41,3 +44,5 @@ namespace TinyWars.Common {
         }
     }
 }
+
+export default TwnsCommonBlockPanel;

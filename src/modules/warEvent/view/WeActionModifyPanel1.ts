@@ -1,37 +1,58 @@
 
-namespace TinyWars.WarEvent {
-    import Helpers              = Utility.Helpers;
-    import Lang                 = Utility.Lang;
-    import Notify               = Utility.Notify;
-    import Types                = Utility.Types;
-    import FloatText            = Utility.FloatText;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import ConfigManager        = Utility.ConfigManager;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import ColorValue           = Types.ColorValue;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction      = ProtoTypes.WarEvent.IWarEventAction;
-    import CommonConstants      = Utility.CommonConstants;
-    import FocusEvent           = egret.FocusEvent;
+import TwnsBwWar                    from "../../baseWar/model/BwWar";
+import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import FloatText                    from "../../tools/helpers/FloatText";
+import GridIndexHelpers             from "../../tools/helpers/GridIndexHelpers";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiImage                  from "../../tools/ui/UiImage";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+import TwnsUiTextInput              from "../../tools/ui/UiTextInput";
+import WarEventHelper               from "../model/WarEventHelper";
+import TwnsWeActionAddUnitListPanel from "./WeActionAddUnitListPanel";
+import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
+
+namespace TwnsWeActionModifyPanel1 {
+    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import WeActionTypeListPanel    = TwnsWeActionTypeListPanel.WeActionTypeListPanel;
+    import WeActionAddUnitListPanel = TwnsWeActionAddUnitListPanel.WeActionAddUnitListPanel;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import ColorValue               = Types.ColorValue;
+    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
+    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
+    import FocusEvent               = egret.FocusEvent;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import BwWar                    = TwnsBwWar.BwWar;
 
     type OpenDataForWeActionModifyPanel1 = {
-        war         : BaseWar.BwWar;
+        war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
-    }
-    export class WeActionModifyPanel1 extends GameUi.UiPanel<OpenDataForWeActionModifyPanel1> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+    };
+    export class WeActionModifyPanel1 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel1> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: WeActionModifyPanel1;
 
-        private _btnBack        : GameUi.UiButton;
-        private _btnType        : GameUi.UiButton;
-        private _btnAddUnit     : GameUi.UiButton;
-        private _btnClear       : GameUi.UiButton;
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelUnitsCount: GameUi.UiLabel;
-        private _listUnit       : GameUi.UiScrollList<DataForUnitRenderer>;
+        private _btnBack        : TwnsUiButton.UiButton;
+        private _btnType        : TwnsUiButton.UiButton;
+        private _btnAddUnit     : TwnsUiButton.UiButton;
+        private _btnClear       : TwnsUiButton.UiButton;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
+        private _labelUnitsCount: TwnsUiLabel.UiLabel;
+        private _listUnit       : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
 
         public static show(openData: OpenDataForWeActionModifyPanel1): void {
             if (!WeActionModifyPanel1._instance) {
@@ -59,8 +80,8 @@ namespace TinyWars.WarEvent {
                 { ui: this._btnBack,        callback: this.close },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
+                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
             ]);
             this._listUnit.setItemRenderer(UnitRenderer);
 
@@ -81,20 +102,20 @@ namespace TinyWars.WarEvent {
         private _onTouchedBtnAddUnit(e: egret.TouchEvent): void {
             const unitArray = this._getOpenData().action.WeaAddUnit.unitArray;
             if (unitArray.length > CommonConstants.WarEventActionAddUnitMaxCount) {
-                FloatText.show(Lang.getText(Lang.Type.A0189));
+                FloatText.show(Lang.getText(LangTextType.A0189));
             } else {
                 unitArray.push(WarEventHelper.getDefaultAddUnitData());
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
         private _onTouchedBtnClear(e: egret.TouchEvent): void {
             const openData = this._getOpenData();
-            Common.CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0190),
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0190),
                 callback: () => {
                     openData.action.WeaAddUnit.unitArray.length = 0;
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             });
         }
@@ -118,11 +139,11 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0533)} A${this._getOpenData().action.WeaCommonData.actionId}`;
-            this._btnType.label     = Lang.getText(Lang.Type.B0516);
-            this._btnAddUnit.label  = Lang.getText(Lang.Type.B0535);
-            this._btnClear.label    = Lang.getText(Lang.Type.B0391);
-            this._btnBack.label     = Lang.getText(Lang.Type.B0146);
+            this._labelTitle.text   = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData.actionId}`;
+            this._btnType.label     = Lang.getText(LangTextType.B0516);
+            this._btnAddUnit.label  = Lang.getText(LangTextType.B0535);
+            this._btnClear.label    = Lang.getText(LangTextType.B0391);
+            this._btnBack.label     = Lang.getText(LangTextType.B0146);
         }
 
         private _updateComponentsForUnits(): void {
@@ -143,73 +164,73 @@ namespace TinyWars.WarEvent {
             const label     = this._labelUnitsCount;
             const maxCount  = CommonConstants.WarEventActionAddUnitMaxCount;
             const currCount = dataArray.length;
-            label.text      = `${Lang.getText(Lang.Type.B0524)}: ${currCount} / ${maxCount}`;
+            label.text      = `${Lang.getText(LangTextType.B0524)}: ${currCount} / ${maxCount}`;
             label.textColor = ((currCount <= maxCount) && (currCount > 0)) ? ColorValue.White : ColorValue.Red;
         }
     }
 
     type DataForUnitRenderer = {
-        war             : BaseWar.BwWar;
+        war             : BwWar;
         action          : IWarEventAction;
         dataForAddUnit  : ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
-    }
-    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
-        private _btnDelete              : GameUi.UiButton;
-        private _labelError             : GameUi.UiLabel;
+    };
+    class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
+        private _btnDelete              : TwnsUiButton.UiButton;
+        private _labelError             : TwnsUiLabel.UiLabel;
 
         private _groupCanBeBlockedByUnit: eui.Group;
-        private _labelCanBeBlockedByUnit: GameUi.UiLabel;
-        private _imgCanBeBlockedByUnit  : GameUi.UiImage;
+        private _labelCanBeBlockedByUnit: TwnsUiLabel.UiLabel;
+        private _imgCanBeBlockedByUnit  : TwnsUiImage.UiImage;
 
         private _groupNeedMovableTile   : eui.Group;
-        private _labelNeedMovableTile   : GameUi.UiLabel;
-        private _imgNeedMovableTile     : GameUi.UiImage;
+        private _labelNeedMovableTile   : TwnsUiLabel.UiLabel;
+        private _imgNeedMovableTile     : TwnsUiImage.UiImage;
 
-        private _labelGridIndex         : GameUi.UiLabel;
-        private _inputGridX             : GameUi.UiTextInput;
-        private _inputGridY             : GameUi.UiTextInput;
+        private _labelGridIndex         : TwnsUiLabel.UiLabel;
+        private _inputGridX             : TwnsUiTextInput.UiTextInput;
+        private _inputGridY             : TwnsUiTextInput.UiTextInput;
 
-        private _labelPlayerIndex       : GameUi.UiLabel;
-        private _inputPlayerIndex       : GameUi.UiTextInput;
+        private _labelPlayerIndex       : TwnsUiLabel.UiLabel;
+        private _inputPlayerIndex       : TwnsUiTextInput.UiTextInput;
 
-        private _btnUnitType            : GameUi.UiButton;
-        private _labelUnitType          : GameUi.UiLabel;
+        private _btnUnitType            : TwnsUiButton.UiButton;
+        private _labelUnitType          : TwnsUiLabel.UiLabel;
 
-        private _btnActionState         : GameUi.UiButton;
-        private _labelActionState       : GameUi.UiLabel;
+        private _btnActionState         : TwnsUiButton.UiButton;
+        private _labelActionState       : TwnsUiLabel.UiLabel;
 
-        private _labelHp                : GameUi.UiLabel;
-        private _inputHp                : GameUi.UiTextInput;
+        private _labelHp                : TwnsUiLabel.UiLabel;
+        private _inputHp                : TwnsUiTextInput.UiTextInput;
 
-        private _labelFuel              : GameUi.UiLabel;
-        private _inputFuel              : GameUi.UiTextInput;
+        private _labelFuel              : TwnsUiLabel.UiLabel;
+        private _inputFuel              : TwnsUiTextInput.UiTextInput;
 
-        private _labelPromotion         : GameUi.UiLabel;
-        private _inputPromotion         : GameUi.UiTextInput;
+        private _labelPromotion         : TwnsUiLabel.UiLabel;
+        private _inputPromotion         : TwnsUiTextInput.UiTextInput;
 
         private _groupHasLoadedCo       : eui.Group;
-        private _labelHasLoadedCo       : GameUi.UiLabel;
-        private _imgHasLoadedCo         : GameUi.UiImage;
+        private _labelHasLoadedCo       : TwnsUiLabel.UiLabel;
+        private _imgHasLoadedCo         : TwnsUiImage.UiImage;
 
         private _groupPrimaryAmmo       : eui.Group;
-        private _labelPrimaryAmmo       : GameUi.UiLabel;
-        private _inputPrimaryAmmo       : GameUi.UiTextInput;
+        private _labelPrimaryAmmo       : TwnsUiLabel.UiLabel;
+        private _inputPrimaryAmmo       : TwnsUiTextInput.UiTextInput;
 
         private _groupFlareAmmo         : eui.Group;
-        private _labelFlareAmmo         : GameUi.UiLabel;
-        private _inputFlareAmmo         : GameUi.UiTextInput;
+        private _labelFlareAmmo         : TwnsUiLabel.UiLabel;
+        private _inputFlareAmmo         : TwnsUiTextInput.UiTextInput;
 
         private _groupIsDiving          : eui.Group;
-        private _labelIsDiving          : GameUi.UiLabel;
-        private _imgIsDiving            : GameUi.UiImage;
+        private _labelIsDiving          : TwnsUiLabel.UiLabel;
+        private _imgIsDiving            : TwnsUiImage.UiImage;
 
         private _groupBuildMaterial     : eui.Group;
-        private _labelBuildMaterial     : GameUi.UiLabel;
-        private _inputBuildMaterial     : GameUi.UiTextInput;
+        private _labelBuildMaterial     : TwnsUiLabel.UiLabel;
+        private _inputBuildMaterial     : TwnsUiTextInput.UiTextInput;
 
         private _groupProduceMaterial   : eui.Group;
-        private _labelProduceMaterial   : GameUi.UiLabel;
-        private _inputProduceMaterial   : GameUi.UiTextInput;
+        private _labelProduceMaterial   : TwnsUiLabel.UiLabel;
+        private _inputProduceMaterial   : TwnsUiTextInput.UiTextInput;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -232,7 +253,7 @@ namespace TinyWars.WarEvent {
                 { ui: this._inputProduceMaterial,       callback: this._onFocusOutInputProduceMaterial,     eventType: FocusEvent.FOCUS_OUT },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._updateComponentsForLanguage();
         }
@@ -240,11 +261,11 @@ namespace TinyWars.WarEvent {
         private _onTouchedBtnDelete(e: egret.TouchEvent): void {
             const data = this.data;
             if (data) {
-                Common.CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0029),
+                CommonConfirmPanel.show({
+                    content : Lang.getText(LangTextType.A0029),
                     callback: () => {
                         Helpers.deleteElementFromArray(data.action.WeaAddUnit.unitArray, data.dataForAddUnit);
-                        Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     },
                 });
             }
@@ -253,14 +274,14 @@ namespace TinyWars.WarEvent {
             const data = this.data;
             if (data) {
                 data.dataForAddUnit.canBeBlockedByUnit = !data.dataForAddUnit.canBeBlockedByUnit;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onTouchedGroupNeedMovableTile(e: egret.TouchEvent): void {
             const data = this.data;
             if (data) {
                 data.dataForAddUnit.needMovableTile = !data.dataForAddUnit.needMovableTile;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onTouchedGroupIsDiving(e: egret.TouchEvent): void {
@@ -268,7 +289,7 @@ namespace TinyWars.WarEvent {
             if (data) {
                 const unitData      = data.dataForAddUnit.unitData;
                 unitData.isDiving   = unitData.isDiving ? undefined : true;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onTouchedGroupHasLoadedCo(e: egret.TouchEvent): void {
@@ -276,7 +297,7 @@ namespace TinyWars.WarEvent {
             if (data) {
                 const unitData          = data.dataForAddUnit.unitData;
                 unitData.hasLoadedCo    = unitData.hasLoadedCo ? undefined : true;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onTouchedBtnActionState(e: egret.TouchEvent): void {
@@ -288,7 +309,7 @@ namespace TinyWars.WarEvent {
                 } else {
                     unitData.actionState = Types.UnitActionState.Acted;
                 }
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onTouchedBtnUnitType(e: egret.TouchEvent): void {
@@ -308,7 +329,7 @@ namespace TinyWars.WarEvent {
             const newGridX  = Math.max(0, Math.min(parseInt(this._inputGridX.text) || 0, data.war.getTileMap().getMapSize().width - 1));
             if (newGridX !== gridIndex.x) {
                 gridIndex.x = newGridX;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputGridY(e: FocusEvent): void {
@@ -321,7 +342,7 @@ namespace TinyWars.WarEvent {
             const newGridY  = Math.max(0, Math.min(parseInt(this._inputGridY.text) || 0, data.war.getTileMap().getMapSize().height - 1));
             if (newGridY !== gridIndex.y) {
                 gridIndex.y = newGridY;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputPlayerIndex(e: FocusEvent): void {
@@ -337,7 +358,7 @@ namespace TinyWars.WarEvent {
             );
             if (newPlayerIndex !== unitData.playerIndex) {
                 unitData.playerIndex = newPlayerIndex;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputHp(e: FocusEvent): void {
@@ -352,7 +373,7 @@ namespace TinyWars.WarEvent {
             const newHp     = Math.max(0, Math.min(parseInt(this._inputHp.text) || 0, maxHp));
             if (newHp !== currentHp) {
                 unitData.currentHp = newHp === maxHp ? undefined : newHp;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputFuel(e: FocusEvent): void {
@@ -367,7 +388,7 @@ namespace TinyWars.WarEvent {
             const newFuel       = Math.max(0, Math.min(parseInt(this._inputFuel.text) || 0, maxFuel));
             if (newFuel !== currentFuel) {
                 unitData.currentFuel = newFuel === maxFuel ? undefined : newFuel;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputPromotion(e: FocusEvent): void {
@@ -382,7 +403,7 @@ namespace TinyWars.WarEvent {
             const newPromotion      = Math.max(0, Math.min(parseInt(this._inputPromotion.text) || 0, maxPromotion));
             if (newPromotion !== currentPromotion) {
                 unitData.currentPromotion = newPromotion === 0 ? undefined : newPromotion;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputPrimaryAmmo(e: FocusEvent): void {
@@ -397,7 +418,7 @@ namespace TinyWars.WarEvent {
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputPrimaryAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
                 unitData.primaryWeaponCurrentAmmo = newAmmo === maxAmmo ? undefined : newAmmo;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputFlareAmmo(e: FocusEvent): void {
@@ -412,7 +433,7 @@ namespace TinyWars.WarEvent {
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputFlareAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
                 unitData.flareCurrentAmmo = newAmmo === maxAmmo ? undefined : newAmmo;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputBuildMaterial(e: FocusEvent): void {
@@ -427,7 +448,7 @@ namespace TinyWars.WarEvent {
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputBuildMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
                 unitData.currentBuildMaterial = newMaterial === maxMaterial ? undefined : newMaterial;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputProduceMaterial(e: FocusEvent): void {
@@ -442,7 +463,7 @@ namespace TinyWars.WarEvent {
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputProduceMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
                 unitData.currentProduceMaterial = newMaterial === maxMaterial ? undefined : newMaterial;
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
@@ -457,22 +478,22 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnDelete.label               = Lang.getText(Lang.Type.B0220);
-            this._labelCanBeBlockedByUnit.text  = Lang.getText(Lang.Type.B0532);
-            this._labelNeedMovableTile.text     = Lang.getText(Lang.Type.B0534);
-            this._labelIsDiving.text            = Lang.getText(Lang.Type.B0371);
-            this._labelHasLoadedCo.text         = Lang.getText(Lang.Type.B0421);
-            this._labelGridIndex.text           = Lang.getText(Lang.Type.B0531);
-            this._labelPlayerIndex.text         = Lang.getText(Lang.Type.B0521);
-            this._labelHp.text                  = Lang.getText(Lang.Type.B0339);
-            this._labelFuel.text                = Lang.getText(Lang.Type.B0342);
-            this._labelPromotion.text           = Lang.getText(Lang.Type.B0370);
-            this._labelPrimaryAmmo.text         = Lang.getText(Lang.Type.B0350);
-            this._labelFlareAmmo.text           = Lang.getText(Lang.Type.B0349);
-            this._labelBuildMaterial.text       = Lang.getText(Lang.Type.B0347);
-            this._labelProduceMaterial.text     = Lang.getText(Lang.Type.B0348);
-            this._btnActionState.label          = Lang.getText(Lang.Type.B0526);
-            this._btnUnitType.label             = Lang.getText(Lang.Type.B0525);
+            this._btnDelete.label               = Lang.getText(LangTextType.B0220);
+            this._labelCanBeBlockedByUnit.text  = Lang.getText(LangTextType.B0532);
+            this._labelNeedMovableTile.text     = Lang.getText(LangTextType.B0534);
+            this._labelIsDiving.text            = Lang.getText(LangTextType.B0371);
+            this._labelHasLoadedCo.text         = Lang.getText(LangTextType.B0421);
+            this._labelGridIndex.text           = Lang.getText(LangTextType.B0531);
+            this._labelPlayerIndex.text         = Lang.getText(LangTextType.B0521);
+            this._labelHp.text                  = Lang.getText(LangTextType.B0339);
+            this._labelFuel.text                = Lang.getText(LangTextType.B0342);
+            this._labelPromotion.text           = Lang.getText(LangTextType.B0370);
+            this._labelPrimaryAmmo.text         = Lang.getText(LangTextType.B0350);
+            this._labelFlareAmmo.text           = Lang.getText(LangTextType.B0349);
+            this._labelBuildMaterial.text       = Lang.getText(LangTextType.B0347);
+            this._labelProduceMaterial.text     = Lang.getText(LangTextType.B0348);
+            this._btnActionState.label          = Lang.getText(LangTextType.B0526);
+            this._btnUnitType.label             = Lang.getText(LangTextType.B0525);
         }
         private _updateComponentsForData(): void {
             this._updateLabelError();
@@ -505,7 +526,7 @@ namespace TinyWars.WarEvent {
                 dataForAddUnit,
                 war             : data.war,
             });
-            label.text      = `${data.action.WeaAddUnit.unitArray.indexOf(dataForAddUnit) + 1}. ${errorTips || Lang.getText(Lang.Type.B0493)}`;
+            label.text      = `${data.action.WeaAddUnit.unitArray.indexOf(dataForAddUnit) + 1}. ${errorTips || Lang.getText(LangTextType.B0493)}`;
             label.textColor = errorTips ? ColorValue.Red : ColorValue.Green;
         }
         private _updateComponentsForCanBeBlockedByUnit(): void {
@@ -684,25 +705,25 @@ namespace TinyWars.WarEvent {
 
     function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
         dataForAddUnit  : ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
-        war             : BaseWar.BwWar;
+        war             : BwWar;
     }): string | undefined {
         if (dataForAddUnit.canBeBlockedByUnit == null) {
-            return Lang.getText(Lang.Type.A0192);
+            return Lang.getText(LangTextType.A0192);
         }
 
         if (dataForAddUnit.needMovableTile == null) {
-            return Lang.getText(Lang.Type.A0193);
+            return Lang.getText(LangTextType.A0193);
         }
 
         const configVersion = war.getConfigVersion();
         const unitData      = dataForAddUnit.unitData;
         const unitCfg       = ConfigManager.getUnitTemplateCfg(configVersion, unitData.unitType);
         if (unitCfg == null) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0525));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0525));
         }
 
         if (!GridIndexHelpers.checkIsInsideMap(unitData.gridIndex, war.getTileMap().getMapSize())) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0531));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0531));
         }
 
         const playerIndex = unitData.playerIndex;
@@ -710,7 +731,7 @@ namespace TinyWars.WarEvent {
             (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
             (playerIndex < CommonConstants.WarFirstPlayerIndex)
         ) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0521));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0521));
         }
 
         const actionState = unitData.actionState;
@@ -718,28 +739,28 @@ namespace TinyWars.WarEvent {
             (actionState !== Types.UnitActionState.Acted)   &&
             (actionState !== Types.UnitActionState.Idle)
         ) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0526));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0526));
         }
 
         const currentFuel = unitData.currentFuel;
         if ((currentFuel < 0) || (currentFuel > unitCfg.maxFuel)) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0342));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0342));
         }
 
         const currentHp = unitData.currentHp;
         if ((currentHp < 0) || (currentHp > unitCfg.maxHp)) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0339));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0339));
         }
 
         const currentBuildMaterial  = unitData.currentBuildMaterial;
         const maxBuildMaterial      = unitCfg.maxBuildMaterial;
         if (maxBuildMaterial == null) {
             if (currentBuildMaterial != null) {
-                return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0347));
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0347));
             }
         } else {
             if ((currentBuildMaterial < 0) || (currentBuildMaterial > maxBuildMaterial)) {
-                return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0347));
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0347));
             }
         }
 
@@ -747,28 +768,28 @@ namespace TinyWars.WarEvent {
         const maxProduceMaterial      = unitCfg.maxProduceMaterial;
         if (maxProduceMaterial == null) {
             if (currentProduceMaterial != null) {
-                return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0348));
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0348));
             }
         } else {
             if ((currentProduceMaterial < 0) || (currentProduceMaterial > maxProduceMaterial)) {
-                return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0348));
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0348));
             }
         }
 
         const currentPromotion = unitData.currentPromotion;
         if ((currentPromotion < 0) || (currentPromotion > ConfigManager.getUnitMaxPromotion(configVersion))) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0370));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0370));
         }
 
         const flareCurrentAmmo  = unitData.flareCurrentAmmo;
         const flareMaxAmmo      = unitCfg.flareMaxAmmo;
         if (flareMaxAmmo == null) {
             if (flareCurrentAmmo != null) {
-                return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0349));
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0349));
             }
         } else {
             if ((flareCurrentAmmo < 0) || (flareCurrentAmmo > flareMaxAmmo)) {
-                return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0349));
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0349));
             }
         }
 
@@ -776,32 +797,32 @@ namespace TinyWars.WarEvent {
         const primaryMaxAmmo      = unitCfg.primaryWeaponMaxAmmo;
         if (primaryMaxAmmo == null) {
             if (primaryCurrentAmmo != null) {
-                return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0350));
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0350));
             }
         } else {
             if ((primaryCurrentAmmo < 0) || (primaryCurrentAmmo > primaryMaxAmmo)) {
-                return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0350));
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0350));
             }
         }
 
         if (unitData.unitId != null) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0527));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0527));
         }
 
         if (unitData.loaderUnitId != null) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0528));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0528));
         }
 
         if ((unitData.isDiving) && (!unitCfg.diveCfgs)) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0371));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0371));
         }
 
         if (unitData.isBuildingTile) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0529));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0529));
         }
 
         if (unitData.isCapturingTile) {
-            return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0530));
+            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0530));
         }
 
         // unitData.hasLoadedCo的值不需要检查
@@ -809,3 +830,5 @@ namespace TinyWars.WarEvent {
         return undefined;
     }
 }
+
+export default TwnsWeActionModifyPanel1;

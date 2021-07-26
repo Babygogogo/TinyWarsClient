@@ -1,27 +1,37 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapManagement {
-    import Lang = Utility.Lang;
+import TwnsMeWar        from "../../mapEditor/model/MeWar";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
+import WarMapProxy      from "../../warMap/model/WarMapProxy";
+
+namespace TwnsMmRejectMapPanel {
+    import MeWar        = TwnsMeWar.MeWar;
+    import LangTextType = TwnsLangTextType.LangTextType;
 
     type OpenData = {
-        war: MapEditor.MeWar;
-    }
-    export class MmRejectMapPanel extends GameUi.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
+        war: MeWar;
+    };
+    export class MmRejectMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MmRejectMapPanel;
 
         // @ts-ignore
-        private _labelTitle     : GameUi.UiLabel;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelTips      : GameUi.UiLabel;
+        private _labelTips      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _inputReason    : GameUi.UiTextInput;
+        private _inputReason    : TwnsUiTextInput.UiTextInput;
         // @ts-ignore
-        private _btnCancel      : GameUi.UiButton;
+        private _btnCancel      : TwnsUiButton.UiButton;
         // @ts-ignore
-        private _btnConfirm     : GameUi.UiButton;
+        private _btnConfirm     : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!MmRejectMapPanel._instance) {
@@ -49,10 +59,10 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
             ]);
 
-            this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
-            this._labelTitle.text   = Lang.getText(Lang.Type.B0297);
-            this._labelTips.text    = Lang.getText(Lang.Type.A0094);
+            this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
+            this._labelTitle.text   = Lang.getText(LangTextType.B0297);
+            this._labelTips.text    = Lang.getText(LangTextType.A0094);
         }
 
         private _onTouchedBtnCancel(): void {
@@ -61,7 +71,7 @@ namespace TinyWars.MapManagement {
 
         private _onTouchedBtnConfirm(): void {
             const war = this._getOpenData().war;
-            WarMap.WarMapProxy.reqMmReviewMap({
+            WarMapProxy.reqMmReviewMap({
                 designerUserId  : war.getMapDesignerUserId(),
                 slotIndex       : war.getMapSlotIndex(),
                 modifiedTime    : war.getMapModifiedTime(),
@@ -80,3 +90,5 @@ namespace TinyWars.MapManagement {
         }
     }
 }
+
+export default TwnsMmRejectMapPanel;

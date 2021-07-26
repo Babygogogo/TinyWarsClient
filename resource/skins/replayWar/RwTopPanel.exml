@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="40" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+<e:Skin width="960" height="40" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" top="0" right="0" height="40">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" locked="true" />
         <e:Group id="_groupPlayer" x="0" verticalCenter="0" locked="true">
-            <GameUi:UiImage source="icon_person_001" x="0" y="0" scaleX="0.8" scaleY="0.8" />
-            <GameUi:UiLabel id="_labelPlayer" text="玩家名居然能有十个字(红)" size="16" x="10" textColor="0xffffff" y="12"
+            <TwnsUiImage:UiImage source="icon_person_001" x="0" y="0" scaleX="0.8" scaleY="0.8" />
+            <TwnsUiLabel:UiLabel id="_labelPlayer" text="玩家名居然能有十个字(红)" size="16" x="10" textColor="0xffffff" y="12"
                             maxTextWidth="320" />
             <e:layout>
                 <e:HorizontalLayout verticalAlign="middle" gap="0" />
             </e:layout>
         </e:Group>
         <e:Group x="340" verticalCenter="0" locked="true">
-            <GameUi:UiImage x="0" y="0" scaleX="0.8" scaleY="0.8" source="icon_fund_001" />
-            <GameUi:UiLabel id="_labelFund" text="999999" size="16" x="330" textColor="0xffffff" y="2"
+            <TwnsUiImage:UiImage x="0" y="0" scaleX="0.8" scaleY="0.8" source="icon_fund_001" />
+            <TwnsUiLabel:UiLabel id="_labelFund" text="999999" size="16" x="330" textColor="0xffffff" y="2"
                             maxTextWidth="100" />
             <e:layout>
                 <e:HorizontalLayout gap="0" verticalAlign="middle" />
@@ -22,18 +22,18 @@
         </e:Group>
         <e:Group x="271" verticalCenter="0">
             <e:Group x="0" y="0">
-                <GameUi:UiLabel id="_labelTurnTitle" text="Turn" size="12" x="0" textColor="0xFFFFFF" y="14"
+                <TwnsUiLabel:UiLabel id="_labelTurnTitle" text="Turn" size="12" x="0" textColor="0xFFFFFF" y="14"
                                 maxTextWidth="200" />
-                <GameUi:UiLabel id="_labelTurn" text="99 / 99" size="12" x="0" textColor="0xFFFFFF" y="0"
+                <TwnsUiLabel:UiLabel id="_labelTurn" text="99 / 99" size="12" x="0" textColor="0xFFFFFF" y="0"
                                 maxTextWidth="200" />
                 <e:layout>
                     <e:HorizontalLayout gap="2" />
                 </e:layout>
             </e:Group>
             <e:Group x="0" y="14">
-                <GameUi:UiLabel id="_labelActionTitle" text="Action" size="12" x="0" textColor="0xFFFFFF" y="0"
+                <TwnsUiLabel:UiLabel id="_labelActionTitle" text="Action" size="12" x="0" textColor="0xFFFFFF" y="0"
                                 maxTextWidth="200" />
-                <GameUi:UiLabel id="_labelAction" text="9999" size="12" x="0" textColor="0xFFFFFF" y="14"
+                <TwnsUiLabel:UiLabel id="_labelAction" text="9999" size="12" x="0" textColor="0xFFFFFF" y="14"
                                 maxTextWidth="200" />
                 <e:layout>
                     <e:HorizontalLayout gap="2" />
@@ -45,20 +45,20 @@
         </e:Group>
         <e:Group id="_groupCo" x="440" verticalCenter="0" locked="true">
             <e:Group x="0" y="0">
-                <GameUi:UiImage x="0" y="0" scaleX="0.8" scaleY="0.8" source="icon_person_002" />
-                <GameUi:UiLabel id="_labelCo" text="Greyfield" size="16" x="38" textColor="0xFFFFFF" y="0"
+                <TwnsUiImage:UiImage x="0" y="0" scaleX="0.8" scaleY="0.8" source="icon_person_002" />
+                <TwnsUiLabel:UiLabel id="_labelCo" text="Greyfield" size="16" x="38" textColor="0xFFFFFF" y="0"
                                 maxTextWidth="100" />
                 <e:layout>
                     <e:HorizontalLayout gap="0" verticalAlign="middle" />
                 </e:layout>
             </e:Group>
             <e:Group x="105" y="0">
-                <GameUi:UiLabel id="_labelCurrEnergy" text="99" size="22" x="0" textColor="0xFFFFFF" y="6"
+                <TwnsUiLabel:UiLabel id="_labelCurrEnergy" text="99" size="22" x="0" textColor="0xFFFFFF" y="6"
                                 maxTextWidth="200" />
                 <e:Group x="20" y="0">
-                    <GameUi:UiLabel id="_labelPowerEnergy" text="P 99 / 99" size="12" x="0" textColor="0xFFFFFF" y="0"
+                    <TwnsUiLabel:UiLabel id="_labelPowerEnergy" text="P 99 / 99" size="12" x="0" textColor="0xFFFFFF" y="0"
                                     maxTextWidth="200" />
-                    <GameUi:UiLabel id="_labelZoneEnergy" text="Z 99 / 99" size="12" x="0" textColor="0xFFFFFF" y="14"
+                    <TwnsUiLabel:UiLabel id="_labelZoneEnergy" text="Z 99 / 99" size="12" x="0" textColor="0xFFFFFF" y="14"
                                     maxTextWidth="200" />
                     <e:layout>
                         <e:VerticalLayout gap="2" />
@@ -72,68 +72,68 @@
                 <e:HorizontalLayout verticalAlign="middle" />
             </e:layout>
         </e:Group>
-        <GameUi:UiButton id="_btnFastRewind" label="" x="760" width="50" top="0" bottom="0" locked="true">
-            <GameUi:skinName>
+        <TwnsUiButton:UiButton id="_btnFastRewind" label="" x="760" width="50" top="0" bottom="0" locked="true">
+            <TwnsUiButton:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
                     <e:Image source="icon_replay_004" scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" />
-                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
                                     horizontalCenter="0" maxTextWidth="70" />
                 </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiButton id="_btnChat" label="" x="710" width="50" top="0" bottom="0">
-            <GameUi:skinName>
+            </TwnsUiButton:skinName>
+        </TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnChat" label="" x="710" width="50" top="0" bottom="0">
+            <TwnsUiButton:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
                     <e:Image scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" source="icon_chat_001" />
-                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
                                     horizontalCenter="0" maxTextWidth="70" />
-                    <GameUi:UiImage id="_imgRed" width="20" height="20" source="c04_t01_s01_f01" right="0" top="0" />
+                    <TwnsUiImage:UiImage id="_imgRed" width="20" height="20" source="c04_t01_s01_f01" right="0" top="0" />
                 </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiButton id="_btnPlay" label="" x="810" width="50" top="0" bottom="0" locked="true">
-            <GameUi:skinName>
+            </TwnsUiButton:skinName>
+        </TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnPlay" label="" x="810" width="50" top="0" bottom="0" locked="true">
+            <TwnsUiButton:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
                     <e:Image source="icon_replay_001" scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" />
-                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
                                     horizontalCenter="0" maxTextWidth="70" />
                 </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiButton id="_btnPause" label="" x="810" width="50" top="0" bottom="0" locked="true">
-            <GameUi:skinName>
+            </TwnsUiButton:skinName>
+        </TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnPause" label="" x="810" width="50" top="0" bottom="0" locked="true">
+            <TwnsUiButton:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
                     <e:Image source="icon_replay_002" scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" />
-                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
                                     horizontalCenter="0" maxTextWidth="70" />
                 </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiButton id="_btnFastForward" label="" width="50" top="0" bottom="0" x="860" locked="true">
-            <GameUi:skinName>
+            </TwnsUiButton:skinName>
+        </TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnFastForward" label="" width="50" top="0" bottom="0" x="860" locked="true">
+            <TwnsUiButton:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
                     <e:Image source="icon_replay_003" scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" />
-                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
                                     horizontalCenter="0" maxTextWidth="70" />
                 </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiButton id="_btnUnitList" label="" x="760" width="50" top="0" bottom="0" visible="false">
-            <GameUi:skinName>
+            </TwnsUiButton:skinName>
+        </TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnUnitList" label="" x="760" width="50" top="0" bottom="0" visible="false">
+            <TwnsUiButton:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
                     <e:Image scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" source="icon_person_003" />
-                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
                                     horizontalCenter="0" maxTextWidth="70" />
                 </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiButton id="_btnMenu" label="" width="50" top="0" bottom="0" x="910" skinName="Skins.Component.Button.ButtonMenu001">
-        </GameUi:UiButton>
+            </TwnsUiButton:skinName>
+        </TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnMenu" label="" width="50" top="0" bottom="0" x="910" skinName="Skins.Component.Button.ButtonMenu001">
+        </TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>

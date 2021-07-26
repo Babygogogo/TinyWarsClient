@@ -1,23 +1,41 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.BaseWar {
+import CommonModel              from "../../common/model/CommonModel";
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import StageManager             from "../../tools/helpers/StageManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import NotifyData               from "../../tools/notify/NotifyData";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsBwUnit               from "../model/BwUnit";
+import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwWar                from "../model/BwWar";
+import TwnsBwCoListPanel        from "./BwCoListPanel";
+import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
+import TwnsBwTileBriefPanel     from "./BwTileBriefPanel";
+import TwnsBwUnitDetailPanel    from "./BwUnitDetailPanel";
+import TwnsBwUnitView           from "./BwUnitView";
+
+namespace TwnsBwUnitBriefPanel {
+    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
+    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
+    import BwUnitDetailPanel    = TwnsBwUnitDetailPanel.BwUnitDetailPanel;
+    import BwUnitView           = TwnsBwUnitView.BwUnitView;
+    import BwWar                = TwnsBwWar.BwWar;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import BwUnit               = TwnsBwUnit.BwUnit;
     import Tween                = egret.Tween;
-    import Notify               = Utility.Notify;
-    import Lang                 = Utility.Lang;
-    import StageManager         = Utility.StageManager;
-    import Types                = Utility.Types;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import CommonModel          = Common.CommonModel;
 
     const _CELL_WIDTH           = 80;
 
     type OpenDataForBwUnitBriefPanel = {
         war : BwWar;
     };
-
-    export class BwUnitBriefPanel extends GameUi.UiPanel<OpenDataForBwUnitBriefPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    // eslint-disable-next-line no-shadow
+    export class BwUnitBriefPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitBriefPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: BwUnitBriefPanel;
@@ -25,7 +43,7 @@ namespace TinyWars.BaseWar {
         private _group      : eui.Group;
         private _cellList   : BwUnitBriefCell[] = [];
 
-        private _unitList   : BaseWar.BwUnit[] = [];
+        private _unitList   : BwUnit[] = [];
         private _isLeftSide = true;
 
         public static show(openData: OpenDataForBwUnitBriefPanel): void {
@@ -51,18 +69,18 @@ namespace TinyWars.BaseWar {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
-                { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: Notify.Type.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
-                { type: Notify.Type.BwWarMenuPanelClosed,           callback: this._onNotifyBwWarMenuPanelClosed },
-                { type: Notify.Type.BwCoListPanelOpened,            callback: this._onNotifyBwCoListPanelOpened },
-                { type: Notify.Type.BwCoListPanelClosed,            callback: this._onNotifyBwCoListPanelClosed },
-                { type: Notify.Type.BwProduceUnitPanelOpened,       callback: this._onNotifyBwProduceUnitPanelOpened },
-                { type: Notify.Type.BwProduceUnitPanelClosed,       callback: this._onNotifyBwProduceUnitPanelClosed },
-                { type: Notify.Type.MeUnitChanged,                  callback: this._onNotifyMeUnitChanged },
-                { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
+                { type: NotifyType.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
+                { type: NotifyType.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
+                { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: NotifyType.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
+                { type: NotifyType.BwWarMenuPanelClosed,           callback: this._onNotifyBwWarMenuPanelClosed },
+                { type: NotifyType.BwCoListPanelOpened,            callback: this._onNotifyBwCoListPanelOpened },
+                { type: NotifyType.BwCoListPanelClosed,            callback: this._onNotifyBwCoListPanelClosed },
+                { type: NotifyType.BwProduceUnitPanelOpened,       callback: this._onNotifyBwProduceUnitPanelOpened },
+                { type: NotifyType.BwProduceUnitPanelClosed,       callback: this._onNotifyBwProduceUnitPanelClosed },
+                { type: NotifyType.MeUnitChanged,                  callback: this._onNotifyMeUnitChanged },
+                { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
             ]);
 
             const group     = this._group;
@@ -121,7 +139,7 @@ namespace TinyWars.BaseWar {
             this._updateView();
         }
         private _onNotifyMeUnitChanged(e: egret.Event): void {
-            const data = e.data as Notify.Data.MeUnitChanged;
+            const data = e.data as NotifyData.MeUnitChanged;
             if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
                 this._updateView();
             }
@@ -135,7 +153,7 @@ namespace TinyWars.BaseWar {
         private _onCellTouchTap(e: egret.TouchEvent): void {
             for (let i = 0; i < this._cellList.length; ++i) {
                 if (this._cellList[i] === e.currentTarget) {
-                    BaseWar.BwUnitDetailPanel.show({ unit: this._unitList[i] });
+                    BwUnitDetailPanel.show({ unit: this._unitList[i] });
                     return;
                 }
             }
@@ -148,8 +166,8 @@ namespace TinyWars.BaseWar {
             const war = this._getOpenData().war;
             if ((war.getIsWarMenuPanelOpening())            ||
                 (!war.getIsRunning())                       ||
-                (BaseWar.BwProduceUnitPanel.getIsOpening()) ||
-                (BaseWar.BwCoListPanel.getIsOpening())
+                (BwProduceUnitPanel.getIsOpening()) ||
+                (BwCoListPanel.getIsOpening())
             ) {
                 this.visible = false;
             } else {
@@ -164,7 +182,7 @@ namespace TinyWars.BaseWar {
                 const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
 
                 if ((unitOnMap)                                         &&
-                    (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                         war,
                         gridIndex,
                         unitType            : unitOnMap.getUnitType(),
@@ -199,11 +217,10 @@ namespace TinyWars.BaseWar {
         }
 
         private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
-            const tileBriefPanel = BaseWar.BwTileBriefPanel.getInstance();
-            const unitBriefPanel = this;
+            const tileBriefPanel = TwnsBwTileBriefPanel.BwTileBriefPanel.getInstance();
             let target = e.target as egret.DisplayObject;
             while (target) {
-                if ((target) && ((target === tileBriefPanel) || (target === unitBriefPanel))) {
+                if ((target) && ((target === tileBriefPanel) || (target === this))) {
                     return;
                 }
                 target = target.parent;
@@ -270,16 +287,16 @@ namespace TinyWars.BaseWar {
     class BwUnitBriefCell extends eui.Component {
         private _group          : eui.Group;
         private _conUnitView    : eui.Group;
-        private _labelName      : GameUi.UiLabel;
-        private _labelHp        : GameUi.UiLabel;
-        private _labelFuel      : GameUi.UiLabel;
-        private _labelState     : GameUi.UiLabel;
-        private _imgHp          : GameUi.UiImage;
-        private _imgFuel        : GameUi.UiImage;
-        private _imgState       : GameUi.UiImage;
-        private _unitView       : BaseWar.BwUnitView;
+        private _labelName      : TwnsUiLabel.UiLabel;
+        private _labelHp        : TwnsUiLabel.UiLabel;
+        private _labelFuel      : TwnsUiLabel.UiLabel;
+        private _labelState     : TwnsUiLabel.UiLabel;
+        private _imgHp          : TwnsUiImage.UiImage;
+        private _imgFuel        : TwnsUiImage.UiImage;
+        private _imgState       : TwnsUiImage.UiImage;
+        private _unitView       : BwUnitView;
 
-        private _unit               : BaseWar.BwUnit;
+        private _unit               : BwUnit;
         private _isChildrenCreated  = false;
 
         public constructor() {
@@ -295,12 +312,12 @@ namespace TinyWars.BaseWar {
 
             this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
             this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
-            this._unitView          = new BaseWar.BwUnitView();
+            this._unitView          = new BwUnitView();
             this._conUnitView.addChild(this._unitView);
             this._updateView();
         }
 
-        public setUnit(unit: BaseWar.BwUnit): void {
+        public setUnit(unit: BwUnit): void {
             this._unit = unit;
             this._updateView();
         }
@@ -351,3 +368,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwUnitBriefPanel;

@@ -1,89 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
-        xmlns:w="http://ns.egret.com/wing">
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_groupList" top="40" bottom="0" width="160" left="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelCommanderInfo" text="指挥官信息" y="10" bold="true" size="20" textColor="0xffffff"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" left="0" right="0" top="0" bottom="0" />
+        <TwnsUiLabel:UiLabel id="_labelCommanderInfo" text="指挥官信息" y="10" bold="true" size="20" textColor="0xffffff"
                         horizontalCenter="0" />
-        <GameUi:UiScrollList id="_listCo" left="0" right="0" bottom="35" top="35">
+        <TwnsUiScrollList:UiScrollList id="_listCo" left="0" right="0" bottom="35" top="35">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="160" height="40" currentState="up" states="up,down">
-                        <GameUi:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
-                                         visible.down="false">
-                            <GameUi:skinName>
+                        <TwnsUiButton:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
+                                               visible.down="false">
+                            <TwnsUiButton:skinName>
                                 <e:Skin states="up,down,disabled">
                                     <e:Image source="commonColorTransparent0000" left="0" right="0" top="0" bottom="0" />
                                     <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
                                              bold="true" textColor="0x000000" />
                                 </e:Skin>
-                            </GameUi:skinName>
-                        </GameUi:UiButton>
-                        <GameUi:UiLabel id="_labelName" text="地图名称" size="22" verticalCenter="0"
+                            </TwnsUiButton:skinName>
+                        </TwnsUiButton:UiButton>
+                        <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="22" verticalCenter="0"
                                         textColor.down="0x00ff00" horizontalCenter="0" />
                     </e:Skin>
                 </e:itemRendererSkinName>
             </e:List>
-        </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" left="0"
-                         right="0" bottom="0"></GameUi:UiButton>
+        </TwnsUiScrollList:UiScrollList>
+        <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" left="0"
+                               right="0" bottom="0"></TwnsUiButton:UiButton>
     </e:Group>
     <e:Group id="_groupInfo" top="40" bottom="0" right="0" width="800">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <e:Scroller id="_scrCoInfo" top="10" bottom="10" left="0" right="0">
             <e:Group>
-                <GameUi:UiImage id="_imgCoPortrait" alpha="0.8" source="c09_t01_s01_f01" right="0" y="75" />
+                <TwnsUiImage:UiImage id="_imgCoPortrait" alpha="0.8" source="c09_t01_s01_f01" right="0" y="75" />
                 <e:Group y="5" x="10">
-                    <GameUi:UiLabel id="_labelNameTitle" text="姓名：" textColor="0xFFFFFF" y="0" size="20" x="0"
+                    <TwnsUiLabel:UiLabel id="_labelNameTitle" text="姓名：" textColor="0xFFFFFF" y="0" size="20" x="0"
                                     maxTextWidth="120" />
-                    <GameUi:UiLabel id="_labelName" text="测试CO1号" textColor="0xFFFFFF" y="0" size="20" x="120"
+                    <TwnsUiLabel:UiLabel id="_labelName" text="测试CO1号" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     textAlign="center" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>
                 </e:Group>
                 <e:Group y="5" x="250">
-                    <GameUi:UiLabel id="_labelForceTitle" text="势力：" textColor="0xFFFFFF" y="0" size="20"
+                    <TwnsUiLabel:UiLabel id="_labelForceTitle" text="势力：" textColor="0xFFFFFF" y="0" size="20"
                                     textAlign="right" x="0" maxTextWidth="60" />
-                    <GameUi:UiLabel id="_labelForce" text="红方" textColor="0xFFFFFF" y="0" size="20" x="120"
+                    <TwnsUiLabel:UiLabel id="_labelForce" text="红方" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     textAlign="center" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>
                 </e:Group>
                 <e:Group y="5" x="460">
-                    <GameUi:UiLabel id="_labelDesignerTitle" text="设计者：" textColor="0xFFFFFF" y="0" size="20" x="0"
+                    <TwnsUiLabel:UiLabel id="_labelDesignerTitle" text="设计者：" textColor="0xFFFFFF" y="0" size="20" x="0"
                                     maxTextWidth="120" />
-                    <GameUi:UiLabel id="_labelDesigner" text="测试CO1号" textColor="0xFFFFFF" y="0" size="20" x="120"
+                    <TwnsUiLabel:UiLabel id="_labelDesigner" text="测试CO1号" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     textAlign="center" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>
                 </e:Group>
                 <e:Group y="45" x="10">
-                    <GameUi:UiLabel id="_labelBoardCostPercentageTitle" text="出场费用：" textColor="0xFFFFFF" y="0"
+                    <TwnsUiLabel:UiLabel id="_labelBoardCostPercentageTitle" text="出场费用：" textColor="0xFFFFFF" y="0"
                                     size="20" x="0" maxTextWidth="120" />
-                    <GameUi:UiLabel id="_labelBoardCostPercentage" text="50%" textColor="0xFFFFFF" y="0" size="20"
+                    <TwnsUiLabel:UiLabel id="_labelBoardCostPercentage" text="50%" textColor="0xFFFFFF" y="0" size="20"
                                     x="120" textAlign="center" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>
                 </e:Group>
                 <e:Group y="45" x="250">
-                    <GameUi:UiLabel id="_labelZoneRadiusTitle" text="zone范围：" textColor="0xFFFFFF" y="0" size="20" x="0"
+                    <TwnsUiLabel:UiLabel id="_labelZoneRadiusTitle" text="zone范围：" textColor="0xFFFFFF" y="0" size="20" x="0"
                                     maxTextWidth="120" />
-                    <GameUi:UiLabel id="_labelZoneRadius" text="1" textColor="0xFFFFFF" y="0" size="20" x="120"
+                    <TwnsUiLabel:UiLabel id="_labelZoneRadius" text="1" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     textAlign="center" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>
                 </e:Group>
                 <e:Group y="43" x="460">
-                    <GameUi:UiLabel id="_labelEnergyBarTitle" text="zone扩张能量值：" textColor="0xFFFFFF" y="0" size="20"
+                    <TwnsUiLabel:UiLabel id="_labelEnergyBarTitle" text="zone扩张能量值：" textColor="0xFFFFFF" y="0" size="20"
                                     x="0" maxTextWidth="170" />
-                    <GameUi:UiLabel id="_labelEnergyBar" text="30 / 80" textColor="0xFFFFFF" y="0" size="20" x="120"
+                    <TwnsUiLabel:UiLabel id="_labelEnergyBar" text="30 / 80" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     textAlign="center" />
                     <e:layout>
                         <e:HorizontalLayout/>
@@ -92,93 +92,90 @@
                 <e:Group y="85" left="0" x="0" width="530">
                     <e:Group y="0" x="0">
                         <e:Group x="20" y="0">
-                            <GameUi:UiLabel text="D2D：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0"
-                                            />
-                            <GameUi:UiLabel id="_labelNoPassiveSkill" text="无" textColor="0xFFFFFF" y="0" size="20"
+                            <TwnsUiLabel:UiLabel text="D2D：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0" />
+                            <TwnsUiLabel:UiLabel id="_labelNoPassiveSkill" text="无" textColor="0xFFFFFF" y="0" size="20"
                                             textAlign="right" x="80" />
                             <e:layout>
                                 <e:HorizontalLayout/>
                             </e:layout>
                         </e:Group>
-                        <GameUi:UiScrollList id="_listPassiveSkill" y="25" left="20" right="10">
+                        <TwnsUiScrollList:UiScrollList id="_listPassiveSkill" y="25" left="20" right="10">
                             <e:List>
                                 <e:itemRendererSkinName>
                                     <e:Skin width="500">
-                                        <GameUi:UiLabel id="_labelIndex" text="1." size="20" width="30" y="5" />
-                                        <GameUi:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5" />
+                                        <TwnsUiLabel:UiLabel id="_labelIndex" text="1." size="20" width="30" y="5" />
+                                        <TwnsUiLabel:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5" />
                                     </e:Skin>
                                 </e:itemRendererSkinName>
                                 <e:layout>
                                     <e:VerticalLayout/>
                                 </e:layout>
                             </e:List>
-                        </GameUi:UiScrollList>
+                        </TwnsUiScrollList:UiScrollList>
                     </e:Group>
                     <e:Group y="0" x="0">
                         <e:Group x="20" y="0">
-                            <GameUi:UiLabel text="COP：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0"
-                                            />
-                            <GameUi:UiLabel id="_labelNoCop" text="无" textColor="0xFFFFFF" y="0" size="20"
+                            <TwnsUiLabel:UiLabel text="COP：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0" />
+                            <TwnsUiLabel:UiLabel id="_labelNoCop" text="无" textColor="0xFFFFFF" y="0" size="20"
                                             textAlign="right" x="80" />
                             <e:layout>
                                 <e:HorizontalLayout/>
                             </e:layout>
                         </e:Group>
                         <e:Group x="200" y="0">
-                            <GameUi:UiLabel id="_labelCopEnergyTitle" text="能量消耗:" textColor="0xFFFFFF" y="0" size="20"
+                            <TwnsUiLabel:UiLabel id="_labelCopEnergyTitle" text="能量消耗:" textColor="0xFFFFFF" y="0" size="20"
                                             textAlign="right" x="0" />
-                            <GameUi:UiLabel id="_labelCopEnergy" text="无" textColor="0xFFFFFF" y="0" size="20"
+                            <TwnsUiLabel:UiLabel id="_labelCopEnergy" text="无" textColor="0xFFFFFF" y="0" size="20"
                                             textAlign="right" x="0" />
                             <e:layout>
                                 <e:HorizontalLayout/>
                             </e:layout>
                         </e:Group>
-                        <GameUi:UiScrollList id="_listCop" y="25" left="20" right="10">
+                        <TwnsUiScrollList:UiScrollList id="_listCop" y="25" left="20" right="10">
                             <e:List>
                                 <e:itemRendererSkinName>
                                     <e:Skin width="500">
-                                        <GameUi:UiLabel id="_labelIndex" text="1." size="20" width="30" y="5" />
-                                        <GameUi:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5" />
+                                        <TwnsUiLabel:UiLabel id="_labelIndex" text="1." size="20" width="30" y="5" />
+                                        <TwnsUiLabel:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5" />
                                     </e:Skin>
                                 </e:itemRendererSkinName>
                                 <e:layout>
                                     <e:VerticalLayout/>
                                 </e:layout>
                             </e:List>
-                        </GameUi:UiScrollList>
+                        </TwnsUiScrollList:UiScrollList>
                     </e:Group>
                     <e:Group y="0" x="0">
                         <e:Group x="20" y="0">
-                            <GameUi:UiLabel text="SCOP：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0"
-                                            />
-                            <GameUi:UiLabel id="_labelNoScop" text="无" textColor="0xFFFFFF" y="0" size="20"
+                            <TwnsUiLabel:UiLabel text="SCOP：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0" />
+                            <TwnsUiLabel:UiLabel id="_labelNoScop" text="无" textColor="0xFFFFFF" y="0" size="20"
                                             textAlign="right" x="120" />
                             <e:layout>
                                 <e:HorizontalLayout/>
                             </e:layout>
                         </e:Group>
                         <e:Group x="200">
-                            <GameUi:UiLabel id="_labelScopEnergyTitle" text="能量消耗:" textColor="0xFFFFFF" y="0" size="20"
+                            <TwnsUiLabel:UiLabel id="_labelScopEnergyTitle" text="能量消耗:" textColor="0xFFFFFF" y="0" size="20"
                                             textAlign="right" x="0" />
-                            <GameUi:UiLabel id="_labelScopEnergy" text="无" textColor="0xFFFFFF" y="0" size="20"
+                            <TwnsUiLabel:UiLabel id="_labelScopEnergy" text="无" textColor="0xFFFFFF" y="0" size="20"
                                             textAlign="right" x="0" />
                             <e:layout>
                                 <e:HorizontalLayout/>
                             </e:layout>
                         </e:Group>
-                        <GameUi:UiScrollList id="_listScop" y="25" left="20" right="10">
+                        <TwnsUiScrollList:UiScrollList id="_listScop" y="25" left="20" right="10">
                             <e:List>
                                 <e:itemRendererSkinName>
                                     <e:Skin width="500">
-                                        <GameUi:UiLabel id="_labelIndex" text="1." size="20" width="30" y="5" />
-                                        <GameUi:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5" />
+                                        <TwnsUiLabel:UiLabel id="_labelIndex" text="1." size="20" width="30" y="5" />
+                                        <TwnsUiLabel:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5" />
                                     </e:Skin>
                                 </e:itemRendererSkinName>
                                 <e:layout>
                                     <e:VerticalLayout/>
                                 </e:layout>
                             </e:List>
-                        </GameUi:UiScrollList>
+                        </TwnsUiScrollList:UiScrollList>
                     </e:Group>
                     <e:layout>
                         <e:VerticalLayout horizontalAlign="justify" gap="20" />
@@ -188,8 +185,8 @@
         </e:Scroller>
         <e:Scroller id="_scrHelp" top="10" bottom="10" left="0" right="0">
             <e:Group>
-                <GameUi:UiLabel id="_labelHelp" text="测试CO1号" textColor="0xFFFFFF" size="20"
-                                left="10" right="10" top="5" wordWrap="true" />
+                <TwnsUiLabel:UiLabel id="_labelHelp" text="测试CO1号" textColor="0xFFFFFF" size="20" left="10" right="10"
+                                top="5" wordWrap="true" />
             </e:Group>
         </e:Scroller>
     </e:Group>

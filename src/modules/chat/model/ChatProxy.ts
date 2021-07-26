@@ -1,20 +1,25 @@
 
-namespace TinyWars.Chat.ChatProxy {
-    import Notify       = Utility.Notify;
-    import NotifyType   = Utility.Notify.Type;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Types        = Utility.Types;
-    import NetManager   = Network.NetManager;
-    import ActionCode   = Network.Codes;
-    import NetMessage   = ProtoTypes.NetMessage;
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Types                from "../../tools/helpers/Types";
+import NetManager           from "../../tools/network/NetManager";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Timer                from "../../tools/helpers/Timer";
+import ChatModel            from "./ChatModel";
+
+namespace ChatProxy {
+    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.MsgChatAddMessage,                callback: _onMsgChatAddMessage,             },
-            { msgCode: ActionCode.MsgChatGetAllMessages,            callback: _onMsgChatGetAllMessages          },
-            { msgCode: ActionCode.MsgChatUpdateReadProgress,        callback: _onMsgChatUpdateReadProgress      },
-            { msgCode: ActionCode.MsgChatGetAllReadProgressList,    callback: _onMsgChatGetAllReadProgressList  },
-        ], ChatProxy);
+            { msgCode: NetMessageCodes.MsgChatAddMessage,                callback: _onMsgChatAddMessage,             },
+            { msgCode: NetMessageCodes.MsgChatGetAllMessages,            callback: _onMsgChatGetAllMessages          },
+            { msgCode: NetMessageCodes.MsgChatUpdateReadProgress,        callback: _onMsgChatUpdateReadProgress      },
+            { msgCode: NetMessageCodes.MsgChatGetAllReadProgressList,    callback: _onMsgChatGetAllReadProgressList  },
+        ], undefined);
     }
 
     export function reqChatAddMessage(
@@ -50,7 +55,7 @@ namespace TinyWars.Chat.ChatProxy {
     export function reqUpdateReadProgress(
         toCategory  : Types.ChatMessageToCategory,
         toTarget    : number,
-        timestamp   = Time.TimeModel.getServerTimestamp(),
+        timestamp   = Timer.getServerTimestamp(),
     ): void {
         NetManager.send({ MsgChatUpdateReadProgress: { c: {
             progress: {
@@ -79,3 +84,5 @@ namespace TinyWars.Chat.ChatProxy {
         }
     }
 }
+
+export default ChatProxy;

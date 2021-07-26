@@ -1,17 +1,33 @@
 
-namespace TinyWars.MultiRankRoom.MrrModel {
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Notify           = Utility.Notify;
-    import Logger           = Utility.Logger;
-    import ConfigManager    = Utility.ConfigManager;
-    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
-    import CommonConstants  = Utility.CommonConstants;
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
+import Logger                               from "../../tools/helpers/Logger";
+import Types                                from "../../tools/helpers/Types";
+import Notify                               from "../../tools/notify/Notify";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel                            from "../../user/model/UserModel";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import MrrProxy                             from "./MrrProxy";
+import MrrSelfSettingsModel                 from "./MrrSelfSettingsModel";
 
+namespace MrrModel {
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+    import NetMessage                               = ProtoTypes.NetMessage;
+    import IMrrRoomInfo                             = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+
+    let _previewingRoomId           : number;
+    let _previewingMapId            : number;
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;
-    const _allRoomDict              = new Map<number, IMrrRoomInfo>();
+    const _roomInfoDict             = new Map<number, IMrrRoomInfo>();
     const _roomInfoRequests         = new Map<number, ((info: NetMessage.MsgMrrGetRoomPublicInfo.IS | undefined | null) => void)[]>();
 
     export function setMaxConcurrentCount(hasFog: boolean, count: number): void {
@@ -25,31 +41,29 @@ namespace TinyWars.MultiRankRoom.MrrModel {
         return hasFog ? _maxConcurrentCountForFog : _maxConcurrentCountForStd;
     }
 
-    export function setRoomInfo(roomInfo: IMrrRoomInfo): void {
-        _allRoomDict.set(roomInfo.roomId, roomInfo);
+    function setRoomInfo(roomId: number, roomInfo: IMrrRoomInfo | undefined): void {
+        _roomInfoDict.set(roomId, roomInfo);
     }
     export function getRoomInfo(roomId: number): Promise<IMrrRoomInfo | undefined | null> {
         if (roomId == null) {
-            return new Promise((resolve, reject) => resolve(null));
+            return new Promise((resolve) => resolve(null));
         }
-
-        const localData = _allRoomDict.get(roomId);
-        if (localData) {
-            return new Promise(resolve => resolve(localData));
+        if (_roomInfoDict.has(roomId)) {
+            return new Promise(resolve => resolve(_roomInfoDict.get(roomId)));
         }
 
         if (_roomInfoRequests.has(roomId)) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 _roomInfoRequests.get(roomId).push(info => resolve(info.roomInfo));
             });
         }
 
-        new Promise<void>((resolve, reject) => {
+        new Promise<void>((resolve) => {
             const callbackOnSucceed = (e: egret.Event): void => {
                 const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
                 if (data.roomId === roomId) {
-                    Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
+                    Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
+                    Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
 
                     for (const cb of _roomInfoRequests.get(roomId)) {
                         cb(data);
@@ -62,8 +76,8 @@ namespace TinyWars.MultiRankRoom.MrrModel {
             const callbackOnFailed = (e: egret.Event): void => {
                 const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
                 if (data.roomId === roomId) {
-                    Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
+                    Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
+                    Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
 
                     for (const cb of _roomInfoRequests.get(roomId)) {
                         cb(data);
@@ -74,33 +88,25 @@ namespace TinyWars.MultiRankRoom.MrrModel {
                 }
             };
 
-            Notify.addEventListener(Notify.Type.MsgMrrGetRoomPublicInfo,        callbackOnSucceed);
-            Notify.addEventListener(Notify.Type.MsgMrrGetRoomPublicInfoFailed,  callbackOnFailed);
+            Notify.addEventListener(NotifyType.MsgMrrGetRoomPublicInfo,        callbackOnSucceed);
+            Notify.addEventListener(NotifyType.MsgMrrGetRoomPublicInfoFailed,  callbackOnFailed);
 
             MrrProxy.reqMrrGetRoomPublicInfo(roomId);
         });
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo)]);
         });
-    }
-    export function deleteRoomInfo(roomId: number): void {
-        const roomInfo = _allRoomDict.get(roomId);
-        _allRoomDict.delete(roomId);
-
-        if ((roomInfo) && (checkIsMyRoom(roomInfo))) {
-            Notify.dispatch(Notify.Type.MrrMyRoomDeleted);
-        }
     }
 
     export function updateWithMyRoomInfoList(roomList: IMrrRoomInfo[]): void {
         for (const roomInfo of roomList || []) {
-            setRoomInfo(roomInfo);
+            setRoomInfo(roomInfo.roomId, roomInfo);
         }
     }
     export function getMyRoomIdArray(): number[] {
         const idArray: number[] = [];
-        for (const [roomId, roomInfo] of _allRoomDict) {
+        for (const [roomId, roomInfo] of _roomInfoDict) {
             if (checkIsMyRoom(roomInfo)) {
                 idArray.push(roomId);
             }
@@ -109,12 +115,12 @@ namespace TinyWars.MultiRankRoom.MrrModel {
     }
 
     export async function updateOnMsgMrrGetRoomPublicInfo(data: ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS): Promise<void> {
-        const roomInfo = data.roomInfo;
-        setRoomInfo(data.roomInfo);
+        const roomInfo  = data.roomInfo;
+        const roomId    = roomInfo.roomId;
+        setRoomInfo(roomId, roomInfo);
 
-        const roomId = roomInfo.roomId;
-        if (SelfSettings.getRoomId() === roomId) {
-            await SelfSettings.resetData(roomId);
+        if (MrrSelfSettingsModel.getRoomId() === roomId) {
+            await MrrSelfSettingsModel.resetData(roomId);
         }
     }
     export async function updateOnMsgMrrSetBannedCoIdList(data: ProtoTypes.NetMessage.MsgMrrSetBannedCoIdList.IS): Promise<void> {
@@ -182,6 +188,15 @@ namespace TinyWars.MultiRankRoom.MrrModel {
             }
         }
     }
+    export function updateOnMsgMrrDeleteRoomByServer(data: ProtoTypes.NetMessage.MsgMrrDeleteRoomByServer.IS): void {
+        const roomId        = data.roomId;
+        const oldRoomInfo   = _roomInfoDict.get(roomId);
+        setRoomInfo(roomId, undefined);
+
+        if ((oldRoomInfo) && (checkIsMyRoom(oldRoomInfo))) {
+            Notify.dispatch(NotifyType.MrrMyRoomDeleted);
+        }
+    }
 
     export async function checkIsRed(): Promise<boolean> {
         for (const roomId of getMyRoomIdArray()) {
@@ -197,7 +212,7 @@ namespace TinyWars.MultiRankRoom.MrrModel {
             return false;
         }
 
-        const selfUserId = User.UserModel.getSelfUserId();
+        const selfUserId = UserModel.getSelfUserId();
         const playerData = roomInfo.playerDataList.find(v => v.userId === selfUserId);
         if (playerData == null) {
             return false;
@@ -213,182 +228,146 @@ namespace TinyWars.MultiRankRoom.MrrModel {
         }
     }
 
-    export namespace Joined {
-        let _previewingRoomId   : number;
-
-        export function getPreviewingRoomId(): number {
-            return _previewingRoomId;
-        }
-        export function setPreviewingRoomId(roomId: number | null): void {
-            if (getPreviewingRoomId() != roomId) {
-                _previewingRoomId = roomId;
-                Notify.dispatch(Notify.Type.MrrJoinedPreviewingRoomIdChanged);
-            }
+    export function getPreviewingRoomId(): number {
+        return _previewingRoomId;
+    }
+    export function setPreviewingRoomId(roomId: number | null): void {
+        if (getPreviewingRoomId() != roomId) {
+            _previewingRoomId = roomId;
+            Notify.dispatch(NotifyType.MrrJoinedPreviewingRoomIdChanged);
         }
     }
 
-    export namespace PreviewMap {
-        let _previewingMapId: number;
-
-        export function getPreviewingMapId(): number | null | undefined {
-            return _previewingMapId;
-        }
-        export function setPreviewingMapId(mapId: number): void {
-            if (getPreviewingMapId() != mapId) {
-                _previewingMapId = mapId;
-                Notify.dispatch(Notify.Type.MrrPreviewingMapIdChanged);
-            }
+    export function getPreviewingMapId(): number | null | undefined {
+        return _previewingMapId;
+    }
+    export function setPreviewingMapId(mapId: number): void {
+        if (getPreviewingMapId() != mapId) {
+            _previewingMapId = mapId;
+            Notify.dispatch(NotifyType.MrrPreviewingMapIdChanged);
         }
     }
 
-    export namespace SelfSettings {
-        let _roomId             : number | null | undefined;
-        let _coId               : number | null | undefined;
-        let _unitAndTileSkinId  : number | null | undefined;
-        let _availableCoIdArray : number[] | null | undefined;
-
-        export async function resetData(roomId: number): Promise<void> {
-            setRoomId(roomId);
-            setCoId(null);
-            setUnitAndTileSkinId(null);
-            setAvailableCoIdArray(null);
-
-            const roomInfo          = await getRoomInfo(roomId);
-            const playerDataList    = roomInfo ? roomInfo.playerDataList || [] : [];
-            const selfUserId        = User.UserModel.getSelfUserId();
-            const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
-            if ((roomInfo.timeForStartSetSelfSettings == null) || (selfPlayerData == null)) {
-                return;
-            }
-
-            const selfPlayerIndex       = selfPlayerData.playerIndex;
-            const availableCoIdArray    = generateAvailableCoIdArray(roomInfo, selfPlayerIndex);
-            if ((availableCoIdArray == null) || (!availableCoIdArray.length)) {
-                Logger.error(`MrrModel.SelfSettings.resetData() empty availableCoIdArray.`);
-                return undefined;
-            }
-            setAvailableCoIdArray(availableCoIdArray);
-
-            if (selfPlayerData.isReady) {
-                setCoId(selfPlayerData.coId);
-                setUnitAndTileSkinId(selfPlayerData.unitAndTileSkinId);
-            } else {
-                const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
-                if ((availableSkinIdList == null) || (!availableSkinIdList.length)) {
-                    Logger.error(`MrrModel.SelfSettings.resetData() empty availableSkinIdList.`);
-                    return undefined;
-                }
-
-                setCoId(CommonConstants.CoEmptyId);
-                setUnitAndTileSkinId(availableSkinIdList.indexOf(selfPlayerIndex) >= 0 ? selfPlayerIndex : availableSkinIdList[0]);
-            }
-        }
-        function setRoomId(roomId: number | null | undefined): void {
-            _roomId = roomId;
-        }
-        export function getRoomId(): number | null | undefined {
-            return _roomId;
+    export async function createDataForCommonWarPlayerInfoPage(roomId: number): Promise<OpenDataForCommonWarPlayerInfoPage | undefined> {
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return undefined;
         }
 
-        export function setCoId(coId: number | null | undefined): void {
-            if (_coId !== coId) {
-                _coId = coId;
-                Notify.dispatch(Notify.Type.MrrSelfSettingsCoIdChanged);
-            }
-        }
-        export function getCoId(): number | null | undefined {
-            return _coId;
-        }
-
-        export function setUnitAndTileSkinId(skinId: number | null | undefined): void {
-            if (_unitAndTileSkinId !== skinId) {
-                _unitAndTileSkinId = skinId;
-                Notify.dispatch(Notify.Type.MrrSelfSettingsSkinIdChanged);
-            }
-        }
-        export function getUnitAndTileSkinId(): number | null | undefined {
-            return _unitAndTileSkinId;
+        const settingsForCommon = roomInfo.settingsForCommon;
+        const warRule           = settingsForCommon.warRule;
+        const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        for (const playerInfo of (roomInfo.playerDataList || [])) {
+            const playerIndex = playerInfo.playerIndex;
+            playerInfoArray.push({
+                playerIndex,
+                teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                isAi                : false,
+                userId              : playerInfo.userId,
+                coId                : playerInfo.coId,
+                unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
+                isReady             : playerInfo.isReady,
+                isInTurn            : undefined,
+                isDefeat            : undefined,
+            });
         }
 
-        function setAvailableCoIdArray(idArray: number[] | null | undefined): void {
-            _availableCoIdArray = idArray;
-        }
-        export function getAvailableCoIdArray(): number[] | null | undefined {
-            return _availableCoIdArray;
-        }
-        function generateAvailableCoIdArray(roomInfo: IMrrRoomInfo, playerIndex: number): number[] | undefined {
-            const settingsForCommon = roomInfo.settingsForCommon;
-            if (settingsForCommon == null) {
-                Logger.error(`MrrModel.generateAvailableCoIdList() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            const configVersion = settingsForCommon.configVersion;
-            if (configVersion == null) {
-                Logger.error(`MrrModel.generateAvailableCoIdList() empty configVersion.`);
-                return undefined;
-            }
-
-            const settingsForMrw = roomInfo.settingsForMrw;
-            if (settingsForMrw == null) {
-                Logger.error(`MrrModel.generateAvailableCoIdList() empty settingsForMrw.`);
-                return undefined;
-            }
-
-            const dataArrayForBanCo = settingsForMrw.dataArrayForBanCo;
-            if (dataArrayForBanCo == null) {
-                Logger.error(`MrrModel.generateAvailableCoIdList() empty dataArrayForBanCo.`);
-                return undefined;
-            }
-
-            const playerRule = BwWarRuleHelper.getPlayerRule(settingsForCommon.warRule, playerIndex);
-            if (playerRule == null) {
-                Logger.error(`MrrModel.generateAvailableCoIdList() empty playerRule.`);
-                return undefined;
-            }
-
-            const bannedCoIdSet = new Set<number>(playerRule.bannedCoIdArray);
-            for (const data of dataArrayForBanCo) {
-                for (const coId of data.bannedCoIdList || []) {
-                    bannedCoIdSet.add(coId);
-                }
-            }
-
-            return BwWarRuleHelper.getAvailableCoIdArray(configVersion, bannedCoIdSet);
-        }
-
-        function generateAvailableSkinIdList(roomInfo: IMrrRoomInfo): number[] | undefined {
-            const playerDataList = roomInfo.playerDataList;
-            if (playerDataList == null) {
-                Logger.error(`MrrModel.SelfSettings.generateAvailableSkinIdList() empty playerDataList.`);
-                return undefined;
-            }
-
-            const usedSkinIds = new Set<number>();
-            for (const playerData of playerDataList) {
-                if (playerData.isReady) {
-                    const skinId = playerData.unitAndTileSkinId;
-                    if (usedSkinIds.has(skinId)) {
-                        Logger.error(`MrrModel.SelfSettings.generateAvailableSkinIdList() duplicated skinId!`);
-                        return undefined;
-                    }
-
-                    usedSkinIds.add(skinId);
-                }
-            }
-
-            const availableSkinIdList: number[] = [];
-            for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
-                if (!usedSkinIds.has(skinId)) {
-                    availableSkinIdList.push(skinId);
-                }
-            }
-            return availableSkinIdList;
-        }
+        return {
+            configVersion           : settingsForCommon.configVersion,
+            playersCountUnneutral   : WarRuleHelpers.getPlayersCount(warRule),
+            roomOwnerPlayerIndex    : undefined,
+            callbackOnExitRoom      : undefined,
+            callbackOnDeletePlayer  : undefined,
+            playerInfoArray,
+        };
     }
 
-    function checkIsMyRoom(roomInfo: IMrrRoomInfo): boolean {
-        const selfUserId = User.UserModel.getSelfUserId();
-        return roomInfo.playerDataList.some(v => v.userId === selfUserId);
+    export async function createDataForCommonWarBasicSettingsPage(roomId: number): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return { dataArrayForListSettings: [] };
+        }
+
+        const warRule           = roomInfo.settingsForCommon.warRule;
+        const settingsForMrw    = roomInfo.settingsForMrw;
+        const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+        const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const openData          : OpenDataForCommonWarBasicSettingsPage = {
+            dataArrayForListSettings    : [
+                {
+                    settingsType    : WarBasicSettingsType.MapName,
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(settingsForMrw.mapId),
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarRuleTitle,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.HasFog,
+                    currentValue    : undefined,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerType,
+                    currentValue    : timerType,
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            ],
+        };
+        if (timerType === Types.BootTimerType.Regular) {
+            openData.dataArrayForListSettings.push({
+                settingsType    : WarBasicSettingsType.TimerRegularParam,
+                currentValue    : bootTimerParams[1],
+                warRule,
+                callbackOnModify: undefined,
+            });
+        } else if (timerType === Types.BootTimerType.Incremental) {
+            openData.dataArrayForListSettings.push(
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                    currentValue    : bootTimerParams[2],
+                    warRule,
+                    callbackOnModify: undefined,
+                },
+            );
+        } else {
+            Logger.error(`MrrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+        }
+
+        return openData;
+    }
+
+    export async function createDataForCommonWarAdvancedSettingsPage(roomId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage | undefined> {
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return undefined;
+        }
+
+        const settingsForCommon = roomInfo.settingsForCommon;
+        const warRule           = settingsForCommon.warRule;
+        return {
+            configVersion   : settingsForCommon.configVersion,
+            warRule,
+            warType         : warRule.ruleForGlobalParams.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+        };
+    }
+
+    function checkIsMyRoom(roomInfo: IMrrRoomInfo | undefined): boolean {
+        const selfUserId = UserModel.getSelfUserId();
+        return roomInfo?.playerDataList?.some(v => v.userId === selfUserId);
     }
 }
+
+export default MrrModel;

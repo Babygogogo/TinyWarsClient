@@ -22,14 +22,15 @@
     var protobuf = global.protobuf = $require(entries[0]);
 
     // Be nice to AMD
-    if (typeof define === "function" && define.amd)
-        define(["long"], function(Long) {
-            if (Long && Long.isLong) {
-                protobuf.util.Long = Long;
-                protobuf.configure();
-            }
-            return protobuf;
-        });
+    // Commented because it errors when egret compiles
+    // if (typeof define === "function" && define.amd)
+    //     define(["long"], function(Long) {
+    //         if (Long && Long.isLong) {
+    //             protobuf.util.Long = Long;
+    //             protobuf.configure();
+    //         }
+    //         return protobuf;
+    //     });
 
     // Be nice to CommonJS
     if (typeof module === "object" && module && module.exports)

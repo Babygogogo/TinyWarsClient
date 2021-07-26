@@ -1,18 +1,33 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.CoopCustomRoom {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import ConfigManager    = Utility.ConfigManager;
-    import CommonConstants  = Utility.CommonConstants;
-    import FloatText        = Utility.FloatText;
-    import Logger           = Utility.Logger;
-    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
-    import CreateModel      = CcrModel.Create;
+import TwnsCommonChooseCoPanel  from "../../common/view/CommonChooseCoPanel";
+import TwnsCommonCoInfoPanel    from "../../common/view/CommonCoInfoPanel";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import FloatText                from "../../tools/helpers/FloatText";
+import Logger                   from "../../tools/helpers/Logger";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
+import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
+import CcrCreateModel           from "../model/CcrCreateModel";
 
-    export class CcrCreatePlayerInfoPage extends GameUi.UiTabPage<void> {
+namespace TwnsCcrCreatePlayerInfoPage {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import CommonCoInfoPanel    = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
+    import CommonChooseCoPanel  = TwnsCommonChooseCoPanel.CommonChooseCoPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+
+    export class CcrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _groupInfo     : eui.Group;
-        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -36,7 +51,7 @@ namespace TinyWars.CoopCustomRoom {
         }
 
         private async _updateComponentsForPlayerInfo(): Promise<void> {
-            const mapRawData    = await CreateModel.getMapRawData();
+            const mapRawData    = await CcrCreateModel.getMapRawData();
             const listPlayer    = this._listPlayer;
             if (mapRawData) {
                 listPlayer.bindData(this._createDataForListPlayer(mapRawData.playersCountUnneutral));
@@ -62,20 +77,20 @@ namespace TinyWars.CoopCustomRoom {
         playerIndex     : number;
         page            : CcrCreatePlayerInfoPage;
     };
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
+    class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
         private readonly _groupCo               : eui.Group;
-        private readonly _imgSkin               : GameUi.UiImage;
-        private readonly _imgCoInfo             : GameUi.UiImage;
-        private readonly _imgCoHead             : GameUi.UiImage;
-        private readonly _labelCo               : GameUi.UiLabel;
-        private readonly _labelPlayerType       : GameUi.UiLabel;
+        private readonly _imgSkin               : TwnsUiImage.UiImage;
+        private readonly _imgCoInfo             : TwnsUiImage.UiImage;
+        private readonly _imgCoHead             : TwnsUiImage.UiImage;
+        private readonly _labelCo               : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerType       : TwnsUiLabel.UiLabel;
 
-        private readonly _labelPlayerIndex      : GameUi.UiLabel;
-        private readonly _labelTeamIndex        : GameUi.UiLabel;
+        private readonly _labelPlayerIndex      : TwnsUiLabel.UiLabel;
+        private readonly _labelTeamIndex        : TwnsUiLabel.UiLabel;
 
-        private readonly _btnChangeCo           : GameUi.UiButton;
-        private readonly _btnChangeController   : GameUi.UiButton;
-        private readonly _btnChangeSkinId       : GameUi.UiButton;
+        private readonly _btnChangeCo           : TwnsUiButton.UiButton;
+        private readonly _btnChangeController   : TwnsUiButton.UiButton;
+        private readonly _btnChangeSkinId       : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -85,7 +100,7 @@ namespace TinyWars.CoopCustomRoom {
                 { ui: this._btnChangeSkinId,        callback: this._onTouchedBtnChangeSkinId },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
             this._updateComponentsForLanguage();
@@ -93,10 +108,10 @@ namespace TinyWars.CoopCustomRoom {
 
         private async _onTouchedGroupCo(): Promise<void> {
             const playerIndex       = this.data.playerIndex;
-            const settingsForCommon = CreateModel.getData().settingsForCommon;
+            const settingsForCommon = CcrCreateModel.getData().settingsForCommon;
             const playerRule        = (settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray || []).find(v => v.playerIndex === playerIndex);
-            const coId              = (CreateModel.getSelfPlayerIndex() === playerIndex) ? (CreateModel.getSelfCoId()) : (playerRule.fixedCoIdInCcw);
-            Common.CommonCoInfoPanel.show({
+            const coId              = (CcrCreateModel.getSelfPlayerIndex() === playerIndex) ? (CcrCreateModel.getSelfCoId()) : (playerRule.fixedCoIdInCcw);
+            CommonCoInfoPanel.show({
                 configVersion   : settingsForCommon.configVersion,
                 coId,
             });
@@ -104,7 +119,7 @@ namespace TinyWars.CoopCustomRoom {
 
         private async _onTouchedBtnChangeController(): Promise<void> {
             const data                  = this.data;
-            const playerRuleArray       = CreateModel.getWarRule().ruleForPlayers.playerRuleDataArray || [];
+            const playerRuleArray       = CcrCreateModel.getWarRule().ruleForPlayers.playerRuleDataArray || [];
             const humanPlayerIndexSet   = new Set<number>();
             const aiPlayerIndexSet      = new Set<number>();
             for (const playerRule of playerRuleArray) {
@@ -123,29 +138,29 @@ namespace TinyWars.CoopCustomRoom {
                 return;
             }
 
-            if (playerIndex === CreateModel.getSelfPlayerIndex()) {
+            if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
                 if (humanPlayerIndexSet.size < 2) {
-                    FloatText.show(Lang.getText(Lang.Type.A0222));
+                    FloatText.show(Lang.getText(LangTextType.A0222));
                 } else {
                     const callback = () => {
                         for (const p of humanPlayerIndexSet) {
                             if (p !== playerIndex) {
-                                CreateModel.setSelfPlayerIndex(p);
+                                CcrCreateModel.setSelfPlayerIndex(p);
                                 break;
                             }
                         }
                         playerRule.fixedCoIdInCcw = CommonConstants.CoEmptyId;
-                        CreateModel.setAiSkinId(playerIndex, playerIndex);
+                        CcrCreateModel.setAiSkinId(playerIndex, playerIndex);
                         data.page.updateView();
                     };
 
-                    if (CreateModel.getPresetWarRuleId() == null) {
+                    if (CcrCreateModel.getPresetWarRuleId() == null) {
                         callback();
                     } else {
-                        Common.CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0129),
+                        CommonConfirmPanel.show({
+                            content : Lang.getText(LangTextType.A0129),
                             callback: () => {
-                                CreateModel.setCustomWarRuleId();
+                                CcrCreateModel.setCustomWarRuleId();
                                 callback();
                             },
                         });
@@ -154,22 +169,22 @@ namespace TinyWars.CoopCustomRoom {
 
             } else {
                 if (playerRule.fixedCoIdInCcw == null) {
-                    CreateModel.setSelfPlayerIndex(playerIndex);
+                    CcrCreateModel.setSelfPlayerIndex(playerIndex);
                     data.page.updateView();
                 } else {
                     const callback = () => {
                         playerRule.fixedCoIdInCcw = null;
-                        CreateModel.deleteAiSkinId(playerIndex);
+                        CcrCreateModel.deleteAiSkinId(playerIndex);
                         data.page.updateView();
                     };
 
-                    if (CreateModel.getPresetWarRuleId() == null) {
+                    if (CcrCreateModel.getPresetWarRuleId() == null) {
                         callback();
                     } else {
-                        Common.CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0129),
+                        CommonConfirmPanel.show({
+                            content : Lang.getText(LangTextType.A0129),
                             callback: () => {
-                                CreateModel.setCustomWarRuleId();
+                                CcrCreateModel.setCustomWarRuleId();
                                 callback();
                             },
                         });
@@ -182,27 +197,27 @@ namespace TinyWars.CoopCustomRoom {
         }
 
         private async _onTouchedBtnChangeSkinId(): Promise<void> {
-            CreateModel.tickUnitAndTileSkinId(this.data.playerIndex);
+            CcrCreateModel.tickUnitAndTileSkinId(this.data.playerIndex);
             this._updateComponentsForSettings();
         }
 
         private async _onTouchedBtnChangeCo(): Promise<void> {
             const playerIndex   = this.data.playerIndex;
-            const warRule       = CreateModel.getWarRule();
+            const warRule       = CcrCreateModel.getWarRule();
             const playerRule    = (warRule.ruleForPlayers.playerRuleDataArray || []).find(v => v.playerIndex === playerIndex);
             if (playerRule == null) {
                 Logger.error(`CcrCreatePlayerInfoPage.PlayerRenderer._onTouchedBtnChangeCo() empty playerRule.`);
                 return;
             }
 
-            const configVersion = CreateModel.getData().settingsForCommon.configVersion;
-            if (playerIndex === CreateModel.getSelfPlayerIndex()) {
-                Common.CommonChooseCoPanel.show({
-                    currentCoId         : CreateModel.getSelfCoId(),
-                    availableCoIdArray  : BwWarRuleHelper.getAvailableCoIdArrayForPlayer(warRule, playerIndex, configVersion),
+            const configVersion = CcrCreateModel.getData().settingsForCommon.configVersion;
+            if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
+                CommonChooseCoPanel.show({
+                    currentCoId         : CcrCreateModel.getSelfCoId(),
+                    availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(warRule, playerIndex, configVersion),
                     callbackOnConfirm   : (coId) => {
-                        if (coId !== CreateModel.getSelfCoId()) {
-                            CreateModel.setSelfCoId(coId);
+                        if (coId !== CcrCreateModel.getSelfCoId()) {
+                            CcrCreateModel.setSelfCoId(coId);
                             this._updateComponentsForSettings();
                         }
                     },
@@ -216,12 +231,12 @@ namespace TinyWars.CoopCustomRoom {
                             coIdArray.push(cfg.coId);
                         }
 
-                        Common.CommonChooseCoPanel.show({
+                        CommonChooseCoPanel.show({
                             currentCoId         : coId,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId) => {
                                 if (newCoId !== coId) {
-                                    CreateModel.setAiCoId(playerIndex, newCoId);
+                                    CcrCreateModel.setAiCoId(playerIndex, newCoId);
                                     this._updateComponentsForSettings();
                                 }
                             },
@@ -231,10 +246,10 @@ namespace TinyWars.CoopCustomRoom {
                     if (warRule.ruleId == null) {
                         callback();
                     } else {
-                        Common.CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0129),
+                        CommonConfirmPanel.show({
+                            content : Lang.getText(LangTextType.A0129),
                             callback: () => {
-                                CreateModel.setCustomWarRuleId();
+                                CcrCreateModel.setCustomWarRuleId();
                                 callback();
                             },
                         });
@@ -252,13 +267,13 @@ namespace TinyWars.CoopCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnChangeCo.label         = Lang.getText(Lang.Type.B0230);
-            this._btnChangeController.label = Lang.getText(Lang.Type.B0608);
-            this._btnChangeSkinId.label     = Lang.getText(Lang.Type.B0609);
+            this._btnChangeCo.label         = Lang.getText(LangTextType.B0230);
+            this._btnChangeController.label = Lang.getText(LangTextType.B0608);
+            this._btnChangeSkinId.label     = Lang.getText(LangTextType.B0609);
         }
 
         private async _updateComponentsForSettings(): Promise<void> {
-            const roomInfo  = CreateModel.getData();
+            const roomInfo  = CcrCreateModel.getData();
             if (!roomInfo) {
                 return;
             }
@@ -275,21 +290,21 @@ namespace TinyWars.CoopCustomRoom {
 
             this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerRule.teamIndex);
 
-            const isSelfPlayer      = CreateModel.getSelfPlayerIndex() === playerIndex;
+            const isSelfPlayer      = CcrCreateModel.getSelfPlayerIndex() === playerIndex;
             const isHumanPlayer     = playerRule.fixedCoIdInCcw == null;
             this._imgSkin.source    = getSourceForImgSkin(
                 isSelfPlayer
-                    ? CreateModel.getSelfUnitAndTileSkinId()
-                    : (isHumanPlayer ? null : CreateModel.getAiSkinId(playerIndex))
+                    ? CcrCreateModel.getSelfUnitAndTileSkinId()
+                    : (isHumanPlayer ? null : CcrCreateModel.getAiSkinId(playerIndex))
             );
 
             this._labelPlayerType.text  = isSelfPlayer
-                ? Lang.getText(Lang.Type.B0647)
+                ? Lang.getText(LangTextType.B0647)
                 : (isHumanPlayer
-                    ? Lang.getText(Lang.Type.B0648)
-                    : Lang.getText(Lang.Type.B0607));
+                    ? Lang.getText(LangTextType.B0648)
+                    : Lang.getText(LangTextType.B0607));
 
-            const coId                      = isSelfPlayer ? CreateModel.getSelfCoId() : playerRule.fixedCoIdInCcw;
+            const coId                      = isSelfPlayer ? CcrCreateModel.getSelfCoId() : playerRule.fixedCoIdInCcw;
             const coCfg                     = ConfigManager.getCoBasicCfg(settingsForCommon.configVersion, coId);
             this._labelCo.text              = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source          = ConfigManager.getCoHeadImageSource(coId);
@@ -309,3 +324,5 @@ namespace TinyWars.CoopCustomRoom {
         }
     }
 }
+
+export default TwnsCcrCreatePlayerInfoPage;

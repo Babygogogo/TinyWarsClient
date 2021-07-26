@@ -1,14 +1,20 @@
 
-namespace TinyWars.MultiPlayerWar {
-    export class MpwPlayerManager extends BaseWar.BwPlayerManager {
-        private _loggedInPlayer : BaseWar.BwPlayer;
+import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
+import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
+import UserModel            from "../../user/model/UserModel";
+
+namespace TwnsMpwPlayerManager {
+    import BwPlayerManager = TwnsBwPlayerManager.BwPlayerManager;
+
+    export class MpwPlayerManager extends BwPlayerManager {
+        private _loggedInPlayer : TwnsBwPlayer.BwPlayer;
 
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getPlayerLoggedIn(): BaseWar.BwPlayer | undefined {
+        public getPlayerLoggedIn(): TwnsBwPlayer.BwPlayer | undefined {
             if (!this._loggedInPlayer) {
-                const userId = User.UserModel.getSelfUserId();
+                const userId = UserModel.getSelfUserId();
                 for (const [, player] of this.getAllPlayersDict()) {
                     if (player.getUserId() === userId) {
                         this._loggedInPlayer = player;
@@ -25,7 +31,9 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         public getAliveWatcherTeamIndexesForSelf(): Set<number> {
-            return this.getAliveWatcherTeamIndexes(User.UserModel.getSelfUserId());
+            return this.getAliveWatcherTeamIndexes(UserModel.getSelfUserId());
         }
     }
 }
+
+export default TwnsMpwPlayerManager;

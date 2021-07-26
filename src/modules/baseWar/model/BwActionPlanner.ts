@@ -1,24 +1,42 @@
 
-namespace TinyWars.BaseWar {
-    import Types                = Utility.Types;
-    import Notify               = Utility.Notify;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import Logger               = Utility.Logger;
-    import Helpers              = Utility.Helpers;
-    import ClientErrorCode      = Utility.ClientErrorCode;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import UnitState            = Types.UnitActionState;
-    import GridIndex            = Types.GridIndex;
-    import State                = Types.ActionPlannerState;
-    import MovableArea          = Types.MovableArea;
-    import AttackableArea       = Types.AttackableArea;
-    import MovePathNode         = Types.MovePathNode;
-    import UnitActionType       = Types.UnitActionType;
+import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Logger                   from "../../tools/helpers/Logger";
+import Types                    from "../../tools/helpers/Types";
+import Notify                   from "../../tools/notify/Notify";
+import NotifyData               from "../../tools/notify/NotifyData";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import UserModel                from "../../user/model/UserModel";
+import TwnsBwActionPlannerView  from "../view/BwActionPlannerView";
+import TwnsBwUnitActionsPanel   from "../view/BwUnitActionsPanel";
+import TwnsBwCursor             from "./BwCursor";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsBwTileMap            from "./BwTileMap";
+import TwnsBwTurnManager        from "./BwTurnManager";
+import TwnsBwUnit               from "./BwUnit";
+import TwnsBwUnitMap            from "./BwUnitMap";
+import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwWar                from "./BwWar";
+
+namespace TwnsBwActionPlanner {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import UnitState        = Types.UnitActionState;
+    import GridIndex        = Types.GridIndex;
+    import State            = Types.ActionPlannerState;
+    import MovableArea      = Types.MovableArea;
+    import AttackableArea   = Types.AttackableArea;
+    import MovePathNode     = Types.MovePathNode;
+    import UnitActionType   = Types.UnitActionType;
+    import BwUnit           = TwnsBwUnit.BwUnit;
+    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+    import BwWar            = TwnsBwWar.BwWar;
 
     type ChosenUnitForDrop = {
         unit        : BwUnit;
         destination : GridIndex;
-    }
+    };
     export type DataForUnitAction = {
         actionType      : UnitActionType;
         callback        : () => void;
@@ -26,10 +44,10 @@ namespace TinyWars.BaseWar {
         unitForDrop?    : BwUnit;
         produceUnitType?: Types.UnitType;
         canProduceUnit? : boolean;
-    }
+    };
 
     export abstract class BwActionPlanner {
-        private readonly _view  = new BwActionPlannerView();
+        private readonly _view  = new TwnsBwActionPlannerView.BwActionPlannerView();
 
         private _war        : BwWar;
         private _mapSize    : Types.MapSize;
@@ -53,9 +71,9 @@ namespace TinyWars.BaseWar {
         private _areaForPreviewMove     : MovableArea;
 
         private _notifyListeners: Notify.Listener[] = [
-            { type: Notify.Type.BwCursorTapped,    callback: this._onNotifyBwCursorTapped },
-            { type: Notify.Type.BwCursorDragged,   callback: this._onNotifyBwCursorDragged },
-            { type: Notify.Type.BwCursorDragEnded, callback: this._onNotifyBwCursorDragEnded },
+            { type: NotifyType.BwCursorTapped,    callback: this._onNotifyBwCursorTapped },
+            { type: NotifyType.BwCursorDragged,   callback: this._onNotifyBwCursorDragged },
+            { type: NotifyType.BwCursorDragEnded, callback: this._onNotifyBwCursorDragEnded },
         ];
 
         public init(mapSize: Types.MapSize): ClientErrorCode {
@@ -92,13 +110,13 @@ namespace TinyWars.BaseWar {
         protected _getUnitMap(): BwUnitMap {
             return this._getWar().getUnitMap();
         }
-        protected _getTileMap(): BwTileMap {
+        protected _getTileMap(): TwnsBwTileMap.BwTileMap {
             return this._getWar().getTileMap();
         }
-        protected _getTurnManager(): BwTurnManager {
+        protected _getTurnManager(): TwnsBwTurnManager.BwTurnManager {
             return this._getWar().getTurnManager();
         }
-        public getCursor(): BwCursor | undefined {
+        public getCursor(): TwnsBwCursor.BwCursor | undefined {
             const war = this._getWar();
             return war ? war.getCursor() : undefined;
         }
@@ -115,7 +133,7 @@ namespace TinyWars.BaseWar {
             this._getWar().getView().tweenGridToCentralArea(gridIndex);
 
             if ((nextState === this.getState())                                                 &&
-                ((nextState === State.ExecutingAction) || (BwHelpers.checkIsStateRequesting(nextState)))
+                ((nextState === State.ExecutingAction) || (WarCommonHelpers.checkIsStateRequesting(nextState)))
             ) {
                 // Do noting.
             } else {
@@ -200,10 +218,10 @@ namespace TinyWars.BaseWar {
         private _onNotifyBwCursorDragged(e: egret.Event): void {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnDrag(gridIndex);
-            this._getWar().getView().tweenGridToCentralArea((e.data as Notify.Data.BwCursorDragged).draggedTo);
+            this._getWar().getView().tweenGridToCentralArea((e.data as NotifyData.BwCursorDragged).draggedTo);
 
             if ((nextState === this.getState())                                                 &&
-                ((nextState === State.ExecutingAction) || (BwHelpers.checkIsStateRequesting(nextState)))
+                ((nextState === State.ExecutingAction) || (WarCommonHelpers.checkIsStateRequesting(nextState)))
             ) {
                 // Do noting.
             } else {
@@ -272,7 +290,7 @@ namespace TinyWars.BaseWar {
             this._prevState = this._state;
             this._state     = state;
             Logger.log(`BwActionPlanner._setState() ${state}`);
-            Notify.dispatch(Notify.Type.BwActionPlannerStateChanged);
+            Notify.dispatch(NotifyType.BwActionPlannerStateChanged);
         }
 
         public setStateIdle(): void {
@@ -433,14 +451,14 @@ namespace TinyWars.BaseWar {
                     // Do nothing.
                 } else {
                     const movableArea = this.getMovableArea();
-                    if (BwHelpers.checkAreaHasGrid(movableArea, gridIndex)) {
+                    if (WarCommonHelpers.checkAreaHasGrid(movableArea, gridIndex)) {
                         this._updateMovePathByDestination(gridIndex);
                     } else {
                         const attackableArea = this.getAttackableArea();
-                        if (!BwHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
+                        if (!WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
                             // Do nothing.
                         } else {
-                            const newPath = BwHelpers.createShortestMovePath(movableArea, attackableArea[gridIndex.x][gridIndex.y].movePathDestination);
+                            const newPath = WarCommonHelpers.createShortestMovePath(movableArea, attackableArea[gridIndex.x][gridIndex.y].movePathDestination);
                             if (focusUnit.checkCanAttackTargetAfterMovePath(newPath, gridIndex)) {
                                 this._setMovePath(newPath);
                             } else {
@@ -456,14 +474,14 @@ namespace TinyWars.BaseWar {
                     // Do nothing.
                 } else {
                     const movableArea = this.getMovableArea();
-                    if (BwHelpers.checkAreaHasGrid(movableArea, gridIndex)) {
+                    if (WarCommonHelpers.checkAreaHasGrid(movableArea, gridIndex)) {
                         this._updateMovePathByDestination(gridIndex);
                     } else {
                         const attackableArea = this.getAttackableArea();
-                        if (!BwHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
+                        if (!WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
                             // Do nothing.
                         } else {
-                            const newPath = BwHelpers.createShortestMovePath(movableArea, attackableArea[gridIndex.x][gridIndex.y].movePathDestination);
+                            const newPath = WarCommonHelpers.createShortestMovePath(movableArea, attackableArea[gridIndex.x][gridIndex.y].movePathDestination);
                             if (focusUnit.checkCanAttackTargetAfterMovePath(newPath, gridIndex)) {
                                 this._setMovePath(newPath);
                             } else {
@@ -529,7 +547,7 @@ namespace TinyWars.BaseWar {
                 Logger.error(`BwActionPlanner._setStateChoosingActionOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
                 } else {
                     if (!this.getFocusUnitLoaded()) {
@@ -543,7 +561,7 @@ namespace TinyWars.BaseWar {
                 }
 
             } else if (currState === State.ChoosingAction) {
-                if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
                 } else {
                     if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
@@ -1034,7 +1052,7 @@ namespace TinyWars.BaseWar {
         private _setStateChoosingActionOnDragEnded(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.MakingMovePath) {
-                if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
                 } else {
                     Logger.error(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 1, currState: ${currState}`);
@@ -1054,11 +1072,12 @@ namespace TinyWars.BaseWar {
         protected abstract _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void;
         protected abstract _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void;
         public abstract setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void;
+        public abstract setStateRequestingPlayerEndTurn(): void;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): BwActionPlannerView {
+        public getView(): TwnsBwActionPlannerView.BwActionPlannerView {
             return this._view;
         }
         protected abstract _updateView(): void;
@@ -1073,7 +1092,7 @@ namespace TinyWars.BaseWar {
         }
 
         public checkIsStateRequesting(): boolean {
-            return BwHelpers.checkIsStateRequesting(this.getState());
+            return WarCommonHelpers.checkIsStateRequesting(this.getState());
         }
 
         public getFocusUnit(): BwUnit | undefined {
@@ -1145,7 +1164,7 @@ namespace TinyWars.BaseWar {
 
         protected _resetMovableArea(): void {
             const unit = this.getFocusUnit();
-            this._movableArea = BwHelpers.createMovableArea({
+            this._movableArea = WarCommonHelpers.createMovableArea({
                 origin          : unit.getGridIndex(),
                 maxMoveCost     : unit.getFinalMoveRange(),
                 mapSize         : this._getWar().getTileMap().getMapSize(),
@@ -1163,7 +1182,7 @@ namespace TinyWars.BaseWar {
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
-            this._setAttackableArea(BwHelpers.createAttackableArea(
+            this._setAttackableArea(WarCommonHelpers.createAttackableArea(
                 {
                     movableArea: this.getMovableArea(), mapSize: this.getMapSize(), minAttackRange: unit.getMinAttackRange(), maxAttackRange: unit.getFinalMaxAttackRange(), checkCanAttack: (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
                         const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
@@ -1213,7 +1232,7 @@ namespace TinyWars.BaseWar {
         // Functions for move path.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _resetMovePathAsShortest(destination: GridIndex): void {
-            this._setMovePath(BwHelpers.createShortestMovePath(this.getMovableArea(), destination));
+            this._setMovePath(WarCommonHelpers.createShortestMovePath(this.getMovableArea(), destination));
         }
         private _setMovePath(movePath: MovePathNode[]): void {
             this._movePath = movePath;
@@ -1290,8 +1309,8 @@ namespace TinyWars.BaseWar {
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
             const unitMap               = this._getUnitMap();
-            const newArea               = BwHelpers.createAttackableArea({
-                movableArea: BwHelpers.createMovableArea({
+            const newArea               = WarCommonHelpers.createAttackableArea({
+                movableArea: WarCommonHelpers.createMovableArea({
                     origin          : unit.getGridIndex(),
                     maxMoveCost     : unit.getFinalMoveRange(),
                     mapSize,
@@ -1342,7 +1361,7 @@ namespace TinyWars.BaseWar {
         }
         private _setUnitForPreviewingMovableArea(unit: BwUnit): void {
             this._unitForPreviewMove = unit;
-            this._areaForPreviewMove = BwHelpers.createMovableArea({
+            this._areaForPreviewMove = WarCommonHelpers.createMovableArea({
                 origin          : unit.getGridIndex(),
                 maxMoveCost     : unit.getFinalMoveRange(),
                 mapSize         : this._getWar().getTileMap().getMapSize(),
@@ -1378,9 +1397,9 @@ namespace TinyWars.BaseWar {
         protected abstract _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State;
         private _getNextStateOnTapWhenMakingMovePath(gridIndex: GridIndex): State {
             const existingUnit = this._getUnitMap().getUnitOnMap(gridIndex);
-            if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+            if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                 if (!existingUnit) {
-                    if (!User.UserModel.getSelfSettingsIsSetPathMode()) {
+                    if (!UserModel.getSelfSettingsIsSetPathMode()) {
                         return State.ChoosingAction;
                     } else {
                         if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
@@ -1460,9 +1479,9 @@ namespace TinyWars.BaseWar {
                 // return State.MakingMovePath;
                 const existingUnit      = this._getUnitMap().getUnitOnMap(gridIndex);
                 const selfPlayerIndex   = this._getWar().getPlayerIndexInTurn();
-                if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                     if (!existingUnit) {
-                        if (!User.UserModel.getSelfSettingsIsSetPathMode()) {
+                        if (!UserModel.getSelfSettingsIsSetPathMode()) {
                             return State.ChoosingAction;
                         } else {
                             if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
@@ -1499,7 +1518,7 @@ namespace TinyWars.BaseWar {
                             }
                         }
                     }
-                 } else {
+                    } else {
                     if (this._checkCanFocusUnitOnMapAttackTarget(gridIndex)) {
                         if (!GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
                             return State.MakingMovePath;
@@ -1568,10 +1587,10 @@ namespace TinyWars.BaseWar {
             }
         }
         private _getNextStateOnDragEndedWhenMakingMovePath(gridIndex: GridIndex): State {
-            if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+            if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                 const existingUnit = this._getUnitMap().getUnitOnMap(gridIndex);
                 if (!existingUnit) {
-                    if (!User.UserModel.getSelfSettingsIsSetPathMode()) {
+                    if (!UserModel.getSelfSettingsIsSetPathMode()) {
                         return State.ChoosingAction;
                     } else {
                         return State.MakingMovePath;
@@ -1600,7 +1619,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getDataForUnitActionsPanel(): OpenDataForBwUnitActionsPanel {
+        protected _getDataForUnitActionsPanel(): TwnsBwUnitActionsPanel.OpenDataForBwUnitActionsPanel {
             const destination           = this.getMovePathDestination();
             const actionUnitBeLoaded    = this._getActionUnitBeLoaded();
             const war                   = this._getWar();
@@ -1638,7 +1657,7 @@ namespace TinyWars.BaseWar {
             dataList.push(...this._getActionUnitProduceUnit());
             dataList.push(...this._getActionUnitWait(dataList.length > 0));
 
-            Logger.assert(dataList.length, `BwActionPlanner._getDataForUnitActionsPanel() no actions available?!`);
+            Logger.assert(!!dataList.length, `BwActionPlanner._getDataForUnitActionsPanel() no actions available?!`);
             return {
                 war,
                 destination,
@@ -1727,7 +1746,7 @@ namespace TinyWars.BaseWar {
                 const teamIndex     = movingUnit.getTeamIndex();
                 if ((existingUnit)                                      &&
                     (existingUnit.getTeamIndex() !== teamIndex)         &&
-                    (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                         war                 : this._war,
                         gridIndex           : targetGridIndex,
                         unitType            : existingUnit.getUnitType(),
@@ -1745,7 +1764,7 @@ namespace TinyWars.BaseWar {
 
         protected _checkCanFocusUnitOnMapAttackTarget(gridIndex: GridIndex): boolean {
             const attackableArea = this.getAttackableArea();
-            if (!BwHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
+            if (!WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
                 return false;
             } else {
                 const focusUnit = this.getFocusUnit();
@@ -1753,7 +1772,7 @@ namespace TinyWars.BaseWar {
                     return true;
                 } else {
                     return focusUnit.checkCanAttackTargetAfterMovePath(
-                        BwHelpers.createShortestMovePath(this.getMovableArea(), attackableArea[gridIndex.x][gridIndex.y].movePathDestination),
+                        WarCommonHelpers.createShortestMovePath(this.getMovableArea(), attackableArea[gridIndex.x][gridIndex.y].movePathDestination),
                         gridIndex
                     );
                 }
@@ -1781,3 +1800,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwActionPlanner;

@@ -5,7 +5,7 @@ const PublishConfig = require("../../../TinyWarsExternals/utils/Publisher/Publis
 
 const INDEX_PATH            = "bin-release/web/twc/index.html";
 const TSCONFIG_PATH         = "tsconfig.json";
-const COMMON_CONSTANTS_PATH = "src/utility/CommonConstants.ts";
+const COMMON_CONSTANTS_PATH = "src/modules/tools/helpers/CommonConstants.ts";
 const TSCONFIG_FOR_PUBLISH  = {
     "compilerOptions": {
         "target": "es5",

@@ -1,15 +1,23 @@
 
-namespace TinyWars.BaseWar {
-    import Types            = Utility.Types;
-    import Notify           = Utility.Notify;
-    import Helpers          = Utility.Helpers;
-    import ClientErrorCode  = Utility.ClientErrorCode;
-    import GridIndex        = Types.GridIndex;
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Notify               from "../../tools/notify/Notify";
+import NotifyData           from "../../tools/notify/NotifyData";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsBwCursorView     from "../view/BwCursorView";
+import TwnsBwWar            from "./BwWar";
+
+namespace TwnsBwCursor {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar            = TwnsBwWar.BwWar;
+    import BwCursorView     = TwnsBwCursorView.BwCursorView;
 
     export class BwCursor {
         private _gridX              = 0;
         private _gridY              = 0;
-        private _previousGridIndex  : GridIndex;
+        private _previousGridIndex  : Types.GridIndex;
         private _mapSize            : Types.MapSize;
         private _isMovableByTouches = true;
         private readonly _view      = new BwCursorView();
@@ -17,9 +25,9 @@ namespace TinyWars.BaseWar {
         private _war    : BwWar;
 
         private _notifyListeners: Notify.Listener[] = [
-            { type: Notify.Type.BwCursorTapped,                 callback: this._onNotifyBwCursorTapped },
-            { type: Notify.Type.BwCursorDragged,                callback: this._onNotifyBwCursorDragged },
-            { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.BwCursorTapped,                 callback: this._onNotifyBwCursorTapped },
+            { type: NotifyType.BwCursorDragged,                callback: this._onNotifyBwCursorDragged },
+            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
         public init(mapSize: Types.MapSize): ClientErrorCode {
@@ -55,14 +63,14 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyBwCursorTapped(e: egret.Event): void {
             if (this.getIsMovableByTouches()) {
-                const data = e.data as Notify.Data.BwCursorTapped;
+                const data = e.data as NotifyData.BwCursorTapped;
                 this.setGridIndex(data.tappedOn);
                 this.updateView();
             }
         }
         private _onNotifyBwCursorDragged(e: egret.Event): void {
             if (this.getIsMovableByTouches()) {
-                const data = e.data as Notify.Data.BwCursorDragged;
+                const data = e.data as NotifyData.BwCursorDragged;
                 this.setGridIndex(data.draggedTo);
                 this.updateView();
             }
@@ -108,21 +116,21 @@ namespace TinyWars.BaseWar {
         public getGridY(): number {
             return this._gridY;
         }
-        public setGridIndex(gridIndex: GridIndex): void {
+        public setGridIndex(gridIndex: Types.GridIndex): void {
             this._setPreviousGridIndex(this.getGridIndex());
 
             this._gridX = gridIndex.x;
             this._gridY = gridIndex.y;
-            Notify.dispatch(Notify.Type.BwCursorGridIndexChanged);
+            Notify.dispatch(NotifyType.BwCursorGridIndexChanged);
         }
-        public getGridIndex(): GridIndex {
+        public getGridIndex(): Types.GridIndex {
             return { x: this.getGridX(), y: this.getGridY() };
         }
 
-        private _setPreviousGridIndex(gridIndex: GridIndex): void {
+        private _setPreviousGridIndex(gridIndex: Types.GridIndex): void {
             this._previousGridIndex = gridIndex;
         }
-        public getPreviousGridIndex(): GridIndex | undefined {
+        public getPreviousGridIndex(): Types.GridIndex | undefined {
             return this._previousGridIndex;
         }
 
@@ -134,3 +142,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwCursor;

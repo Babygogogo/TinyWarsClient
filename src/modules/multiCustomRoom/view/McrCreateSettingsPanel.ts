@@ -1,48 +1,76 @@
 
-namespace TinyWars.MultiCustomRoom {
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import FloatText        = Utility.FloatText;
-    import Helpers          = Utility.Helpers;
-    import ConfigManager    = Utility.ConfigManager;
-    import CommonConstants  = Utility.CommonConstants;
-    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
-    import BwHelpers        = BaseWar.BwHelpers;
+import TwnsCommonChooseCoPanel              from "../../common/view/CommonChooseCoPanel";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import McrProxy                             from "../../multiCustomRoom/model/McrProxy";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
+import ConfigManager                        from "../../tools/helpers/ConfigManager";
+import FloatText                            from "../../tools/helpers/FloatText";
+import FlowManager                          from "../../tools/helpers/FlowManager";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Logger                               from "../../tools/helpers/Logger";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiImage                          from "../../tools/ui/UiImage";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import McrCreateModel                       from "../model/McrCreateModel";
+import TwnsMcrCreateAdvancedSettingsPage    from "./McrCreateAdvancedSettingsPage";
+import TwnsMcrCreateMapListPanel            from "./McrCreateMapListPanel";
+
+namespace TwnsMcrCreateSettingsPanel {
+    import McrCreateAdvancedSettingsPage            = TwnsMcrCreateAdvancedSettingsPage.McrCreateAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class McrCreateSettingsPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class McrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: McrCreateSettingsPanel;
 
         private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : GameUi.UiLabel;
-        private readonly _labelCreateRoom       : GameUi.UiLabel;
-        private readonly _labelChooseMap        : GameUi.UiLabel;
-        private readonly _labelRoomSettings     : GameUi.UiLabel;
+        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
+        private readonly _labelCreateRoom       : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseMap        : TwnsUiLabel.UiLabel;
+        private readonly _labelRoomSettings     : TwnsUiLabel.UiLabel;
 
         private readonly _groupSettings         : eui.Group;
         private readonly _groupChooseCo         : eui.Group;
-        private readonly _labelChooseCo         : GameUi.UiLabel;
-        private readonly _btnChooseCo           : GameUi.UiButton;
+        private readonly _labelChooseCo         : TwnsUiLabel.UiLabel;
+        private readonly _btnChooseCo           : TwnsUiButton.UiButton;
 
         private readonly _groupChoosePlayerIndex: eui.Group;
-        private readonly _labelChoosePlayerIndex: GameUi.UiLabel;
-        private readonly _sclPlayerIndex        : GameUi.UiScrollList<DataForPlayerIndexRenderer>;
+        private readonly _labelChoosePlayerIndex: TwnsUiLabel.UiLabel;
+        private readonly _sclPlayerIndex        : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
 
         private readonly _groupChooseSkinId     : eui.Group;
-        private readonly _labelChooseSkinId     : GameUi.UiLabel;
-        private readonly _sclSkinId             : GameUi.UiScrollList<DataForSkinIdRenderer>;
+        private readonly _labelChooseSkinId     : TwnsUiLabel.UiLabel;
+        private readonly _sclSkinId             : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, void>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarMapInfoPage>;
 
-        private readonly _btnBack               : GameUi.UiButton;
-        private readonly _btnConfirm            : GameUi.UiButton;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
-        private _timeoutIdForBtnConfirm: number;
+        private _timeoutIdForBtnConfirm : number;
+        private _isTabInitialized       = false;
 
         public static show(): void {
             if (!McrCreateSettingsPanel._instance) {
@@ -62,35 +90,39 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrCreateSettingsPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
                 { ui: this._btnChooseCo,    callback: this._onTouchedBtnChooseCo },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.McrCreateSelfCoIdChanged,   callback: this._onNotifyMcrCreateSelfCoIdChanged },
-                { type: Notify.Type.MsgMcrCreateRoom,           callback: this._onNotifyMsgMcrCreateRoom },
+                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.McrCreateSelfCoIdChanged,   callback: this._onNotifyMcrCreateSelfCoIdChanged },
+                { type: NotifyType.MsgMcrCreateRoom,           callback: this._onNotifyMsgMcrCreateRoom },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
             this._sclSkinId.setItemRenderer(SkinIdRenderer);
 
+            this._isTabInitialized = false;
             this._tabSettings.bindData([
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : McrCreateBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                    tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : McrCreateAdvancedSettingsPage,
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
-                    pageClass   : McrCreateMapInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0298) },
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
             ]);
+            this._isTabInitialized = true;
 
             this._showOpenAnimation();
 
@@ -109,30 +141,39 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             this.close();
-            McrCreateMapListPanel.show();
+            TwnsMcrCreateMapListPanel.McrCreateMapListPanel.show();
         }
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const data = McrModel.Create.getData();
+        private _onTouchedBtnConfirm(): void {
+            const data = McrCreateModel.getData();
             McrProxy.reqCreateRoom(data);
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
         }
-        private _onTouchedBtnChooseCo(e: egret.TouchEvent): void {
-            McrCreateChooseCoPanel.show({ coId: McrModel.Create.getSelfCoId() });
+        private _onTouchedBtnChooseCo(): void {
+            const currentCoId = McrCreateModel.getSelfCoId();
+            TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                currentCoId,
+                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(McrCreateModel.getWarRule(), McrCreateModel.getSelfPlayerIndex(), ConfigManager.getLatestFormalVersion()),
+                callbackOnConfirm   : (newCoId) => {
+                    if (newCoId !== currentCoId) {
+                        McrCreateModel.setSelfCoId(newCoId);
+                    }
+                },
+            });
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyMcrCreateSelfCoIdChanged(e: egret.Event): void {
+        private _onNotifyMcrCreateSelfCoIdChanged(): void {
             this._updateBtnChooseCo();
         }
-        private _onNotifyMsgMcrCreateRoom(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0015));
-            Utility.FlowManager.gotoLobby();
+        private _onNotifyMsgMcrCreateRoom(): void {
+            FloatText.show(Lang.getText(LangTextType.A0015));
+            FlowManager.gotoLobby();
         }
 
         private _resetTimeoutForBtnConfirm(): void {
@@ -154,24 +195,24 @@ namespace TinyWars.MultiCustomRoom {
         // Functions for the view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0000);
-            this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0137);
-            this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
-            this._labelRoomSettings.text        = Lang.getText(Lang.Type.B0571);
-            this._labelChooseCo.text            = Lang.getText(Lang.Type.B0145);
-            this._labelChoosePlayerIndex.text   = Lang.getText(Lang.Type.B0572);
-            this._labelChooseSkinId.text        = Lang.getText(Lang.Type.B0573);
-            this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-            this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
+            this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
+            this._labelMultiPlayer.text         = Lang.getText(LangTextType.B0137);
+            this._labelChooseMap.text           = Lang.getText(LangTextType.B0227);
+            this._labelRoomSettings.text        = Lang.getText(LangTextType.B0571);
+            this._labelChooseCo.text            = Lang.getText(LangTextType.B0145);
+            this._labelChoosePlayerIndex.text   = Lang.getText(LangTextType.B0572);
+            this._labelChooseSkinId.text        = Lang.getText(LangTextType.B0573);
+            this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+            this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
         }
 
         private _updateBtnChooseCo(): void {
-            const cfg               = ConfigManager.getCoBasicCfg(McrModel.Create.getData().settingsForCommon.configVersion, McrModel.Create.getSelfCoId());
+            const cfg               = ConfigManager.getCoBasicCfg(McrCreateModel.getData().settingsForCommon.configVersion, McrCreateModel.getSelfCoId());
             this._btnChooseCo.label = cfg.name;
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
-            const playersCountUnneutral = (await McrModel.Create.getMapRawData()).playersCountUnneutral;
+            const playersCountUnneutral = (await McrCreateModel.getMapRawData()).playersCountUnneutral;
             const dataArray             : DataForPlayerIndexRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
@@ -189,6 +230,125 @@ namespace TinyWars.MultiCustomRoom {
                 });
             }
             this._sclSkinId.bindData(dataArray);
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
+            }
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            const warRule           = McrCreateModel.getWarRule();
+            const bootTimerParams   = McrCreateModel.getBootTimerParams();
+            const timerType         = bootTimerParams[0] as Types.BootTimerType;
+            const openData          : OpenDataForCommonWarBasicSettingsPage = {
+                dataArrayForListSettings: [
+                    {
+                        settingsType    : WarBasicSettingsType.MapName,
+                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(McrCreateModel.getMapId()),
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarName,
+                        currentValue    : McrCreateModel.getWarName(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            McrCreateModel.setWarName(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarPassword,
+                        currentValue    : McrCreateModel.getWarPassword(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            McrCreateModel.setWarPassword(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarComment,
+                        currentValue    : McrCreateModel.getWarComment(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            McrCreateModel.setWarComment(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarRuleTitle,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: async () => {
+                            await McrCreateModel.tickPresetWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.HasFog,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: () => {
+                            McrCreateModel.setHasFog(!McrCreateModel.getHasFog());
+                            McrCreateModel.setCustomWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerType,
+                        currentValue    : timerType,
+                        warRule,
+                        callbackOnModify: async () => {
+                            McrCreateModel.tickBootTimerType();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                ],
+            };
+            if (timerType === Types.BootTimerType.Regular) {
+                openData.dataArrayForListSettings.push({
+                    settingsType    : WarBasicSettingsType.TimerRegularParam,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: () => {
+                        McrCreateModel.tickTimerRegularTime();
+                        this._updateCommonWarBasicSettingsPage();
+                    },
+                });
+            } else if (timerType === Types.BootTimerType.Incremental) {
+                openData.dataArrayForListSettings.push(
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                        currentValue    : bootTimerParams[1],
+                        warRule,
+                        callbackOnModify: (newValue: number) => {
+                            McrCreateModel.setTimerIncrementalInitialTime(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                        currentValue    : bootTimerParams[2],
+                        warRule,
+                        callbackOnModify: (newValue: number) => {
+                            McrCreateModel.setTimerIncrementalIncrementalValue(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                );
+            } else {
+                Logger.error(`McrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            }
+
+            return openData;
+        }
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+            const mapId = McrCreateModel.getMapId();
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -255,9 +415,9 @@ namespace TinyWars.MultiCustomRoom {
 
     type DataForTabItemRenderer = {
         name: string;
-    }
-    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: GameUi.UiLabel;
+    };
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
@@ -266,15 +426,15 @@ namespace TinyWars.MultiCustomRoom {
 
     type DataForPlayerIndexRenderer = {
         playerIndex: number;
-    }
-    class PlayerIndexRenderer extends GameUi.UiListItemRenderer<DataForPlayerIndexRenderer> {
-        private readonly _labelName : GameUi.UiLabel;
+    };
+    class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerIndexRenderer> {
+        private readonly _labelName : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.McrCreateTeamIndexChanged,          callback: this._onNotifyMcrCreateTeamIndexChanged },
-                { type: Notify.Type.McrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMcrCreateSelfPlayerIndexChanged },
+                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.McrCreateTeamIndexChanged,          callback: this._onNotifyMcrCreateTeamIndexChanged },
+                { type: NotifyType.McrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMcrCreateSelfPlayerIndexChanged },
             ]);
         }
 
@@ -283,26 +443,26 @@ namespace TinyWars.MultiCustomRoom {
             this._updateState();
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             const data = this.data;
             if (data) {
-                const creator       = McrModel.Create;
+                const creator       = McrCreateModel;
                 const playerIndex   = data.playerIndex;
                 creator.setSelfPlayerIndex(playerIndex);
 
-                const availableCoIdArray = BwWarRuleHelper.getAvailableCoIdArrayForPlayer(creator.getWarRule(), playerIndex, ConfigManager.getLatestFormalVersion());
+                const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer(creator.getWarRule(), playerIndex, ConfigManager.getLatestFormalVersion());
                 if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
-                    creator.setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdArray));
+                    creator.setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
                 }
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
-        private _onNotifyMcrCreateTeamIndexChanged(e: egret.Event): void {
+        private _onNotifyMcrCreateTeamIndexChanged(): void {
             this._updateLabelName();
         }
-        private _onNotifyMcrCreateSelfPlayerIndexChanged(e: egret.Event): void {
+        private _onNotifyMcrCreateSelfPlayerIndexChanged(): void {
             this._updateState();
         }
 
@@ -310,24 +470,24 @@ namespace TinyWars.MultiCustomRoom {
             const data = this.data;
             if (data) {
                 const playerIndex       = data.playerIndex;
-                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelper.getTeamIndex(McrModel.Create.getWarRule(), playerIndex))})`;
+                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(McrCreateModel.getWarRule(), playerIndex))})`;
             }
         }
         private _updateState(): void {
             const data          = this.data;
-            this.currentState   = ((data) && (data.playerIndex === McrModel.Create.getSelfPlayerIndex())) ? `down` : `up`;
+            this.currentState   = ((data) && (data.playerIndex === McrCreateModel.getSelfPlayerIndex())) ? `down` : `up`;
         }
     }
 
     type DataForSkinIdRenderer = {
         skinId: number;
-    }
-    class SkinIdRenderer extends GameUi.UiListItemRenderer<DataForSkinIdRenderer> {
-        private readonly _imgColor  : GameUi.UiImage;
+    };
+    class SkinIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkinIdRenderer> {
+        private readonly _imgColor  : TwnsUiImage.UiImage;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.McrCreateSelfSkinIdChanged, callback: this._onNotifyMcrCreateSelfSkinIdChanged },
+                { type: NotifyType.McrCreateSelfSkinIdChanged, callback: this._onNotifyMcrCreateSelfSkinIdChanged },
             ]);
         }
 
@@ -335,13 +495,13 @@ namespace TinyWars.MultiCustomRoom {
             this._updateImgColor();
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             const data = this.data;
             if (data) {
-                McrModel.Create.setSelfUnitAndTileSkinId(data.skinId);
+                McrCreateModel.setSelfUnitAndTileSkinId(data.skinId);
             }
         }
-        private _onNotifyMcrCreateSelfSkinIdChanged(e: egret.Event): void {
+        private _onNotifyMcrCreateSelfSkinIdChanged(): void {
             this._updateImgColor();
         }
 
@@ -349,8 +509,10 @@ namespace TinyWars.MultiCustomRoom {
             const data = this.data;
             if (data) {
                 const skinId            = data.skinId;
-                this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, McrModel.Create.getSelfUnitAndTileSkinId() === skinId);
+                this._imgColor.source   = WarCommonHelpers.getImageSourceForSkinId(skinId, McrCreateModel.getSelfUnitAndTileSkinId() === skinId);
             }
         }
     }
 }
+
+export default TwnsMcrCreateSettingsPanel;

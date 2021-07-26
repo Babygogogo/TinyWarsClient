@@ -1,24 +1,34 @@
 
-namespace TinyWars.MapEditor {
-    import Lang     = Utility.Lang;
-    import Notify   = Utility.Notify;
-    import Types    = Utility.Types;
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import MeModel          from "../model/MeModel";
+import TwnsMeWar        from "../model/MeWar";
 
-    export class MeVisibilityPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
+namespace TwnsMeVisibilityPanel {
+    import MeWar        = TwnsMeWar.MeWar;
+    import LangTextType = TwnsLangTextType.LangTextType;
+    import NotifyType   = TwnsNotifyType.NotifyType;
+
+    export class MeVisibilityPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeVisibilityPanel;
 
         private _groupUnit          : eui.Group;
-        private _labelUnit          : GameUi.UiLabel;
-        private _imgUnit            : GameUi.UiImage;
+        private _labelUnit          : TwnsUiLabel.UiLabel;
+        private _imgUnit            : TwnsUiImage.UiImage;
         private _groupTileObject    : eui.Group;
-        private _imgTileObject      : GameUi.UiImage;
-        private _labelTileObject    : GameUi.UiLabel;
+        private _imgTileObject      : TwnsUiImage.UiImage;
+        private _labelTileObject    : TwnsUiLabel.UiLabel;
         private _groupTileBase      : eui.Group;
-        private _imgTileBase        : GameUi.UiImage;
-        private _labelTileBase      : GameUi.UiLabel;
+        private _imgTileBase        : TwnsUiImage.UiImage;
+        private _labelTileBase      : TwnsUiLabel.UiLabel;
 
         private _war : MeWar;
 
@@ -45,7 +55,7 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupTileBase,      callback: this._onTouchedGroupTileBase, },
@@ -84,9 +94,9 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTileBase.text        = Lang.getText(Lang.Type.B0302);
-            this._labelTileObject.text      = Lang.getText(Lang.Type.B0303);
-            this._labelUnit.text            = Lang.getText(Lang.Type.B0304);
+            this._labelTileBase.text        = Lang.getText(LangTextType.B0302);
+            this._labelTileObject.text      = Lang.getText(LangTextType.B0303);
+            this._labelUnit.text            = Lang.getText(LangTextType.B0304);
         }
 
         private _updateGroupUnit(): void {
@@ -100,3 +110,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeVisibilityPanel;

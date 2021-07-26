@@ -1,34 +1,61 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.CoopCustomRoom {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import WarMapModel      = WarMap.WarMapModel;
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
+import CcrModel                             from "../../coopCustomRoom/model/CcrModel";
+import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import CcrJoinModel                         from "../model/CcrJoinModel";
+import CcrProxy                             from "../model/CcrProxy";
+import TwnsCcrMainMenuPanel                 from "./CcrMainMenuPanel";
+import TwnsCcrRoomInfoPanel                 from "./CcrRoomInfoPanel";
 
-    export class CcrMyRoomListPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+namespace TwnsCcrMyRoomListPanel {
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+
+    export class CcrMyRoomListPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CcrMyRoomListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, OpenDataForCcrRoomMapInfoPage | OpenDataForCcrRoomPlayerInfoPage | OpenDataForCcrRoomAdvancedSettingsPage | OpenDataForCcrRoomBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : GameUi.UiLabel;
-        private readonly _labelMyRoom           : GameUi.UiLabel;
+        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
+        private readonly _labelMyRoom           : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack               : GameUi.UiButton;
-        private readonly _btnNextStep           : GameUi.UiButton;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnNextStep           : TwnsUiButton.UiButton;
 
         private readonly _groupRoomList         : eui.Group;
-        private readonly _listRoom              : GameUi.UiScrollList<DataForRoomRenderer>;
-        private readonly _labelNoRoom           : GameUi.UiLabel;
-        private readonly _labelLoading          : GameUi.UiLabel;
+        private readonly _listRoom              : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
+        private readonly _labelNoRoom           : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
+        private _isTabInitialized   = false;
 
         public static show(): void {
             if (!CcrMyRoomListPanel._instance) {
@@ -48,16 +75,20 @@ namespace TinyWars.CoopCustomRoom {
             this.skinName = "resource/skins/coopCustomRoom/CcrMyRoomListPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.CcrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyCcrJoinedPreviewingRoomIdChanged },
-                { type: Notify.Type.MsgCcrGetJoinedRoomInfoList,        callback: this._onNotifyMsgCcrGetJoinedRoomInfoList },
-                { type: Notify.Type.MsgCcrCreateRoom,                   callback: this._onNotifyMsgCreateRoom },
-                { type: Notify.Type.MsgCcrDeleteRoomByServer,           callback: this._onNotifyMsgCcrDeleteRoomByServer },
-                { type: Notify.Type.MsgCcrJoinRoom,                     callback: this._onNotifyMsgCcrJoinRoom },
-                { type: Notify.Type.MsgCcrDeletePlayer,                 callback: this._onNotifyMsgCcrDeletePlayer },
-                { type: Notify.Type.MsgCcrExitRoom,                     callback: this._onNotifyMsgCcrExitRoom },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.CcrJoinedPreviewingRoomIdChanged,    callback: this._onNotifyCcrJoinedPreviewingRoomIdChanged },
+                { type: NotifyType.MsgCcrGetJoinedRoomInfoList,         callback: this._onNotifyMsgCcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgCcrCreateRoom,                    callback: this._onNotifyMsgCreateRoom },
+                { type: NotifyType.MsgCcrDeleteRoomByServer,            callback: this._onNotifyMsgCcrDeleteRoomByServer },
+                { type: NotifyType.MsgCcrJoinRoom,                      callback: this._onNotifyMsgCcrJoinRoom },
+                { type: NotifyType.MsgCcrDeletePlayer,                  callback: this._onNotifyMsgCcrDeletePlayer },
+                { type: NotifyType.MsgCcrExitRoom,                      callback: this._onNotifyMsgCcrExitRoom },
+                { type: NotifyType.MsgCcrGetRoomInfo,                   callback: this._onNotifyMsgCcrGetRoomInfo },
+                { type: NotifyType.MsgCcrSetSelfSettings,               callback: this._onNotifyMsgCcrSetSelfSettings },
+                { type: NotifyType.MsgCcrSetReady,                      callback: this._onNotifyMsgCcrSetReady },
+                { type: NotifyType.MsgCcrGetOwnerPlayerIndex,           callback: this._onNotifyMsgCcrGetOwnerPlayerIndex },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -68,8 +99,9 @@ namespace TinyWars.CoopCustomRoom {
 
             this._showOpenAnimation();
 
-            this._hasReceivedData = false;
-            this._initTabSettings();
+            this._hasReceivedData   = false;
+            this._isTabInitialized  = false;
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
@@ -106,30 +138,73 @@ namespace TinyWars.CoopCustomRoom {
             this._updateGroupRoomList();
         }
 
-        private _onNotifyMsgCcrJoinRoom(): void {
+        private _onNotifyMsgCcrJoinRoom(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrJoinRoom.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+
             this._updateGroupRoomList();
         }
 
-        private _onNotifyMsgCcrDeletePlayer(): void {
+        private _onNotifyMsgCcrDeletePlayer(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrDeletePlayer.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+
             this._updateGroupRoomList();
         }
 
-        private _onNotifyMsgCcrExitRoom(): void {
+        private _onNotifyMsgCcrExitRoom(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrExitRoom.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+
             this._updateGroupRoomList();
+        }
+
+        private _onNotifyMsgCcrGetRoomInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomInfo.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateComponentsForPreviewingRoomInfo();
+            }
+        }
+
+        private _onNotifyMsgCcrSetSelfSettings(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrSetSelfSettings.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+        }
+
+        private _onNotifyMsgCcrSetReady(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrSetReady.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+        }
+
+        private _onNotifyMsgCcrGetOwnerPlayerIndex(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrGetOwnerPlayerIndex.IS;
+            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            CcrMainMenuPanel.show();
-            Lobby.LobbyTopPanel.show();
-            Lobby.LobbyBottomPanel.show();
+            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
 
         private _onTouchedBtnNextStep(): void {
-            const roomId = CcrModel.Joined.getPreviewingRoomId();
+            const roomId = CcrJoinModel.getJoinedPreviewingRoomId();
             if (roomId != null) {
                 this.close();
-                CcrRoomInfoPanel.show({
+                TwnsCcrRoomInfoPanel.CcrRoomInfoPanel.show({
                     roomId,
                 });
             }
@@ -138,38 +213,39 @@ namespace TinyWars.CoopCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _initTabSettings(): void {
+        private async _initTabSettings(): Promise<void> {
             this._tabSettings.bindData([
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
-                    pageClass   : CcrRoomMapInfoPage,
-                    pageData    : { roomId: null } as OpenDataForCcrRoomMapInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0298) },
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
-                    pageClass   : CcrRoomPlayerInfoPage,
-                    pageData    : { roomId: null } as OpenDataForCcrRoomPlayerInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0224) },
+                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : CcrRoomBasicSettingsPage,
-                    pageData    : { roomId: null } as OpenDataForCcrRoomBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass   : CcrRoomAdvancedSettingsPage,
-                    pageData    : { roomId: null } as OpenDataForCcrRoomAdvancedSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0003) },
+                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
+            this._isTabInitialized = true;
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-            this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0646);
-            this._labelMyRoom.text          = Lang.getText(Lang.Type.B0410);
-            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-            this._labelNoRoom.text          = Lang.getText(Lang.Type.B0582);
-            this._btnNextStep.label         = Lang.getText(Lang.Type.B0398);
+            this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+            this._labelMultiPlayer.text     = Lang.getText(LangTextType.B0646);
+            this._labelMyRoom.text          = Lang.getText(LangTextType.B0410);
+            this._btnBack.label             = Lang.getText(LangTextType.B0146);
+            this._labelNoRoom.text          = Lang.getText(LangTextType.B0582);
+            this._btnNextStep.label         = Lang.getText(LangTextType.B0398);
         }
 
         private _updateGroupRoomList(): void {
@@ -187,9 +263,9 @@ namespace TinyWars.CoopCustomRoom {
                 labelNoRoom.visible     = !dataArray.length;
                 listRoom.bindData(dataArray);
 
-                const roomId = CcrModel.Joined.getPreviewingRoomId();
+                const roomId = CcrJoinModel.getJoinedPreviewingRoomId();
                 if (dataArray.every(v => v.roomId != roomId)) {
-                    CcrModel.Joined.setPreviewingRoomId(dataArray.length ? dataArray[0].roomId : null);
+                    CcrJoinModel.setJoinedPreviewingRoomId(dataArray.length ? dataArray[0].roomId : null);
                 }
             }
         }
@@ -197,7 +273,7 @@ namespace TinyWars.CoopCustomRoom {
         private _updateComponentsForPreviewingRoomInfo(): void {
             const groupTab      = this._groupTab;
             const btnNextStep   = this._btnNextStep;
-            const roomId        = CcrModel.Joined.getPreviewingRoomId();
+            const roomId        = CcrJoinModel.getJoinedPreviewingRoomId();
             if ((!this._hasReceivedData) || (roomId == null)) {
                 groupTab.visible    = false;
                 btnNextStep.visible = false;
@@ -205,11 +281,34 @@ namespace TinyWars.CoopCustomRoom {
                 groupTab.visible    = true;
                 btnNextStep.visible = true;
 
-                const tab = this._tabSettings;
-                tab.updatePageData(0, { roomId } as OpenDataForCcrRoomMapInfoPage);
-                tab.updatePageData(1, { roomId } as OpenDataForCcrRoomPlayerInfoPage);
-                tab.updatePageData(2, { roomId } as OpenDataForCcrRoomBasicSettingsPage);
-                tab.updatePageData(3, { roomId } as OpenDataForCcrRoomAdvancedSettingsPage);
+                this._updateCommonWarMapInfoPage();
+                this._updateCommonWarPlayerInfoPage();
+                this._updateCommonWarBasicSettingsPage();
+                this._updateCommonWarAdvancedSettingsPage();
+            }
+        }
+
+        private async _updateCommonWarMapInfoPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
+            }
+        }
+
+        private async _updateCommonWarPlayerInfoPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage());
+            }
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+            }
+        }
+
+        private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
             }
         }
 
@@ -222,6 +321,25 @@ namespace TinyWars.CoopCustomRoom {
             }
 
             return dataArray.sort((v1, v2) => v1.roomId - v2.roomId);
+        }
+
+        private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
+            const mapId = (await CcrModel.getRoomInfo(CcrJoinModel.getJoinedPreviewingRoomId()))?.settingsForCcw?.mapId;
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
+        }
+
+        private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
+            return await CcrModel.createDataForCommonWarPlayerInfoPage(CcrJoinModel.getJoinedPreviewingRoomId());
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            return await CcrModel.createDataForCommonWarBasicSettingsPage(CcrJoinModel.getJoinedPreviewingRoomId(), true);
+        }
+
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+            return await CcrModel.createDataForCommonWarAdvancedSettingsPage(CcrJoinModel.getJoinedPreviewingRoomId());
         }
 
         private _showOpenAnimation(): void {
@@ -286,8 +404,8 @@ namespace TinyWars.CoopCustomRoom {
     type DataForTabItemRenderer = {
         name: string;
     };
-    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: GameUi.UiLabel;
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
@@ -297,11 +415,11 @@ namespace TinyWars.CoopCustomRoom {
     type DataForRoomRenderer = {
         roomId: number;
     };
-    class RoomRenderer extends GameUi.UiListItemRenderer<DataForRoomRenderer> {
-        private readonly _btnChoose     : GameUi.UiButton;
-        private readonly _btnNext       : GameUi.UiButton;
-        private readonly _labelName     : GameUi.UiLabel;
-        private readonly _imgRed        : GameUi.UiLabel;
+    class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
+        private readonly _btnChoose     : TwnsUiButton.UiButton;
+        private readonly _btnNext       : TwnsUiButton.UiButton;
+        private readonly _labelName     : TwnsUiLabel.UiLabel;
+        private readonly _imgRed        : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -309,7 +427,7 @@ namespace TinyWars.CoopCustomRoom {
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.CcrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyCcrJoinedPreviewingRoomIdChanged },
+                { type: NotifyType.CcrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyCcrJoinedPreviewingRoomIdChanged },
             ]);
         }
 
@@ -333,18 +451,20 @@ namespace TinyWars.CoopCustomRoom {
         }
 
         private _onTouchTapBtnChoose(): void {
-            CcrModel.Joined.setPreviewingRoomId(this.data.roomId);
+            CcrJoinModel.setJoinedPreviewingRoomId(this.data.roomId);
         }
 
         private _onTouchTapBtnNext(): void {
             CcrMyRoomListPanel.hide();
-            CcrRoomInfoPanel.show({
+            TwnsCcrRoomInfoPanel.CcrRoomInfoPanel.show({
                 roomId  : this.data.roomId,
             });
         }
 
         private _updateState(): void {
-            this.currentState = this.data.roomId === CcrModel.Joined.getPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
+            this.currentState = this.data.roomId === CcrJoinModel.getJoinedPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }
+
+export default TwnsCcrMyRoomListPanel;

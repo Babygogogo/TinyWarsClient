@@ -1,35 +1,63 @@
 
-namespace TinyWars.ReplayWar {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import FlowManager      = Utility.FlowManager;
-    import WarMapModel      = WarMap.WarMapModel;
+import TwnsCommonBlockPanel         from "../../common/view/CommonBlockPanel";
+import TwnsCommonWarMapInfoPage     from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonWarPlayerInfoPage  from "../../common/view/CommonWarPlayerInfoPage";
+import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
+import FlowManager                  from "../../tools/helpers/FlowManager";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+import TwnsUiTab                    from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer        from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
+import RwModel                      from "../model/RwModel";
+import RwProxy                      from "../model/RwProxy";
+import TwnsRwReplayWarInfoPage      from "./RwReplayWarInfoPage";
+import TwnsRwSearchReplayPanel      from "./RwSearchReplayPanel";
 
-    export class RwReplayListPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+namespace TwnsRwReplayListPanel {
+    import OpenDataForRwReplayWarInfoPage       = TwnsRwReplayWarInfoPage.OpenDataForRwReplayWarInfoPage;
+    import OpenDataForCommonWarMapInfoPage      = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage   = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import RwReplayWarInfoPage                  = TwnsRwReplayWarInfoPage.RwReplayWarInfoPage;
+    import RwSearchReplayPanel                  = TwnsRwSearchReplayPanel.RwSearchReplayPanel;
+    import LangTextType                         = TwnsLangTextType.LangTextType;
+    import NotifyType                           = TwnsNotifyType.NotifyType;
+    import CommonBlockPanel                     = TwnsCommonBlockPanel.CommonBlockPanel;
+
+    export class RwReplayListPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: RwReplayListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, OpenDataForRwReplayMapInfoPage | OpenDataForRwReplayPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
 
         private readonly _groupNavigator        : eui.Group;
-        private readonly _labelReplay           : GameUi.UiLabel;
-        private readonly _labelChooseReplay     : GameUi.UiLabel;
+        private readonly _labelReplay           : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseReplay     : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack               : GameUi.UiButton;
-        private readonly _btnNextStep           : GameUi.UiButton;
-        private readonly _btnSearch             : GameUi.UiButton;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnNextStep           : TwnsUiButton.UiButton;
+        private readonly _btnSearch             : TwnsUiButton.UiButton;
 
         private readonly _groupReplayList       : eui.Group;
-        private readonly _listReplay            : GameUi.UiScrollList<DataForReplayRenderer>;
-        private readonly _labelNoReplay         : GameUi.UiLabel;
-        private readonly _labelLoading          : GameUi.UiLabel;
+        private readonly _listReplay            : TwnsUiScrollList.UiScrollList<DataForReplayRenderer>;
+        private readonly _labelNoReplay         : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
+        private _isTabInitialized   = false;
 
         public static show(): void {
             if (!RwReplayListPanel._instance) {
@@ -51,11 +79,11 @@ namespace TinyWars.ReplayWar {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.RwPreviewingReplayIdChanged,    callback: this._onNotifyRwPreviewingReplayIdChanged },
-                { type: Notify.Type.MsgReplayGetInfoList,           callback: this._onNotifyMsgReplayGetInfoList },
-                { type: Notify.Type.MsgReplayGetData,               callback: this._onNotifyMsgReplayGetData },
-                { type: Notify.Type.MsgReplayGetDataFailed,         callback: this._onNotifyMsgReplayGetDataFailed },
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.RwPreviewingReplayIdChanged,    callback: this._onNotifyRwPreviewingReplayIdChanged },
+                { type: NotifyType.MsgReplayGetInfoList,           callback: this._onNotifyMsgReplayGetInfoList },
+                { type: NotifyType.MsgReplayGetData,               callback: this._onNotifyMsgReplayGetData },
+                { type: NotifyType.MsgReplayGetDataFailed,         callback: this._onNotifyMsgReplayGetDataFailed },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -67,7 +95,8 @@ namespace TinyWars.ReplayWar {
 
             this._showOpenAnimation();
 
-            this._hasReceivedData = false;
+            this._hasReceivedData   = false;
+            this._isTabInitialized  = false;
             this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupReplayList();
@@ -83,44 +112,44 @@ namespace TinyWars.ReplayWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyRwPreviewingReplayIdChanged(e: egret.Event): void {
+        private _onNotifyRwPreviewingReplayIdChanged(): void {
             this._updateComponentsForPreviewingReplayInfo();
         }
 
-        private _onNotifyMsgReplayGetInfoList(e: egret.Event): void {
+        private _onNotifyMsgReplayGetInfoList(): void {
             this._hasReceivedData = true;
             this._updateGroupReplayList();
             this._updateComponentsForPreviewingReplayInfo();
         }
 
-        private _onNotifyMsgReplayGetData(e: egret.Event): void {
+        private _onNotifyMsgReplayGetData(): void {
             const data = RwModel.getReplayData();
             FlowManager.gotoReplayWar(data.encodedWar, data.replayId);
         }
 
-        private _onNotifyMsgReplayGetDataFailed(e: egret.Event): void {
-            Common.CommonBlockPanel.hide();
+        private _onNotifyMsgReplayGetDataFailed(): void {
+            CommonBlockPanel.hide();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onTouchTapBtnBack(): void {
             this.close();
-            MultiCustomRoom.McrMainMenuPanel.show();
-            Lobby.LobbyTopPanel.show();
-            Lobby.LobbyBottomPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
-        private _onTouchedBtnSearch(e: egret.TouchEvent): void {
+        private _onTouchedBtnSearch(): void {
             RwSearchReplayPanel.show();
         }
-        private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
+        private _onTouchedBtnNextStep(): void {
             const replayId = RwModel.getPreviewingReplayId();
             if (replayId != null) {
-                Common.CommonBlockPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0040),
+                CommonBlockPanel.show({
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0040),
                 });
                 RwProxy.reqReplayGetData(replayId);
             }
@@ -132,31 +161,32 @@ namespace TinyWars.ReplayWar {
         private _initTabSettings(): void {
             this._tabSettings.bindData([
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
-                    pageClass   : RwReplayMapInfoPage,
-                    pageData    : { replayId: null } as OpenDataForRwReplayMapInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0298) },
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageData    : this._createDataForCommonWarMapInfoPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
-                    pageClass   : RwReplayPlayerInfoPage,
-                    pageData    : { replayId: null } as OpenDataForRwReplayPlayerInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0224) },
+                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageData    : this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
                     pageClass   : RwReplayWarInfoPage,
                     pageData    : { replayId: null } as OpenDataForRwReplayWarInfoPage,
                 },
             ]);
+            this._isTabInitialized = true;
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-            this._labelReplay.text          = Lang.getText(Lang.Type.B0092);
-            this._labelChooseReplay.text    = Lang.getText(Lang.Type.B0598);
-            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-            this._labelNoReplay.text        = Lang.getText(Lang.Type.B0241);
-            this._btnNextStep.label         = Lang.getText(Lang.Type.B0024);
-            this._btnSearch.label           = Lang.getText(Lang.Type.B0228);
+            this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+            this._labelReplay.text          = Lang.getText(LangTextType.B0092);
+            this._labelChooseReplay.text    = Lang.getText(LangTextType.B0598);
+            this._btnBack.label             = Lang.getText(LangTextType.B0146);
+            this._labelNoReplay.text        = Lang.getText(LangTextType.B0241);
+            this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
+            this._btnSearch.label           = Lang.getText(LangTextType.B0228);
         }
 
         private _updateGroupReplayList(): void {
@@ -193,9 +223,21 @@ namespace TinyWars.ReplayWar {
                 btnNextStep.visible = true;
 
                 const tab = this._tabSettings;
-                tab.updatePageData(0, { replayId } as OpenDataForRwReplayMapInfoPage);
-                tab.updatePageData(1, { replayId } as OpenDataForRwReplayPlayerInfoPage);
                 tab.updatePageData(2, { replayId } as OpenDataForRwReplayWarInfoPage);
+                this._updateCommonWarMapInfoPage();
+                this._updateCommonWarPlayerInfoPage();
+            }
+        }
+
+        private _updateCommonWarMapInfoPage(): void {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, this._createDataForCommonWarMapInfoPage());
+            }
+        }
+
+        private _updateCommonWarPlayerInfoPage(): void {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(1, this._createDataForCommonWarPlayerInfoPage());
             }
         }
 
@@ -208,6 +250,46 @@ namespace TinyWars.ReplayWar {
             }
 
             return dataArray.sort((v1, v2) => v2.replayId - v1.replayId);
+        }
+
+        private _createDataForCommonWarMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+            const mapId = RwModel.getReplayInfo(RwModel.getPreviewingReplayId())?.replayBriefInfo?.mapId;
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
+        }
+
+        private _createDataForCommonWarPlayerInfoPage(): OpenDataForCommonWarPlayerInfoPage | undefined {
+            const replayInfo = RwModel.getReplayInfo(RwModel.getPreviewingReplayId());
+            if (replayInfo == null) {
+                return undefined;
+            }
+
+            const replayBriefInfo   = replayInfo.replayBriefInfo;
+            const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+            for (const playerInfo of replayBriefInfo.playerInfoList || []) {
+                const userId = playerInfo.userId;
+                playerInfoArray.push({
+                    playerIndex         : playerInfo.playerIndex,
+                    teamIndex           : playerInfo.teamIndex,
+                    isAi                : userId == null,
+                    userId,
+                    coId                : playerInfo.coId,
+                    unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
+                    isReady             : undefined,
+                    isInTurn            : undefined,
+                    isDefeat            : !playerInfo.isAlive,
+                });
+            }
+
+            return {
+                configVersion           : replayBriefInfo.configVersion,
+                playersCountUnneutral   : playerInfoArray.length,
+                roomOwnerPlayerIndex    : undefined,
+                callbackOnExitRoom      : undefined,
+                callbackOnDeletePlayer  : undefined,
+                playerInfoArray,
+            };
         }
 
         private _showOpenAnimation(): void {
@@ -281,9 +363,9 @@ namespace TinyWars.ReplayWar {
 
     type DataForTabItemRenderer = {
         name: string;
-    }
-    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: GameUi.UiLabel;
+    };
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
@@ -292,13 +374,13 @@ namespace TinyWars.ReplayWar {
 
     type DataForReplayRenderer = {
         replayId: number;
-    }
-    class ReplayRenderer extends GameUi.UiListItemRenderer<DataForReplayRenderer> {
-        private readonly _btnChoose     : GameUi.UiButton;
-        private readonly _btnNext       : GameUi.UiButton;
-        private readonly _labelType     : GameUi.UiLabel;
-        private readonly _labelId       : GameUi.UiLabel;
-        private readonly _labelName     : GameUi.UiLabel;
+    };
+    class ReplayRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForReplayRenderer> {
+        private readonly _btnChoose     : TwnsUiButton.UiButton;
+        private readonly _btnNext       : TwnsUiButton.UiButton;
+        private readonly _labelType     : TwnsUiLabel.UiLabel;
+        private readonly _labelId       : TwnsUiLabel.UiLabel;
+        private readonly _labelName     : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -306,7 +388,7 @@ namespace TinyWars.ReplayWar {
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.RwPreviewingReplayIdChanged,  callback: this._onNotifyRwPreviewingReplayIdChanged },
+                { type: NotifyType.RwPreviewingReplayIdChanged,  callback: this._onNotifyRwPreviewingReplayIdChanged },
             ]);
         }
 
@@ -329,18 +411,18 @@ namespace TinyWars.ReplayWar {
             }
         }
 
-        private _onNotifyRwPreviewingReplayIdChanged(e: egret.Event): void {
+        private _onNotifyRwPreviewingReplayIdChanged(): void {
             this._updateState();
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(): void {
             RwModel.setPreviewingReplayId(this.data.replayId);
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            Common.CommonBlockPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0040),
+        private _onTouchTapBtnNext(): void {
+            CommonBlockPanel.show({
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0040),
             });
             RwProxy.reqReplayGetData(this.data.replayId);
         }
@@ -350,3 +432,5 @@ namespace TinyWars.ReplayWar {
         }
     }
 }
+
+export default TwnsRwReplayListPanel;

@@ -1,22 +1,31 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.BaseWar {
-    import Types                        = Utility.Types;
-    import DestructionHelpers           = Utility.DestructionHelpers;
-    import Notify                       = Utility.Notify;
-    import ProtoTypes                   = Utility.ProtoTypes;
-    import Logger                       = Utility.Logger;
-    import ConfigManager                = Utility.ConfigManager;
-    import GridIndexHelpers             = Utility.GridIndexHelpers;
-    import ClientErrorCode              = Utility.ClientErrorCode;
-    import CommonConstants              = Utility.CommonConstants;
-    import VisibilityHelpers            = Utility.VisibilityHelpers;
+import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Logger                   from "../../tools/helpers/Logger";
+import Timer                    from "../../tools/helpers/Timer";
+import Types                    from "../../tools/helpers/Types";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import WarDestructionHelpers    from "../../tools/warHelpers/WarDestructionHelpers";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsBwUnit               from "./BwUnit";
+import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwWar                from "./BwWar";
+
+namespace TwnsBwTurnManager {
+    import NotifyType                   = TwnsNotifyType.NotifyType;
     import TurnPhaseCode                = Types.TurnPhaseCode;
     import TurnAndPlayerIndex           = Types.TurnAndPlayerIndex;
     import ISerialTurnManager           = ProtoTypes.WarSerialization.ISerialTurnManager;
     import WarAction                    = ProtoTypes.WarAction;
     import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
     import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
+    import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
+    import BwUnit                       = TwnsBwUnit.BwUnit;
+    import BwWar                        = TwnsBwWar.BwWar;
 
     export class BwTurnManager {
         private _turnIndex          : number | undefined;
@@ -436,7 +445,7 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_01;
             }
 
-            const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             if (visibleUnits == null) {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_02;
             }
@@ -483,7 +492,7 @@ namespace TinyWars.BaseWar {
                     (unit.getPlayerIndex() === playerIndex) && (allUnitsOnMap.push(unit));
                 }
 
-                const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
                 if (visibleUnits == null) {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_03;
                 }
@@ -562,7 +571,7 @@ namespace TinyWars.BaseWar {
                         }
 
                         fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
-                        DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+                        WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
                     }
                 }
             }
@@ -581,7 +590,7 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_01;
             }
 
-            const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             if (visibleUnits == null) {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_02;
             }
@@ -629,7 +638,7 @@ namespace TinyWars.BaseWar {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_03;
                 }
 
-                const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
                 if (visibleUnits == null) {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_04;
                 }
@@ -763,7 +772,7 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithExtraData_01;
             }
 
-            const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             if (visibleUnits == null) {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithExtraData_02;
             }
@@ -820,7 +829,7 @@ namespace TinyWars.BaseWar {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_05;
                 }
 
-                const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                const visibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
                 if (visibleUnits == null) {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_06;
                 }
@@ -849,7 +858,7 @@ namespace TinyWars.BaseWar {
 
                             if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
                                 (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
-                                (BwHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
                             ) {
                                 targetUnits.push(unit);
                             }
@@ -923,7 +932,7 @@ namespace TinyWars.BaseWar {
 
                             if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
                                 (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
-                                (BwHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
                             ) {
                                 const maxFuel = unit.getMaxFuel();
                                 if (maxFuel == null) {
@@ -969,7 +978,7 @@ namespace TinyWars.BaseWar {
 
                             if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
                                 (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
-                                (BwHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
                             ) {
                                 const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                                 if (maxAmmo) {
@@ -1154,7 +1163,7 @@ namespace TinyWars.BaseWar {
 
             this._setTurnIndex(info.turnIndex);
             this._setPlayerIndexInTurn(info.playerIndex);
-            this._setEnterTurnTime(Time.TimeModel.getServerTimestamp());
+            this._setEnterTurnTime(Timer.getServerTimestamp());
             war.getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
 
             return ClientErrorCode.NoError;
@@ -1170,7 +1179,7 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_01;
             }
 
-            const currTime      = Time.TimeModel.getServerTimestamp();
+            const currTime      = Timer.getServerTimestamp();
             let restTimeToBoot  : number | null | undefined;
             if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
                 restTimeToBoot = 0;
@@ -1241,7 +1250,7 @@ namespace TinyWars.BaseWar {
 
             this._setTurnIndex(info.turnIndex);
             this._setPlayerIndexInTurn(info.playerIndex);
-            this._setEnterTurnTime(Time.TimeModel.getServerTimestamp());
+            this._setEnterTurnTime(Timer.getServerTimestamp());
             war.getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
 
             return ClientErrorCode.NoError;
@@ -1307,7 +1316,7 @@ namespace TinyWars.BaseWar {
         private _setTurnIndex(index: number): void {
             if (this._turnIndex !== index){
                 this._turnIndex = index;
-                Notify.dispatch(Notify.Type.BwTurnIndexChanged);
+                Notify.dispatch(NotifyType.BwTurnIndexChanged);
             }
         }
 
@@ -1317,7 +1326,7 @@ namespace TinyWars.BaseWar {
         private _setPlayerIndexInTurn(index: number): void {
             if (this._playerIndexInTurn !== index) {
                 this._playerIndexInTurn = index;
-                Notify.dispatch(Notify.Type.BwPlayerIndexInTurnChanged);
+                Notify.dispatch(NotifyType.BwPlayerIndexInTurnChanged);
             }
         }
         public getNextPlayerIndex(playerIndex: number, includeNeutral = false): number | undefined {
@@ -1341,7 +1350,7 @@ namespace TinyWars.BaseWar {
         private _setPhaseCode(code: TurnPhaseCode): void {
             if (this._phaseCode !== code) {
                 this._phaseCode = code;
-                Notify.dispatch(Notify.Type.BwTurnPhaseCodeChanged);
+                Notify.dispatch(NotifyType.BwTurnPhaseCodeChanged);
             }
         }
 
@@ -1438,3 +1447,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwTurnManager;

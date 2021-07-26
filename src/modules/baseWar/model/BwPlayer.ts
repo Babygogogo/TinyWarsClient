@@ -1,17 +1,25 @@
 
-namespace TinyWars.BaseWar {
-    import Types            = Utility.Types;
-    import Notify           = Utility.Notify;
-    import Logger           = Utility.Logger;
-    import ConfigManager    = Utility.ConfigManager;
-    import ClientErrorCode  = Utility.ClientErrorCode;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import CommonConstants  = Utility.CommonConstants;
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import UserModel            from "../../user/model/UserModel";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsBwWar            from "./BwWar";
+
+namespace TwnsBwPlayer {
+    import NotifyType       = TwnsNotifyType.NotifyType;
     import GridIndex        = Types.GridIndex;
     import PlayerAliveState = Types.PlayerAliveState;
     import CoSkillType      = Types.CoSkillType;
     import ISerialPlayer    = ProtoTypes.WarSerialization.ISerialPlayer;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar            = TwnsBwWar.BwWar;
 
     export class BwPlayer {
         private _playerIndex            : number;
@@ -100,7 +108,7 @@ namespace TinyWars.BaseWar {
             }
 
             const coCurrentEnergy = data.coCurrentEnergy || 0;
-            if (coCurrentEnergy > BwHelpers.getCoMaxEnergy(coConfig)) {
+            if (coCurrentEnergy > WarCommonHelpers.getCoMaxEnergy(coConfig)) {
                 return ClientErrorCode.BwPlayerInit11;
             }
 
@@ -268,7 +276,7 @@ namespace TinyWars.BaseWar {
                 coUsingSkillType,
                 coIsDestroyedInTurn,
                 unitAndTileSkinId,
-                userId                      : playerIndex > 0 ? User.UserModel.getSelfUserId() : null,
+                userId                      : playerIndex > 0 ? UserModel.getSelfUserId() : null,
                 coId,
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
                 watchRequestSrcUserIdArray  : [],
@@ -289,7 +297,7 @@ namespace TinyWars.BaseWar {
         public setFund(fund: number): void {
             if (this._fund !== fund) {
                 this._fund = fund;
-                Notify.dispatch(Notify.Type.BwPlayerFundChanged, this);
+                Notify.dispatch(NotifyType.BwPlayerFundChanged, this);
             }
         }
         public getFund(): number {
@@ -303,7 +311,7 @@ namespace TinyWars.BaseWar {
             return this._hasVotedForDraw;
         }
         public checkCanVoteForDraw(): boolean {
-            return BwHelpers.checkCanVoteForDraw({
+            return WarCommonHelpers.checkCanVoteForDraw({
                 playerIndex : this.getPlayerIndex(),
                 aliveState  : this.getAliveState(),
             });
@@ -393,13 +401,13 @@ namespace TinyWars.BaseWar {
             const userId = this.getUserId();
             return (userId == null)
                 ?  `A.I.`
-                : await User.UserModel.getUserNickname(userId) || `??`;
+                : await UserModel.getUserNickname(userId) || `??`;
         }
 
         public setCoId(coId: number | null | undefined): void {
             if (this._coId != coId) {
                 this._coId = coId;
-                Notify.dispatch(Notify.Type.BwCoIdChanged);
+                Notify.dispatch(NotifyType.BwCoIdChanged);
             }
         }
         public getCoId(): number | null | undefined {
@@ -408,14 +416,14 @@ namespace TinyWars.BaseWar {
 
         public setCoCurrentEnergy(energy: number): void {
             this._coCurrentEnergy = energy;
-            Notify.dispatch(Notify.Type.BwCoEnergyChanged);
+            Notify.dispatch(NotifyType.BwCoEnergyChanged);
         }
         public getCoCurrentEnergy(): number {
             return this._coCurrentEnergy;
         }
         public getCoMaxEnergy(): number | null | undefined {
             const config = this._getCoBasicCfg();
-            return config ? BwHelpers.getCoMaxEnergy(config) : 0;
+            return config ? WarCommonHelpers.getCoMaxEnergy(config) : 0;
         }
         public getCoZoneExpansionEnergyList(): number[] | null | undefined {
             const cfg = this._getCoBasicCfg();
@@ -491,7 +499,7 @@ namespace TinyWars.BaseWar {
         }
         public setCoUsingSkillType(skillType: Types.CoSkillType): void {
             this._coUsingSkillType = skillType;
-            Notify.dispatch(Notify.Type.BwCoUsingSkillTypeChanged);
+            Notify.dispatch(NotifyType.BwCoUsingSkillTypeChanged);
         }
         public getCoCurrentSkills(): number[] | null {
             return this.getCoSkills(this.getCoUsingSkillType());
@@ -520,7 +528,7 @@ namespace TinyWars.BaseWar {
             } else {
                 const version = this._war.getConfigVersion();
                 for (const skillId of currentSkills) {
-                    if (Utility.ConfigManager.getCoSkillCfg(version, skillId).showZone) {
+                    if (ConfigManager.getCoSkillCfg(version, skillId).showZone) {
                         return true;
                     }
                 }
@@ -549,7 +557,9 @@ namespace TinyWars.BaseWar {
             const coId = this.getCoId();
             return coId == null
                 ? null
-                : Utility.ConfigManager.getCoBasicCfg(this._war.getConfigVersion(), coId);
+                : ConfigManager.getCoBasicCfg(this._war.getConfigVersion(), coId);
         }
     }
 }
+
+export default TwnsBwPlayer;

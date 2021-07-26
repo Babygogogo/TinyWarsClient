@@ -1,9 +1,11 @@
 
-namespace TinyWars.BaseWar {
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ClientErrorCode  = Utility.ClientErrorCode;
-    import Logger           = Utility.Logger;
+import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+import Logger                   from "../../tools/helpers/Logger";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+
+namespace TwnsBwRandomNumberManager {
     import ISeedRandomState = ProtoTypes.Structure.ISeedRandomState;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwRandomNumberManager {
         private _isNeedReplay?              : boolean;
@@ -81,3 +83,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwRandomNumberManager;

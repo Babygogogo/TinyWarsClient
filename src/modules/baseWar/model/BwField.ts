@@ -1,8 +1,25 @@
 
-namespace TinyWars.BaseWar {
-    import ClientErrorCode  = Utility.ClientErrorCode;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ISerialField     = ProtoTypes.WarSerialization.ISerialField;
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsBwFieldView          from "../view/BwFieldView";
+import TwnsBwActionPlanner      from "./BwActionPlanner";
+import TwnsBwCursor             from "./BwCursor";
+import TwnsBwFogMap             from "./BwFogMap";
+import TwnsBwGridVisualEffect   from "./BwGridVisualEffect";
+import TwnsBwTileMap            from "./BwTileMap";
+import TwnsBwUnitMap            from "./BwUnitMap";
+import TwnsBwWar                from "./BwWar";
+
+namespace TwnsBwField {
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ISerialField         = ProtoTypes.WarSerialization.ISerialField;
+    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
+    import BwWar                = TwnsBwWar.BwWar;
+    import BwCursor             = TwnsBwCursor.BwCursor;
+    import BwFogMap             = TwnsBwFogMap.BwFogMap;
+    import BwGridVisualEffect   = TwnsBwGridVisualEffect.BwGridVisualEffect;
+    import BwFieldView          = TwnsBwFieldView.BwFieldView;
 
     export abstract class BwField {
         private readonly _cursor            = new BwCursor();
@@ -10,9 +27,9 @@ namespace TinyWars.BaseWar {
         private readonly _view              = new BwFieldView();
 
         public abstract getFogMap(): BwFogMap;
-        public abstract getTileMap(): BwTileMap;
+        public abstract getTileMap(): TwnsBwTileMap.BwTileMap;
         public abstract getUnitMap(): BwUnitMap;
-        public abstract getActionPlanner(): BwActionPlanner;
+        public abstract getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner;
 
         public init({ data, configVersion, playersCountUnneutral }: {
             data                    : ISerialField | null | undefined;
@@ -23,8 +40,8 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwFieldInit00;
             }
 
-            const mapSize = BwHelpers.getMapSize(data.tileMap);
-            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+            const mapSize = WarCommonHelpers.getMapSize(data.tileMap);
+            if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 return ClientErrorCode.BwFieldInit01;
             }
 
@@ -98,7 +115,7 @@ namespace TinyWars.BaseWar {
             configVersion           : string;
             playersCountUnneutral   : number;
         }): ClientErrorCode {
-            const mapSize       = BwHelpers.getMapSize(data.tileMap);
+            const mapSize       = WarCommonHelpers.getMapSize(data.tileMap);
             const fogMapError   = this.getFogMap().fastInit({
                 data                : data.fogMap,
                 mapSize,
@@ -211,3 +228,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwField;

@@ -1,40 +1,53 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.User {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
-    import ProtoTypes   = Utility.ProtoTypes;
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import UserProxy                from "../../user/model/UserProxy";
+import TwnsUserPanel            from "../../user/view/UserPanel";
 
-    export class UserOnlineUsersPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsUserOnlineUsersPanel {
+    import UserPanel    = TwnsUserPanel.UserPanel;
+    import LangTextType = TwnsLangTextType.LangTextType;
+    import NotifyType   = TwnsNotifyType.NotifyType;
+
+    export class UserOnlineUsersPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: UserOnlineUsersPanel;
 
         // @ts-ignore
-        private readonly _imgMask               : GameUi.UiImage;
+        private readonly _imgMask               : TwnsUiImage.UiImage;
         // @ts-ignore
         private readonly _group                 : eui.Group;
         // @ts-ignore
-        private readonly _labelTitle            : GameUi.UiLabel;
+        private readonly _labelTitle            : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _btnClose              : GameUi.UiButton;
+        private readonly _btnClose              : TwnsUiButton.UiButton;
 
         // @ts-ignore
-        private readonly _labelTips             : GameUi.UiLabel;
+        private readonly _labelTips             : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelUsersCountTitle  : GameUi.UiLabel;
+        private readonly _labelUsersCountTitle  : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelUsersCount       : GameUi.UiLabel;
+        private readonly _labelUsersCount       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelNameTitle1       : GameUi.UiLabel;
+        private readonly _labelNameTitle1       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelNameTitle2       : GameUi.UiLabel;
+        private readonly _labelNameTitle2       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _listUser              : GameUi.UiScrollList<DataForUserRenderer>;
+        private readonly _listUser              : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
         // @ts-ignore
-        private readonly _labelLoading          : GameUi.UiLabel;
+        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
         private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUsers.IS | null | undefined;
         private _dataForList: DataForUserRenderer[] | null | undefined;
@@ -65,8 +78,8 @@ namespace TinyWars.User {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgUserGetOnlineUsers,  callback: this._onNotifySUserGetOnlineUsers },
+                { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserGetOnlineUsers,  callback: this._onNotifySUserGetOnlineUsers },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
@@ -106,7 +119,7 @@ namespace TinyWars.User {
             const msg = this._msg;
             if (!msg) {
                 this._labelLoading.visible  = true;
-                this._labelUsersCount.text  = Lang.getText(Lang.Type.B0029);
+                this._labelUsersCount.text  = Lang.getText(LangTextType.B0029);
                 this._listUser.clear();
             } else {
                 this._labelLoading.visible  = false;
@@ -155,12 +168,12 @@ namespace TinyWars.User {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text           = Lang.getText(Lang.Type.B0236);
-            this._labelTips.text            = Lang.getText(Lang.Type.A0064);
-            this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-            this._labelUsersCountTitle.text = `${Lang.getText(Lang.Type.B0237)}:`;
-            this._labelNameTitle1.text      = Lang.getText(Lang.Type.B0175);
-            this._labelNameTitle2.text      = Lang.getText(Lang.Type.B0175);
+            this._labelTitle.text           = Lang.getText(LangTextType.B0236);
+            this._labelTips.text            = Lang.getText(LangTextType.A0064);
+            this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+            this._labelUsersCountTitle.text = `${Lang.getText(LangTextType.B0237)}:`;
+            this._labelNameTitle1.text      = Lang.getText(LangTextType.B0175);
+            this._labelNameTitle2.text      = Lang.getText(LangTextType.B0175);
         }
 
         private _showOpenAnimation(): void {
@@ -197,12 +210,11 @@ namespace TinyWars.User {
         userId      : number | null | undefined;
         nickname    : string | null | undefined;
     };
-
-    class UserRenderer extends GameUi.UiListItemRenderer<DataForUserRenderer> {
+    class UserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUserRenderer> {
         // @ts-ignore
-        private readonly _imgBg     : GameUi.UiImage;
+        private readonly _imgBg     : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _labelName : GameUi.UiLabel;
+        private readonly _labelName : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -232,3 +244,5 @@ namespace TinyWars.User {
         }
     }
 }
+
+export default TwnsUserOnlineUsersPanel;

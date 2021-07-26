@@ -1,46 +1,61 @@
 
-namespace TinyWars.Common {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
-    import ConfigManager    = Utility.ConfigManager;
-    import ProtoTypes       = Utility.ProtoTypes;
+import CommonModel              from "../../common/model/CommonModel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Timer                    from "../../tools/helpers/Timer";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import UserModel                from "../../user/model/UserModel";
+import TwnsWarMapUnitView       from "../../warMap/view/WarMapUnitView";
+
+namespace TwnsCommonDamageChartPanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import WarMapUnitView   = TwnsWarMapUnitView.WarMapUnitView;
     import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
-    import CommonConstants  = Utility.CommonConstants;
     import IUnitTemplateCfg = ProtoTypes.Config.IUnitTemplateCfg;
 
-    export class CommonDamageChartPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: CommonDamageChartPanel;
 
         private _groupList          : eui.Group;
-        private _labelTitle         : TinyWars.GameUi.UiLabel;
-        private _listUnit           : TinyWars.GameUi.UiScrollList<DataForUnitRenderer>;
-        private _btnBack            : TinyWars.GameUi.UiButton;
+        private _labelTitle         : TwnsUiLabel.UiLabel;
+        private _listUnit           : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private _btnBack            : TwnsUiButton.UiButton;
 
         private _groupInfo          : eui.Group;
         private _conUnitView        : eui.Group;
-        private _labelName          : GameUi.UiLabel;
+        private _labelName          : TwnsUiLabel.UiLabel;
 
-        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
-        private _listDamageChart    : GameUi.UiScrollList<DataForDamageRenderer>;
-        private _labelDamageChart   : GameUi.UiLabel;
-        private _labelOffenseMain1  : GameUi.UiLabel;
-        private _labelOffenseSub1   : GameUi.UiLabel;
-        private _labelDefenseMain1  : GameUi.UiLabel;
-        private _labelDefenseSub1   : GameUi.UiLabel;
-        private _labelOffenseMain2  : GameUi.UiLabel;
-        private _labelOffenseSub2   : GameUi.UiLabel;
-        private _labelDefenseMain2  : GameUi.UiLabel;
-        private _labelDefenseSub2   : GameUi.UiLabel;
+        private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private _listDamageChart    : TwnsUiScrollList.UiScrollList<DataForDamageRenderer>;
+        private _labelDamageChart   : TwnsUiLabel.UiLabel;
+        private _labelOffenseMain1  : TwnsUiLabel.UiLabel;
+        private _labelOffenseSub1   : TwnsUiLabel.UiLabel;
+        private _labelDefenseMain1  : TwnsUiLabel.UiLabel;
+        private _labelDefenseSub1   : TwnsUiLabel.UiLabel;
+        private _labelOffenseMain2  : TwnsUiLabel.UiLabel;
+        private _labelOffenseSub2   : TwnsUiLabel.UiLabel;
+        private _labelDefenseMain2  : TwnsUiLabel.UiLabel;
+        private _labelDefenseSub2   : TwnsUiLabel.UiLabel;
 
         private _selectedIndex          : number;
         private _dataForListUnit        : DataForUnitRenderer[];
         private _dataForListDamageChart : DataForDamageRenderer[];
-        private _unitView               = new WarMap.WarMapUnitView();
+        private _unitView               = new WarMapUnitView();
 
         public static show(): void {
             if (!CommonDamageChartPanel._instance) {
@@ -68,9 +83,9 @@ namespace TinyWars.Common {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this.close },
@@ -114,14 +129,14 @@ namespace TinyWars.Common {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            this._unitView.updateOnAnimationTick(Time.TimeModel.getUnitAnimationTickCount());
+        private _onNotifyUnitAnimationTick(): void {
+            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
         }
-        private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwPlannerStateChanged(): void {
             this.close();
         }
 
@@ -159,17 +174,17 @@ namespace TinyWars.Common {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-            this._labelTitle.text           = Lang.getText(Lang.Type.B0440);
-            this._labelDamageChart.text     = Lang.getText(Lang.Type.B0334);
-            this._labelOffenseMain1.text    = Lang.getText(Lang.Type.B0335);
-            this._labelOffenseSub1.text     = Lang.getText(Lang.Type.B0336);
-            this._labelDefenseMain1.text    = Lang.getText(Lang.Type.B0337);
-            this._labelDefenseSub1.text     = Lang.getText(Lang.Type.B0338);
-            this._labelOffenseMain2.text    = Lang.getText(Lang.Type.B0335);
-            this._labelOffenseSub2.text     = Lang.getText(Lang.Type.B0336);
-            this._labelDefenseMain2.text    = Lang.getText(Lang.Type.B0337);
-            this._labelDefenseSub2.text     = Lang.getText(Lang.Type.B0338);
+            this._btnBack.label             = Lang.getText(LangTextType.B0146);
+            this._labelTitle.text           = Lang.getText(LangTextType.B0440);
+            this._labelDamageChart.text     = Lang.getText(LangTextType.B0334);
+            this._labelOffenseMain1.text    = Lang.getText(LangTextType.B0335);
+            this._labelOffenseSub1.text     = Lang.getText(LangTextType.B0336);
+            this._labelDefenseMain1.text    = Lang.getText(LangTextType.B0337);
+            this._labelDefenseSub1.text     = Lang.getText(LangTextType.B0338);
+            this._labelOffenseMain2.text    = Lang.getText(LangTextType.B0335);
+            this._labelOffenseSub2.text     = Lang.getText(LangTextType.B0336);
+            this._labelDefenseMain2.text    = Lang.getText(LangTextType.B0337);
+            this._labelDefenseSub2.text     = Lang.getText(LangTextType.B0338);
             this._updateListInfo();
         }
 
@@ -183,7 +198,7 @@ namespace TinyWars.Common {
                     playerIndex     : CommonConstants.WarFirstPlayerIndex,
                     unitType,
                     actionState     : Types.UnitActionState.Idle,
-                }, Time.TimeModel.getUnitAnimationTickCount());
+                }, Timer.getUnitAnimationTickCount());
             }
         }
 
@@ -226,58 +241,58 @@ namespace TinyWars.Common {
         private _createInfoHp(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             const maxHp = cfg.maxHp;
             return {
-                titleText   : Lang.getText(Lang.Type.B0339),
+                titleText   : Lang.getText(LangTextType.B0339),
                 valueText   : `${maxHp} / ${maxHp}`,
             };
         }
         private _createInfoProductionCost(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(Lang.Type.B0341),
+                titleText   : Lang.getText(LangTextType.B0341),
                 valueText   : `${cfg.productionCost}`,
             };
         }
         private _createInfoMovement(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(Lang.Type.B0340),
+                titleText   : Lang.getText(LangTextType.B0340),
                 valueText   : `${cfg.moveRange} (${Lang.getMoveTypeName(cfg.moveType)})`,
             };
         }
         private _createInfoFuel(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             const maxFuel = cfg.maxFuel;
             return {
-                titleText   : Lang.getText(Lang.Type.B0342),
+                titleText   : Lang.getText(LangTextType.B0342),
                 valueText   : `${maxFuel} / ${maxFuel}`,
             };
         }
         private _createInfoFuelConsumption(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(Lang.Type.B0343),
+                titleText   : Lang.getText(LangTextType.B0343),
                 valueText   : `${cfg.fuelConsumptionPerTurn}${cfg.diveCfgs == null ? `` : ` (${cfg.diveCfgs[0]})`}`,
             };
         }
         private _createInfoFuelDestruction(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(Lang.Type.B0344),
+                titleText   : Lang.getText(LangTextType.B0344),
                 valueText   : cfg.isDestroyedOnOutOfFuel
-                    ? Lang.getText(Lang.Type.B0012)
-                    : Lang.getText(Lang.Type.B0013),
+                    ? Lang.getText(LangTextType.B0012)
+                    : Lang.getText(LangTextType.B0013),
             };
         }
         private _createInfoAttackRange(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(Lang.Type.B0345),
-                valueText   : cfg.minAttackRange == null ? Lang.getText(Lang.Type.B0001) : `${cfg.minAttackRange} - ${cfg.maxAttackRange}`,
+                titleText   : Lang.getText(LangTextType.B0345),
+                valueText   : cfg.minAttackRange == null ? Lang.getText(LangTextType.B0001) : `${cfg.minAttackRange} - ${cfg.maxAttackRange}`,
             };
         }
         private _createInfoAttackAfterMove(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(Lang.Type.B0346),
-                valueText   : cfg.canAttackAfterMove ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                titleText   : Lang.getText(LangTextType.B0346),
+                valueText   : cfg.canAttackAfterMove ? Lang.getText(LangTextType.B0012) : Lang.getText(LangTextType.B0013),
             };
         }
         private _createInfoVisionRange(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(Lang.Type.B0354),
+                titleText   : Lang.getText(LangTextType.B0354),
                 valueText   : `${cfg.visionRange}`,
             };
         }
@@ -287,7 +302,7 @@ namespace TinyWars.Common {
                 return null;
             } else {
                 return {
-                    titleText   : Lang.getText(Lang.Type.B0350),
+                    titleText   : Lang.getText(LangTextType.B0350),
                     valueText   : `${maxValue} / ${maxValue}`,
                 };
             }
@@ -298,7 +313,7 @@ namespace TinyWars.Common {
                 return null;
             } else {
                 return {
-                    titleText   : Lang.getText(Lang.Type.B0347),
+                    titleText   : Lang.getText(LangTextType.B0347),
                     valueText   : `${maxValue} / ${maxValue}`,
                 };
             }
@@ -309,7 +324,7 @@ namespace TinyWars.Common {
                 return null;
             } else {
                 return {
-                    titleText   : Lang.getText(Lang.Type.B0348),
+                    titleText   : Lang.getText(LangTextType.B0348),
                     valueText   : `${maxValue} / ${maxValue}`,
                 };
             }
@@ -320,7 +335,7 @@ namespace TinyWars.Common {
                 return null;
             } else {
                 return {
-                    titleText   : Lang.getText(Lang.Type.B0349),
+                    titleText   : Lang.getText(LangTextType.B0349),
                     valueText   : `${maxValue} / ${maxValue}`,
                 };
             }
@@ -328,8 +343,8 @@ namespace TinyWars.Common {
         private _createInfoDive(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
             const isDiver = !!cfg.diveCfgs;
             return {
-                titleText   : Lang.getText(Lang.Type.B0439),
-                valueText   : isDiver ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                titleText   : Lang.getText(LangTextType.B0439),
+                valueText   : isDiver ? Lang.getText(LangTextType.B0012) : Lang.getText(LangTextType.B0013),
             };
         }
 
@@ -386,11 +401,10 @@ namespace TinyWars.Common {
         unitType        : Types.UnitType;
         index           : number;
         panel           : CommonDamageChartPanel;
-    }
-
-    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
+    };
+    class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
         private _imgChoose  : eui.Image;
-        private _labelName  : TinyWars.GameUi.UiLabel;
+        private _labelName  : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -403,7 +417,7 @@ namespace TinyWars.Common {
             this._labelName.text    = Lang.getUnitName(data.unitType);
         }
 
-        private _onTouchedImgChoose(e: egret.TouchEvent): void {
+        private _onTouchedImgChoose(): void {
             const data = this.data;
             data.panel.setSelectedIndexAndUpdateView(data.index);
         }
@@ -412,11 +426,10 @@ namespace TinyWars.Common {
     type DataForInfoRenderer = {
         titleText   : string;
         valueText   : string;
-    }
-
-    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : GameUi.UiButton;
-        private _labelValue : GameUi.UiLabel;
+    };
+    class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+        private _btnTitle   : TwnsUiButton.UiButton;
+        private _labelValue : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             const data              = this.data;
@@ -431,30 +444,29 @@ namespace TinyWars.Common {
         playerIndex?    : number;
         targetUnitType? : UnitType;
         targetTileType? : TileType;
-    }
-
-    class DamageRenderer extends GameUi.UiListItemRenderer<DataForDamageRenderer> {
+    };
+    class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {
         private _group                  : eui.Group;
         private _conView                : eui.Group;
-        private _unitView               : WarMap.WarMapUnitView;
-        private _tileView               : GameUi.UiImage;
-        private _labelPrimaryAttack     : GameUi.UiLabel;
-        private _labelSecondaryAttack   : GameUi.UiLabel;
-        private _labelPrimaryDefend     : GameUi.UiLabel;
-        private _labelSecondaryDefend   : GameUi.UiLabel;
+        private _unitView               : WarMapUnitView;
+        private _tileView               : TwnsUiImage.UiImage;
+        private _labelPrimaryAttack     : TwnsUiLabel.UiLabel;
+        private _labelSecondaryAttack   : TwnsUiLabel.UiLabel;
+        private _labelPrimaryDefend     : TwnsUiLabel.UiLabel;
+        private _labelSecondaryDefend   : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
 
-            this._unitView = new WarMap.WarMapUnitView();
+            this._unitView = new WarMapUnitView();
             this._conView.addChild(this._unitView);
         }
 
         private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
-                this._unitView.updateOnAnimationTick(Time.TimeModel.getUnitAnimationTickCount());
+                this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
             }
         }
 
@@ -478,7 +490,7 @@ namespace TinyWars.Common {
                     unitType        : targetUnitType,
                     playerIndex     : data.playerIndex,
                     actionState     : Types.UnitActionState.Idle,
-                }, Time.TimeModel.getUnitAnimationTickCount());
+                }, Timer.getUnitAnimationTickCount());
 
                 const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
                 const targetArmorType           = ConfigManager.getUnitTemplateCfg(configVersion, targetUnitType).armorType;
@@ -500,17 +512,17 @@ namespace TinyWars.Common {
 
                 const targetTileType            = data.targetTileType;
                 const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
-                const targetCfg                 = ConfigManager.getTileTemplateCfgByType(configVersion, targetTileType)
+                const targetCfg                 = ConfigManager.getTileTemplateCfgByType(configVersion, targetTileType);
                 const targetArmorType           = targetCfg.armorType;
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
-                this._tileView.source           = Common.CommonModel.getCachedTileObjectImageSource({
-                    version     : User.UserModel.getSelfSettingsTextureVersion(),
+                this._tileView.source           = CommonModel.getCachedTileObjectImageSource({
+                    version     : UserModel.getSelfSettingsTextureVersion(),
                     skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                     objectType  : ConfigManager.getTileObjectTypeByTileType(targetTileType),
                     isDark      : false,
                     shapeId     : 0,
-                    tickCount   : Time.TimeModel.getTileAnimationTickCount(),
+                    tickCount   : Timer.getTileAnimationTickCount(),
                 });
                 this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
                 this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;
@@ -520,3 +532,5 @@ namespace TinyWars.Common {
         }
     }
 }
+
+export default TwnsCommonDamageChartPanel;

@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group width="200" height="146" y="40" x="680">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <e:Group x="20" y="20">
             <e:Group id="_groupTileBase" x="0" y="0">
-                <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
                                 source="common0005" />
-                <GameUi:UiImage id="_imgTileBase" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                <TwnsUiImage:UiImage id="_imgTileBase" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
                                 verticalCenter="0" source="common0006" />
-                <GameUi:UiLabel id="_labelTileBase" text="Tile Bases" textColor="0xFFFFFF" size="20" x="32"
+                <TwnsUiLabel:UiLabel id="_labelTileBase" text="Tile Bases" textColor="0xFFFFFF" size="20" x="32"
                                 verticalCenter="0" />
             </e:Group>
             <e:Group id="_groupTileObject" x="0" y="0">
-                <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
                                 source="common0005" />
-                <GameUi:UiImage id="_imgTileObject" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                <TwnsUiImage:UiImage id="_imgTileObject" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
                                 verticalCenter="0" source="common0006" />
-                <GameUi:UiLabel id="_labelTileObject" text="Tile Objects" textColor="0xFFFFFF" size="20" x="32"
+                <TwnsUiLabel:UiLabel id="_labelTileObject" text="Tile Objects" textColor="0xFFFFFF" size="20" x="32"
                                 verticalCenter="0" />
             </e:Group>
             <e:Group id="_groupUnit" x="0" y="0">
-                <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
                                 source="common0005" />
-                <GameUi:UiImage id="_imgUnit" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0" verticalCenter="0"
+                <TwnsUiImage:UiImage id="_imgUnit" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0" verticalCenter="0"
                                 source="common0006" />
-                <GameUi:UiLabel id="_labelUnit" text="Units" textColor="0xFFFFFF" size="20" x="32" verticalCenter="0" />
+                <TwnsUiLabel:UiLabel id="_labelUnit" text="Units" textColor="0xFFFFFF" size="20" x="32" verticalCenter="0" />
             </e:Group>
             <e:layout>
                 <e:VerticalLayout gap="12" />

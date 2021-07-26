@@ -1,11 +1,12 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.BaseWar {
-    import Helpers              = Utility.Helpers;
-    import Logger               = Utility.Logger;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import ClientErrorCode      = Utility.ClientErrorCode;
+import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Logger                       from "../../tools/helpers/Logger";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+
+namespace TwnsBwExecutedActionManager {
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwExecutedActionManager {
         private _isNeedReplay?      : boolean;
@@ -84,3 +85,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwExecutedActionManager;

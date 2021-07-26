@@ -1,27 +1,46 @@
 
-namespace TinyWars.SinglePlayerMode {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import CommonConstants  = Utility.CommonConstants;
-    import Types            = Utility.Types;
-    import BwHelpers        = BaseWar.BwHelpers;
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
+import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
+import SpmModel                 from "../../singlePlayerMode/model/SpmModel";
+import SpmProxy                 from "../../singlePlayerMode/model/SpmProxy";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import WarMapModel              from "../../warMap/model/WarMapModel";
+
+namespace TwnsSpmCreateSfwSaveSlotsPanel {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
+    import CommonInputPanel     = TwnsCommonInputPanel.CommonInputPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
 
     export type OpenDataForSpmCreateSfwSaveSlotsPanel = ISerialWar;
 
-    export class SpmCreateSfwSaveSlotsPanel extends GameUi.UiPanel<OpenDataForSpmCreateSfwSaveSlotsPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+    export class SpmCreateSfwSaveSlotsPanel extends TwnsUiPanel.UiPanel<OpenDataForSpmCreateSfwSaveSlotsPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: SpmCreateSfwSaveSlotsPanel;
 
         private _group          : eui.Group;
-        private _labelPanelTitle: GameUi.UiLabel;
-        private _srlSaveSlot    : GameUi.UiScrollList<DataForSlotRenderer>;
+        private _labelPanelTitle: TwnsUiLabel.UiLabel;
+        private _srlSaveSlot    : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
         private _listSaveSlot   : eui.List;
-        private _btnHelp        : GameUi.UiButton;
-        private _btnCancel      : GameUi.UiButton;
+        private _btnHelp        : TwnsUiButton.UiButton;
+        private _btnCancel      : TwnsUiButton.UiButton;
 
         private _dataForList: DataForSlotRenderer[];
 
@@ -52,7 +71,7 @@ namespace TinyWars.SinglePlayerMode {
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._srlSaveSlot.setItemRenderer(SlotRenderer);
 
@@ -70,9 +89,9 @@ namespace TinyWars.SinglePlayerMode {
         }
 
         private _onTouchedBtnHelp(e: egret.TouchEvent): void {
-            Common.CommonHelpPanel.show({
-                title   : Lang.getText(Lang.Type.B0325),
-                content : Lang.getText(Lang.Type.R0006),
+            CommonHelpPanel.show({
+                title   : Lang.getText(LangTextType.B0325),
+                content : Lang.getText(LangTextType.R0006),
             });
         }
 
@@ -88,19 +107,19 @@ namespace TinyWars.SinglePlayerMode {
 
             this._dataForList = this._createDataForList();
             this._srlSaveSlot.bindData(this._dataForList);
-            this._listSaveSlot.selectedIndex = SpmModel.SaveSlot.getAvailableIndex();
+            this._listSaveSlot.selectedIndex = SpmModel.getAvailableIndex();
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelPanelTitle.text  = Lang.getText(Lang.Type.B0259);
-            this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
-            this._btnHelp.label         = Lang.getText(Lang.Type.B0143);
+            this._labelPanelTitle.text  = Lang.getText(LangTextType.B0259);
+            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+            this._btnHelp.label         = Lang.getText(LangTextType.B0143);
         }
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
             const warData   = this._getOpenData();
-            const slotDict  = SinglePlayerMode.SpmModel.SaveSlot.getSlotDict();
+            const slotDict  = SpmModel.getSlotDict();
             for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
@@ -117,14 +136,14 @@ namespace TinyWars.SinglePlayerMode {
         slotIndex   : number;
         slotInfo    : Types.SpmWarSaveSlotData | null;
         warData     : ISerialWar;
-    }
-    class SlotRenderer extends GameUi.UiListItemRenderer<DataForSlotRenderer> {
+    };
+    class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
         private _group          : eui.Group;
-        private _imgBg          : GameUi.UiImage;
-        private _labelSlotIndex : GameUi.UiLabel;
-        private _labelType      : GameUi.UiLabel;
-        private _labelMapName   : GameUi.UiLabel;
-        private _labelChoose    : GameUi.UiLabel;
+        private _imgBg          : TwnsUiImage.UiImage;
+        private _labelSlotIndex : TwnsUiLabel.UiLabel;
+        private _labelType      : TwnsUiLabel.UiLabel;
+        private _labelMapName   : TwnsUiLabel.UiLabel;
+        private _labelChoose    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -132,7 +151,7 @@ namespace TinyWars.SinglePlayerMode {
             ]);
 
             this._imgBg.touchEnabled    = true;
-            this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
+            this._labelChoose.text      = Lang.getText(LangTextType.B0258);
         }
 
         protected _onDataChanged(): void {
@@ -142,14 +161,14 @@ namespace TinyWars.SinglePlayerMode {
         private _onTouchedImgBg(e: egret.TouchEvent): void {
             const data      = this.data;
             const callback  = () => {
-                Common.CommonInputPanel.show({
-                    title       : Lang.getText(Lang.Type.B0088),
+                CommonInputPanel.show({
+                    title       : Lang.getText(LangTextType.B0088),
                     maxChars    : CommonConstants.SpmSaveSlotCommentMaxLength,
                     currentValue: ``,
-                    tips        : Lang.getText(Lang.Type.A0144),
+                    tips        : Lang.getText(LangTextType.A0144),
                     charRestrict: null,
                     callback    : (panel) => {
-                        SinglePlayerMode.SpmProxy.reqSpmCreateSfw({
+                        SpmProxy.reqSpmCreateSfw({
                             slotIndex       : data.slotIndex,
                             slotExtraData   : { slotComment: panel.getInputText() },
                             warData         : data.warData,
@@ -161,8 +180,8 @@ namespace TinyWars.SinglePlayerMode {
             if (!data.slotInfo) {
                 callback();
             } else {
-                Common.CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0070),
+                CommonConfirmPanel.show({
+                    content : Lang.getText(LangTextType.A0070),
                     callback,
                 });
             }
@@ -183,18 +202,20 @@ namespace TinyWars.SinglePlayerMode {
                 labelMapName.text   = `----`;
             } else {
                 const warData   = slotInfo.warData;
-                labelType.text  = Lang.getWarTypeName(BwHelpers.getWarType(warData));
+                labelType.text  = Lang.getWarTypeName(WarCommonHelpers.getWarType(warData));
 
                 const slotComment = slotInfo.extraData.slotComment;
                 if (slotComment) {
                     labelMapName.text = slotComment;
                 } else {
-                    const mapId         = BwHelpers.getMapId(warData);
+                    const mapId         = WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
-                        ? `(${Lang.getText(Lang.Type.B0321)})`
-                        : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId);
+                        ? `(${Lang.getText(LangTextType.B0321)})`
+                        : await WarMapModel.getMapNameInCurrentLanguage(mapId);
                 }
             }
         }
     }
 }
+
+export default TwnsSpmCreateSfwSaveSlotsPanel;

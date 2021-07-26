@@ -1,45 +1,53 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.User {
-    import Lang             = Utility.Lang;
-    import NotifyType       = Utility.Notify.Type;
-    import LocalStorage     = Utility.LocalStorage;
-    import StageManager     = Utility.StageManager;
-    import CommonConstants  = Utility.CommonConstants;
-    import Helpers          = Utility.Helpers;
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Helpers          from "../../tools/helpers/Helpers";
+import LocalStorage     from "../../tools/helpers/LocalStorage";
+import StageManager     from "../../tools/helpers/StageManager";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+
+namespace TwnsUserSetStageScalePanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import LangTextType     = TwnsLangTextType.LangTextType;
     import StageMinScale    = CommonConstants.StageMinScale;
     import StageMaxScale    = CommonConstants.StageMaxScale;
 
-    export class UserSetStageScalePanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class UserSetStageScalePanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: UserSetStageScalePanel;
 
         // @ts-ignore
-        private readonly _imgMask           : GameUi.UiImage;
+        private readonly _imgMask           : TwnsUiImage.UiImage;
         // @ts-ignore
         private readonly _group             : eui.Group;
         // @ts-ignore
-        private readonly _labelTitle        : GameUi.UiLabel;
+        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
 
         // @ts-ignore
-        private readonly _labelScaleTitle   : GameUi.UiLabel;
+        private readonly _labelScaleTitle   : TwnsUiLabel.UiLabel;
         // @ts-ignore
         private readonly _groupScale        : eui.Group;
         // @ts-ignore
-        private readonly _imgScaleBar       : GameUi.UiImage;
+        private readonly _imgScaleBar       : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _imgScalePoint     : GameUi.UiImage;
+        private readonly _imgScalePoint     : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _labelScale        : GameUi.UiLabel;
+        private readonly _labelScale        : TwnsUiLabel.UiLabel;
 
         // @ts-ignore
-        private readonly _btnCancel         : GameUi.UiButton;
+        private readonly _btnCancel         : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnDefault        : GameUi.UiButton;
+        private readonly _btnDefault        : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnConfirm        : GameUi.UiButton;
+        private readonly _btnConfirm        : TwnsUiButton.UiButton;
 
         private _prevScale                  : number | undefined;
         private _selectedScale              : number | undefined;
@@ -150,11 +158,11 @@ namespace TinyWars.User {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getText(Lang.Type.B0558);
-            this._labelScaleTitle.text  = Lang.getText(Lang.Type.B0559);
-            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
-            this._btnDefault.label      = Lang.getText(Lang.Type.B0543);
-            this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
+            this._labelTitle.text       = Lang.getText(LangTextType.B0558);
+            this._labelScaleTitle.text  = Lang.getText(LangTextType.B0559);
+            this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+            this._btnDefault.label      = Lang.getText(LangTextType.B0543);
+            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
         }
 
         private _updateGroupScale(): void {
@@ -195,3 +203,5 @@ namespace TinyWars.User {
         }
     }
 }
+
+export default TwnsUserSetStageScalePanel;

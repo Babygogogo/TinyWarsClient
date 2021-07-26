@@ -1,27 +1,37 @@
 
-namespace TinyWars.WarEvent {
-    import Notify               = Utility.Notify;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Logger               = Utility.Logger;
-    import Lang                 = Utility.Lang;
-    import FloatText            = Utility.FloatText;
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import WarEventHelper           from "../model/WarEventHelper";
+
+namespace TwnsWeConditionReplacePanel {
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
 
     type OpenDataForWeConditionReplacePanel = {
         fullData        : IWarEventFullData;
         parentNodeId    : number;
         conditionId     : number;
-    }
-    export class WeConditionReplacePanel extends GameUi.UiPanel<OpenDataForWeConditionReplacePanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+    };
+    export class WeConditionReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeConditionReplacePanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: WeConditionReplacePanel;
 
-        private _listCondition      : GameUi.UiScrollList<DataForConditionRenderer>;
-        private _labelTitle         : GameUi.UiLabel;
-        private _labelNoCondition   : GameUi.UiLabel;
-        private _btnClose           : GameUi.UiButton;
+        private _listCondition      : TwnsUiScrollList.UiScrollList<DataForConditionRenderer>;
+        private _labelTitle         : TwnsUiLabel.UiLabel;
+        private _labelNoCondition   : TwnsUiLabel.UiLabel;
+        private _btnClose           : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForWeConditionReplacePanel): void {
             if (!WeConditionReplacePanel._instance) {
@@ -46,7 +56,7 @@ namespace TinyWars.WarEvent {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
@@ -68,9 +78,9 @@ namespace TinyWars.WarEvent {
 
         private _updateComponentsForLanguage(): void {
             const openData              = this._getOpenData();
-            this._labelTitle.text       = `${Lang.getText(Lang.Type.B0500)} C${openData.conditionId}`;
-            this._labelNoCondition.text = Lang.getText(Lang.Type.B0278);
-            this._btnClose.label        = Lang.getText(Lang.Type.B0146);
+            this._labelTitle.text       = `${Lang.getText(LangTextType.B0500)} C${openData.conditionId}`;
+            this._labelNoCondition.text = Lang.getText(LangTextType.B0278);
+            this._btnClose.label        = Lang.getText(LangTextType.B0146);
         }
         private _updateListConditionAndLabelNoCondition(): void {
             const openData          = this._getOpenData();
@@ -98,12 +108,12 @@ namespace TinyWars.WarEvent {
         srcConditionId      : number;
         candidateConditionId: number;
         fullData            : IWarEventFullData;
-    }
-    class ConditionRenderer extends GameUi.UiListItemRenderer<DataForConditionRenderer> {
-        private _labelConditionId   : GameUi.UiLabel;
-        private _labelCondition     : GameUi.UiLabel;
-        private _btnCopy            : GameUi.UiButton;
-        private _btnSelect          : GameUi.UiButton;
+    };
+    class ConditionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForConditionRenderer> {
+        private _labelConditionId   : TwnsUiLabel.UiLabel;
+        private _labelCondition     : TwnsUiLabel.UiLabel;
+        private _btnCopy            : TwnsUiButton.UiButton;
+        private _btnSelect          : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -111,7 +121,7 @@ namespace TinyWars.WarEvent {
                 { ui: this._btnSelect,  callback: this._onTouchedBtnSelect },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
             this._updateComponentsForLanguage();
@@ -135,7 +145,7 @@ namespace TinyWars.WarEvent {
                 conditionIdForDelete    : data.srcConditionId,
                 conditionIdForClone     : data.candidateConditionId,
             }) != null) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 WeConditionReplacePanel.hide();
             }
         }
@@ -151,7 +161,7 @@ namespace TinyWars.WarEvent {
                 oldConditionId  : data.srcConditionId,
                 newConditionId  : data.candidateConditionId,
             })) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 WeConditionReplacePanel.hide();
             }
         }
@@ -160,8 +170,8 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnCopy.label     = Lang.getText(Lang.Type.B0487);
-            this._btnSelect.label   = Lang.getText(Lang.Type.B0492);
+            this._btnCopy.label     = Lang.getText(LangTextType.B0487);
+            this._btnSelect.label   = Lang.getText(LangTextType.B0492);
 
             this._updateLabelConditionId();
             this._updateLabelCondition();
@@ -170,7 +180,7 @@ namespace TinyWars.WarEvent {
         private _updateLabelConditionId(): void {
             const data = this.data;
             if (data) {
-                this._labelConditionId.text  = `${Lang.getText(Lang.Type.B0502)}: C${data.candidateConditionId}`;
+                this._labelConditionId.text  = `${Lang.getText(LangTextType.B0502)}: C${data.candidateConditionId}`;
             }
         }
         private _updateLabelCondition(): void {
@@ -182,7 +192,7 @@ namespace TinyWars.WarEvent {
             const condition = (data.fullData.conditionArray || []).find(v => v.WecCommonData.conditionId === data.candidateConditionId);
             const label     = this._labelCondition;
             if (condition == null) {
-                label.text = Lang.getText(Lang.Type.A0160);
+                label.text = Lang.getText(LangTextType.A0160);
             } else {
                 label.text = WarEventHelper.getDescForCondition(condition);
             }
@@ -195,3 +205,5 @@ namespace TinyWars.WarEvent {
         }
     }
 }
+
+export default TwnsWeConditionReplacePanel;

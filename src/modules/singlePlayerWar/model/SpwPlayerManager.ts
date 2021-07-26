@@ -1,13 +1,17 @@
 
-namespace TinyWars.SinglePlayerWar {
-    import Logger = Utility.Logger;
+import Logger               from "../../tools/helpers/Logger";
+import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
+import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
 
-    export class SpwPlayerManager extends BaseWar.BwPlayerManager {
+namespace TwnsSpwPlayerManager {
+    import BwPlayerManager = TwnsBwPlayerManager.BwPlayerManager;
+
+    export class SpwPlayerManager extends BwPlayerManager {
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getHumanPlayers(): BaseWar.BwPlayer[] {
-            const players: BaseWar.BwPlayer[] = [];
+        public getHumanPlayers(): TwnsBwPlayer.BwPlayer[] {
+            const players: TwnsBwPlayer.BwPlayer[] = [];
             for (const [, player] of this.getAllPlayersDict()) {
                 if (player.getUserId() != null) {
                     players.push(player);
@@ -34,7 +38,7 @@ namespace TinyWars.SinglePlayerWar {
             if (!humanPlayers.length) {
                 return this.getAliveTeamIndexes(false);
             } else {
-                // return this.getAliveWatcherTeamIndexes(User.UserModel.getSelfUserId());
+                // return this.getAliveWatcherTeamIndexes(UserModel.getSelfUserId());
                 const player = this.getPlayerInTurn();
                 if (player == null) {
                     Logger.error(`SpwPlayerManager.getAliveWatcherTeamIndexesForSelf() empty player.`);
@@ -68,3 +72,5 @@ namespace TinyWars.SinglePlayerWar {
         }
     }
 }
+
+export default TwnsSpwPlayerManager;

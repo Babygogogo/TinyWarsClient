@@ -1,9 +1,18 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.Common {
-    import Lang     = Utility.Lang;
-    import Notify   = Utility.Notify;
-    import Helpers  = Utility.Helpers;
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+
+namespace TwnsCommonInputPanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     type OpenData = {
         title           : string;
@@ -13,19 +22,19 @@ namespace TinyWars.Common {
         charRestrict    : string | null;
         callback        : (panel: CommonInputPanel) => any;
     };
-    export class CommonInputPanel extends GameUi.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
+    export class CommonInputPanel extends TwnsUiPanel.UiPanel<OpenData> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CommonInputPanel;
 
-        private readonly _imgMask       : GameUi.UiImage;
+        private readonly _imgMask       : TwnsUiImage.UiImage;
         private readonly _group         : eui.Group;
-        private readonly _labelTitle    : GameUi.UiLabel;
-        private readonly _labelTips     : GameUi.UiLabel;
-        private readonly _input         : GameUi.UiTextInput;
-        private readonly _btnCancel     : GameUi.UiButton;
-        private readonly _btnConfirm    : GameUi.UiButton;
+        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
+        private readonly _labelTips     : TwnsUiLabel.UiLabel;
+        private readonly _input         : TwnsUiTextInput.UiTextInput;
+        private readonly _btnCancel     : TwnsUiButton.UiButton;
+        private readonly _btnConfirm    : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!CommonInputPanel._instance) {
@@ -49,7 +58,7 @@ namespace TinyWars.Common {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel, },
@@ -124,8 +133,10 @@ namespace TinyWars.Common {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
+            this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
         }
     }
 }
+
+export default TwnsCommonInputPanel;

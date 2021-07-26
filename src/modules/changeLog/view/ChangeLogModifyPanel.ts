@@ -1,32 +1,40 @@
 
-namespace TinyWars.ChangeLog {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import ConfigManager    = Utility.ConfigManager;
-    import Types            = Utility.Types;
-    import FloatText        = Utility.FloatText;
-    import ProtoTypes       = Utility.ProtoTypes;
+import ChangeLogModel   from "../../changeLog/model/ChangeLogModel";
+import ChangeLogProxy   from "../../changeLog/model/ChangeLogProxy";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import FloatText        from "../../tools/helpers/FloatText";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
+
+namespace TwnsChangeLogModifyPanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForChangeLogModifyPanel = {
         messageId   : number;
-    }
-
-    export class ChangeLogModifyPanel extends GameUi.UiPanel<OpenDataForChangeLogModifyPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+    };
+    export class ChangeLogModifyPanel extends TwnsUiPanel.UiPanel<OpenDataForChangeLogModifyPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: ChangeLogModifyPanel;
 
-        private _inputChinese   : GameUi.UiTextInput;
-        private _inputEnglish   : GameUi.UiTextInput;
-        private _labelTip       : GameUi.UiLabel;
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelChinese   : GameUi.UiLabel;
-        private _labelEnglish   : GameUi.UiLabel;
-        private _btnModify      : GameUi.UiButton;
-        private _btnClose       : GameUi.UiButton;
+        private _inputChinese   : TwnsUiTextInput.UiTextInput;
+        private _inputEnglish   : TwnsUiTextInput.UiTextInput;
+        private _labelTip       : TwnsUiLabel.UiLabel;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
+        private _labelChinese   : TwnsUiLabel.UiLabel;
+        private _labelEnglish   : TwnsUiLabel.UiLabel;
+        private _btnModify      : TwnsUiButton.UiButton;
+        private _btnClose       : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForChangeLogModifyPanel): void {
             if (!ChangeLogModifyPanel._instance) {
@@ -52,7 +60,7 @@ namespace TinyWars.ChangeLog {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
@@ -77,9 +85,9 @@ namespace TinyWars.ChangeLog {
                 { languageType: Types.LanguageType.English, text: englishText || chineseText },
             ];
             if (textList.every(v => v.text.length <= 0)) {
-                FloatText.show(Lang.getText(Lang.Type.A0155));
+                FloatText.show(Lang.getText(LangTextType.A0155));
             } else if (textList.some(v => v.text.length > CommonConstants.ChangeLogTextMaxLength)) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.ChangeLogTextMaxLength));
+                FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.ChangeLogTextMaxLength));
             } else {
                 ChangeLogProxy.reqChangeLogModifyMessage(this._getOpenData().messageId, textList);
                 this.close();
@@ -95,12 +103,14 @@ namespace TinyWars.ChangeLog {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnClose.label    = Lang.getText(Lang.Type.B0146);
-            this._btnModify.label   = Lang.getText(Lang.Type.B0317);
-            this._labelChinese.text = Lang.getText(Lang.Type.B0455);
-            this._labelEnglish.text = Lang.getText(Lang.Type.B0456);
-            this._labelTip.text     = Lang.getText(Lang.Type.A0156);
-            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0317)} #${this._getOpenData().messageId}`;
+            this._btnClose.label    = Lang.getText(LangTextType.B0146);
+            this._btnModify.label   = Lang.getText(LangTextType.B0317);
+            this._labelChinese.text = Lang.getText(LangTextType.B0455);
+            this._labelEnglish.text = Lang.getText(LangTextType.B0456);
+            this._labelTip.text     = Lang.getText(LangTextType.A0156);
+            this._labelTitle.text   = `${Lang.getText(LangTextType.B0317)} #${this._getOpenData().messageId}`;
         }
     }
 }
+
+export default TwnsChangeLogModifyPanel;

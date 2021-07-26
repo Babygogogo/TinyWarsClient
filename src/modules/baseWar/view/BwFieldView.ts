@@ -1,9 +1,22 @@
 
-namespace TinyWars.BaseWar {
+import TwnsBwField                  from "../model/BwField";
+import TwnsBwActionPlannerView      from "./BwActionPlannerView";
+import TwnsBwCursorView             from "./BwCursorView";
+import TwnsBwGridVisualEffectView   from "./BwGridVisualEffectView";
+import TwnsBwTileMapView            from "./BwTileMapView";
+import TwnsBwUnitMapView            from "./BwUnitMapView";
+
+namespace TwnsBwFieldView {
+    import BwGridVisualEffectView   = TwnsBwGridVisualEffectView.BwGridVisualEffectView;
+    import BwTileMapView            = TwnsBwTileMapView.BwTileMapView;
+    import BwUnitMapView            = TwnsBwUnitMapView.BwUnitMapView;
+    import BwField                  = TwnsBwField.BwField;
+    import BwCursorView             = TwnsBwCursorView.BwCursorView;
+
     export class BwFieldView extends egret.DisplayObjectContainer {
         private _field                  : BwField;
         private _tileMapView            : BwTileMapView;
-        private _actionPlannerView      : BwActionPlannerView;
+        private _actionPlannerView      : TwnsBwActionPlannerView.BwActionPlannerView;
         private _unitMapView            : BwUnitMapView;
         private _cursorView             : BwCursorView;
         private _gridVisionEffectView   : BwGridVisualEffectView;
@@ -30,8 +43,10 @@ namespace TinyWars.BaseWar {
         }
 
         public startRunningView(): void {
+            // nothing to do
         }
         public stopRunningView(): void {
+            // nothing to do
         }
 
         private _getUnitMapView(): BwUnitMapView {
@@ -63,3 +78,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwFieldView;

@@ -1,66 +1,74 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.User {
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import NotifyType       = Utility.Notify.Type;
-    import CommonConstants  = Utility.CommonConstants;
-    import SoundManager     = Utility.SoundManager;
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Helpers          from "../../tools/helpers/Helpers";
+import SoundManager     from "../../tools/helpers/SoundManager";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
 
-    export class UserSetSoundPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsUserSetSoundPanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+
+    export class UserSetSoundPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: UserSetSoundPanel;
 
         // @ts-ignore
-        private readonly _imgMask           : GameUi.UiImage;
+        private readonly _imgMask           : TwnsUiImage.UiImage;
         // @ts-ignore
         private readonly _group             : eui.Group;
         // @ts-ignore
-        private readonly _labelTitle        : GameUi.UiLabel;
+        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
 
         // @ts-ignore
-        private readonly _labelBgmTitle     : GameUi.UiLabel;
+        private readonly _labelBgmTitle     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _imgBgmMute        : GameUi.UiImage;
+        private readonly _imgBgmMute        : TwnsUiImage.UiImage;
         // @ts-ignore
         private readonly _groupBgmVolume    : eui.Group;
         // @ts-ignore
-        private readonly _imgBgmBar         : GameUi.UiImage;
+        private readonly _imgBgmBar         : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _imgBgmPoint       : GameUi.UiImage;
+        private readonly _imgBgmPoint       : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _labelBgmVolume    : GameUi.UiLabel;
+        private readonly _labelBgmVolume    : TwnsUiLabel.UiLabel;
 
         // @ts-ignore
-        private readonly _labelEffectTitle  : GameUi.UiLabel;
+        private readonly _labelEffectTitle  : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _imgEffectMute     : GameUi.UiImage;
+        private readonly _imgEffectMute     : TwnsUiImage.UiImage;
         // @ts-ignore
         private readonly _groupEffectVolume : eui.Group;
         // @ts-ignore
-        private readonly _imgEffectBar      : GameUi.UiImage;
+        private readonly _imgEffectBar      : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _imgEffectPoint    : GameUi.UiImage;
+        private readonly _imgEffectPoint    : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _labelEffectVolume : GameUi.UiLabel;
+        private readonly _labelEffectVolume : TwnsUiLabel.UiLabel;
 
         // @ts-ignore
-        private readonly _labelSwitchBgm    : GameUi.UiLabel;
+        private readonly _labelSwitchBgm    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelBgmName      : GameUi.UiLabel;
+        private readonly _labelBgmName      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _btnPrevBgm        : GameUi.UiButton;
+        private readonly _btnPrevBgm        : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnNextBgm        : GameUi.UiButton;
+        private readonly _btnNextBgm        : TwnsUiButton.UiButton;
 
         // @ts-ignore
-        private readonly _btnCancel         : GameUi.UiButton;
+        private readonly _btnCancel         : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnDefault        : GameUi.UiButton;
+        private readonly _btnDefault        : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnConfirm        : GameUi.UiButton;
+        private readonly _btnConfirm        : TwnsUiButton.UiButton;
 
         private _prevBgmMute                : boolean | undefined;
         private _prevBgmVolume              : number | undefined;
@@ -222,13 +230,13 @@ namespace TinyWars.User {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getText(Lang.Type.B0540);
-            this._labelBgmTitle.text    = Lang.getText(Lang.Type.B0541);
-            this._labelEffectTitle.text = Lang.getText(Lang.Type.B0542);
-            this._labelSwitchBgm.text   = Lang.getText(Lang.Type.B0631);
-            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
-            this._btnDefault.label      = Lang.getText(Lang.Type.B0543);
-            this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
+            this._labelTitle.text       = Lang.getText(LangTextType.B0540);
+            this._labelBgmTitle.text    = Lang.getText(LangTextType.B0541);
+            this._labelEffectTitle.text = Lang.getText(LangTextType.B0542);
+            this._labelSwitchBgm.text   = Lang.getText(LangTextType.B0631);
+            this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+            this._btnDefault.label      = Lang.getText(LangTextType.B0543);
+            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
             this._updateLabelBgmName();
         }
 
@@ -285,3 +293,5 @@ namespace TinyWars.User {
         }
     }
 }
+
+export default TwnsUserSetSoundPanel;

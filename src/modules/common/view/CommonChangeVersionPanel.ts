@@ -1,16 +1,25 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.Common {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import CommonConstants  = Utility.CommonConstants;
-    import Helpers          = Utility.Helpers;
-    import Logger           = Utility.Logger;
-    import GameVersion      = Types.GameVersion;
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Logger                   from "../../tools/helpers/Logger";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
-    export class CommonChangeVersionPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+namespace TwnsCommonChangeVersionPanel {
+    import LangTextType = TwnsLangTextType.LangTextType;
+    import NotifyType   = TwnsNotifyType.NotifyType;
+    import GameVersion  = Types.GameVersion;
+
+    export class CommonChangeVersionPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: CommonChangeVersionPanel;
@@ -18,17 +27,17 @@ namespace TinyWars.Common {
         // @ts-ignore
         private readonly _group         : eui.Group;
         // @ts-ignore
-        private readonly _imgMask       : GameUi.UiImage;
+        private readonly _imgMask       : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _labelTitle    : GameUi.UiLabel;
+        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _btnBack       : GameUi.UiButton;
+        private readonly _btnBack       : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnConfirm    : GameUi.UiButton;
+        private readonly _btnConfirm    : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _listVersion   : GameUi.UiScrollList<DataForMapNameRenderer>;
+        private readonly _listVersion   : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
         // @ts-ignore
-        private readonly _labelTips     : GameUi.UiLabel;
+        private readonly _labelTips     : TwnsUiLabel.UiLabel;
 
         public static show(): void {
             if (!CommonChangeVersionPanel._instance) {
@@ -60,7 +69,7 @@ namespace TinyWars.Common {
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._listVersion.setItemRenderer(MapNameRenderer);
 
@@ -112,10 +121,10 @@ namespace TinyWars.Common {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text   = Lang.getText(Lang.Type.B0620);
-            this._btnBack.label     = Lang.getText(Lang.Type.B0154);
-            this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-            this._labelTips.text    = Lang.getText(Lang.Type.A0219);
+            this._labelTitle.text   = Lang.getText(LangTextType.B0620);
+            this._btnBack.label     = Lang.getText(LangTextType.B0154);
+            this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+            this._labelTips.text    = Lang.getText(LangTextType.A0219);
         }
 
         private _initListVersion(): void {
@@ -171,17 +180,17 @@ namespace TinyWars.Common {
     type DataForMapNameRenderer = {
         gameVersion : GameVersion;
     };
-    class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
+    class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
         // @ts-ignore
-        private _labelName      : GameUi.UiLabel;
+        private _labelName      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelDesc      : GameUi.UiLabel;
+        private _labelDesc      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelCurrent   : GameUi.UiLabel;
+        private _labelCurrent   : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
         }
 
@@ -204,7 +213,7 @@ namespace TinyWars.Common {
             this._labelDesc.text    = Lang.getGameVersionDesc(gameVersion) || CommonConstants.ErrorTextForUndefined;
 
             const labelCurrent      = this._labelCurrent;
-            labelCurrent.text       = `(${Lang.getText(Lang.Type.B0623)})`;
+            labelCurrent.text       = `(${Lang.getText(LangTextType.B0623)})`;
             labelCurrent.visible    = gameVersion === CommonConstants.GameVersion;
         }
     }
@@ -218,3 +227,5 @@ namespace TinyWars.Common {
         }
     }
 }
+
+export default TwnsCommonChangeVersionPanel;

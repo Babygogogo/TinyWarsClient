@@ -1,32 +1,42 @@
 
-namespace TinyWars.MapEditor {
-    import Types            = Utility.Types;
-    import Helpers          = Utility.Helpers;
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import ConfigManager    = Utility.ConfigManager;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
+import TwnsCommonAlertPanel from "../../common/view/CommonAlertPanel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiComponent      from "../../tools/ui/UiComponent";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+
+namespace TwnsMeAvailableCoPanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
     import WarRule          = ProtoTypes.WarRule;
-    import CommonConstants  = Utility.CommonConstants;
+    import LangTextType     = TwnsLangTextType.LangTextType;
 
     type OpenDataForMeAvailableCoPanel = {
         playerRule      : WarRule.IDataForPlayerRule;
         warRule         : WarRule.IWarRule;
         isReviewing     : boolean;
-    }
-
-    export class MeAvailableCoPanel extends GameUi.UiPanel<OpenDataForMeAvailableCoPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
+    };
+    export class MeAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMeAvailableCoPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeAvailableCoPanel;
 
-        private _labelAvailableCoTitle  : TinyWars.GameUi.UiLabel;
+        private _labelAvailableCoTitle  : TwnsUiLabel.UiLabel;
         private _groupCoTiers           : eui.Group;
         private _groupCoNames           : eui.Group;
-        private _btnCancel              : TinyWars.GameUi.UiButton;
-        private _btnConfirm             : TinyWars.GameUi.UiButton;
+        private _btnCancel              : TwnsUiButton.UiButton;
+        private _btnConfirm             : TwnsUiButton.UiButton;
 
         private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
@@ -59,7 +69,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
 
             const bannedCoIdSet = this._bannedCoIdSet;
@@ -94,14 +104,14 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const bannedCoIdSet = this._bannedCoIdSet;
             if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-                Common.CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0130),
+                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0130),
                 });
             } else {
                 const openData = this._getOpenData();
-                BwWarRuleHelper.setBannedCoIdArray(openData.warRule, openData.playerRule.playerIndex, bannedCoIdSet);
-                Notify.dispatch(Notify.Type.MeBannedCoIdArrayChanged);
+                WarRuleHelpers.setBannedCoIdArray(openData.warRule, openData.playerRule.playerIndex, bannedCoIdSet);
+                Notify.dispatch(NotifyType.MeBannedCoIdArrayChanged);
                 this.close();
             }
         }
@@ -154,9 +164,9 @@ namespace TinyWars.MapEditor {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
-            this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._getOpenData().playerRule.playerIndex})`;
+            this._btnCancel.label               = Lang.getText(LangTextType.B0154);
+            this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+            this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._getOpenData().playerRule.playerIndex})`;
         }
 
         private _initGroupCoTiers(): void {
@@ -229,15 +239,16 @@ namespace TinyWars.MapEditor {
         }
     }
 
-    const enum CoTierState {
+    // eslint-disable-next-line no-shadow
+    enum CoTierState {
         AllAvailable,
         PartialAvailable,
         Unavailable,
     }
 
-    class RendererForCoTier extends GameUi.UiComponent {
-        private _imgSelected: GameUi.UiImage;
-        private _labelName  : GameUi.UiLabel;
+    class RendererForCoTier extends TwnsUiComponent.UiComponent {
+        private _imgSelected: TwnsUiImage.UiImage;
+        private _labelName  : TwnsUiLabel.UiLabel;
 
         private _tier           : number;
         private _isCustomSwitch = false;
@@ -281,9 +292,9 @@ namespace TinyWars.MapEditor {
         }
     }
 
-    class RendererForCoName extends GameUi.UiComponent {
-        private _imgSelected: GameUi.UiImage;
-        private _labelName  : GameUi.UiLabel;
+    class RendererForCoName extends TwnsUiComponent.UiComponent {
+        private _imgSelected: TwnsUiImage.UiImage;
+        private _labelName  : TwnsUiLabel.UiLabel;
 
         private _coId           : number;
         private _isSelected     : boolean;
@@ -314,3 +325,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeAvailableCoPanel;

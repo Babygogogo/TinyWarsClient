@@ -1,14 +1,23 @@
 
-namespace TinyWars.BaseWar {
-    import Notify               = Utility.Notify;
-    import Types                = Utility.Types;
+import TwnsUiZoomableComponent      from "../../tools/ui/UiZoomableComponent";
+import TwnsBwWar                    from "../../baseWar/model/BwWar";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import NotifyData                   from "../../tools/notify/NotifyData";
+import StageManager                 from "../../tools/helpers/StageManager";
+import Types                        from "../../tools/helpers/Types";
+
+namespace TwnsBwWarView {
+    import NotifyType           = TwnsNotifyType.NotifyType;
     import GridIndex            = Types.GridIndex;
     import Point                = Types.Point;
+    import BwWar                = TwnsBwWar.BwWar;
     const PADDING_HORIZONTAL    = 150;
     const PADDING_VERTICAL      = 50;
 
     export class BwWarView extends eui.Group {
-        private _fieldContainer     = new GameUi.UiZoomableComponent();
+        private _fieldContainer     = new TwnsUiZoomableComponent.UiZoomableComponent();
         private _war                : BwWar;
 
         private _isShowingVibration = false;
@@ -16,10 +25,10 @@ namespace TinyWars.BaseWar {
         private _vibrationTimeoutId : number;
 
         private _notifyListeners: Notify.Listener[] = [
-            { type: Notify.Type.BwFieldZoomed,  callback: this._onNotifyBwFieldZoomed },
-            { type: Notify.Type.BwFieldDragged, callback: this._onNotifyBwFieldDragged },
+            { type: NotifyType.BwFieldZoomed,  callback: this._onNotifyBwFieldZoomed },
+            { type: NotifyType.BwFieldDragged, callback: this._onNotifyBwFieldDragged },
         ];
-        private _uiListeners: Utility.Types.UiListener[] = [
+        private _uiListeners: Types.UiListener[] = [
             { ui: this,     callback: this._onEnterFrame,   eventType: egret.Event.ENTER_FRAME },
         ];
 
@@ -40,7 +49,7 @@ namespace TinyWars.BaseWar {
         public init(war: BwWar): void {
             this._war = war;
 
-            const gridSize  = Utility.CommonConstants.GridSize;
+            const gridSize  = CommonConstants.GridSize;
             const mapSize   = war.getTileMap().getMapSize();
             this._fieldContainer.removeAllContents();
             this._fieldContainer.setContentWidth(mapSize.width * gridSize.width);
@@ -69,13 +78,13 @@ namespace TinyWars.BaseWar {
             this._fieldContainer.setMouseWheelListenerEnabled(false);
         }
 
-        public getFieldContainer(): GameUi.UiZoomableComponent {
+        public getFieldContainer(): TwnsUiZoomableComponent.UiZoomableComponent {
             return this._fieldContainer;
         }
 
         public tweenGridToCentralArea(gridIndex: GridIndex): void {
-            const stage     = Utility.StageManager.getStage();
-            const gridSize  = Utility.CommonConstants.GridSize;
+            const stage     = StageManager.getStage();
+            const gridSize  = CommonConstants.GridSize;
             const container = this._fieldContainer;
             const currPoint = container.getContents().localToGlobal(
                 (gridIndex.x + 0.5) * gridSize.width,
@@ -93,7 +102,7 @@ namespace TinyWars.BaseWar {
             container.tweenContentToPoint(newPoint.x, newPoint.y, false);
         }
         public moveGridToCenter(gridIndex: GridIndex): void {
-            const stage = Utility.StageManager.getStage();
+            const stage = StageManager.getStage();
             this._moveGridToPoint(gridIndex, stage.stageWidth / 2, stage.stageHeight / 2);
         }
         private _moveGridToPoint(gridIndex: GridIndex, x: number, y: number): void {
@@ -103,7 +112,7 @@ namespace TinyWars.BaseWar {
             container.setContentY(point.y, false);
         }
         private _getRevisedContentPointForMoveGrid(gridIndex: GridIndex, x: number, y: number): Point {
-            const gridSize  = Utility.CommonConstants.GridSize;
+            const gridSize  = CommonConstants.GridSize;
             const container = this._fieldContainer;
             const contents  = container.getContents();
             const point1    = contents.localToGlobal(
@@ -148,11 +157,11 @@ namespace TinyWars.BaseWar {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyBwFieldZoomed(e: egret.Event): void {
-            const data = e.data as Notify.Data.BwFieldZoomed;
+            const data = e.data as NotifyData.BwFieldZoomed;
             this._fieldContainer.setZoomByTouches(data.current, data.previous);
         }
         private _onNotifyBwFieldDragged(e: egret.Event): void {
-            const data = e.data as Notify.Data.BwFieldDragged;
+            const data = e.data as NotifyData.BwFieldDragged;
             this._fieldContainer.setDragByTouches(data.current, data.previous);
         }
 
@@ -161,3 +170,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwWarView;

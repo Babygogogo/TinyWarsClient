@@ -1,20 +1,26 @@
 
-namespace TinyWars.Broadcast {
-    import Notify       = Utility.Notify;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Lang         = Utility.Lang;
-    import StageManager = Utility.StageManager;
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import Types                from "../../tools/helpers/Types";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import BroadcastModel       from "../model/BroadcastModel";
+import Lang                 from "../../tools/lang/Lang";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import StageManager         from "../../tools/helpers/StageManager";
+
+namespace TwnsBroadcastPanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     const _FLOW_SPEED = 80;
 
-    export class BroadcastPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify0;
+    export class BroadcastPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Notify0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: BroadcastPanel;
 
         private _groupLamp              : eui.Group;
-        private _labelLamp              : GameUi.UiLabel;
+        private _labelLamp              : TwnsUiLabel.UiLabel;
 
         private _ongoingMessageIdSet    = new Set<number>();
 
@@ -39,9 +45,9 @@ namespace TinyWars.Broadcast {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.TimeTick,                   callback: this._onNotifyTimeTick },
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgBroadcastGetMessageList, callback: this._onMsgBroadcastGetMessageList },
+                { type: NotifyType.TimeTick,                   callback: this._onNotifyTimeTick },
+                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgBroadcastGetMessageList, callback: this._onMsgBroadcastGetMessageList },
             ]);
 
             this.touchEnabled   = false;
@@ -101,3 +107,5 @@ namespace TinyWars.Broadcast {
         }
     }
 }
+
+export default TwnsBroadcastPanel;

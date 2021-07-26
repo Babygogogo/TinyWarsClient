@@ -1,32 +1,42 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.Common {
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
-    import Helpers          = Utility.Helpers;
-    import Notify           = Utility.Notify;
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+
+namespace TwnsCommonChooseCoPanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     type OpenData = {
         currentCoId         : number | undefined | null;
         availableCoIdArray  : number[];
         callbackOnConfirm   : (coId: number) => void;
     };
-    export class CommonChooseCoPanel extends GameUi.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class CommonChooseCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: CommonChooseCoPanel;
 
-        private readonly _imgMask       : GameUi.UiImage;
+        private readonly _imgMask       : TwnsUiImage.UiImage;
         private readonly _group         : eui.Group;
 
-        private readonly _labelChooseCo : GameUi.UiLabel;
-        private readonly _listCo        : GameUi.UiScrollList<DataForCoRenderer>;
-        private readonly _btnConfirm    : GameUi.UiButton;
-        private readonly _btnCancel     : GameUi.UiButton;
-        private readonly _uiCoInfo      : GameUi.UiCoInfo;
+        private readonly _labelChooseCo : TwnsUiLabel.UiLabel;
+        private readonly _listCo        : TwnsUiScrollList.UiScrollList<DataForCoRenderer>;
+        private readonly _btnConfirm    : TwnsUiButton.UiButton;
+        private readonly _btnCancel     : TwnsUiButton.UiButton;
+        private readonly _uiCoInfo      : TwnsUiCoInfo.UiCoInfo;
 
         private _dataForListCo          : DataForCoRenderer[] = [];
         private _selectedIndex          : number;
@@ -58,7 +68,7 @@ namespace TinyWars.Common {
                 { ui: this._btnCancel,      callback: this._onTouchTapBtnBack },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._listCo.setItemRenderer(CoRenderer);
 
@@ -118,9 +128,9 @@ namespace TinyWars.Common {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelChooseCo.text    = Lang.getText(Lang.Type.B0145);
-            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
+            this._labelChooseCo.text    = Lang.getText(LangTextType.B0145);
+            this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
 
             this._updateComponentsForCoInfo();
         }
@@ -200,8 +210,8 @@ namespace TinyWars.Common {
         index       : number;
         panel       : CommonChooseCoPanel;
     };
-    class CoRenderer extends GameUi.UiListItemRenderer<DataForCoRenderer> {
-        private _labelName: GameUi.UiLabel;
+    class CoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCoRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             const data              = this.data;
@@ -215,3 +225,5 @@ namespace TinyWars.Common {
         }
     }
 }
+
+export default TwnsCommonChooseCoPanel;

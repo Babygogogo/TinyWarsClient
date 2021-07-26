@@ -1,18 +1,29 @@
 
-namespace TinyWars.MapEditor {
-    export class MeField extends BaseWar.BwField {
+import TwnsBwField          from "../../baseWar/model/BwField";
+import TwnsBwTileMap        from "../../baseWar/model/BwTileMap";
+import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
+import TwnsMeActionPlanner  from "./MeActionPlanner";
+import TwnsMeFogMap         from "./MeFogMap";
+
+namespace TwnsMeField {
+    import BwField          = TwnsBwField.BwField;
+    import MeActionPlanner  = TwnsMeActionPlanner.MeActionPlanner;
+    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+    import MeFogMap         = TwnsMeFogMap.MeFogMap;
+
+    export class MeField extends BwField {
         private readonly _fogMap        = new MeFogMap();
-        private readonly _tileMap       = new BaseWar.BwTileMap();
-        private readonly _unitMap       = new BaseWar.BwUnitMap();
+        private readonly _tileMap       = new TwnsBwTileMap.BwTileMap();
+        private readonly _unitMap       = new BwUnitMap();
         private readonly _actionPlanner = new MeActionPlanner();
 
         public getFogMap(): MeFogMap {
             return this._fogMap;
         }
-        public getTileMap(): BaseWar.BwTileMap {
+        public getTileMap(): TwnsBwTileMap.BwTileMap {
             return this._tileMap;
         }
-        public getUnitMap(): BaseWar.BwUnitMap {
+        public getUnitMap(): BwUnitMap {
             return this._unitMap;
         }
         public getActionPlanner(): MeActionPlanner {
@@ -31,3 +42,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeField;

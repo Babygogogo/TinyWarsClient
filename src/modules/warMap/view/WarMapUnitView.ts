@@ -1,22 +1,23 @@
 
-namespace TinyWars.WarMap {
-    import UiImage          = GameUi.UiImage;
-    import Types            = Utility.Types
-    import Helpers          = Utility.Helpers;
-    import CommonConstants  = Utility.CommonConstants;
-    import ConfigManager    = Utility.ConfigManager;
-    import BwHelpers        = BaseWar.BwHelpers;
-    import TimeModel        = Time.TimeModel;
-    import CommonModel      = Common.CommonModel;
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import Types                from "../../tools/helpers/Types";
+import Helpers              from "../../tools/helpers/Helpers";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import Timer                from "../../tools/helpers/Timer";
+import CommonModel          from "../../common/model/CommonModel";
+import UserModel            from "../../user/model/UserModel";
 
+namespace TwnsWarMapUnitView {
     const { width: GRID_WIDTH, height: GRID_HEIGHT }    = CommonConstants.GridSize;
     const IMG_UNIT_STATE_WIDTH                          = 28;
     const IMG_UNIT_STATE_HEIGHT                         = 36;
 
     export class WarMapUnitView extends egret.DisplayObjectContainer {
-        private readonly _imgUnit                   = new UiImage();
-        private readonly _imgHp                     = new UiImage();
-        private readonly _imgState                  = new UiImage();
+        private readonly _imgUnit                   = new TwnsUiImage.UiImage();
+        private readonly _imgHp                     = new TwnsUiImage.UiImage();
+        private readonly _imgState                  = new TwnsUiImage.UiImage();
         private readonly _framesForStateAnimation   : string[] = [];
 
         private _unitData                           : Types.WarMapUnitViewData;
@@ -48,7 +49,7 @@ namespace TinyWars.WarMap {
             this._isDark    = data.actionState === Types.UnitActionState.Acted;
             this.x          = gridIndex.x * GRID_WIDTH - GRID_WIDTH / 4;
             this.y          = gridIndex.y * GRID_HEIGHT - GRID_HEIGHT / 2;
-            this.updateOnAnimationTick(tickCount || TimeModel.getUnitAnimationTickCount());
+            this.updateOnAnimationTick(tickCount || Timer.getUnitAnimationTickCount());
 
             this._updateImageHp();
             this._resetStateAnimationFrames();
@@ -63,7 +64,7 @@ namespace TinyWars.WarMap {
             if (data) {
                 this._tickStateAnimationFrame();
                 this._imgUnit.source = CommonModel.getCachedUnitImageSource({
-                    version     : User.UserModel.getSelfSettingsTextureVersion(),
+                    version     : UserModel.getSelfSettingsTextureVersion(),
                     skinId      : data.skinId || ConfigManager.getUnitAndTileDefaultSkinId(data.playerIndex),
                     unitType    : data.unitType,
                     isMoving    : false,
@@ -76,11 +77,11 @@ namespace TinyWars.WarMap {
         private _updateImageHp(): void {
             const data          = this._unitData;
             const hp            = data ? data.currentHp : null;
-            const normalizedHp  = hp == null ? null : BaseWar.BwHelpers.getNormalizedHp(hp);
+            const normalizedHp  = hp == null ? null : WarCommonHelpers.getNormalizedHp(hp);
             const imgHp         = this._imgHp;
             if ((normalizedHp == null)                                                      ||
                 (normalizedHp <= 0)                                                         ||
-                (normalizedHp >= BwHelpers.getNormalizedHp(this._getUnitTemplateCfg().maxHp))
+                (normalizedHp >= WarCommonHelpers.getNormalizedHp(this._getUnitTemplateCfg().maxHp))
             ) {
                 imgHp.visible = false;
             } else {
@@ -108,7 +109,7 @@ namespace TinyWars.WarMap {
             const framesCount       = frames.length;
             this._imgState.source   = framesCount <= 0
                 ? undefined
-                : frames[Math.floor(TimeModel.getUnitAnimationTickCount() / 6) % framesCount];
+                : frames[Math.floor(Timer.getUnitAnimationTickCount() / 6) % framesCount];
         }
 
         private _addFrameForCoSkill(): void {
@@ -191,3 +192,5 @@ namespace TinyWars.WarMap {
         return CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
     }
 }
+
+export default TwnsWarMapUnitView;

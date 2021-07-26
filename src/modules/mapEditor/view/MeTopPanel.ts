@@ -1,36 +1,64 @@
 
-namespace TinyWars.MapEditor {
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import ConfigManager    = Utility.ConfigManager;
-    import DrawerMode       = Types.MapEditorDrawerMode;
-    import CommonConstants  = Utility.CommonConstants;
+import TwnsBwUnit                   from "../../baseWar/model/BwUnit";
+import TwnsBwUnitView               from "../../baseWar/view/BwUnitView";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsMeDrawer                 from "../model/MeDrawer";
+import MeModel                      from "../model/MeModel";
+import TwnsMeWar                    from "../model/MeWar";
+import TwnsMeChooseTileBasePanel    from "./MeChooseTileBasePanel";
+import TwnsMeChooseTileObjectPanel  from "./MeChooseTileObjectPanel";
+import TwnsMeChooseUnitPanel        from "./MeChooseUnitPanel";
+import TwnsMeSymmetryPanel          from "./MeSymmetryPanel";
+import TwnsMeTileSimpleView         from "./MeTileSimpleView";
+import TwnsMeVisibilityPanel        from "./MeVisibilityPanel";
+import TwnsMeWarMenuPanel           from "./MeWarMenuPanel";
 
-    export class MeTopPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsMeTopPanel {
+    import BwUnitView               = TwnsBwUnitView.BwUnitView;
+    import MeDrawer                 = TwnsMeDrawer.MeDrawer;
+    import MeWar                    = TwnsMeWar.MeWar;
+    import MeChooseTileBasePanel    = TwnsMeChooseTileBasePanel.MeChooseTileBasePanel;
+    import MeChooseUnitPanel        = TwnsMeChooseUnitPanel.MeChooseUnitPanel;
+    import MeWarMenuPanel           = TwnsMeWarMenuPanel.MeWarMenuPanel;
+    import MeChooseTileObjectPanel  = TwnsMeChooseTileObjectPanel.MeChooseTileObjectPanel;
+    import MeVisibilityPanel        = TwnsMeVisibilityPanel.MeVisibilityPanel;
+    import MeSymmetryPanel          = TwnsMeSymmetryPanel.MeSymmetryPanel;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import DrawerMode               = Types.MapEditorDrawerMode;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+
+    // eslint-disable-next-line no-shadow
+    export class MeTopPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeTopPanel;
 
         private _groupMode          : eui.Group;
-        private _labelModeTitle     : GameUi.UiLabel;
-        private _labelMode          : GameUi.UiLabel;
+        private _labelModeTitle     : TwnsUiLabel.UiLabel;
+        private _labelMode          : TwnsUiLabel.UiLabel;
         private _conUnitView        : eui.Group;
         private _conTileView        : eui.Group;
 
-        private _btnModePreview         : GameUi.UiButton;
-        private _btnModeDrawTileBase    : GameUi.UiButton;
-        private _btnModeDrawTileObject  : GameUi.UiButton;
-        private _btnModeDrawUnit        : GameUi.UiButton;
-        private _btnModeDeleteTileObject: GameUi.UiButton;
-        private _btnModeDeleteUnit      : GameUi.UiButton;
-        private _btnVisibility          : GameUi.UiButton;
-        private _btnSymmetry            : GameUi.UiButton;
-        private _btnMenu                : GameUi.UiButton;
+        private _btnModePreview         : TwnsUiButton.UiButton;
+        private _btnModeDrawTileBase    : TwnsUiButton.UiButton;
+        private _btnModeDrawTileObject  : TwnsUiButton.UiButton;
+        private _btnModeDrawUnit        : TwnsUiButton.UiButton;
+        private _btnModeDeleteTileObject: TwnsUiButton.UiButton;
+        private _btnModeDeleteUnit      : TwnsUiButton.UiButton;
+        private _btnVisibility          : TwnsUiButton.UiButton;
+        private _btnSymmetry            : TwnsUiButton.UiButton;
+        private _btnMenu                : TwnsUiButton.UiButton;
 
-        private _unitView   = new BaseWar.BwUnitView();
-        private _tileView   = new MeTileSimpleView();
+        private _unitView   = new BwUnitView();
+        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
         private _war    : MeWar;
         private _drawer : MeDrawer;
@@ -56,16 +84,16 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
-                { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.MeDrawerModeChanged,            callback: this._onNotifyMeDrawerModeChanged },
-                { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
-                { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
-                { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
-                { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
-                { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
+                { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.MeDrawerModeChanged,            callback: this._onNotifyMeDrawerModeChanged },
+                { type: NotifyType.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
+                { type: NotifyType.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
+                { type: NotifyType.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
+                { type: NotifyType.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
+                { type: NotifyType.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
+                { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnModePreview,             callback: this._onTouchedBtnModePreview },
@@ -183,14 +211,14 @@ namespace TinyWars.MapEditor {
         private _updateComponentsForLanguage(): void {
             this._updateLabelModeTitle();
             this._updateLabelMode();
-            this._btnModePreview.label          = Lang.getText(Lang.Type.B0286);
-            this._btnModeDrawUnit.label         = Lang.getText(Lang.Type.B0281);
-            this._btnModeDrawTileObject.label   = Lang.getText(Lang.Type.B0283);
-            this._btnModeDrawTileBase.label     = Lang.getText(Lang.Type.B0282);
-            this._btnModeDeleteUnit.label       = Lang.getText(Lang.Type.B0284);
-            this._btnModeDeleteTileObject.label = Lang.getText(Lang.Type.B0285);
-            this._btnVisibility.label           = Lang.getText(Lang.Type.B0301);
-            this._btnSymmetry.label             = Lang.getText(Lang.Type.B0306);
+            this._btnModePreview.label          = Lang.getText(LangTextType.B0286);
+            this._btnModeDrawUnit.label         = Lang.getText(LangTextType.B0281);
+            this._btnModeDrawTileObject.label   = Lang.getText(LangTextType.B0283);
+            this._btnModeDrawTileBase.label     = Lang.getText(LangTextType.B0282);
+            this._btnModeDeleteUnit.label       = Lang.getText(LangTextType.B0284);
+            this._btnModeDeleteTileObject.label = Lang.getText(LangTextType.B0285);
+            this._btnVisibility.label           = Lang.getText(LangTextType.B0301);
+            this._btnSymmetry.label             = Lang.getText(LangTextType.B0306);
         }
 
         private _updateGroupMode(): void {
@@ -202,7 +230,7 @@ namespace TinyWars.MapEditor {
 
         private _updateLabelModeTitle(): void {
             const label     = this._labelModeTitle;
-            label.text      = `${Lang.getText(Lang.Type.B0280)}: `;
+            label.text      = `${Lang.getText(LangTextType.B0280)}: `;
             label.textColor = getTextColorForDrawerMode(this._drawer.getMode());
         }
 
@@ -288,7 +316,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateBtnMenu(): void {
-            this._btnMenu.label = Lang.getText(Lang.Type.B0155);
+            this._btnMenu.label = Lang.getText(LangTextType.B0155);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -307,7 +335,7 @@ namespace TinyWars.MapEditor {
         }
         private _initUnitView(): void {
             const war   = this._war;
-            const unit  = new BaseWar.BwUnit();
+            const unit  = new TwnsBwUnit.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
@@ -332,3 +360,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeTopPanel;

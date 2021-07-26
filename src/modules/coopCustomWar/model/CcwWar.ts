@@ -1,14 +1,17 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.CoopCustomWar {
-    import Logger           = Utility.Logger;
-    import Types            = Utility.Types;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ClientErrorCode  = Utility.ClientErrorCode;
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import TwnsMpwWar           from "../../multiPlayerWar/model/MpwWar";
+import Logger               from "../../tools/helpers/Logger";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+
+namespace TwnsCcwWar {
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForCcw  = ProtoTypes.WarSettings.ISettingsForCcw;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import MpwWar           = TwnsMpwWar.MpwWar;
 
-    export class CcwWar extends MultiPlayerWar.MpwWar {
+    export class CcwWar extends MpwWar {
         private _settingsForCcw?: ISettingsForCcw;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
@@ -97,3 +100,5 @@ namespace TinyWars.CoopCustomWar {
         }
     }
 }
+
+export default TwnsCcwWar;

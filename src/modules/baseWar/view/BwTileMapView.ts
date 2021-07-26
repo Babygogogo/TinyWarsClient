@@ -1,10 +1,19 @@
 
-namespace TinyWars.BaseWar {
-    import Notify               = Utility.Notify;
-    import Helpers              = Utility.Helpers;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import CommonConstants      = Utility.CommonConstants;
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import UserModel            from "../../user/model/UserModel";
+import TwnsBwTileMap        from "../model/BwTileMap";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwTileView       from "./BwTileView";
+
+namespace TwnsBwTileMapView {
+    import BwTileView   = TwnsBwTileView.BwTileView;
+    import NotifyType   = TwnsNotifyType.NotifyType;
+    import BwTileMap    = TwnsBwTileMap.BwTileMap;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -14,11 +23,11 @@ namespace TinyWars.BaseWar {
         private readonly _gridBorderLayer   = new egret.DisplayObjectContainer();
         private readonly _objectLayer       = new egret.DisplayObjectContainer();
         private readonly _coZoneContainer   = new egret.DisplayObjectContainer();
-        private readonly _coZoneImageDict   = new Map<number, GameUi.UiImage[][]>();
+        private readonly _coZoneImageDict   = new Map<number, TwnsUiImage.UiImage[][]>();
 
         private readonly _notifyListeners   = [
-            { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
-            { type: Notify.Type.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
+            { type: NotifyType.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+            { type: NotifyType.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
         ];
 
         private _tileMap: BwTileMap;
@@ -66,14 +75,14 @@ namespace TinyWars.BaseWar {
             const gridBorderLayer                           = this._gridBorderLayer;
             gridBorderLayer.removeChildren();
             for (let x = 0; x <= mapWidth; ++x) {
-                const img   = new GameUi.UiImage(`commonColorBlack0000`);
+                const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
                 img.width   = 2;
                 img.height  = borderHeight;
                 img.x       = (x * GRID_WIDTH) - 1;
                 gridBorderLayer.addChild(img);
             }
             for (let y = 0; y <= mapHeight; ++y) {
-                const img   = new GameUi.UiImage(`commonColorBlack0000`);
+                const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
                 img.width   = borderWidth;
                 img.height  = 2;
                 img.y       = (y * GRID_HEIGHT) - 1;
@@ -136,7 +145,7 @@ namespace TinyWars.BaseWar {
                     const column = matrix[x];
                     for (let y = 0; y < mapHeight; ++y) {
                         if (column[y] == null) {
-                            const img   = new GameUi.UiImage(imgSource);
+                            const img   = new TwnsUiImage.UiImage(imgSource);
                             img.x       = GRID_WIDTH * x;
                             img.y       = GRID_HEIGHT * y;
                             column[y]   = img;
@@ -186,7 +195,7 @@ namespace TinyWars.BaseWar {
                     : player.getCoGridIndexListOnMap().filter(gridIndex => {
                         const unit = unitMap.getUnitOnMap(gridIndex);
                         return (!!unit)
-                            && (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            && (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex,
                                 unitType: unit.getUnitType(),
@@ -228,7 +237,9 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateGridBorderLayerVisible(): void {
-            this._gridBorderLayer.visible = User.UserModel.getSelfSettingsIsShowGridBorder();
+            this._gridBorderLayer.visible = UserModel.getSelfSettingsIsShowGridBorder();
         }
     }
 }
+
+export default TwnsBwTileMapView;

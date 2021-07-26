@@ -1,26 +1,41 @@
 
-namespace TinyWars.SinglePlayerMode {
-    import Tween        = egret.Tween;
-    import Lang         = Utility.Lang;
-    import FloatText    = Utility.FloatText;
-    import Notify       = Utility.Notify;
-    import Helpers      = Utility.Helpers;
+import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
+import TwnsMrrMainMenuPanel         from "../../multiRankRoom/view/MrrMainMenuPanel";
+import TwnsScrCreateMapListPanel    from "../../singleCustomRoom/view/ScrCreateMapListPanel";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsSpmWarListPanel          from "./SpmWarListPanel";
 
-    export class SpmMainMenuPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+namespace TwnsSpmMainMenuPanel {
+    import SpmWarListPanel          = TwnsSpmWarListPanel.SpmWarListPanel;
+    import ScrCreateMapListPanel    = TwnsScrCreateMapListPanel.ScrCreateMapListPanel;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import Tween                    = egret.Tween;
+
+    export class SpmMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: SpmMainMenuPanel;
 
         private readonly _groupLeft         : eui.Group;
-        private readonly _btnCampaign       : TinyWars.GameUi.UiButton;
-        private readonly _btnCreateCustomWar: TinyWars.GameUi.UiButton;
-        private readonly _btnContinueWar    : TinyWars.GameUi.UiButton;
+        private readonly _btnCampaign       : TwnsUiButton.UiButton;
+        private readonly _btnCreateCustomWar: TwnsUiButton.UiButton;
+        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
 
         private readonly _group             : eui.Group;
-        private readonly _btnMultiPlayer    : TinyWars.GameUi.UiButton;
-        private readonly _btnRanking        : TinyWars.GameUi.UiButton;
-        private readonly _btnSinglePlayer   : TinyWars.GameUi.UiButton;
+        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
+        private readonly _btnRanking        : TwnsUiButton.UiButton;
+        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!SpmMainMenuPanel._instance) {
@@ -50,7 +65,7 @@ namespace TinyWars.SinglePlayerMode {
                 { ui: this._btnContinueWar,     callback: this._onTouchedBtnContinueWar },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
             ]);
 
             this._showOpenAnimation();
@@ -69,25 +84,25 @@ namespace TinyWars.SinglePlayerMode {
 
         private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
             this.close();
-            MultiCustomRoom.McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
         }
         private _onTouchedBtnRanking(e: egret.TouchEvent): void {
             this.close();
-            MultiRankRoom.MrrMainMenuPanel.show();
+            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
         }
         private _onTouchedBtnCampaign(e: egret.TouchEvent): void {
-            FloatText.show(Lang.getText(Lang.Type.A0053));
+            FloatText.show(Lang.getText(LangTextType.A0053));
         }
         private _onTouchedBtnCreateCustomWar(e: egret.TouchEvent): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
-            SingleCustomRoom.ScrCreateMapListPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+            ScrCreateMapListPanel.show();
         }
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             SpmWarListPanel.show();
         }
 
@@ -159,3 +174,5 @@ namespace TinyWars.SinglePlayerMode {
         }
     }
 }
+
+export default TwnsSpmMainMenuPanel;

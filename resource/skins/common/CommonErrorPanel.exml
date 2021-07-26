@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelTitle" text="标题" textColor="0xffffff" y="12" horizontalCenter="0" size="20" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="标题" textColor="0xffffff" y="12" horizontalCenter="0" size="20" />
         <e:Scroller left="10" right="10" top="40" bottom="10">
             <e:Group>
-                <GameUi:UiLabel id="_labelContent" text="内容" textColor="0xFFFFFF" size="14" left="5" right="5" top="5" />
+                <TwnsUiLabel:UiLabel id="_labelContent" text="内容" textColor="0xFFFFFF" size="14" left="5" right="5" top="5" />
             </e:Group>
         </e:Scroller>
-        <GameUi:UiButton id="_btnClose" label="确定" right="10" top="10">
+        <TwnsUiButton:UiButton id="_btnClose" label="确定" right="10" top="10">
             <e:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -18,6 +18,6 @@
                              textColor="0x00ff00" />
                 </e:Skin>
             </e:skinName>
-        </GameUi:UiButton>
+        </TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>

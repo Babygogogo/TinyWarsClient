@@ -1,19 +1,37 @@
 
-namespace TinyWars.MultiCustomRoom {
-    import ProtoTypes       = Utility.ProtoTypes;
-    import FloatText        = Utility.FloatText;
-    import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
-    import CommonConstants  = Utility.CommonConstants;
-    import Notify           = Utility.Notify;
-    import PlayerRuleType   = Types.PlayerRuleType;
+import TwnsCommonBanCoPanel     from "../../common/view/CommonBanCoPanel";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import FloatText                from "../../tools/helpers/FloatText";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
+import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
+import McrCreateModel           from "../model/McrCreateModel";
 
-    export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage<void> {
+namespace TwnsMcrCreateAdvancedSettingsPage {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import PlayerRuleType       = Types.PlayerRuleType;
+
+    export class McrCreateAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _scroller      : eui.Scroller;
-        private readonly _btnReset      : GameUi.UiButton;
-        private readonly _btnCustomize  : GameUi.UiButton;
-        private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer>;
-        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private readonly _btnReset      : TwnsUiButton.UiButton;
+        private readonly _btnCustomize  : TwnsUiButton.UiButton;
+        private readonly _listSetting   : TwnsUiScrollList.UiScrollList<DataForSettingRenderer>;
+        private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         private _initialWarRuleId   : number;
         private _mapRawData         : ProtoTypes.Map.IMapRawData;
@@ -26,8 +44,8 @@ namespace TinyWars.MultiCustomRoom {
 
         protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.McrCreatePresetWarRuleIdChanged,    callback: this._onNotifyMcrCreatePresetWarRuleIdChanged },
+                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.McrCreatePresetWarRuleIdChanged,    callback: this._onNotifyMcrCreatePresetWarRuleIdChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnReset,       callback: this._onTouchedBtnReset },
@@ -41,8 +59,8 @@ namespace TinyWars.MultiCustomRoom {
             this.top    = 0;
             this.bottom = 0;
 
-            this._initialWarRuleId  = McrModel.Create.getPresetWarRuleId();
-            this._mapRawData        = await McrModel.Create.getMapRawData();
+            this._initialWarRuleId  = McrCreateModel.getPresetWarRuleId();
+            this._mapRawData        = await McrCreateModel.getMapRawData();
 
             this._updateComponentsForLanguage();
             this._initListSetting();
@@ -62,13 +80,13 @@ namespace TinyWars.MultiCustomRoom {
             this._updateBtnCustomize();
         }
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
-            McrModel.Create.resetDataByWarRuleId(this._initialWarRuleId);
+            McrCreateModel.resetDataByWarRuleId(this._initialWarRuleId);
         }
         private _onTouchedBtnCustomize(e: egret.TouchEvent): void {
-            Common.CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0129),
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    McrModel.Create.setCustomWarRuleId();
+                    McrCreateModel.setCustomWarRuleId();
                 },
             });
         }
@@ -77,15 +95,15 @@ namespace TinyWars.MultiCustomRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnReset.label        = Lang.getText(Lang.Type.B0567);
-            this._btnCustomize.label    = Lang.getText(Lang.Type.B0575);
+            this._btnReset.label        = Lang.getText(LangTextType.B0567);
+            this._btnCustomize.label    = Lang.getText(LangTextType.B0575);
         }
 
         private _updateBtnReset(): void {
-            this._btnReset.visible = (this._initialWarRuleId != null) && (McrModel.Create.getPresetWarRuleId() == null);
+            this._btnReset.visible = (this._initialWarRuleId != null) && (McrCreateModel.getPresetWarRuleId() == null);
         }
         private _updateBtnCustomize(): void {
-            this._btnCustomize.visible = McrModel.Create.getPresetWarRuleId() != null;
+            this._btnCustomize.visible = McrCreateModel.getPresetWarRuleId() != null;
         }
 
         private _initListSetting(): void {
@@ -119,10 +137,10 @@ namespace TinyWars.MultiCustomRoom {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForSettingRenderer = {
         playerRuleType  : PlayerRuleType;
-    }
-    class SettingRenderer extends GameUi.UiListItemRenderer<DataForSettingRenderer> {
-        private readonly _labelName : GameUi.UiLabel;
-        private readonly _btnHelp   : GameUi.UiButton;
+    };
+    class SettingRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSettingRenderer> {
+        private readonly _labelName : TwnsUiLabel.UiLabel;
+        private readonly _btnHelp   : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -143,9 +161,9 @@ namespace TinyWars.MultiCustomRoom {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                Common.CommonHelpPanel.show({
+                CommonHelpPanel.show({
                     title   : `CO`,
-                    content : Lang.getText(Lang.Type.R0004),
+                    content : Lang.getText(LangTextType.R0004),
                 });
             }
         }
@@ -156,10 +174,10 @@ namespace TinyWars.MultiCustomRoom {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForPlayerRenderer = {
         playerIndex : number;
-    }
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _labelPlayerIndex   : GameUi.UiLabel;
-        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
+    };
+    class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
+        private _labelPlayerIndex   : TwnsUiLabel.UiLabel;
+        private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -204,11 +222,11 @@ namespace TinyWars.MultiCustomRoom {
         infoText?               : string;
         infoColor?              : number;
         callbackOnTouchedTitle? : (() => void) | null;
-    }
-    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
-        private readonly _btnCustom     : GameUi.UiButton;
-        private readonly _inputValue    : GameUi.UiTextInput;
-        private readonly _labelValue    : GameUi.UiLabel;
+    };
+    class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+        private readonly _btnCustom     : TwnsUiButton.UiButton;
+        private readonly _inputValue    : TwnsUiTextInput.UiTextInput;
+        private readonly _labelValue    : TwnsUiLabel.UiLabel;
 
         private _callbackForTouchLabelValue     : () => void;
         private _callbackForFocusOutInputValue  : () => void;
@@ -220,8 +238,8 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._inputValue, callback: this._onFocusOutInputValue, eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.McrCreatePresetWarRuleIdChanged,    callback: this._onNotifyMcrCreatePresetWarRuleIdChanged },
-                { type: Notify.Type.McrCreateBannedCoIdArrayChanged,    callback: this._onNotifyMcrCreateBannedCoIdArrayChanged },
+                { type: NotifyType.McrCreatePresetWarRuleIdChanged,    callback: this._onNotifyMcrCreatePresetWarRuleIdChanged },
+                { type: NotifyType.McrCreateBannedCoIdArrayChanged,    callback: this._onNotifyMcrCreateBannedCoIdArrayChanged },
             ]);
             this._labelValue.touchEnabled = true;
         }
@@ -236,10 +254,10 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnCustom(e: egret.TouchEvent): void {
-            Common.CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0129),
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    McrModel.Create.setCustomWarRuleId();
+                    McrCreateModel.setCustomWarRuleId();
                 },
             });
         }
@@ -266,7 +284,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateBtnCustom(): void {
-            this._btnCustom.visible = McrModel.Create.getPresetWarRuleId() != null;
+            this._btnCustom.visible = McrCreateModel.getPresetWarRuleId() != null;
         }
         private _updateComponentsForValue(): void {
             const data = this.data;
@@ -294,27 +312,54 @@ namespace TinyWars.MultiCustomRoom {
 
             const labelValue                    = this._labelValue;
             labelValue.visible                  = true;
-            labelValue.text                     = Lang.getPlayerTeamName(McrModel.Create.getTeamIndex(playerIndex));
+            labelValue.text                     = Lang.getPlayerTeamName(McrCreateModel.getTeamIndex(playerIndex));
             labelValue.textColor                = 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => McrModel.Create.tickTeamIndex(playerIndex);
+            this._callbackForTouchLabelValue    = () => McrCreateModel.tickTeamIndex(playerIndex);
         }
         private _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): void {
             this._inputValue.visible            = false;
             this._callbackForFocusOutInputValue = null;
 
             const labelValue                    = this._labelValue;
-            const currValue                     = (McrModel.Create.getBannedCoIdArray(playerIndex) || []).length;
+            const currValue                     = (McrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
+            const configVersion                 = ConfigManager.getLatestFormalVersion();
+            const selfCoId                      = playerIndex === McrCreateModel.getSelfPlayerIndex() ? McrCreateModel.getSelfCoId() : undefined;
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => McrCreateBanCoPanel.show({ playerIndex });
+            this._callbackForTouchLabelValue    = () => TwnsCommonBanCoPanel.CommonBanCoPanel.show({
+                playerIndex,
+                configVersion,
+                fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                bannedCoIdArray     : McrCreateModel.getBannedCoIdArray(playerIndex) || [],
+                maxBanCount         : undefined,
+                selfCoId,
+                callbackOnConfirm   : (bannedCoIdSet) => {
+                    const callback = () => {
+                        McrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
+                        Notify.dispatch(NotifyType.McrCreateBannedCoIdArrayChanged);
+                        TwnsCommonBanCoPanel.CommonBanCoPanel.hide();
+                    };
+                    if (!bannedCoIdSet.has(selfCoId)) {
+                        callback();
+                    } else {
+                        CommonConfirmPanel.show({
+                            content : Lang.getText(LangTextType.A0057),
+                            callback: () => {
+                                McrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
+                                callback();
+                            },
+                        });
+                    }
+                },
+            });
         }
         private _updateComponentsForValueAsInitialFund(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = McrModel.Create.getInitialFund(playerIndex);
+            const currValue                     = McrCreateModel.getInitialFund(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
@@ -327,18 +372,18 @@ namespace TinyWars.MultiCustomRoom {
                     (value > CommonConstants.WarRuleInitialFundMaxLimit)    ||
                     (value < CommonConstants.WarRuleInitialFundMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    McrModel.Create.setInitialFund(playerIndex, value);
+                    McrCreateModel.setInitialFund(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsIncomeMultiplier(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = McrModel.Create.getIncomeMultiplier(playerIndex);
+            const currValue                     = McrCreateModel.getIncomeMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
@@ -351,18 +396,18 @@ namespace TinyWars.MultiCustomRoom {
                     (value > CommonConstants.WarRuleIncomeMultiplierMaxLimit)   ||
                     (value < CommonConstants.WarRuleIncomeMultiplierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    McrModel.Create.setIncomeMultiplier(playerIndex, value);
+                    McrCreateModel.setIncomeMultiplier(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = McrModel.Create.getEnergyAddPctOnLoadCo(playerIndex);
+            const currValue                     = McrCreateModel.getEnergyAddPctOnLoadCo(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
@@ -375,18 +420,18 @@ namespace TinyWars.MultiCustomRoom {
                     (value > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
                     (value < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    McrModel.Create.setEnergyAddPctOnLoadCo(playerIndex, value);
+                    McrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = McrModel.Create.getEnergyGrowthMultiplier(playerIndex);
+            const currValue                     = McrCreateModel.getEnergyGrowthMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
@@ -399,18 +444,18 @@ namespace TinyWars.MultiCustomRoom {
                     (value > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit) ||
                     (value < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    McrModel.Create.setEnergyGrowthMultiplier(playerIndex, value);
+                    McrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsMoveRangeModifier(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = McrModel.Create.getMoveRangeModifier(playerIndex);
+            const currValue                     = McrCreateModel.getMoveRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
@@ -423,18 +468,18 @@ namespace TinyWars.MultiCustomRoom {
                     (value > CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
                     (value < CommonConstants.WarRuleMoveRangeModifierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    McrModel.Create.setMoveRangeModifier(playerIndex, value);
+                    McrCreateModel.setMoveRangeModifier(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsAttackPowerModifier(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = McrModel.Create.getAttackPowerModifier(playerIndex);
+            const currValue                     = McrCreateModel.getAttackPowerModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
@@ -447,18 +492,18 @@ namespace TinyWars.MultiCustomRoom {
                     (value > CommonConstants.WarRuleOffenseBonusMaxLimit)   ||
                     (value < CommonConstants.WarRuleOffenseBonusMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    McrModel.Create.setAttackPowerModifier(playerIndex, value);
+                    McrCreateModel.setAttackPowerModifier(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsVisionRangeModifier(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = McrModel.Create.getVisionRangeModifier(playerIndex);
+            const currValue                     = McrCreateModel.getVisionRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
@@ -471,18 +516,18 @@ namespace TinyWars.MultiCustomRoom {
                     (value > CommonConstants.WarRuleVisionRangeModifierMaxLimit)    ||
                     (value < CommonConstants.WarRuleVisionRangeModifierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    McrModel.Create.setVisionRangeModifier(playerIndex, value);
+                    McrCreateModel.setVisionRangeModifier(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsLuckLowerLimit(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = McrModel.Create.getLuckLowerLimit(playerIndex);
+            const currValue                     = McrCreateModel.getLuckLowerLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
@@ -494,20 +539,20 @@ namespace TinyWars.MultiCustomRoom {
                 if ((isNaN(value))                                          ||
                     (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                     (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                    (value > McrModel.Create.getLuckUpperLimit(playerIndex))
+                    (value > McrCreateModel.getLuckUpperLimit(playerIndex))
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    McrModel.Create.setLuckLowerLimit(playerIndex, value);
+                    McrCreateModel.setLuckLowerLimit(playerIndex, value);
                 }
-            }
+            };
         }
         private _updateComponentsForValueAsLuckUpperLimit(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = McrModel.Create.getLuckUpperLimit(playerIndex);
+            const currValue                     = McrCreateModel.getLuckUpperLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
@@ -519,13 +564,13 @@ namespace TinyWars.MultiCustomRoom {
                 if ((isNaN(value))                                          ||
                     (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                     (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                    (value < McrModel.Create.getLuckLowerLimit(playerIndex))
+                    (value < McrCreateModel.getLuckLowerLimit(playerIndex))
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    McrModel.Create.setLuckUpperLimit(playerIndex, value);
+                    McrCreateModel.setLuckUpperLimit(playerIndex, value);
                 }
-            }
+            };
         }
     }
 
@@ -539,3 +584,5 @@ namespace TinyWars.MultiCustomRoom {
         }
     }
 }
+
+export default TwnsMcrCreateAdvancedSettingsPage;

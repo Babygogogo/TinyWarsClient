@@ -1,16 +1,25 @@
 
-namespace TinyWars.BaseWar {
-    import Logger               = Utility.Logger;
-    import Types                = Utility.Types;
-    import Helpers              = Utility.Helpers;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import ClientErrorCode      = Utility.ClientErrorCode;
-    import CommonConstants      = Utility.CommonConstants;
-    import MapSize              = Types.MapSize;
-    import WarSerialization     = ProtoTypes.WarSerialization;
-    import ISerialTileMap       = WarSerialization.ISerialTileMap;
-    import ISerialTile          = WarSerialization.ISerialTile;
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwTileMapView    from "../view/BwTileMapView";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsBwTile           from "./BwTile";
+import TwnsBwWar            from "./BwWar";
+
+namespace TwnsBwTileMap {
+    import MapSize          = Types.MapSize;
+    import WarSerialization = ProtoTypes.WarSerialization;
+    import ISerialTileMap   = WarSerialization.ISerialTileMap;
+    import ISerialTile      = WarSerialization.ISerialTile;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar            = TwnsBwWar.BwWar;
+    import BwTileMapView    = TwnsBwTileMapView.BwTileMapView;
+    import BwTile           = TwnsBwTile.BwTile;
 
     export class BwTileMap {
         private _map        : BwTile[][];
@@ -36,7 +45,7 @@ namespace TinyWars.BaseWar {
 
             const mapWidth  = mapSize.width;
             const mapHeight = mapSize.height;
-            if ((!BwHelpers.checkIsValidMapSize(mapSize)) ||
+            if ((!WarCommonHelpers.checkIsValidMapSize(mapSize)) ||
                 (mapWidth * mapHeight !== tiles.length)
             ) {
                 return ClientErrorCode.BwTileMapInit02;
@@ -277,3 +286,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwTileMap;

@@ -1,19 +1,31 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MultiFreeRoom {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import ConfigManager    = Utility.ConfigManager;
-    import Types            = Utility.Types;
-    import CommonConstants  = Utility.CommonConstants;
-    import BwHelpers        = BaseWar.BwHelpers;
+import TwnsCommonCoInfoPanel    from "../../common/view/CommonCoInfoPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import UserModel                from "../../user/model/UserModel";
+import MfrCreateModel           from "../model/MfrCreateModel";
 
-    export class MfrCreatePlayerInfoPage extends GameUi.UiTabPage<void> {
+namespace TwnsMfrCreatePlayerInfoPage {
+    import CommonCoInfoPanel    = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+
+    export class MfrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
         // @ts-ignore
         private readonly _groupInfo     : eui.Group;
         // @ts-ignore
-        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -23,7 +35,7 @@ namespace TinyWars.MultiFreeRoom {
 
         protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
             this.left   = 0;
@@ -46,7 +58,7 @@ namespace TinyWars.MultiFreeRoom {
         }
         private _updateComponentsForRoomInfo(): void {
             const dataArray         : DataForPlayerRenderer[] = [];
-            const maxPlayerIndex    = MfrModel.Create.getInitialWarData().playerManager.players.length - 1;
+            const maxPlayerIndex    = MfrCreateModel.getInitialWarData().playerManager.players.length - 1;
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
                 dataArray.push({
                     playerIndex,
@@ -59,40 +71,40 @@ namespace TinyWars.MultiFreeRoom {
     type DataForPlayerRenderer = {
         playerIndex     : number;
     };
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
+    class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
         // @ts-ignore
         private readonly _groupCo           : eui.Group;
         // @ts-ignore
-        private readonly _imgSkin           : GameUi.UiImage;
+        private readonly _imgSkin           : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _imgCoHead         : GameUi.UiImage;
+        private readonly _imgCoHead         : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _imgCoInfo         : GameUi.UiImage;
+        private readonly _imgCoInfo         : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _labelNickname     : GameUi.UiLabel;
+        private readonly _labelNickname     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelCo           : GameUi.UiLabel;
+        private readonly _labelCo           : TwnsUiLabel.UiLabel;
 
         // @ts-ignore
-        private readonly _labelPlayerIndex  : GameUi.UiLabel;
+        private readonly _labelPlayerIndex  : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelTeamIndex    : GameUi.UiLabel;
+        private readonly _labelTeamIndex    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelRankStdTitle : GameUi.UiLabel;
+        private readonly _labelRankStdTitle : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelRankStd      : GameUi.UiLabel;
+        private readonly _labelRankStd      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelRankFogTitle : GameUi.UiLabel;
+        private readonly _labelRankFogTitle : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelRankFog      : GameUi.UiLabel;
+        private readonly _labelRankFog      : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._groupCo,    callback: this._onTouchedGroupCo },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MfrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
+                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MfrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
             ]);
 
             this._updateComponentsForLanguage();
@@ -100,10 +112,10 @@ namespace TinyWars.MultiFreeRoom {
 
         private async _onTouchedGroupCo(): Promise<void> {
             const playerIndex       = this.data.playerIndex;
-            const initialWarData    = MfrModel.Create.getInitialWarData();
+            const initialWarData    = MfrCreateModel.getInitialWarData();
             const coId              = initialWarData.playerManager.players.find(v => v.playerIndex === playerIndex).coId;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
-                Common.CommonCoInfoPanel.show({
+                CommonCoInfoPanel.show({
                     configVersion   : initialWarData.settingsForCommon.configVersion,
                     coId,
                 });
@@ -122,16 +134,16 @@ namespace TinyWars.MultiFreeRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelRankStdTitle.text    = Lang.getText(Lang.Type.B0546);
-            this._labelRankFogTitle.text    = Lang.getText(Lang.Type.B0547);
+            this._labelRankStdTitle.text    = Lang.getText(LangTextType.B0546);
+            this._labelRankFogTitle.text    = Lang.getText(LangTextType.B0547);
         }
 
         private async _updateComponentsForSettings(): Promise<void> {
             const playerIndex           = this.data.playerIndex;
-            const initialWarData        = MfrModel.Create.getInitialWarData();
+            const initialWarData        = MfrCreateModel.getInitialWarData();
             const settingsForCommon     = initialWarData.settingsForCommon;
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(BwHelpers.getTeamIndexByRuleForPlayers(settingsForCommon.warRule.ruleForPlayers, playerIndex));
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarCommonHelpers.getTeamIndexByRuleForPlayers(settingsForCommon.warRule.ruleForPlayers, playerIndex));
 
             const playerData            = initialWarData.playerManager.players.find(v => v.playerIndex === playerIndex);
             this._imgSkin.source        = getSourceForImgSkin(playerData.unitAndTileSkinId);
@@ -142,12 +154,12 @@ namespace TinyWars.MultiFreeRoom {
             this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
-            const userInfo              = MfrModel.Create.getSelfPlayerIndex() === playerIndex ? await User.UserModel.getUserPublicInfo(User.UserModel.getSelfUserId()) : null;
+            const userInfo              = MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(UserModel.getSelfUserId()) : null;
             const labelNickname         = this._labelNickname;
             if (userInfo) {
                 labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
             } else {
-                labelNickname.text = playerData.userId == null ? Lang.getText(Lang.Type.B0607) : `??`;
+                labelNickname.text = playerData.userId == null ? Lang.getText(LangTextType.B0607) : `??`;
             }
 
             const rankScoreArray        = userInfo ? userInfo.userMrwRankInfoArray : undefined;
@@ -176,3 +188,5 @@ namespace TinyWars.MultiFreeRoom {
         }
     }
 }
+
+export default TwnsMfrCreatePlayerInfoPage;

@@ -1,31 +1,60 @@
 
-namespace TinyWars.SingleCustomRoom {
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Helpers          = Utility.Helpers;
+import TwnsCommonConfirmPanel               from "../../common/view/CommonConfirmPanel";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import SpmModel                             from "../../singlePlayerMode/model/SpmModel";
+import SpmProxy                             from "../../singlePlayerMode/model/SpmProxy";
+import FlowManager                          from "../../tools/helpers/FlowManager";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import ScrCreateModel                       from "../model/ScrCreateModel";
+import TwnsScrCreateAdvancedSettingsPage    from "./ScrCreateAdvancedSettingsPage";
+import TwnsScrCreateMapListPanel            from "./ScrCreateMapListPanel";
+import TwnsScrCreatePlayerInfoPage          from "./ScrCreatePlayerInfoPage";
+import TwnsScrCreateSaveSlotsPanel          from "./ScrCreateSaveSlotsPanel";
+
+namespace TwnsScrCreateSettingsPanel {
+    import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import ScrCreateAdvancedSettingsPage            = TwnsScrCreateAdvancedSettingsPage.ScrCreateAdvancedSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import ScrCreatePlayerInfoPage                  = TwnsScrCreatePlayerInfoPage.ScrCreatePlayerInfoPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class ScrCreateSettingsPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class ScrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: ScrCreateSettingsPanel;
 
         private readonly _groupNavigator        : eui.Group;
-        private readonly _labelSinglePlayer     : GameUi.UiLabel;
-        private readonly _labelCustomMode       : GameUi.UiLabel;
-        private readonly _labelChooseMap        : GameUi.UiLabel;
-        private readonly _labelGameSettings     : GameUi.UiLabel;
+        private readonly _labelSinglePlayer     : TwnsUiLabel.UiLabel;
+        private readonly _labelCustomMode       : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseMap        : TwnsUiLabel.UiLabel;
+        private readonly _labelGameSettings     : TwnsUiLabel.UiLabel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, void>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage>;
 
-        private readonly _btnBack               : GameUi.UiButton;
-        private readonly _btnConfirm            : GameUi.UiButton;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
-        private _timeoutIdForBtnConfirm: number;
+        private _timeoutIdForBtnConfirm : number;
+        private _isTabInitialized       = false;
 
         public static show(): void {
             if (!ScrCreateSettingsPanel._instance) {
@@ -45,35 +74,40 @@ namespace TinyWars.SingleCustomRoom {
             this.skinName = "resource/skins/singleCustomRoom/ScrCreateSettingsPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgSpmCreateScw,    callback: this._onNotifyMsgSpmCreateScw },
+                { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgSpmCreateScw,                 callback: this._onNotifyMsgSpmCreateScw },
+                { type: NotifyType.ScrCreateWarSaveSlotChanged,     callback: this._onNotifyScrCreateWarSaveSlotChanged },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
+            this._isTabInitialized = false;
             this._tabSettings.bindData([
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : ScrCreateBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                    tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : ScrCreateAdvancedSettingsPage,
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
-                    pageClass   : ScrCreateMapInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0298) },
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                    tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : ScrCreatePlayerInfoPage,
                 },
             ]);
+            this._isTabInitialized = true;
 
             this._showOpenAnimation();
 
@@ -89,38 +123,41 @@ namespace TinyWars.SingleCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             this.close();
-            ScrCreateMapListPanel.show();
+            TwnsScrCreateMapListPanel.ScrCreateMapListPanel.show();
         }
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const data      = ScrModel.Create.getData();
+        private _onTouchedBtnConfirm(): void {
+            const data      = ScrCreateModel.getData();
             const callback  = () => {
-                SinglePlayerMode.SpmProxy.reqSpmCreateScw(data);
+                SpmProxy.reqSpmCreateScw(data);
                 this._btnConfirm.enabled = false;
                 this._resetTimeoutForBtnConfirm();
             };
 
-            if (SinglePlayerMode.SpmModel.SaveSlot.checkIsEmpty(data.slotIndex)) {
+            if (SpmModel.checkIsEmpty(data.slotIndex)) {
                 callback();
             } else {
-                Common.CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0070),
+                CommonConfirmPanel.show({
+                    content : Lang.getText(LangTextType.A0070),
                     callback,
                 });
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
         private _onNotifyMsgSpmCreateScw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateScw.IS;
-            Utility.FlowManager.gotoSinglePlayerWar({
+            FlowManager.gotoSinglePlayerWar({
                 warData         : data.warData,
                 slotExtraData   : data.extraData,
                 slotIndex       : data.slotIndex,
             });
+        }
+        private _onNotifyScrCreateWarSaveSlotChanged(): void {
+            this._updateCommonWarBasicSettingsPage();
         }
 
         private _resetTimeoutForBtnConfirm(): void {
@@ -142,12 +179,77 @@ namespace TinyWars.SingleCustomRoom {
         // Functions for the view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelSinglePlayer.text        = Lang.getText(Lang.Type.B0138);
-            this._labelCustomMode.text          = Lang.getText(Lang.Type.B0603);
-            this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
-            this._labelGameSettings.text        = Lang.getText(Lang.Type.B0604);
-            this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-            this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
+            this._labelSinglePlayer.text        = Lang.getText(LangTextType.B0138);
+            this._labelCustomMode.text          = Lang.getText(LangTextType.B0603);
+            this._labelChooseMap.text           = Lang.getText(LangTextType.B0227);
+            this._labelGameSettings.text        = Lang.getText(LangTextType.B0604);
+            this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+            this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
+            }
+        }
+
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+            const mapId = ScrCreateModel.getMapId();
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            const warRule   = ScrCreateModel.getWarRule();
+            const openData  : OpenDataForCommonWarBasicSettingsPage = {
+                dataArrayForListSettings: [
+                    {
+                        settingsType    : WarBasicSettingsType.MapName,
+                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(ScrCreateModel.getMapId()),
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarRuleTitle,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: async () => {
+                            await ScrCreateModel.tickPresetWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.HasFog,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: () => {
+                            ScrCreateModel.setHasFog(!ScrCreateModel.getHasFog());
+                            ScrCreateModel.setCustomWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
+                        currentValue    : ScrCreateModel.getSaveSlotIndex(),
+                        warRule,
+                        callbackOnModify: () => {
+                            TwnsScrCreateSaveSlotsPanel.ScrCreateSaveSlotsPanel.show();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
+                        currentValue    : ScrCreateModel.getSlotComment(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            ScrCreateModel.setSlotComment(newValue || undefined);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                ],
+            };
+
+            return openData;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -204,12 +306,14 @@ namespace TinyWars.SingleCustomRoom {
 
     type DataForTabItemRenderer = {
         name: string;
-    }
-    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: GameUi.UiLabel;
+    };
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
         }
     }
 }
+
+export default TwnsScrCreateSettingsPanel;

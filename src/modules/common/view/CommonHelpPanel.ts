@@ -1,24 +1,28 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.Common {
-    import Helpers = Utility.Helpers;
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import Helpers          from "../../tools/helpers/Helpers";
+import Types            from "../../tools/helpers/Types";
 
+namespace TwnsCommonHelpPanel {
     type OpenData = {
         title  : string;
         content: string;
     };
-    export class CommonHelpPanel extends GameUi.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
+    export class CommonHelpPanel extends TwnsUiPanel.UiPanel<OpenData> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CommonHelpPanel;
 
-        private readonly _imgMask       : GameUi.UiImage;
+        private readonly _imgMask       : TwnsUiImage.UiImage;
         private readonly _group         : eui.Group;
-        private readonly _btnClose      : GameUi.UiButton;
-        private readonly _labelTitle    : GameUi.UiLabel;
+        private readonly _btnClose      : TwnsUiButton.UiButton;
+        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
         private readonly _scrContent    : eui.Scroller;
-        private readonly _labelContent  : GameUi.UiLabel;
+        private readonly _labelContent  : TwnsUiLabel.UiLabel;
 
         public static show(openData: OpenData): void {
             if (!CommonHelpPanel._instance) {
@@ -87,3 +91,5 @@ namespace TinyWars.Common {
         }
     }
 }
+
+export default TwnsCommonHelpPanel;

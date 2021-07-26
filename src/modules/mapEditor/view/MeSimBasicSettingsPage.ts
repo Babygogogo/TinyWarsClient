@@ -1,21 +1,34 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapEditor {
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import CommonHelpPanel  = Common.CommonHelpPanel;
+import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
+import TwnsCommonHelpPanel          from "../../common/view/CommonHelpPanel";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiImage                  from "../../tools/ui/UiImage";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiTabPage                from "../../tools/ui/UiTabPage";
+import TwnsWarMapBuildingListPanel  from "../../warMap/view/WarMapBuildingListPanel";
+import MeSimModel                   from "../model/MeSimModel";
 
-    export class MeSimBasicSettingsPage extends GameUi.UiTabPage<void> {
-        private _btnMapNameTitle            : GameUi.UiButton;
-        private _labelMapName               : GameUi.UiLabel;
-        private _btnBuildings               : GameUi.UiButton;
+namespace TwnsMeSimBasicSettingsPage {
+    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import CommonHelpPanel          = TwnsCommonHelpPanel.CommonHelpPanel;
+    import WarMapBuildingListPanel  = TwnsWarMapBuildingListPanel.WarMapBuildingListPanel;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = TwnsNotifyType.NotifyType;
 
-        private _btnModifyWarRule           : GameUi.UiButton;
-        private _labelWarRule               : GameUi.UiLabel;
+    export class MeSimBasicSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
+        private _btnMapNameTitle            : TwnsUiButton.UiButton;
+        private _labelMapName               : TwnsUiLabel.UiLabel;
+        private _btnBuildings               : TwnsUiButton.UiButton;
 
-        private _btnModifyHasFog            : GameUi.UiButton;
-        private _imgHasFog                  : GameUi.UiImage;
-        private _btnHelpHasFog              : GameUi.UiButton;
+        private _btnModifyWarRule           : TwnsUiButton.UiButton;
+        private _labelWarRule               : TwnsUiLabel.UiLabel;
+
+        private _btnModifyHasFog            : TwnsUiButton.UiButton;
+        private _imgHasFog                  : TwnsUiImage.UiImage;
+        private _btnHelpHasFog              : TwnsUiButton.UiButton;
 
         public constructor() {
             super();
@@ -31,7 +44,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnBuildings,               callback: this._onTouchedBtnBuildings },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
 
             this._btnModifyHasFog.setTextColor(0x00FF00);
@@ -50,23 +63,23 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnModifyWarRule(): void {
-            MeModel.Sim.tickPresetWarRuleId();
+            MeSimModel.tickPresetWarRuleId();
             this._updateComponentsForWarRule();
         }
 
         private _onTouchedBtnModifyHasFog(): void {
             const callback = () => {
-                MeModel.Sim.setHasFog(!MeModel.Sim.getHasFog());
+                MeSimModel.setHasFog(!MeSimModel.getHasFog());
                 this._updateImgHasFog();
                 this._updateLabelWarRule();
             };
-            if (MeModel.Sim.getPresetWarRuleId() == null) {
+            if (MeSimModel.getPresetWarRuleId() == null) {
                 callback();
             } else {
-                Common.CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0129),
+                CommonConfirmPanel.show({
+                    content : Lang.getText(LangTextType.A0129),
                     callback: () => {
-                        MeModel.Sim.setPresetWarRuleId(null);
+                        MeSimModel.setPresetWarRuleId(null);
                         callback();
                     },
                 });
@@ -75,15 +88,15 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnHelpHasFog(): void {
             CommonHelpPanel.show({
-                title  : Lang.getText(Lang.Type.B0020),
-                content: Lang.getText(Lang.Type.R0002),
+                title  : Lang.getText(LangTextType.B0020),
+                content: Lang.getText(LangTextType.R0002),
             });
         }
 
         private async _onTouchedBtnBuildings(): Promise<void> {
-            const mapRawData = MeModel.Sim.getMapRawData();
-            WarMap.WarMapBuildingListPanel.show({
-                configVersion           : MeModel.Sim.getWarData().settingsForCommon.configVersion,
+            const mapRawData = MeSimModel.getMapRawData();
+            WarMapBuildingListPanel.show({
+                configVersion           : MeSimModel.getWarData().settingsForCommon.configVersion,
                 tileDataArray           : mapRawData.tileDataArray,
                 playersCountUnneutral   : mapRawData.playersCountUnneutral,
             });
@@ -93,10 +106,10 @@ namespace TinyWars.MapEditor {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnMapNameTitle.label         = Lang.getText(Lang.Type.B0225);
-            this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
-            this._btnModifyWarRule.label        = Lang.getText(Lang.Type.B0318);
-            this._btnBuildings.label            = Lang.getText(Lang.Type.B0333);
+            this._btnMapNameTitle.label         = Lang.getText(LangTextType.B0225);
+            this._btnModifyHasFog.label         = Lang.getText(LangTextType.B0020);
+            this._btnModifyWarRule.label        = Lang.getText(LangTextType.B0318);
+            this._btnBuildings.label            = Lang.getText(LangTextType.B0333);
         }
 
         private _updateComponentsForWarRule(): void {
@@ -105,18 +118,20 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getLanguageText({ textArray: MeModel.Sim.getMapRawData().mapNameArray });
+            this._labelMapName.text = Lang.getLanguageText({ textArray: MeSimModel.getMapRawData().mapNameArray });
         }
 
         private async _updateLabelWarRule(): Promise<void> {
             const label             = this._labelWarRule;
-            const settingsForCommon = MeModel.Sim.getWarData().settingsForCommon;
+            const settingsForCommon = MeSimModel.getWarData().settingsForCommon;
             label.text              = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
             label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFF0000 : 0x00FF00;
         }
 
         private _updateImgHasFog(): void {
-            this._imgHasFog.visible = MeModel.Sim.getHasFog();
+            this._imgHasFog.visible = MeSimModel.getHasFog();
         }
     }
 }
+
+export default TwnsMeSimBasicSettingsPage;

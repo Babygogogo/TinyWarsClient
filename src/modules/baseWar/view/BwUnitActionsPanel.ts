@@ -1,25 +1,40 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.BaseWar {
-    import Helpers          = Utility.Helpers;
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
+import StageManager             from "../../tools/helpers/StageManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsBwActionPlanner      from "../model/BwActionPlanner";
+import TwnsBwUnit               from "../model/BwUnit";
+import TwnsBwWar                from "../model/BwWar";
+import TwnsBwUnitView           from "./BwUnitView";
+
+namespace TwnsBwUnitActionsPanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import LangTextType     = TwnsLangTextType.LangTextType;
     import UnitActionType   = Types.UnitActionType;
+    import BwWar            = TwnsBwWar.BwWar;
+    import BwUnitView       = TwnsBwUnitView.BwUnitView;
 
     export type OpenDataForBwUnitActionsPanel = {
         war         : BwWar;
         destination : Types.GridIndex;
-        actionList  : DataForUnitAction[];
+        actionList  : TwnsBwActionPlanner.DataForUnitAction[];
     };
-    export class BwUnitActionsPanel extends GameUi.UiPanel<OpenDataForBwUnitActionsPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class BwUnitActionsPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitActionsPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: BwUnitActionsPanel;
 
         private _group      : eui.Group;
-        private _listAction : GameUi.UiScrollList<DataForUnitActionRenderer>;
+        private _listAction : TwnsUiScrollList.UiScrollList<DataForUnitActionRenderer>;
 
         public static show(openData: OpenDataForBwUnitActionsPanel): void {
             if (!BwUnitActionsPanel._instance) {
@@ -44,7 +59,7 @@ namespace TinyWars.BaseWar {
                 // { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
                 // { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
                 // { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
-                { type: Notify.Type.ZoomableContentsMoved,      callback: this._onNotifyZoomableContentsMoved },
+                { type: NotifyType.ZoomableContentsMoved,      callback: this._onNotifyZoomableContentsMoved },
             ]);
             this._listAction.setItemRenderer(UnitActionRenderer);
 
@@ -81,7 +96,7 @@ namespace TinyWars.BaseWar {
                         canProduceUnit  : data.canProduceUnit,
                     });
                 } else {
-                    const unitForProduce = new BaseWar.BwUnit();
+                    const unitForProduce = new TwnsBwUnit.BwUnit();
                     unitForProduce.init({
                         gridIndex   : { x: -1, y: -1 },
                         unitId      : -1,
@@ -109,8 +124,8 @@ namespace TinyWars.BaseWar {
             const container = openData.war.getView().getFieldContainer();
             const contents  = container.getContents();
             const gridIndex = openData.destination;
-            const gridSize  = Utility.CommonConstants.GridSize;
-            const stage     = Utility.StageManager.getStage();
+            const gridSize  = CommonConstants.GridSize;
+            const stage     = StageManager.getStage();
             const group     = this._group;
             const point     = contents.localToGlobal(
                 (gridIndex.x + 1) * gridSize.width,
@@ -146,23 +161,23 @@ namespace TinyWars.BaseWar {
         war             : BwWar;
         actionType      : UnitActionType;
         callback        : () => void;
-        unit?           : BaseWar.BwUnit;
+        unit?           : TwnsBwUnit.BwUnit;
         canProduceUnit? : boolean;
     };
 
-    class UnitActionRenderer extends GameUi.UiListItemRenderer<DataForUnitActionRenderer> {
-        private _labelAction: GameUi.UiLabel;
-        private _labelCost  : GameUi.UiLabel;
+    class UnitActionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitActionRenderer> {
+        private _labelAction: TwnsUiLabel.UiLabel;
+        private _labelCost  : TwnsUiLabel.UiLabel;
         private _conUnitView: eui.Group;
 
-        private _unitView   : BaseWar.BwUnitView;
+        private _unitView   : BwUnitView;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
 
-            this._unitView = new BaseWar.BwUnitView();
+            this._unitView = new BwUnitView();
             this._conUnitView.addChild(this._unitView);
         }
 
@@ -178,7 +193,7 @@ namespace TinyWars.BaseWar {
                 this.currentState       = "withUnit";
                 this._labelCost.text    = data.actionType !== Types.UnitActionType.ProduceUnit
                     ? ""
-                    : `${Lang.getText(Lang.Type.B0079)}: ${unit.getProductionFinalCost()}`;
+                    : `${Lang.getText(LangTextType.B0079)}: ${unit.getProductionFinalCost()}`;
                 this._unitView.init(unit).startRunningView();
             }
         }
@@ -198,3 +213,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwUnitActionsPanel;

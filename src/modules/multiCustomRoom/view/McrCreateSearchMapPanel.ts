@@ -1,40 +1,49 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MultiCustomRoom {
-    import Types        = Utility.Types;
-    import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
-    import Notify       = Utility.Notify;
-    import ProtoTypes   = Utility.ProtoTypes;
+import Helpers                      from "../../tools/helpers/Helpers";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiImage                  from "../../tools/ui/UiImage";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiTextInput              from "../../tools/ui/UiTextInput";
+import TwnsMcrCreateMapListPanel    from "./McrCreateMapListPanel";
 
-    export class McrCreateSearchMapPanel extends GameUi.UiPanel<void> {
+namespace TwnsMcrCreateSearchMapPanel {
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+
+    export class McrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<void> {
         protected _IS_EXCLUSIVE = false;
         protected _LAYER_TYPE   = Types.LayerType.Hud2;
 
         private static _instance: McrCreateSearchMapPanel;
 
-        private readonly _imgMask                   : GameUi.UiImage;
+        private readonly _imgMask                   : TwnsUiImage.UiImage;
 
         private readonly _group                     : eui.Group;
-        private readonly _btnClose                  : GameUi.UiButton;
-        private readonly _btnReset                  : GameUi.UiButton;
-        private readonly _btnSearch                 : GameUi.UiButton;
-        private readonly _labelName                 : GameUi.UiLabel;
-        private readonly _labelMapNameTitle         : GameUi.UiLabel;
-        private readonly _labelDesignerTitle        : GameUi.UiLabel;
-        private readonly _labelPlayersCountTitle    : GameUi.UiLabel;
-        private readonly _labelPlayedTimesTitle     : GameUi.UiLabel;
-        private readonly _labelMinRatingTitle       : GameUi.UiLabel;
-        private readonly _labelDesc                 : GameUi.UiLabel;
-        private readonly _inputMapName              : GameUi.UiTextInput;
-        private readonly _inputDesigner             : GameUi.UiTextInput;
-        private readonly _inputPlayersCount         : GameUi.UiTextInput;
-        private readonly _inputPlayedTimes          : GameUi.UiTextInput;
-        private readonly _inputMinRating            : GameUi.UiTextInput;
+        private readonly _btnClose                  : TwnsUiButton.UiButton;
+        private readonly _btnReset                  : TwnsUiButton.UiButton;
+        private readonly _btnSearch                 : TwnsUiButton.UiButton;
+        private readonly _labelName                 : TwnsUiLabel.UiLabel;
+        private readonly _labelMapNameTitle         : TwnsUiLabel.UiLabel;
+        private readonly _labelDesignerTitle        : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayersCountTitle    : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayedTimesTitle     : TwnsUiLabel.UiLabel;
+        private readonly _labelMinRatingTitle       : TwnsUiLabel.UiLabel;
+        private readonly _labelDesc                 : TwnsUiLabel.UiLabel;
+        private readonly _inputMapName              : TwnsUiTextInput.UiTextInput;
+        private readonly _inputDesigner             : TwnsUiTextInput.UiTextInput;
+        private readonly _inputPlayersCount         : TwnsUiTextInput.UiTextInput;
+        private readonly _inputPlayedTimes          : TwnsUiTextInput.UiTextInput;
+        private readonly _inputMinRating            : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelTagFogTitle          : GameUi.UiLabel;
-        private readonly _labelTagFog               : GameUi.UiLabel;
-        private readonly _btnTagFog                 : GameUi.UiButton;
+        private readonly _labelTagFogTitle          : TwnsUiLabel.UiLabel;
+        private readonly _labelTagFog               : TwnsUiLabel.UiLabel;
+        private readonly _btnTagFog                 : TwnsUiButton.UiButton;
 
         private _mapTag         : ProtoTypes.Map.IDataForMapTag = {};
 
@@ -66,7 +75,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnTagFog,  callback: this._onTouchedBtnTagFog },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
             this._showOpenAnimation();
@@ -78,14 +87,14 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnReset(): void {
-            McrCreateMapListPanel.getInstance().setMapFilters({});
+            TwnsMcrCreateMapListPanel.McrCreateMapListPanel.getInstance().setMapFilters({});
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
             const minRatingText = this._inputMinRating.text;
             const minRating     = minRatingText ? Number(minRatingText) : null;
-            McrCreateMapListPanel.getInstance().setMapFilters({
+            TwnsMcrCreateMapListPanel.McrCreateMapListPanel.getInstance().setMapFilters({
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
                 playersCount: Number(this._inputPlayersCount.text) || null,
@@ -115,16 +124,16 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelName.text                = Lang.getText(Lang.Type.B0447);
-            this._labelMapNameTitle.text        = Lang.getText(Lang.Type.B0225);
-            this._labelDesignerTitle.text       = Lang.getText(Lang.Type.B0251);
-            this._labelPlayersCountTitle.text   = Lang.getText(Lang.Type.B0229);
-            this._labelPlayedTimesTitle.text    = Lang.getText(Lang.Type.B0568);
-            this._labelMinRatingTitle.text      = Lang.getText(Lang.Type.B0569);
-            this._labelTagFogTitle.text         = Lang.getText(Lang.Type.B0570);
-            this._labelDesc.text                = Lang.getText(Lang.Type.A0063);
-            this._btnReset.label                = Lang.getText(Lang.Type.B0567);
-            this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
+            this._labelName.text                = Lang.getText(LangTextType.B0447);
+            this._labelMapNameTitle.text        = Lang.getText(LangTextType.B0225);
+            this._labelDesignerTitle.text       = Lang.getText(LangTextType.B0251);
+            this._labelPlayersCountTitle.text   = Lang.getText(LangTextType.B0229);
+            this._labelPlayedTimesTitle.text    = Lang.getText(LangTextType.B0568);
+            this._labelMinRatingTitle.text      = Lang.getText(LangTextType.B0569);
+            this._labelTagFogTitle.text         = Lang.getText(LangTextType.B0570);
+            this._labelDesc.text                = Lang.getText(LangTextType.A0063);
+            this._btnReset.label                = Lang.getText(LangTextType.B0567);
+            this._btnSearch.label               = Lang.getText(LangTextType.B0228);
             this._updateLabelTagFog();
         }
 
@@ -132,9 +141,9 @@ namespace TinyWars.MultiCustomRoom {
             const hasFog    = this._mapTag.fog;
             const label     = this._labelTagFog;
             if (hasFog == true) {
-                label.text = Lang.getText(Lang.Type.B0012);
+                label.text = Lang.getText(LangTextType.B0012);
             } else if (hasFog == false) {
-                label.text = Lang.getText(Lang.Type.B0013);
+                label.text = Lang.getText(LangTextType.B0013);
             } else {
                 label.text = undefined;
             }
@@ -169,3 +178,5 @@ namespace TinyWars.MultiCustomRoom {
         }
     }
 }
+
+export default TwnsMcrCreateSearchMapPanel;

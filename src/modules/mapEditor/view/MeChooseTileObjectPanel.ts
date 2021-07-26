@@ -1,22 +1,36 @@
 
-namespace TinyWars.MapEditor {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
-    import ConfigManager    = Utility.ConfigManager;
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsMeDrawer             from "../model/MeDrawer";
+import MeModel                  from "../model/MeModel";
+import TwnsMeTileSimpleView     from "./MeTileSimpleView";
+
+namespace TwnsMeChooseTileObjectPanel {
+    import DataForDrawTileObject    = TwnsMeDrawer.DataForDrawTileObject;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = TwnsNotifyType.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
-    export class MeChooseTileObjectPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class MeChooseTileObjectPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeChooseTileObjectPanel;
 
-        private _labelRecentTitle   : GameUi.UiLabel;
-        private _listRecent         : GameUi.UiScrollList<DataForTileObjectRenderer>;
-        private _listCategory       : GameUi.UiScrollList<DataForCategoryRenderer>;
-        private _btnCancel          : GameUi.UiButton;
+        private _labelRecentTitle   : TwnsUiLabel.UiLabel;
+        private _listRecent         : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
+        private _listCategory       : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private _btnCancel          : TwnsUiButton.UiButton;
 
         private _dataListForRecent  : DataForTileObjectRenderer[] = [];
 
@@ -42,7 +56,7 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
@@ -90,13 +104,13 @@ namespace TinyWars.MapEditor {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
-            this._labelRecentTitle.text = `${Lang.getText(Lang.Type.B0372)}:`
+            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+            this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
         }
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
             const mapping = new Map<number, DataForDrawTileObject[]>();
-            for (const [objectType, cfg] of Utility.CommonConstants.TileObjectShapeConfigs) {
+            for (const [objectType, cfg] of CommonConstants.TileObjectShapeConfigs) {
                 for (let playerIndex = cfg.minPlayerIndex; playerIndex <= cfg.maxPlayerIndex; ++playerIndex) {
                     if (!mapping.has(playerIndex)) {
                         mapping.set(playerIndex, []);
@@ -139,11 +153,10 @@ namespace TinyWars.MapEditor {
     type DataForCategoryRenderer = {
         dataListForDrawTileObject   : DataForDrawTileObject[];
         panel                       : MeChooseTileObjectPanel;
-    }
-
-    class CategoryRenderer extends GameUi.UiListItemRenderer<DataForCategoryRenderer> {
-        private _labelCategory  : GameUi.UiLabel;
-        private _listTileObject : GameUi.UiScrollList<DataForTileObjectRenderer>;
+    };
+    class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
+        private _labelCategory  : TwnsUiLabel.UiLabel;
+        private _listTileObject : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
 
         protected _onOpened(): void {
             this._listTileObject.setItemRenderer(TileObjectRenderer);
@@ -170,18 +183,17 @@ namespace TinyWars.MapEditor {
     type DataForTileObjectRenderer = {
         dataForDrawTileObject   : DataForDrawTileObject;
         panel                   : MeChooseTileObjectPanel;
-    }
-
-    class TileObjectRenderer extends GameUi.UiListItemRenderer<DataForTileObjectRenderer> {
+    };
+    class TileObjectRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileObjectRenderer> {
         private _group          : eui.Group;
-        private _labelName      : GameUi.UiLabel;
+        private _labelName      : TwnsUiLabel.UiLabel;
         private _conTileView    : eui.Group;
 
-        private _tileView   = new MeTileSimpleView();
+        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+                { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
 
             const tileView = this._tileView;
@@ -219,3 +231,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeChooseTileObjectPanel;

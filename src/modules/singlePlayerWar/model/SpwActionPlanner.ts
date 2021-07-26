@@ -1,20 +1,32 @@
 
-namespace TinyWars.SinglePlayerWar {
-    import Types                = Utility.Types;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import FloatText            = Utility.FloatText;
-    import Lang                 = Utility.Lang;
-    import ProtoTypes           = Utility.ProtoTypes;
+import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
+import TwnsBwUnit               from "../../baseWar/model/BwUnit";
+import TwnsBwProduceUnitPanel   from "../../baseWar/view/BwProduceUnitPanel";
+import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import FloatText                from "../../tools/helpers/FloatText";
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import SpwLocalProxy            from "./SpwLocalProxy";
+import TwnsSpwWar               from "./SpwWar";
+
+namespace TwnsSpwActionPlanner {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
+    import SpwWar               = TwnsSpwWar.SpwWar;
+    import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import UnitState            = Types.UnitActionState;
     import GridIndex            = Types.GridIndex;
     import State                = Types.ActionPlannerState;
     import UnitActionType       = Types.UnitActionType;
     import UnitType             = Types.UnitType;
-    import BwHelpers            = BaseWar.BwHelpers;
-    import CommonConfirmPanel   = Common.CommonConfirmPanel;
 
-    export class SpwActionPlanner extends BaseWar.BwActionPlanner {
+    export class SpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
         private _getPlayerIndexInTurn(): number {
             return this._getWar().getPlayerIndexInTurn();
         }
@@ -33,7 +45,7 @@ namespace TinyWars.SinglePlayerWar {
 
             this._setState(State.ChoosingProductionTarget);
             this._updateView();
-            BaseWar.BwProduceUnitPanel.show({
+            BwProduceUnitPanel.show({
                 gridIndex,
                 war     : this._getWar(),
             });
@@ -229,13 +241,13 @@ namespace TinyWars.SinglePlayerWar {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                BaseWar.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+                TwnsBwUnitActionsPanel.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
             } else {
-                BaseWar.BwUnitActionsPanel.hide();
+                TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
             }
         }
 
-        protected _checkCanControlUnit(unit: BaseWar.BwUnit): boolean {
+        protected _checkCanControlUnit(unit: TwnsBwUnit.BwUnit): boolean {
             const playerInTurn = this._getWar().getPlayerInTurn();
             return (unit.getPlayerIndex() === playerInTurn.getPlayerIndex())
                 && (playerInTurn.getUserId() != null);
@@ -417,7 +429,7 @@ namespace TinyWars.SinglePlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitBeLoaded(): TwnsBwActionPlanner.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -429,7 +441,7 @@ namespace TinyWars.SinglePlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitJoin(): TwnsBwActionPlanner.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -441,7 +453,7 @@ namespace TinyWars.SinglePlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitUseCoSuperPower(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -451,14 +463,14 @@ namespace TinyWars.SinglePlayerWar {
                         actionType  : UnitActionType.UseCoSuperPower,
                         callback    : () => {
                             CommonConfirmPanel.show({
-                                content : Lang.getText(Lang.Type.A0058),
+                                content : Lang.getText(LangTextType.A0058),
                                 callback: () => this._setStateRequestingUnitUseCoSuperPower(),
                             });
                         },
                     }];
             }
         }
-        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitUseCoPower(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -468,14 +480,14 @@ namespace TinyWars.SinglePlayerWar {
                         actionType  : UnitActionType.UseCoPower,
                         callback    : () => {
                             CommonConfirmPanel.show({
-                                content : Lang.getText(Lang.Type.A0054),
+                                content : Lang.getText(LangTextType.A0054),
                                 callback: () => this._setStateRequestingUnitUseCoPower(),
                             });
                         },
                     }];
             }
         }
-        protected _getActionUnitLoadCo(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitLoadCo(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -484,7 +496,7 @@ namespace TinyWars.SinglePlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitCapture(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitCapture(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -493,7 +505,7 @@ namespace TinyWars.SinglePlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitDive(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitDive(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -502,7 +514,7 @@ namespace TinyWars.SinglePlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitSurface(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitSurface(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -511,7 +523,7 @@ namespace TinyWars.SinglePlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitBuildTile(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitBuildTile(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -520,7 +532,7 @@ namespace TinyWars.SinglePlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitSupply(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitSupply(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -538,7 +550,7 @@ namespace TinyWars.SinglePlayerWar {
                 return [];
             }
         }
-        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitProduceUnit(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -550,21 +562,21 @@ namespace TinyWars.SinglePlayerWar {
                     if (focusUnit.getCurrentProduceMaterial() < 1) {
                         return [{
                             actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(Lang.Type.B0051)),
+                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0051)),
                             canProduceUnit  : false,
                             produceUnitType,
                         }];
                     } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
                         return [{
                             actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(Lang.Type.B0052)),
+                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0052)),
                             canProduceUnit  : false,
                             produceUnitType,
                         }];
                     } else if ((this._getWar() as SpwWar).getPlayerInTurn().getFund() < focusUnit.getProduceUnitCost()) {
                         return [{
                             actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(Lang.Type.B0053)),
+                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0053)),
                             canProduceUnit  : false,
                             produceUnitType,
                         }];
@@ -579,7 +591,7 @@ namespace TinyWars.SinglePlayerWar {
                 }
             }
         }
-        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): TwnsBwActionPlanner.DataForUnitAction[] {
             const existingUnit = this._getUnitMap().getVisibleUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];
@@ -590,7 +602,7 @@ namespace TinyWars.SinglePlayerWar {
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitDropOnChooseAction()
                             : () => CommonConfirmPanel.show({
-                                content : Lang.getText(Lang.Type.A0055),
+                                content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitDropOnChooseAction(),
                             }),
                     }];
@@ -600,7 +612,7 @@ namespace TinyWars.SinglePlayerWar {
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitWait()
                             : () => CommonConfirmPanel.show({
-                                content : Lang.getText(Lang.Type.A0055),
+                                content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitWait(),
                             }),
                     }];
@@ -611,7 +623,7 @@ namespace TinyWars.SinglePlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: BaseWar.BwUnit): number | undefined {
+        protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: TwnsBwUnit.BwUnit): number | undefined {
             if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
                 return undefined;
             } else {
@@ -634,7 +646,7 @@ namespace TinyWars.SinglePlayerWar {
             const beginningGridIndex    = focusUnit.getGridIndex();
             const hasAmmo               = (focusUnit.getPrimaryWeaponCurrentAmmo() > 0) || (focusUnit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
-            this._setAttackableArea(BwHelpers.createAttackableArea({
+            this._setAttackableArea(WarCommonHelpers.createAttackableArea({
                 movableArea     : this.getMovableArea(),
                 mapSize         : this.getMapSize(),
                 minAttackRange  : focusUnit.getMinAttackRange(),
@@ -656,14 +668,14 @@ namespace TinyWars.SinglePlayerWar {
             }));
         }
 
-        protected _addUnitForPreviewAttackableArea(unit: BaseWar.BwUnit): void {
+        protected _addUnitForPreviewAttackableArea(unit: TwnsBwUnit.BwUnit): void {
             const canAttackAfterMove    = unit.checkCanAttackAfterMove();
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
             const unitMap               = this._getUnitMap();
-            const newArea               = BwHelpers.createAttackableArea({
-                movableArea: BwHelpers.createMovableArea({
+            const newArea               = WarCommonHelpers.createAttackableArea({
+                movableArea: WarCommonHelpers.createMovableArea({
                     origin          : unit.getGridIndex(),
                     maxMoveCost     : unit.getFinalMoveRange(),
                     mapSize,
@@ -712,3 +724,5 @@ namespace TinyWars.SinglePlayerWar {
         }
     }
 }
+
+export default TwnsSpwActionPlanner;

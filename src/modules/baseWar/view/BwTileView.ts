@@ -1,26 +1,28 @@
 
-namespace TinyWars.BaseWar {
-    import CommonModel      = Common.CommonModel;
-    import TimeModel        = Time.TimeModel;
-    import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
-    import CommonConstants  = Utility.CommonConstants;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import TileObjectType   = Types.TileObjectType;
-    import TileBaseType     = Types.TileBaseType;
-    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import CommonModel      from "../../common/model/CommonModel";
+import Timer            from "../../tools/helpers/Timer";
+import UserModel        from "../../user/model/UserModel";
+import Types            from "../../tools/helpers/Types";
+import Logger           from "../../tools/helpers/Logger";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
+namespace TwnsBwTileView {
+    import TileObjectType       = Types.TileObjectType;
+    import TileBaseType         = Types.TileBaseType;
+    import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
+
+    const { height: GRID_HEIGHT } = CommonConstants.GridSize;
 
     export type DataForTileView = {
         tileData    : ISerialTile;
         hasFog      : boolean;
         skinId      : number;
-    }
-
+    };
     export class BwTileView {
-        private _imgBase    = new GameUi.UiImage();
-        private _imgObject  = new GameUi.UiImage();
+        private _imgBase    = new TwnsUiImage.UiImage();
+        private _imgObject  = new TwnsUiImage.UiImage();
 
         private _data       : DataForTileView;
 
@@ -63,8 +65,8 @@ namespace TinyWars.BaseWar {
 
             const imgObject = this.getImgObject();
             const imgBase   = this.getImgBase();
-            const version   = User.UserModel.getSelfSettingsTextureVersion();
-            const tickCount = TimeModel.getTileAnimationTickCount();
+            const version   = UserModel.getSelfSettingsTextureVersion();
+            const tickCount = Timer.getTileAnimationTickCount();
 
             const objectType = tileData.objectType;
             if (objectType == null) {
@@ -103,11 +105,13 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public getImgObject(): GameUi.UiImage {
+        public getImgObject(): TwnsUiImage.UiImage {
             return this._imgObject;
-        };
-        public getImgBase(): GameUi.UiImage {
+        }
+        public getImgBase(): TwnsUiImage.UiImage {
             return this._imgBase;
         }
     }
 }
+
+export default TwnsBwTileView;

@@ -1,7 +1,10 @@
 
-namespace TinyWars.BaseWar {
-    export class BwBackgroundPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Bottom;
+import TwnsUiPanel  from "../../tools/ui/UiPanel";
+import Types        from "../../tools/helpers/Types";
+
+namespace TwnsBwBackgroundPanel {
+    export class BwBackgroundPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Bottom;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: BwBackgroundPanel;
@@ -26,3 +29,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwBackgroundPanel;

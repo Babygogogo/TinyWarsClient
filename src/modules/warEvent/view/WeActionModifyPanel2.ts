@@ -1,35 +1,47 @@
 
-namespace TinyWars.WarEvent {
-    import Lang                 = Utility.Lang;
-    import Notify               = Utility.Notify;
-    import Types                = Utility.Types;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import CommonConstants      = Utility.CommonConstants;
-    import PlayerAliveState     = Types.PlayerAliveState;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction      = ProtoTypes.WarEvent.IWarEventAction;
+import TwnsBwWar                    from "../../baseWar/model/BwWar";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
+
+namespace TwnsWeActionModifyPanel2 {
+    import WeActionTypeListPanel    = TwnsWeActionTypeListPanel.WeActionTypeListPanel;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import PlayerAliveState         = Types.PlayerAliveState;
+    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
+    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import BwWar                    = TwnsBwWar.BwWar;
 
     type OpenDataForWeActionModifyPanel2 = {
-        war         : BaseWar.BwWar;
+        war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
-    }
-    export class WeActionModifyPanel2 extends GameUi.UiPanel<OpenDataForWeActionModifyPanel2> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+    };
+    export class WeActionModifyPanel2 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel2> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: WeActionModifyPanel2;
 
-        private _labelTitle             : TinyWars.GameUi.UiLabel;
-        private _btnType                : TinyWars.GameUi.UiButton;
-        private _btnBack                : TinyWars.GameUi.UiButton;
-        private _labelPlayerIndexTitle  : TinyWars.GameUi.UiLabel;
-        private _labelPlayerIndex       : TinyWars.GameUi.UiLabel;
-        private _btnSwitchPlayerIndex   : TinyWars.GameUi.UiButton;
-        private _labelPlayerStateTitle  : TinyWars.GameUi.UiLabel;
-        private _labelPlayerState       : TinyWars.GameUi.UiLabel;
-        private _btnSwitchPlayerState   : TinyWars.GameUi.UiButton;
-        private _labelTips              : TinyWars.GameUi.UiLabel;
+        private _labelTitle             : TwnsUiLabel.UiLabel;
+        private _btnType                : TwnsUiButton.UiButton;
+        private _btnBack                : TwnsUiButton.UiButton;
+        private _labelPlayerIndexTitle  : TwnsUiLabel.UiLabel;
+        private _labelPlayerIndex       : TwnsUiLabel.UiLabel;
+        private _btnSwitchPlayerIndex   : TwnsUiButton.UiButton;
+        private _labelPlayerStateTitle  : TwnsUiLabel.UiLabel;
+        private _labelPlayerState       : TwnsUiLabel.UiLabel;
+        private _btnSwitchPlayerState   : TwnsUiButton.UiButton;
+        private _labelTips              : TwnsUiLabel.UiLabel;
 
         public static show(openData: OpenDataForWeActionModifyPanel2): void {
             if (!WeActionModifyPanel2._instance) {
@@ -57,8 +69,8 @@ namespace TinyWars.WarEvent {
                 { ui: this._btnBack,                callback: this.close },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
+                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
             ]);
 
             this._updateView();
@@ -81,7 +93,7 @@ namespace TinyWars.WarEvent {
             const action        = this._getOpenData().action.WeaSetPlayerAliveState;
             action.playerIndex  = ((action.playerIndex || 0) % CommonConstants.WarMaxPlayerIndex) + 1;
 
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnSwitchPlayerState(e: egret.TouchEvent): void {
@@ -95,7 +107,7 @@ namespace TinyWars.WarEvent {
                 action.playerAliveState = PlayerAliveState.Alive;
             }
 
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnType(e: egret.TouchEvent): void {
@@ -119,13 +131,13 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text               = `${Lang.getText(Lang.Type.B0533)} A${this._getOpenData().action.WeaCommonData.actionId}`;
-            this._btnType.label                 = Lang.getText(Lang.Type.B0516);
-            this._btnSwitchPlayerIndex.label    = Lang.getText(Lang.Type.B0520);
-            this._btnSwitchPlayerState.label    = Lang.getText(Lang.Type.B0520);
-            this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-            this._labelPlayerIndexTitle.text    = Lang.getText(Lang.Type.B0521);
-            this._labelPlayerStateTitle.text    = Lang.getText(Lang.Type.B0523);
+            this._labelTitle.text               = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData.actionId}`;
+            this._btnType.label                 = Lang.getText(LangTextType.B0516);
+            this._btnSwitchPlayerIndex.label    = Lang.getText(LangTextType.B0520);
+            this._btnSwitchPlayerState.label    = Lang.getText(LangTextType.B0520);
+            this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+            this._labelPlayerIndexTitle.text    = Lang.getText(LangTextType.B0521);
+            this._labelPlayerStateTitle.text    = Lang.getText(LangTextType.B0523);
 
             this._updateLabelPlayerState();
             this._updateLabelTips();
@@ -146,10 +158,12 @@ namespace TinyWars.WarEvent {
 
     function getTipsForPlayerAliveState(playerAliveState: PlayerAliveState): string {
         switch (playerAliveState) {
-            case PlayerAliveState.Alive : return Lang.getText(Lang.Type.A0214);
-            case PlayerAliveState.Dying : return Lang.getText(Lang.Type.A0215);
-            case PlayerAliveState.Dead  : return Lang.getText(Lang.Type.A0216);
+            case PlayerAliveState.Alive : return Lang.getText(LangTextType.A0214);
+            case PlayerAliveState.Dying : return Lang.getText(LangTextType.A0215);
+            case PlayerAliveState.Dead  : return Lang.getText(LangTextType.A0216);
             default                     : return undefined;
         }
     }
 }
+
+export default TwnsWeActionModifyPanel2;

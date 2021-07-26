@@ -1,41 +1,57 @@
 
-namespace TinyWars.BaseWar {
-    import Tween            = egret.Tween;
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import StageManager     = Utility.StageManager;
-    import Types            = Utility.Types;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import StageManager             from "../../tools/helpers/StageManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import NotifyData               from "../../tools/notify/NotifyData";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsBwWar                from "../model/BwWar";
+import TwnsBwCoListPanel        from "./BwCoListPanel";
+import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
+import TwnsBwTileDetailPanel    from "./BwTileDetailPanel";
+import TwnsBwTileView           from "./BwTileView";
+import TwnsBwUnitBriefPanel     from "./BwUnitBriefPanel";
+
+namespace TwnsBwTileBriefPanel {
+    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
+    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
+    import BwTileDetailPanel    = TwnsBwTileDetailPanel.BwTileDetailPanel;
+    import BwTileView           = TwnsBwTileView.BwTileView;
+    import BwWar                = TwnsBwWar.BwWar;
+    import Tween                = egret.Tween;
+    import NotifyType           = TwnsNotifyType.NotifyType;
 
     const _IMAGE_SOURCE_HP      = `c04_t10_s00_f00`;
-    const _IMAGE_SOURCE_FUEL    = `c04_t10_s01_f00`;
-    const _IMAGE_SOURCE_AMMO    = `c04_t10_s02_f00`;
-    const _IMAGE_SOURCE_DEFENSE = `c04_t10_s03_f00`;
+    // const _IMAGE_SOURCE_FUEL    = `c04_t10_s01_f00`;
+    // const _IMAGE_SOURCE_AMMO    = `c04_t10_s02_f00`;
+    // const _IMAGE_SOURCE_DEFENSE = `c04_t10_s03_f00`;
     const _IMAGE_SOURCE_CAPTURE = `c04_t10_s04_f00`;
     const _IMAGE_SOURCE_BUILD   = `c04_t10_s05_f00`;
     const _CELL_WIDTH           = 80;
 
-    type OpenDataForBwTileBriefPanel = {
+    type OpenData = {
         war : BwWar;
-    }
-
-    export class BwTileBriefPanel extends GameUi.UiPanel<OpenDataForBwTileBriefPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    };
+    export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: BwTileBriefPanel;
 
         private readonly _group             : eui.Group;
         private readonly _conTileView       : eui.Group;
-        private readonly _tileView          = new BaseWar.BwTileView();
-        private readonly _labelName         : GameUi.UiLabel;
-        private readonly _labelGridIndex    : GameUi.UiLabel;
-        private readonly _labelState        : GameUi.UiLabel;
-        private readonly _labelDefense      : GameUi.UiLabel;
-        private readonly _imgDefense        : GameUi.UiImage;
-        private readonly _imgState          : GameUi.UiImage;
+        private readonly _tileView          = new BwTileView();
+        private readonly _labelName         : TwnsUiLabel.UiLabel;
+        private readonly _labelGridIndex    : TwnsUiLabel.UiLabel;
+        private readonly _labelState        : TwnsUiLabel.UiLabel;
+        private readonly _labelDefense      : TwnsUiLabel.UiLabel;
+        private readonly _imgDefense        : TwnsUiImage.UiImage;
+        private readonly _imgState          : TwnsUiImage.UiImage;
 
-        public static show(openData: OpenDataForBwTileBriefPanel): void {
+        public static show(openData: OpenData): void {
             if (!BwTileBriefPanel._instance) {
                 BwTileBriefPanel._instance = new BwTileBriefPanel();
             }
@@ -58,18 +74,18 @@ namespace TinyWars.BaseWar {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
-                { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: Notify.Type.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
-                { type: Notify.Type.BwWarMenuPanelClosed,           callback: this._onNotifyBwWarMenuPanelClosed },
-                { type: Notify.Type.BwCoListPanelOpened,            callback: this._onNotifyBwCoListPanelOpened },
-                { type: Notify.Type.BwCoListPanelClosed,            callback: this._onNotifyBwCoListPanelClosed },
-                { type: Notify.Type.BwProduceUnitPanelOpened,       callback: this._onNotifyBwProduceUnitPanelOpened },
-                { type: Notify.Type.BwProduceUnitPanelClosed,       callback: this._onNotifyBwProduceUnitPanelClosed },
-                { type: Notify.Type.MeTileChanged,                  callback: this._onNotifyMeTileChanged },
-                { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
+                { type: NotifyType.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
+                { type: NotifyType.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
+                { type: NotifyType.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
+                { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: NotifyType.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
+                { type: NotifyType.BwWarMenuPanelClosed,           callback: this._onNotifyBwWarMenuPanelClosed },
+                { type: NotifyType.BwCoListPanelOpened,            callback: this._onNotifyBwCoListPanelOpened },
+                { type: NotifyType.BwCoListPanelClosed,            callback: this._onNotifyBwCoListPanelClosed },
+                { type: NotifyType.BwProduceUnitPanelOpened,       callback: this._onNotifyBwProduceUnitPanelOpened },
+                { type: NotifyType.BwProduceUnitPanelClosed,       callback: this._onNotifyBwProduceUnitPanelClosed },
+                { type: NotifyType.MeTileChanged,                  callback: this._onNotifyMeTileChanged },
+                { type: NotifyType.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
             ]);
             this._setUiListenerArray([
                 { ui: this, callback: this._onTouchedThis, },
@@ -128,7 +144,7 @@ namespace TinyWars.BaseWar {
             this._updateView();
         }
         private _onNotifyMeTileChanged(e: egret.Event): void {
-            const data = e.data as Notify.Data.MeTileChanged;
+            const data = e.data as NotifyData.MeTileChanged;
             if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
                 this._updateView();
             }
@@ -140,7 +156,7 @@ namespace TinyWars.BaseWar {
         private _onTouchedThis(e: egret.TouchEvent): void {
             const war   = this._getOpenData().war;
             const tile  = war.getTileMap().getTile(war.getCursor().getGridIndex());
-            (tile) && (BaseWar.BwTileDetailPanel.show({ tile }));
+            (tile) && (BwTileDetailPanel.show({ tile }));
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,8 +165,8 @@ namespace TinyWars.BaseWar {
         private _updateView(): void {
             const war = this._getOpenData().war;
             if ((war.getIsWarMenuPanelOpening())            ||
-                (BaseWar.BwProduceUnitPanel.getIsOpening()) ||
-                (BaseWar.BwCoListPanel.getIsOpening())
+                (BwProduceUnitPanel.getIsOpening()) ||
+                (BwCoListPanel.getIsOpening())
             ) {
                 this.visible = false;
             } else {
@@ -192,11 +208,10 @@ namespace TinyWars.BaseWar {
         }
 
         private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
-            const tileBriefPanel = this;
-            const unitBriefPanel = BwUnitBriefPanel.getInstance();
+            const unitBriefPanel = TwnsBwUnitBriefPanel.BwUnitBriefPanel.getInstance();
             let target = e.target as egret.DisplayObject;
             while (target) {
-                if ((target) && ((target === tileBriefPanel) || (target === unitBriefPanel))) {
+                if ((target) && ((target === this) || (target === unitBriefPanel))) {
                     return;
                 }
                 target = target.parent;
@@ -235,3 +250,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwTileBriefPanel;

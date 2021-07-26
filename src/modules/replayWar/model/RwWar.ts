@@ -1,30 +1,48 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.ReplayWar {
-    import Types                = Utility.Types;
-    import Notify               = Utility.Notify;
-    import FloatText            = Utility.FloatText;
-    import Lang                 = Utility.Lang;
-    import Helpers              = Utility.Helpers;
-    import Logger               = Utility.Logger;
-    import ClientErrorCode      = Utility.ClientErrorCode;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import WarType              = Types.WarType;
-    import WarAction            = ProtoTypes.WarAction;
-    import IWarActionContainer  = WarAction.IWarActionContainer;
-    import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
+import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
+import TwnsBwWar                    from "../../baseWar/model/BwWar";
+import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
+import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Logger                       from "../../tools/helpers/Logger";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import WarActionExecutor            from "../../tools/warHelpers/WarActionExecutor";
+import WarVisibilityHelpers         from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsRwWarMenuPanel           from "../view/RwWarMenuPanel";
+import TwnsRwField                  from "./RwField";
+import TwnsRwPlayerManager          from "./RwPlayerManager";
+
+namespace TwnsRwWar {
+    import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
+    import RwWarMenuPanel           = TwnsRwWarMenuPanel.RwWarMenuPanel;
+    import RwPlayerManager          = TwnsRwPlayerManager.RwPlayerManager;
+    import RwField                  = TwnsRwField.RwField;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import WarType                  = Types.WarType;
+    import WarAction                = ProtoTypes.WarAction;
+    import IWarActionContainer      = WarAction.IWarActionContainer;
+    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar                    = TwnsBwWar.BwWar;
+    import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
 
     type CheckPointData = {
         warData     : ISerialWar;
         nextActionId: number;
     };
 
-    export class RwWar extends BaseWar.BwWar {
+    export class RwWar extends BwWar {
         private readonly _playerManager         = new RwPlayerManager();
         private readonly _field                 = new RwField();
-        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
-        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
+        private readonly _commonSettingManager  = new BwCommonSettingManager();
+        private readonly _warEventManager       = new BwWarEventManager();
 
         private _settingsForMcw: ProtoTypes.WarSettings.ISettingsForMcw;
         private _settingsForScw: ProtoTypes.WarSettings.ISettingsForScw;
@@ -69,10 +87,10 @@ namespace TinyWars.ReplayWar {
         public getPlayerManager(): RwPlayerManager {
             return this._playerManager;
         }
-        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
+        public getCommonSettingManager(): BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): BaseWar.BwWarEventManager {
+        public getWarEventManager(): BwWarEventManager {
             return this._warEventManager;
         }
 
@@ -80,7 +98,7 @@ namespace TinyWars.ReplayWar {
             // No need to update units.
 
             const tileMap       = this.getTileMap();
-            const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeam(this, this.getPlayerInTurn().getTeamIndex());
+            const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeam(this, this.getPlayerInTurn().getTeamIndex());
             for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
                 tile.flushDataToView();
@@ -89,100 +107,100 @@ namespace TinyWars.ReplayWar {
         }
 
         public async getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0081)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0081)} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | undefined> {
-            return `${Lang.getFormattedText(Lang.Type.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn())} ${this._getDescSuffix()}`;
+            return `${Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn())} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(action.unitType)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0095)} ${Lang.getUnitName(action.unitType)} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined> {
-            return `${await this.getPlayerInTurn().getNickname()} ${Lang.getText(action.deprecatedIsBoot ? Lang.Type.B0396: Lang.Type.B0055)} ${this._getDescSuffix()}`;
+            return `${await this.getPlayerInTurn().getNickname()} ${Lang.getText(action.deprecatedIsBoot ? LangTextType.B0396: LangTextType.B0055)} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined> {
             const nickname      = await this.getPlayerInTurn().getNickname();
             const playerIndex   = this.getPlayerIndexInTurn();
             const suffix        = this._getDescSuffix();
             if (!action.isAgree) {
-                return `${Lang.getFormattedText(Lang.Type.F0017, playerIndex, nickname)} ${suffix}`;
+                return `${Lang.getFormattedText(LangTextType.F0017, playerIndex, nickname)} ${suffix}`;
             } else {
                 if (this.getDrawVoteManager().getRemainingVotes()) {
-                    return `${Lang.getFormattedText(Lang.Type.F0018, playerIndex, nickname)} ${suffix}`;
+                    return `${Lang.getFormattedText(LangTextType.F0018, playerIndex, nickname)} ${suffix}`;
                 } else {
-                    return `${Lang.getFormattedText(Lang.Type.F0019, playerIndex, nickname)} ${suffix}`;
+                    return `${Lang.getFormattedText(LangTextType.F0019, playerIndex, nickname)} ${suffix}`;
                 }
             }
         }
         public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | undefined> {
-            return `P${this.getPlayerIndexInTurn()} ${await this.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} ${this._getDescSuffix()}`;
+            return `P${this.getPlayerIndexInTurn()} ${await this.getPlayerInTurn().getNickname()} ${Lang.getText(LangTextType.B0094)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0451)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0451)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined> {
             const playerIndex = action.targetPlayerIndex;
-            return `P${playerIndex} ${await this.getPlayer(playerIndex).getNickname()}${Lang.getText(Lang.Type.B0450)} ${this._getDescSuffix()}`;
+            return `P${playerIndex} ${await this.getPlayer(playerIndex).getNickname()}${Lang.getText(LangTextType.B0450)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0087)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0087)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | undefined> {
-            return Lang.getFormattedText(Lang.Type.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
+            return Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
         }
         public async getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | undefined> {
-            return Lang.getFormattedText(Lang.Type.F0028, await this.getPlayerInTurn().getNickname());
+            return Lang.getFormattedText(LangTextType.F0028, await this.getPlayerInTurn().getNickname());
         }
         public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0097)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0097)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitAttackUnit(action: WarAction.IWarActionUnitAttackUnit): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0097)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0097)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitBeLoaded(action: WarAction.IWarActionUnitBeLoaded): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0098)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0098)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitBuildTile(action: WarAction.IWarActionUnitBuildTile): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0099)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0099)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitCaptureTile(action: WarAction.IWarActionUnitCaptureTile): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0100)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0100)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitDive(action: WarAction.IWarActionUnitDive): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0101)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0101)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitDropUnit(action: WarAction.IWarActionUnitDropUnit): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0102)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0102)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitJoinUnit(action: WarAction.IWarActionUnitJoinUnit): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0103)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0103)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitLaunchFlare(action: WarAction.IWarActionUnitLaunchFlare): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0104)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0104)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitLaunchSilo(action: WarAction.IWarActionUnitLaunchSilo): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0105)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0105)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitLoadCo(action: WarAction.IWarActionUnitLoadCo): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0139)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0139)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitProduceUnit(action: WarAction.IWarActionUnitProduceUnit): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0106)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0106)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitSupplyUnit(action: WarAction.IWarActionUnitSupplyUnit): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0107)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0107)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitSurface(action: WarAction.IWarActionUnitSurface): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0108)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0108)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0142)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0142)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0109)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0109)} ${this._getDescSuffix()}`;
         }
         private _getDescSuffix(): string {
-            return `(${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`;
+            return `(${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`;
         }
 
         public serializeForCheckPoint(): CheckPointData {
@@ -350,7 +368,7 @@ namespace TinyWars.ReplayWar {
         }
         public setNextActionId(nextActionId: number): void {
             this._nextActionId = nextActionId;
-            Notify.dispatch(Notify.Type.RwNextActionIdChanged);
+            Notify.dispatch(NotifyType.RwNextActionIdChanged);
         }
 
         public getIsAutoReplay(): boolean {
@@ -359,7 +377,7 @@ namespace TinyWars.ReplayWar {
         public setIsAutoReplay(isAuto: boolean): void {
             if (this.getIsAutoReplay() !== isAuto) {
                 this._isAutoReplay = isAuto;
-                Notify.dispatch(Notify.Type.ReplayAutoReplayChanged);
+                Notify.dispatch(NotifyType.ReplayAutoReplayChanged);
 
                 if ((isAuto) && (!this.getIsExecutingAction()) && (!this.checkIsInEnd())) {
                     this._executeNextAction(false);
@@ -405,7 +423,7 @@ namespace TinyWars.ReplayWar {
             await this._loadCheckPoint(checkPointId);
             await Helpers.checkAndCallLater();
             this.startRunning().startRunningView();
-            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
         }
         public async loadPreviousCheckPoint(): Promise<void> {
             if (this.checkIsInBeginning()) {
@@ -421,7 +439,7 @@ namespace TinyWars.ReplayWar {
             await this._loadCheckPoint(checkPointId);
             await Helpers.checkAndCallLater();
             this.startRunning().startRunningView();
-            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {
             const checkPointData        = this.getCheckPointData(checkPointId);
@@ -464,14 +482,14 @@ namespace TinyWars.ReplayWar {
                 (this.checkIsInEnd())        ||
                 (this.getIsExecutingAction())
             ) {
-                FloatText.show(Lang.getText(Lang.Type.B0110));
+                FloatText.show(Lang.getText(LangTextType.B0110));
             } else {
                 await this._doExecuteAction(action, isFastExecute);
             }
         }
         private async _doExecuteAction(action: IWarActionContainer, isFastExecute: boolean): Promise<void> {
             this.setNextActionId(this.getNextActionId() + 1);
-            const errorCode = await BaseWar.BwWarActionExecutor.checkAndExecute(this, action, isFastExecute);
+            const errorCode = await WarActionExecutor.checkAndExecute(this, action, isFastExecute);
             if (errorCode) {
                 Logger.error(`RwWar._doExecuteAction() errorCode: ${errorCode}`);
             }
@@ -504,3 +522,5 @@ namespace TinyWars.ReplayWar {
         }
     }
 }
+
+export default TwnsRwWar;

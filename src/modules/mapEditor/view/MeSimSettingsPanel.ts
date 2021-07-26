@@ -1,22 +1,41 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapEditor {
-    import Lang         = Utility.Lang;
-    import Notify       = Utility.Notify;
-    import FloatText    = Utility.FloatText;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import FlowManager  = Utility.FlowManager;
+import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
+import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
+import FloatText                        from "../../tools/helpers/FloatText";
+import FlowManager                      from "../../tools/helpers/FlowManager";
+import Types                            from "../../tools/helpers/Types";
+import Lang                             from "../../tools/lang/Lang";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                     from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiTab                        from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
+import MeSimModel                       from "../model/MeSimModel";
+import TwnsMeSimAdvancedSettingsPage    from "./MeSimAdvancedSettingsPage";
+import TwnsMeSimBasicSettingsPage       from "./MeSimBasicSettingsPage";
+import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
-    export class MeSimSettingsPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsMeSimSettingsPanel {
+    import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
+    import MeSimAdvancedSettingsPage    = TwnsMeSimAdvancedSettingsPage.MeSimAdvancedSettingsPage;
+    import MeSimBasicSettingsPage       = TwnsMeSimBasicSettingsPage.MeSimBasicSettingsPage;
+    import LangTextType                 = TwnsLangTextType.LangTextType;
+    import NotifyType                   = TwnsNotifyType.NotifyType;
+
+    export class MeSimSettingsPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeSimSettingsPanel;
 
-        private _tabSettings    : GameUi.UiTab<DataForTabItemRenderer, void>;
-        private _labelMenuTitle : GameUi.UiLabel;
-        private _btnBack        : GameUi.UiButton;
-        private _btnConfirm     : GameUi.UiButton;
+        private _tabSettings    : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
+        private _labelMenuTitle : TwnsUiLabel.UiLabel;
+        private _btnBack        : TwnsUiButton.UiButton;
+        private _btnConfirm     : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MeSimSettingsPanel._instance) {
@@ -42,18 +61,18 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgSpmCreateSfw,    callback: this._onMsgSpmCreateSfw },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgSpmCreateSfw,    callback: this._onMsgSpmCreateSfw },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
             this._tabSettings.bindData([
                 {
-                    tabItemData: { name: Lang.getText(Lang.Type.B0002) },
+                    tabItemData: { name: Lang.getText(LangTextType.B0002) },
                     pageClass  : MeSimBasicSettingsPage,
                 },
                 {
-                    tabItemData: { name: Lang.getText(Lang.Type.B0003) },
+                    tabItemData: { name: Lang.getText(LangTextType.B0003) },
                     pageClass  : MeSimAdvancedSettingsPage,
                 },
             ]);
@@ -64,21 +83,21 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnBack(): void {
             this.close();
-            MeWarMenuPanel.show();
+            TwnsMeWarMenuPanel.MeWarMenuPanel.show();
         }
 
         private _onTouchedBtnConfirm(): void {
-            if (MeModel.Sim.checkIsValidWarData()) {
-                SinglePlayerMode.SpmCreateSfwSaveSlotsPanel.show(MeModel.Sim.getWarData());
+            if (MeSimModel.checkIsValidWarData()) {
+                SpmCreateSfwSaveSlotsPanel.show(MeSimModel.getWarData());
             } else {
-                FloatText.show(Lang.getText(Lang.Type.A0146));
+                FloatText.show(Lang.getText(LangTextType.A0146));
             }
         }
 
         private _onMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
-            Common.CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0107),
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
                         slotIndex       : data.slotIndex,
@@ -94,9 +113,9 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0325);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
+            this._labelMenuTitle.text   = Lang.getText(LangTextType.B0325);
+            this._btnBack.label         = Lang.getText(LangTextType.B0146);
+            this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
         }
     }
 
@@ -104,11 +123,13 @@ namespace TinyWars.MapEditor {
         name: string;
     };
 
-    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: GameUi.UiLabel;
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
         }
     }
 }
+
+export default TwnsMeSimSettingsPanel;

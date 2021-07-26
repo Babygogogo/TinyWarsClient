@@ -1,32 +1,53 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.BaseWar {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
-    import FloatText        = Utility.FloatText;
-    import CommonConstants  = Utility.CommonConstants;
-    import Helpers          = Utility.Helpers;
-    import BwHelpers        = BaseWar.BwHelpers;
-    import BwUnit           = BaseWar.BwUnit;
-    import UnitType         = Types.UnitType;
-    import GridIndex        = Types.GridIndex;
+
+import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsBwActionPlanner      from "../model/BwActionPlanner";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsBwUnit               from "../model/BwUnit";
+import TwnsBwWar                from "../model/BwWar";
+import TwnsBwUnitDetailPanel    from "./BwUnitDetailPanel";
+import TwnsBwUnitView           from "./BwUnitView";
+
+namespace TwnsBwProduceUnitPanel {
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import BwUnitDetailPanel    = TwnsBwUnitDetailPanel.BwUnitDetailPanel;
+    import BwUnitView           = TwnsBwUnitView.BwUnitView;
+    import CommonInputPanel     = TwnsCommonInputPanel.CommonInputPanel;
+    import UnitType             = Types.UnitType;
+    import GridIndex            = Types.GridIndex;
+    import BwWar                = TwnsBwWar.BwWar;
 
     type OpenDataForBwProduceUnitPanel = {
         gridIndex   : GridIndex;
-        war         : BaseWar.BwWar;
+        war         : BwWar;
     };
-    export class BwProduceUnitPanel extends GameUi.UiPanel<OpenDataForBwProduceUnitPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class BwProduceUnitPanel extends TwnsUiPanel.UiPanel<OpenDataForBwProduceUnitPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: BwProduceUnitPanel;
 
-        private _imgMask    : GameUi.UiImage;
+        private _imgMask    : TwnsUiImage.UiImage;
         private _group      : eui.Group;
-        private _listUnit   : GameUi.UiScrollList<DataForUnitRenderer>;
-        private _btnCancel  : GameUi.UiButton;
-        private _btnDetail  : GameUi.UiButton;
+        private _listUnit   : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private _btnCancel  : TwnsUiButton.UiButton;
+        private _btnDetail  : TwnsUiButton.UiButton;
 
         private _dataForList: DataForUnitRenderer[];
 
@@ -56,8 +77,8 @@ namespace TinyWars.BaseWar {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
@@ -69,14 +90,14 @@ namespace TinyWars.BaseWar {
 
             this._updateView();
 
-            Notify.dispatch(Notify.Type.BwProduceUnitPanelOpened);
+            Notify.dispatch(NotifyType.BwProduceUnitPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
 
             this._dataForList = null;
 
-            Notify.dispatch(Notify.Type.BwProduceUnitPanelClosed);
+            Notify.dispatch(NotifyType.BwProduceUnitPanelClosed);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +118,7 @@ namespace TinyWars.BaseWar {
             const selectedIndex = this._listUnit.getSelectedIndex();
             const data          = selectedIndex != null ? this._dataForList[selectedIndex] : null;
             if (data) {
-                BaseWar.BwUnitDetailPanel.show({
+                BwUnitDetailPanel.show({
                     unit  : data.unit,
                 });
             }
@@ -114,8 +135,8 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnCancel.label = Lang.getText(Lang.Type.B0154);
-            this._btnDetail.label = Lang.getText(Lang.Type.B0267);
+            this._btnCancel.label = Lang.getText(LangTextType.B0154);
+            this._btnDetail.label = Lang.getText(LangTextType.B0267);
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
@@ -131,10 +152,10 @@ namespace TinyWars.BaseWar {
             const actionPlanner     = war.getActionPlanner();
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
-            const minNormalizedHp   = skillCfg ? BwHelpers.getNormalizedHp(skillCfg[3]) : BwHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            const minNormalizedHp   = skillCfg ? WarCommonHelpers.getNormalizedHp(skillCfg[3]) : WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
-            for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
-                const unit = new BaseWar.BwUnit();
+            for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
+                const unit = new TwnsBwUnit.BwUnit();
                 unit.init({
                     gridIndex   : { x: -1, y: -1 },
                     unitId      : -1,
@@ -142,7 +163,7 @@ namespace TinyWars.BaseWar {
                     playerIndex,
                 }, configVersion);
                 unit.startRunning(war);
-                const cfgCost = Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
+                const cfgCost = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
                 dataList.push({
                     unitType,
                     currentFund,
@@ -197,35 +218,34 @@ namespace TinyWars.BaseWar {
 
     type DataForUnitRenderer = {
         unitType                : UnitType;
-        unit                    : BwUnit;
+        unit                    : TwnsBwUnit.BwUnit;
         minCost                 : number;
         cfgCost                 : number;
         currentFund             : number;
-        actionPlanner           : BaseWar.BwActionPlanner;
+        actionPlanner           : TwnsBwActionPlanner.BwActionPlanner;
         gridIndex               : GridIndex;
         unitProductionSkillCfg  : number[] | null;
         panel                   : BwProduceUnitPanel;
     };
-
-    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
+    class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;
-        private _imgBg          : GameUi.UiImage;
+        private _imgBg          : TwnsUiImage.UiImage;
         private _conUnitView    : eui.Group;
-        private _labelName      : GameUi.UiLabel;
-        private _labelCost      : GameUi.UiLabel;
-        private _labelProduce   : GameUi.UiLabel;
-        private _unitView       : BaseWar.BwUnitView;
+        private _labelName      : TwnsUiLabel.UiLabel;
+        private _labelCost      : TwnsUiLabel.UiLabel;
+        private _labelProduce   : TwnsUiLabel.UiLabel;
+        private _unitView       : BwUnitView;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
 
             this._imgBg.touchEnabled = true;
             this._imgBg.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgBg, this);
 
-            this._unitView = new BaseWar.BwUnitView();
+            this._unitView = new BwUnitView();
             this._conUnitView.addChild(this._unitView);
         }
 
@@ -247,7 +267,7 @@ namespace TinyWars.BaseWar {
         private _onTouchedImgBg(): void {
             const data = this.data;
             if (data.currentFund < data.minCost) {
-                FloatText.show(Lang.getText(Lang.Type.B0053));
+                FloatText.show(Lang.getText(LangTextType.B0053));
                 return;
             }
 
@@ -277,16 +297,16 @@ namespace TinyWars.BaseWar {
                         rawMaxHp,
                         Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * skillCfg[5] / 100) / normalizer) * normalizer
                     );
-                    Common.CommonInputPanel.show({
+                    CommonInputPanel.show({
                         title           : `${Lang.getUnitName(unitType)} HP`,
                         currentValue    : "" + maxHp,
                         maxChars        : 3,
                         charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minHp}, ${maxHp}]`,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minHp}, ${maxHp}]`,
                         callback        : panel => {
                             const value = Number(panel.getInputText());
                             if ((isNaN(value)) || (value > maxHp) || (value < minHp)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                                FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
                                 actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, value);
                             }
@@ -304,13 +324,15 @@ namespace TinyWars.BaseWar {
 
             const unitType                  = data.unitType;
             const isFundEnough              = data.currentFund >= data.minCost;
-            this._labelCost.text            = `${Lang.getText(Lang.Type.B0079)}: ${data.minCost}`;
+            this._labelCost.text            = `${Lang.getText(LangTextType.B0079)}: ${data.minCost}`;
             this._labelCost.textColor       = isFundEnough ? 0x00FF00 : 0xFF0000;
             this._labelName.text            = Lang.getUnitName(unitType);
             this._labelProduce.textColor    = isFundEnough ? 0x00FF00 : 0xFF0000;
-            this._labelProduce.text         = Lang.getText(Lang.Type.B0095);
+            this._labelProduce.text         = Lang.getText(LangTextType.B0095);
 
             this._unitView.init(data.unit).startRunningView();
         }
     }
 }
+
+export default TwnsBwProduceUnitPanel;

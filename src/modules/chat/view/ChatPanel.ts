@@ -1,17 +1,39 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.Chat {
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import FloatText        = Utility.FloatText;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Helpers          = Utility.Helpers;
-    import Logger           = Utility.Logger;
-    import ChatCategory     = Types.ChatMessageToCategory;
-    import ChatChannel      = Types.ChatChannel;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import CommonConstants  = Utility.CommonConstants;
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import CcrModel                 from "../../coopCustomRoom/model/CcrModel";
+import McrModel                 from "../../multiCustomRoom/model/McrModel";
+import MfrModel                 from "../../multiFreeRoom/model/MfrModel";
+import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Logger                   from "../../tools/helpers/Logger";
+import Timer                    from "../../tools/helpers/Timer";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
+import UserModel                from "../../user/model/UserModel";
+import WarMapModel              from "../../warMap/model/WarMapModel";
+import ChatModel                from "../model/ChatModel";
+import ChatProxy                from "../model/ChatProxy";
+
+namespace TwnsChatPanel {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import ChatCategory         = Types.ChatMessageToCategory;
+    import ChatChannel          = Types.ChatChannel;
+    import NetMessage           = ProtoTypes.NetMessage;
 
     type OpenDataForChatPanel = {
         toUserId?       : number;
@@ -19,24 +41,24 @@ namespace TinyWars.Chat {
         toMfrRoomId?    : number;
         toCcrRoomId?    : number;
     };
-    export class ChatPanel extends GameUi.UiPanel<OpenDataForChatPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class ChatPanel extends TwnsUiPanel.UiPanel<OpenDataForChatPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: ChatPanel;
 
-        private readonly _imgMask           : GameUi.UiImage;
+        private readonly _imgMask           : TwnsUiImage.UiImage;
 
         private readonly _groupChannel      : eui.Group;
-        private readonly _listChat          : GameUi.UiScrollList<DataForChatPageRenderer>;
-        private readonly _btnClose          : GameUi.UiButton;
-        private readonly _btnRefresh        : GameUi.UiButton;
+        private readonly _listChat          : TwnsUiScrollList.UiScrollList<DataForChatPageRenderer>;
+        private readonly _btnClose          : TwnsUiButton.UiButton;
+        private readonly _btnRefresh        : TwnsUiButton.UiButton;
         private readonly _groupMessage      : eui.Group;
-        private readonly _labelNoMessage    : GameUi.UiLabel;
-        private readonly _listMessage       : GameUi.UiScrollList<DataForMessageRenderer>;
+        private readonly _labelNoMessage    : TwnsUiLabel.UiLabel;
+        private readonly _listMessage       : TwnsUiScrollList.UiScrollList<DataForMessageRenderer>;
         private readonly _groupInput        : eui.Group;
-        private readonly _inputMessage      : GameUi.UiTextInput;
-        private readonly _btnSend           : GameUi.UiButton;
+        private readonly _inputMessage      : TwnsUiTextInput.UiTextInput;
+        private readonly _btnSend           : TwnsUiButton.UiButton;
 
         private _dataForListChat: DataForChatPageRenderer[] = [];
         private _selectedIndex  : number;
@@ -66,9 +88,9 @@ namespace TinyWars.Chat {
 
         protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgChatAddMessage,      callback: this._onMsgChatAddMessage },
-                { type: Notify.Type.MsgChatGetAllMessages,  callback: this._onMsgChatGetAllMessages },
+                { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgChatAddMessage,      callback: this._onMsgChatAddMessage },
+                { type: NotifyType.MsgChatGetAllMessages,  callback: this._onMsgChatGetAllMessages },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
@@ -85,7 +107,7 @@ namespace TinyWars.Chat {
             this._listChat.bindData(this._dataForListChat);
             this.setSelectedIndex(this._getDefaultSelectedIndex());
 
-            Notify.dispatch(Notify.Type.ChatPanelOpened);
+            Notify.dispatch(NotifyType.ChatPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
@@ -93,7 +115,7 @@ namespace TinyWars.Chat {
             this._dataForListChat   = null;
             this._selectedIndex     = null;
 
-            Notify.dispatch(Notify.Type.ChatPanelClosed);
+            Notify.dispatch(NotifyType.ChatPanelClosed);
         }
 
         public setSelectedIndex(newIndex: number): void {
@@ -136,7 +158,7 @@ namespace TinyWars.Chat {
         private async _onMsgChatAddMessage(e: egret.Event): Promise<void> {
             const message       = (e.data as NetMessage.MsgChatAddMessage.IS).message;
             const fromUserId    = message.fromUserId;
-            if (fromUserId === User.UserModel.getSelfUserId()) {
+            if (fromUserId === UserModel.getSelfUserId()) {
                 this._inputMessage.text = "";
             }
 
@@ -175,10 +197,10 @@ namespace TinyWars.Chat {
         }
 
         private _onTouchedBtnRefresh(): void {
-            const currTime  = Time.TimeModel.getServerTimestamp();
+            const currTime  = Timer.getServerTimestamp();
             const cdTime    = ChatModel.getTimestampForNextReqAllMessages() - currTime;
             if (cdTime > 0) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0026, cdTime));
+                FloatText.show(Lang.getFormattedText(LangTextType.F0026, cdTime));
             } else {
                 ChatModel.setTimestampForNextReqAllMessages(currTime + 30);
                 ChatProxy.reqGetAllMessages();
@@ -189,7 +211,7 @@ namespace TinyWars.Chat {
             const content = this._inputMessage.text;
             if (content) {
                 if (content.length > CommonConstants.ChatContentMaxLength) {
-                    FloatText.show(Lang.getText(Lang.Type.B0375));
+                    FloatText.show(Lang.getText(LangTextType.B0375));
                 } else {
                     const data = this._dataForListChat[this.getSelectedIndex()];
                     if (data) {
@@ -251,10 +273,10 @@ namespace TinyWars.Chat {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelNoMessage.text   = Lang.getText(Lang.Type.B0381);
-            this._btnClose.label        = Lang.getText(Lang.Type.B0146);
-            this._btnRefresh.label      = Lang.getText(Lang.Type.B0602);
-            this._btnSend.label         = Lang.getText(Lang.Type.B0382);
+            this._labelNoMessage.text   = Lang.getText(LangTextType.B0381);
+            this._btnClose.label        = Lang.getText(LangTextType.B0146);
+            this._btnRefresh.label      = Lang.getText(LangTextType.B0602);
+            this._btnSend.label         = Lang.getText(LangTextType.B0382);
         }
 
         private _updateComponentsForMessage(): void {
@@ -294,7 +316,7 @@ namespace TinyWars.Chat {
                 ++indexForSort;
             }
             for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.McrRoom)) {
-                if (await MultiCustomRoom.McrModel.getRoomInfo(toRoomId)) {
+                if (await McrModel.getRoomInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
@@ -306,7 +328,7 @@ namespace TinyWars.Chat {
                 }
             }
             for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.CcrRoom)) {
-                if (await CoopCustomRoom.CcrModel.getRoomInfo(toRoomId)) {
+                if (await CcrModel.getRoomInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
@@ -318,7 +340,7 @@ namespace TinyWars.Chat {
                 }
             }
             for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.MfrRoom)) {
-                if (await MultiFreeRoom.MfrModel.getRoomInfo(toRoomId)) {
+                if (await MfrModel.getRoomInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
@@ -340,9 +362,9 @@ namespace TinyWars.Chat {
                 ++indexForSort;
             }
 
-            const war           = MultiPlayerWar.MpwModel.getWar();
+            const war           = MpwModel.getWar();
             const playerManager = war ? war.getPlayerManager() : null;
-            const player        = playerManager ? playerManager.getPlayerByUserId(User.UserModel.getSelfUserId()) : null;
+            const player        = playerManager ? playerManager.getPlayerByUserId(UserModel.getSelfUserId()) : null;
             if ((player) && (player.getAliveState() === Types.PlayerAliveState.Alive)) {
                 const toWarAndTeam1 = war.getWarId() * CommonConstants.ChatTeamDivider;
                 if (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.WarAndTeam, toTarget: toWarAndTeam1 })) {
@@ -533,18 +555,17 @@ namespace TinyWars.Chat {
         toCategory  : ChatCategory;
         toTarget    : number;
     };
-
-    class ChatPageRenderer extends GameUi.UiListItemRenderer<DataForChatPageRenderer> {
-        private _labelName      : GameUi.UiLabel;
-        private _labelType      : GameUi.UiLabel;
-        private _imgRed         : GameUi.UiLabel;
+    class ChatPageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForChatPageRenderer> {
+        private _labelName      : TwnsUiLabel.UiLabel;
+        private _labelType      : TwnsUiLabel.UiLabel;
+        private _imgRed         : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.MsgChatGetAllMessages,            callback: this._onMsgChatGetAllMessages },
-                { type: Notify.Type.MsgChatAddMessage,                callback: this._onMsgChatAddMessage },
-                { type: Notify.Type.MsgChatGetAllReadProgressList,    callback: this._onMsgChatGetAllReadProgressList },
-                { type: Notify.Type.MsgChatUpdateReadProgress,        callback: this._onMsgChatUpdateReadProgress },
+                { type: NotifyType.MsgChatGetAllMessages,            callback: this._onMsgChatGetAllMessages },
+                { type: NotifyType.MsgChatAddMessage,                callback: this._onMsgChatAddMessage },
+                { type: NotifyType.MsgChatGetAllReadProgressList,    callback: this._onMsgChatGetAllReadProgressList },
+                { type: NotifyType.MsgChatUpdateReadProgress,        callback: this._onMsgChatUpdateReadProgress },
             ]);
         }
 
@@ -581,49 +602,49 @@ namespace TinyWars.Chat {
             const labelName     = this._labelName;
 
             if (toCategory === ChatCategory.PublicChannel) {
-                labelType.text  = Lang.getText(Lang.Type.B0376);
+                labelType.text  = Lang.getText(LangTextType.B0376);
                 labelName.text  = Lang.getChatChannelName(toTarget);
 
             } else if (toCategory === ChatCategory.WarAndTeam) {
                 const divider       = CommonConstants.ChatTeamDivider;
                 const teamIndex     = toTarget % divider;
-                labelType.text      = Lang.getText(Lang.Type.B0377);
-                labelName.text      = `ID:${Math.floor(toTarget / divider)} ${teamIndex === 0 ? Lang.getText(Lang.Type.B0379) : Lang.getPlayerTeamName(teamIndex)}`;
+                labelType.text      = Lang.getText(LangTextType.B0377);
+                labelName.text      = `ID:${Math.floor(toTarget / divider)} ${teamIndex === 0 ? Lang.getText(LangTextType.B0379) : Lang.getPlayerTeamName(teamIndex)}`;
 
             } else if (toCategory === ChatCategory.Private) {
-                labelType.text = Lang.getText(Lang.Type.B0378);
+                labelType.text = Lang.getText(LangTextType.B0378);
                 labelName.text = null;
-                User.UserModel.getUserNickname(toTarget).then(name => labelName.text = name);
+                UserModel.getUserNickname(toTarget).then(name => labelName.text = name);
 
             } else if (toCategory === ChatCategory.McrRoom) {
-                labelType.text = `${Lang.getText(Lang.Type.B0443)} #${toTarget}`;
+                labelType.text = `${Lang.getText(LangTextType.B0443)} #${toTarget}`;
                 labelName.text = null;
-                MultiCustomRoom.McrModel.getRoomInfo(toTarget).then(async (v) => {
+                McrModel.getRoomInfo(toTarget).then(async (v) => {
                     const warName = v ? v.settingsForMcw.warName : null;
                     if (warName) {
                         labelName.text = warName;
                     } else {
-                        labelName.text = await WarMap.WarMapModel.getMapNameInCurrentLanguage(v.settingsForMcw.mapId);
+                        labelName.text = await WarMapModel.getMapNameInCurrentLanguage(v.settingsForMcw.mapId);
                     }
                 });
 
             } else if (toCategory === ChatCategory.CcrRoom) {
-                labelType.text = `${Lang.getText(Lang.Type.B0643)} #${toTarget}`;
+                labelType.text = `${Lang.getText(LangTextType.B0643)} #${toTarget}`;
                 labelName.text = null;
-                CoopCustomRoom.CcrModel.getRoomInfo(toTarget).then(async (v) => {
+                CcrModel.getRoomInfo(toTarget).then(async (v) => {
                     const warName = v ? v.settingsForCcw.warName : null;
                     if (warName) {
                         labelName.text = warName;
                     } else {
-                        labelName.text = await WarMap.WarMapModel.getMapNameInCurrentLanguage(v.settingsForCcw.mapId);
+                        labelName.text = await WarMapModel.getMapNameInCurrentLanguage(v.settingsForCcw.mapId);
                     }
                 });
 
             } else if (toCategory === ChatCategory.MfrRoom) {
-                labelType.text = `${Lang.getText(Lang.Type.B0556)} #${toTarget}`;
+                labelType.text = `${Lang.getText(LangTextType.B0556)} #${toTarget}`;
                 labelName.text = null;
-                MultiFreeRoom.MfrModel.getRoomInfo(toTarget).then(async (v) => {
-                    labelName.text = v.settingsForMfw.warName || Lang.getText(Lang.Type.B0555);
+                MfrModel.getRoomInfo(toTarget).then(async (v) => {
+                    labelName.text = v.settingsForMfw.warName || Lang.getText(LangTextType.B0555);
                 });
 
             } else {
@@ -640,17 +661,17 @@ namespace TinyWars.Chat {
     type DataForMessageRenderer = {
         message: ProtoTypes.Chat.IChatMessage;
     };
-    class MessageRenderer extends GameUi.UiListItemRenderer<DataForMessageRenderer> {
-        private _labelName      : GameUi.UiLabel;
-        private _labelContent   : GameUi.UiLabel;
+    class MessageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMessageRenderer> {
+        private _labelName      : TwnsUiLabel.UiLabel;
+        private _labelContent   : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             const message               = this.data.message;
             const fromUserId            = message.fromUserId;
             this._labelContent.text     = message.content;
-            this._labelName.textColor   = fromUserId === User.UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
+            this._labelName.textColor   = fromUserId === UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
             this._labelName.text        = `    (${Helpers.getTimestampShortText(message.timestamp)})`;
-            User.UserModel.getUserPublicInfo(fromUserId).then(info => {
+            UserModel.getUserPublicInfo(fromUserId).then(info => {
                 const d = this.data;
                 if ((d) && (info.userId === d.message.fromUserId)) {
                     this._labelName.text = `${info.nickname || `???`}    (${Helpers.getTimestampShortText(message.timestamp)})`;
@@ -662,11 +683,11 @@ namespace TinyWars.Chat {
             const message = this.data.message;
             if (message.toCategory !== ChatCategory.Private) {
                 const userId = message.fromUserId;
-                if (userId !== User.UserModel.getSelfUserId()) {
-                    const info = await User.UserModel.getUserPublicInfo(userId);
+                if (userId !== UserModel.getSelfUserId()) {
+                    const info = await UserModel.getUserPublicInfo(userId);
                     if (info) {
-                        Common.CommonConfirmPanel.show({
-                            content : Lang.getFormattedText(Lang.Type.F0025, info.nickname),
+                        CommonConfirmPanel.show({
+                            content : Lang.getFormattedText(LangTextType.F0025, info.nickname),
                             callback: () => {
                                 ChatPanel.show({ toUserId: userId });
                             },
@@ -677,3 +698,5 @@ namespace TinyWars.Chat {
         }
     }
 }
+
+export default TwnsChatPanel;

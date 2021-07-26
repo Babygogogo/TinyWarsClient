@@ -1,19 +1,23 @@
 
-namespace TinyWars.Broadcast.BroadcastProxy {
-    import Notify           = Utility.Notify;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import NetManager       = Network.NetManager;
-    import NetworkCodes     = Network.Codes;
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Notify               from "../../tools/notify/Notify";
+import NetManager           from "../../tools/network/NetManager";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import BroadcastModel       from "./BroadcastModel";
+
+namespace BroadcastProxy {
+    import NotifyType       = TwnsNotifyType.NotifyType;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetworkCodes.MsgBroadcastAddMessage,         callback: _onMsgBroadcastAddMessage },
-            { msgCode: NetworkCodes.MsgBroadcastDeleteMessage,      callback: _onMsgBroadcastDeleteMessage, },
-            { msgCode: NetworkCodes.MsgBroadcastDoBroadcast,        callback: _onMsgBroadcastDoBroadcast },
-            { msgCode: NetworkCodes.MsgBroadcastGetMessageList,     callback: _onMsgBroadcastGetMessageList, },
-        ], BroadcastProxy);
+            { msgCode: NetMessageCodes.MsgBroadcastAddMessage,         callback: _onMsgBroadcastAddMessage },
+            { msgCode: NetMessageCodes.MsgBroadcastDeleteMessage,      callback: _onMsgBroadcastDeleteMessage, },
+            { msgCode: NetMessageCodes.MsgBroadcastDoBroadcast,        callback: _onMsgBroadcastDoBroadcast },
+            { msgCode: NetMessageCodes.MsgBroadcastGetMessageList,     callback: _onMsgBroadcastGetMessageList, },
+        ], undefined);
     }
 
     export function reqBroadcastAddMessage(textList: ILanguageText[], startTime: number, endTime: number): void {
@@ -28,7 +32,7 @@ namespace TinyWars.Broadcast.BroadcastProxy {
     function _onMsgBroadcastAddMessage(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgBroadcastAddMessage.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgBroadcastAddMessage, data);
+            Notify.dispatch(NotifyType.MsgBroadcastAddMessage, data);
         }
     }
 
@@ -42,7 +46,7 @@ namespace TinyWars.Broadcast.BroadcastProxy {
     function _onMsgBroadcastDeleteMessage(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgBroadcastDeleteMessage.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgBroadcastDeleteMessage, data);
+            Notify.dispatch(NotifyType.MsgBroadcastDeleteMessage, data);
         }
     }
 
@@ -50,12 +54,12 @@ namespace TinyWars.Broadcast.BroadcastProxy {
         NetManager.send({
             MsgBroadcastDoBroadcast: { c: {
             } },
-        })
+        });
     }
     function _onMsgBroadcastDoBroadcast(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgBroadcastDoBroadcast.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgBroadcastDoBroadcast, data);
+            Notify.dispatch(NotifyType.MsgBroadcastDoBroadcast, data);
         }
     }
 
@@ -64,10 +68,12 @@ namespace TinyWars.Broadcast.BroadcastProxy {
         } }, });
     }
     function _onMsgBroadcastGetMessageList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgBroadcastGetMessageList.IS;
+        const data = e.data as ProtoTypes.NetMessage.MsgBroadcastGetMessageList.IS;
         if (!data.errorCode) {
             BroadcastModel.setAllMessageList(data.messageList);
-            Notify.dispatch(Notify.Type.MsgBroadcastGetMessageList, data);
+            Notify.dispatch(NotifyType.MsgBroadcastGetMessageList, data);
         }
     }
 }
+
+export default BroadcastProxy;

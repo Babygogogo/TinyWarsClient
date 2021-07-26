@@ -1,25 +1,38 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapEditor {
-    import Lang         = Utility.Lang;
-    import Notify       = Utility.Notify;
-    import ProtoTypes   = Utility.ProtoTypes;
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import MeModel                  from "../model/MeModel";
+import MeProxy                  from "../model/MeProxy";
+import MeUtility                from "../model/MeUtility";
 
-    export class MeConfirmSaveMapPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
+namespace TwnsMeConfirmSaveMapPanel {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+
+    export class MeConfirmSaveMapPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MeConfirmSaveMapPanel;
 
-        private _labelTitle             : GameUi.UiLabel;
-        private _labelContent           : GameUi.UiLabel;
-        private _labelReviewDescTitle   : GameUi.UiLabel;
-        private _labelReviewDesc        : GameUi.UiLabel;
+        private _labelTitle             : TwnsUiLabel.UiLabel;
+        private _labelContent           : TwnsUiLabel.UiLabel;
+        private _labelReviewDescTitle   : TwnsUiLabel.UiLabel;
+        private _labelReviewDesc        : TwnsUiLabel.UiLabel;
         private _groupNeedReview        : eui.Group;
-        private _imgNeedReview          : GameUi.UiImage;
-        private _labelNeedReview        : GameUi.UiLabel;
-        private _btnCancel              : GameUi.UiButton;
-        private _btnConfirm             : GameUi.UiButton;
+        private _imgNeedReview          : TwnsUiImage.UiImage;
+        private _labelNeedReview        : TwnsUiLabel.UiLabel;
+        private _btnCancel              : TwnsUiButton.UiButton;
+        private _btnConfirm             : TwnsUiButton.UiButton;
 
         private _slotIndex  : number;
         private _mapRawData : ProtoTypes.Map.IMapRawData;
@@ -47,7 +60,7 @@ namespace TinyWars.MapEditor {
 
         protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel, },
@@ -79,8 +92,8 @@ namespace TinyWars.MapEditor {
                 MeProxy.reqMeSubmitMap(this._slotIndex, this._mapRawData, needReview);
                 this.close();
             } else {
-                Common.CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0084),
+                CommonConfirmPanel.show({
+                    content : Lang.getText(LangTextType.A0084),
                     callback: () => {
                         MeProxy.reqMeSubmitMap(this._slotIndex, this._mapRawData, needReview);
                         this.close();
@@ -99,13 +112,13 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnConfirm.label          = Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label           = Lang.getText(Lang.Type.B0154);
-            this._labelTitle.text           = Lang.getText(Lang.Type.B0088);
-            this._labelReviewDescTitle.text = Lang.getText(Lang.Type.A0083);
-            this._labelReviewDesc.text      = Lang.getText(Lang.Type.A0083);
-            this._labelNeedReview.text      = Lang.getText(Lang.Type.B0289);
-            this._labelContent.setRichText(Lang.getText(Lang.Type.A0082));
+            this._btnConfirm.label          = Lang.getText(LangTextType.B0026);
+            this._btnCancel.label           = Lang.getText(LangTextType.B0154);
+            this._labelTitle.text           = Lang.getText(LangTextType.B0088);
+            this._labelReviewDescTitle.text = Lang.getText(LangTextType.A0083);
+            this._labelReviewDesc.text      = Lang.getText(LangTextType.A0083);
+            this._labelNeedReview.text      = Lang.getText(LangTextType.B0289);
+            this._labelContent.setRichText(Lang.getText(LangTextType.A0082));
         }
 
         private _updateImgNeedReview(): void {
@@ -113,3 +126,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeConfirmSaveMapPanel;

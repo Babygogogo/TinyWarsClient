@@ -1,28 +1,32 @@
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-namespace TinyWars.CoopCustomRoom.CcrProxy {
-    import NetManager   = Network.NetManager;
-    import ActionCode   = Network.Codes;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Notify       = Utility.Notify;
-    import NetMessage   = ProtoTypes.NetMessage;
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import NetManager           from "../../tools/network/NetManager";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import CcrModel             from "../../coopCustomRoom/model/CcrModel";
+
+namespace CcrProxy {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.MsgCcrCreateRoom,                 callback: _onMsgCcrCreateRoom },
-            { msgCode: ActionCode.MsgCcrJoinRoom,                   callback: _onMsgCcrJoinRoom },
-            { msgCode: ActionCode.MsgCcrDeleteRoomByPlayer,         callback: _onMsgCcrDeleteRoomByPlayer },
-            { msgCode: ActionCode.MsgCcrDeleteRoomByServer,         callback: _onMsgCcrDeleteRoomByServer },
-            { msgCode: ActionCode.MsgCcrExitRoom,                   callback: _onMsgCcrExitRoom },
-            { msgCode: ActionCode.MsgCcrDeletePlayer,               callback: _onMsgCcrDeletePlayer },
-            { msgCode: ActionCode.MsgCcrSetReady,                   callback: _onMsgCcrSetReady },
-            { msgCode: ActionCode.MsgCcrSetSelfSettings,            callback: _onMsgCcrSetSelfSettings },
-            { msgCode: ActionCode.MsgCcrGetOwnerPlayerIndex,        callback: _onMsgCcrGetOwnerPlayerIndex },
-            { msgCode: ActionCode.MsgCcrGetRoomInfo,                callback: _onMsgCcrGetRoomInfo },
-            { msgCode: ActionCode.MsgCcrGetJoinableRoomInfoList,    callback: _onMsgCcrGetJoinableRoomInfoList },
-            { msgCode: ActionCode.MsgCcrGetJoinedRoomInfoList,      callback: _onMsgCcrGetJoinedRoomInfoList },
-            { msgCode: ActionCode.MsgCcrStartWar,                   callback: _onMsgCcrStartWar },
-        ], CcrProxy);
+            { msgCode: NetMessageCodes.MsgCcrCreateRoom,                 callback: _onMsgCcrCreateRoom },
+            { msgCode: NetMessageCodes.MsgCcrJoinRoom,                   callback: _onMsgCcrJoinRoom },
+            { msgCode: NetMessageCodes.MsgCcrDeleteRoomByPlayer,         callback: _onMsgCcrDeleteRoomByPlayer },
+            { msgCode: NetMessageCodes.MsgCcrDeleteRoomByServer,         callback: _onMsgCcrDeleteRoomByServer },
+            { msgCode: NetMessageCodes.MsgCcrExitRoom,                   callback: _onMsgCcrExitRoom },
+            { msgCode: NetMessageCodes.MsgCcrDeletePlayer,               callback: _onMsgCcrDeletePlayer },
+            { msgCode: NetMessageCodes.MsgCcrSetReady,                   callback: _onMsgCcrSetReady },
+            { msgCode: NetMessageCodes.MsgCcrSetSelfSettings,            callback: _onMsgCcrSetSelfSettings },
+            { msgCode: NetMessageCodes.MsgCcrGetOwnerPlayerIndex,        callback: _onMsgCcrGetOwnerPlayerIndex },
+            { msgCode: NetMessageCodes.MsgCcrGetRoomInfo,                callback: _onMsgCcrGetRoomInfo },
+            { msgCode: NetMessageCodes.MsgCcrGetJoinableRoomInfoList,    callback: _onMsgCcrGetJoinableRoomInfoList },
+            { msgCode: NetMessageCodes.MsgCcrGetJoinedRoomInfoList,      callback: _onMsgCcrGetJoinedRoomInfoList },
+            { msgCode: NetMessageCodes.MsgCcrStartWar,                   callback: _onMsgCcrStartWar },
+        ], undefined);
     }
 
     export function reqCreateRoom(param: NetMessage.MsgCcrCreateRoom.IC): void {
@@ -33,7 +37,7 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
     function _onMsgCcrCreateRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCcrCreateRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgCcrCreateRoom, data);
+            Notify.dispatch(NotifyType.MsgCcrCreateRoom, data);
         }
     }
 
@@ -46,7 +50,7 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
         const data = e.data as NetMessage.MsgCcrJoinRoom.IS;
         if (!data.errorCode) {
             await CcrModel.updateOnMsgCcrJoinRoom(data);
-            Notify.dispatch(Notify.Type.MsgCcrJoinRoom, data);
+            Notify.dispatch(NotifyType.MsgCcrJoinRoom, data);
         }
     }
 
@@ -60,15 +64,15 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
     function _onMsgCcrDeleteRoomByPlayer(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCcrDeleteRoomByPlayer.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgCcrDeleteRoomByPlayer, data);
+            Notify.dispatch(NotifyType.MsgCcrDeleteRoomByPlayer, data);
         }
     }
 
     function _onMsgCcrDeleteRoomByServer(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCcrDeleteRoomByServer.IS;
         if (!data.errorCode) {
-            CcrModel.deleteRoomInfo(data.roomId);
-            Notify.dispatch(Notify.Type.MsgCcrDeleteRoomByServer, data);
+            CcrModel.updateOnMsgCcrDeleteRoomByServer(data);
+            Notify.dispatch(NotifyType.MsgCcrDeleteRoomByServer, data);
         }
     }
 
@@ -83,7 +87,7 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
         const data = e.data as NetMessage.MsgCcrExitRoom.IS;
         if (!data.errorCode) {
             await CcrModel.updateOnMsgCcrExitRoom(data);
-            Notify.dispatch(Notify.Type.MsgCcrExitRoom, data);
+            Notify.dispatch(NotifyType.MsgCcrExitRoom, data);
         }
     }
 
@@ -99,7 +103,7 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
         const data = e.data as NetMessage.MsgCcrDeletePlayer.IS;
         if (!data.errorCode) {
             await CcrModel.updateOnMsgCcrDeletePlayer(data);
-            Notify.dispatch(Notify.Type.MsgCcrDeletePlayer, data);
+            Notify.dispatch(NotifyType.MsgCcrDeletePlayer, data);
         }
     }
 
@@ -115,7 +119,7 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
         const data = e.data as NetMessage.MsgCcrSetReady.IS;
         if (!data.errorCode) {
             await CcrModel.updateOnMsgCcrSetReady(data);
-            Notify.dispatch(Notify.Type.MsgCcrSetReady, data);
+            Notify.dispatch(NotifyType.MsgCcrSetReady, data);
         }
     }
 
@@ -128,7 +132,7 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
         const data = e.data as NetMessage.MsgCcrSetSelfSettings.IS;
         if (!data.errorCode) {
             await CcrModel.updateOnMsgCcrSetSelfSettings(data);
-            Notify.dispatch(Notify.Type.MsgCcrSetSelfSettings, data);
+            Notify.dispatch(NotifyType.MsgCcrSetSelfSettings, data);
         }
     }
 
@@ -136,7 +140,7 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
         const data = e.data as NetMessage.MsgCcrGetOwnerPlayerIndex.IS;
         if (!data.errorCode) {
             await CcrModel.updateOnMsgCcrGetOwnerPlayerIndex(data);
-            Notify.dispatch(Notify.Type.MsgCcrGetOwnerPlayerIndex, data);
+            Notify.dispatch(NotifyType.MsgCcrGetOwnerPlayerIndex, data);
         }
     }
 
@@ -150,17 +154,10 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
     function _onMsgCcrGetRoomInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCcrGetRoomInfo.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgCcrGetRoomInfoFailed, data);
+            Notify.dispatch(NotifyType.MsgCcrGetRoomInfoFailed, data);
         } else {
-            const roomInfo  = data.roomInfo;
-            const roomId    = data.roomId;
-            if (roomInfo) {
-                CcrModel.setRoomInfo(roomInfo);
-            } else {
-                CcrModel.deleteRoomInfo(roomId);
-            }
-
-            Notify.dispatch(Notify.Type.MsgCcrGetRoomInfo, data);
+            CcrModel.updateOnMsgCcrGetRoomInfo(data);
+            Notify.dispatch(NotifyType.MsgCcrGetRoomInfo, data);
         }
     }
 
@@ -174,7 +171,7 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
         const data = e.data as NetMessage.MsgCcrGetJoinableRoomInfoList.IS;
         if (!data.errorCode) {
             CcrModel.setJoinableRoomInfoList(data.roomInfoList);
-            Notify.dispatch(Notify.Type.MsgCcrGetJoinableRoomInfoList, data);
+            Notify.dispatch(NotifyType.MsgCcrGetJoinableRoomInfoList, data);
         }
     }
 
@@ -188,7 +185,7 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
         const data = e.data as NetMessage.MsgCcrGetJoinedRoomInfoList.IS;
         if (!data.errorCode) {
             CcrModel.setJoinedRoomInfoList(data.roomInfoList);
-            Notify.dispatch(Notify.Type.MsgCcrGetJoinedRoomInfoList, data);
+            Notify.dispatch(NotifyType.MsgCcrGetJoinedRoomInfoList, data);
         }
     }
 
@@ -202,7 +199,9 @@ namespace TinyWars.CoopCustomRoom.CcrProxy {
     function _onMsgCcrStartWar(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCcrStartWar.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgCcrStartWar, data);
+            Notify.dispatch(NotifyType.MsgCcrStartWar, data);
         }
     }
 }
+
+export default CcrProxy;

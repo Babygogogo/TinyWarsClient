@@ -1,18 +1,31 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.SinglePlayerWar {
-    import ProtoTypes               = Utility.ProtoTypes;
-    import Lang                     = Utility.Lang;
-    import CommonConstants          = Utility.CommonConstants;
-    import VisibilityHelpers        = Utility.VisibilityHelpers;
+import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
+import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
+import TwnsBwWar                    from "../../baseWar/model/BwWar";
+import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import WarVisibilityHelpers         from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsSpwField                 from "./SpwField";
+import TwnsSpwPlayerManager         from "./SpwPlayerManager";
+
+namespace TwnsSpwWar {
+    import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
+    import SpwPlayerManager         = TwnsSpwPlayerManager.SpwPlayerManager;
+    import SpwField                 = TwnsSpwField.SpwField;
+    import LangTextType             = TwnsLangTextType.LangTextType;
     import WarAction                = ProtoTypes.WarAction;
     import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+    import BwWar                    = TwnsBwWar.BwWar;
+    import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
 
-    export abstract class SpwWar extends BaseWar.BwWar {
+    export abstract class SpwWar extends BwWar {
         private readonly _playerManager         = new SpwPlayerManager();
         private readonly _field                 = new SpwField();
-        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
-        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
+        private readonly _commonSettingManager  = new BwCommonSettingManager();
+        private readonly _warEventManager       = new BwWarEventManager();
 
         private _saveSlotIndex      : number;
         private _saveSlotExtraData  : ISpmWarSaveSlotExtraData;
@@ -21,12 +34,12 @@ namespace TinyWars.SinglePlayerWar {
 
         public updateTilesAndUnitsOnVisibilityChanged(): void {
             const teamIndexes   = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-            const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
+            const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
             }
 
-            const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
+            const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
             const tileMap       = this.getTileMap();
             for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
@@ -39,50 +52,50 @@ namespace TinyWars.SinglePlayerWar {
             return undefined;
         }
         public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | undefined> {
-            return Lang.getFormattedText(Lang.Type.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
+            return Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
         }
         public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | undefined> {
             return undefined;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined> {
-            return Lang.getFormattedText(action.deprecatedIsBoot ? Lang.Type.F0028 : Lang.Type.F0008, await this.getPlayerInTurn().getNickname());
+            return Lang.getFormattedText(action.deprecatedIsBoot ? LangTextType.F0028 : LangTextType.F0008, await this.getPlayerInTurn().getNickname());
         }
         public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined> {
             const nickname      = await this.getPlayerInTurn().getNickname();
             const playerIndex   = this.getPlayerIndexInTurn();
             if (!action.isAgree) {
-                return Lang.getFormattedText(Lang.Type.F0017, playerIndex, nickname);
+                return Lang.getFormattedText(LangTextType.F0017, playerIndex, nickname);
             } else {
                 if (this.getDrawVoteManager().getRemainingVotes()) {
-                    return Lang.getFormattedText(Lang.Type.F0018, playerIndex, nickname);
+                    return Lang.getFormattedText(LangTextType.F0018, playerIndex, nickname);
                 } else {
-                    return Lang.getFormattedText(Lang.Type.F0019, playerIndex, nickname);
+                    return Lang.getFormattedText(LangTextType.F0019, playerIndex, nickname);
                 }
             }
         }
         public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | undefined> {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
-                return Lang.getFormattedText(Lang.Type.F0022, Lang.getText(Lang.Type.B0111), playerIndex);
+                return Lang.getFormattedText(LangTextType.F0022, Lang.getText(LangTextType.B0111), playerIndex);
             } else {
-                return Lang.getFormattedText(Lang.Type.F0022, await this.getPlayerInTurn().getNickname(), playerIndex);
+                return Lang.getFormattedText(LangTextType.F0022, await this.getPlayerInTurn().getNickname(), playerIndex);
             }
         }
         public async getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0451)}`;
+            return `${Lang.getText(LangTextType.B0451)}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined> {
             const playerIndex = action.targetPlayerIndex;
-            return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(Lang.Type.B0450)}`;
+            return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(LangTextType.B0450)}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
-            return `${Lang.getText(Lang.Type.B0087)}`;
+            return `${Lang.getText(LangTextType.B0087)}`;
         }
         public async getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | undefined> {
-            return Lang.getFormattedText(Lang.Type.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
+            return Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
         }
         public async getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | undefined> {
-            return Lang.getFormattedText(Lang.Type.F0028, await this.getPlayerInTurn().getNickname());
+            return Lang.getFormattedText(LangTextType.F0028, await this.getPlayerInTurn().getNickname());
         }
         public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined> {
             return undefined;
@@ -139,10 +152,10 @@ namespace TinyWars.SinglePlayerWar {
         public getField(): SpwField {
             return this._field;
         }
-        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
+        public getCommonSettingManager(): BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): BaseWar.BwWarEventManager {
+        public getWarEventManager(): BwWarEventManager {
             return this._warEventManager;
         }
 
@@ -167,11 +180,10 @@ namespace TinyWars.SinglePlayerWar {
         public getHumanPlayerIndexes(): number[] {
             return (this.getPlayerManager() as SpwPlayerManager).getHumanPlayerIndexes();
         }
-        public getHumanPlayers(): BaseWar.BwPlayer[] {
+        public getHumanPlayers(): TwnsBwPlayer.BwPlayer[] {
             return (this.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
-        }
-        public checkIsHumanInTurn(): boolean {
-            return this.getHumanPlayerIndexes().indexOf(this.getPlayerIndexInTurn()) >= 0;
         }
     }
 }
+
+export default TwnsSpwWar;

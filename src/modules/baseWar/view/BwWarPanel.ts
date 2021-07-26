@@ -1,10 +1,16 @@
 
-namespace TinyWars.BaseWar {
+import TwnsUiPanel  from "../../tools/ui/UiPanel";
+import TwnsBwWar    from "../model/BwWar";
+import Types        from "../../tools/helpers/Types";
+
+namespace TwnsBwWarPanel {
+    import BwWar            = TwnsBwWar.BwWar;
+
     type OpenDataForBwWarPanel = {
         war: BwWar;
-    }
-    export class BwWarPanel extends GameUi.UiPanel<OpenDataForBwWarPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+    };
+    export class BwWarPanel extends TwnsUiPanel.UiPanel<OpenDataForBwWarPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: BwWarPanel;
@@ -37,3 +43,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwWarPanel;

@@ -1,21 +1,25 @@
 
-namespace TinyWars.Common.CommonProxy {
-    import Notify           = Utility.Notify;
-    import NotifyType       = Utility.Notify.Type;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
+import CommonModel          from "./CommonModel";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import NetManager           from "../../tools/network/NetManager";
+
+namespace CommonProxy {
+    import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
-    import NetManager       = Network.NetManager;
-    import ActionCode       = Network.Codes;
+    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.MsgCommonHeartbeat,           callback: _onMsgCommonHeartbeat },
-            { msgCode: ActionCode.MsgCommonError,               callback: _onMsgCommonError, },
-            { msgCode: ActionCode.MsgCommonLatestConfigVersion, callback: _onMsgCommonLatestConfigVersion },
-            { msgCode: ActionCode.MsgCommonGetServerStatus,     callback: _onMsgCommonGetServerStatus, },
-            { msgCode: ActionCode.MsgCommonGetRankList,         callback: _onMsgCommonGetRankList },
-        ], CommonProxy);
+            { msgCode: NetMessageCodes.MsgCommonHeartbeat,           callback: _onMsgCommonHeartbeat },
+            { msgCode: NetMessageCodes.MsgCommonError,               callback: _onMsgCommonError, },
+            { msgCode: NetMessageCodes.MsgCommonLatestConfigVersion, callback: _onMsgCommonLatestConfigVersion },
+            { msgCode: NetMessageCodes.MsgCommonGetServerStatus,     callback: _onMsgCommonGetServerStatus, },
+            { msgCode: NetMessageCodes.MsgCommonGetRankList,         callback: _onMsgCommonGetRankList },
+        ], undefined);
     }
 
     export function reqCommonHeartbeat(counter: number): void {
@@ -41,7 +45,7 @@ namespace TinyWars.Common.CommonProxy {
         const version   = data.version;
         ConfigManager.setLatestFormalVersion(version);
         ConfigManager.loadConfig(version);
-        Notify.dispatch(Notify.Type.MsgCommonLatestConfigVersion, data);
+        Notify.dispatch(NotifyType.MsgCommonLatestConfigVersion, data);
     }
 
     export function reqCommonGetServerStatus(): void {
@@ -61,7 +65,9 @@ namespace TinyWars.Common.CommonProxy {
         const data = e.data as NetMessage.MsgCommonGetRankList.IS;
         if (!data.errorCode) {
             CommonModel.setRankList(data.rankDataList);
-            Notify.dispatch(Notify.Type.MsgCommonGetRankList, data);
+            Notify.dispatch(NotifyType.MsgCommonGetRankList, data);
         }
     }
 }
+
+export default CommonProxy;

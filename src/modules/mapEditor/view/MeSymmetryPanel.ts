@@ -1,50 +1,61 @@
 
-namespace TinyWars.MapEditor {
-    import Lang         = Utility.Lang;
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import MeModel          from "../model/MeModel";
+import MeUtility        from "../model/MeUtility";
+import TwnsMeWar        from "../model/MeWar";
+
+namespace TwnsMeSymmetryPanel {
+    import MeWar        = TwnsMeWar.MeWar;
+    import LangTextType = TwnsLangTextType.LangTextType;
+    import NotifyType   = TwnsNotifyType.NotifyType;
     import SymmetryType = Types.SymmetryType;
 
-    export class MeSymmetryPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
+    export class MeSymmetryPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeSymmetryPanel;
 
         private _groupLeftRight             : eui.Group;
-        private _labelLeftRightTitle        : TinyWars.GameUi.UiLabel;
-        private _labelLeftRightRate         : TinyWars.GameUi.UiLabel;
+        private _labelLeftRightTitle        : TwnsUiLabel.UiLabel;
+        private _labelLeftRightRate         : TwnsUiLabel.UiLabel;
         private _groupLeftRightBox          : eui.Group;
-        private _imgLeftRight               : TinyWars.GameUi.UiImage;
-        private _labelLeftRightAuto         : TinyWars.GameUi.UiLabel;
+        private _imgLeftRight               : TwnsUiImage.UiImage;
+        private _labelLeftRightAuto         : TwnsUiLabel.UiLabel;
 
         private _groupUpDown                : eui.Group;
-        private _labelUpDownTitle           : TinyWars.GameUi.UiLabel;
-        private _labelUpDownRate            : TinyWars.GameUi.UiLabel;
+        private _labelUpDownTitle           : TwnsUiLabel.UiLabel;
+        private _labelUpDownRate            : TwnsUiLabel.UiLabel;
         private _groupUpDownBox             : eui.Group;
-        private _imgUpDown                  : TinyWars.GameUi.UiImage;
-        private _labelUpDownAuto            : TinyWars.GameUi.UiLabel;
+        private _imgUpDown                  : TwnsUiImage.UiImage;
+        private _labelUpDownAuto            : TwnsUiLabel.UiLabel;
 
         private _groupRotational            : eui.Group;
-        private _labelRotationalTitle       : TinyWars.GameUi.UiLabel;
-        private _labelRotationalRate        : TinyWars.GameUi.UiLabel;
+        private _labelRotationalTitle       : TwnsUiLabel.UiLabel;
+        private _labelRotationalRate        : TwnsUiLabel.UiLabel;
         private _groupRotationalBox         : eui.Group;
-        private _imgRotational              : TinyWars.GameUi.UiImage;
-        private _labelRotationalAuto        : TinyWars.GameUi.UiLabel;
+        private _imgRotational              : TwnsUiImage.UiImage;
+        private _labelRotationalAuto        : TwnsUiLabel.UiLabel;
 
         private _groupUpLeftDownRight       : eui.Group;
-        private _labelUpLeftDownRightTitle  : TinyWars.GameUi.UiLabel;
-        private _labelUpLeftDownRightRate   : TinyWars.GameUi.UiLabel;
+        private _labelUpLeftDownRightTitle  : TwnsUiLabel.UiLabel;
+        private _labelUpLeftDownRightRate   : TwnsUiLabel.UiLabel;
         private _groupUpLeftDownRightBox    : eui.Group;
-        private _imgUpLeftDownRight         : TinyWars.GameUi.UiImage;
-        private _labelUpLeftDownRightAuto   : TinyWars.GameUi.UiLabel;
+        private _imgUpLeftDownRight         : TwnsUiImage.UiImage;
+        private _labelUpLeftDownRightAuto   : TwnsUiLabel.UiLabel;
 
         private _groupUpRightDownLeft       : eui.Group;
-        private _labelUpRightDownLeftTitle  : TinyWars.GameUi.UiLabel;
-        private _labelUpRightDownLeftRate   : TinyWars.GameUi.UiLabel;
+        private _labelUpRightDownLeftTitle  : TwnsUiLabel.UiLabel;
+        private _labelUpRightDownLeftRate   : TwnsUiLabel.UiLabel;
         private _groupUpRightDownLeftBox    : eui.Group;
-        private _imgUpRightDownLeft         : TinyWars.GameUi.UiImage;
-        private _labelUpRightDownLeftAuto   : TinyWars.GameUi.UiLabel;
+        private _imgUpRightDownLeft         : TwnsUiImage.UiImage;
+        private _labelUpRightDownLeftAuto   : TwnsUiLabel.UiLabel;
 
         private _war                    : MeWar;
         private _asymmetricalCounters   : MeUtility.AsymmetricalCounters;
@@ -72,7 +83,7 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupLeftRightBox,          callback: this._onTouchedGroupLeftRightBox, },
@@ -145,16 +156,16 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelUpDownTitle.text             = Lang.getText(Lang.Type.B0308);
-            this._labelLeftRightTitle.text          = Lang.getText(Lang.Type.B0309);
-            this._labelRotationalTitle.text         = Lang.getText(Lang.Type.B0310);
-            this._labelUpLeftDownRightTitle.text    = Lang.getText(Lang.Type.B0311);
-            this._labelUpRightDownLeftTitle.text    = Lang.getText(Lang.Type.B0312);
-            this._labelUpDownAuto.text              = Lang.getText(Lang.Type.B0307);
-            this._labelLeftRightAuto.text           = Lang.getText(Lang.Type.B0307);
-            this._labelRotationalAuto.text          = Lang.getText(Lang.Type.B0307);
-            this._labelUpLeftDownRightAuto.text     = Lang.getText(Lang.Type.B0307);
-            this._labelUpRightDownLeftAuto.text     = Lang.getText(Lang.Type.B0307);
+            this._labelUpDownTitle.text             = Lang.getText(LangTextType.B0308);
+            this._labelLeftRightTitle.text          = Lang.getText(LangTextType.B0309);
+            this._labelRotationalTitle.text         = Lang.getText(LangTextType.B0310);
+            this._labelUpLeftDownRightTitle.text    = Lang.getText(LangTextType.B0311);
+            this._labelUpRightDownLeftTitle.text    = Lang.getText(LangTextType.B0312);
+            this._labelUpDownAuto.text              = Lang.getText(LangTextType.B0307);
+            this._labelLeftRightAuto.text           = Lang.getText(LangTextType.B0307);
+            this._labelRotationalAuto.text          = Lang.getText(LangTextType.B0307);
+            this._labelUpLeftDownRightAuto.text     = Lang.getText(LangTextType.B0307);
+            this._labelUpRightDownLeftAuto.text     = Lang.getText(LangTextType.B0307);
         }
 
         private _updateGroupBoxes(): void {
@@ -260,3 +271,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeSymmetryPanel;

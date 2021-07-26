@@ -1,14 +1,18 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MultiPlayerWar {
-    import Logger               = Utility.Logger;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
+import TwnsBwFogMap         from "../../baseWar/model/BwFogMap";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import MpwUtility           from "./MpwUtility";
+import TwnsMpwWar           from "./MpwWar";
 
-    export class MpwFogMap extends BaseWar.BwFogMap {
+namespace TwnsMpwFogMap {
+    import BwFogMap = TwnsBwFogMap.BwFogMap;
+    import MpwWar   = TwnsMpwWar.MpwWar;
+
+    export class MpwFogMap extends BwFogMap {
         public startRunning(war: MpwWar): void {
             this._setWar(war);
 
-            const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             for (const tile of war.getTileMap().getAllTiles()) {
                 if (visibleTiles.has(tile)) {
                     tile.setHasFog(false);
@@ -21,3 +25,5 @@ namespace TinyWars.MultiPlayerWar {
         }
     }
 }
+
+export default TwnsMpwFogMap;

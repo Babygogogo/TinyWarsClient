@@ -1,112 +1,124 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.User {
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import ConfigManager    = Utility.ConfigManager;
-    import CommonConstants  = Utility.CommonConstants;
-    import WarType          = Types.WarType;
+import TwnsChatPanel            from "../../chat/view/ChatPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import UserModel                from "../../user/model/UserModel";
+import UserProxy                from "../../user/model/UserProxy";
+
+namespace TwnsUserPanel {
+    import LangTextType = TwnsLangTextType.LangTextType;
+    import NotifyType   = TwnsNotifyType.NotifyType;
+    import WarType      = Types.WarType;
 
     type OpenDataForUserPanel = {
         userId  : number;
     };
-    export class UserPanel extends GameUi.UiPanel<OpenDataForUserPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class UserPanel extends TwnsUiPanel.UiPanel<OpenDataForUserPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: UserPanel;
 
         // @ts-ignore
-        private readonly _imgMask           : GameUi.UiImage;
+        private readonly _imgMask           : TwnsUiImage.UiImage;
         // @ts-ignore
         private readonly _group             : eui.Group;
         // @ts-ignore
-        private readonly _labelTitle        : GameUi.UiLabel;
+        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _btnClose          : GameUi.UiButton;
+        private readonly _btnClose          : TwnsUiButton.UiButton;
 
         // @ts-ignore
-        private readonly _groupButtons      : GameUi.UiButton;
+        private readonly _groupButtons      : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnChat           : GameUi.UiButton;
+        private readonly _btnChat           : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _imgLogo           : GameUi.UiImage;
+        private readonly _imgLogo           : TwnsUiImage.UiImage;
 
         // @ts-ignore
-        private readonly _labelStdRankScoreTitle    : GameUi.UiLabel;
+        private readonly _labelStdRankScoreTitle    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelStdRankScore         : GameUi.UiLabel;
+        private readonly _labelStdRankScore         : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelStdRankRankTitle     : GameUi.UiLabel;
+        private readonly _labelStdRankRankTitle     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelStdRankRank          : GameUi.UiLabel;
+        private readonly _labelStdRankRank          : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelStdRankRankSuffix    : GameUi.UiLabel;
+        private readonly _labelStdRankRankSuffix    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelFogRankScoreTitle    : GameUi.UiLabel;
+        private readonly _labelFogRankScoreTitle    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelFogRankScore         : GameUi.UiLabel;
+        private readonly _labelFogRankScore         : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelFogRankRankTitle     : GameUi.UiLabel;
+        private readonly _labelFogRankRankTitle     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelFogRankRank          : GameUi.UiLabel;
+        private readonly _labelFogRankRank          : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelFogRankRankSuffix    : GameUi.UiLabel;
+        private readonly _labelFogRankRankSuffix    : TwnsUiLabel.UiLabel;
 
         // @ts-ignore
-        private readonly _labelRegisterTimeTitle    : GameUi.UiLabel;
+        private readonly _labelRegisterTimeTitle    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelRegisterTime1        : GameUi.UiLabel;
+        private readonly _labelRegisterTime1        : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelRegisterTime2        : GameUi.UiLabel;
+        private readonly _labelRegisterTime2        : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelLastLoginTimeTitle   : GameUi.UiLabel;
+        private readonly _labelLastLoginTimeTitle   : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelLastLoginTime1       : GameUi.UiLabel;
+        private readonly _labelLastLoginTime1       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelLastLoginTime2       : GameUi.UiLabel;
+        private readonly _labelLastLoginTime2       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelOnlineTimeTitle      : GameUi.UiLabel;
+        private readonly _labelOnlineTimeTitle      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelOnlineTime           : GameUi.UiLabel;
+        private readonly _labelOnlineTime           : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelLoginCountTitle      : GameUi.UiLabel;
+        private readonly _labelLoginCountTitle      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelLoginCount           : GameUi.UiLabel;
+        private readonly _labelLoginCount           : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelUserId               : GameUi.UiLabel;
+        private readonly _labelUserId               : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelUserIdTitle          : GameUi.UiLabel;
+        private readonly _labelUserIdTitle          : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelDiscordId            : GameUi.UiLabel;
+        private readonly _labelDiscordId            : TwnsUiLabel.UiLabel;
 
         // @ts-ignore
-        private readonly _labelHistoryStd           : GameUi.UiLabel;
+        private readonly _labelHistoryStd           : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelHistoryStdWin        : GameUi.UiLabel;
+        private readonly _labelHistoryStdWin        : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelHistoryStdLose       : GameUi.UiLabel;
+        private readonly _labelHistoryStdLose       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelHistoryStdDraw       : GameUi.UiLabel;
+        private readonly _labelHistoryStdDraw       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelHistoryStdRatio      : GameUi.UiLabel;
+        private readonly _labelHistoryStdRatio      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelHistoryFog           : GameUi.UiLabel;
+        private readonly _labelHistoryFog           : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelHistoryFogWin        : GameUi.UiLabel;
+        private readonly _labelHistoryFogWin        : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelHistoryFogLose       : GameUi.UiLabel;
+        private readonly _labelHistoryFogLose       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelHistoryFogDraw       : GameUi.UiLabel;
+        private readonly _labelHistoryFogDraw       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelHistoryFogRatio      : GameUi.UiLabel;
+        private readonly _labelHistoryFogRatio      : TwnsUiLabel.UiLabel;
 
         // @ts-ignore
-        private readonly _sclHistoryStd             : GameUi.UiScrollList<DataForHistoryRenderer>;
+        private readonly _sclHistoryStd             : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
         // @ts-ignore
-        private readonly _sclHistoryFog             : GameUi.UiScrollList<DataForHistoryRenderer>;
+        private readonly _sclHistoryFog             : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
 
         public static show(openData: OpenDataForUserPanel): void {
             if (!UserPanel._instance) {
@@ -131,10 +143,10 @@ namespace TinyWars.User {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgUserGetPublicInfo,   callback: this._onMsgUserGetPublicInfo },
-                { type: Notify.Type.MsgUserSetNickname,     callback: this._onMsgUserSetNickname },
-                { type: Notify.Type.MsgUserSetDiscordId,    callback: this._onMsgUserSetDiscordId },
+                { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserGetPublicInfo,   callback: this._onMsgUserGetPublicInfo },
+                { type: NotifyType.MsgUserSetNickname,     callback: this._onMsgUserSetNickname },
+                { type: NotifyType.MsgUserSetDiscordId,    callback: this._onMsgUserSetDiscordId },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
@@ -174,7 +186,7 @@ namespace TinyWars.User {
         private _onTouchedBtnChat(): void {
             const userId = this._getOpenData().userId;
             this.close();
-            Chat.ChatPanel.show({ toUserId: userId });
+            TwnsChatPanel.ChatPanel.show({ toUserId: userId });
         }
 
         private _showOpenAnimation(): void {
@@ -253,25 +265,25 @@ namespace TinyWars.User {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelStdRankScoreTitle.text   = Lang.getText(Lang.Type.B0198);
-            this._labelStdRankRankTitle.text    = Lang.getText(Lang.Type.B0546);
-            this._labelFogRankScoreTitle.text   = Lang.getText(Lang.Type.B0199);
-            this._labelFogRankRankTitle.text    = Lang.getText(Lang.Type.B0547);
-            this._labelUserIdTitle.text         = Lang.getText(Lang.Type.B0640);
-            this._labelRegisterTimeTitle.text   = Lang.getText(Lang.Type.B0194);
-            this._labelLastLoginTimeTitle.text  = Lang.getText(Lang.Type.B0195);
-            this._labelOnlineTimeTitle.text     = Lang.getText(Lang.Type.B0196);
-            this._labelLoginCountTitle.text     = Lang.getText(Lang.Type.B0197);
-            this._labelHistoryStd.text          = Lang.getText(Lang.Type.B0548);
-            this._labelHistoryStdWin.text       = Lang.getText(Lang.Type.B0550);
-            this._labelHistoryStdLose.text      = Lang.getText(Lang.Type.B0551);
-            this._labelHistoryStdDraw.text      = Lang.getText(Lang.Type.B0552);
-            this._labelHistoryStdRatio.text     = Lang.getText(Lang.Type.B0553);
-            this._labelHistoryFog.text          = Lang.getText(Lang.Type.B0549);
-            this._labelHistoryFogWin.text       = Lang.getText(Lang.Type.B0550);
-            this._labelHistoryFogLose.text      = Lang.getText(Lang.Type.B0551);
-            this._labelHistoryFogDraw.text      = Lang.getText(Lang.Type.B0552);
-            this._labelHistoryFogRatio.text     = Lang.getText(Lang.Type.B0553);
+            this._labelStdRankScoreTitle.text   = Lang.getText(LangTextType.B0198);
+            this._labelStdRankRankTitle.text    = Lang.getText(LangTextType.B0546);
+            this._labelFogRankScoreTitle.text   = Lang.getText(LangTextType.B0199);
+            this._labelFogRankRankTitle.text    = Lang.getText(LangTextType.B0547);
+            this._labelUserIdTitle.text         = Lang.getText(LangTextType.B0640);
+            this._labelRegisterTimeTitle.text   = Lang.getText(LangTextType.B0194);
+            this._labelLastLoginTimeTitle.text  = Lang.getText(LangTextType.B0195);
+            this._labelOnlineTimeTitle.text     = Lang.getText(LangTextType.B0196);
+            this._labelLoginCountTitle.text     = Lang.getText(LangTextType.B0197);
+            this._labelHistoryStd.text          = Lang.getText(LangTextType.B0548);
+            this._labelHistoryStdWin.text       = Lang.getText(LangTextType.B0550);
+            this._labelHistoryStdLose.text      = Lang.getText(LangTextType.B0551);
+            this._labelHistoryStdDraw.text      = Lang.getText(LangTextType.B0552);
+            this._labelHistoryStdRatio.text     = Lang.getText(LangTextType.B0553);
+            this._labelHistoryFog.text          = Lang.getText(LangTextType.B0549);
+            this._labelHistoryFogWin.text       = Lang.getText(LangTextType.B0550);
+            this._labelHistoryFogLose.text      = Lang.getText(LangTextType.B0551);
+            this._labelHistoryFogDraw.text      = Lang.getText(LangTextType.B0552);
+            this._labelHistoryFogRatio.text     = Lang.getText(LangTextType.B0553);
 
             this._updateLabelTitle();
             this._updateComponentsForStdRank();
@@ -283,7 +295,7 @@ namespace TinyWars.User {
 
         private async _updateLabelTitle(): Promise<void> {
             const nickname          = await UserModel.getUserNickname(this._getOpenData().userId);
-            this._labelTitle.text   = Lang.getFormattedText(Lang.Type.F0009, nickname);
+            this._labelTitle.text   = Lang.getFormattedText(LangTextType.F0009, nickname);
         }
         private async _updateComponentsForStdRank(): Promise<void> {
             const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
@@ -353,7 +365,7 @@ namespace TinyWars.User {
             this._labelOnlineTime.text  = onlineTime == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimeDurationText2(onlineTime);
         }
         private _updateBtnChat(): void {
-            this._btnChat.label = Lang.getText(Lang.Type.B0383);
+            this._btnChat.label = Lang.getText(LangTextType.B0383);
         }
     }
 
@@ -364,22 +376,21 @@ namespace TinyWars.User {
         playersCount: number;
         showBottom? : boolean;
     };
-
-    class HistoryRenderer extends GameUi.UiListItemRenderer<DataForHistoryRenderer> {
+    class HistoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForHistoryRenderer> {
         // @ts-ignore
-        private readonly _imgBg         : GameUi.UiImage;
+        private readonly _imgBg         : TwnsUiImage.UiImage;
         // @ts-ignore
-        private readonly _labelType     : GameUi.UiLabel;
+        private readonly _labelType     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelWin      : GameUi.UiLabel;
+        private readonly _labelWin      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelLose     : GameUi.UiLabel;
+        private readonly _labelLose     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelDraw     : GameUi.UiLabel;
+        private readonly _labelDraw     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelRatio    : GameUi.UiLabel;
+        private readonly _labelRatio    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _imgBottom     : GameUi.UiImage;
+        private readonly _imgBottom     : TwnsUiImage.UiImage;
 
         protected async _onDataChanged(): Promise<void> {
             const data              = this.data;
@@ -390,7 +401,7 @@ namespace TinyWars.User {
             const playersCount  = data.playersCount;
             const labelType     = this._labelType;
             if ((warType === WarType.MrwFog) || (warType === WarType.MrwStd)) {
-                labelType.text = Lang.getText(Lang.Type.B0554);
+                labelType.text = Lang.getText(LangTextType.B0554);
             } else {
                 labelType.text  = `${playersCount}P`;
             }
@@ -407,3 +418,5 @@ namespace TinyWars.User {
         }
     }
 }
+
+export default TwnsUserPanel;

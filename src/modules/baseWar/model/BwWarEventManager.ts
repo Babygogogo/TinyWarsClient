@@ -1,18 +1,27 @@
 
-namespace TinyWars.BaseWar {
-    import ConfigManager                    = Utility.ConfigManager;
-    import Types                            = Utility.Types;
-    import GridIndexHelpers                 = Utility.GridIndexHelpers;
-    import Helpers                          = Utility.Helpers;
-    import ProtoTypes                       = Utility.ProtoTypes;
-    import Logger                           = Utility.Logger;
-    import ClientErrorCode                  = Utility.ClientErrorCode;
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwTileMap        from "./BwTileMap";
+import TwnsBwUnit           from "./BwUnit";
+import TwnsBwUnitMap        from "./BwUnitMap";
+import TwnsBwWar            from "./BwWar";
+
+namespace TwnsBwWarEventManager {
     import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;
     import IDataForWarEventCalledCount      = ProtoTypes.WarSerialization.IDataForWarEventCalledCount;
     import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
     import WarEvent                         = ProtoTypes.WarEvent;
     import IExtraDataForSystemCallWarEvent  = ProtoTypes.WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent;
-    import CommonConstants                  = Utility.CommonConstants;
+    import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
+    import BwUnitMap                        = TwnsBwUnitMap.BwUnitMap;
+    import BwWar                            = TwnsBwWar.BwWar;
 
     export class BwWarEventManager {
         private _war?               : BwWar;
@@ -214,7 +223,7 @@ namespace TinyWars.BaseWar {
                     continue;
                 }
 
-                if (BwHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+                if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     configVersion,
@@ -248,7 +257,7 @@ namespace TinyWars.BaseWar {
                 revisedUnitData.gridIndex   = gridIndex;
                 revisedUnitData.unitId      = unitId;
 
-                const unit      = new BwUnit();
+                const unit      = new TwnsBwUnit.BwUnit();
                 const unitError = unit.init(revisedUnitData, configVersion);
                 if (unitError) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() unitError: ${unitError}`);
@@ -894,7 +903,7 @@ namespace TinyWars.BaseWar {
     function getGridIndexForAddUnit({ origin, unitMap, tileMap, moveType, needMovableTile, canBeBlockedByUnit }: {
         origin              : Types.GridIndex;
         unitMap             : BwUnitMap;
-        tileMap             : BwTileMap;
+        tileMap             : TwnsBwTileMap.BwTileMap;
         moveType            : Types.MoveType;
         needMovableTile     : boolean;
         canBeBlockedByUnit  : boolean;
@@ -952,3 +961,5 @@ namespace TinyWars.BaseWar {
         return undefined;
     }
 }
+
+export default TwnsBwWarEventManager;

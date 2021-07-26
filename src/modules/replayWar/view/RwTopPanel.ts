@@ -1,36 +1,59 @@
 
-namespace TinyWars.ReplayWar {
-    import FloatText        = Utility.FloatText;
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
+import TwnsBwCoListPanel    from "../../baseWar/view/BwCoListPanel";
+import TwnsBwUnitListPanel  from "../../baseWar/view/BwUnitListPanel";
+import ChatModel            from "../../chat/model/ChatModel";
+import TwnsChatPanel        from "../../chat/view/ChatPanel";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUserPanel        from "../../user/view/UserPanel";
+import RwModel              from "../model/RwModel";
+import TwnsRwWar            from "../model/RwWar";
+import TwnsRwWarMenuPanel   from "./RwWarMenuPanel";
 
-    export class RwTopPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsRwTopPanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import ChatPanel        = TwnsChatPanel.ChatPanel;
+    import UserPanel        = TwnsUserPanel.UserPanel;
+    import BwCoListPanel    = TwnsBwCoListPanel.BwCoListPanel;
+    import BwUnitListPanel  = TwnsBwUnitListPanel.BwUnitListPanel;
+    import RwWar            = TwnsRwWar.RwWar;
+    import RwWarMenuPanel   = TwnsRwWarMenuPanel.RwWarMenuPanel;
+
+    // eslint-disable-next-line no-shadow
+    export class RwTopPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: RwTopPanel;
 
         private _groupPlayer        : eui.Group;
-        private _labelPlayer        : GameUi.UiLabel;
-        private _labelFund          : GameUi.UiLabel;
-        private _labelTurnTitle     : GameUi.UiLabel;
-        private _labelTurn          : GameUi.UiLabel;
-        private _labelActionTitle   : GameUi.UiLabel;
-        private _labelAction        : GameUi.UiLabel;
+        private _labelPlayer        : TwnsUiLabel.UiLabel;
+        private _labelFund          : TwnsUiLabel.UiLabel;
+        private _labelTurnTitle     : TwnsUiLabel.UiLabel;
+        private _labelTurn          : TwnsUiLabel.UiLabel;
+        private _labelActionTitle   : TwnsUiLabel.UiLabel;
+        private _labelAction        : TwnsUiLabel.UiLabel;
         private _groupCo            : eui.Group;
-        private _labelCo            : GameUi.UiLabel;
-        private _labelCurrEnergy    : GameUi.UiLabel;
-        private _labelPowerEnergy   : GameUi.UiLabel;
-        private _labelZoneEnergy    : GameUi.UiLabel;
-        private _btnChat            : GameUi.UiButton;
-        private _btnFastRewind      : GameUi.UiButton;
-        private _btnFastForward     : GameUi.UiButton;
-        private _btnPlay            : GameUi.UiButton;
-        private _btnPause           : GameUi.UiButton;
-        private _btnUnitList        : GameUi.UiButton;
-        private _btnMenu            : GameUi.UiButton;
+        private _labelCo            : TwnsUiLabel.UiLabel;
+        private _labelCurrEnergy    : TwnsUiLabel.UiLabel;
+        private _labelPowerEnergy   : TwnsUiLabel.UiLabel;
+        private _labelZoneEnergy    : TwnsUiLabel.UiLabel;
+        private _btnChat            : TwnsUiButton.UiButton;
+        private _btnFastRewind      : TwnsUiButton.UiButton;
+        private _btnFastForward     : TwnsUiButton.UiButton;
+        private _btnPlay            : TwnsUiButton.UiButton;
+        private _btnPause           : TwnsUiButton.UiButton;
+        private _btnUnitList        : TwnsUiButton.UiButton;
+        private _btnMenu            : TwnsUiButton.UiButton;
 
         private _war    : RwWar;
 
@@ -55,17 +78,17 @@ namespace TinyWars.ReplayWar {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
-                { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
-                { type: Notify.Type.RwNextActionIdChanged,          callback: this._onNotifyBwNextActionIdChanged },
-                { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
-                { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
-                { type: Notify.Type.ReplayAutoReplayChanged,        callback: this._onNotifyReplayAutoReplayChanged },
-                { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatUpdateReadProgressList },
-                { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
-                { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
-                { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
+                { type: NotifyType.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
+                { type: NotifyType.RwNextActionIdChanged,          callback: this._onNotifyBwNextActionIdChanged },
+                { type: NotifyType.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
+                { type: NotifyType.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
+                { type: NotifyType.ReplayAutoReplayChanged,        callback: this._onNotifyReplayAutoReplayChanged },
+                { type: NotifyType.MsgChatGetAllReadProgressList,  callback: this._onMsgChatUpdateReadProgressList },
+                { type: NotifyType.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
+                { type: NotifyType.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
+                { type: NotifyType.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
@@ -126,11 +149,11 @@ namespace TinyWars.ReplayWar {
 
         private _onTouchedGroupPlayer(e: egret.TouchEvent): void {
             const userId = this._war.getPlayerInTurn().getUserId();
-            (userId) && (User.UserPanel.show({ userId }));
+            (userId) && (UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(e: egret.TouchEvent): void {
             const war = this._war;
-            BaseWar.BwCoListPanel.show({
+            BwCoListPanel.show({
                 war,
                 selectedIndex: Math.max(war.getPlayerIndexInTurn() - 1, 0),
             });
@@ -138,18 +161,18 @@ namespace TinyWars.ReplayWar {
         }
         private _onTouchedBtnChat(e: egret.TouchEvent): void {
             RwWarMenuPanel.hide();
-            Chat.ChatPanel.show({});
+            ChatPanel.show({});
         }
         private async _onTouchedBtnFastRewind(e: egret.TouchEvent): Promise<void> {
             const war = this._war;
             war.setIsAutoReplay(false);
 
             if (!war.getIsRunning()) {
-                FloatText.show(Lang.getText(Lang.Type.A0040));
+                FloatText.show(Lang.getText(LangTextType.A0040));
             } else if (war.getIsExecutingAction()) {
-                FloatText.show(Lang.getText(Lang.Type.A0044));
+                FloatText.show(Lang.getText(LangTextType.A0044));
             } else if (war.checkIsInBeginning()) {
-                FloatText.show(Lang.getText(Lang.Type.A0042));
+                FloatText.show(Lang.getText(LangTextType.A0042));
             } else {
                 await Helpers.checkAndCallLater();
                 await war.loadPreviousCheckPoint();
@@ -162,11 +185,11 @@ namespace TinyWars.ReplayWar {
             war.setIsAutoReplay(false);
 
             if (!war.getIsRunning()) {
-                FloatText.show(Lang.getText(Lang.Type.A0040));
+                FloatText.show(Lang.getText(LangTextType.A0040));
             } else if (war.getIsExecutingAction()) {
-                FloatText.show(Lang.getText(Lang.Type.A0044));
+                FloatText.show(Lang.getText(LangTextType.A0044));
             } else if (war.checkIsInEnd()) {
-                FloatText.show(Lang.getText(Lang.Type.A0043));
+                FloatText.show(Lang.getText(LangTextType.A0043));
             } else {
                 await Helpers.checkAndCallLater();
                 await war.loadNextCheckPoint();
@@ -177,7 +200,7 @@ namespace TinyWars.ReplayWar {
         private _onTouchedBtnPlay(e: egret.TouchEvent): void {
             const war = this._war;
             if (war.checkIsInEnd()) {
-                FloatText.show(Lang.getText(Lang.Type.A0041));
+                FloatText.show(Lang.getText(LangTextType.A0041));
             } else {
                 this._war.setIsAutoReplay(true);
             }
@@ -188,7 +211,7 @@ namespace TinyWars.ReplayWar {
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
             const war = this._war;
             war.getField().getActionPlanner().setStateIdle();
-            BaseWar.BwUnitListPanel.show({ war });
+            BwUnitListPanel.show({ war });
         }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
             const actionPlanner = this._war.getActionPlanner();
@@ -214,8 +237,8 @@ namespace TinyWars.ReplayWar {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTurnTitle.text   = Lang.getText(Lang.Type.B0091);
-            this._labelActionTitle.text = Lang.getText(Lang.Type.B0090);
+            this._labelTurnTitle.text   = Lang.getText(LangTextType.B0091);
+            this._labelActionTitle.text = Lang.getText(LangTextType.B0090);
         }
 
         private _updateLabelTurn(): void {
@@ -249,7 +272,7 @@ namespace TinyWars.ReplayWar {
             if ((war) && (war.getIsRunning())) {
                 const player        = war.getPlayerInTurn();
                 const coId          = player.getCoId();
-                this._labelCo.text  = `${coId == null ? "----" : Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
+                this._labelCo.text  = `${coId == null ? "----" : ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
 
                 const skillType = player.getCoUsingSkillType();
                 if (skillType === Types.CoSkillType.Power) {
@@ -279,7 +302,9 @@ namespace TinyWars.ReplayWar {
         }
 
         private _updateBtnChat(): void {
-            this._btnChat.setRedVisible(Chat.ChatModel.checkHasUnreadMessage());
+            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
         }
     }
 }
+
+export default TwnsRwTopPanel;

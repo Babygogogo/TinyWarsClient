@@ -1,10 +1,22 @@
 
-namespace TinyWars.WarEvent {
-    import Notify               = Utility.Notify;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Logger               = Utility.Logger;
-    import Lang                 = Utility.Lang;
-    import FloatText            = Utility.FloatText;
+import FloatText                from "../../tools/helpers/FloatText";
+import Logger                   from "../../tools/helpers/Logger";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import WarEventHelper           from "../model/WarEventHelper";
+
+namespace TwnsWeNodeReplacePanel {
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
 
     type OpenDataForWeNodeReplacePanel = {
@@ -12,17 +24,17 @@ namespace TinyWars.WarEvent {
         parentNodeId?   : number;
         nodeId          : number | null | undefined;
         fullData        : IWarEventFullData;
-    }
-    export class WeNodeReplacePanel extends GameUi.UiPanel<OpenDataForWeNodeReplacePanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+    };
+    export class WeNodeReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeNodeReplacePanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: WeNodeReplacePanel;
 
-        private _listNode       : GameUi.UiScrollList<DataForNodeRenderer>;
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelNoNode    : GameUi.UiLabel;
-        private _btnClose       : GameUi.UiButton;
+        private _listNode       : TwnsUiScrollList.UiScrollList<DataForNodeRenderer>;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
+        private _labelNoNode    : TwnsUiLabel.UiLabel;
+        private _btnClose       : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForWeNodeReplacePanel): void {
             if (!WeNodeReplacePanel._instance) {
@@ -47,7 +59,7 @@ namespace TinyWars.WarEvent {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
@@ -68,9 +80,9 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text   = Lang.getText(Lang.Type.B0491);
-            this._labelNoNode.text  = Lang.getText(Lang.Type.B0278);
-            this._btnClose.label    = Lang.getText(Lang.Type.B0146);
+            this._labelTitle.text   = Lang.getText(LangTextType.B0491);
+            this._labelNoNode.text  = Lang.getText(LangTextType.B0278);
+            this._btnClose.label    = Lang.getText(LangTextType.B0146);
         }
         private _updateListNodeAndLabelNoNode(): void {
             const openData      = this._getOpenData();
@@ -101,13 +113,13 @@ namespace TinyWars.WarEvent {
         srcNodeId       : number;
         candidateNodeId : number;
         fullData        : IWarEventFullData;
-    }
-    class NodeRenderer extends GameUi.UiListItemRenderer<DataForNodeRenderer> {
-        private _labelNodeId        : GameUi.UiLabel;
-        private _labelSubNode       : GameUi.UiLabel;
-        private _labelSubCondition  : GameUi.UiLabel;
-        private _btnCopy            : GameUi.UiButton;
-        private _btnSelect          : GameUi.UiButton;
+    };
+    class NodeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForNodeRenderer> {
+        private _labelNodeId        : TwnsUiLabel.UiLabel;
+        private _labelSubNode       : TwnsUiLabel.UiLabel;
+        private _labelSubCondition  : TwnsUiLabel.UiLabel;
+        private _btnCopy            : TwnsUiButton.UiButton;
+        private _btnSelect          : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -115,7 +127,7 @@ namespace TinyWars.WarEvent {
                 { ui: this._btnSelect,  callback: this._onTouchedBtnSelect },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
             this._updateComponentsForLanguage();
@@ -154,11 +166,11 @@ namespace TinyWars.WarEvent {
                     conditionIdArray,
                     subNodeIdArray,
                 }) != null) {
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             } else {
                 if (WarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
-                    FloatText.show(Lang.getText(Lang.Type.A0179));
+                    FloatText.show(Lang.getText(LangTextType.A0179));
                     return;
                 }
 
@@ -168,7 +180,7 @@ namespace TinyWars.WarEvent {
                     nodeIdForClone  : candidateNodeId,
                     nodeIdForDelete : data.srcNodeId,
                 }) != null) {
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             }
         }
@@ -187,11 +199,11 @@ namespace TinyWars.WarEvent {
                     eventId     : data.eventId,
                     newNodeId,
                 })) {
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             } else {
                 if (WarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: newNodeId }).nodeIdSet.has(parentNodeId)) {
-                    FloatText.show(Lang.getText(Lang.Type.A0179));
+                    FloatText.show(Lang.getText(LangTextType.A0179));
                     return;
                 }
 
@@ -201,7 +213,7 @@ namespace TinyWars.WarEvent {
                     oldNodeId   : data.srcNodeId,
                     newNodeId,
                 })) {
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             }
         }
@@ -210,8 +222,8 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnCopy.label     = Lang.getText(Lang.Type.B0487);
-            this._btnSelect.label   = Lang.getText(Lang.Type.B0492);
+            this._btnCopy.label     = Lang.getText(LangTextType.B0487);
+            this._btnSelect.label   = Lang.getText(LangTextType.B0492);
 
             this._updateLabelNodeId();
             this._updateLabelSubNode();
@@ -221,7 +233,7 @@ namespace TinyWars.WarEvent {
         private _updateLabelNodeId(): void {
             const data = this.data;
             if (data) {
-                this._labelNodeId.text  = `${Lang.getText(Lang.Type.B0488)}: N${data.candidateNodeId}`;
+                this._labelNodeId.text  = `${Lang.getText(LangTextType.B0488)}: N${data.candidateNodeId}`;
             }
         }
         private _updateLabelSubNode(): void {
@@ -233,14 +245,14 @@ namespace TinyWars.WarEvent {
             const node  = (data.fullData.conditionNodeArray || []).find(v => v.nodeId === data.candidateNodeId);
             const label = this._labelSubNode;
             if (node == null) {
-                label.text = Lang.getText(Lang.Type.A0160);
+                label.text = Lang.getText(LangTextType.A0160);
             } else {
                 const textArray: string[] = [];
                 for (const subNodeId of (node.subNodeIdArray || []).sort((v1, v2) => v1 - v2)) {
                     textArray.push(`N${subNodeId}`);
                 }
 
-                label.text = `${Lang.getText(Lang.Type.B0489)}: ${textArray.length ? textArray.join(`, `) : Lang.getText(Lang.Type.B0001)}`;
+                label.text = `${Lang.getText(LangTextType.B0489)}: ${textArray.length ? textArray.join(`, `) : Lang.getText(LangTextType.B0001)}`;
             }
         }
         private _updateLabelSubCondition(): void {
@@ -259,8 +271,10 @@ namespace TinyWars.WarEvent {
                     textArray.push(`C${conditionId}`);
                 }
 
-                label.text = `${Lang.getText(Lang.Type.B0490)}: ${textArray.length ? textArray.join(`, `) : Lang.getText(Lang.Type.B0001)}`;
+                label.text = `${Lang.getText(LangTextType.B0490)}: ${textArray.length ? textArray.join(`, `) : Lang.getText(LangTextType.B0001)}`;
             }
         }
     }
 }
+
+export default TwnsWeNodeReplacePanel;

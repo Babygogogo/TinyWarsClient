@@ -1,33 +1,49 @@
 
-namespace TinyWars.BaseWar {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import CommonModel  = Common.CommonModel;
+import TwnsBwUnit               from "../../baseWar/model/BwUnit";
+import TwnsBwWar                from "../../baseWar/model/BwWar";
+import CommonModel              from "../../common/model/CommonModel";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsBwCursor             from "../model/BwCursor";
+import TwnsBwUnitMap            from "../model/BwUnitMap";
+import TwnsBwUnitView           from "./BwUnitView";
 
-    const _LEFT_X   = 0;
-    const _RIGHT_X  = 820;
+namespace TwnsBwUnitListPanel {
+    import BwUnitView       = TwnsBwUnitView.BwUnitView;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+    import BwWar            = TwnsBwWar.BwWar;
+    import BwCursor         = TwnsBwCursor.BwCursor;
 
     type OpenDataForBwUnitListPanel = {
         war : BwWar;
     };
-    export class BwUnitListPanel extends GameUi.UiPanel<OpenDataForBwUnitListPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class BwUnitListPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitListPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: BwUnitListPanel;
 
         private readonly _group             : eui.Group;
-        private readonly _labelName         : GameUi.UiLabel;
-        private readonly _labelCountName    : GameUi.UiLabel;
-        private readonly _labelValueName    : GameUi.UiLabel;
-        private readonly _listUnit          : GameUi.UiScrollList<DataForUnitRenderer>;
-        private readonly _labelCount        : GameUi.UiLabel;
-        private readonly _labelValue        : GameUi.UiLabel;
-        private readonly _btnSwitch         : GameUi.UiButton;
+        private readonly _labelName         : TwnsUiLabel.UiLabel;
+        private readonly _labelCountName    : TwnsUiLabel.UiLabel;
+        private readonly _labelValueName    : TwnsUiLabel.UiLabel;
+        private readonly _listUnit          : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private readonly _labelCount        : TwnsUiLabel.UiLabel;
+        private readonly _labelValue        : TwnsUiLabel.UiLabel;
+        private readonly _btnSwitch         : TwnsUiButton.UiButton;
 
-        private _cursor         : BaseWar.BwCursor;
-        private _unitMap        : BaseWar.BwUnitMap;
+        private _cursor         : BwCursor;
+        private _unitMap        : BwUnitMap;
         private _dataForList    : DataForUnitRenderer[];
         private _playerIndex    : number;
 
@@ -51,11 +67,11 @@ namespace TinyWars.BaseWar {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
-                { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-                { type: Notify.Type.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
+                { type: NotifyType.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
+                { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
+                { type: NotifyType.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnSwitch, callback: this._onTouchedBtnSwitch },
@@ -102,10 +118,10 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelCountName.text   = `${Lang.getText(Lang.Type.B0160)}:`;
-            this._labelValueName.text   = `${Lang.getText(Lang.Type.B0161)}:`;
-            this._labelName.text        = Lang.getText(Lang.Type.B0152);
-            this._btnSwitch.label       = Lang.getText(Lang.Type.B0244);
+            this._labelCountName.text   = `${Lang.getText(LangTextType.B0160)}:`;
+            this._labelValueName.text   = `${Lang.getText(LangTextType.B0161)}:`;
+            this._labelName.text        = Lang.getText(LangTextType.B0152);
+            this._btnSwitch.label       = Lang.getText(LangTextType.B0244);
         }
 
         private _updateView(): void {
@@ -163,31 +179,30 @@ namespace TinyWars.BaseWar {
     const _IMAGE_SOURCE_FLARE       = `c03_t99_s02_f02`;
 
     type DataForUnitRenderer = {
-        unit    : BaseWar.BwUnit;
-        cursor  : BaseWar.BwCursor;
+        unit    : TwnsBwUnit.BwUnit;
+        cursor  : BwCursor;
     };
-
-    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
+    class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;
         private _conUnitView    : eui.Group;
-        private _labelName      : GameUi.UiLabel;
-        private _labelGridIndex : GameUi.UiLabel;
-        private _labelHp        : GameUi.UiLabel;
-        private _labelFuel      : GameUi.UiLabel;
-        private _labelState     : GameUi.UiLabel;
-        private _imgHp          : GameUi.UiImage;
-        private _imgFuel        : GameUi.UiImage;
-        private _imgState       : GameUi.UiImage;
-        private _unitView       : BaseWar.BwUnitView;
+        private _labelName      : TwnsUiLabel.UiLabel;
+        private _labelGridIndex : TwnsUiLabel.UiLabel;
+        private _labelHp        : TwnsUiLabel.UiLabel;
+        private _labelFuel      : TwnsUiLabel.UiLabel;
+        private _labelState     : TwnsUiLabel.UiLabel;
+        private _imgHp          : TwnsUiImage.UiImage;
+        private _imgFuel        : TwnsUiImage.UiImage;
+        private _imgState       : TwnsUiImage.UiImage;
+        private _unitView       : BwUnitView;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
 
             this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
             this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
-            this._unitView          = new BaseWar.BwUnitView();
+            this._unitView          = new BwUnitView();
             this._conUnitView.addChild(this._unitView);
         }
 
@@ -249,3 +264,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwUnitListPanel;

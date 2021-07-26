@@ -1,21 +1,35 @@
 
-namespace TinyWars.SingleCustomRoom {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import BwHelpers    = BaseWar.BwHelpers;
+import SpmModel                 from "../../singlePlayerMode/model/SpmModel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import WarMapModel              from "../../warMap/model/WarMapModel";
+import ScrCreateModel           from "../model/ScrCreateModel";
 
-    export class ScrCreateSaveSlotsPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+namespace TwnsScrCreateSaveSlotsPanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
+
+    export class ScrCreateSaveSlotsPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: ScrCreateSaveSlotsPanel;
 
         private _group          : eui.Group;
-        private _labelPanelTitle: GameUi.UiLabel;
-        private _srlSaveSlot    : GameUi.UiScrollList<DataForSlotRenderer>;
+        private _labelPanelTitle: TwnsUiLabel.UiLabel;
+        private _srlSaveSlot    : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
         private _listSaveSlot   : eui.List;
-        private _btnCancel      : GameUi.UiButton;
+        private _btnCancel      : TwnsUiButton.UiButton;
 
         private _dataForList: DataForSlotRenderer[];
 
@@ -44,7 +58,7 @@ namespace TinyWars.SingleCustomRoom {
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._srlSaveSlot.setItemRenderer(SlotRenderer);
 
@@ -73,18 +87,18 @@ namespace TinyWars.SingleCustomRoom {
 
             this._dataForList = this._createDataForList();
             this._srlSaveSlot.bindData(this._dataForList);
-            this._listSaveSlot.selectedIndex = ScrModel.Create.getSaveSlotIndex();
+            this._listSaveSlot.selectedIndex = ScrCreateModel.getSaveSlotIndex();
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelPanelTitle.text  = Lang.getText(Lang.Type.B0259);
-            this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
+            this._labelPanelTitle.text  = Lang.getText(LangTextType.B0259);
+            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
         }
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotDict  = SinglePlayerMode.SpmModel.SaveSlot.getSlotDict();
-            for (let slotIndex = 0; slotIndex < Utility.CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+            const slotDict  = SpmModel.getSlotDict();
+            for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
                     slotInfo    : slotDict.get(slotIndex),
@@ -98,14 +112,14 @@ namespace TinyWars.SingleCustomRoom {
     type DataForSlotRenderer = {
         slotIndex   : number;
         slotInfo    : Types.SpmWarSaveSlotData | null;
-    }
-    class SlotRenderer extends GameUi.UiListItemRenderer<DataForSlotRenderer> {
+    };
+    class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
         private _group          : eui.Group;
-        private _imgBg          : GameUi.UiImage;
-        private _labelSlotIndex : GameUi.UiLabel;
-        private _labelType      : GameUi.UiLabel;
-        private _labelMapName   : GameUi.UiLabel;
-        private _labelChoose    : GameUi.UiLabel;
+        private _imgBg          : TwnsUiImage.UiImage;
+        private _labelSlotIndex : TwnsUiLabel.UiLabel;
+        private _labelType      : TwnsUiLabel.UiLabel;
+        private _labelMapName   : TwnsUiLabel.UiLabel;
+        private _labelChoose    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -113,7 +127,7 @@ namespace TinyWars.SingleCustomRoom {
             ]);
 
             this._imgBg.touchEnabled    = true;
-            this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
+            this._labelChoose.text      = Lang.getText(LangTextType.B0258);
         }
 
         protected _onDataChanged(): void {
@@ -121,7 +135,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
-            ScrModel.Create.setSaveSlotIndex(this.data.slotIndex);
+            ScrCreateModel.setSaveSlotIndex(this.data.slotIndex);
             ScrCreateSaveSlotsPanel.hide();
         }
 
@@ -140,18 +154,20 @@ namespace TinyWars.SingleCustomRoom {
                 labelMapName.text   = `----`;
             } else {
                 const warData   = slotInfo.warData;
-                labelType.text  = Lang.getWarTypeName(BwHelpers.getWarType(warData));
+                labelType.text  = Lang.getWarTypeName(WarCommonHelpers.getWarType(warData));
 
                 const slotComment = slotInfo.extraData.slotComment;
                 if (slotComment) {
                     labelMapName.text = slotComment;
                 } else {
-                    const mapId         = BwHelpers.getMapId(warData);
+                    const mapId         = WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
-                        ? `(${Lang.getText(Lang.Type.B0321)})`
-                        : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId);
+                        ? `(${Lang.getText(LangTextType.B0321)})`
+                        : await WarMapModel.getMapNameInCurrentLanguage(mapId);
                 }
             }
         }
     }
 }
+
+export default TwnsScrCreateSaveSlotsPanel;

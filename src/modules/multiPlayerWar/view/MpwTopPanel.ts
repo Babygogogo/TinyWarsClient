@@ -1,36 +1,62 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MultiPlayerWar {
-    import BwHelpers        = BaseWar.BwHelpers;
-    import FloatText        = Utility.FloatText;
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
+import TwnsBwCoListPanel        from "../../baseWar/view/BwCoListPanel";
+import TwnsBwUnitListPanel      from "../../baseWar/view/BwUnitListPanel";
+import ChatModel                from "../../chat/model/ChatModel";
+import TwnsChatPanel            from "../../chat/view/ChatPanel";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
+import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
+import TwnsMpwWar               from "../../multiPlayerWar/model/MpwWar";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsUserPanel            from "../../user/view/UserPanel";
+import TwnsMpwActionPlanner     from "../model/MpwActionPlanner";
+import TwnsMpwWarMenuPanel      from "./MpwWarMenuPanel";
 
-    export class MpwTopPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsMpwTopPanel {
+    import ChatPanel            = TwnsChatPanel.ChatPanel;
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import UserPanel            = TwnsUserPanel.UserPanel;
+    import MpwWar               = TwnsMpwWar.MpwWar;
+    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
+    import MpwActionPlanner     = TwnsMpwActionPlanner.MpwActionPlanner;
+    import MpwWarMenuPanel      = TwnsMpwWarMenuPanel.MpwWarMenuPanel;
+    import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+
+    export class MpwTopPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MpwTopPanel;
 
         private _groupPlayer        : eui.Group;
-        private _labelPlayer        : GameUi.UiLabel;
-        private _labelFund          : GameUi.UiLabel;
+        private _labelPlayer        : TwnsUiLabel.UiLabel;
+        private _labelFund          : TwnsUiLabel.UiLabel;
         private _groupTimer         : eui.Group;
-        private _labelTimerTitle    : GameUi.UiLabel;
-        private _labelTimer         : GameUi.UiLabel;
+        private _labelTimerTitle    : TwnsUiLabel.UiLabel;
+        private _labelTimer         : TwnsUiLabel.UiLabel;
         private _groupCo            : eui.Group;
-        private _labelCo            : GameUi.UiLabel;
-        private _labelCurrEnergy    : GameUi.UiLabel;
-        private _labelPowerEnergy   : GameUi.UiLabel;
-        private _labelZoneEnergy    : GameUi.UiLabel;
-        private _btnChat            : GameUi.UiButton;
-        private _btnUnitList        : GameUi.UiButton;
-        private _btnFindBuilding    : GameUi.UiButton;
-        private _btnEndTurn         : GameUi.UiButton;
-        private _btnCancel          : GameUi.UiButton;
-        private _btnMenu            : GameUi.UiButton;
+        private _labelCo            : TwnsUiLabel.UiLabel;
+        private _labelCurrEnergy    : TwnsUiLabel.UiLabel;
+        private _labelPowerEnergy   : TwnsUiLabel.UiLabel;
+        private _labelZoneEnergy    : TwnsUiLabel.UiLabel;
+        private _btnChat            : TwnsUiButton.UiButton;
+        private _btnUnitList        : TwnsUiButton.UiButton;
+        private _btnFindBuilding    : TwnsUiButton.UiButton;
+        private _btnEndTurn         : TwnsUiButton.UiButton;
+        private _btnCancel          : TwnsUiButton.UiButton;
+        private _btnMenu            : TwnsUiButton.UiButton;
 
         private _war    : MpwWar;
 
@@ -55,18 +81,18 @@ namespace TinyWars.MultiPlayerWar {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.TimeTick,                       callback: this._onNotifyTimeTick },
-                { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
-                { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
-                { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
-                { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
-                { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
-                { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
-                { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
-                { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.TimeTick,                       callback: this._onNotifyTimeTick },
+                { type: NotifyType.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
+                { type: NotifyType.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
+                { type: NotifyType.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
+                { type: NotifyType.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
+                { type: NotifyType.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
+                { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: NotifyType.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
+                { type: NotifyType.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
+                { type: NotifyType.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
+                { type: NotifyType.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
@@ -142,10 +168,10 @@ namespace TinyWars.MultiPlayerWar {
 
         private _onTouchedGroupPlayer(): void {
             const userId = this._war.getPlayerInTurn().getUserId();
-            (userId) && (User.UserPanel.show({ userId }));
+            (userId) && (UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(): void {
-            BaseWar.BwCoListPanel.show({
+            BwCoListPanel.show({
                 war             : this._war,
                 selectedIndex   : Math.max(this._war.getPlayerIndexInTurn() - 1, 0),
             });
@@ -153,14 +179,14 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _onTouchedBtnChat(): void {
             MpwWarMenuPanel.hide();
-            Chat.ChatPanel.show({});
+            ChatPanel.show({});
         }
         private _onTouchedBtnUnitList(): void {
             const war           = this._war;
             const actionPlanner = war.getField().getActionPlanner();
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
-                BaseWar.BwUnitListPanel.show({ war });
+                BwUnitListPanel.show({ war });
             }
         }
         private _onTouchedBtnFindBuilding(): void {
@@ -170,9 +196,9 @@ namespace TinyWars.MultiPlayerWar {
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
-                const gridIndex = BwHelpers.getIdleBuildingGridIndex(war);
+                const gridIndex = WarCommonHelpers.getIdleBuildingGridIndex(war);
                 if (!gridIndex) {
-                    FloatText.show(Lang.getText(Lang.Type.A0077));
+                    FloatText.show(Lang.getText(LangTextType.A0077));
                 } else {
                     const cursor = field.getCursor();
                     cursor.setGridIndex(gridIndex);
@@ -184,10 +210,10 @@ namespace TinyWars.MultiPlayerWar {
         private _onTouchedBtnEndTurn(): void {
             const war = this._war;
             if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
-                FloatText.show(Lang.getText(Lang.Type.A0034));
+                FloatText.show(Lang.getText(LangTextType.A0034));
             } else {
-                Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0036),
+                CommonConfirmPanel.show({
+                    title   : Lang.getText(LangTextType.B0036),
                     content : this._getHintForEndTurn(),
                     callback: () => (this._war.getActionPlanner() as MpwActionPlanner).setStateRequestingPlayerEndTurn(),
                 });
@@ -201,7 +227,7 @@ namespace TinyWars.MultiPlayerWar {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            BaseWar.BwCoListPanel.hide();
+            BwCoListPanel.hide();
             MpwWarMenuPanel.show();
         }
 
@@ -222,7 +248,7 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTimerTitle.text = Lang.getText(Lang.Type.B0188);
+            this._labelTimerTitle.text = Lang.getText(LangTextType.B0188);
         }
 
         private async _updateLabelPlayer(): Promise<void> {
@@ -266,7 +292,7 @@ namespace TinyWars.MultiPlayerWar {
             if ((war) && (war.getIsRunning())) {
                 const player        = war.getPlayerInTurn();
                 const coId          = player.getCoId();
-                this._labelCo.text  = `${coId == null ? "----" : Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
+                this._labelCo.text  = `${coId == null ? "----" : ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
 
                 const skillType = player.getCoUsingSkillType();
                 if (skillType === Types.CoSkillType.Power) {
@@ -321,7 +347,7 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         private _updateBtnChat(): void {
-            this._btnChat.setRedVisible(Chat.ChatModel.checkHasUnreadMessage());
+            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -340,7 +366,7 @@ namespace TinyWars.MultiPlayerWar {
                         ++idleUnitsCount;
                     }
                 }
-                (idleUnitsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0006, idleUnitsCount)));
+                (idleUnitsCount) && (hints.push(Lang.getFormattedText(LangTextType.F0006, idleUnitsCount)));
             }
 
             {
@@ -359,7 +385,7 @@ namespace TinyWars.MultiPlayerWar {
                 const textArrayForBuildings: string[] = [];
                 for (const [tileType, gridIndexArray] of idleBuildingsDict) {
                     textArrayForBuildings.push(Lang.getFormattedText(
-                        Lang.Type.F0007, gridIndexArray.length,
+                        LangTextType.F0007, gridIndexArray.length,
                         Lang.getTileName(tileType),
                         gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
                     );
@@ -367,8 +393,10 @@ namespace TinyWars.MultiPlayerWar {
                 (textArrayForBuildings.length) && (hints.push(textArrayForBuildings.join(`\n`)));
             }
 
-            hints.push(Lang.getText(Lang.Type.A0024));
+            hints.push(Lang.getText(LangTextType.A0024));
             return hints.join(`\n\n`);
         }
     }
 }
+
+export default TwnsMpwTopPanel;

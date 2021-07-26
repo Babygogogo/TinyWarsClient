@@ -1,23 +1,34 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MultiPlayerWar {
-    import Types                = Utility.Types;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import Logger               = Utility.Logger;
-    import FloatText            = Utility.FloatText;
-    import Lang                 = Utility.Lang;
+import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
+import TwnsBwUnit               from "../../baseWar/model/BwUnit";
+import TwnsBwProduceUnitPanel   from "../../baseWar/view/BwProduceUnitPanel";
+import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
+import FloatText                from "../../tools/helpers/FloatText";
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Logger                   from "../../tools/helpers/Logger";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import UserModel                from "../../user/model/UserModel";
+import TwnsMpwWar               from "./MpwWar";
+
+namespace TwnsMpwActionPlanner {
+    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import UnitState            = Types.UnitActionState;
     import GridIndex            = Types.GridIndex;
     import State                = Types.ActionPlannerState;
     import UnitActionType       = Types.UnitActionType;
     import UnitType             = Types.UnitType;
-    import CommonConfirmPanel   = Common.CommonConfirmPanel;
 
-    export class MpwActionPlanner extends BaseWar.BwActionPlanner {
+    export class MpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
         private _getPlayerIndexLoggedIn(): number | undefined {
             const war = this._getWar();
-            if (!(war instanceof MpwWar)) {
+            if (!(war instanceof TwnsMpwWar.MpwWar)) {
                 Logger.error(`MpwActionPlanner._getPlayerIndexLoggedIn() empty war.`);
                 return undefined;
             }
@@ -45,7 +56,7 @@ namespace TinyWars.MultiPlayerWar {
                 return;
             }
 
-            BaseWar.BwProduceUnitPanel.show({
+            BwProduceUnitPanel.show({
                 gridIndex,
                 war,
             });
@@ -564,13 +575,13 @@ namespace TinyWars.MultiPlayerWar {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                BaseWar.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+                TwnsBwUnitActionsPanel.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
             } else {
-                BaseWar.BwUnitActionsPanel.hide();
+                TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
             }
         }
 
-        protected _checkCanControlUnit(unit: BaseWar.BwUnit): boolean {
+        protected _checkCanControlUnit(unit: TwnsBwUnit.BwUnit): boolean {
             const war           = this._getWar();
             const playerInTurn  = war ? war.getPlayerInTurn() : undefined;
             if (playerInTurn == null) {
@@ -578,7 +589,7 @@ namespace TinyWars.MultiPlayerWar {
                 return false;
             }
 
-            return (playerInTurn.getUserId() === User.UserModel.getSelfUserId())
+            return (playerInTurn.getUserId() === UserModel.getSelfUserId())
                 && (playerInTurn.getPlayerIndex() === unit.getPlayerIndex());
         }
 
@@ -769,7 +780,7 @@ namespace TinyWars.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitBeLoaded(): TwnsBwActionPlanner.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -781,7 +792,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitJoin(): TwnsBwActionPlanner.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -793,7 +804,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitUseCoSuperPower(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -803,14 +814,14 @@ namespace TinyWars.MultiPlayerWar {
                         actionType  : UnitActionType.UseCoSuperPower,
                         callback    : () => {
                             CommonConfirmPanel.show({
-                                content : Lang.getText(Lang.Type.A0058),
+                                content : Lang.getText(LangTextType.A0058),
                                 callback: () => this._setStateRequestingUnitUseCoSuperPower(),
                             });
                         },
                     }];
             }
         }
-        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitUseCoPower(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -820,14 +831,14 @@ namespace TinyWars.MultiPlayerWar {
                         actionType  : UnitActionType.UseCoPower,
                         callback    : () => {
                             CommonConfirmPanel.show({
-                                content : Lang.getText(Lang.Type.A0054),
+                                content : Lang.getText(LangTextType.A0054),
                                 callback: () => this._setStateRequestingUnitUseCoPower(),
                             });
                         },
                     }];
             }
         }
-        protected _getActionUnitLoadCo(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitLoadCo(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -836,7 +847,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitCapture(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitCapture(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -845,7 +856,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitDive(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitDive(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -854,7 +865,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitSurface(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitSurface(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -863,7 +874,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitBuildTile(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitBuildTile(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -872,7 +883,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitSupply(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitSupply(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -890,7 +901,7 @@ namespace TinyWars.MultiPlayerWar {
                 return [];
             }
         }
-        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitProduceUnit(): TwnsBwActionPlanner.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -907,21 +918,21 @@ namespace TinyWars.MultiPlayerWar {
                     if (focusUnit.getCurrentProduceMaterial() < 1) {
                         return [{
                             actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(Lang.Type.B0051)),
+                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0051)),
                             canProduceUnit  : false,
                             produceUnitType,
                         }];
                     } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
                         return [{
                             actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(Lang.Type.B0052)),
+                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0052)),
                             canProduceUnit  : false,
                             produceUnitType,
                         }];
-                    } else if ((this._getWar() as MpwWar).getPlayerLoggedIn().getFund() < focusUnit.getProduceUnitCost()) {
+                    } else if ((this._getWar() as TwnsMpwWar.MpwWar).getPlayerLoggedIn().getFund() < focusUnit.getProduceUnitCost()) {
                         return [{
                             actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(Lang.Type.B0053)),
+                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0053)),
                             canProduceUnit  : false,
                             produceUnitType,
                         }];
@@ -936,7 +947,7 @@ namespace TinyWars.MultiPlayerWar {
                 }
             }
         }
-        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitAction[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): TwnsBwActionPlanner.DataForUnitAction[] {
             const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];
@@ -947,7 +958,7 @@ namespace TinyWars.MultiPlayerWar {
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitDropOnChooseAction()
                             : () => CommonConfirmPanel.show({
-                                content : Lang.getText(Lang.Type.A0055),
+                                content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitDropOnChooseAction(),
                             }),
                     }];
@@ -957,7 +968,7 @@ namespace TinyWars.MultiPlayerWar {
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitWait()
                             : () => CommonConfirmPanel.show({
-                                content : Lang.getText(Lang.Type.A0055),
+                                content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitWait(),
                             }),
                     }];
@@ -966,3 +977,5 @@ namespace TinyWars.MultiPlayerWar {
         }
     }
 }
+
+export default TwnsMpwActionPlanner;

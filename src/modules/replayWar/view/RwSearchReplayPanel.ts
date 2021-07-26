@@ -1,42 +1,52 @@
 
-namespace TinyWars.ReplayWar {
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import Notify           = Utility.Notify;
-    import CommonConstants  = Utility.CommonConstants;
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Helpers          from "../../tools/helpers/Helpers";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
+import RwProxy          from "../model/RwProxy";
 
-    export class RwSearchReplayPanel extends GameUi.UiPanel<void> {
+namespace TwnsRwSearchReplayPanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
+
+    export class RwSearchReplayPanel extends TwnsUiPanel.UiPanel<void> {
         protected _IS_EXCLUSIVE = false;
         protected _LAYER_TYPE   = Types.LayerType.Hud2;
 
         private static _instance: RwSearchReplayPanel;
 
-        private readonly _imgMask                   : GameUi.UiImage;
+        private readonly _imgMask                   : TwnsUiImage.UiImage;
 
         private readonly _group                     : eui.Group;
-        private readonly _btnReset                  : GameUi.UiButton;
-        private readonly _btnSearch                 : GameUi.UiButton;
-        private readonly _labelName                 : GameUi.UiLabel;
-        private readonly _labelDesc                 : GameUi.UiLabel;
+        private readonly _btnReset                  : TwnsUiButton.UiButton;
+        private readonly _btnSearch                 : TwnsUiButton.UiButton;
+        private readonly _labelName                 : TwnsUiLabel.UiLabel;
+        private readonly _labelDesc                 : TwnsUiLabel.UiLabel;
 
-        private readonly _labelReplayIdTitle        : GameUi.UiLabel;
-        private readonly _inputReplayId             : GameUi.UiTextInput;
+        private readonly _labelReplayIdTitle        : TwnsUiLabel.UiLabel;
+        private readonly _inputReplayId             : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelMapNameTitle         : GameUi.UiLabel;
-        private readonly _inputMapName              : GameUi.UiTextInput;
+        private readonly _labelMapNameTitle         : TwnsUiLabel.UiLabel;
+        private readonly _inputMapName              : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelUserNicknameTitle    : GameUi.UiLabel;
-        private readonly _inputUserNickname         : GameUi.UiTextInput;
+        private readonly _labelUserNicknameTitle    : TwnsUiLabel.UiLabel;
+        private readonly _inputUserNickname         : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelCoNameTitle          : GameUi.UiLabel;
-        private readonly _inputCoName               : GameUi.UiTextInput;
+        private readonly _labelCoNameTitle          : TwnsUiLabel.UiLabel;
+        private readonly _inputCoName               : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelMinGlobalRatingTitle : GameUi.UiLabel;
-        private readonly _inputMinGlobalRating      : GameUi.UiTextInput;
+        private readonly _labelMinGlobalRatingTitle : TwnsUiLabel.UiLabel;
+        private readonly _inputMinGlobalRating      : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelMinMyRatingTitle     : GameUi.UiLabel;
-        private readonly _inputMinMyRating          : GameUi.UiTextInput;
+        private readonly _labelMinMyRatingTitle     : TwnsUiLabel.UiLabel;
+        private readonly _inputMinMyRating          : TwnsUiTextInput.UiTextInput;
 
         public static show(): void {
             if (!RwSearchReplayPanel._instance) {
@@ -66,7 +76,7 @@ namespace TinyWars.ReplayWar {
                 { ui: this._inputMinMyRating,       callback: this._onFocusOutInputMinMyRating,     eventType: egret.Event.FOCUS_OUT },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
             this._showOpenAnimation();
@@ -115,16 +125,16 @@ namespace TinyWars.ReplayWar {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelName.text                    = Lang.getText(Lang.Type.B0447);
-            this._labelReplayIdTitle.text           = Lang.getText(Lang.Type.B0235);
-            this._labelMapNameTitle.text            = Lang.getText(Lang.Type.B0225);
-            this._labelUserNicknameTitle.text       = Lang.getText(Lang.Type.B0393);
-            this._labelCoNameTitle.text             = Lang.getText(Lang.Type.B0394);
-            this._labelMinMyRatingTitle.text        = Lang.getText(Lang.Type.B0363);
-            this._labelMinGlobalRatingTitle.text    = Lang.getText(Lang.Type.B0364);
-            this._labelDesc.text                    = Lang.getText(Lang.Type.A0063);
-            this._btnReset.label                    = Lang.getText(Lang.Type.B0567);
-            this._btnSearch.label                   = Lang.getText(Lang.Type.B0228);
+            this._labelName.text                    = Lang.getText(LangTextType.B0447);
+            this._labelReplayIdTitle.text           = Lang.getText(LangTextType.B0235);
+            this._labelMapNameTitle.text            = Lang.getText(LangTextType.B0225);
+            this._labelUserNicknameTitle.text       = Lang.getText(LangTextType.B0393);
+            this._labelCoNameTitle.text             = Lang.getText(LangTextType.B0394);
+            this._labelMinMyRatingTitle.text        = Lang.getText(LangTextType.B0363);
+            this._labelMinGlobalRatingTitle.text    = Lang.getText(LangTextType.B0364);
+            this._labelDesc.text                    = Lang.getText(LangTextType.A0063);
+            this._btnReset.label                    = Lang.getText(LangTextType.B0567);
+            this._btnSearch.label                   = Lang.getText(LangTextType.B0228);
         }
 
         private _showOpenAnimation(): void {
@@ -161,3 +171,5 @@ namespace TinyWars.ReplayWar {
         return isNaN(num) ? null : num;
     }
 }
+
+export default TwnsRwSearchReplayPanel;

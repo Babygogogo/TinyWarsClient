@@ -4,7 +4,7 @@
             "type": "Egret",
             "request": "launch",
             "name": "Egret WebpackDevServer Debugger",
-            "url": "http://localhost:3000",
+            "url": "http://localhost:2000",
             "webRoot": "${workspaceFolder}",
             "preLaunchTask": "egret: build"
         }

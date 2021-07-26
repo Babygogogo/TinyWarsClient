@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="760" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+<e:Skin width="760" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group x="10" y="10">
-        <GameUi:UiLabel id="_labelMapNameTitle" text="地图名称：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
+        <TwnsUiLabel:UiLabel id="_labelMapNameTitle" text="地图名称：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
                         x="0" />
-        <GameUi:UiLabel id="_labelMapName" text="地图名称" textColor="0xFFFFFF" y="0" size="20" x="120" />
+        <TwnsUiLabel:UiLabel id="_labelMapName" text="地图名称" textColor="0xFFFFFF" y="0" size="20" x="120" />
         <e:layout>
             <e:HorizontalLayout/>
         </e:layout>
     </e:Group>
     <e:Group x="540" y="10">
-        <GameUi:UiLabel id="_labelPlayersCountTitle" text="玩家数量：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
+        <TwnsUiLabel:UiLabel id="_labelPlayersCountTitle" text="玩家数量：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
                         x="0" />
-        <GameUi:UiLabel id="_labelPlayersCount" text="2" textColor="0xFFFFFF" y="0" size="20" x="120" />
+        <TwnsUiLabel:UiLabel id="_labelPlayersCount" text="2" textColor="0xFFFFFF" y="0" size="20" x="120" />
         <e:layout>
             <e:HorizontalLayout/>
         </e:layout>
     </e:Group>
-    <GameUi:UiLabel id="_labelPlayerList" text="玩家列表" textColor="0xFFFFFF" y="40" size="20" horizontalCenter="0"
+    <TwnsUiLabel:UiLabel id="_labelPlayerList" text="玩家列表" textColor="0xFFFFFF" y="40" size="20" horizontalCenter="0"
                     locked="true" />
-    <GameUi:UiScrollList id="_listPlayer" y="70" horizontalCenter="0">
+    <TwnsUiScrollList:UiScrollList id="_listPlayer" y="70" horizontalCenter="0">
         <e:List>
             <e:itemRendererSkinName>
                 <e:Skin width="170" currentState="up" states="down,up">
                     <e:Group left="0" right="0" top="0" bottom="0">
-                        <GameUi:UiScrollList id="_listInfo" y="0" horizontalCenter="0">
+                        <TwnsUiScrollList:UiScrollList id="_listInfo" y="0" horizontalCenter="0">
                             <e:List>
                                 <e:itemRendererSkinName>
                                     <e:Skin width="170">
                                         <e:Group left="0" right="0" top="0" bottom="0">
-                                            <GameUi:UiButton id="_btnTitle" label="Buildings" skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0"
-                                                             width="100"></GameUi:UiButton>
-                                            <GameUi:UiLabel id="_labelValue" text="(Empty)" size="14"
+                                            <TwnsUiButton:UiButton id="_btnTitle" label="Buildings" skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0"
+                                                             width="100"></TwnsUiButton:UiButton>
+                                            <TwnsUiLabel:UiLabel id="_labelValue" text="(Empty)" size="14"
                                                             textColor="0xFFFFFF" x="120" verticalCenter="0" width="60" />
                                             <e:layout>
                                                 <e:HorizontalLayout verticalAlign="middle" gap="0" />
@@ -43,7 +43,7 @@
                                     <e:VerticalLayout gap="0" />
                                 </e:layout>
                             </e:List>
-                        </GameUi:UiScrollList>
+                        </TwnsUiScrollList:UiScrollList>
                     </e:Group>
                 </e:Skin>
             </e:itemRendererSkinName>
@@ -51,5 +51,5 @@
                 <e:HorizontalLayout/>
             </e:layout>
         </e:List>
-    </GameUi:UiScrollList>
+    </TwnsUiScrollList:UiScrollList>
 </e:Skin>

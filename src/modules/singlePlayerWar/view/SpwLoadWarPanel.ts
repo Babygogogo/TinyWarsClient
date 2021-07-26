@@ -1,22 +1,41 @@
 
-namespace TinyWars.SinglePlayerWar {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import BwHelpers    = BaseWar.BwHelpers;
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
+import SpmModel                 from "../../singlePlayerMode/model/SpmModel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import FlowManager              from "../../tools/helpers/FlowManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import WarMapModel              from "../../warMap/model/WarMapModel";
+import SpwModel                 from "../model/SpwModel";
 
-    export class SpwLoadWarPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+namespace TwnsSpwLoadWarPanel {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+
+    export class SpwLoadWarPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: SpwLoadWarPanel;
 
         private _group          : eui.Group;
-        private _labelPanelTitle: GameUi.UiLabel;
-        private _srlSaveSlot    : GameUi.UiScrollList<DataForSlotRenderer>;
+        private _labelPanelTitle: TwnsUiLabel.UiLabel;
+        private _srlSaveSlot    : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
         private _listSaveSlot   : eui.List;
-        private _btnHelp        : GameUi.UiButton;
-        private _btnCancel      : GameUi.UiButton;
+        private _btnHelp        : TwnsUiButton.UiButton;
+        private _btnCancel      : TwnsUiButton.UiButton;
 
         private _dataForList: DataForSlotRenderer[];
 
@@ -47,7 +66,7 @@ namespace TinyWars.SinglePlayerWar {
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._srlSaveSlot.setItemRenderer(SlotRenderer);
 
@@ -65,9 +84,9 @@ namespace TinyWars.SinglePlayerWar {
         }
 
         private _onTouchedBtnHelp(e: egret.TouchEvent): void {
-            Common.CommonHelpPanel.show({
-                title   : Lang.getText(Lang.Type.B0325),
-                content : Lang.getText(Lang.Type.R0006),
+            CommonHelpPanel.show({
+                title   : Lang.getText(LangTextType.B0325),
+                content : Lang.getText(LangTextType.R0006),
             });
         }
 
@@ -87,15 +106,15 @@ namespace TinyWars.SinglePlayerWar {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelPanelTitle.text  = Lang.getText(Lang.Type.B0259);
-            this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
-            this._btnHelp.label         = Lang.getText(Lang.Type.B0143);
+            this._labelPanelTitle.text  = Lang.getText(LangTextType.B0259);
+            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+            this._btnHelp.label         = Lang.getText(LangTextType.B0143);
         }
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotDict  = SinglePlayerMode.SpmModel.SaveSlot.getSlotDict();
-            for (let slotIndex = 0; slotIndex < Utility.CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+            const slotDict  = SpmModel.getSlotDict();
+            for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
                     slotInfo    : slotDict.get(slotIndex),
@@ -109,15 +128,14 @@ namespace TinyWars.SinglePlayerWar {
     type DataForSlotRenderer = {
         slotIndex   : number;
         slotInfo    : Types.SpmWarSaveSlotData | null;
-    }
-
-    class SlotRenderer extends GameUi.UiListItemRenderer<DataForSlotRenderer> {
+    };
+    class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
         private _group          : eui.Group;
-        private _imgBg          : GameUi.UiImage;
-        private _labelSlotIndex : GameUi.UiLabel;
-        private _labelType      : GameUi.UiLabel;
-        private _labelMapName   : GameUi.UiLabel;
-        private _labelChoose    : GameUi.UiLabel;
+        private _imgBg          : TwnsUiImage.UiImage;
+        private _labelSlotIndex : TwnsUiLabel.UiLabel;
+        private _labelType      : TwnsUiLabel.UiLabel;
+        private _labelMapName   : TwnsUiLabel.UiLabel;
+        private _labelChoose    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -125,7 +143,7 @@ namespace TinyWars.SinglePlayerWar {
             ]);
 
             this._imgBg.touchEnabled    = true;
-            this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
+            this._labelChoose.text      = Lang.getText(LangTextType.B0258);
         }
 
         protected _onDataChanged(): void {
@@ -136,10 +154,10 @@ namespace TinyWars.SinglePlayerWar {
             const data      = this.data;
             const slotInfo  = data.slotInfo;
             if (slotInfo) {
-                Common.CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0072),
+                CommonConfirmPanel.show({
+                    content : Lang.getText(LangTextType.A0072),
                     callback: () => {
-                        Utility.FlowManager.gotoSinglePlayerWar({
+                        FlowManager.gotoSinglePlayerWar({
                             slotIndex       : slotInfo.slotIndex,
                             warData         : slotInfo.warData,
                             slotExtraData   : slotInfo.extraData,
@@ -164,18 +182,20 @@ namespace TinyWars.SinglePlayerWar {
                 labelMapName.text   = `----`;
             } else {
                 const warData   = slotInfo.warData;
-                labelType.text  = Lang.getWarTypeName(BwHelpers.getWarType(warData));
+                labelType.text  = Lang.getWarTypeName(WarCommonHelpers.getWarType(warData));
 
                 const slotComment = slotInfo.extraData.slotComment;
                 if (slotComment) {
                     labelMapName.text = slotComment;
                 } else {
-                    const mapId         = BwHelpers.getMapId(warData);
+                    const mapId         = WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
-                        ? `(${Lang.getText(Lang.Type.B0321)})`
-                        : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId);
+                        ? `(${Lang.getText(LangTextType.B0321)})`
+                        : await WarMapModel.getMapNameInCurrentLanguage(mapId);
                 }
             }
         }
     }
 }
+
+export default TwnsSpwLoadWarPanel;

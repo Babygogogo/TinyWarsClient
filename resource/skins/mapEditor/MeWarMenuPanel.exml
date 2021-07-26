@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" top="40" bottom="0" width="160" x="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelMenuTitle" text="菜单" y="10" bold="true" size="20" textColor="0xffffff"
+        <TwnsUiLabel:UiLabel id="_labelMenuTitle" text="菜单" y="10" bold="true" size="20" textColor="0xffffff"
                         horizontalCenter="0" />
-        <GameUi:UiLabel id="_labelNoCommand" text="(暂无可用选项)" bold="true" size="20" textColor="0xFFFFFF"
+        <TwnsUiLabel:UiLabel id="_labelNoCommand" text="(暂无可用选项)" bold="true" size="20" textColor="0xFFFFFF"
                         horizontalCenter="0" verticalCenter="0" />
-        <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="35" top="35">
+        <TwnsUiScrollList:UiScrollList id="_listCommand" left="0" right="0" bottom="35" top="35">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="160" height="50" currentState="up" states="down,up">
                         <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                            <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                            <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
                                             anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
                                             visible.up="false" />
-                            <GameUi:UiLabel id="_labelName" text="选项名六个字" size="22" textColor="0xffffff"
+                            <TwnsUiLabel:UiLabel id="_labelName" text="选项名六个字" size="22" textColor="0xffffff"
                                             horizontalCenter="0" verticalCenter="0" maxTextWidth="150" />
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>
             </e:List>
-        </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" bottom="0" left="0"
-                         right="0"></GameUi:UiButton>
+        </TwnsUiScrollList:UiScrollList>
+        <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" bottom="0" left="0"
+                         right="0"></TwnsUiButton:UiButton>
     </e:Group>
     <e:Group top="40" bottom="0" right="0" left="160">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <e:Scroller left="0" right="0" top="10" bottom="10">
             <e:Group left="0" right="0" y="10">
-                <GameUi:UiLabel id="_labelMapInfoTitle" text="地图信息" y="0" bold="true" size="20" textColor="0xFFFFFF"
+                <TwnsUiLabel:UiLabel id="_labelMapInfoTitle" text="地图信息" y="0" bold="true" size="20" textColor="0xFFFFFF"
                                 horizontalCenter="0" />
                 <e:Group y="25" horizontalCenter="0">
                     <e:Group id="_groupMapName" height="28">
-                        <GameUi:UiButton id="_btnModifyMapName" label="修改" x="330" width="160" top="0" bottom="0"
+                        <TwnsUiButton:UiButton id="_btnModifyMapName" label="修改" x="330" width="160" top="0" bottom="0"
                                          height="28" skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiLabel id="_labelMapName" text="地图名称" size="16" textColor="0xFFFFFF" x="180"
+                        <TwnsUiLabel:UiLabel id="_labelMapName" text="地图名称" size="16" textColor="0xFFFFFF" x="180"
                                         verticalCenter="0" width="630" />
                         <e:layout>
                             <e:HorizontalLayout verticalAlign="middle" gap="10" />
                         </e:layout>
                     </e:Group>
                     <e:Group id="_groupMapDesigner" height="28">
-                        <GameUi:UiButton id="_btnModifyMapDesigner" label="修改" x="330" width="160" top="0" bottom="0"
+                        <TwnsUiButton:UiButton id="_btnModifyMapDesigner" label="修改" x="330" width="160" top="0" bottom="0"
                                          height="28" skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiLabel id="_labelMapDesigner" text="作者名称" size="16" textColor="0xFFFFFF" x="180"
+                        <TwnsUiLabel:UiLabel id="_labelMapDesigner" text="作者名称" size="16" textColor="0xFFFFFF" x="180"
                                         verticalCenter="0" />
                         <e:layout>
                             <e:HorizontalLayout verticalAlign="middle" gap="10" />
                         </e:layout>
                     </e:Group>
                     <e:Group id="_groupMapSize" height="28">
-                        <GameUi:UiButton id="_btnModifyMapSize" label="修改" x="340" width="160" top="0" bottom="0"
+                        <TwnsUiButton:UiButton id="_btnModifyMapSize" label="修改" x="340" width="160" top="0" bottom="0"
                                          height="28" skinName="Skins.Component.Button.ButtonSelfAdaption001" y="10" />
-                        <GameUi:UiLabel id="_labelMapSize" text="地图尺寸" size="16" textColor="0xFFFFFF" x="180"
+                        <TwnsUiLabel:UiLabel id="_labelMapSize" text="地图尺寸" size="16" textColor="0xFFFFFF" x="180"
                                         verticalCenter="0" />
                         <e:layout>
                             <e:HorizontalLayout verticalAlign="middle" gap="10" />
@@ -65,14 +65,14 @@
                         <e:VerticalLayout/>
                     </e:layout>
                 </e:Group>
-                <GameUi:UiScrollList id="_listTile" width="780">
+                <TwnsUiScrollList:UiScrollList id="_listTile" width="780">
                     <e:List>
                         <e:itemRendererSkinName>
                             <e:Skin width="60" height="32">
                                 <e:Group id="_group" left="0" right="0" top="0" bottom="0">
                                     <e:Group id="_conTileView" touchChildren="false" touchEnabled="false" left="0"
                                              bottom="0" scaleX="0.4" scaleY="0.4" width="0" height="0" />
-                                    <GameUi:UiLabel id="_labelNum" text="20" size="16" textColor="0xffffff"
+                                    <TwnsUiLabel:UiLabel id="_labelNum" text="20" size="16" textColor="0xffffff"
                                                     verticalCenter="0" x="32" />
                                 </e:Group>
                             </e:Skin>
@@ -82,15 +82,15 @@
                                           horizontalAlign="center" />
                         </e:layout>
                     </e:List>
-                </GameUi:UiScrollList>
-                <GameUi:UiScrollList id="_listUnit" width="780">
+                </TwnsUiScrollList:UiScrollList>
+                <TwnsUiScrollList:UiScrollList id="_listUnit" width="780">
                     <e:List>
                         <e:itemRendererSkinName>
                             <e:Skin width="60" height="32">
                                 <e:Group id="_group" width="60" height="32" x="0" y="0">
                                     <e:Group id="_conUnitView" touchChildren="false" touchEnabled="false" left="0"
                                              top="2" scaleX="0.4" scaleY="0.4" />
-                                    <GameUi:UiLabel id="_labelNum" text="20" size="16" textColor="0xffffff"
+                                    <TwnsUiLabel:UiLabel id="_labelNum" text="20" size="16" textColor="0xffffff"
                                                     verticalCenter="0" x="32" />
                                 </e:Group>
                             </e:Skin>
@@ -100,7 +100,7 @@
                                           horizontalAlign="center" />
                         </e:layout>
                     </e:List>
-                </GameUi:UiScrollList>
+                </TwnsUiScrollList:UiScrollList>
                 <e:layout>
                     <e:VerticalLayout horizontalAlign="center" paddingTop="4" />
                 </e:layout>

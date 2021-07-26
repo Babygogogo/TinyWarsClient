@@ -1,31 +1,42 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.User {
-    import FloatText    = Utility.FloatText;
-    import Helpers      = Utility.Helpers;
-    import Lang         = Utility.Lang;
-    import NotifyType   = Utility.Notify.Type;
+import FloatText        from "../../tools/helpers/FloatText";
+import Helpers          from "../../tools/helpers/Helpers";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
+import UserModel        from "../../user/model/UserModel";
+import UserProxy        from "../../user/model/UserProxy";
 
-    export class UserChangeNicknamePanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+namespace TwnsUserChangeNicknamePanel {
+    import NotifyType   = TwnsNotifyType.NotifyType;
+    import LangTextType = TwnsLangTextType.LangTextType;
+
+    export class UserChangeNicknamePanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         // @ts-ignore
-        private readonly _imgMask       : GameUi.UiImage;
+        private readonly _imgMask       : TwnsUiImage.UiImage;
         // @ts-ignore
         private readonly _group         : eui.Group;
         // @ts-ignore
-        private readonly _labelTitle    : GameUi.UiLabel;
+        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelNickname : GameUi.UiLabel;
+        private readonly _labelNickname : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelNote     : GameUi.UiLabel;
+        private readonly _labelNote     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _inputNickname : GameUi.UiTextInput;
+        private readonly _inputNickname : TwnsUiTextInput.UiTextInput;
         // @ts-ignore
-        private readonly _btnConfirm    : GameUi.UiButton;
+        private readonly _btnConfirm    : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnClose      : GameUi.UiButton;
+        private readonly _btnClose      : TwnsUiButton.UiButton;
 
         private _isRequesting   = false;
 
@@ -74,11 +85,11 @@ namespace TinyWars.User {
 
         private _onTouchedBtnConfirm(): void {
             if (this._isRequesting) {
-                FloatText.show(Lang.getText(Lang.Type.A0046));
+                FloatText.show(Lang.getText(LangTextType.A0046));
             } else {
                 const nickname = this._inputNickname.text;
-                if (!Utility.Helpers.checkIsNicknameValid(nickname)) {
-                    FloatText.show(Lang.getText(Lang.Type.A0002));
+                if (!Helpers.checkIsNicknameValid(nickname)) {
+                    FloatText.show(Lang.getText(LangTextType.A0002));
                 } else {
                     this._isRequesting = true;
                     UserProxy.reqSetNickname(nickname);
@@ -87,7 +98,7 @@ namespace TinyWars.User {
         }
 
         private _onMsgUserSetNickname(): void {
-            FloatText.show(Lang.getText(Lang.Type.A0047));
+            FloatText.show(Lang.getText(LangTextType.A0047));
             this.close();
         }
         private _onMsgUserSetNicknameFailed(): void {
@@ -102,11 +113,11 @@ namespace TinyWars.User {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getText(Lang.Type.B0149);
-            this._labelNickname.text    = Lang.getText(Lang.Type.B0242);
-            this._labelNote.text        = Lang.getText(Lang.Type.A0066);
-            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
-            this._btnClose.label        = Lang.getText(Lang.Type.B0154);
+            this._labelTitle.text       = Lang.getText(LangTextType.B0149);
+            this._labelNickname.text    = Lang.getText(LangTextType.B0242);
+            this._labelNote.text        = Lang.getText(LangTextType.A0066);
+            this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+            this._btnClose.label        = Lang.getText(LangTextType.B0154);
         }
 
         private _showOpenAnimation(): void {
@@ -138,3 +149,5 @@ namespace TinyWars.User {
         }
     }
 }
+
+export default TwnsUserChangeNicknamePanel;

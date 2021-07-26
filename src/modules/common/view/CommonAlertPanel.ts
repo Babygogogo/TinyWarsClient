@@ -1,30 +1,38 @@
 
-namespace TinyWars.Common {
-    import Lang     = Utility.Lang;
-    import Notify   = Utility.Notify;
-    import Types    = Utility.Types;
-    import Helpers  = Utility.Helpers;
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Types                from "../../tools/helpers/Types";
+import Helpers              from "../../tools/helpers/Helpers";
+import Lang                 from "../../tools/lang/Lang";
 
-    type OpenDataForCommonAlertPanel = {
+namespace TwnsCommonAlertPanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+
+    type OpenData = {
         title       : string;
         content     : string;
         callback?   : () => any;
-    }
-
-    export class CommonAlertPanel extends GameUi.UiPanel<OpenDataForCommonAlertPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
+    };
+    // eslint-disable-next-line no-shadow
+    export class CommonAlertPanel extends TwnsUiPanel.UiPanel<OpenData> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CommonAlertPanel;
 
-        private readonly _imgMask       : GameUi.UiImage;
+        private readonly _imgMask       : TwnsUiImage.UiImage;
         private readonly _group         : eui.Group;
-        private readonly _labelTitle    : GameUi.UiLabel;
+        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
         private readonly _scrContent    : eui.Scroller;
-        private readonly _labelContent  : GameUi.UiLabel;
-        private readonly _btnConfirm    : GameUi.UiButton;
+        private readonly _labelContent  : TwnsUiLabel.UiLabel;
+        private readonly _btnConfirm    : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForCommonAlertPanel): void {
+        public static show(openData: OpenData): void {
             if (!CommonAlertPanel._instance) {
                 CommonAlertPanel._instance = new CommonAlertPanel();
             }
@@ -49,7 +57,7 @@ namespace TinyWars.Common {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnClose },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
 
             this._showOpenAnimation();
@@ -78,7 +86,7 @@ namespace TinyWars.Common {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnConfirm.label = Lang.getText(Lang.Type.B0026);
+            this._btnConfirm.label = Lang.getText(LangTextType.B0026);
         }
 
         private _showOpenAnimation(): void {
@@ -111,3 +119,5 @@ namespace TinyWars.Common {
         }
     }
 }
+
+export default TwnsCommonAlertPanel;

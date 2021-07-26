@@ -1,14 +1,17 @@
 
-namespace TinyWars.MultiRankWar {
-    import Logger           = Utility.Logger;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Types            = Utility.Types;
-    import ClientErrorCode  = Utility.ClientErrorCode;
+import TwnsMpwWar           from "../../multiPlayerWar/model/MpwWar";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+
+namespace TwnsMrwWar {
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForMrw  = ProtoTypes.WarSettings.ISettingsForMrw;
-    import CommonConstants  = Utility.CommonConstants;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import MpwWar           = TwnsMpwWar.MpwWar;
 
-    export class MrwWar extends MultiPlayerWar.MpwWar {
+    export class MrwWar extends MpwWar {
         private _settingsForMrw?: ISettingsForMrw;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
@@ -63,3 +66,5 @@ namespace TinyWars.MultiRankWar {
         }
     }
 }
+
+export default TwnsMrwWar;

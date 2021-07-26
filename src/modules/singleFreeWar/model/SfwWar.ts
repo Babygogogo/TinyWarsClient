@@ -1,14 +1,19 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.SingleFreeWar {
-    import Types            = Utility.Types;
-    import ClientErrorCode  = Utility.ClientErrorCode;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Logger           = Utility.Logger;
+import TwnsSpwWar           from "../../singlePlayerWar/model/SpwWar";
+import TwnsSpwWarMenuPanel  from "../../singlePlayerWar/view/SpwWarMenuPanel";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+
+namespace TwnsSfwWar {
+    import SpwWar           = TwnsSpwWar.SpwWar;
+    import SpwWarMenuPanel  = TwnsSpwWarMenuPanel.SpwWarMenuPanel;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForSfw  = ProtoTypes.WarSettings.ISettingsForSfw;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
-    export class SfwWar extends SinglePlayerWar.SpwWar {
+    export class SfwWar extends SpwWar {
         private _settingsForSfw : ISettingsForSfw;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
@@ -113,7 +118,7 @@ namespace TinyWars.SingleFreeWar {
             return false;
         }
         public getIsWarMenuPanelOpening(): boolean {
-            return SinglePlayerWar.SpwWarMenuPanel.getIsOpening();
+            return SpwWarMenuPanel.getIsOpening();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,3 +150,5 @@ namespace TinyWars.SingleFreeWar {
         }
     }
 }
+
+export default TwnsSfwWar;

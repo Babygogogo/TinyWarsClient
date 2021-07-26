@@ -1,17 +1,48 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.BaseWar {
-    import Logger           = Utility.Logger;
-    import Types            = Utility.Types;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
-    import TimeModel        = Time.TimeModel;
-    import ClientErrorCode  = Utility.ClientErrorCode;
-    import WarAction        = ProtoTypes.WarAction;
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Logger                       from "../../tools/helpers/Logger";
+import Timer                        from "../../tools/helpers/Timer";
+import Types                        from "../../tools/helpers/Types";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import WarEventHelper               from "../../warEvent/model/WarEventHelper";
+import TwnsBwWarView                from "../view/BwWarView";
+import TwnsBwActionPlanner          from "./BwActionPlanner";
+import TwnsBwCommonSettingManager   from "./BwCommonSettingManager";
+import TwnsBwCursor                 from "./BwCursor";
+import TwnsBwDrawVoteManager        from "./BwDrawVoteManager";
+import TwnsBwExecutedActionManager  from "./BwExecutedActionManager";
+import TwnsBwField                  from "./BwField";
+import TwnsBwFogMap                 from "./BwFogMap";
+import TwnsBwGridVisualEffect       from "./BwGridVisualEffect";
+import TwnsBwPlayer                 from "./BwPlayer";
+import TwnsBwPlayerManager          from "./BwPlayerManager";
+import TwnsBwRandomNumberManager    from "./BwRandomNumberManager";
+import TwnsBwTileMap                from "./BwTileMap";
+import TwnsBwTurnManager            from "./BwTurnManager";
+import TwnsBwUnitMap                from "./BwUnitMap";
+import TwnsBwWarEventManager        from "./BwWarEventManager";
+
+namespace TwnsBwWar {
+    import WarAction                = ProtoTypes.WarAction;
+    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import BwUnitMap                = TwnsBwUnitMap.BwUnitMap;
+    import BwCursor                 = TwnsBwCursor.BwCursor;
+    import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
+    import BwDrawVoteManager        = TwnsBwDrawVoteManager.BwDrawVoteManager;
+    import BwExecutedActionManager  = TwnsBwExecutedActionManager.BwExecutedActionManager;
+    import BwWarView                = TwnsBwWarView.BwWarView;
+    import BwField                  = TwnsBwField.BwField;
+    import BwFogMap                 = TwnsBwFogMap.BwFogMap;
+    import BwGridVisualEffect       = TwnsBwGridVisualEffect.BwGridVisualEffect;
+    import BwPlayerManager          = TwnsBwPlayerManager.BwPlayerManager;
+    import BwRandomNumberManager    = TwnsBwRandomNumberManager.BwRandomNumberManager;
+    import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
 
     export abstract class BwWar {
-        private readonly _turnManager           = new BwTurnManager();
+        private readonly _turnManager           = new TwnsBwTurnManager.BwTurnManager();
         private readonly _executedActionManager = new BwExecutedActionManager();
         private readonly _randomNumberManager   = new BwRandomNumberManager();
         private readonly _drawVoteManager       = new BwDrawVoteManager();
@@ -32,7 +63,7 @@ namespace TinyWars.BaseWar {
         public abstract getPlayerManager(): BwPlayerManager;
         public abstract getField(): BwField;
         public abstract getCommonSettingManager(): BwCommonSettingManager;
-        public abstract getWarEventManager(): BaseWar.BwWarEventManager;
+        public abstract getWarEventManager(): BwWarEventManager;
         public abstract getSettingsBootTimerParams(): number[] | null | undefined;
         public abstract getIsRunTurnPhaseWithExtraData(): boolean;
         public abstract updateTilesAndUnitsOnVisibilityChanged(): void;
@@ -83,8 +114,8 @@ namespace TinyWars.BaseWar {
             const dataForWarEventManager    = data.warEventManager;
             const commonSettingManagerError = await this.getCommonSettingManager().init({
                 settings                : data.settingsForCommon,
-                allWarEventIdArray      : WarEvent.WarEventHelper.getAllWarEventIdArray(dataForWarEventManager ? dataForWarEventManager.warEventFullData : undefined),
-                playersCountUnneutral   : BwHelpers.getPlayersCountUnneutral(data.playerManager),
+                allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager ? dataForWarEventManager.warEventFullData : undefined),
+                playersCountUnneutral   : WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
             });
             if (commonSettingManagerError) {
                 return commonSettingManagerError;
@@ -356,7 +387,7 @@ namespace TinyWars.BaseWar {
                 && (player.getUserId() != null)
                 && (player.getAliveState() === Types.PlayerAliveState.Alive)
                 && (!player.checkIsNeutral())
-                && (TimeModel.getServerTimestamp() > enterTurnTime + restTimeToBoot);
+                && (Timer.getServerTimestamp() > enterTurnTime + restTimeToBoot);
         }
 
         private _setWarId(warId: number | null | undefined): void {
@@ -380,17 +411,21 @@ namespace TinyWars.BaseWar {
             return settingsForCommon.warRule;
         }
 
-        public getPlayer(playerIndex: number): BwPlayer | undefined {
+        public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer | undefined {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
-        public getPlayerInTurn(): BwPlayer | undefined {
+        public getPlayerInTurn(): TwnsBwPlayer.BwPlayer | undefined {
             return this.getPlayerManager().getPlayerInTurn();
         }
         public getPlayerIndexInTurn(): number | undefined {
             return this.getTurnManager().getPlayerIndexInTurn();
         }
+        public checkIsHumanInTurn(): boolean {
+            const player = this.getPlayerInTurn();
+            return (player != null) && (player.getUserId() != null);
+        }
 
-        public getTurnManager(): BwTurnManager {
+        public getTurnManager(): TwnsBwTurnManager.BwTurnManager {
             return this._turnManager;
         }
         public getFogMap(): BwFogMap {
@@ -399,10 +434,10 @@ namespace TinyWars.BaseWar {
         public getUnitMap(): BwUnitMap {
             return this.getField().getUnitMap();
         }
-        public getTileMap(): BwTileMap {
+        public getTileMap(): TwnsBwTileMap.BwTileMap {
             return this.getField().getTileMap();
         }
-        public getActionPlanner(): BwActionPlanner {
+        public getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
             return this.getField().getActionPlanner();
         }
         public getGridVisionEffect(): BwGridVisualEffect {
@@ -434,3 +469,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwWar;

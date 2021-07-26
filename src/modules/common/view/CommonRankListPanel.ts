@@ -1,49 +1,63 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.Common {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
-    import CommonConstants  = Utility.CommonConstants;
+import CommonModel              from "../../common/model/CommonModel";
+import CommonProxy              from "../../common/model/CommonProxy";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Logger                   from "../../tools/helpers/Logger";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import UserModel                from "../../user/model/UserModel";
+import TwnsUserPanel            from "../../user/view/UserPanel";
 
-    export class CommonRankListPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsCommonRankListPanel {
+    import UserPanel    = TwnsUserPanel.UserPanel;
+    import LangTextType = TwnsLangTextType.LangTextType;
+    import NotifyType   = TwnsNotifyType.NotifyType;
+
+    export class CommonRankListPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: CommonRankListPanel;
 
         // @ts-ignore
-        private readonly _imgMask           : GameUi.UiImage;
+        private readonly _imgMask           : TwnsUiImage.UiImage;
         // @ts-ignore
         private readonly _group             : eui.Group;
         // @ts-ignore
-        private readonly _labelTitle        : GameUi.UiLabel;
+        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _btnClose          : GameUi.UiButton;
+        private readonly _btnClose          : TwnsUiButton.UiButton;
 
         // @ts-ignore
-        private readonly _labelStdTitle     : GameUi.UiLabel;
+        private readonly _labelStdTitle     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelStdNoData    : GameUi.UiLabel;
+        private readonly _labelStdNoData    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelStdNickname  : GameUi.UiLabel;
+        private readonly _labelStdNickname  : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelStdScore     : GameUi.UiLabel;
+        private readonly _labelStdScore     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _listStd           : GameUi.UiScrollList<DataForUserRenderer>;
+        private readonly _listStd           : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
 
         // @ts-ignore
-        private readonly _labelFogTitle     : GameUi.UiLabel;
+        private readonly _labelFogTitle     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelFogNoData    : GameUi.UiLabel;
+        private readonly _labelFogNoData    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelFogNickname  : GameUi.UiLabel;
+        private readonly _labelFogNickname  : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelFogScore     : GameUi.UiLabel;
+        private readonly _labelFogScore     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _listFog           : GameUi.UiScrollList<DataForUserRenderer>;
+        private readonly _listFog           : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
 
         public static show(): void {
             if (!CommonRankListPanel._instance) {
@@ -67,8 +81,8 @@ namespace TinyWars.Common {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgCommonGetRankList,   callback: this._onMsgCommonGetRankList },
+                { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgCommonGetRankList,   callback: this._onMsgCommonGetRankList },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
@@ -107,15 +121,15 @@ namespace TinyWars.Common {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getText(Lang.Type.B0436);
-            this._labelStdTitle.text    = Lang.getText(Lang.Type.B0548);
-            this._labelStdNoData.text   = Lang.getText(Lang.Type.B0278);
-            this._labelStdNickname.text = Lang.getText(Lang.Type.B0175);
-            this._labelStdScore.text    = Lang.getText(Lang.Type.B0579);
-            this._labelFogTitle.text    = Lang.getText(Lang.Type.B0549);
-            this._labelFogNoData.text   = Lang.getText(Lang.Type.B0278);
-            this._labelFogNickname.text = Lang.getText(Lang.Type.B0175);
-            this._labelFogScore.text    = Lang.getText(Lang.Type.B0579);
+            this._labelTitle.text       = Lang.getText(LangTextType.B0436);
+            this._labelStdTitle.text    = Lang.getText(LangTextType.B0548);
+            this._labelStdNoData.text   = Lang.getText(LangTextType.B0278);
+            this._labelStdNickname.text = Lang.getText(LangTextType.B0175);
+            this._labelStdScore.text    = Lang.getText(LangTextType.B0579);
+            this._labelFogTitle.text    = Lang.getText(LangTextType.B0549);
+            this._labelFogNoData.text   = Lang.getText(LangTextType.B0278);
+            this._labelFogNickname.text = Lang.getText(LangTextType.B0175);
+            this._labelFogScore.text    = Lang.getText(LangTextType.B0579);
         }
 
         private _updateComponentsForStd(): void {
@@ -203,18 +217,17 @@ namespace TinyWars.Common {
         playersCount: number;
         warType     : Types.WarType;
     };
-
-    class UserRenderer extends GameUi.UiListItemRenderer<DataForUserRenderer> {
+    class UserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUserRenderer> {
         // @ts-ignore
         private _group          : eui.Group;
         // @ts-ignore
-        private _imgBg          : GameUi.UiImage;
+        private _imgBg          : TwnsUiImage.UiImage;
         // @ts-ignore
-        private _labelIndex     : GameUi.UiLabel;
+        private _labelIndex     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelNickname  : GameUi.UiLabel;
+        private _labelNickname  : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelScore     : GameUi.UiLabel;
+        private _labelScore     : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -230,7 +243,7 @@ namespace TinyWars.Common {
         private _onTouchedImgBg(): void {
             const data = this.data;
             if (data) {
-                User.UserPanel.show({ userId: data.userId });
+                UserPanel.show({ userId: data.userId });
             }
         }
 
@@ -246,12 +259,12 @@ namespace TinyWars.Common {
             const rank              = data.rank;
             const labelNickname     = this._labelNickname;
             const labelScore        = this._labelScore;
-            labelNickname.text      = Lang.getText(Lang.Type.B0029);
+            labelNickname.text      = Lang.getText(LangTextType.B0029);
             labelScore.text         = ``;
             this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;
 
-            const userInfo = await User.UserModel.getUserPublicInfo(data.userId);
+            const userInfo = await UserModel.getUserPublicInfo(data.userId);
             if (userInfo == null) {
                 Logger.error(`UserRenderer._updateView() empty userInfo.`);
                 return;
@@ -270,3 +283,5 @@ namespace TinyWars.Common {
         }
     }
 }
+
+export default TwnsCommonRankListPanel;

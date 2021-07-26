@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing"
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing"
         class="Skins.Component.Button.ButtonYellow002">
     <e:Group left="0" right="0" top="0" bottom="0">
         <e:Image source="commonPentagon0009" left="0" right="0" top="0" bottom="0" scale9Grid="4,4,1,1" />
-        <GameUi:UiLabel id="labelDisplay" size="20" textColor="0x000000" wordWrap="true" bold="true"
+        <TwnsUiLabel:UiLabel id="labelDisplay" size="20" textColor="0x000000" wordWrap="true" bold="true"
                         verticalAlign="middle" verticalCenter="1" horizontalCenter="-2" />
-        <GameUi:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16" height="16" />
+        <TwnsUiImage:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16" height="16" />
     </e:Group>
 </e:Skin>

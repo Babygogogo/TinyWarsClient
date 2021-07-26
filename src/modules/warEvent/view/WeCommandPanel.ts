@@ -1,56 +1,76 @@
 
-namespace TinyWars.WarEvent {
-    import Notify               = Utility.Notify;
-    import Lang                 = Utility.Lang;
-    import Helpers              = Utility.Helpers;
-    import ConfigManager        = Utility.ConfigManager;
-    import FloatText            = Utility.FloatText;
-    import Types                = Utility.Types;
-    import Logger               = Utility.Logger;
-    import CommonConfirmPanel   = Common.CommonConfirmPanel;
-    import CommonInputPanel     = Common.CommonInputPanel;
-    import ColorValue           = Types.ColorValue;
-    import WarEventDescType     = Types.WarEventDescType;
-    import CommonConstants      = Utility.CommonConstants;
+import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
+import TwnsCommonInputPanel         from "../../common/view/CommonInputPanel";
+import TwnsMeWar                    from "../../mapEditor/model/MeWar";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Logger                       from "../../tools/helpers/Logger";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import WarEventHelper               from "../model/WarEventHelper";
+import TwnsWeActionReplacePanel     from "./WeActionReplacePanel";
+import TwnsWeConditionReplacePanel  from "./WeConditionReplacePanel";
+import TwnsWeEventRenamePanel       from "./WeEventRenamePanel";
+import TwnsWeNodeReplacePanel       from "./WeNodeReplacePanel";
+
+namespace TwnsWeCommandPanel {
+    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import CommonInputPanel         = TwnsCommonInputPanel.CommonInputPanel;
+    import MeWar                    = TwnsMeWar.MeWar;
+    import WeEventRenamePanel       = TwnsWeEventRenamePanel.WeEventRenamePanel;
+    import WeNodeReplacePanel       = TwnsWeNodeReplacePanel.WeNodeReplacePanel;
+    import WeConditionReplacePanel  = TwnsWeConditionReplacePanel.WeConditionReplacePanel;
+    import WeActionReplacePanel     = TwnsWeActionReplacePanel.WeActionReplacePanel;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import ColorValue               = Types.ColorValue;
+    import WarEventDescType         = Types.WarEventDescType;
 
     type OpenDataForWeCommandPanel = {
-        war             : MapEditor.MeWar;
+        war             : MeWar;
         descType        : WarEventDescType;
         eventId         : number;
         actionId?       : number;
         conditionId?    : number;
         parentNodeId?   : number;
         nodeId?         : number;
-    }
-    export class WeCommandPanel extends GameUi.UiPanel<OpenDataForWeCommandPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+    };
+    export class WeCommandPanel extends TwnsUiPanel.UiPanel<OpenDataForWeCommandPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: WeCommandPanel;
 
-        private _labelTitle                     : GameUi.UiLabel;
-        private _labelDesc                      : GameUi.UiLabel;
-        private _labelError                     : GameUi.UiLabel;
-        private _btnClose                       : GameUi.UiButton;
+        private _labelTitle                     : TwnsUiLabel.UiLabel;
+        private _labelDesc                      : TwnsUiLabel.UiLabel;
+        private _labelError                     : TwnsUiLabel.UiLabel;
+        private _btnClose                       : TwnsUiButton.UiButton;
 
         private _groupBtn                       : eui.Group;
-        private _btnModifyEventName             : GameUi.UiButton;
-        private _btnModifyMaxCallCountPerTurn   : GameUi.UiButton;
-        private _btnModifyMaxCallCountTotal     : GameUi.UiButton;
-        private _btnInitSubNodeToEvent          : GameUi.UiButton;
-        private _btnDeleteEvent                 : GameUi.UiButton;
-        private _btnSwitchNodeAndOr             : GameUi.UiButton;
-        private _btnReplaceNode                 : GameUi.UiButton;
-        private _btnAddSubNodeToNode            : GameUi.UiButton;
-        private _btnAddSubCondition             : GameUi.UiButton;
-        private _btnDeleteNode                  : GameUi.UiButton;
-        private _btnModifyCondition             : GameUi.UiButton;
-        private _btnReplaceCondition            : GameUi.UiButton;
-        private _btnDeleteCondition             : GameUi.UiButton;
-        private _btnModifyAction                : GameUi.UiButton;
-        private _btnReplaceAction               : GameUi.UiButton;
-        private _btnAddAction                   : GameUi.UiButton;
-        private _btnDeleteAction                : GameUi.UiButton;
+        private _btnModifyEventName             : TwnsUiButton.UiButton;
+        private _btnModifyMaxCallCountPerTurn   : TwnsUiButton.UiButton;
+        private _btnModifyMaxCallCountTotal     : TwnsUiButton.UiButton;
+        private _btnInitSubNodeToEvent          : TwnsUiButton.UiButton;
+        private _btnDeleteEvent                 : TwnsUiButton.UiButton;
+        private _btnSwitchNodeAndOr             : TwnsUiButton.UiButton;
+        private _btnReplaceNode                 : TwnsUiButton.UiButton;
+        private _btnAddSubNodeToNode            : TwnsUiButton.UiButton;
+        private _btnAddSubCondition             : TwnsUiButton.UiButton;
+        private _btnDeleteNode                  : TwnsUiButton.UiButton;
+        private _btnModifyCondition             : TwnsUiButton.UiButton;
+        private _btnReplaceCondition            : TwnsUiButton.UiButton;
+        private _btnDeleteCondition             : TwnsUiButton.UiButton;
+        private _btnModifyAction                : TwnsUiButton.UiButton;
+        private _btnReplaceAction               : TwnsUiButton.UiButton;
+        private _btnAddAction                   : TwnsUiButton.UiButton;
+        private _btnDeleteAction                : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForWeCommandPanel): void {
             if (!WeCommandPanel._instance) {
@@ -96,8 +116,8 @@ namespace TinyWars.WarEvent {
                 { ui: this._btnDeleteAction,                callback: this._onTouchedBtnDeleteAction },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.WarEventFullDataChanged,        callback: this._onNotifyWarEventFullDataChanged },
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.WarEventFullDataChanged,        callback: this._onNotifyWarEventFullDataChanged },
             ]);
             this._updateComponentsForLanguage();
         }
@@ -116,19 +136,19 @@ namespace TinyWars.WarEvent {
                 const maxValue  = CommonConstants.WarEventMaxCallCountInPlayerTurn;
                 const eventData = data.war.getWarEventManager().getWarEventFullData().eventArray.find(v => v.eventId === data.eventId);
                 CommonInputPanel.show({
-                    title           : Lang.getText(Lang.Type.B0476),
+                    title           : Lang.getText(LangTextType.B0476),
                     charRestrict    : `0-9`,
-                    tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                    tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                     maxChars        : 3,
                     currentValue    : `${eventData.maxCallCountInPlayerTurn}`,
                     callback        : (panel) => {
                         const text  = panel.getInputText();
                         const value = text ? Number(text) : NaN;
                         if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                            FloatText.show(Lang.getText(Lang.Type.A0098));
+                            FloatText.show(Lang.getText(LangTextType.A0098));
                         } else {
                             eventData.maxCallCountInPlayerTurn = value;
-                            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                            Notify.dispatch(NotifyType.WarEventFullDataChanged);
                         }
                     },
                 });
@@ -141,19 +161,19 @@ namespace TinyWars.WarEvent {
                 const maxValue  = CommonConstants.WarEventMaxCallCountTotal;
                 const eventData = data.war.getWarEventManager().getWarEventFullData().eventArray.find(v => v.eventId === data.eventId);
                 CommonInputPanel.show({
-                    title           : Lang.getText(Lang.Type.B0477),
+                    title           : Lang.getText(LangTextType.B0477),
                     charRestrict    : `0-9`,
-                    tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                    tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                     maxChars        : 3,
                     currentValue    : `${eventData.maxCallCountTotal}`,
                     callback        : (panel) => {
                         const text  = panel.getInputText();
                         const value = text ? Number(text) : NaN;
                         if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                            FloatText.show(Lang.getText(Lang.Type.A0098));
+                            FloatText.show(Lang.getText(LangTextType.A0098));
                         } else {
                             eventData.maxCallCountTotal = value;
-                            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                            Notify.dispatch(NotifyType.WarEventFullDataChanged);
                         }
                     },
                 });
@@ -168,7 +188,7 @@ namespace TinyWars.WarEvent {
                     fullData,
                     eventId,
                 }) != null) {
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             };
 
@@ -177,7 +197,7 @@ namespace TinyWars.WarEvent {
                 callback();
             } else {
                 CommonConfirmPanel.show({
-                    content : Lang.getFormattedText(Lang.Type.F0060, `N${nodeId}`),
+                    content : Lang.getFormattedText(LangTextType.F0060, `N${nodeId}`),
                     callback,
                 });
             }
@@ -186,8 +206,8 @@ namespace TinyWars.WarEvent {
             const data      = this._getOpenData();
             const eventId   = data.eventId;
             CommonConfirmPanel.show({
-                title   : `${Lang.getText(Lang.Type.B0479)} E${eventId}`,
-                content : Lang.getText(Lang.Type.A0171),
+                title   : `${Lang.getText(LangTextType.B0479)} E${eventId}`,
+                content : Lang.getText(LangTextType.A0171),
                 callback: () => {
                     const war           = data.war;
                     const eventArray    = war.getWarEventManager().getWarEventFullData().eventArray;
@@ -201,7 +221,7 @@ namespace TinyWars.WarEvent {
                     }
 
                     this.close();
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -209,7 +229,7 @@ namespace TinyWars.WarEvent {
             const data = this._getOpenData();
             const node = data.war.getWarEventManager().getWarEventFullData().conditionNodeArray.find(v => v.nodeId === data.nodeId);
             node.isAnd = !node.isAnd;
-            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnReplaceNode(e: egret.TouchEvent): void {               // DONE
             const data = this._getOpenData();
@@ -226,21 +246,21 @@ namespace TinyWars.WarEvent {
                 fullData        : data.war.getWarEventManager().getWarEventFullData(),
                 parentNodeId    : data.nodeId,
             }) != null) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onTouchedBtnAddSubCondition(e: egret.TouchEvent): void {           // DONE
             const data = this._getOpenData();
             if (WarEventHelper.addDefaultCondition(data.war.getWarEventManager().getWarEventFullData(), data.nodeId) != null) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onTouchedBtnDeleteNode(e: egret.TouchEvent): void {                // DONE
             const data      = this._getOpenData();
             const nodeId    = data.nodeId;
             CommonConfirmPanel.show({
-                title   : `${Lang.getText(Lang.Type.B0481)} N${nodeId}`,
-                content : Lang.getText(Lang.Type.A0172),
+                title   : `${Lang.getText(LangTextType.B0481)} N${nodeId}`,
+                content : Lang.getText(LangTextType.A0172),
                 callback: () => {
                     const fullData      = data.war.getWarEventManager().getWarEventFullData();
                     const parentNodeId  = data.parentNodeId;
@@ -253,7 +273,7 @@ namespace TinyWars.WarEvent {
                     // WarEventHelper.checkAndDeleteUnusedNode(fullData, nodeId);
 
                     this.close();
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -275,15 +295,15 @@ namespace TinyWars.WarEvent {
             const data          = this._getOpenData();
             const conditionId   = data.conditionId;
             CommonConfirmPanel.show({
-                title   : `${Lang.getText(Lang.Type.B0485)} C${conditionId}`,
-                content : Lang.getText(Lang.Type.A0175),
+                title   : `${Lang.getText(LangTextType.B0485)} C${conditionId}`,
+                content : Lang.getText(LangTextType.A0175),
                 callback: () => {
                     const fullData = data.war.getWarEventManager().getWarEventFullData();
                     Helpers.deleteElementFromArray(fullData.conditionNodeArray.find(v => v.nodeId === data.parentNodeId).conditionIdArray, conditionId, 1);
                     // WarEventHelper.checkAndDeleteUnusedCondition(fullData, conditionId);
 
                     this.close();
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -305,22 +325,22 @@ namespace TinyWars.WarEvent {
         private _onTouchedBtnAddAction(e: egret.TouchEvent): void {                 // DONE
             const data = this._getOpenData();
             if (WarEventHelper.addDefaultAction(data.war.getWarEventManager().getWarEventFullData(), data.eventId) != null) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onTouchedBtnDeleteAction(e: egret.TouchEvent): void {              // DONE
             const data      = this._getOpenData();
             const actionId  = data.actionId;
             CommonConfirmPanel.show({
-                title   : `${Lang.getText(Lang.Type.B0486)} A${actionId}`,
-                content : Lang.getText(Lang.Type.A0176),
+                title   : `${Lang.getText(LangTextType.B0486)} A${actionId}`,
+                content : Lang.getText(LangTextType.A0176),
                 callback: () => {
                     const fullData = data.war.getWarEventManager().getWarEventFullData();
                     Helpers.deleteElementFromArray(fullData.eventArray.find(v => v.eventId === data.eventId).actionIdArray, actionId);
                     // WarEventHelper.checkAndDeleteUnusedAction(fullData, actionId);
 
                     this.close();
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -333,24 +353,24 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {                              // DONE
-            this._btnClose.label                        = Lang.getText(Lang.Type.B0146);
-            this._btnDeleteEvent.label                  = Lang.getText(Lang.Type.B0479);
-            this._btnModifyEventName.label              = Lang.getText(Lang.Type.B0495);
-            this._btnModifyMaxCallCountPerTurn.label    = Lang.getText(Lang.Type.B0317);
-            this._btnModifyMaxCallCountTotal.label      = Lang.getText(Lang.Type.B0317);
-            this._btnInitSubNodeToEvent.label           = Lang.getText(Lang.Type.B0494);
-            this._btnSwitchNodeAndOr.label              = Lang.getText(Lang.Type.B0482);
-            this._btnReplaceNode.label                  = Lang.getText(Lang.Type.B0491);
-            this._btnAddSubCondition.label              = Lang.getText(Lang.Type.B0483);
-            this._btnAddSubNodeToNode.label             = Lang.getText(Lang.Type.B0484);
-            this._btnDeleteNode.label                   = Lang.getText(Lang.Type.B0499);
-            this._btnModifyCondition.label              = Lang.getText(Lang.Type.B0501);
-            this._btnReplaceCondition.label             = Lang.getText(Lang.Type.B0500);
-            this._btnDeleteCondition.label              = Lang.getText(Lang.Type.B0485);
-            this._btnModifyAction.label                 = Lang.getText(Lang.Type.B0317);
-            this._btnReplaceAction.label                = Lang.getText(Lang.Type.B0480);
-            this._btnAddAction.label                    = Lang.getText(Lang.Type.B0496);
-            this._btnDeleteAction.label                 = Lang.getText(Lang.Type.B0220);
+            this._btnClose.label                        = Lang.getText(LangTextType.B0146);
+            this._btnDeleteEvent.label                  = Lang.getText(LangTextType.B0479);
+            this._btnModifyEventName.label              = Lang.getText(LangTextType.B0495);
+            this._btnModifyMaxCallCountPerTurn.label    = Lang.getText(LangTextType.B0317);
+            this._btnModifyMaxCallCountTotal.label      = Lang.getText(LangTextType.B0317);
+            this._btnInitSubNodeToEvent.label           = Lang.getText(LangTextType.B0494);
+            this._btnSwitchNodeAndOr.label              = Lang.getText(LangTextType.B0482);
+            this._btnReplaceNode.label                  = Lang.getText(LangTextType.B0491);
+            this._btnAddSubCondition.label              = Lang.getText(LangTextType.B0483);
+            this._btnAddSubNodeToNode.label             = Lang.getText(LangTextType.B0484);
+            this._btnDeleteNode.label                   = Lang.getText(LangTextType.B0499);
+            this._btnModifyCondition.label              = Lang.getText(LangTextType.B0501);
+            this._btnReplaceCondition.label             = Lang.getText(LangTextType.B0500);
+            this._btnDeleteCondition.label              = Lang.getText(LangTextType.B0485);
+            this._btnModifyAction.label                 = Lang.getText(LangTextType.B0317);
+            this._btnReplaceAction.label                = Lang.getText(LangTextType.B0480);
+            this._btnAddAction.label                    = Lang.getText(LangTextType.B0496);
+            this._btnDeleteAction.label                 = Lang.getText(LangTextType.B0220);
 
             this._updateLabelTitle();
             this._updateLabelDescAndButtons();
@@ -361,20 +381,20 @@ namespace TinyWars.WarEvent {
             const descType  = openData.descType;
             const label     = this._labelTitle;
             if (descType === WarEventDescType.Action) {
-                label.text = `${Lang.getText(Lang.Type.B0317)} A${openData.actionId || `???`}`;
+                label.text = `${Lang.getText(LangTextType.B0317)} A${openData.actionId || `???`}`;
             } else if (descType === WarEventDescType.Condition) {
-                label.text = `${Lang.getText(Lang.Type.B0317)} C${openData.conditionId || `???`}`;
+                label.text = `${Lang.getText(LangTextType.B0317)} C${openData.conditionId || `???`}`;
             } else if (descType === WarEventDescType.ConditionNode) {
-                label.text = `${Lang.getText(Lang.Type.B0317)} N${openData.nodeId || `???`}`;
+                label.text = `${Lang.getText(LangTextType.B0317)} N${openData.nodeId || `???`}`;
             } else if (descType === WarEventDescType.EventName) {
-                label.text = `${Lang.getText(Lang.Type.B0317)} E${openData.eventId || `???`}`;
+                label.text = `${Lang.getText(LangTextType.B0317)} E${openData.eventId || `???`}`;
             } else if (descType === WarEventDescType.EventMaxCallCountInPlayerTurn) {
-                label.text = `${Lang.getText(Lang.Type.B0317)} E${openData.eventId || `???`}`;
+                label.text = `${Lang.getText(LangTextType.B0317)} E${openData.eventId || `???`}`;
             } else if (descType === WarEventDescType.EventMaxCallCountTotal) {
-                label.text = `${Lang.getText(Lang.Type.B0317)} E${openData.eventId || `???`}`;
+                label.text = `${Lang.getText(LangTextType.B0317)} E${openData.eventId || `???`}`;
             } else {
                 Logger.error(`WeCommandPanel._updateLabelTitle() invalid descType.`);
-                label.text = Lang.getText(Lang.Type.B0317);
+                label.text = Lang.getText(LangTextType.B0317);
             }
         }
 
@@ -411,7 +431,7 @@ namespace TinyWars.WarEvent {
 
             const errorTip          = WarEventHelper.getErrorTipForEvent(fullData, event);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
             this._labelDesc.text    = `E${eventId} ${Lang.getLanguageText({ textArray: event.eventNameArray })}`;
 
@@ -434,9 +454,9 @@ namespace TinyWars.WarEvent {
 
             const errorTip          = WarEventHelper.getErrorTipForEventCallCountInPlayerTurn(event);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
-            this._labelDesc.text    = `E${eventId} ${Lang.getText(Lang.Type.B0476)}: ${event.maxCallCountInPlayerTurn}`;
+            this._labelDesc.text    = `E${eventId} ${Lang.getText(LangTextType.B0476)}: ${event.maxCallCountInPlayerTurn}`;
 
             const group = this._groupBtn;
             group.removeChildren();
@@ -454,9 +474,9 @@ namespace TinyWars.WarEvent {
 
             const errorTip          = WarEventHelper.getErrorTipForEventCallCountTotal(event);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
-            this._labelDesc.text    = `E${eventId} ${Lang.getText(Lang.Type.B0477)}: ${event.maxCallCountTotal}`;
+            this._labelDesc.text    = `E${eventId} ${Lang.getText(LangTextType.B0477)}: ${event.maxCallCountTotal}`;
 
             const group = this._groupBtn;
             group.removeChildren();
@@ -474,9 +494,9 @@ namespace TinyWars.WarEvent {
 
             const errorTip          = WarEventHelper.getErrorTipForConditionNode(fullData, node);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
-            this._labelDesc.text    = `N${nodeId} ${node.isAnd ? Lang.getText(Lang.Type.A0162) : Lang.getText(Lang.Type.A0163)}`;
+            this._labelDesc.text    = `N${nodeId} ${node.isAnd ? Lang.getText(LangTextType.A0162) : Lang.getText(LangTextType.A0163)}`;
 
             const group = this._groupBtn;
             group.removeChildren();
@@ -498,7 +518,7 @@ namespace TinyWars.WarEvent {
 
             const errorTip          = WarEventHelper.getErrorTipForCondition(fullData, condition);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
             this._labelDesc.text    = `C${conditionId} ${WarEventHelper.getDescForCondition(condition)}`;
 
@@ -520,7 +540,7 @@ namespace TinyWars.WarEvent {
 
             const errorTip          = WarEventHelper.getErrorTipForAction(fullData, action, data.war);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
             this._labelDesc.text    = `A${actionId} ${WarEventHelper.getDescForAction(action)}`;
 
@@ -533,3 +553,5 @@ namespace TinyWars.WarEvent {
         }
     }
 }
+
+export default TwnsWeCommandPanel;

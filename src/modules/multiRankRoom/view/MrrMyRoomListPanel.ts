@@ -1,35 +1,62 @@
 
-namespace TinyWars.MultiRankRoom {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import FloatText        = Utility.FloatText;
-    import Helpers          = Utility.Helpers;
-    import WarMapModel      = WarMap.WarMapModel;
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
+import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import MrrModel                             from "../model/MrrModel";
+import MrrProxy                             from "../model/MrrProxy";
+import MrrSelfSettingsModel                 from "../model/MrrSelfSettingsModel";
+import TwnsMrrMainMenuPanel                 from "./MrrMainMenuPanel";
+import TwnsMrrRoomInfoPanel                 from "./MrrRoomInfoPanel";
 
-    export class MrrMyRoomListPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+namespace TwnsMrrMyRoomListPanel {
+    import MrrRoomInfoPanel                         = TwnsMrrRoomInfoPanel.MrrRoomInfoPanel;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+
+    export class MrrMyRoomListPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MrrMyRoomListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, OpenDataForMrrRoomMapInfoPage | OpenDataForMrrRoomPlayerInfoPage | OpenDataForMrrRoomAdvancedSettingsPage | OpenDataForMrrRoomBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
-        private readonly _labelRankMatch        : GameUi.UiLabel;
-        private readonly _labelMyRoom           : GameUi.UiLabel;
+        private readonly _labelRankMatch        : TwnsUiLabel.UiLabel;
+        private readonly _labelMyRoom           : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack               : GameUi.UiButton;
-        private readonly _btnNextStep           : GameUi.UiButton;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnNextStep           : TwnsUiButton.UiButton;
 
         private readonly _groupRoomList         : eui.Group;
-        private readonly _listRoom              : GameUi.UiScrollList<DataForRoomRenderer>;
-        private readonly _labelNoRoom           : GameUi.UiLabel;
-        private readonly _labelLoading          : GameUi.UiLabel;
+        private readonly _listRoom              : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
+        private readonly _labelNoRoom           : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
+        private _isTabInitialized   = false;
 
         public static show(): void {
             if (!MrrMyRoomListPanel._instance) {
@@ -49,12 +76,15 @@ namespace TinyWars.MultiRankRoom {
             this.skinName = "resource/skins/multiRankRoom/MrrMyRoomListPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MrrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
-                { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,      callback: this._onNotifyMsgMrrGetMyRoomPublicInfoList },
-                { type: Notify.Type.MsgMrrDeleteRoomByServer,           callback: this._onNotifyMsgMrrDeleteRoomByServer },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MrrJoinedPreviewingRoomIdChanged,    callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
+                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,       callback: this._onNotifyMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgMrrDeleteRoomByServer,            callback: this._onNotifyMsgMrrDeleteRoomByServer },
+                { type: NotifyType.MsgMrrGetRoomPublicInfo,             callback: this._onNotifyMsgMrrGetRoomPublicInfo },
+                { type: NotifyType.MsgMrrSetSelfSettings,               callback: this._onNotifyMsgMrrSetSelfSettings },
+                { type: NotifyType.MsgMrrSetBannedCoIdList,             callback: this._onNotifyMsgMrrSetBannedCoIdList },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -65,8 +95,9 @@ namespace TinyWars.MultiRankRoom {
 
             this._showOpenAnimation();
 
-            this._hasReceivedData = false;
-            this._initTabSettings();
+            this._hasReceivedData   = false;
+            this._isTabInitialized  = false;
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
@@ -81,36 +112,57 @@ namespace TinyWars.MultiRankRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyMrrJoinedPreviewingRoomIdChanged(e: egret.Event): void {
+        private _onNotifyMrrJoinedPreviewingRoomIdChanged(): void {
             this._updateComponentsForPreviewingRoomInfo();
         }
 
-        private _onNotifyMsgMrrGetMyRoomPublicInfoList(e: egret.Event): void {
+        private _onNotifyMsgMrrGetMyRoomPublicInfoList(): void {
             this._hasReceivedData = true;
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
         }
 
-        private _onNotifyMsgMrrDeleteRoomByServer(e: egret.Event): void {
+        private _onNotifyMsgMrrDeleteRoomByServer(): void {
             this._updateGroupRoomList();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            this.close();
-            MrrMainMenuPanel.show();
-            Lobby.LobbyTopPanel.show();
-            Lobby.LobbyBottomPanel.show();
+        private _onNotifyMsgMrrGetRoomPublicInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS;
+            if (data.roomId === MrrModel.getPreviewingRoomId()) {
+                this._updateComponentsForPreviewingRoomInfo();
+            }
         }
 
-        private async _onTouchedBtnNextStep(e: egret.TouchEvent): Promise<void> {
-            const roomId = MrrModel.Joined.getPreviewingRoomId();
+        private _onNotifyMsgMrrSetSelfSettings(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMrrSetSelfSettings.IS;
+            if (data.roomId === MrrModel.getPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+        }
+
+        private _onNotifyMsgMrrSetBannedCoIdList(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMrrSetBannedCoIdList.IS;
+            if (data.roomId === MrrModel.getPreviewingRoomId()) {
+                this._updateCommonWarPlayerInfoPage();
+            }
+        }
+
+        private _onTouchTapBtnBack(): void {
+            this.close();
+            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+        }
+
+        private async _onTouchedBtnNextStep(): Promise<void> {
+            const roomId = MrrModel.getPreviewingRoomId();
             if (roomId != null) {
                 this.close();
-                await MrrModel.SelfSettings.resetData(roomId);
+                await MrrSelfSettingsModel.resetData(roomId);
                 MrrRoomInfoPanel.show({
                     roomId,
                 });
@@ -120,38 +172,39 @@ namespace TinyWars.MultiRankRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _initTabSettings(): void {
+        private async _initTabSettings(): Promise<void> {
             this._tabSettings.bindData([
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
-                    pageClass   : MrrRoomMapInfoPage,
-                    pageData    : { roomId: null } as OpenDataForMrrRoomMapInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0298) },
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
-                    pageClass   : MrrRoomPlayerInfoPage,
-                    pageData    : { roomId: null } as OpenDataForMrrRoomPlayerInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0224) },
+                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : MrrRoomBasicSettingsPage,
-                    pageData    : { roomId: null } as OpenDataForMrrRoomBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass   : MrrRoomAdvancedSettingsPage,
-                    pageData    : { roomId: null } as OpenDataForMrrRoomAdvancedSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0003) },
+                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
+            this._isTabInitialized = true;
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-            this._labelRankMatch.text       = Lang.getText(Lang.Type.B0404);
-            this._labelMyRoom.text          = Lang.getText(Lang.Type.B0410);
-            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-            this._labelNoRoom.text          = Lang.getText(Lang.Type.B0582);
-            this._btnNextStep.label         = Lang.getText(Lang.Type.B0398);
+            this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+            this._labelRankMatch.text       = Lang.getText(LangTextType.B0404);
+            this._labelMyRoom.text          = Lang.getText(LangTextType.B0410);
+            this._btnBack.label             = Lang.getText(LangTextType.B0146);
+            this._labelNoRoom.text          = Lang.getText(LangTextType.B0582);
+            this._btnNextStep.label         = Lang.getText(LangTextType.B0398);
         }
 
         private _updateGroupRoomList(): void {
@@ -169,9 +222,9 @@ namespace TinyWars.MultiRankRoom {
                 labelNoRoom.visible     = !dataArray.length;
                 listRoom.bindData(dataArray);
 
-                const roomId = MrrModel.Joined.getPreviewingRoomId();
+                const roomId = MrrModel.getPreviewingRoomId();
                 if (dataArray.every(v => v.roomId != roomId)) {
-                    MrrModel.Joined.setPreviewingRoomId(dataArray.length ? dataArray[0].roomId : null);
+                    MrrModel.setPreviewingRoomId(dataArray.length ? dataArray[0].roomId : null);
                 }
             }
         }
@@ -179,7 +232,7 @@ namespace TinyWars.MultiRankRoom {
         private _updateComponentsForPreviewingRoomInfo(): void {
             const groupTab      = this._groupTab;
             const btnNextStep   = this._btnNextStep;
-            const roomId        = MrrModel.Joined.getPreviewingRoomId();
+            const roomId        = MrrModel.getPreviewingRoomId();
             if ((!this._hasReceivedData) || (roomId == null)) {
                 groupTab.visible    = false;
                 btnNextStep.visible = false;
@@ -187,11 +240,10 @@ namespace TinyWars.MultiRankRoom {
                 groupTab.visible    = true;
                 btnNextStep.visible = true;
 
-                const tab = this._tabSettings;
-                tab.updatePageData(0, { roomId } as OpenDataForMrrRoomMapInfoPage);
-                tab.updatePageData(1, { roomId } as OpenDataForMrrRoomPlayerInfoPage);
-                tab.updatePageData(2, { roomId } as OpenDataForMrrRoomBasicSettingsPage);
-                tab.updatePageData(3, { roomId } as OpenDataForMrrRoomAdvancedSettingsPage);
+                this._updateCommonWarMapInfoPage();
+                this._updateCommonWarPlayerInfoPage();
+                this._updateCommonWarBasicSettingsPage();
+                this._updateCommonWarAdvancedSettingsPage();
             }
         }
 
@@ -204,6 +256,49 @@ namespace TinyWars.MultiRankRoom {
             }
 
             return dataArray.sort((v1, v2) => v1.roomId - v2.roomId);
+        }
+
+        private async _updateCommonWarMapInfoPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
+            }
+        }
+
+        private async _updateCommonWarPlayerInfoPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage());
+            }
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+            }
+        }
+
+        private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
+            }
+        }
+
+        private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
+            const mapId = (await MrrModel.getRoomInfo(MrrModel.getPreviewingRoomId()))?.settingsForMrw?.mapId;
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
+        }
+
+        private _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
+            return MrrModel.createDataForCommonWarPlayerInfoPage(MrrModel.getPreviewingRoomId());
+        }
+
+        private _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            return MrrModel.createDataForCommonWarBasicSettingsPage(MrrModel.getPreviewingRoomId());
+        }
+
+        private _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+            return MrrModel.createDataForCommonWarAdvancedSettingsPage(MrrModel.getPreviewingRoomId());
         }
 
         private _showOpenAnimation(): void {
@@ -267,9 +362,9 @@ namespace TinyWars.MultiRankRoom {
 
     type DataForTabItemRenderer = {
         name: string;
-    }
-    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: GameUi.UiLabel;
+    };
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
@@ -278,12 +373,12 @@ namespace TinyWars.MultiRankRoom {
 
     type DataForRoomRenderer = {
         roomId: number;
-    }
-    class RoomRenderer extends GameUi.UiListItemRenderer<DataForRoomRenderer> {
-        private readonly _btnChoose     : GameUi.UiButton;
-        private readonly _btnNext       : GameUi.UiButton;
-        private readonly _labelName     : GameUi.UiLabel;
-        private readonly _imgRed        : GameUi.UiLabel;
+    };
+    class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
+        private readonly _btnChoose     : TwnsUiButton.UiButton;
+        private readonly _btnNext       : TwnsUiButton.UiButton;
+        private readonly _labelName     : TwnsUiLabel.UiLabel;
+        private readonly _imgRed        : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -291,7 +386,7 @@ namespace TinyWars.MultiRankRoom {
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.MrrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
+                { type: NotifyType.MrrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
             ]);
         }
 
@@ -305,19 +400,19 @@ namespace TinyWars.MultiRankRoom {
             this._labelName.text    = roomInfo ? await WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForMrw.mapId) : null;
         }
 
-        private _onNotifyMrrJoinedPreviewingRoomIdChanged(e: egret.Event): void {
+        private _onNotifyMrrJoinedPreviewingRoomIdChanged(): void {
             this._updateState();
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            MrrModel.Joined.setPreviewingRoomId(this.data.roomId);
+        private _onTouchTapBtnChoose(): void {
+            MrrModel.setPreviewingRoomId(this.data.roomId);
         }
 
-        private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchTapBtnNext(): Promise<void> {
             const roomId = this.data.roomId;
             if (roomId != null) {
                 MrrMyRoomListPanel.hide();
-                await MrrModel.SelfSettings.resetData(roomId);
+                await MrrSelfSettingsModel.resetData(roomId);
                 MrrRoomInfoPanel.show({
                     roomId,
                 });
@@ -325,7 +420,9 @@ namespace TinyWars.MultiRankRoom {
         }
 
         private _updateState(): void {
-            this.currentState = this.data.roomId === MrrModel.Joined.getPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
+            this.currentState = this.data.roomId === MrrModel.getPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }
+
+export default TwnsMrrMyRoomListPanel;

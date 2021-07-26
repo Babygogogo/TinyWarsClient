@@ -1,34 +1,61 @@
 
-namespace TinyWars.SinglePlayerMode {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import CommonConstants  = Utility.CommonConstants;
-    import BwHelpers        = BaseWar.BwHelpers;
-    import WarMapModel      = WarMap.WarMapModel;
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
+import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import FlowManager                          from "../../tools/helpers/FlowManager";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import SpmModel                             from "../model/SpmModel";
+import TwnsSpmMainMenuPanel                 from "./SpmMainMenuPanel";
 
-    export class SpmWarListPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+namespace TwnsSpmWarListPanel {
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+
+    export class SpmWarListPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: SpmWarListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, OpenDataForSpmWarMapInfoPage | OpenDataForSpmWarPlayerInfoPage | OpenDataForSpmWarAdvancedSettingsPage | OpenDataForSpmWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
-        private readonly _labelSinglePlayer     : GameUi.UiLabel;
-        private readonly _labelContinue         : GameUi.UiLabel;
-        private readonly _labelChooseWar        : GameUi.UiLabel;
+        private readonly _labelSinglePlayer     : TwnsUiLabel.UiLabel;
+        private readonly _labelContinue         : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseWar        : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack               : GameUi.UiButton;
-        private readonly _btnNextStep           : GameUi.UiButton;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnNextStep           : TwnsUiButton.UiButton;
 
         private readonly _groupWarList          : eui.Group;
-        private readonly _listWar               : GameUi.UiScrollList<DataForWarRenderer>;
-        private readonly _labelNoWar            : GameUi.UiLabel;
-        private readonly _labelLoading          : GameUi.UiLabel;
+        private readonly _listWar               : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
+        private readonly _labelNoWar            : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
+
+        private _isTabInitialized = false;
 
         public static show(): void {
             if (!SpmWarListPanel._instance) {
@@ -48,11 +75,11 @@ namespace TinyWars.SinglePlayerMode {
             this.skinName = "resource/skins/singlePlayerMode/SpmWarListPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SpmPreviewingWarSaveSlotChanged,    callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
-                { type: Notify.Type.MsgSpmGetWarSaveSlotFullDataArray,  callback: this._onNotifyMsgSpmGetWarSaveSlotFullDataArray },
+                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.SpmPreviewingWarSaveSlotChanged,    callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
+                { type: NotifyType.MsgSpmGetWarSaveSlotFullDataArray,  callback: this._onNotifyMsgSpmGetWarSaveSlotFullDataArray },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -63,7 +90,8 @@ namespace TinyWars.SinglePlayerMode {
 
             this._showOpenAnimation();
 
-            this._initTabSettings();
+            this._isTabInitialized = false;
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
@@ -76,30 +104,30 @@ namespace TinyWars.SinglePlayerMode {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySpmPreviewingWarSaveSlotChanged(e: egret.Event): void {
+        private _onNotifySpmPreviewingWarSaveSlotChanged(): void {
             this._updateComponentsForPreviewingWarInfo();
         }
 
-        private _onNotifyMsgSpmGetWarSaveSlotFullDataArray(e: egret.Event): void {
+        private _onNotifyMsgSpmGetWarSaveSlotFullDataArray(): void {
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onTouchTapBtnBack(): void {
             this.close();
-            SpmMainMenuPanel.show();
-            Lobby.LobbyTopPanel.show();
-            Lobby.LobbyBottomPanel.show();
+            TwnsSpmMainMenuPanel.SpmMainMenuPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
 
-        private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
-            const slotData = SpmModel.SaveSlot.getSlotDict().get(SpmModel.SaveSlot.getPreviewingSlotIndex());
+        private _onTouchedBtnNextStep(): void {
+            const slotData = SpmModel.getSlotDict().get(SpmModel.getPreviewingSlotIndex());
             if (slotData != null) {
-                Utility.FlowManager.gotoSinglePlayerWar({
+                FlowManager.gotoSinglePlayerWar({
                     slotIndex       : slotData.slotIndex,
                     warData         : slotData.warData,
                     slotExtraData   : slotData.extraData,
@@ -110,46 +138,47 @@ namespace TinyWars.SinglePlayerMode {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _initTabSettings(): void {
+        private async _initTabSettings(): Promise<void> {
             this._tabSettings.bindData([
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
-                    pageClass   : SpmWarMapInfoPage,
-                    pageData    : { slotIndex: null } as OpenDataForSpmWarMapInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0298) },
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageData    : this._createDataForCommonWarMapInfoPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
-                    pageClass   : SpmWarPlayerInfoPage,
-                    pageData    : { slotIndex: null } as OpenDataForSpmWarPlayerInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0224) },
+                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageData    : this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : SpmWarBasicSettingsPage,
-                    pageData    : { slotIndex: null } as OpenDataForSpmWarBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass   : SpmWarAdvancedSettingsPage,
-                    pageData    : { slotIndex: null } as OpenDataForSpmWarAdvancedSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0003) },
+                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
+            this._isTabInitialized = true;
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-            this._labelSinglePlayer.text    = Lang.getText(Lang.Type.B0138);
-            this._labelContinue.text        = Lang.getText(Lang.Type.B0024);
-            this._labelChooseWar.text       = Lang.getText(Lang.Type.B0589);
-            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-            this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
-            this._btnNextStep.label         = Lang.getText(Lang.Type.B0024);
+            this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+            this._labelSinglePlayer.text    = Lang.getText(LangTextType.B0138);
+            this._labelContinue.text        = Lang.getText(LangTextType.B0024);
+            this._labelChooseWar.text       = Lang.getText(LangTextType.B0589);
+            this._btnBack.label             = Lang.getText(LangTextType.B0146);
+            this._labelNoWar.text           = Lang.getText(LangTextType.B0210);
+            this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
         }
 
         private _updateGroupWarList(): void {
             const labelLoading  = this._labelLoading;
             const labelNoWar    = this._labelNoWar;
             const listWar       = this._listWar;
-            if (!SpmModel.SaveSlot.getHasReceivedSlotArray()) {
+            if (!SpmModel.getHasReceivedSlotArray()) {
                 labelLoading.visible    = true;
                 labelNoWar.visible     = false;
                 listWar.clear();
@@ -160,9 +189,9 @@ namespace TinyWars.SinglePlayerMode {
                 labelNoWar.visible      = !dataArray.length;
                 listWar.bindData(dataArray);
 
-                const slotIndex = SpmModel.SaveSlot.getPreviewingSlotIndex();
+                const slotIndex = SpmModel.getPreviewingSlotIndex();
                 if (dataArray.every(v => v.slotIndex != slotIndex)) {
-                    SpmModel.SaveSlot.setPreviewingSlotIndex(dataArray.length ? dataArray[0].slotIndex : null);
+                    SpmModel.setPreviewingSlotIndex(dataArray.length ? dataArray[0].slotIndex : null);
                 }
             }
         }
@@ -170,31 +199,173 @@ namespace TinyWars.SinglePlayerMode {
         private _updateComponentsForPreviewingWarInfo(): void {
             const groupTab      = this._groupTab;
             const btnNextStep   = this._btnNextStep;
-            const slotIndex     = SpmModel.SaveSlot.getPreviewingSlotIndex();
-            if ((!SpmModel.SaveSlot.getHasReceivedSlotArray()) || (slotIndex == null)) {
+            const slotIndex     = SpmModel.getPreviewingSlotIndex();
+            if ((!SpmModel.getHasReceivedSlotArray()) || (slotIndex == null)) {
                 groupTab.visible    = false;
                 btnNextStep.visible = false;
             } else {
                 groupTab.visible    = true;
                 btnNextStep.visible = true;
 
-                const tab = this._tabSettings;
-                tab.updatePageData(0, { slotIndex } as OpenDataForSpmWarMapInfoPage);
-                tab.updatePageData(1, { slotIndex } as OpenDataForSpmWarPlayerInfoPage);
-                tab.updatePageData(2, { slotIndex } as OpenDataForSpmWarBasicSettingsPage);
-                tab.updatePageData(3, { slotIndex } as OpenDataForSpmWarAdvancedSettingsPage);
+                this._updateCommonWarMapInfoPage();
+                this._updateCommonWarPlayerInfoPage();
+                this._updateCommonWarBasicSettingsPage();
+                this._updateCommonWarAdvancedSettingsPage();
+            }
+        }
+
+        private _updateCommonWarMapInfoPage(): void {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, this._createDataForCommonWarMapInfoPage());
+            }
+        }
+
+        private _updateCommonWarPlayerInfoPage(): void {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(1, this._createDataForCommonWarPlayerInfoPage());
+            }
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+            }
+        }
+
+        private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
             }
         }
 
         private _createDataForListWar(): DataForWarRenderer[] {
             const dataArray: DataForWarRenderer[] = [];
-            for (const [slotIndex] of SpmModel.SaveSlot.getSlotDict()) {
+            for (const [slotIndex] of SpmModel.getSlotDict()) {
                 dataArray.push({
                     slotIndex,
                 });
             }
 
             return dataArray;
+        }
+
+        private _createDataForCommonWarMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+            const slotIndex = SpmModel.getPreviewingSlotIndex();
+            const warData   = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex)?.warData;
+            if (warData == null) {
+                return {};
+            }
+
+            const mapId = WarCommonHelpers.getMapId(warData);
+            if (mapId != null) {
+                return { mapInfo: { mapId } };
+            }
+
+            const initialWarData = warData.settingsForSfw?.initialWarData;
+            if (initialWarData) {
+                return { warInfo: {
+                    warData : initialWarData,
+                    players : warData.playerManager.players,
+                } };
+            } else {
+                return {};
+            }
+        }
+
+        private _createDataForCommonWarPlayerInfoPage(): OpenDataForCommonWarPlayerInfoPage {
+            const slotIndex = SpmModel.getPreviewingSlotIndex();
+            const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
+            const warData   = slotData?.warData;
+            if (warData == null) {
+                return undefined;
+            }
+
+            const settingsForCommon = warData.settingsForCommon;
+            const warRule           = settingsForCommon.warRule;
+            const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+            for (const playerInfo of warData.playerManager.players) {
+                const { playerIndex, userId } = playerInfo;
+                playerInfoArray.push({
+                    playerIndex,
+                    teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                    isAi                : userId == null,
+                    userId,
+                    coId                : playerInfo.coId,
+                    unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
+                    isReady             : undefined,
+                    isInTurn            : undefined,
+                    isDefeat            : playerInfo.aliveState === Types.PlayerAliveState.Dead,
+                });
+            }
+
+            return {
+                configVersion           : settingsForCommon.configVersion,
+                playersCountUnneutral   : WarRuleHelpers.getPlayersCount(warRule),
+                roomOwnerPlayerIndex    : undefined,
+                callbackOnDeletePlayer  : undefined,
+                callbackOnExitRoom      : undefined,
+                playerInfoArray,
+            };
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            const slotIndex = SpmModel.getPreviewingSlotIndex();
+            const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
+            const warData   = slotData?.warData;
+            if (warData == null) {
+                return { dataArrayForListSettings: [] };
+            }
+
+            const warRule   = warData.settingsForCommon.warRule;
+            const mapId     = WarCommonHelpers.getMapId(warData);
+            return { dataArrayForListSettings: [
+                {
+                    settingsType    : WarBasicSettingsType.MapName,
+                    warRule,
+                    currentValue    : mapId == null ? Lang.getText(LangTextType.B0321) : await WarMapModel.getMapNameInCurrentLanguage(mapId),
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
+                    warRule,
+                    currentValue    : slotIndex,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
+                    warRule,
+                    currentValue    : slotData.extraData?.slotComment,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarRuleTitle,
+                    warRule,
+                    currentValue    : undefined,
+                    callbackOnModify: undefined,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.HasFog,
+                    warRule,
+                    currentValue    : undefined,
+                    callbackOnModify: undefined,
+                },
+            ] };
+        }
+
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage | undefined> {
+            const slotIndex = SpmModel.getPreviewingSlotIndex();
+            const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
+            const warData   = slotData?.warData;
+            if (warData == null) {
+                return undefined;
+            }
+
+            const settingsForCommon = warData.settingsForCommon;
+            return {
+                configVersion   : settingsForCommon.configVersion,
+                warRule         : settingsForCommon.warRule,
+                warType         : WarCommonHelpers.getWarType(warData),
+            };
         }
 
         private _showOpenAnimation(): void {
@@ -258,9 +429,9 @@ namespace TinyWars.SinglePlayerMode {
 
     type DataForTabItemRenderer = {
         name: string;
-    }
-    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: GameUi.UiLabel;
+    };
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
@@ -269,12 +440,12 @@ namespace TinyWars.SinglePlayerMode {
 
     type DataForWarRenderer = {
         slotIndex: number;
-    }
-    class WarRenderer extends GameUi.UiListItemRenderer<DataForWarRenderer> {
-        private readonly _btnChoose     : GameUi.UiButton;
-        private readonly _btnNext       : GameUi.UiButton;
-        private readonly _labelType     : GameUi.UiLabel;
-        private readonly _labelName     : GameUi.UiLabel;
+    };
+    class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
+        private readonly _btnChoose     : TwnsUiButton.UiButton;
+        private readonly _btnNext       : TwnsUiButton.UiButton;
+        private readonly _labelType     : TwnsUiLabel.UiLabel;
+        private readonly _labelName     : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -282,7 +453,7 @@ namespace TinyWars.SinglePlayerMode {
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.SpmPreviewingWarSaveSlotChanged,  callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
+                { type: NotifyType.SpmPreviewingWarSaveSlotChanged,  callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
             ]);
         }
 
@@ -290,7 +461,7 @@ namespace TinyWars.SinglePlayerMode {
             this._updateState();
 
             const slotIndex = this.data.slotIndex;
-            const slotData  = SpmModel.SaveSlot.getSlotDict().get(slotIndex);
+            const slotData  = SpmModel.getSlotDict().get(slotIndex);
             const labelType = this._labelType;
             const labelName = this._labelName;
             if (!slotData) {
@@ -298,33 +469,33 @@ namespace TinyWars.SinglePlayerMode {
                 labelName.text  = null;
             } else {
                 const warData   = slotData.warData;
-                labelType.text  = `${slotIndex}. ${Lang.getWarTypeName(BwHelpers.getWarType(warData))}`;
+                labelType.text  = `${slotIndex}. ${Lang.getWarTypeName(WarCommonHelpers.getWarType(warData))}`;
 
                 const slotComment = slotData.extraData.slotComment;
                 if (slotComment) {
                     labelName.text = slotComment;
                 } else {
-                    const mapId     = BwHelpers.getMapId(warData);
+                    const mapId     = WarCommonHelpers.getMapId(warData);
                     labelName.text  = mapId == null
-                        ? `(${Lang.getText(Lang.Type.B0321)})`
-                        : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId);
+                        ? `(${Lang.getText(LangTextType.B0321)})`
+                        : await WarMapModel.getMapNameInCurrentLanguage(mapId);
                 }
             }
         }
 
-        private _onNotifySpmPreviewingWarSaveSlotChanged(e: egret.Event): void {
+        private _onNotifySpmPreviewingWarSaveSlotChanged(): void {
             this._updateState();
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            SpmModel.SaveSlot.setPreviewingSlotIndex(this.data.slotIndex);
+        private _onTouchTapBtnChoose(): void {
+            SpmModel.setPreviewingSlotIndex(this.data.slotIndex);
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
+        private _onTouchTapBtnNext(): void {
             const slotIndex = this.data.slotIndex;
-            const slotData  = SpmModel.SaveSlot.getSlotDict().get(slotIndex);
+            const slotData  = SpmModel.getSlotDict().get(slotIndex);
             if (slotData != null) {
-                Utility.FlowManager.gotoSinglePlayerWar({
+                FlowManager.gotoSinglePlayerWar({
                     slotIndex,
                     warData         : slotData.warData,
                     slotExtraData   : slotData.extraData,
@@ -333,7 +504,9 @@ namespace TinyWars.SinglePlayerMode {
         }
 
         private _updateState(): void {
-            this.currentState = this.data.slotIndex === SpmModel.SaveSlot.getPreviewingSlotIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this.currentState = this.data.slotIndex === SpmModel.getPreviewingSlotIndex() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }
+
+export default TwnsSpmWarListPanel;

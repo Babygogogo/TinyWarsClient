@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing"
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing"
         class="Skins.Component.RadioButton.RadioButton001">
     <e:Group x="0" y="0">
-        <GameUi:UiLabel id="_labelTitle" text="Language" size="15" left="0" top="0" textColor="0xFFFFFF" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="Language" size="15" left="0" top="0" textColor="0xFFFFFF" />
         <e:Group x="0" y="20" width="120" height="20">
             <e:Group top="0" bottom="0" left="0" width="50%">
-                <GameUi:UiImage id="_imgLeftOn" source="commonRectangle0000" scale9Grid="2,2,1,1" left="0" right="0"
+                <TwnsUiImage:UiImage id="_imgLeftOn" source="commonRectangle0000" scale9Grid="2,2,1,1" left="0" right="0"
                                 top="0" bottom="0" />
-                <GameUi:UiImage id="_imgLeftOff" scale9Grid="2,2,1,1" source="commonRectangle0001" left="0" right="0"
+                <TwnsUiImage:UiImage id="_imgLeftOff" scale9Grid="2,2,1,1" source="commonRectangle0001" left="0" right="0"
                                 top="0" bottom="0" />
-                <GameUi:UiLabel id="_labelLeft" text="English" size="12" textColor="0xCCCCCC" horizontalCenter="0"
+                <TwnsUiLabel:UiLabel id="_labelLeft" text="English" size="12" textColor="0xCCCCCC" horizontalCenter="0"
                                 verticalCenter="1" />
             </e:Group>
             <e:Group top="0" bottom="0" width="50%" right="0">
-                <GameUi:UiImage id="_imgRightOn" source="commonRectangle0000" scale9Grid="2,2,1,1" left="0" right="0"
+                <TwnsUiImage:UiImage id="_imgRightOn" source="commonRectangle0000" scale9Grid="2,2,1,1" left="0" right="0"
                                 top="0" bottom="0" />
-                <GameUi:UiImage id="_imgRightOff" scale9Grid="2,2,1,1" source="commonRectangle0001" left="0" right="0"
+                <TwnsUiImage:UiImage id="_imgRightOff" scale9Grid="2,2,1,1" source="commonRectangle0001" left="0" right="0"
                                 top="0" bottom="0" />
-                <GameUi:UiLabel id="_labelRight" text="Origin" size="12" textColor="0xCCCCCC" horizontalCenter="0"
+                <TwnsUiLabel:UiLabel id="_labelRight" text="Origin" size="12" textColor="0xCCCCCC" horizontalCenter="0"
                                 verticalCenter="1" />
             </e:Group>
         </e:Group>

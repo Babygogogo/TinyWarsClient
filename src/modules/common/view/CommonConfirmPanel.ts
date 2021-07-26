@@ -1,8 +1,15 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.Common {
-    import Helpers  = Utility.Helpers;
-    import Lang     = Utility.Lang;
+import Helpers          from "../../tools/helpers/Helpers";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+
+namespace TwnsCommonConfirmPanel {
+    import LangTextType = TwnsLangTextType.LangTextType;
 
     type OpenDataForCommonConfirmPanel = {
         title?              : string;
@@ -12,28 +19,27 @@ namespace TinyWars.Common {
         textForConfirm?     : string;
         textForCancel?      : string;
     };
-
-    export class CommonConfirmPanel extends GameUi.UiPanel<OpenDataForCommonConfirmPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
+    export class CommonConfirmPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonConfirmPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CommonConfirmPanel;
 
         // @ts-ignore
-        private readonly _imgMask       : GameUi.UiImage;
+        private readonly _imgMask       : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private readonly _group         : eui.Group;
         // @ts-ignore
-        private readonly _labelTitle    : GameUi.UiLabel;
+        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
         // @ts-ignore
         private readonly _scrContent    : eui.Scroller;
         // @ts-ignore
-        private readonly _labelContent  : GameUi.UiLabel;
+        private readonly _labelContent  : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _btnCancel     : GameUi.UiButton;
+        private readonly _btnCancel     : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnConfirm    : GameUi.UiButton;
+        private readonly _btnConfirm    : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForCommonConfirmPanel): void {
             if (!CommonConfirmPanel._instance) {
@@ -64,9 +70,9 @@ namespace TinyWars.Common {
             this._showOpenAnimation();
 
             const openData          = this._getOpenData();
-            this._btnConfirm.label  = openData.textForConfirm || Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label   = openData.textForCancel || Lang.getText(Lang.Type.B0154);
-            this._labelTitle.text   = openData.title || Lang.getText(Lang.Type.B0088);
+            this._btnConfirm.label  = openData.textForConfirm || Lang.getText(LangTextType.B0026);
+            this._btnCancel.label   = openData.textForCancel || Lang.getText(LangTextType.B0154);
+            this._labelTitle.text   = openData.title || Lang.getText(LangTextType.B0088);
             this._labelContent.setRichText(openData.content);
             this._scrContent.viewport.scrollV = 0;
         }
@@ -116,3 +122,5 @@ namespace TinyWars.Common {
         }
     }
 }
+
+export default TwnsCommonConfirmPanel;

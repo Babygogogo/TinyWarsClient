@@ -1,15 +1,21 @@
 
-namespace TinyWars.BaseWar {
-    import TimeModel            = Time.TimeModel;
-    import CommonModel          = Common.CommonModel;
-    import Types                = Utility.Types;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import Helpers              = Utility.Helpers;
+import TwnsBwUnit           from "../model/BwUnit";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import Timer                from "../../tools/helpers/Timer";
+import CommonModel          from "../../common/model/CommonModel";
+import UserModel            from "../../user/model/UserModel";
+import Types                from "../../tools/helpers/Types";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+
+namespace TwnsBwUnitView {
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
+    import BwUnit               = TwnsBwUnit.BwUnit;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = Utility.CommonConstants.GridSize;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = CommonConstants.GridSize;
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_X               = _GRID_WIDTH * 3 / 4;
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_Y               = _GRID_HEIGHT / 2;
     const _IMG_UNIT_STAND_X                             = _GRID_WIDTH * 2 / 4;
@@ -17,9 +23,9 @@ namespace TinyWars.BaseWar {
     const _IMG_UNIT_STATE_HEIGHT                        = 36;
 
     export class BwUnitView extends egret.DisplayObjectContainer {
-        private _imgHp      = new GameUi.UiImage();
-        private _imgState   = new GameUi.UiImage();
-        private _imgUnit    = new GameUi.UiImage();
+        private _imgHp      = new TwnsUiImage.UiImage();
+        private _imgState   = new TwnsUiImage.UiImage();
+        private _imgUnit    = new TwnsUiImage.UiImage();
 
         private _unit                       : BwUnit;
         private _animationType              = UnitAnimationType.Stand;
@@ -74,10 +80,10 @@ namespace TinyWars.BaseWar {
         public tickUnitAnimationFrame(): void {
             const unit              = this.getUnit();
             this._imgUnit.source    = CommonModel.getCachedUnitImageSource({
-                version     : User.UserModel.getSelfSettingsTextureVersion(),
+                version     : UserModel.getSelfSettingsTextureVersion(),
                 isDark      : this._isDark,
                 isMoving    : this._animationType === UnitAnimationType.Move,
-                tickCount   : Time.TimeModel.getUnitAnimationTickCount(),
+                tickCount   : Timer.getUnitAnimationTickCount(),
                 skinId      : unit.getSkinId(),
                 unitType    : unit.getUnitType(),
             });
@@ -113,7 +119,7 @@ namespace TinyWars.BaseWar {
             const framesCount       = this._framesForStateAnimation.length;
             this._imgState.source   = framesCount <= 0
                 ? undefined
-                : this._framesForStateAnimation[Math.floor(TimeModel.getUnitAnimationTickCount() / 6) % framesCount];
+                : this._framesForStateAnimation[Math.floor(Timer.getUnitAnimationTickCount() / 6) % framesCount];
         }
 
         protected _getIsDark(): boolean {
@@ -161,7 +167,7 @@ namespace TinyWars.BaseWar {
                     if (isDiving) {
                         tween.call(() => {
                             this.visible = (i === path.length - 1)
-                                && (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                                && (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                     war,
                                     gridIndex,
                                     unitType,
@@ -172,7 +178,7 @@ namespace TinyWars.BaseWar {
                         });
                     } else {
                         tween.call(() => {
-                            this.visible = (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            this.visible = (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex           : path[i - 1],
                                 unitType,
@@ -180,7 +186,7 @@ namespace TinyWars.BaseWar {
                                 unitPlayerIndex     : playerIndex,
                                 observerTeamIndexes : watcherTeamIndexes,
                             }))
-                            || (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            || (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex,
                                 unitType,
@@ -201,7 +207,7 @@ namespace TinyWars.BaseWar {
                     tween.call(() => {
                         this._setImgUnitFlippedX(false);
                         if ((isBlocked)                                         &&
-                            (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 unitType,
                                 isDiving,
@@ -230,7 +236,7 @@ namespace TinyWars.BaseWar {
                         cursor.updateView();
                         this._setImgUnitFlippedX(false);
                         if ((isBlocked)                                         &&
-                            (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 unitType,
                                 isDiving,
@@ -336,3 +342,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwUnitView;

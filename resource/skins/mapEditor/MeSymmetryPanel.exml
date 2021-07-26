@@ -1,92 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group width="380" height="222" y="40" right="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <e:Group x="20" y="20">
             <e:Group id="_groupLeftRight" x="0" y="0">
                 <e:Group x="0" y="4">
-                    <GameUi:UiLabel id="_labelLeftRightTitle" text="L to R" textColor="0xFFFFFF" size="20" y="0" x="0" />
-                    <GameUi:UiLabel id="_labelLeftRightRate" text="100%" textColor="0xFFFFFF" size="20" y="0" x="0" />
+                    <TwnsUiLabel:UiLabel id="_labelLeftRightTitle" text="L to R" textColor="0xFFFFFF" size="20" y="0" x="0" />
+                    <TwnsUiLabel:UiLabel id="_labelLeftRightRate" text="100%" textColor="0xFFFFFF" size="20" y="0" x="0" />
                     <e:layout>
                         <e:HorizontalLayout gap="20" />
                     </e:layout>
                 </e:Group>
                 <e:Group id="_groupLeftRightBox" x="180" y="0">
-                    <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
-                    <GameUi:UiImage id="_imgLeftRight" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
+                    <TwnsUiImage:UiImage id="_imgLeftRight" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
                                     source="common0006" y="0" />
-                    <GameUi:UiLabel id="_labelLeftRightAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20" x="32"
+                    <TwnsUiLabel:UiLabel id="_labelLeftRightAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20" x="32"
                                     y="4" />
                 </e:Group>
             </e:Group>
             <e:Group id="_groupUpDown" x="10" y="10">
                 <e:Group x="0" y="4">
-                    <GameUi:UiLabel id="_labelUpDownTitle" text="U to D" textColor="0xFFFFFF" size="20" y="0" x="0" />
-                    <GameUi:UiLabel id="_labelUpDownRate" text="100%" textColor="0xFFFFFF" size="20" y="0" x="0" />
+                    <TwnsUiLabel:UiLabel id="_labelUpDownTitle" text="U to D" textColor="0xFFFFFF" size="20" y="0" x="0" />
+                    <TwnsUiLabel:UiLabel id="_labelUpDownRate" text="100%" textColor="0xFFFFFF" size="20" y="0" x="0" />
                     <e:layout>
                         <e:HorizontalLayout gap="20" />
                     </e:layout>
                 </e:Group>
                 <e:Group id="_groupUpDownBox" x="180" y="0">
-                    <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
-                    <GameUi:UiImage id="_imgUpDown" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
+                    <TwnsUiImage:UiImage id="_imgUpDown" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
                                     source="common0006" y="0" />
-                    <GameUi:UiLabel id="_labelUpDownAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20" x="32"
+                    <TwnsUiLabel:UiLabel id="_labelUpDownAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20" x="32"
                                     y="4" />
                 </e:Group>
             </e:Group>
             <e:Group id="_groupRotational" x="20" y="20">
                 <e:Group x="0" y="4">
-                    <GameUi:UiLabel id="_labelRotationalTitle" text="Rotational" textColor="0xFFFFFF" size="20" y="0"
+                    <TwnsUiLabel:UiLabel id="_labelRotationalTitle" text="Rotational" textColor="0xFFFFFF" size="20" y="0"
                                     x="0" />
-                    <GameUi:UiLabel id="_labelRotationalRate" text="100%" textColor="0xFFFFFF" size="20" y="0" x="0" />
+                    <TwnsUiLabel:UiLabel id="_labelRotationalRate" text="100%" textColor="0xFFFFFF" size="20" y="0" x="0" />
                     <e:layout>
                         <e:HorizontalLayout gap="20" />
                     </e:layout>
                 </e:Group>
                 <e:Group id="_groupRotationalBox" x="180" y="0">
-                    <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
-                    <GameUi:UiImage id="_imgRotational" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
+                    <TwnsUiImage:UiImage id="_imgRotational" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
                                     source="common0006" y="0" />
-                    <GameUi:UiLabel id="_labelRotationalAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20"
+                    <TwnsUiLabel:UiLabel id="_labelRotationalAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20"
                                     x="32" y="4" />
                 </e:Group>
             </e:Group>
             <e:Group id="_groupUpLeftDownRight" x="30" y="30">
                 <e:Group x="0" y="4">
-                    <GameUi:UiLabel id="_labelUpLeftDownRightTitle" text="UL to DR" textColor="0xFFFFFF" size="20" y="0"
+                    <TwnsUiLabel:UiLabel id="_labelUpLeftDownRightTitle" text="UL to DR" textColor="0xFFFFFF" size="20" y="0"
                                     x="0" />
-                    <GameUi:UiLabel id="_labelUpLeftDownRightRate" text="100%" textColor="0xFFFFFF" size="20" y="0"
+                    <TwnsUiLabel:UiLabel id="_labelUpLeftDownRightRate" text="100%" textColor="0xFFFFFF" size="20" y="0"
                                     x="0" />
                     <e:layout>
                         <e:HorizontalLayout gap="20" />
                     </e:layout>
                 </e:Group>
                 <e:Group id="_groupUpLeftDownRightBox" x="180" y="0">
-                    <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
-                    <GameUi:UiImage id="_imgUpLeftDownRight" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
+                    <TwnsUiImage:UiImage id="_imgUpLeftDownRight" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
                                     source="common0006" y="0" />
-                    <GameUi:UiLabel id="_labelUpLeftDownRightAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20"
+                    <TwnsUiLabel:UiLabel id="_labelUpLeftDownRightAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20"
                                     x="32" y="4" />
                 </e:Group>
             </e:Group>
             <e:Group id="_groupUpRightDownLeft" x="40" y="40">
                 <e:Group x="0" y="4">
-                    <GameUi:UiLabel id="_labelUpRightDownLeftTitle" text="UR to DL" textColor="0xFFFFFF" size="20" y="0"
+                    <TwnsUiLabel:UiLabel id="_labelUpRightDownLeftTitle" text="UR to DL" textColor="0xFFFFFF" size="20" y="0"
                                     x="0" />
-                    <GameUi:UiLabel id="_labelUpRightDownLeftRate" text="100%" textColor="0xFFFFFF" size="20" y="0"
+                    <TwnsUiLabel:UiLabel id="_labelUpRightDownLeftRate" text="100%" textColor="0xFFFFFF" size="20" y="0"
                                     x="0" />
                     <e:layout>
                         <e:HorizontalLayout gap="20" />
                     </e:layout>
                 </e:Group>
                 <e:Group id="_groupUpRightDownLeftBox" x="180" y="0">
-                    <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
-                    <GameUi:UiImage id="_imgUpRightDownLeft" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
+                    <TwnsUiImage:UiImage id="_imgUpRightDownLeft" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
                                     source="common0006" y="0" />
-                    <GameUi:UiLabel id="_labelUpRightDownLeftAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20"
+                    <TwnsUiLabel:UiLabel id="_labelUpRightDownLeftAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20"
                                     x="32" y="4" />
                 </e:Group>
             </e:Group>

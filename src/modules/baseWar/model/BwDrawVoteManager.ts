@@ -1,9 +1,14 @@
 
-namespace TinyWars.BaseWar {
-    import Logger               = Utility.Logger;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import ClientErrorCode      = Utility.ClientErrorCode;
+import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import TwnsBwWar                    from "../../baseWar/model/BwWar";
+import Logger                       from "../../tools/helpers/Logger";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
+
+namespace TwnsBwDrawVoteManager {
     import ISerialPlayerManager = ProtoTypes.WarSerialization.ISerialPlayerManager;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar                = TwnsBwWar.BwWar;
 
     export class BwDrawVoteManager {
         private _remainingVotes : number | null | undefined;
@@ -15,7 +20,7 @@ namespace TinyWars.BaseWar {
             } else {
                 let maxVotes = 0;
                 for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {
-                    if (BwHelpers.checkCanVoteForDraw({
+                    if (WarCommonHelpers.checkCanVoteForDraw({
                         playerIndex : playerData.playerIndex,
                         aliveState  : playerData.aliveState,
                     })) {
@@ -70,3 +75,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwDrawVoteManager;

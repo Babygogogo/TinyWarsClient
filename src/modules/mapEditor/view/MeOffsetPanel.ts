@@ -1,21 +1,32 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapEditor {
-    import Lang         = Utility.Lang;
-    import Notify       = Utility.Notify;
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+import MeModel              from "../model/MeModel";
+import MeUtility            from "../model/MeUtility";
+import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
 
-    export class MeOffsetPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsMeOffsetPanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+
+    export class MeOffsetPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeOffsetPanel;
 
-        private _labelTitle     : GameUi.UiLabel;
-        private _inputOffsetX   : GameUi.UiTextInput;
-        private _inputOffsetY   : GameUi.UiTextInput;
-        private _labelTips      : GameUi.UiLabel;
-        private _btnCancel      : GameUi.UiButton;
-        private _btnConfirm     : GameUi.UiButton;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
+        private _inputOffsetX   : TwnsUiTextInput.UiTextInput;
+        private _inputOffsetY   : TwnsUiTextInput.UiTextInput;
+        private _labelTips      : TwnsUiLabel.UiLabel;
+        private _btnCancel      : TwnsUiButton.UiButton;
+        private _btnConfirm     : TwnsUiButton.UiButton;
 
         private _offsetX   : number;
         private _offsetY  : number;
@@ -42,7 +53,7 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel, },
@@ -79,7 +90,7 @@ namespace TinyWars.MapEditor {
             }
 
             this.close();
-            MeWarMenuPanel.hide();
+            TwnsMeWarMenuPanel.MeWarMenuPanel.hide();
         }
 
         private _onFocusOutInputOffsetX(): void {
@@ -107,10 +118,12 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
-            this._labelTitle.text   = Lang.getText(Lang.Type.B0293);
-            this._labelTips.text    = Lang.getText(Lang.Type.A0088);
+            this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
+            this._labelTitle.text   = Lang.getText(LangTextType.B0293);
+            this._labelTips.text    = Lang.getText(LangTextType.A0088);
         }
     }
 }
+
+export default TwnsMeOffsetPanel;

@@ -1,16 +1,35 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.SinglePlayerWar.SpwModel {
-    import Types                    = Utility.Types;
-    import Logger                   = Utility.Logger;
-    import Lang                     = Utility.Lang;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import ClientErrorCode          = Utility.ClientErrorCode;
-    import CommonConstants          = Utility.CommonConstants;
+import TwnsBwWar            from "../../baseWar/model/BwWar";
+import TwnsCommonAlertPanel from "../../common/view/CommonAlertPanel";
+import TwnsScwWar           from "../../singleCustomWar/model/ScwWar";
+import TwnsSfwWar           from "../../singleFreeWar/model/SfwWar";
+import TwnsSrwWar           from "../../singleRankWar/model/SrwWar";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import FlowManager          from "../../tools/helpers/FlowManager";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import WarActionExecutor    from "../../tools/warHelpers/WarActionExecutor";
+import WarActionReviser     from "../../tools/warHelpers/WarActionReviser";
+import WarRobot             from "../../tools/warHelpers/WarRobot";
+import TwnsSpwPlayerManager from "./SpwPlayerManager";
+import TwnsSpwWar           from "./SpwWar";
+
+namespace SpwModel {
+    import SpwWar                   = TwnsSpwWar.SpwWar;
+    import ScwWar                   = TwnsScwWar.ScwWar;
+    import SfwWar                   = TwnsSfwWar.SfwWar;
+    import SrwWar                   = TwnsSrwWar.SrwWar;
+    import SpwPlayerManager         = TwnsSpwPlayerManager.SpwPlayerManager;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import WarSerialization         = ProtoTypes.WarSerialization;
     import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
     import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-    import CommonAlertPanel         = Common.CommonAlertPanel;
+    import BwWar                    = TwnsBwWar.BwWar;
 
     let _war: SpwWar;
     export function init(): void {
@@ -31,11 +50,11 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         }
 
         const war = warData.settingsForScw
-            ? new SingleCustomWar.ScwWar()
+            ? new ScwWar()
             : (warData.settingsForSfw
-                ? new SingleFreeWar.SfwWar()
+                ? new SfwWar()
                 : (warData.settingsForSrw
-                    ? new SingleRankWar.SrwWar()
+                    ? new SrwWar()
                     : null
                 )
             );
@@ -76,15 +95,15 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Util functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _warsWithRobotRunning = new Set<SpwWar>();
+    const _warsWithRobotRunning = new Set<BwWar>();
 
-    export async function handlePlayerActionAndAutoActions(war: SpwWar, action: IWarActionContainer): Promise<void> {
+    export async function handlePlayerActionAndAutoActions(war: BwWar, action: IWarActionContainer): Promise<void> {
         await handlePlayerOrRobotAction(war, action);
 
         await checkAndHandleAutoActionsAndRobotRecursively(war);
     }
 
-    export async function checkAndHandleAutoActionsAndRobotRecursively(war: SpwWar): Promise<void> {
+    export async function checkAndHandleAutoActionsAndRobotRecursively(war: BwWar): Promise<void> {
         if (_warsWithRobotRunning.has(war)) {
             return;
         }
@@ -110,7 +129,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         const {
             errorCode   : errorCodeForRobotAction,
             action      : robotAction,
-        } = await SpwRobot.getNextAction(war);
+        } = await WarRobot.getNextAction(war);
         if (errorCodeForRobotAction) {
             Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() errorCodeForRobotAction: ${errorCodeForRobotAction}`);
             _warsWithRobotRunning.delete(war);
@@ -132,7 +151,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         await checkAndHandleAutoActionsAndRobotRecursively(war);
     }
 
-    async function handlePlayerOrRobotAction(war: SpwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
+    async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
         if (!checkCanExecuteAction(war)) {
             Logger.error(`SpwModel.handlePlayerOrRobotAction() checkCanExecuteAction(war) is not true!`);
             return ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_00;
@@ -141,32 +160,32 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         return await reviseAndExecute(war, action);
     }
 
-    function checkAndEndWar(war: SpwWar): boolean {
+    function checkAndEndWar(war: BwWar): boolean {
         if (!war.getIsEnded()) {
             return false;
         } else {
             // TODO: show panels for srw.
-            const callback = () => Utility.FlowManager.gotoLobby();
+            const callback = () => FlowManager.gotoLobby();
             if (war.getDrawVoteManager().checkIsDraw()) {
-                CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0030),
+                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0030),
                     callback,
                 });
             } else {
                 const humanPlayerList = (war.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
                 if (humanPlayerList.length <= 0) {
-                    CommonAlertPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
-                        content : Lang.getText(Lang.Type.A0035),
+                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                        title   : Lang.getText(LangTextType.B0088),
+                        content : Lang.getText(LangTextType.A0035),
                         callback,
                     });
                 } else {
-                    CommonAlertPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
+                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                        title   : Lang.getText(LangTextType.B0088),
                         content : humanPlayerList.some(v => v.getAliveState() === Types.PlayerAliveState.Alive)
-                            ? Lang.getText(Lang.Type.A0022)
-                            : Lang.getText(Lang.Type.A0023),
+                            ? Lang.getText(LangTextType.A0022)
+                            : Lang.getText(LangTextType.A0023),
                         callback,
                     });
                 }
@@ -175,7 +194,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         }
     }
 
-    async function checkAndHandleSystemActions(war: SpwWar): Promise<boolean> {
+    async function checkAndHandleSystemActions(war: BwWar): Promise<boolean> {
         if ((war == null) || (war.getIsEnded())) {
             return false;
         }
@@ -270,14 +289,14 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         // No system action available.
         return false;
     }
-    async function handleSystemBeginTurn(war: SpwWar): Promise<ClientErrorCode> {
+    async function handleSystemBeginTurn(war: BwWar): Promise<ClientErrorCode> {
         return await reviseAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemBeginTurn    : {
             },
         });
     }
-    async function handleSystemCallWarEvent(war: SpwWar, warEventId: number): Promise<ClientErrorCode> {
+    async function handleSystemCallWarEvent(war: BwWar, warEventId: number): Promise<ClientErrorCode> {
         return await reviseAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemCallWarEvent : {
@@ -285,7 +304,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
             },
         });
     }
-    async function handleSystemDestroyPlayerForce(war: SpwWar, playerIndex: number): Promise<ClientErrorCode> {
+    async function handleSystemDestroyPlayerForce(war: BwWar, playerIndex: number): Promise<ClientErrorCode> {
         return await reviseAndExecute(war, {
             actionId                            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemDestroyPlayerForce   : {
@@ -293,21 +312,21 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
             },
         });
     }
-    async function handleSystemEndWar(war: SpwWar): Promise<ClientErrorCode> {
+    async function handleSystemEndWar(war: BwWar): Promise<ClientErrorCode> {
         return await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndWar   : {
             },
         });
     }
-    async function handleSystemHandleBootPlayer(war: SpwWar): Promise<ClientErrorCode> {
+    async function handleSystemHandleBootPlayer(war: BwWar): Promise<ClientErrorCode> {
         return await reviseAndExecute(war, {
             actionId                        : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemHandleBootPlayer : {
             },
         });
     }
-    async function handleSystemEndTurn(war: SpwWar): Promise<ClientErrorCode> {
+    async function handleSystemEndTurn(war: BwWar): Promise<ClientErrorCode> {
         return await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndTurn  : {
@@ -315,17 +334,17 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         });
     }
 
-    function checkCanExecuteAction(war: SpwWar): boolean {
+    function checkCanExecuteAction(war: BwWar): boolean {
         return (war != null)                &&
             (!war.getIsEnded())             &&
             (!war.getIsExecutingAction())   &&
             (war.getIsRunning());
     }
-    async function reviseAndExecute(war: SpwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
+    async function reviseAndExecute(war: BwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
         const {
             errorCode   : errorCodeForRevisedAction,
             action      : revisedAction,
-        } = BwActionReviser.revise(war, action);
+        } = WarActionReviser.revise(war, action);
         if (errorCodeForRevisedAction) {
             Logger.error(`SpwModel.reviseAndExecute() errorCodeForRevisedAction: ${errorCodeForRevisedAction}.`);
             return errorCodeForRevisedAction;
@@ -334,7 +353,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
             return ClientErrorCode.SpwModel_ReviseAndExecute_00;
         }
 
-        const errorCodeForExecute = await BaseWar.BwWarActionExecutor.checkAndExecute(war, revisedAction, false);
+        const errorCodeForExecute = await WarActionExecutor.checkAndExecute(war, revisedAction, false);
         if (errorCodeForExecute) {
             Logger.error(`SpwModel.reviseAndExecute() errorCodeForExecute: ${errorCodeForExecute}.`);
             return errorCodeForExecute;
@@ -344,3 +363,5 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         return ClientErrorCode.NoError;
     }
 }
+
+export default SpwModel;

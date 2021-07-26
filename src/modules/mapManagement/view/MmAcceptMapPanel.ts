@@ -1,70 +1,82 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapManagement {
-    import Lang     = Utility.Lang;
-    import Notify   = Utility.Notify;
+import TwnsMeWar        from "../../mapEditor/model/MeWar";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
+import WarMapProxy      from "../../warMap/model/WarMapProxy";
+
+namespace TwnsMmAcceptMapPanel {
+    import MeWar        = TwnsMeWar.MeWar;
+    import NotifyType   = TwnsNotifyType.NotifyType;
+    import LangTextType = TwnsLangTextType.LangTextType;
 
     type OpenData = {
-        war: MapEditor.MeWar;
-    }
-    export class MmAcceptMapPanel extends GameUi.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
+        war: MeWar;
+    };
+    export class MmAcceptMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MmAcceptMapPanel;
 
         // @ts-ignore
-        private _labelTitle     : GameUi.UiLabel;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelTips      : GameUi.UiLabel;
+        private _labelTips      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _inputReason    : GameUi.UiTextInput;
+        private _inputReason    : TwnsUiTextInput.UiTextInput;
         // @ts-ignore
-        private _btnCancel      : GameUi.UiButton;
+        private _btnCancel      : TwnsUiButton.UiButton;
         // @ts-ignore
-        private _btnConfirm     : GameUi.UiButton;
+        private _btnConfirm     : TwnsUiButton.UiButton;
 
         // @ts-ignore
         private _groupMcw       : eui.Group;
         // @ts-ignore
-        private _labelMcw       : GameUi.UiLabel;
+        private _labelMcw       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgMcw         : GameUi.UiImage;
+        private _imgMcw         : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private _groupCcw       : eui.Group;
         // @ts-ignore
-        private _labelCcw       : GameUi.UiLabel;
+        private _labelCcw       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgCcw         : GameUi.UiImage;
+        private _imgCcw         : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private _groupScw       : eui.Group;
         // @ts-ignore
-        private _labelScw       : GameUi.UiLabel;
+        private _labelScw       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgScw         : GameUi.UiImage;
+        private _imgScw         : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private _groupSrw       : eui.Group;
         // @ts-ignore
-        private _labelSrw       : GameUi.UiLabel;
+        private _labelSrw       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgSrw         : GameUi.UiImage;
+        private _imgSrw         : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private _groupMrwStd    : eui.Group;
         // @ts-ignore
-        private _labelMrwStd    : GameUi.UiLabel;
+        private _labelMrwStd    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgMrwStd      : GameUi.UiImage;
+        private _imgMrwStd      : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private _groupMrwFog    : eui.Group;
         // @ts-ignore
-        private _labelMrwFog    : GameUi.UiLabel;
+        private _labelMrwFog    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgMrwFog      : GameUi.UiImage;
+        private _imgMrwFog      : TwnsUiImage.UiImage;
 
         public static show(openData: OpenData): void {
             if (!MmAcceptMapPanel._instance) {
@@ -88,7 +100,7 @@ namespace TinyWars.MapManagement {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel, },
@@ -120,7 +132,7 @@ namespace TinyWars.MapManagement {
         }
         private _onTouchedBtnConfirm(): void {
             const war = this._getOpenData().war;
-            WarMap.WarMapProxy.reqMmReviewMap({
+            WarMapProxy.reqMmReviewMap({
                 designerUserId  : war.getMapDesignerUserId(),
                 slotIndex       : war.getMapSlotIndex(),
                 modifiedTime    : war.getMapModifiedTime(),
@@ -157,16 +169,18 @@ namespace TinyWars.MapManagement {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
-            this._labelTitle.text   = Lang.getText(Lang.Type.B0296);
-            this._labelTips.text    = Lang.getText(Lang.Type.A0105);
-            this._labelMcw.text     = Lang.getText(Lang.Type.B0200);
-            this._labelCcw.text     = Lang.getText(Lang.Type.B0619);
-            this._labelMrwStd.text  = Lang.getText(Lang.Type.B0404);
-            this._labelMrwFog.text  = Lang.getText(Lang.Type.B0408);
-            this._labelScw.text     = Lang.getText(Lang.Type.B0409);
-            this._labelSrw.text     = Lang.getText(Lang.Type.B0614);
+            this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
+            this._labelTitle.text   = Lang.getText(LangTextType.B0296);
+            this._labelTips.text    = Lang.getText(LangTextType.A0105);
+            this._labelMcw.text     = Lang.getText(LangTextType.B0200);
+            this._labelCcw.text     = Lang.getText(LangTextType.B0619);
+            this._labelMrwStd.text  = Lang.getText(LangTextType.B0404);
+            this._labelMrwFog.text  = Lang.getText(LangTextType.B0408);
+            this._labelScw.text     = Lang.getText(LangTextType.B0409);
+            this._labelSrw.text     = Lang.getText(LangTextType.B0614);
         }
     }
 }
+
+export default TwnsMmAcceptMapPanel;

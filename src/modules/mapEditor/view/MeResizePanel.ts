@@ -1,27 +1,39 @@
 
-namespace TinyWars.MapEditor {
-    import Lang         = Utility.Lang;
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import FloatText    = Utility.FloatText;
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import FloatText            from "../../tools/helpers/FloatText";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+import MeModel              from "../model/MeModel";
+import MeUtility            from "../model/MeUtility";
+import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
 
-    export class MeResizePanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsMeResizePanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
+
+    export class MeResizePanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeResizePanel;
 
-        private _labelTitle         : GameUi.UiLabel;
-        private _labelCurrSizeTitle : GameUi.UiLabel;
-        private _labelCurrWidth     : GameUi.UiLabel;
-        private _labelCurrHeight    : GameUi.UiLabel;
-        private _labelNewSizeTitle  : GameUi.UiLabel;
-        private _inputNewWidth      : GameUi.UiTextInput;
-        private _inputNewHeight     : GameUi.UiTextInput;
-        private _labelTips1         : GameUi.UiLabel;
-        private _labelTips2         : GameUi.UiLabel;
-        private _btnCancel          : GameUi.UiButton;
-        private _btnConfirm         : GameUi.UiButton;
+        private _labelTitle         : TwnsUiLabel.UiLabel;
+        private _labelCurrSizeTitle : TwnsUiLabel.UiLabel;
+        private _labelCurrWidth     : TwnsUiLabel.UiLabel;
+        private _labelCurrHeight    : TwnsUiLabel.UiLabel;
+        private _labelNewSizeTitle  : TwnsUiLabel.UiLabel;
+        private _inputNewWidth      : TwnsUiTextInput.UiTextInput;
+        private _inputNewHeight     : TwnsUiTextInput.UiTextInput;
+        private _labelTips1         : TwnsUiLabel.UiLabel;
+        private _labelTips2         : TwnsUiLabel.UiLabel;
+        private _btnCancel          : TwnsUiButton.UiButton;
+        private _btnConfirm         : TwnsUiButton.UiButton;
 
         private _newWidth   : number;
         private _newHeight  : number;
@@ -48,7 +60,7 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel, },
@@ -78,7 +90,7 @@ namespace TinyWars.MapEditor {
             const height        = this._newHeight;
             const gridsCount    = width * height;
             if ((!gridsCount) || (gridsCount <= 0)) {
-                FloatText.show(Lang.getText(Lang.Type.A0087));
+                FloatText.show(Lang.getText(LangTextType.A0087));
             } else {
                 const war       = MeModel.getWar();
                 const currSize  = war.getTileMap().getMapSize();
@@ -94,7 +106,7 @@ namespace TinyWars.MapEditor {
                 }
 
                 this.close();
-                MeWarMenuPanel.hide();
+                TwnsMeWarMenuPanel.MeWarMenuPanel.hide();
             }
         }
 
@@ -123,13 +135,15 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnConfirm.label          = Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label           = Lang.getText(Lang.Type.B0154);
-            this._labelTitle.text           = Lang.getText(Lang.Type.B0290);
-            this._labelCurrSizeTitle.text   = Lang.getText(Lang.Type.B0291);
-            this._labelNewSizeTitle.text    = Lang.getText(Lang.Type.B0292);
-            this._labelTips1.text           = Lang.getText(Lang.Type.A0086);
-            this._labelTips2.text           = Lang.getFormattedText(Lang.Type.F0023, Utility.CommonConstants.MapMaxGridsCount);
+            this._btnConfirm.label          = Lang.getText(LangTextType.B0026);
+            this._btnCancel.label           = Lang.getText(LangTextType.B0154);
+            this._labelTitle.text           = Lang.getText(LangTextType.B0290);
+            this._labelCurrSizeTitle.text   = Lang.getText(LangTextType.B0291);
+            this._labelNewSizeTitle.text    = Lang.getText(LangTextType.B0292);
+            this._labelTips1.text           = Lang.getText(LangTextType.A0086);
+            this._labelTips2.text           = Lang.getFormattedText(LangTextType.F0023, CommonConstants.MapMaxGridsCount);
         }
     }
 }
+
+export default TwnsMeResizePanel;

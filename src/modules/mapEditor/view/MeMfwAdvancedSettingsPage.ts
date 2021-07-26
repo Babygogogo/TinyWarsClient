@@ -1,20 +1,33 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapEditor {
-    import FloatText        = Utility.FloatText;
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import ConfigManager    = Utility.ConfigManager;
-    import CommonConstants  = Utility.CommonConstants;
-    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
+import TwnsCommonChooseCoPanel  from "../../common/view/CommonChooseCoPanel";
+import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import FloatText                from "../../tools/helpers/FloatText";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
+import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
+import MeMfwModel               from "../model/MeMfwModel";
 
-    export class MeMfwAdvancedSettingsPage extends GameUi.UiTabPage<void> {
-        private _labelMapNameTitle      : GameUi.UiLabel;
-        private _labelMapName           : GameUi.UiLabel;
-        private _labelPlayersCountTitle : GameUi.UiLabel;
-        private _labelPlayersCount      : GameUi.UiLabel;
-        private _labelPlayerList        : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
+namespace TwnsMeMfwAdvancedSettingsPage {
+    import CommonInputPanel     = TwnsCommonInputPanel.CommonInputPanel;
+    import CommonChooseCoPanel  = TwnsCommonChooseCoPanel.CommonChooseCoPanel;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+
+    export class MeMfwAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
+        private _labelMapNameTitle      : TwnsUiLabel.UiLabel;
+        private _labelMapName           : TwnsUiLabel.UiLabel;
+        private _labelPlayersCountTitle : TwnsUiLabel.UiLabel;
+        private _labelPlayersCount      : TwnsUiLabel.UiLabel;
+        private _labelPlayerList        : TwnsUiLabel.UiLabel;
+        private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -24,7 +37,7 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
@@ -45,21 +58,21 @@ namespace TinyWars.MapEditor {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}:`;
-            this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}:`;
-            this._labelPlayerList.text          = Lang.getText(Lang.Type.B0395);
+            this._labelMapNameTitle.text        = `${Lang.getText(LangTextType.B0225)}:`;
+            this._labelPlayersCountTitle.text   = `${Lang.getText(LangTextType.B0229)}:`;
+            this._labelPlayerList.text          = Lang.getText(LangTextType.B0395);
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getLanguageText({ textArray: MeModel.Mfw.getMapRawData().mapNameArray });
+            this._labelMapName.text = Lang.getLanguageText({ textArray: MeMfwModel.getMapRawData().mapNameArray });
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + MeModel.Mfw.getMapRawData().playersCountUnneutral;
+            this._labelPlayersCount.text = "" + MeMfwModel.getMapRawData().playersCountUnneutral;
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = MeModel.Mfw.getMapRawData().playersCountUnneutral;
+            const playersCount  = MeMfwModel.getMapRawData().playersCountUnneutral;
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -71,8 +84,8 @@ namespace TinyWars.MapEditor {
     type DataForPlayerRenderer = {
         playerIndex : number;
     };
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
+    class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
+        private _listInfo   : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -107,15 +120,15 @@ namespace TinyWars.MapEditor {
             ];
         }
         private _createDataController(playerIndex: number): DataForInfoRenderer {
-            const isControlledByPlayer = MeModel.Mfw.getIsControlledByHuman(playerIndex);
+            const isControlledByPlayer = MeMfwModel.getIsControlledByHuman(playerIndex);
             return {
-                titleText               : Lang.getText(Lang.Type.B0424),
-                infoText                : isControlledByPlayer ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256),
+                titleText               : Lang.getText(LangTextType.B0424),
+                infoText                : isControlledByPlayer ? Lang.getText(LangTextType.B0031) : Lang.getText(LangTextType.B0256),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        MeModel.Mfw.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
-                        MeModel.Mfw.setCoId(playerIndex, CommonConstants.CoEmptyId);
+                        MeMfwModel.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
+                        MeMfwModel.setCoId(playerIndex, CommonConstants.CoEmptyId);
                         this._updateView();
                     });
                 },
@@ -123,33 +136,33 @@ namespace TinyWars.MapEditor {
         }
         private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
             return {
-                titleText               : Lang.getText(Lang.Type.B0019),
-                infoText                : Lang.getPlayerTeamName(MeModel.Mfw.getTeamIndex(playerIndex)),
+                titleText               : Lang.getText(LangTextType.B0019),
+                infoText                : Lang.getPlayerTeamName(MeMfwModel.getTeamIndex(playerIndex)),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        MeModel.Mfw.tickTeamIndex(playerIndex);
+                        MeMfwModel.tickTeamIndex(playerIndex);
                         this._updateView();
                     });
                 },
             };
         }
         private _createDataCo(playerIndex: number): DataForInfoRenderer {
-            const coId          = MeModel.Mfw.getCoId(playerIndex);
-            const configVersion = MeModel.Mfw.getWarData().settingsForCommon.configVersion;
+            const coId          = MeMfwModel.getCoId(playerIndex);
+            const configVersion = MeMfwModel.getWarData().settingsForCommon.configVersion;
             return {
-                titleText               : Lang.getText(Lang.Type.B0425),
+                titleText               : Lang.getText(LangTextType.B0425),
                 infoText                : ConfigManager.getCoNameAndTierText(configVersion, coId),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    Common.CommonChooseCoPanel.show({
+                    CommonChooseCoPanel.show({
                         currentCoId         : coId,
-                        availableCoIdArray  : MeModel.Mfw.getIsControlledByHuman(playerIndex)
-                            ? BwWarRuleHelper.getAvailableCoIdArrayForPlayer(MeModel.Mfw.getWarRule(), playerIndex, configVersion)
+                        availableCoIdArray  : MeMfwModel.getIsControlledByHuman(playerIndex)
+                            ? WarRuleHelpers.getAvailableCoIdArrayForPlayer(MeMfwModel.getWarRule(), playerIndex, configVersion)
                             : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                         callbackOnConfirm   : newCoId => {
                             if (newCoId !== coId) {
-                                MeModel.Mfw.setCoId(playerIndex, newCoId);
+                                MeMfwModel.setCoId(playerIndex, newCoId);
                                 this._updateView();
                             }
                         },
@@ -159,38 +172,38 @@ namespace TinyWars.MapEditor {
         }
         private _createDataSkinId(playerIndex: number): DataForInfoRenderer {
             return {
-                titleText               : Lang.getText(Lang.Type.B0397),
-                infoText                : Lang.getUnitAndTileSkinName(MeModel.Mfw.getUnitAndTileSkinId(playerIndex)),
+                titleText               : Lang.getText(LangTextType.B0397),
+                infoText                : Lang.getUnitAndTileSkinName(MeMfwModel.getUnitAndTileSkinId(playerIndex)),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    MeModel.Mfw.tickUnitAndTileSkinId(playerIndex);
+                    MeMfwModel.tickUnitAndTileSkinId(playerIndex);
                     this._updateView();
                 },
             };
         }
         private _createDataInitialFund(playerIndex: number): DataForInfoRenderer {
-            const currValue = MeModel.Mfw.getInitialFund(playerIndex);
+            const currValue = MeMfwModel.getInitialFund(playerIndex);
             return {
-                titleText               : Lang.getText(Lang.Type.B0178),
+                titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0178),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0178),
                             currentValue    : "" + currValue,
                             maxChars        : 7,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    MeModel.Mfw.setInitialFund(playerIndex, value);
+                                    MeMfwModel.setInitialFund(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -200,28 +213,28 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataIncomeMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue = MeModel.Mfw.getIncomeMultiplier(playerIndex);
+            const currValue = MeMfwModel.getIncomeMultiplier(playerIndex);
             const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0179),
+                titleText               : Lang.getText(LangTextType.B0179),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0179),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0179),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
                             charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    MeModel.Mfw.setIncomeMultiplier(playerIndex, value);
+                                    MeMfwModel.setIncomeMultiplier(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -231,28 +244,28 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataEnergyAddPctOnLoadCo(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Mfw.getEnergyAddPctOnLoadCo(playerIndex);
+            const currValue     = MeMfwModel.getEnergyAddPctOnLoadCo(playerIndex);
             const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0180),
+                titleText               : Lang.getText(LangTextType.B0180),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0180),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0180),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
                             charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    MeModel.Mfw.setEnergyAddPctOnLoadCo(playerIndex, value);
+                                    MeMfwModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -262,28 +275,28 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataEnergyGrowthMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Mfw.getEnergyGrowthMultiplier(playerIndex);
+            const currValue     = MeMfwModel.getEnergyGrowthMultiplier(playerIndex);
             const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0181),
+                titleText               : Lang.getText(LangTextType.B0181),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0181),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0181),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
                             charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    MeModel.Mfw.setEnergyGrowthMultiplier(playerIndex, value);
+                                    MeMfwModel.setEnergyGrowthMultiplier(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -293,28 +306,28 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataMoveRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Mfw.getMoveRangeModifier(playerIndex);
+            const currValue     = MeMfwModel.getMoveRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0182),
+                titleText               : Lang.getText(LangTextType.B0182),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0182),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0182),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    MeModel.Mfw.setMoveRangeModifier(playerIndex, value);
+                                    MeMfwModel.setMoveRangeModifier(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -324,28 +337,28 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataAttackPowerModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Mfw.getAttackPowerModifier(playerIndex);
+            const currValue     = MeMfwModel.getAttackPowerModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
             const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0183),
+                titleText               : Lang.getText(LangTextType.B0183),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0183),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0183),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    MeModel.Mfw.setAttackPowerModifier(playerIndex, value);
+                                    MeMfwModel.setAttackPowerModifier(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -355,28 +368,28 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataVisionRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Mfw.getVisionRangeModifier(playerIndex);
+            const currValue     = MeMfwModel.getVisionRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0184),
+                titleText               : Lang.getText(LangTextType.B0184),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0184),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0184),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    MeModel.Mfw.setVisionRangeModifier(playerIndex, value);
+                                    MeMfwModel.setVisionRangeModifier(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -386,33 +399,33 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataLuckLowerLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Mfw.getLuckLowerLimit(playerIndex);
+            const currValue     = MeMfwModel.getLuckLowerLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0189),
+                titleText               : Lang.getText(LangTextType.B0189),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0189),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0189),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    const upperLimit = MeModel.Mfw.getLuckUpperLimit(playerIndex);
+                                    const upperLimit = MeMfwModel.getLuckUpperLimit(playerIndex);
                                     if (value <= upperLimit) {
-                                        MeModel.Mfw.setLuckLowerLimit(playerIndex, value);
+                                        MeMfwModel.setLuckLowerLimit(playerIndex, value);
                                     } else {
-                                        MeModel.Mfw.setLuckUpperLimit(playerIndex, value);
-                                        MeModel.Mfw.setLuckLowerLimit(playerIndex, upperLimit);
+                                        MeMfwModel.setLuckUpperLimit(playerIndex, value);
+                                        MeMfwModel.setLuckLowerLimit(playerIndex, upperLimit);
                                     }
                                     this._updateView();
                                 }
@@ -423,33 +436,33 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataLuckUpperLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Mfw.getLuckUpperLimit(playerIndex);
+            const currValue     = MeMfwModel.getLuckUpperLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0190),
+                titleText               : Lang.getText(LangTextType.B0190),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0190),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0190),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    const lowerLimit = MeModel.Mfw.getLuckLowerLimit(playerIndex);
+                                    const lowerLimit = MeMfwModel.getLuckLowerLimit(playerIndex);
                                     if (value >= lowerLimit) {
-                                        MeModel.Mfw.setLuckUpperLimit(playerIndex, value);
+                                        MeMfwModel.setLuckUpperLimit(playerIndex, value);
                                     } else {
-                                        MeModel.Mfw.setLuckLowerLimit(playerIndex, value);
-                                        MeModel.Mfw.setLuckUpperLimit(playerIndex, lowerLimit);
+                                        MeMfwModel.setLuckLowerLimit(playerIndex, value);
+                                        MeMfwModel.setLuckUpperLimit(playerIndex, lowerLimit);
                                     }
                                     this._updateView();
                                 }
@@ -461,13 +474,13 @@ namespace TinyWars.MapEditor {
         }
 
         private _confirmUseCustomRule(callback: () => void): void {
-            // if (MeModel.Mfw.getPresetWarRuleId() == null) {
+            // if (MeMfwModel.getPresetWarRuleId() == null) {
             //     callback();
             // } else {
-            //     Common.CommonConfirmPanel.show({
+            //     CommonConfirmPanel.show({
             //         content : Lang.getText(Lang.Type.A0129),
             //         callback: () => {
-            //             MeModel.Mfw.setPresetWarRuleId(null);
+            //             MeMfwModel.setPresetWarRuleId(null);
             //             callback();
             //         },
             //     });
@@ -482,10 +495,9 @@ namespace TinyWars.MapEditor {
         infoColor               : number;
         callbackOnTouchedTitle  : (() => void) | null;
     };
-
-    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : GameUi.UiButton;
-        private _labelValue : GameUi.UiLabel;
+    class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+        private _btnTitle   : TwnsUiButton.UiButton;
+        private _labelValue : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -518,3 +530,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeMfwAdvancedSettingsPage;

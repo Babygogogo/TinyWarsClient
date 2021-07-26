@@ -1,30 +1,35 @@
 
-namespace TinyWars.WarMap.WarMapProxy {
-    import NetManager   = Network.NetManager;
-    import MsgCode      = Network.Codes;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Notify       = Utility.Notify;
-    import NetMessage   = ProtoTypes.NetMessage;
+import WarMapModel          from "./WarMapModel";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import NetManager           from "../../tools/network/NetManager";
+
+namespace WarMapProxy {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: MsgCode.MsgMapGetEnabledBriefDataList,   callback: _onMsgMapGetEnabledBriefDataList },
-            { msgCode: MsgCode.MsgMapGetEnabledRawDataList,     callback: _onMsgMapGetEnabledRawDataList },
-            { msgCode: MsgCode.MsgMapGetBriefData,              callback: _onMsgMapGetBriefData },
-            { msgCode: MsgCode.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
-            { msgCode: MsgCode.MsgMmSetMapAvailability,         callback: _onMsgMmSetMapAvailability },
-            { msgCode: MsgCode.MsgMmSetMapEnabled,              callback: _onMsgMmSetMapEnabled },
-            { msgCode: MsgCode.MsgMmGetReviewingMaps,           callback: _onMsgMmGetReviewingMaps },
-            { msgCode: MsgCode.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
-            { msgCode: MsgCode.MsgMmSetMapTag,                  callback: _onMsgMmSetMapTag },
-        ], WarMapProxy);
+            { msgCode: NetMessageCodes.MsgMapGetEnabledBriefDataList,   callback: _onMsgMapGetEnabledBriefDataList },
+            { msgCode: NetMessageCodes.MsgMapGetEnabledRawDataList,     callback: _onMsgMapGetEnabledRawDataList },
+            { msgCode: NetMessageCodes.MsgMapGetBriefData,              callback: _onMsgMapGetBriefData },
+            { msgCode: NetMessageCodes.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
+            { msgCode: NetMessageCodes.MsgMmSetMapAvailability,         callback: _onMsgMmSetMapAvailability },
+            { msgCode: NetMessageCodes.MsgMmSetMapEnabled,              callback: _onMsgMmSetMapEnabled },
+            { msgCode: NetMessageCodes.MsgMmGetReviewingMaps,           callback: _onMsgMmGetReviewingMaps },
+            { msgCode: NetMessageCodes.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
+            { msgCode: NetMessageCodes.MsgMmSetMapTag,                  callback: _onMsgMmSetMapTag },
+        ], undefined);
     }
 
     function _onMsgMapGetEnabledBriefDataList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetEnabledBriefDataList.IS;
         if (!data.errorCode) {
             WarMapModel.resetBriefDataDict(data.dataList);
-            Notify.dispatch(Notify.Type.MsgMapGetEnabledBriefDataList, data);
+            Notify.dispatch(NotifyType.MsgMapGetEnabledBriefDataList, data);
         }
     }
 
@@ -32,7 +37,7 @@ namespace TinyWars.WarMap.WarMapProxy {
         const data = e.data as NetMessage.MsgMapGetEnabledRawDataList.IS;
         if (!data.errorCode) {
             WarMapModel.updateRawDataDict(data.dataList);
-            Notify.dispatch(Notify.Type.MsgMapGetEnabledRawDataList, data);
+            Notify.dispatch(NotifyType.MsgMapGetEnabledRawDataList, data);
         }
     }
 
@@ -46,10 +51,10 @@ namespace TinyWars.WarMap.WarMapProxy {
     function _onMsgMapGetBriefData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetBriefData.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgMapGetBriefDataFailed, data);
+            Notify.dispatch(NotifyType.MsgMapGetBriefDataFailed, data);
         } else {
             WarMapModel.setBriefData(data.mapBriefData);
-            Notify.dispatch(Notify.Type.MsgMapGetBriefData, data);
+            Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
         }
     }
 
@@ -63,10 +68,10 @@ namespace TinyWars.WarMap.WarMapProxy {
     function _onMsgMapGetRawData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetRawData.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgMapGetRawDataFailed, data);
+            Notify.dispatch(NotifyType.MsgMapGetRawDataFailed, data);
         } else {
             WarMapModel.setRawData(data.mapId, data.mapRawData);
-            Notify.dispatch(Notify.Type.MsgMapGetRawData, data);
+            Notify.dispatch(NotifyType.MsgMapGetRawData, data);
         }
     }
 
@@ -81,7 +86,7 @@ namespace TinyWars.WarMap.WarMapProxy {
     function _onMsgMmSetMapAvailability(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmSetMapAvailability.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgMmSetMapAvailability);
+            Notify.dispatch(NotifyType.MsgMmSetMapAvailability);
         }
     }
 
@@ -97,7 +102,7 @@ namespace TinyWars.WarMap.WarMapProxy {
         const data = e.data as NetMessage.MsgMmSetMapEnabled.IS;
         if (!data.errorCode) {
             WarMapModel.updateOnSetMapEnabled(data);
-            Notify.dispatch(Notify.Type.MsgMmSetMapEnabled, data);
+            Notify.dispatch(NotifyType.MsgMmSetMapEnabled, data);
         }
     }
 
@@ -110,7 +115,7 @@ namespace TinyWars.WarMap.WarMapProxy {
         const data = e.data as NetMessage.MsgMmGetReviewingMaps.IS;
         if (!data.errorCode) {
             WarMapModel.setMmReviewingMaps(data.maps);
-            Notify.dispatch(Notify.Type.MsgMmGetReviewingMaps, data);
+            Notify.dispatch(NotifyType.MsgMmGetReviewingMaps, data);
         }
     }
 
@@ -138,7 +143,7 @@ namespace TinyWars.WarMap.WarMapProxy {
     function _onMsgMmReviewMap(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmReviewMap.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgMmReviewMap, data);
+            Notify.dispatch(NotifyType.MsgMmReviewMap, data);
         }
     }
 
@@ -151,7 +156,9 @@ namespace TinyWars.WarMap.WarMapProxy {
     function _onMsgMmSetMapTag(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmSetMapTag.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgMmSetMapTag, data);
+            Notify.dispatch(NotifyType.MsgMmSetMapTag, data);
         }
     }
 }
+
+export default WarMapProxy;

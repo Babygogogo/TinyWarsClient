@@ -1,17 +1,22 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.BaseWar {
-    import Types                = Utility.Types;
-    import ClientErrorCode      = Utility.ClientErrorCode;
-    import Logger               = Utility.Logger;
-    import CommonConstants      = Utility.CommonConstants;
-    import WarSerialization     = Utility.ProtoTypes.WarSerialization;
-    import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
-    import ISerialPlayer        = WarSerialization.ISerialPlayer;
-    import PlayerAliveState     = Types.PlayerAliveState;
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwPlayer         from "./BwPlayer";
+import TwnsBwWar            from "./BwWar";
+
+namespace TwnsBwPlayerManager {
+    import WarSerialization         = ProtoTypes.WarSerialization;
+    import ISerialPlayerManager     = WarSerialization.ISerialPlayerManager;
+    import ISerialPlayer            = WarSerialization.ISerialPlayer;
+    import PlayerAliveState         = Types.PlayerAliveState;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar                    = TwnsBwWar.BwWar;
 
     export abstract class BwPlayerManager {
-        private _players        = new Map<number, BwPlayer>();
+        private _players        = new Map<number, TwnsBwPlayer.BwPlayer>();
         private _war            : BwWar | undefined;
 
         public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
@@ -29,7 +34,7 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwPlayerManagerInit01;
             }
 
-            const newPlayerMap  = new Map<number, BwPlayer>();
+            const newPlayerMap  = new Map<number, TwnsBwPlayer.BwPlayer>();
             const skinIdSet     = new Set<number>();
             for (const playerData of playerArray) {
                 const playerIndex = playerData.playerIndex;
@@ -43,7 +48,7 @@ namespace TinyWars.BaseWar {
                 }
                 skinIdSet.add(skinId);
 
-                const player        = new BwPlayer();
+                const player        = new TwnsBwPlayer.BwPlayer();
                 const playerError   = player.init(playerData, configVersion);
                 if (playerError) {
                     return playerError;
@@ -153,21 +158,21 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getPlayer(playerIndex: number): BwPlayer | undefined {
+        public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer | undefined {
             return this._players.get(playerIndex);
         }
-        public getAllPlayersDict(): Map<number, BwPlayer> {
+        public getAllPlayersDict(): Map<number, TwnsBwPlayer.BwPlayer> {
             return this._players;
         }
-        public getAllPlayers(): BwPlayer[] {
-            const players: BwPlayer[] = [];
+        public getAllPlayers(): TwnsBwPlayer.BwPlayer[] {
+            const players: TwnsBwPlayer.BwPlayer[] = [];
             for (const [, player] of this.getAllPlayersDict()) {
                 players.push(player);
             }
             return players;
         }
 
-        public getPlayerByUserId(userId: number): BwPlayer | undefined {
+        public getPlayerByUserId(userId: number): TwnsBwPlayer.BwPlayer | undefined {
             for (const [, player] of this._players) {
                 if (player.getUserId() === userId) {
                     return player;
@@ -176,7 +181,7 @@ namespace TinyWars.BaseWar {
             return undefined;
         }
 
-        public getPlayerInTurn(): BwPlayer | undefined {
+        public getPlayerInTurn(): TwnsBwPlayer.BwPlayer | undefined {
             const war = this._getWar();
             if (war == null) {
                 return undefined;
@@ -265,7 +270,7 @@ namespace TinyWars.BaseWar {
             return (p1 != null) && (p2 != null) && (p1.getTeamIndex() === p2.getTeamIndex());
         }
 
-        public forEachPlayer(includeNeutral: boolean, func: (p: BwPlayer) => void): void {
+        public forEachPlayer(includeNeutral: boolean, func: (p: TwnsBwPlayer.BwPlayer) => void): void {
             for (const [playerIndex, player] of this._players) {
                 ((includeNeutral) || (playerIndex !== 0)) && (func(player));
             }
@@ -298,3 +303,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwPlayerManager;

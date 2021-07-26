@@ -1,32 +1,57 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.CoopCustomRoom {
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import FloatText        = Utility.FloatText;
-    import Helpers          = Utility.Helpers;
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import FloatText                            from "../../tools/helpers/FloatText";
+import FlowManager                          from "../../tools/helpers/FlowManager";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Logger                               from "../../tools/helpers/Logger";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
+import CcrCreateModel                       from "../model/CcrCreateModel";
+import CcrProxy                             from "../model/CcrProxy";
+import TwnsCcrCreateAdvancedSettingsPage    from "./CcrCreateAdvancedSettingsPage";
+import TwnsCcrCreateMapListPanel            from "./CcrCreateMapListPanel";
+import TwnsCcrCreatePlayerInfoPage          from "./CcrCreatePlayerInfoPage";
+
+namespace TwnsCcrCreateSettingsPanel {
+    import CcrCreateAdvancedSettingsPage            = TwnsCcrCreateAdvancedSettingsPage.CcrCreateAdvancedSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import CcrCreatePlayerInfoPage                  = TwnsCcrCreatePlayerInfoPage.CcrCreatePlayerInfoPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class CcrCreateSettingsPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class CcrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CcrCreateSettingsPanel;
 
         private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : GameUi.UiLabel;
-        private readonly _labelCreateRoom       : GameUi.UiLabel;
-        private readonly _labelChooseMap        : GameUi.UiLabel;
-        private readonly _labelRoomSettings     : GameUi.UiLabel;
+        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
+        private readonly _labelCreateRoom       : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseMap        : TwnsUiLabel.UiLabel;
+        private readonly _labelRoomSettings     : TwnsUiLabel.UiLabel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, void>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage>;
 
-        private readonly _btnBack               : GameUi.UiButton;
-        private readonly _btnConfirm            : GameUi.UiButton;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
-        private _timeoutIdForBtnConfirm: number;
+        private _timeoutIdForBtnConfirm : number;
+        private _isTabInitialized       = false;
 
         public static show(): void {
             if (!CcrCreateSettingsPanel._instance) {
@@ -46,35 +71,39 @@ namespace TinyWars.CoopCustomRoom {
             this.skinName = "resource/skins/coopCustomRoom/CcrCreateSettingsPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgCcrCreateRoom,           callback: this._onNotifyMsgCcrCreateRoom },
+                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgCcrCreateRoom,           callback: this._onNotifyMsgCcrCreateRoom },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
+            this._isTabInitialized = false;
             this._tabSettings.bindData([
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : CcrCreateBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                    tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : CcrCreateAdvancedSettingsPage,
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                    tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : CcrCreatePlayerInfoPage,
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
-                    pageClass   : CcrCreateMapInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0298) },
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
             ]);
+            this._isTabInitialized = true;
 
             this._showOpenAnimation();
 
@@ -92,10 +121,10 @@ namespace TinyWars.CoopCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            CcrCreateMapListPanel.show();
+            TwnsCcrCreateMapListPanel.CcrCreateMapListPanel.show();
         }
         private _onTouchedBtnConfirm(): void {
-            const data = CcrModel.Create.getData();
+            const data = CcrCreateModel.getData();
             CcrProxy.reqCreateRoom(data);
 
             this._btnConfirm.enabled = false;
@@ -106,8 +135,8 @@ namespace TinyWars.CoopCustomRoom {
             this._updateComponentsForLanguage();
         }
         private _onNotifyMsgCcrCreateRoom(): void {
-            FloatText.show(Lang.getText(Lang.Type.A0015));
-            Utility.FlowManager.gotoLobby();
+            FloatText.show(Lang.getText(LangTextType.A0015));
+            FlowManager.gotoLobby();
         }
 
         private _resetTimeoutForBtnConfirm(): void {
@@ -129,12 +158,132 @@ namespace TinyWars.CoopCustomRoom {
         // Functions for the view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0000);
-            this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0646);
-            this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
-            this._labelRoomSettings.text        = Lang.getText(Lang.Type.B0571);
-            this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-            this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
+            this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
+            this._labelMultiPlayer.text         = Lang.getText(LangTextType.B0646);
+            this._labelChooseMap.text           = Lang.getText(LangTextType.B0227);
+            this._labelRoomSettings.text        = Lang.getText(LangTextType.B0571);
+            this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+            this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
+            }
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            const warRule           = CcrCreateModel.getWarRule();
+            const bootTimerParams   = CcrCreateModel.getBootTimerParams();
+            const timerType         = bootTimerParams[0] as Types.BootTimerType;
+            const openData          : OpenDataForCommonWarBasicSettingsPage = {
+                dataArrayForListSettings: [
+                    {
+                        settingsType    : WarBasicSettingsType.MapName,
+                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(CcrCreateModel.getMapId()),
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarName,
+                        currentValue    : CcrCreateModel.getWarName(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            CcrCreateModel.setWarName(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarPassword,
+                        currentValue    : CcrCreateModel.getWarPassword(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            CcrCreateModel.setWarPassword(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarComment,
+                        currentValue    : CcrCreateModel.getWarComment(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            CcrCreateModel.setWarComment(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarRuleTitle,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: async () => {
+                            await CcrCreateModel.tickPresetWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.HasFog,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: () => {
+                            CcrCreateModel.setHasFog(!CcrCreateModel.getHasFog());
+                            CcrCreateModel.setCustomWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerType,
+                        currentValue    : timerType,
+                        warRule,
+                        callbackOnModify: async () => {
+                            CcrCreateModel.tickBootTimerType();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                ],
+            };
+            if (timerType === Types.BootTimerType.Regular) {
+                openData.dataArrayForListSettings.push({
+                    settingsType    : WarBasicSettingsType.TimerRegularParam,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: () => {
+                        CcrCreateModel.tickTimerRegularTime();
+                        this._updateCommonWarBasicSettingsPage();
+                    },
+                });
+            } else if (timerType === Types.BootTimerType.Incremental) {
+                openData.dataArrayForListSettings.push(
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                        currentValue    : bootTimerParams[1],
+                        warRule,
+                        callbackOnModify: (newValue: number) => {
+                            CcrCreateModel.setTimerIncrementalInitialTime(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                        currentValue    : bootTimerParams[2],
+                        warRule,
+                        callbackOnModify: (newValue: number) => {
+                            CcrCreateModel.setTimerIncrementalIncrementalValue(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                );
+            } else {
+                Logger.error(`CcrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            }
+
+            return openData;
+        }
+
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+            const mapId = CcrCreateModel.getMapId();
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId } };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,11 +341,13 @@ namespace TinyWars.CoopCustomRoom {
     type DataForTabItemRenderer = {
         name: string;
     };
-    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: GameUi.UiLabel;
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
         }
     }
 }
+
+export default TwnsCcrCreateSettingsPanel;

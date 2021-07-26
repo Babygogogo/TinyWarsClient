@@ -1,17 +1,29 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapManagement {
-    import Lang         = Utility.Lang;
-    import NotifyType   = Utility.Notify.Type;
-    import Logger       = Utility.Logger;
-    import WarMapModel  = WarMap.WarMapModel;
-    import WarMapProxy  = WarMap.WarMapProxy;
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import Logger                   from "../../tools/helpers/Logger";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import WarMapModel              from "../../warMap/model/WarMapModel";
+import WarMapProxy              from "../../warMap/model/WarMapProxy";
+import TwnsMmWarRulePanel       from "./MmWarRulePanel";
+
+namespace TwnsMmAvailabilityChangePanel {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import MmWarRulePanel       = TwnsMmWarRulePanel.MmWarRulePanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
 
     type OpenDataForMmAvailabilityChangePanel = {
         mapId   : number;
-    }
-    export class MmAvailabilityChangePanel extends GameUi.UiPanel<OpenDataForMmAvailabilityChangePanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    };
+    export class MmAvailabilityChangePanel extends TwnsUiPanel.UiPanel<OpenDataForMmAvailabilityChangePanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MmAvailabilityChangePanel;
@@ -19,53 +31,53 @@ namespace TinyWars.MapManagement {
         // @ts-ignore
         private _groupMcw       : eui.Group;
         // @ts-ignore
-        private _labelMcw       : GameUi.UiLabel;
+        private _labelMcw       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgMcw         : GameUi.UiImage;
+        private _imgMcw         : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private _groupCcw       : eui.Group;
         // @ts-ignore
-        private _labelCcw       : GameUi.UiLabel;
+        private _labelCcw       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgCcw         : GameUi.UiImage;
+        private _imgCcw         : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private _groupScw       : eui.Group;
         // @ts-ignore
-        private _labelScw       : GameUi.UiLabel;
+        private _labelScw       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgScw         : GameUi.UiImage;
+        private _imgScw         : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private _groupSrw       : eui.Group;
         // @ts-ignore
-        private _labelSrw       : GameUi.UiLabel;
+        private _labelSrw       : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgSrw         : GameUi.UiImage;
+        private _imgSrw         : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private _groupMrwStd    : eui.Group;
         // @ts-ignore
-        private _labelMrwStd    : GameUi.UiLabel;
+        private _labelMrwStd    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgMrwStd      : GameUi.UiImage;
+        private _imgMrwStd      : TwnsUiImage.UiImage;
 
         // @ts-ignore
         private _groupMrwFog    : eui.Group;
         // @ts-ignore
-        private _labelMrwFog    : GameUi.UiLabel;
+        private _labelMrwFog    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _imgMrwFog      : GameUi.UiImage;
+        private _imgMrwFog      : TwnsUiImage.UiImage;
 
         // @ts-ignore
-        private _btnDelete      : GameUi.UiButton;
+        private _btnDelete      : TwnsUiButton.UiButton;
         // @ts-ignore
-        private _btnWarRule     : GameUi.UiButton;
+        private _btnWarRule     : TwnsUiButton.UiButton;
         // @ts-ignore
-        private _btnCancel      : GameUi.UiButton;
+        private _btnCancel      : TwnsUiButton.UiButton;
         // @ts-ignore
-        private _btnConfirm     : GameUi.UiButton;
+        private _btnConfirm     : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForMmAvailabilityChangePanel): void {
             if (!MmAvailabilityChangePanel._instance) {
@@ -126,8 +138,8 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchedBtnDelete(): void {
-            Common.CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0080),
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0080),
                 callback: () => {
                     WarMapProxy.reqMmSetMapEnabled(this._getOpenData().mapId, false);
                     this.close();
@@ -188,16 +200,18 @@ namespace TinyWars.MapManagement {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
-            this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-            this._btnDelete.label   = Lang.getText(Lang.Type.B0270);
-            this._btnWarRule.label  = Lang.getText(Lang.Type.B0314);
-            this._labelMcw.text     = Lang.getText(Lang.Type.B0200);
-            this._labelCcw.text     = Lang.getText(Lang.Type.B0619);
-            this._labelMrwStd.text  = Lang.getText(Lang.Type.B0404);
-            this._labelMrwFog.text  = Lang.getText(Lang.Type.B0408);
-            this._labelScw.text     = Lang.getText(Lang.Type.B0409);
-            this._labelSrw.text     = Lang.getText(Lang.Type.B0614);
+            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
+            this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+            this._btnDelete.label   = Lang.getText(LangTextType.B0270);
+            this._btnWarRule.label  = Lang.getText(LangTextType.B0314);
+            this._labelMcw.text     = Lang.getText(LangTextType.B0200);
+            this._labelCcw.text     = Lang.getText(LangTextType.B0619);
+            this._labelMrwStd.text  = Lang.getText(LangTextType.B0404);
+            this._labelMrwFog.text  = Lang.getText(LangTextType.B0408);
+            this._labelScw.text     = Lang.getText(LangTextType.B0409);
+            this._labelSrw.text     = Lang.getText(LangTextType.B0614);
         }
     }
 }
+
+export default TwnsMmAvailabilityChangePanel;

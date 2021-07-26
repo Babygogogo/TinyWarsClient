@@ -1,20 +1,29 @@
 
-namespace TinyWars.BaseWar {
-    import Notify               = Utility.Notify;
-    import Types                = Utility.Types;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Types                from "../../tools/helpers/Types";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsBwUnitMap        from "../model/BwUnitMap";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwUnitView       from "./BwUnitView";
+
+namespace TwnsBwUnitMapView {
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import BwUnitView           = TwnsBwUnitView.BwUnitView;
     import UnitCategory         = Types.UnitCategory;
     import ActionPlannerState   = Types.ActionPlannerState;
+    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.CommonConstants.GridSize;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
 
     export class BwUnitMapView extends egret.DisplayObjectContainer {
         private readonly _layerForNaval     = new egret.DisplayObjectContainer();
         private readonly _layerForGround    = new egret.DisplayObjectContainer();
         private readonly _layerForAir       = new egret.DisplayObjectContainer();
         private readonly _notifyListeners   = [
-            { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-            { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
         private _unitMap                    : BwUnitMap;
@@ -82,13 +91,13 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
+        private _onNotifyUnitAnimationTick(): void {
             this._updateAnimationsOnTick(this._layerForAir);
             this._updateAnimationsOnTick(this._layerForGround);
             this._updateAnimationsOnTick(this._layerForNaval);
         }
 
-        private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwActionPlannerStateChanged(): void {
             const actionPlanner = this._getUnitMap().getWar().getActionPlanner();
             const state         = actionPlanner.getState();
 
@@ -189,11 +198,11 @@ namespace TinyWars.BaseWar {
 
         private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer | undefined {
             const version = this._getUnitMap().getWar().getConfigVersion();
-            if (Utility.ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Air)) {
+            if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Air)) {
                 return this._layerForAir;
-            } else if (Utility.ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Ground)) {
+            } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Ground)) {
                 return this._layerForGround;
-            } else if (Utility.ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Naval)) {
+            } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Naval)) {
                 return this._layerForNaval;
             } else {
                 return undefined;
@@ -203,10 +212,12 @@ namespace TinyWars.BaseWar {
         private _resetVisibleForAllUnitsOnMap(): void {
             const unitMap       = this._getUnitMap();
             const war           = unitMap.getWar();
-            const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             for (const unit of unitMap.getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
             }
         }
     }
 }
+
+export default TwnsBwUnitMapView;

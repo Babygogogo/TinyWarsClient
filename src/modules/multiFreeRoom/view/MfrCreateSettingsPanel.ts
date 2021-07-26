@@ -1,45 +1,74 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MultiFreeRoom {
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import FloatText        = Utility.FloatText;
-    import Helpers          = Utility.Helpers;
-    import CommonConstants  = Utility.CommonConstants;
-    import Types            = Utility.Types;
-    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
-    import BwHelpers        = BaseWar.BwHelpers;
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
+import FloatText                            from "../../tools/helpers/FloatText";
+import FlowManager                          from "../../tools/helpers/FlowManager";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Logger                               from "../../tools/helpers/Logger";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiImage                          from "../../tools/ui/UiImage";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+import MfrCreateModel                       from "../model/MfrCreateModel";
+import TwnsMfrCreateAdvancedSettingsPage    from "./MfrCreateAdvancedSettingsPage";
+import TwnsMfrCreatePlayerInfoPage          from "./MfrCreatePlayerInfoPage";
+import TwnsMfrMainMenuPanel                 from "./MfrMainMenuPanel";
+
+namespace TwnsMfrCreateSettingsPanel {
+    import MfrMainMenuPanel                         = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
+    import MfrCreateAdvancedSettingsPage            = TwnsMfrCreateAdvancedSettingsPage.MfrCreateAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import MfrCreatePlayerInfoPage                  = TwnsMfrCreatePlayerInfoPage.MfrCreatePlayerInfoPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class MfrCreateSettingsPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class MfrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MfrCreateSettingsPanel;
 
         private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : GameUi.UiLabel;
-        private readonly _labelFreeMode         : GameUi.UiLabel;
-        private readonly _labelCreateRoom       : GameUi.UiLabel;
-        private readonly _labelRoomSettings     : GameUi.UiLabel;
+        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
+        private readonly _labelFreeMode         : TwnsUiLabel.UiLabel;
+        private readonly _labelCreateRoom       : TwnsUiLabel.UiLabel;
+        private readonly _labelRoomSettings     : TwnsUiLabel.UiLabel;
 
         private readonly _groupSettings         : eui.Group;
         private readonly _groupChoosePlayerIndex: eui.Group;
-        private readonly _labelChoosePlayerIndex: GameUi.UiLabel;
-        private readonly _sclPlayerIndex        : GameUi.UiScrollList<DataForPlayerIndexRenderer>;
+        private readonly _labelChoosePlayerIndex: TwnsUiLabel.UiLabel;
+        private readonly _sclPlayerIndex        : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
 
         private readonly _groupChooseSkinId     : eui.Group;
-        private readonly _labelChooseSkinId     : GameUi.UiLabel;
-        private readonly _sclSkinId             : GameUi.UiScrollList<DataForSkinIdRenderer>;
+        private readonly _labelChooseSkinId     : TwnsUiLabel.UiLabel;
+        private readonly _sclSkinId             : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, void>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage>;
 
-        private readonly _btnBack               : GameUi.UiButton;
-        private readonly _btnConfirm            : GameUi.UiButton;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnConfirm            : TwnsUiButton.UiButton;
 
-        private _timeoutIdForBtnConfirm: number;
+        private _timeoutIdForBtnConfirm : number;
+        private _isTabInitialized       = false;
 
         public static show(): void {
             if (!MfrCreateSettingsPanel._instance) {
@@ -65,31 +94,35 @@ namespace TinyWars.MultiFreeRoom {
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMfrCreateRoom,           callback: this._onNotifyMsgMfrCreateRoom },
+                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMfrCreateRoom,           callback: this._onNotifyMsgMfrCreateRoom },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
             this._sclSkinId.setItemRenderer(SkinIdRenderer);
 
+            this._isTabInitialized = false;
             this._tabSettings.bindData([
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : MfrCreateBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                    tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : MfrCreateAdvancedSettingsPage,
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                    tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : MfrCreatePlayerInfoPage,
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
-                    pageClass   : MfrCreateMapInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0298) },
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageData    : this._createDataForCommonMapInfoPage(),
                 },
             ]);
+            this._isTabInitialized = true;
 
             this._showOpenAnimation();
 
@@ -110,11 +143,11 @@ namespace TinyWars.MultiFreeRoom {
         private _onTouchedBtnBack(): void {
             this.close();
             MfrMainMenuPanel.show();
-            Lobby.LobbyTopPanel.show();
-            Lobby.LobbyBottomPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
         private _onTouchedBtnConfirm(): void {
-            const data = MfrModel.Create.getData();
+            const data = MfrCreateModel.getData();
             MfrProxy.reqCreateRoom(data);
 
             this._btnConfirm.enabled = false;
@@ -125,8 +158,8 @@ namespace TinyWars.MultiFreeRoom {
             this._updateComponentsForLanguage();
         }
         private _onNotifyMsgMfrCreateRoom(): void {
-            FloatText.show(Lang.getText(Lang.Type.A0015));
-            Utility.FlowManager.gotoLobby();
+            FloatText.show(Lang.getText(LangTextType.A0015));
+            FlowManager.gotoLobby();
         }
 
         private _resetTimeoutForBtnConfirm(): void {
@@ -148,18 +181,18 @@ namespace TinyWars.MultiFreeRoom {
         // Functions for the view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0137);
-            this._labelFreeMode.text            = Lang.getText(Lang.Type.B0557);
-            this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0000);
-            this._labelRoomSettings.text        = Lang.getText(Lang.Type.B0571);
-            this._labelChoosePlayerIndex.text   = Lang.getText(Lang.Type.B0572);
-            this._labelChooseSkinId.text        = Lang.getText(Lang.Type.B0586);
-            this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-            this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
+            this._labelMultiPlayer.text         = Lang.getText(LangTextType.B0137);
+            this._labelFreeMode.text            = Lang.getText(LangTextType.B0557);
+            this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
+            this._labelRoomSettings.text        = Lang.getText(LangTextType.B0571);
+            this._labelChoosePlayerIndex.text   = Lang.getText(LangTextType.B0572);
+            this._labelChooseSkinId.text        = Lang.getText(LangTextType.B0586);
+            this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+            this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
-            const playersCountUnneutral = MfrModel.Create.getInitialWarData().playerManager.players.length - 1;
+            const playersCountUnneutral = MfrCreateModel.getInitialWarData().playerManager.players.length - 1;
             const dataArray             : DataForPlayerIndexRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
@@ -177,6 +210,113 @@ namespace TinyWars.MultiFreeRoom {
                 });
             }
             this._sclSkinId.bindData(dataArray);
+        }
+
+        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+            const warData = MfrCreateModel.getInitialWarData();
+            return warData == null
+                ? {}
+                : { warInfo: { warData } };
+        }
+
+        private _updateCommonWarBasicSettingsPage(): void {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, this._createDataForCommonWarBasicSettingsPage());
+            }
+        }
+
+        private _createDataForCommonWarBasicSettingsPage(): OpenDataForCommonWarBasicSettingsPage {
+            const warRule           = MfrCreateModel.getWarRule();
+            const bootTimerParams   = MfrCreateModel.getBootTimerParams();
+            const timerType         = bootTimerParams[0] as Types.BootTimerType;
+            const openData          : OpenDataForCommonWarBasicSettingsPage = {
+                dataArrayForListSettings: [
+                    {
+                        settingsType    : WarBasicSettingsType.WarName,
+                        currentValue    : MfrCreateModel.getWarName(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            MfrCreateModel.setWarName(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarPassword,
+                        currentValue    : MfrCreateModel.getWarPassword(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            MfrCreateModel.setWarPassword(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarComment,
+                        currentValue    : MfrCreateModel.getWarComment(),
+                        warRule,
+                        callbackOnModify: (newValue: string) => {
+                            MfrCreateModel.setWarComment(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarRuleTitle,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.HasFog,
+                        currentValue    : undefined,
+                        warRule,
+                        callbackOnModify: undefined,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerType,
+                        currentValue    : timerType,
+                        warRule,
+                        callbackOnModify: async () => {
+                            MfrCreateModel.tickBootTimerType();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                ],
+            };
+            if (timerType === Types.BootTimerType.Regular) {
+                openData.dataArrayForListSettings.push({
+                    settingsType    : WarBasicSettingsType.TimerRegularParam,
+                    currentValue    : bootTimerParams[1],
+                    warRule,
+                    callbackOnModify: () => {
+                        MfrCreateModel.tickTimerRegularTime();
+                        this._updateCommonWarBasicSettingsPage();
+                    },
+                });
+            } else if (timerType === Types.BootTimerType.Incremental) {
+                openData.dataArrayForListSettings.push(
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
+                        currentValue    : bootTimerParams[1],
+                        warRule,
+                        callbackOnModify: (newValue: number) => {
+                            MfrCreateModel.setTimerIncrementalInitialTime(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
+                        currentValue    : bootTimerParams[2],
+                        warRule,
+                        callbackOnModify: (newValue: number) => {
+                            MfrCreateModel.setTimerIncrementalIncrementalValue(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                );
+            } else {
+                Logger.error(`MfrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            }
+
+            return openData;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,8 +384,8 @@ namespace TinyWars.MultiFreeRoom {
     type DataForTabItemRenderer = {
         name: string;
     };
-    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: GameUi.UiLabel;
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
@@ -255,14 +395,14 @@ namespace TinyWars.MultiFreeRoom {
     type DataForPlayerIndexRenderer = {
         playerIndex: number;
     };
-    class PlayerIndexRenderer extends GameUi.UiListItemRenderer<DataForPlayerIndexRenderer> {
-        private readonly _labelName : GameUi.UiLabel;
+    class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerIndexRenderer> {
+        private readonly _labelName : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MfrCreateTeamIndexChanged,          callback: this._onNotifyMfrCreateTeamIndexChanged },
-                { type: Notify.Type.MfrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
+                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MfrCreateTeamIndexChanged,          callback: this._onNotifyMfrCreateTeamIndexChanged },
+                { type: NotifyType.MfrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
             ]);
         }
 
@@ -274,14 +414,14 @@ namespace TinyWars.MultiFreeRoom {
         public onItemTapEvent(): void {
             const data = this.data;
             if (data) {
-                const creator       = MfrModel.Create;
+                const creator       = MfrCreateModel;
                 const playerIndex   = data.playerIndex;
                 const playerData    = creator.getInitialWarData().playerManager.players.find(v => v.playerIndex === playerIndex);
                 if ((playerData == null)                                    ||
                     (playerData.aliveState === Types.PlayerAliveState.Dead) ||
                     (playerData.userId == null)
                 ) {
-                    FloatText.show(Lang.getText(Lang.Type.A0204));
+                    FloatText.show(Lang.getText(LangTextType.A0204));
                 } else {
                     creator.setSelfPlayerIndex(playerIndex);
                 }
@@ -301,24 +441,24 @@ namespace TinyWars.MultiFreeRoom {
             const data = this.data;
             if (data) {
                 const playerIndex       = data.playerIndex;
-                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelper.getTeamIndex(MfrModel.Create.getWarRule(), playerIndex))})`;
+                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(MfrCreateModel.getWarRule(), playerIndex))})`;
             }
         }
         private _updateState(): void {
             const data          = this.data;
-            this.currentState   = ((data) && (data.playerIndex === MfrModel.Create.getSelfPlayerIndex())) ? `down` : `up`;
+            this.currentState   = ((data) && (data.playerIndex === MfrCreateModel.getSelfPlayerIndex())) ? `down` : `up`;
         }
     }
 
     type DataForSkinIdRenderer = {
         skinId: number;
     };
-    class SkinIdRenderer extends GameUi.UiListItemRenderer<DataForSkinIdRenderer> {
-        private readonly _imgColor  : GameUi.UiImage;
+    class SkinIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkinIdRenderer> {
+        private readonly _imgColor  : TwnsUiImage.UiImage;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.MfrCreateSelfPlayerIndexChanged, callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
+                { type: NotifyType.MfrCreateSelfPlayerIndexChanged, callback: this._onNotifyMfrCreateSelfPlayerIndexChanged },
             ]);
         }
 
@@ -334,8 +474,10 @@ namespace TinyWars.MultiFreeRoom {
             const data = this.data;
             if (data) {
                 const skinId            = data.skinId;
-                this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, MfrModel.Create.getSelfPlayerData().unitAndTileSkinId === skinId);
+                this._imgColor.source   = WarCommonHelpers.getImageSourceForSkinId(skinId, MfrCreateModel.getSelfPlayerData().unitAndTileSkinId === skinId);
             }
         }
     }
 }
+
+export default TwnsMfrCreateSettingsPanel;

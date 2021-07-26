@@ -1,44 +1,60 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MultiCustomRoom {
-    import Tween        = egret.Tween;
-    import Notify       = Utility.Notify;
-    import Helpers      = Utility.Helpers;
-    import MpwModel     = MultiPlayerWar.MpwModel;
+import CcrModel                     from "../../coopCustomRoom/model/CcrModel";
+import TwnsCcrMainMenuPanel         from "../../coopCustomRoom/view/CcrMainMenuPanel";
+import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import McrModel                     from "../../multiCustomRoom/model/McrModel";
+import TwnsMcwMyWarListPanel        from "../../multiCustomWar/view/McwMyWarListPanel";
+import MfrModel                     from "../../multiFreeRoom/model/MfrModel";
+import TwnsMfrMainMenuPanel         from "../../multiFreeRoom/view/MfrMainMenuPanel";
+import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
+import TwnsMrrMainMenuPanel         from "../../multiRankRoom/view/MrrMainMenuPanel";
+import TwnsRwReplayListPanel        from "../../replayWar/view/RwReplayListPanel";
+import TwnsSpmMainMenuPanel         from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Types                        from "../../tools/helpers/Types";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import WwModel                      from "../../watchWar/model/WwModel";
+import TwnsMcrCreateMapListPanel    from "./McrCreateMapListPanel";
+import TwnsMcrJoinRoomListPanel     from "./McrJoinRoomListPanel";
+import TwnsMcrMyRoomListPanel       from "./McrMyRoomListPanel";
+import TwnsWwMainMenuPanel    from "../../watchWar/view/WwMainMenuPanel";
 
-    export class McrMainMenuPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+namespace TwnsMcrMainMenuPanel {
+    import MfrMainMenuPanel         = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
+    import MrrMainMenuPanel         = TwnsMrrMainMenuPanel.MrrMainMenuPanel;
+    import RwReplayListPanel        = TwnsRwReplayListPanel.RwReplayListPanel;
+    import SpmMainMenuPanel         = TwnsSpmMainMenuPanel.SpmMainMenuPanel;
+    import McrWatchMainMenuPanel    = TwnsWwMainMenuPanel.WwMainMenuPanel;
+    import McrCreateMapListPanel    = TwnsMcrCreateMapListPanel.McrCreateMapListPanel;
+    import McrJoinRoomListPanel     = TwnsMcrJoinRoomListPanel.McrJoinRoomListPanel;
+    import McrMyRoomListPanel       = TwnsMcrMyRoomListPanel.McrMyRoomListPanel;
+    import CcrMainMenuPanel         = TwnsCcrMainMenuPanel.CcrMainMenuPanel;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import Tween                    = egret.Tween;
+
+    export class McrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: McrMainMenuPanel;
 
-        // @ts-ignore
         private readonly _group             : eui.Group;
-        // @ts-ignore
-        private readonly _btnMultiPlayer    : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _btnRanking        : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _btnSinglePlayer   : GameUi.UiButton;
+        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
+        private readonly _btnRanking        : TwnsUiButton.UiButton;
+        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
 
-        // @ts-ignore
         private readonly _groupLeft         : eui.Group;
-        // @ts-ignore
-        private readonly _btnCreateRoom     : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _btnJoinRoom       : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _btnMyRoom         : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _btnContinueWar    : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _btnWatchWar       : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _btnReplayWar      : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _btnCoopMode       : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _btnFreeMode       : GameUi.UiButton;
+        private readonly _btnCreateRoom     : TwnsUiButton.UiButton;
+        private readonly _btnJoinRoom       : TwnsUiButton.UiButton;
+        private readonly _btnMyRoom         : TwnsUiButton.UiButton;
+        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
+        private readonly _btnWatchWar       : TwnsUiButton.UiButton;
+        private readonly _btnReplayWar      : TwnsUiButton.UiButton;
+        private readonly _btnCoopMode       : TwnsUiButton.UiButton;
+        private readonly _btnFreeMode       : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!McrMainMenuPanel._instance) {
@@ -73,7 +89,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnFreeMode,        callback: this._onTouchedBtnFreeMode },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
             ]);
 
             this._showOpenAnimation();
@@ -90,55 +106,53 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnRanking(): void {
             this.close();
-            MultiRankRoom.MrrMainMenuPanel.show();
+            MrrMainMenuPanel.show();
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            SinglePlayerMode.SpmMainMenuPanel.show();
+            SpmMainMenuPanel.show();
         }
         private _onTouchedBtnCreateRoom(): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             McrCreateMapListPanel.show({});
         }
         private _onTouchedBtnJoinRoom(): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             McrJoinRoomListPanel.show();
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             McrMyRoomListPanel.show();
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
-            MultiCustomWar.McwMyWarListPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+            TwnsMcwMyWarListPanel.McwMyWarListPanel.show();
         }
         private _onTouchedBtnWatchWar(): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
             McrWatchMainMenuPanel.show();
         }
         private _onTouchedBtnReplayWar(): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
-            ReplayWar.RwReplayListPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+            RwReplayListPanel.show();
         }
         private _onTouchedBtnCoopMode(): void {
             this.close();
-            CoopCustomRoom.CcrMainMenuPanel.show();
+            CcrMainMenuPanel.show();
         }
         private _onTouchedBtnFreeMode(): void {
             this.close();
-            MultiFreeRoom.MfrMainMenuPanel.show();
+            MfrMainMenuPanel.show();
         }
 
         private _onMsgUserLogout(): void {
@@ -242,12 +256,14 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateView(): Promise<void> {
-            const watchInfos = MpwModel.getWatchRequestedWarInfos();
+            const watchInfos = WwModel.getWatchRequestedWarInfos();
             this._btnMyRoom.setRedVisible(await McrModel.checkIsRed());
             this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMcwWars());
             this._btnWatchWar.setRedVisible((!!watchInfos) && (watchInfos.length > 0));
-            this._btnCoopMode.setRedVisible(MpwModel.checkIsRedForMyCcwWars() || await CoopCustomRoom.CcrModel.checkIsRed());
-            this._btnFreeMode.setRedVisible(MpwModel.checkIsRedForMyMfwWars() || await MultiFreeRoom.MfrModel.checkIsRed());
+            this._btnCoopMode.setRedVisible(MpwModel.checkIsRedForMyCcwWars() || await CcrModel.checkIsRed());
+            this._btnFreeMode.setRedVisible(MpwModel.checkIsRedForMyMfwWars() || await MfrModel.checkIsRed());
         }
     }
 }
+
+export default TwnsMcrMainMenuPanel;

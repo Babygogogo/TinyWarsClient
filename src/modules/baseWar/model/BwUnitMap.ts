@@ -1,18 +1,26 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.BaseWar {
-    import Types                = Utility.Types;
-    import Helpers              = Utility.Helpers;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import Logger               = Utility.Logger;
-    import ClientErrorCode      = Utility.ClientErrorCode;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import ConfigManager        = Utility.ConfigManager;
-    import GridIndex            = Types.GridIndex;
-    import WarSerialization     = ProtoTypes.WarSerialization;
-    import ISerialUnitMap       = WarSerialization.ISerialUnitMap;
-    import ISerialUnit          = WarSerialization.ISerialUnit;
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwUnitMapView    from "../view/BwUnitMapView";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsBwUnit           from "./BwUnit";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwWar            from "./BwWar";
+
+namespace TwnsBwUnitMap {
+    import GridIndex        = Types.GridIndex;
+    import WarSerialization = ProtoTypes.WarSerialization;
+    import ISerialUnitMap   = WarSerialization.ISerialUnitMap;
+    import ISerialUnit      = WarSerialization.ISerialUnit;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import BwUnit           = TwnsBwUnit.BwUnit;
+    import BwUnitMapView    = TwnsBwUnitMapView.BwUnitMapView;
+    import BwWar            = TwnsBwWar.BwWar;
 
     export class BwUnitMap {
         private _war            : BwWar | undefined;
@@ -38,7 +46,7 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwUnitMapInit01;
             }
 
-            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+            if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 return ClientErrorCode.BwUnitMapInit02;
             }
 
@@ -195,7 +203,7 @@ namespace TinyWars.BaseWar {
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-            for (const unit of VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+            for (const unit of WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
                 units.push(unit.serializeForCreateSfw());
 
                 if (teamIndexes.has(unit.getTeamIndex())) {
@@ -220,7 +228,7 @@ namespace TinyWars.BaseWar {
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-            for (const unit of VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+            for (const unit of WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
                 units.push(unit.serializeForCreateMfr());
 
                 if (teamIndexes.has(unit.getTeamIndex())) {
@@ -349,7 +357,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+            return (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                 war,
                 unitType,
                 isDiving,
@@ -602,3 +610,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwUnitMap;

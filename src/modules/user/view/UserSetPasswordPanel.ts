@@ -1,38 +1,49 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.User {
-    import FloatText    = Utility.FloatText;
-    import Lang         = Utility.Lang;
-    import NotifyType   = Utility.Notify.Type;
-    import Helpers      = Utility.Helpers;
-    import LocalStorage = Utility.LocalStorage;
+import FloatText        from "../../tools/helpers/FloatText";
+import Helpers          from "../../tools/helpers/Helpers";
+import LocalStorage     from "../../tools/helpers/LocalStorage";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
+import UserModel        from "../../user/model/UserModel";
+import UserProxy        from "../../user/model/UserProxy";
 
-    export class UserSetPasswordPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsUserSetPasswordPanel {
+    import NotifyType   = TwnsNotifyType.NotifyType;
+    import LangTextType = TwnsLangTextType.LangTextType;
+
+    export class UserSetPasswordPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         // @ts-ignore
-        private readonly _imgMask                   : GameUi.UiImage;
+        private readonly _imgMask                   : TwnsUiImage.UiImage;
         // @ts-ignore
         private readonly _group                     : eui.Group;
         // @ts-ignore
-        private readonly _labelTitle                : GameUi.UiLabel;
+        private readonly _labelTitle                : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelOldPasswordTitle     : GameUi.UiLabel;
+        private readonly _labelOldPasswordTitle     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _inputOldPassword          : GameUi.UiTextInput;
+        private readonly _inputOldPassword          : TwnsUiTextInput.UiTextInput;
         // @ts-ignore
-        private readonly _labelNewPasswordTitle0    : GameUi.UiLabel;
+        private readonly _labelNewPasswordTitle0    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _inputNewPassword0         : GameUi.UiTextInput;
+        private readonly _inputNewPassword0         : TwnsUiTextInput.UiTextInput;
         // @ts-ignore
-        private readonly _labelNewPasswordTitle1    : GameUi.UiLabel;
+        private readonly _labelNewPasswordTitle1    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _inputNewPassword1         : GameUi.UiTextInput;
+        private readonly _inputNewPassword1         : TwnsUiTextInput.UiTextInput;
         // @ts-ignore
-        private readonly _btnConfirm                : GameUi.UiButton;
+        private readonly _btnConfirm                : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnCancel                 : GameUi.UiButton;
+        private readonly _btnCancel                 : TwnsUiButton.UiButton;
 
         private static _instance: UserSetPasswordPanel;
 
@@ -75,11 +86,11 @@ namespace TinyWars.User {
         }
 
         private _onMsgUserSetPassword(): void {
-            FloatText.show(Lang.getText(Lang.Type.A0148));
+            FloatText.show(Lang.getText(LangTextType.A0148));
 
             const password = this._inputNewPassword0.text;
             LocalStorage.setPassword(password);
-            User.UserModel.setSelfPassword(password);
+            UserModel.setSelfPassword(password);
             this.close();
         }
         private _onNotifyLanguageChanged(): void {
@@ -88,22 +99,22 @@ namespace TinyWars.User {
 
         private _onTouchedBtnConfirm(): void {
             const newPassword = this._inputNewPassword0.text;
-            if (!Utility.Helpers.checkIsPasswordValid(newPassword)) {
-                FloatText.show(Lang.getText(Lang.Type.A0003));
+            if (!Helpers.checkIsPasswordValid(newPassword)) {
+                FloatText.show(Lang.getText(LangTextType.A0003));
             } else if (newPassword !== this._inputNewPassword1.text) {
-                FloatText.show(Lang.getText(Lang.Type.A0147));
+                FloatText.show(Lang.getText(LangTextType.A0147));
             } else {
-                User.UserProxy.reqUserSetPassword(this._inputOldPassword.text, newPassword);
+                UserProxy.reqUserSetPassword(this._inputOldPassword.text, newPassword);
             }
         }
 
         private _updateOnLanguageChanged(): void {
-            this._labelTitle.text               = Lang.getText(Lang.Type.B0426);
-            this._labelOldPasswordTitle.text    = Lang.getText(Lang.Type.B0427);
-            this._labelNewPasswordTitle0.text   = Lang.getText(Lang.Type.B0428);
-            this._labelNewPasswordTitle1.text   = Lang.getText(Lang.Type.B0429);
-            this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
+            this._labelTitle.text               = Lang.getText(LangTextType.B0426);
+            this._labelOldPasswordTitle.text    = Lang.getText(LangTextType.B0427);
+            this._labelNewPasswordTitle0.text   = Lang.getText(LangTextType.B0428);
+            this._labelNewPasswordTitle1.text   = Lang.getText(LangTextType.B0429);
+            this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+            this._btnCancel.label               = Lang.getText(LangTextType.B0154);
         }
 
         private _showOpenAnimation(): void {
@@ -135,3 +146,5 @@ namespace TinyWars.User {
         }
     }
 }
+
+export default TwnsUserSetPasswordPanel;

@@ -1,43 +1,52 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.Common {
-    import Notify           = Utility.Notify;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Lang             = Utility.Lang;
-    import CommonConstants  = Utility.CommonConstants;
-    import Helpers          = Utility.Helpers;
+import CommonProxy      from "../../common/model/CommonProxy";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Helpers          from "../../tools/helpers/Helpers";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
 
-    export class CommonServerStatusPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
+namespace TwnsCommonServerStatusPanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
+
+    export class CommonServerStatusPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: CommonServerStatusPanel;
 
         // @ts-ignore
-        private readonly _imgMask                   : GameUi.UiImage;
+        private readonly _imgMask                   : TwnsUiImage.UiImage;
         // @ts-ignore
         private readonly _group                     : eui.Group;
         // @ts-ignore
-        private readonly _labelTitle                : GameUi.UiLabel;
+        private readonly _labelTitle                : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _btnClose                  : GameUi.UiButton;
+        private readonly _btnClose                  : TwnsUiButton.UiButton;
 
         // @ts-ignore
-        private readonly _labelAccountsTitle        : GameUi.UiLabel;
+        private readonly _labelAccountsTitle        : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelAccounts             : GameUi.UiLabel;
+        private readonly _labelAccounts             : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelOnlineTimeTitle      : GameUi.UiLabel;
+        private readonly _labelOnlineTimeTitle      : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelOnlineTime           : GameUi.UiLabel;
+        private readonly _labelOnlineTime           : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelNewAccountsTitle     : GameUi.UiLabel;
+        private readonly _labelNewAccountsTitle     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelNewAccounts          : GameUi.UiLabel;
+        private readonly _labelNewAccounts          : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelActiveAccountsTitle  : GameUi.UiLabel;
+        private readonly _labelActiveAccountsTitle  : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelActiveAccounts       : GameUi.UiLabel;
+        private readonly _labelActiveAccounts       : TwnsUiLabel.UiLabel;
 
         public static show(): void {
             if (!CommonServerStatusPanel._instance) {
@@ -62,7 +71,7 @@ namespace TinyWars.Common {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
+                { type: NotifyType.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
@@ -84,7 +93,7 @@ namespace TinyWars.Common {
             this._labelAccounts.text        = "" + data.totalAccounts;
 
             const totalOnlineTime           = data.totalOnlineTime;
-            this._labelOnlineTime.text      = totalOnlineTime == null ? CommonConstants.ErrorTextForUndefined : Utility.Helpers.getTimeDurationText(totalOnlineTime);
+            this._labelOnlineTime.text      = totalOnlineTime == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimeDurationText(totalOnlineTime);
 
             const activeAccounts            = data.activeAccounts;
             this._labelActiveAccounts.text  = activeAccounts == null ? CommonConstants.ErrorTextForUndefined : activeAccounts.join(" / ");
@@ -94,11 +103,11 @@ namespace TinyWars.Common {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text               = Lang.getText(Lang.Type.B0327);
-            this._labelAccountsTitle.text       = `${Lang.getText(Lang.Type.B0328)}:`;
-            this._labelOnlineTimeTitle.text     = `${Lang.getText(Lang.Type.B0329)}:`;
-            this._labelNewAccountsTitle.text    = `${Lang.getText(Lang.Type.B0330)}:`;
-            this._labelActiveAccountsTitle.text = `${Lang.getText(Lang.Type.B0331)}:`;
+            this._labelTitle.text               = Lang.getText(LangTextType.B0327);
+            this._labelAccountsTitle.text       = `${Lang.getText(LangTextType.B0328)}:`;
+            this._labelOnlineTimeTitle.text     = `${Lang.getText(LangTextType.B0329)}:`;
+            this._labelNewAccountsTitle.text    = `${Lang.getText(LangTextType.B0330)}:`;
+            this._labelActiveAccountsTitle.text = `${Lang.getText(LangTextType.B0331)}:`;
         }
 
         private _showOpenAnimation(): void {
@@ -130,3 +139,5 @@ namespace TinyWars.Common {
         }
     }
 }
+
+export default TwnsCommonServerStatusPanel;

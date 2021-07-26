@@ -1,23 +1,29 @@
 
-namespace TinyWars.Common {
-    import Lang = Utility.Lang;
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import TwnsUiButton     from "../../tools/ui/UiButton";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import Types            from "../../tools/helpers/Types";
 
-    type OpenDataForCommonErrorPanel = {
+namespace TwnsCommonErrorPanel {
+    import LangTextType         = TwnsLangTextType.LangTextType;
+
+    type OpenData = {
         content     : string;
         callback?   : () => any;
-    }
-
-    export class CommonErrorPanel extends GameUi.UiPanel<OpenDataForCommonErrorPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Top;
+    };
+    export class CommonErrorPanel extends TwnsUiPanel.UiPanel<OpenData> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Top;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: CommonErrorPanel;
 
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelContent   : GameUi.UiLabel;
-        private _btnClose       : GameUi.UiButton;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
+        private _labelContent   : TwnsUiLabel.UiLabel;
+        private _btnClose       : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForCommonErrorPanel): void {
+        public static show(openData: OpenData): void {
             if (!CommonErrorPanel._instance) {
                 CommonErrorPanel._instance = new CommonErrorPanel();
             }
@@ -42,8 +48,8 @@ namespace TinyWars.Common {
                 { ui: this._btnClose, callback: this._onTouchedBtnClose },
             ]);
 
-            this._btnClose.label    = Lang.getText(Lang.Type.B0026);
-            this._labelTitle.text   = Lang.getText(Lang.Type.A0056);
+            this._btnClose.label    = Lang.getText(LangTextType.B0026);
+            this._labelTitle.text   = Lang.getText(LangTextType.A0056);
             this._labelContent.setRichText(this._getOpenData().content);
         }
 
@@ -55,3 +61,5 @@ namespace TinyWars.Common {
         }
     }
 }
+
+export default TwnsCommonErrorPanel;

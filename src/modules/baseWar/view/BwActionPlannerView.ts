@@ -1,13 +1,22 @@
 
-namespace TinyWars.BaseWar {
-    import TimeModel        = Time.TimeModel;
-    import Types            = Utility.Types;
-    import Helpers          = Utility.Helpers;
-    import Notify           = Utility.Notify;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import State            = Types.ActionPlannerState;
-    import GridIndex        = Types.GridIndex;
-    import Direction        = Types.Direction;
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Timer                from "../../tools/helpers/Timer";
+import Types                from "../../tools/helpers/Types";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsBwActionPlanner  from "../model/BwActionPlanner";
+import TwnsBwUnit           from "../model/BwUnit";
+import TwnsBwUnitView       from "./BwUnitView";
+
+namespace TwnsBwActionPlannerView {
+    import NotifyType   = TwnsNotifyType.NotifyType;
+    import State        = Types.ActionPlannerState;
+    import GridIndex    = Types.GridIndex;
+    import Direction    = Types.Direction;
+    import BwUnitView   = TwnsBwUnitView.BwUnitView;
 
     const _PATH_GRID_SOURCE_EMPTY               = undefined;
     const _PATH_GRID_SOURCE_LINE_VERTICAL       = `c08_t01_s01_f01`;
@@ -21,7 +30,7 @@ namespace TinyWars.BaseWar {
     const _PATH_GRID_SOURCE_CORNER_UP_LEFT      = `c08_t01_s09_f01`;
     const _PATH_GRID_SOURCE_CORNER_UP_RIGHT     = `c08_t01_s10_f01`;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.CommonConstants.GridSize;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
     const _MOVABLE_GRID_FRAMES = [
         `c08_t02_s01_f01`, `c08_t02_s01_f02`, `c08_t02_s01_f03`, `c08_t02_s01_f04`,
         `c08_t02_s01_f05`, `c08_t02_s01_f06`, `c08_t02_s01_f07`, `c08_t02_s01_f08`,
@@ -76,7 +85,7 @@ namespace TinyWars.BaseWar {
     const ALPHA_FOR_ATTACKABLE_GRIDS_SILO   = 0.15;
 
     export class BwActionPlannerView extends egret.DisplayObjectContainer {
-        private _actionPlanner  : BwActionPlanner;
+        private _actionPlanner  : TwnsBwActionPlanner.BwActionPlanner;
         private _mapSize        : Types.MapSize;
 
         private _conForGrids            = new egret.DisplayObjectContainer();
@@ -84,16 +93,16 @@ namespace TinyWars.BaseWar {
         private _conForMoveDestination  = new egret.DisplayObjectContainer();
         private _conForAttackableGrids  = new egret.DisplayObjectContainer();
         private _conForMovePath         = new egret.DisplayObjectContainer();
-        private _imgsForMovableGrids    : GameUi.UiImage[][];
-        private _imgsForAttackableGrids : GameUi.UiImage[][];
-        private _imgForMoveDestination  : GameUi.UiImage;
+        private _imgsForMovableGrids    : TwnsUiImage.UiImage[][];
+        private _imgsForAttackableGrids : TwnsUiImage.UiImage[][];
+        private _imgForMoveDestination  : TwnsUiImage.UiImage;
 
         private _conForUnits            = new egret.DisplayObjectContainer();
         private _focusUnitViews         = new Map<number, BwUnitView>();
 
         private _notifyEvents: Notify.Listener[] = [
-            { type: Notify.Type.GridAnimationTick, callback: this._onNotifyGridAnimationTick },
-            { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.GridAnimationTick, callback: this._onNotifyGridAnimationTick },
+            { type: NotifyType.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick },
         ];
 
         public constructor() {
@@ -109,7 +118,7 @@ namespace TinyWars.BaseWar {
             this.addChild(this._conForUnits);
         }
 
-        public init(actionPlanner: BwActionPlanner): void {
+        public init(actionPlanner: TwnsBwActionPlanner.BwActionPlanner): void {
             this._actionPlanner = actionPlanner;
             this._mapSize       = actionPlanner.getMapSize();
             this._initConForMovableGrids();
@@ -117,7 +126,7 @@ namespace TinyWars.BaseWar {
             this._initConForAttackableGrids();
             this._initConForMovePath();
         }
-        public fastInit(actionPlanner: BwActionPlanner): void {
+        public fastInit(actionPlanner: TwnsBwActionPlanner.BwActionPlanner): void {
             this._actionPlanner = actionPlanner;
         }
 
@@ -142,10 +151,10 @@ namespace TinyWars.BaseWar {
             this._conForMovableGrids.alpha = ALPHA_FOR_MOVABLE_GRIDS;
 
             const { width, height } = this._mapSize;
-            const images            = Helpers.createEmptyMap<GameUi.UiImage>(width, height);
+            const images            = Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
-                    const image     = new GameUi.UiImage(_MOVABLE_GRID_FRAMES[0]);
+                    const image     = new TwnsUiImage.UiImage(_MOVABLE_GRID_FRAMES[0]);
                     image.x         = x * _GRID_WIDTH;
                     image.y         = y * _GRID_HEIGHT;
                     image.visible   = false;
@@ -157,7 +166,7 @@ namespace TinyWars.BaseWar {
         }
         private _initConForMoveDestination(): void {
             this._conForMoveDestination.removeChildren();
-            this._imgForMoveDestination     = new GameUi.UiImage(_MOVABLE_GRID_FRAMES[0]);
+            this._imgForMoveDestination     = new TwnsUiImage.UiImage(_MOVABLE_GRID_FRAMES[0]);
             this._imgForMoveDestination.x   = 0;
             this._imgForMoveDestination.y   = 0;
             this._conForMoveDestination.addChild(this._imgForMoveDestination);
@@ -167,10 +176,10 @@ namespace TinyWars.BaseWar {
             this._conForAttackableGrids.alpha = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
             const { width, height } = this._mapSize;
-            const images            = Helpers.createEmptyMap<GameUi.UiImage>(width, height);
+            const images            = Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
-                    const image     = new GameUi.UiImage(_ATTACKABLE_GRID_FRAMES[0]);
+                    const image     = new TwnsUiImage.UiImage(_ATTACKABLE_GRID_FRAMES[0]);
                     image.x         = x * _GRID_WIDTH;
                     image.y         = y * _GRID_HEIGHT;
                     image.visible   = false;
@@ -188,8 +197,8 @@ namespace TinyWars.BaseWar {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyGridAnimationTick(e: egret.Event): void {
-            const sourceForMovable      = _MOVABLE_GRID_FRAMES[TimeModel.getGridAnimationTickCount() % _MOVABLE_GRID_FRAMES.length];
-            const sourceForAttackable   = _ATTACKABLE_GRID_FRAMES[TimeModel.getGridAnimationTickCount() % _ATTACKABLE_GRID_FRAMES.length];
+            const sourceForMovable      = _MOVABLE_GRID_FRAMES[Timer.getGridAnimationTickCount() % _MOVABLE_GRID_FRAMES.length];
+            const sourceForAttackable   = _ATTACKABLE_GRID_FRAMES[Timer.getGridAnimationTickCount() % _ATTACKABLE_GRID_FRAMES.length];
             const imgsForMovable        = this._imgsForMovableGrids;
             const imgsForAttackable     = this._imgsForAttackableGrids;
             const { width, height }     = this._mapSize;
@@ -625,7 +634,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _addUnitView(unit: BwUnit, gridIndex: GridIndex, alpha = 1): void {
+        private _addUnitView(unit: TwnsBwUnit.BwUnit, gridIndex: GridIndex, alpha = 1): void {
             const view = new BwUnitView().init(unit).startRunningView();
             // view.alpha = alpha;
             _resetUnitViewXy(view, gridIndex);
@@ -644,12 +653,12 @@ namespace TinyWars.BaseWar {
         }
     }
 
-    function _createImgForMovePathGrid(prev: GridIndex, curr: GridIndex, next: GridIndex): GameUi.UiImage {
+    function _createImgForMovePathGrid(prev: GridIndex, curr: GridIndex, next: GridIndex): TwnsUiImage.UiImage {
         const source = _PATH_GRID_SOURCES.get(GridIndexHelpers.getAdjacentDirection(prev, curr)).get(GridIndexHelpers.getAdjacentDirection(next, curr));
         if (!source) {
             return undefined;
         } else {
-            const image = new GameUi.UiImage(source);
+            const image = new TwnsUiImage.UiImage(source);
             image.x = curr.x * _GRID_WIDTH;
             image.y = curr.y * _GRID_HEIGHT;
             return image;
@@ -661,3 +670,5 @@ namespace TinyWars.BaseWar {
         view.y  = gridIndex.y * _GRID_HEIGHT;
     }
 }
+
+export default TwnsBwActionPlannerView;

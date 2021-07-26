@@ -1,23 +1,40 @@
 
-namespace TinyWars.MapEditor {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
+import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
+import TwnsLobbyBottomPanel     from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyPanel           from "../../lobby/view/LobbyPanel";
+import TwnsLobbyTopPanel        from "../../lobby/view/LobbyTopPanel";
+import FlowManager              from "../../tools/helpers/FlowManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsUiZoomableMap        from "../../tools/ui/UiZoomableMap";
+import MeModel                  from "../model/MeModel";
+import MeProxy                  from "../model/MeProxy";
 
-    export class MeMapListPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+namespace TwnsMeMapListPanel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+
+    export class MeMapListPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MeMapListPanel;
 
-        private _zoomMap        : GameUi.UiZoomableMap;
-        private _labelNoData    : GameUi.UiLabel;
-        private _labelMenuTitle : GameUi.UiLabel;
-        private _labelLoading   : GameUi.UiLabel;
-        private _listMap        : GameUi.UiScrollList<DataForMapRenderer>;
-        private _btnBack        : GameUi.UiButton;
+        private _zoomMap        : TwnsUiZoomableMap.UiZoomableMap;
+        private _labelNoData    : TwnsUiLabel.UiLabel;
+        private _labelMenuTitle : TwnsUiLabel.UiLabel;
+        private _labelLoading   : TwnsUiLabel.UiLabel;
+        private _listMap        : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
+        private _btnBack        : TwnsUiButton.UiButton;
 
         private _dataForListMap     : DataForMapRenderer[] = [];
         private _selectedWarIndex   : number;
@@ -42,8 +59,8 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMeGetDataList,     callback: this._onNotifySMeGetDataList },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMeGetDataList,     callback: this._onNotifySMeGetDataList },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -62,8 +79,8 @@ namespace TinyWars.MapEditor {
             this._selectedWarIndex = dataList[newIndex] ? newIndex : undefined;
 
             if (dataList[oldIndex]) {
-                this._listMap.updateSingleData(oldIndex, dataList[oldIndex])
-            };
+                this._listMap.updateSingleData(oldIndex, dataList[oldIndex]);
+            }
 
             if (dataList[newIndex]) {
                 this._listMap.updateSingleData(newIndex, dataList[newIndex]);
@@ -98,19 +115,19 @@ namespace TinyWars.MapEditor {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            Lobby.LobbyPanel.show();
-            Lobby.LobbyTopPanel.show();
-            Lobby.LobbyBottomPanel.show();
+            TwnsLobbyPanel.LobbyPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelNoData.text      = Lang.getText(Lang.Type.B0278);
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0272);
-            this._labelLoading.text     = Lang.getText(Lang.Type.A0078);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+            this._labelNoData.text      = Lang.getText(LangTextType.B0278);
+            this._labelMenuTitle.text   = Lang.getText(LangTextType.B0272);
+            this._labelLoading.text     = Lang.getText(LangTextType.A0078);
+            this._btnBack.label         = Lang.getText(LangTextType.B0146);
         }
 
         private _createDataForListMap(dict: Map<number, IMapEditorData>): DataForMapRenderer[] {
@@ -146,13 +163,12 @@ namespace TinyWars.MapEditor {
         index   : number;
         mapData : IMapEditorData;
         panel   : MeMapListPanel;
-    }
-
-    class MapRenderer extends GameUi.UiListItemRenderer<DataForMapRenderer> {
-        private _btnChoose      : GameUi.UiButton;
-        private _labelName      : GameUi.UiLabel;
-        private _labelStatus    : GameUi.UiLabel;
-        private _btnNext        : GameUi.UiButton;
+    };
+    class MapRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapRenderer> {
+        private _btnChoose      : TwnsUiButton.UiButton;
+        private _labelName      : TwnsUiLabel.UiLabel;
+        private _labelStatus    : TwnsUiLabel.UiLabel;
+        private _btnNext        : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -169,7 +185,7 @@ namespace TinyWars.MapEditor {
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelStatus.text      = Lang.getMapReviewStatusText(status);
             this._labelStatus.textColor = getReviewStatusTextColor(status);
-            this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData ? mapRawData.mapNameArray : [] }) || `(${Lang.getText(Lang.Type.B0277)})`;
+            this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData ? mapRawData.mapNameArray : [] }) || `(${Lang.getText(LangTextType.B0277)})`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
@@ -183,23 +199,23 @@ namespace TinyWars.MapEditor {
             const reviewStatus  = mapData.reviewStatus;
 
             if (reviewStatus === Types.MapReviewStatus.Rejected) {
-                Common.CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0305),
-                    content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
+                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    title   : Lang.getText(LangTextType.B0305),
+                    content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {
-                        Utility.FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
+                        FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
                     },
                 });
             } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
-                Common.CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0326),
-                    content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
+                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    title   : Lang.getText(LangTextType.B0326),
+                    content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {
-                        Utility.FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
+                        FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
                     },
                 });
             } else {
-                Utility.FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
+                FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
             }
         }
     }
@@ -214,3 +230,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeMapListPanel;

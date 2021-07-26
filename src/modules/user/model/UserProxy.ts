@@ -1,12 +1,16 @@
 
-namespace TinyWars.User.UserProxy {
-    import NetManager       = Network.NetManager;
-    import NetMessageCodes  = Network.Codes;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Notify           = Utility.Notify;
-    import Helpers          = Utility.Helpers;
-    import NotifyType       = Notify.Type;
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import Notify               from "../../tools/notify/Notify";
+import UserModel            from "../../user/model/UserModel";
+import NetManager           from "../../tools/network/NetManager";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Sha1Generator        from "../../tools/helpers/Sha1Generator";
+
+namespace UserProxy {
+    import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
         NetManager.addListeners([
@@ -27,7 +31,7 @@ namespace TinyWars.User.UserProxy {
         NetManager.send({
             MsgUserLogin: { c: {
                 account,
-                password    : Helpers.Sha1Generator.b64_sha1(rawPassword),
+                password    : Sha1Generator.b64_sha1(rawPassword),
                 isAutoRelogin,
             } },
         });
@@ -35,7 +39,7 @@ namespace TinyWars.User.UserProxy {
     function _onMsgUserLogin(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserLogin.IS;
         if (!data.errorCode) {
-            User.UserModel.updateOnMsgUserLogin(data);
+            UserModel.updateOnMsgUserLogin(data);
             Notify.dispatch(NotifyType.MsgUserLogin, data);
         }
     }
@@ -44,7 +48,7 @@ namespace TinyWars.User.UserProxy {
         NetManager.send({
             MsgUserRegister: { c: {
                 account,
-                password: Helpers.Sha1Generator.b64_sha1(rawPassword),
+                password: Sha1Generator.b64_sha1(rawPassword),
                 nickname,
             } },
         });
@@ -79,10 +83,10 @@ namespace TinyWars.User.UserProxy {
     function _onMsgUserGetPublicInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgUserGetPublicInfoFailed, data);
+            Notify.dispatch(NotifyType.MsgUserGetPublicInfoFailed, data);
         } else {
             UserModel.setUserPublicInfo(data.userPublicInfo);
-            Notify.dispatch(Notify.Type.MsgUserGetPublicInfo, data);
+            Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
         }
     }
 
@@ -96,10 +100,10 @@ namespace TinyWars.User.UserProxy {
     async function _onMsgUserSetNickname(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgUserSetNickname.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgUserSetNicknameFailed, data);
+            Notify.dispatch(NotifyType.MsgUserSetNicknameFailed, data);
         } else {
             await UserModel.updateOnMsgUserSetNickname(data);
-            Notify.dispatch(Notify.Type.MsgUserSetNickname, data);
+            Notify.dispatch(NotifyType.MsgUserSetNickname, data);
         }
     }
 
@@ -113,10 +117,10 @@ namespace TinyWars.User.UserProxy {
     async function _onMsgUserSetDiscordId(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgUserSetDiscordId.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgUserSetDiscordIdFailed, data);
+            Notify.dispatch(NotifyType.MsgUserSetDiscordIdFailed, data);
         } else {
             await UserModel.updateOnMsgUserSetDiscordId(data);
-            Notify.dispatch(Notify.Type.MsgUserSetDiscordId, data);
+            Notify.dispatch(NotifyType.MsgUserSetDiscordId, data);
         }
     }
 
@@ -128,7 +132,7 @@ namespace TinyWars.User.UserProxy {
     function _onMsgUserGetOnlineUsers(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserGetOnlineUsers.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgUserGetOnlineUsers, data);
+            Notify.dispatch(NotifyType.MsgUserGetOnlineUsers, data);
         }
     }
 
@@ -142,20 +146,20 @@ namespace TinyWars.User.UserProxy {
         const data = e.data as ProtoTypes.NetMessage.MsgUserSetPrivilege.IS;
         if (!data.errorCode) {
             await UserModel.updateOnMsgUserSetPrivilege(data);
-            Notify.dispatch(Notify.Type.MsgUserSetPrivilege, data);
+            Notify.dispatch(NotifyType.MsgUserSetPrivilege, data);
         }
     }
 
     export function reqUserSetPassword(oldRawPassword: string, newRawPassword: string): void {
         NetManager.send({ MsgUserSetPassword: { c: {
-            oldPassword : Helpers.Sha1Generator.b64_sha1(oldRawPassword),
-            newPassword : Helpers.Sha1Generator.b64_sha1(newRawPassword),
+            oldPassword : Sha1Generator.b64_sha1(oldRawPassword),
+            newPassword : Sha1Generator.b64_sha1(newRawPassword),
         } } });
     }
     function _onMsgUserSetPassword(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgUserSetPassword.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgUserSetPassword, data);
+            Notify.dispatch(NotifyType.MsgUserSetPassword, data);
         }
     }
 
@@ -168,7 +172,9 @@ namespace TinyWars.User.UserProxy {
         const data = e.data as ProtoTypes.NetMessage.MsgUserSetSettings.IS;
         if (!data.errorCode) {
             UserModel.updateOnMsgUserSetSettings(data);
-            Notify.dispatch(Notify.Type.MsgUserSetSettings, data);
+            Notify.dispatch(NotifyType.MsgUserSetSettings, data);
         }
     }
 }
+
+export default UserProxy;

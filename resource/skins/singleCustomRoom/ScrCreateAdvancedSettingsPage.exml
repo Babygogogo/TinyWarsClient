@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing">
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0">
         <e:Scroller id="_scroller" top="0" bottom="20" right="20" left="0">
             <e:Group>
-                <GameUi:UiButton id="_btnReset" label="Reset" y="8" skinName="Skins.Component.Button.ButtonBlue001"
+                <TwnsUiButton:UiButton id="_btnReset" label="Reset" y="8" skinName="Skins.Component.Button.ButtonBlue001"
                                  width="120" locked="true" />
-                <GameUi:UiButton id="_btnCustomize" label="Customize" y="8"
+                <TwnsUiButton:UiButton id="_btnCustomize" label="Customize" y="8"
                                  skinName="Skins.Component.Button.ButtonBlue001" width="120" locked="true" />
-                <GameUi:UiScrollList id="_listSetting" y="50" left="0" right="0">
+                <TwnsUiScrollList:UiScrollList id="_listSetting" y="50" left="0" right="0">
                     <e:List>
                         <e:itemRendererSkinName>
                             <e:Skin height="40">
                                 <e:Group left="0" right="0" top="0" bottom="0">
-                                    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000"
+                                    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000"
                                                     alpha="0.4" scale9Grid="1,1,2,2" locked="true" />
-                                    <GameUi:UiLabel id="_labelName" text="War Name" textColor="0xFFFFFF" size="16"
+                                    <TwnsUiLabel:UiLabel id="_labelName" text="War Name" textColor="0xFFFFFF" size="16"
                                                     verticalCenter="0" bold="true" left="10" width="130" wordWrap="true" />
-                                    <GameUi:UiButton id="_btnHelp" verticalCenter="0" x="132">
-                                        <GameUi:skinName>
+                                    <TwnsUiButton:UiButton id="_btnHelp" verticalCenter="0" x="132">
+                                        <TwnsUiButton:skinName>
                                             <e:Skin states="up,down,disabled">
                                                 <e:Image width="100%" height="100%" source="commonIcon0001" />
                                                 <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
                                             </e:Skin>
-                                        </GameUi:skinName>
-                                    </GameUi:UiButton>
+                                        </TwnsUiButton:skinName>
+                                    </TwnsUiButton:UiButton>
                                 </e:Group>
                             </e:Skin>
                         </e:itemRendererSkinName>
@@ -31,24 +31,24 @@
                             <e:VerticalLayout paddingTop="4" horizontalAlign="contentJustify" />
                         </e:layout>
                     </e:List>
-                </GameUi:UiScrollList>
-                <GameUi:UiScrollList id="_listPlayer" y="0" left="160" right="0">
+                </TwnsUiScrollList:UiScrollList>
+                <TwnsUiScrollList:UiScrollList id="_listPlayer" y="0" left="160" right="0">
                     <e:List>
                         <e:itemRendererSkinName>
                             <e:Skin width="120" currentState="up" states="down,up">
                                 <e:Group left="0" right="0" top="0" bottom="0">
-                                    <GameUi:UiLabel id="_labelPlayerIndex" text="P1" horizontalCenter="0" bold="true"
+                                    <TwnsUiLabel:UiLabel id="_labelPlayerIndex" text="P1" horizontalCenter="0" bold="true"
                                                     size="24" y="12" />
-                                    <GameUi:UiScrollList id="_listInfo" y="50" horizontalCenter="0">
+                                    <TwnsUiScrollList:UiScrollList id="_listInfo" y="50" horizontalCenter="0">
                                         <e:List>
                                             <e:itemRendererSkinName>
                                                 <e:Skin width="120" height="40">
                                                     <e:Group left="0" right="0" top="0" bottom="0">
-                                                        <GameUi:UiImage source="commonRectangle0001" top="6" bottom="6"
+                                                        <TwnsUiImage:UiImage source="commonRectangle0001" top="6" bottom="6"
                                                                         left="20" right="20" scale9Grid="2,2,1,1" />
-                                                        <GameUi:UiTextInput id="_inputValue" left="20" right="20"
+                                                        <TwnsUiTextInput:UiTextInput id="_inputValue" left="20" right="20"
                                                                             top="6" bottom="6">
-                                                            <GameUi:skinName>
+                                                            <TwnsUiButton:skinName>
                                                                 <e:Skin>
                                                                     <e:Group left="0" right="0" top="0" bottom="0">
                                                                         <e:EditableText id="textDisplay" size="16"
@@ -63,22 +63,22 @@
                                                                                  verticalCenter="0" />
                                                                     </e:Group>
                                                                 </e:Skin>
-                                                            </GameUi:skinName>
-                                                        </GameUi:UiTextInput>
-                                                        <GameUi:UiLabel id="_labelValue" text="Label" size="16"
+                                                            </TwnsUiButton:skinName>
+                                                        </TwnsUiTextInput:UiTextInput>
+                                                        <TwnsUiLabel:UiLabel id="_labelValue" text="Label" size="16"
                                                                         verticalAlign="middle" textAlign="center"
                                                                         left="20" right="20" top="6" bottom="6" />
-                                                        <GameUi:UiButton id="_btnCustom" label="" left="20" right="20"
+                                                        <TwnsUiButton:UiButton id="_btnCustom" label="" left="20" right="20"
                                                                          top="6" bottom="6" visible="false">
-                                                            <GameUi:skinName>
+                                                            <TwnsUiButton:skinName>
                                                                 <e:Skin states="up,down,disabled">
                                                                     <e:Image width="100%" height="100%"
                                                                              source="commonColorTransparent0001" />
                                                                     <e:Label id="labelDisplay" horizontalCenter="0"
                                                                              verticalCenter="0" />
                                                                 </e:Skin>
-                                                            </GameUi:skinName>
-                                                        </GameUi:UiButton>
+                                                            </TwnsUiButton:skinName>
+                                                        </TwnsUiButton:UiButton>
                                                     </e:Group>
                                                 </e:Skin>
                                             </e:itemRendererSkinName>
@@ -86,7 +86,7 @@
                                                 <e:VerticalLayout/>
                                             </e:layout>
                                         </e:List>
-                                    </GameUi:UiScrollList>
+                                    </TwnsUiScrollList:UiScrollList>
                                 </e:Group>
                             </e:Skin>
                         </e:itemRendererSkinName>
@@ -94,7 +94,7 @@
                             <e:HorizontalLayout paddingTop="4" gap="0" />
                         </e:layout>
                     </e:List>
-                </GameUi:UiScrollList>
+                </TwnsUiScrollList:UiScrollList>
             </e:Group>
         </e:Scroller>
     </e:Group>

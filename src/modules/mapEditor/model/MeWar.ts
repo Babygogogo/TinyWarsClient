@@ -1,20 +1,37 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapEditor {
-    import Helpers          = Utility.Helpers;
-    import Types            = Utility.Types;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ClientErrorCode  = Utility.ClientErrorCode;
-    import CommonConstants  = Utility.CommonConstants;
-    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
-    import WarAction        = ProtoTypes.WarAction;
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import IWarRule         = ProtoTypes.WarRule.IWarRule;
-    import IMapRawData      = ProtoTypes.Map.IMapRawData;
-    import IDataForMapTag   = ProtoTypes.Map.IDataForMapTag;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+import TwnsBwWar                    from "../../baseWar/model/BwWar";
+import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Timer                        from "../../tools/helpers/Timer";
+import Types                        from "../../tools/helpers/Types";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers               from "../../tools/warHelpers/WarRuleHelpers";
+import TwnsMeWarMenuPanel           from "../view/MeWarMenuPanel";
+import TwnsMeCommonSettingManager   from "./MeCommonSettingManager";
+import TwnsMeDrawer                 from "./MeDrawer";
+import TwnsMeField                  from "./MeField";
+import TwnsMePlayerManager          from "./MePlayerManager";
+import MeUtility                    from "./MeUtility";
+import TwnsMeWarEventManager        from "./MeWarEventManager";
 
-    export class MeWar extends BaseWar.BwWar {
+namespace TwnsMeWar {
+    import MeDrawer                 = TwnsMeDrawer.MeDrawer;
+    import MeField                  = TwnsMeField.MeField;
+    import MePlayerManager          = TwnsMePlayerManager.MePlayerManager;
+    import MeCommonSettingManager   = TwnsMeCommonSettingManager.MeCommonSettingManager;
+    import MeWarEventManager        = TwnsMeWarEventManager.MeWarEventManager;
+    import MeWarMenuPanel           = TwnsMeWarMenuPanel.MeWarMenuPanel;
+    import WarAction                = ProtoTypes.WarAction;
+    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
+    import IWarRule                 = ProtoTypes.WarRule.IWarRule;
+    import IMapRawData              = ProtoTypes.Map.IMapRawData;
+    import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
+    import ILanguageText            = ProtoTypes.Structure.ILanguageText;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar                    = TwnsBwWar.BwWar;
+
+    export class MeWar extends BwWar {
         private readonly _playerManager         = new MePlayerManager();
         private readonly _field                 = new MeField();
         private readonly _commonSettingManager  = new MeCommonSettingManager();
@@ -57,14 +74,14 @@ namespace TinyWars.MapEditor {
             this.setMapTag(mapRawData.mapTag);
         }
 
-        public startRunning(): BaseWar.BwWar {
+        public startRunning(): BwWar {
             super.startRunning();
 
             this.getDrawer().startRunning(this);
 
             return this;
         }
-        public stopRunning(): BaseWar.BwWar {
+        public stopRunning(): BwWar {
             super.stopRunning();
 
             this.getDrawer().stopRunning();
@@ -85,7 +102,7 @@ namespace TinyWars.MapEditor {
                 mapWidth                : mapSize.width,
                 mapHeight               : mapSize.height,
                 playersCountUnneutral,
-                modifiedTime            : Time.TimeModel.getServerTimestamp(),
+                modifiedTime            : Timer.getServerTimestamp(),
                 tileDataArray           : this.getTileMap().serialize().tiles,
                 unitDataArray           : unitMap.serialize().units,
                 warRuleArray            : this.getRevisedWarRuleArray(playersCountUnneutral),
@@ -300,7 +317,7 @@ namespace TinyWars.MapEditor {
 
         public addWarRule(): void {
             const ruleList = this.getWarRuleArray();
-            ruleList.push(BwWarRuleHelper.createDefaultWarRule(ruleList.length, CommonConstants.WarMaxPlayerIndex));
+            ruleList.push(WarRuleHelpers.createDefaultWarRule(ruleList.length, CommonConstants.WarMaxPlayerIndex));
         }
         public deleteWarRule(ruleId: number): void {
             const ruleList  = this.getWarRuleArray();
@@ -327,3 +344,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeWar;

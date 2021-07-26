@@ -1,13 +1,17 @@
 
-namespace TinyWars.MultiFreeWar {
-    import Logger           = Utility.Logger;
-    import Types            = Utility.Types;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ClientErrorCode  = Utility.ClientErrorCode;
+import TwnsMpwWar           from "../../multiPlayerWar/model/MpwWar";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+
+namespace TwnsMfwWar {
+    import MpwWar           = TwnsMpwWar.MpwWar;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForMfw  = ProtoTypes.WarSettings.ISettingsForMfw;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
-    export class MfwWar extends MultiPlayerWar.MpwWar {
+    export class MfwWar extends MpwWar {
         private _settingsForMfw?: ISettingsForMfw;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
@@ -43,7 +47,7 @@ namespace TinyWars.MultiFreeWar {
             return false;
         }
         public getMapId(): number | undefined {
-            return undefined
+            return undefined;
         }
 
         private _setSettingsForMfw(settings: ISettingsForMfw): void {
@@ -95,3 +99,5 @@ namespace TinyWars.MultiFreeWar {
         }
     }
 }
+
+export default TwnsMfwWar;

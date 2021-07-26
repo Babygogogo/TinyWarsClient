@@ -1,18 +1,23 @@
 
-namespace TinyWars.SinglePlayerWar {
-    import VisibilityHelpers = Utility.VisibilityHelpers;
+import TwnsBwFogMap         from "../../baseWar/model/BwFogMap";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsSpwWar           from "./SpwWar";
 
-    export class SpwFogMap extends BaseWar.BwFogMap {
+namespace TwnsSpwFogMap {
+    import BwFogMap = TwnsBwFogMap.BwFogMap;
+    import SpwWar   = TwnsSpwWar.SpwWar;
+
+    export class SpwFogMap extends BwFogMap {
         public startRunning(war: SpwWar): void {
             this._setWar(war);
 
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-            const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
+            const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
             for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
             }
 
-            const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
+            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
             for (const tile of war.getTileMap().getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
                 tile.flushDataToView();
@@ -20,3 +25,5 @@ namespace TinyWars.SinglePlayerWar {
         }
     }
 }
+
+export default TwnsSpwFogMap;

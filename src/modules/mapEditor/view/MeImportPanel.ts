@@ -1,18 +1,31 @@
 
-namespace TinyWars.MapEditor {
-    import Notify   = Utility.Notify;
-    import Lang     = Utility.Lang;
-    import Types    = Utility.Types;
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import WarMapModel              from "../../warMap/model/WarMapModel";
+import MeModel                  from "../model/MeModel";
 
-    export class MeImportPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+namespace TwnsMeImportPanel {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+
+    export class MeImportPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeImportPanel;
 
         private _group      : eui.Group;
-        private _listMap    : TinyWars.GameUi.UiScrollList<DataForMapRenderer>;
-        private _btnCancel  : TinyWars.GameUi.UiButton;
+        private _listMap    : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
+        private _btnCancel  : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MeImportPanel._instance) {
@@ -36,7 +49,7 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
@@ -60,15 +73,15 @@ namespace TinyWars.MapEditor {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
+            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
         }
 
         private async _createDataForListMap(): Promise<DataForMapRenderer[]> {
             const dataList: DataForMapRenderer[] = [];
-            for (const [mapFileName] of WarMap.WarMapModel.getBriefDataDict()) {
+            for (const [mapFileName] of WarMapModel.getBriefDataDict()) {
                 dataList.push({
                     mapId: mapFileName,
-                    mapName     : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapFileName),
+                    mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapFileName),
                     panel       : this,
                 });
             }
@@ -85,11 +98,10 @@ namespace TinyWars.MapEditor {
         mapId   : number;
         mapName : string;
         panel   : MeImportPanel;
-    }
-
-    class MapRenderer extends GameUi.UiListItemRenderer<DataForMapRenderer> {
+    };
+    class MapRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapRenderer> {
         private _group          : eui.Group;
-        private _labelName      : GameUi.UiLabel;
+        private _labelName      : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             const data              = this.data;
@@ -98,13 +110,13 @@ namespace TinyWars.MapEditor {
 
         public onItemTapEvent(): void {
             const data = this.data;
-            Common.CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0095) + `\n"${data.mapName}"`,
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0095) + `\n"${data.mapName}"`,
                 callback: async () => {
                     const war = MeModel.getWar();
                     war.stopRunning();
                     await war.initWithMapEditorData({
-                        mapRawData  : await WarMap.WarMapModel.getRawData(data.mapId),
+                        mapRawData  : await WarMapModel.getRawData(data.mapId),
                         slotIndex   : war.getMapSlotIndex(),
                     });
                     war.setIsMapModified(true);
@@ -117,3 +129,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeImportPanel;

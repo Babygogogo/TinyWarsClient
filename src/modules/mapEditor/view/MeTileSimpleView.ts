@@ -1,17 +1,21 @@
 
-namespace TinyWars.MapEditor {
-    import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
-    import CommonConstants  = Utility.CommonConstants;
-    import CommonModel      = Common.CommonModel;
-    import TileObjectType   = Types.TileObjectType;
-    import TileBaseType     = Types.TileBaseType;
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Logger           from "../../tools/helpers/Logger";
+import Types            from "../../tools/helpers/Types";
+import CommonModel      from "../../common/model/CommonModel";
+import Timer            from "../../tools/helpers/Timer";
+import UserModel        from "../../user/model/UserModel";
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
+namespace TwnsMeTileSimpleView {
+    import TileObjectType           = Types.TileObjectType;
+    import TileBaseType             = Types.TileBaseType;
+
+    const { height: GRID_HEIGHT }   = CommonConstants.GridSize;
 
     export class MeTileSimpleView {
-        private _imgBase    = new GameUi.UiImage();
-        private _imgObject  = new GameUi.UiImage();
+        private _imgBase        = new TwnsUiImage.UiImage();
+        private _imgObject      = new TwnsUiImage.UiImage();
 
         private _baseType       : TileBaseType;
         private _baseShapeId    : number;
@@ -59,10 +63,10 @@ namespace TinyWars.MapEditor {
             this._updateImages();
         }
 
-        public getImgObject(): GameUi.UiImage {
+        public getImgObject(): TwnsUiImage.UiImage {
             return this._imgObject;
-        };
-        public getImgBase(): GameUi.UiImage {
+        }
+        public getImgBase(): TwnsUiImage.UiImage {
             return this._imgBase;
         }
 
@@ -71,8 +75,8 @@ namespace TinyWars.MapEditor {
         }
 
         protected _updateImages(): void {
-            const version   = User.UserModel.getSelfSettingsTextureVersion();
-            const tickCount = Time.TimeModel.getTileAnimationTickCount();
+            const version   = UserModel.getSelfSettingsTextureVersion();
+            const tickCount = Timer.getTileAnimationTickCount();
             const skinId    = this._playerIndex;
 
             const objectType = this._objectType;
@@ -107,3 +111,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeTileSimpleView;

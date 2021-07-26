@@ -1,14 +1,32 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.CoopCustomRoom {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
-    import Helpers          = Utility.Helpers;
-    import WarMapModel      = WarMap.WarMapModel;
-    import IDataForMapTag   = ProtoTypes.Map.IDataForMapTag;
+import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+import TwnsUiMapInfo                from "../../tools/ui/UiMapInfo";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+import TwnsUiZoomableMap            from "../../tools/ui/UiZoomableMap";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
+import CcrCreateModel               from "../model/CcrCreateModel";
+import TwnsCcrCreateSearchMapPanel  from "./CcrCreateSearchMapPanel";
+import TwnsCcrCreateSettingsPanel   from "./CcrCreateSettingsPanel";
+import TwnsCcrMainMenuPanel         from "./CcrMainMenuPanel";
+
+namespace TwnsCcrCreateMapListPanel {
+    import CcrCreateSearchMapPanel  = TwnsCcrCreateSearchMapPanel.CcrCreateSearchMapPanel;
+    import CcrCreateSettingsPanel   = TwnsCcrCreateSettingsPanel.CcrCreateSettingsPanel;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
 
     type FiltersForMapList = {
         mapName?        : string;
@@ -18,31 +36,31 @@ namespace TinyWars.CoopCustomRoom {
         minRating?      : number;
         mapTag?         : IDataForMapTag;
     };
-    export class CcrCreateMapListPanel extends GameUi.UiPanel<FiltersForMapList> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+    export class CcrCreateMapListPanel extends TwnsUiPanel.UiPanel<FiltersForMapList> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CcrCreateMapListPanel;
 
         private readonly _groupMapView          : eui.Group;
-        private readonly _zoomMap               : GameUi.UiZoomableMap;
-        private readonly _labelLoading          : GameUi.UiLabel;
+        private readonly _zoomMap               : TwnsUiZoomableMap.UiZoomableMap;
+        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
         private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : GameUi.UiLabel;
-        private readonly _labelCreateRoom       : GameUi.UiLabel;
-        private readonly _labelChooseMap        : GameUi.UiLabel;
+        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
+        private readonly _labelCreateRoom       : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseMap        : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack               : GameUi.UiButton;
-        private readonly _btnSearch             : GameUi.UiButton;
-        private readonly _btnMapInfo            : GameUi.UiButton;
-        private readonly _btnNextStep           : GameUi.UiButton;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnSearch             : TwnsUiButton.UiButton;
+        private readonly _btnMapInfo            : TwnsUiButton.UiButton;
+        private readonly _btnNextStep           : TwnsUiButton.UiButton;
 
         private readonly _groupMapList          : eui.Group;
-        private readonly _listMap               : GameUi.UiScrollList<DataForMapNameRenderer>;
-        private readonly _labelNoMap            : GameUi.UiLabel;
+        private readonly _listMap               : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
+        private readonly _labelNoMap            : TwnsUiLabel.UiLabel;
 
-        private readonly _uiMapInfo             : GameUi.UiMapInfo;
+        private readonly _uiMapInfo             : TwnsUiMapInfo.UiMapInfo;
 
         private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
@@ -77,7 +95,7 @@ namespace TinyWars.CoopCustomRoom {
                 { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._listMap.setItemRenderer(MapNameRenderer);
 
@@ -136,16 +154,16 @@ namespace TinyWars.CoopCustomRoom {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            CcrMainMenuPanel.show();
-            Lobby.LobbyTopPanel.show();
-            Lobby.LobbyBottomPanel.show();
+            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
             const selectedMapId = this.getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
-                await CcrModel.Create.resetDataByMapId(selectedMapId);
+                await CcrCreateModel.resetDataByMapId(selectedMapId);
                 CcrCreateSettingsPanel.show();
             }
         }
@@ -158,15 +176,15 @@ namespace TinyWars.CoopCustomRoom {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0000);
-            this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0646);
-            this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
-            this._labelLoading.text             = Lang.getText(Lang.Type.A0150);
-            this._labelNoMap.text               = Lang.getText(Lang.Type.A0010);
-            this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-            this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
-            this._btnMapInfo.label              = Lang.getText(Lang.Type.B0298);
-            this._btnNextStep.label             = Lang.getText(Lang.Type.B0566);
+            this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
+            this._labelMultiPlayer.text         = Lang.getText(LangTextType.B0646);
+            this._labelChooseMap.text           = Lang.getText(LangTextType.B0227);
+            this._labelLoading.text             = Lang.getText(LangTextType.A0150);
+            this._labelNoMap.text               = Lang.getText(LangTextType.A0010);
+            this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+            this._btnSearch.label               = Lang.getText(LangTextType.B0228);
+            this._btnMapInfo.label              = Lang.getText(LangTextType.B0298);
+            this._btnNextStep.label             = Lang.getText(LangTextType.B0566);
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
@@ -211,7 +229,6 @@ namespace TinyWars.CoopCustomRoom {
             this._uiMapInfo.setData({
                 mapInfo: {
                     mapId,
-                    configVersion   : ConfigManager.getLatestFormalVersion(),
                 },
             });
         }
@@ -310,10 +327,10 @@ namespace TinyWars.CoopCustomRoom {
         mapName : string;
         panel   : CcrCreateMapListPanel;
     };
-    class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
-        private _btnChoose: GameUi.UiButton;
-        private _btnNext  : GameUi.UiButton;
-        private _labelName: GameUi.UiLabel;
+    class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
+        private _btnChoose: TwnsUiButton.UiButton;
+        private _btnNext  : TwnsUiButton.UiButton;
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -336,8 +353,10 @@ namespace TinyWars.CoopCustomRoom {
         private async _onTouchTapBtnNext(): Promise<void> {
             const data = this.data;
             data.panel.close();
-            await CcrModel.Create.resetDataByMapId(data.mapId);
+            await CcrCreateModel.resetDataByMapId(data.mapId);
             CcrCreateSettingsPanel.show();
         }
     }
 }
+
+export default TwnsCcrCreateMapListPanel;

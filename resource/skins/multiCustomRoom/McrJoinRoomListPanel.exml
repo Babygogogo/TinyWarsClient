@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0">
         <e:Group id="_groupTab" top="80" left="240" right="0" bottom="0" locked="true">
-            <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
+            <TwnsUiTab:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
                 <e:skinName>
                     <e:Skin>
                         <e:Group id="_page" top="40" bottom="0" left="0" right="0" />
@@ -12,12 +12,12 @@
                                 <e:itemRendererSkinName>
                                     <e:Skin states="up,down,disabled" height="30" width="100">
                                         <e:Group left="0" top="0" bottom="0" right="0">
-                                            <GameUi:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1" left="0"
+                                            <TwnsUiImage:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1" left="0"
                                                             right="0" top="0" bottom="0" x="0" y="0" visible.up="false" />
-                                            <GameUi:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001" left="0"
+                                            <TwnsUiImage:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001" left="0"
                                                             right="0" top="0" bottom="0" x="0" y="0" visible.up="true"
                                                             visible.down="false" />
-                                            <GameUi:UiLabel id="_labelName" text="Advanced Settings" size="12"
+                                            <TwnsUiLabel:UiLabel id="_labelName" text="Advanced Settings" size="12"
                                                             textColor="0xCCCCCC" wordWrap="true" left="4" right="4"
                                                             textAlign="center" verticalCenter="1" />
                                         </e:Group>
@@ -30,28 +30,28 @@
                         </e:Scroller>
                     </e:Skin>
                 </e:skinName>
-            </GameUi:UiTab>
+            </TwnsUiTab:UiTab>
         </e:Group>
-        <GameUi:UiButton id="_btnBack" label="Back" y="20" height="30" width="220"
-                         skinName="Skins.Component.Button.ButtonYellow001" left="0"></GameUi:UiButton>
+        <TwnsUiButton:UiButton id="_btnBack" label="Back" y="20" height="30" width="220"
+                         skinName="Skins.Component.Button.ButtonYellow001" left="0"></TwnsUiButton:UiButton>
         <e:Group id="_groupNavigator" x="240" y="20">
             <e:Group x="0" y="0">
-                <GameUi:UiLabel id="_labelMultiPlayer" text="Multi Player" size="14" width="80" wordWrap="true"
+                <TwnsUiLabel:UiLabel id="_labelMultiPlayer" text="Multi Player" size="14" width="80" wordWrap="true"
                                 textAlign="center" x="0" y="0" textColor="0xAAAAAA" />
-                <GameUi:UiLabel text="Create Rooms" size="14" id="_labelJoinRoom" width="80" wordWrap="true"
+                <TwnsUiLabel:UiLabel text="Create Rooms" size="14" id="_labelJoinRoom" width="80" wordWrap="true"
                                 textAlign="center" x="92" y="0" textColor="0xAAAAAA" />
-                <GameUi:UiLabel text="Choose a Map" size="14" id="_labelChooseRoom" width="80" wordWrap="true"
+                <TwnsUiLabel:UiLabel text="Choose a Map" size="14" id="_labelChooseRoom" width="80" wordWrap="true"
                                 textAlign="center" x="102" y="10" bold="true" />
                 <e:layout>
                     <e:HorizontalLayout verticalAlign="bottom" gap="12" />
                 </e:layout>
             </e:Group>
             <e:Group x="34" y="17">
-                <GameUi:UiImage x="0" y="0" source="point0000" />
-                <GameUi:UiImage x="10" y="10" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
-                <GameUi:UiImage x="10" y="10" source="point0000" />
-                <GameUi:UiImage x="10" y="10" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
-                <GameUi:UiImage x="20" y="20" source="point0000" />
+                <TwnsUiImage:UiImage x="0" y="0" source="point0000" />
+                <TwnsUiImage:UiImage x="10" y="10" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
+                <TwnsUiImage:UiImage x="10" y="10" source="point0000" />
+                <TwnsUiImage:UiImage x="10" y="10" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
+                <TwnsUiImage:UiImage x="20" y="20" source="point0000" />
                 <e:layout>
                     <e:HorizontalLayout gap="0" verticalAlign="middle" />
                 </e:layout>
@@ -61,33 +61,33 @@
             </e:layout>
         </e:Group>
         <e:Group id="_groupRoomList" width="200" top="130" bottom="70" left="20" locked="true">
-            <GameUi:UiLabel id="_labelNoRoom" text="没有符合条件的地图" bold="true" size="20" textColor="0xFFFFFF"
+            <TwnsUiLabel:UiLabel id="_labelNoRoom" text="没有符合条件的地图" bold="true" size="20" textColor="0xFFFFFF"
                             horizontalCenter="0" width="160" textAlign="center" verticalCenter="-10" />
-            <GameUi:UiLabel id="_labelLoading" text="正在加载，请稍候" bold="true" size="20" textColor="0xFFFFFF"
+            <TwnsUiLabel:UiLabel id="_labelLoading" text="正在加载，请稍候" bold="true" size="20" textColor="0xFFFFFF"
                             horizontalCenter="0" width="160" textAlign="center" verticalCenter="-10" x="30" y="150" />
-            <GameUi:UiScrollList id="_listRoom" left="0" right="0" bottom="0" top="0">
+            <TwnsUiScrollList:UiScrollList id="_listRoom" left="0" right="0" bottom="0" top="0">
                 <e:List>
                     <e:itemRendererSkinName>
                         <e:Skin width="200" height="40" currentState="up" states="up,down">
-                            <GameUi:UiImage source="commonPentagon0002" left="10" right="0" top="0" bottom="0"
+                            <TwnsUiImage:UiImage source="commonPentagon0002" left="10" right="0" top="0" bottom="0"
                                             visible.down="false" scale9Grid="4,4,1,1" />
-                            <GameUi:UiImage left="10" right="0" top="0" bottom="0" x="10" y="10"
+                            <TwnsUiImage:UiImage left="10" right="0" top="0" bottom="0" x="10" y="10"
                                             source="commonPentagon0003" visible.up="false" scale9Grid="4,4,1,1" />
-                            <GameUi:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
+                            <TwnsUiButton:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
                                              visible.down="false">
-                                <GameUi:skinName>
+                                <TwnsUiButton:skinName>
                                     <e:Skin states="up,down,disabled">
                                         <e:Image source="commonColorTransparent0000" left="0" right="0" top="0"
                                                  bottom="0" />
                                         <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
                                                  bold="true" textColor="0x000000" />
                                     </e:Skin>
-                                </GameUi:skinName>
-                            </GameUi:UiButton>
-                            <GameUi:UiLabel id="_labelName" text="地图名称" size="16" verticalCenter="0" x="20"
+                                </TwnsUiButton:skinName>
+                            </TwnsUiButton:UiButton>
+                            <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="16" verticalCenter="0" x="20"
                                             maxTextWidth="150" />
-                            <GameUi:UiImage id="_imgPassword" x="0" source="commonIcon0000" verticalCenter="0" />
-                            <GameUi:UiButton id="_btnNext" visible.up="false" width="40" top="0" bottom="0" right="0"
+                            <TwnsUiImage:UiImage id="_imgPassword" x="0" source="commonIcon0000" verticalCenter="0" />
+                            <TwnsUiButton:UiButton id="_btnNext" visible.up="false" width="40" top="0" bottom="0" right="0"
                                              skinName="Skins.Component.Button.ButtonTriangle001" />
                         </e:Skin>
                     </e:itemRendererSkinName>
@@ -95,9 +95,9 @@
                         <e:VerticalLayout/>
                     </e:layout>
                 </e:List>
-            </GameUi:UiScrollList>
+            </TwnsUiScrollList:UiScrollList>
         </e:Group>
-        <GameUi:UiButton id="_btnNextStep" label="下一步" height="30" width="200" bottom="20"
-                         skinName="Skins.Component.Button.ButtonYellow001" left="20"></GameUi:UiButton>
+        <TwnsUiButton:UiButton id="_btnNextStep" label="下一步" height="30" width="200" bottom="20"
+                         skinName="Skins.Component.Button.ButtonYellow001" left="20"></TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>

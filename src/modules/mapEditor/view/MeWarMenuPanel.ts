@@ -1,51 +1,108 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapEditor {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
-    import FlowManager      = Utility.FlowManager;
-    import Logger           = Utility.Logger;
-    import FloatText        = Utility.FloatText;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import UnitType         = Types.UnitType;
-    import TileBaseType     = Types.TileBaseType;
-    import TileObjectType   = Types.TileObjectType;
+import TwnsBwUnit                   from "../../baseWar/model/BwUnit";
+import TwnsBwUnitView               from "../../baseWar/view/BwUnitView";
+import TwnsChatPanel                from "../../chat/view/ChatPanel";
+import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
+import TwnsCommonInputPanel         from "../../common/view/CommonInputPanel";
+import TwnsMmAcceptMapPanel         from "../../mapManagement/view/MmAcceptMapPanel";
+import TwnsMmRejectMapPanel         from "../../mapManagement/view/MmRejectMapPanel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import FloatText                    from "../../tools/helpers/FloatText";
+import FlowManager                  from "../../tools/helpers/FlowManager";
+import Logger                       from "../../tools/helpers/Logger";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+import TwnsUserSettingsPanel        from "../../user/view/UserSettingsPanel";
+import TwnsWeEventListPanel         from "../../warEvent/view/WeEventListPanel";
+import TwnsMeDrawer                 from "../model/MeDrawer";
+import MeMfwModel                   from "../model/MeMfwModel";
+import MeModel                      from "../model/MeModel";
+import MeSimModel                   from "../model/MeSimModel";
+import MeUtility                    from "../model/MeUtility";
+import TwnsMeWar                    from "../model/MeWar";
+import TwnsMeChooseUnitPanel        from "./MeChooseUnitPanel";
+import TwnsMeClearPanel             from "./MeClearPanel";
+import TwnsMeConfirmSaveMapPanel    from "./MeConfirmSaveMapPanel";
+import TwnsMeImportPanel            from "./MeImportPanel";
+import TwnsMeMapTagPanel            from "./MeMapTagPanel";
+import TwnsMeMfwSettingsPanel       from "./MeMfwSettingsPanel";
+import TwnsMeModifyMapNamePanel     from "./MeModifyMapNamePanel";
+import TwnsMeOffsetPanel            from "./MeOffsetPanel";
+import TwnsMeResizePanel            from "./MeResizePanel";
+import TwnsMeSimSettingsPanel       from "./MeSimSettingsPanel";
+import TwnsMeTileSimpleView         from "./MeTileSimpleView";
+import TwnsMeWarRulePanel           from "./MeWarRulePanel";
+
+namespace TwnsMeWarMenuPanel {
+    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import CommonInputPanel         = TwnsCommonInputPanel.CommonInputPanel;
+    import UserSettingsPanel        = TwnsUserSettingsPanel.UserSettingsPanel;
+    import BwUnitView               = TwnsBwUnitView.BwUnitView;
+    import DataForDrawUnit          = TwnsMeDrawer.DataForDrawUnit;
+    import MeWar                    = TwnsMeWar.MeWar;
+    import MeModifyMapNamePanel     = TwnsMeModifyMapNamePanel.MeModifyMapNamePanel;
+    import MeResizePanel            = TwnsMeResizePanel.MeResizePanel;
+    import MeConfirmSaveMapPanel    = TwnsMeConfirmSaveMapPanel.MeConfirmSaveMapPanel;
+    import MeWarRulePanel           = TwnsMeWarRulePanel.MeWarRulePanel;
+    import MeChooseUnitPanel        = TwnsMeChooseUnitPanel.MeChooseUnitPanel;
+    import MeMapTagPanel            = TwnsMeMapTagPanel.MeMapTagPanel;
+    import MeSimSettingsPanel       = TwnsMeSimSettingsPanel.MeSimSettingsPanel;
+    import MeClearPanel             = TwnsMeClearPanel.MeClearPanel;
+    import MeImportPanel            = TwnsMeImportPanel.MeImportPanel;
+    import MeMfwSettingsPanel       = TwnsMeMfwSettingsPanel.MeMfwSettingsPanel;
+    import MeOffsetPanel            = TwnsMeOffsetPanel.MeOffsetPanel;
+    import WeEventListPanel         = TwnsWeEventListPanel.WeEventListPanel;
+    import MmAcceptMapPanel         = TwnsMmAcceptMapPanel.MmAcceptMapPanel;
+    import MmRejectMapPanel         = TwnsMmRejectMapPanel.MmRejectMapPanel;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import UnitType                 = Types.UnitType;
+    import TileBaseType             = Types.TileBaseType;
+    import TileObjectType           = Types.TileObjectType;
+    import LangTextType             = TwnsLangTextType.LangTextType;
 
     // eslint-disable-next-line no-shadow
-    const enum MenuType {
+    enum TwnsMeWarMenuType {
         Main,
         Advanced,
     }
 
-    export class MeWarMenuPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class MeWarMenuPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeWarMenuPanel;
 
         private _group                  : eui.Group;
-        private _listCommand            : GameUi.UiScrollList<DataForCommandRenderer>;
-        private _labelNoCommand         : GameUi.UiLabel;
-        private _btnBack                : GameUi.UiButton;
-        private _labelMenuTitle         : GameUi.UiLabel;
-        private _labelMapInfoTitle      : GameUi.UiLabel;
+        private _listCommand            : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
+        private _labelNoCommand         : TwnsUiLabel.UiLabel;
+        private _btnBack                : TwnsUiButton.UiButton;
+        private _labelMenuTitle         : TwnsUiLabel.UiLabel;
+        private _labelMapInfoTitle      : TwnsUiLabel.UiLabel;
 
-        private _btnModifyMapName       : GameUi.UiButton;
-        private _labelMapName           : GameUi.UiLabel;
+        private _btnModifyMapName       : TwnsUiButton.UiButton;
+        private _labelMapName           : TwnsUiLabel.UiLabel;
 
-        private _btnModifyMapDesigner   : GameUi.UiButton;
-        private _labelMapDesigner       : GameUi.UiLabel;
+        private _btnModifyMapDesigner   : TwnsUiButton.UiButton;
+        private _labelMapDesigner       : TwnsUiLabel.UiLabel;
 
-        private _btnModifyMapSize       : GameUi.UiButton;
-        private _labelMapSize           : GameUi.UiLabel;
+        private _btnModifyMapSize       : TwnsUiButton.UiButton;
+        private _labelMapSize           : TwnsUiLabel.UiLabel;
 
-        private _listTile               : GameUi.UiScrollList<DataForTileRenderer>;
-        private _listUnit               : GameUi.UiScrollList<DataForUnitRenderer>;
+        private _listTile               : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
+        private _listUnit               : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
 
         private _war            : MeWar;
         private _dataForList    : DataForCommandRenderer[];
-        private _menuType       = MenuType.Main;
+        private _menuType       = TwnsMeWarMenuType.Main;
 
         public static show(): void {
             if (!MeWarMenuPanel._instance) {
@@ -71,12 +128,12 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: Notify.Type.MeMapNameChanged,                   callback: this._onNotifyMeMapNameChanged },
-                { type: Notify.Type.MsgMeSubmitMap,                     callback: this._onMsgMeSubmitMap },
-                { type: Notify.Type.MsgMmReviewMap,                     callback: this._onMsgMmReviewMap },
-                { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
+                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: NotifyType.MeMapNameChanged,                   callback: this._onNotifyMeMapNameChanged },
+                { type: NotifyType.MsgMeSubmitMap,                     callback: this._onMsgMeSubmitMap },
+                { type: NotifyType.MsgMmReviewMap,                     callback: this._onMsgMmReviewMap },
+                { type: NotifyType.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
@@ -90,17 +147,17 @@ namespace TinyWars.MapEditor {
 
             const war           = MeModel.getWar();
             this._war           = war;
-            this._menuType      = MenuType.Main;
+            this._menuType      = TwnsMeWarMenuType.Main;
 
             this._updateView();
 
-            Notify.dispatch(Notify.Type.BwWarMenuPanelOpened);
+            Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
             this._war           = null;
             this._dataForList   = null;
 
-            Notify.dispatch(Notify.Type.BwWarMenuPanelClosed);
+            Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,10 +166,10 @@ namespace TinyWars.MapEditor {
         private _onMsgMeSubmitMap(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMeSubmitMap.IS;
             if (data.mapRawDataErrorCode) {
-                FloatText.show(Lang.getText(Lang.Type.A0197));
+                FloatText.show(Lang.getText(LangTextType.A0197));
                 FloatText.show(Lang.getErrorText(data.mapRawDataErrorCode));
             } else {
-                FloatText.show(Lang.getText(Lang.Type.A0085));
+                FloatText.show(Lang.getText(LangTextType.A0085));
             }
             this._war.setIsMapModified(false);
         }
@@ -120,17 +177,17 @@ namespace TinyWars.MapEditor {
         private _onMsgMmReviewMap(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMmReviewMap.IS;
             if (data.isAccept) {
-                FloatText.show(Lang.getText(Lang.Type.A0092));
+                FloatText.show(Lang.getText(LangTextType.A0092));
             } else {
-                FloatText.show(Lang.getText(Lang.Type.A0093));
+                FloatText.show(Lang.getText(LangTextType.A0093));
             }
-            Utility.FlowManager.gotoLobby();
+            FlowManager.gotoLobby();
         }
 
         private _onMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
-            Common.CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0107),
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
                         slotIndex       : data.slotIndex,
@@ -155,10 +212,10 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnBack(): void {
             const type = this._menuType;
-            if (type === MenuType.Main) {
+            if (type === TwnsMeWarMenuType.Main) {
                 this.close();
-            } else if (type === MenuType.Advanced) {
-                this._menuType = MenuType.Main;
+            } else if (type === TwnsMeWarMenuType.Advanced) {
+                this._menuType = TwnsMeWarMenuType.Main;
                 this._updateListCommand();
             } else {
                 Logger.error(`McwWarMenuPanel._onTouchedBtnBack() invalid this._menuType: ${type}`);
@@ -182,11 +239,11 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnModifyMapDesigner(): void {
             const war = this._war;
             if (!war.getIsReviewingMap()) {
-                Common.CommonInputPanel.show({
-                    title           : Lang.getText(Lang.Type.B0163),
+                CommonInputPanel.show({
+                    title           : Lang.getText(LangTextType.B0163),
                     tips            : null,
                     currentValue    : war.getMapDesignerName(),
-                    maxChars        : Utility.CommonConstants.MapMaxDesignerLength,
+                    maxChars        : CommonConstants.MapMaxDesignerLength,
                     charRestrict    : null,
                     callback        : (panel) => {
                         war.setMapDesignerName(panel.getInputText());
@@ -229,12 +286,12 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text                   = Lang.getText(Lang.Type.B0155);
-            this._labelMapInfoTitle.text                = Lang.getText(Lang.Type.B0298);
-            this._btnModifyMapName.label                = Lang.getText(Lang.Type.B0225);
-            this._btnModifyMapDesigner.label            = Lang.getText(Lang.Type.B0163);
-            this._btnModifyMapSize.label                = Lang.getText(Lang.Type.B0300);
-            this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
+            this._labelMenuTitle.text                   = Lang.getText(LangTextType.B0155);
+            this._labelMapInfoTitle.text                = Lang.getText(LangTextType.B0298);
+            this._btnModifyMapName.label                = Lang.getText(LangTextType.B0225);
+            this._btnModifyMapDesigner.label            = Lang.getText(LangTextType.B0163);
+            this._btnModifyMapSize.label                = Lang.getText(LangTextType.B0300);
+            this._btnBack.label                         = Lang.getText(LangTextType.B0146);
         }
 
         private _updateLabelMapName(): void {
@@ -350,9 +407,9 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _createDataForList(): DataForCommandRenderer[] {
             const type = this._menuType;
-            if (type === MenuType.Main) {
+            if (type === TwnsMeWarMenuType.Main) {
                 return this._createDataForMainMenu();
-            } else if (type === MenuType.Advanced) {
+            } else if (type === TwnsMeWarMenuType.Advanced) {
                 return this._createDataForAdvancedMenu();
             } else {
                 Logger.error(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
@@ -389,9 +446,9 @@ namespace TinyWars.MapEditor {
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
             return {
-                name    : Lang.getText(Lang.Type.B0080),
+                name    : Lang.getText(LangTextType.B0080),
                 callback: () => {
-                    this._menuType = MenuType.Advanced;
+                    this._menuType = TwnsMeWarMenuType.Advanced;
                     this._updateListCommand();
                 },
             };
@@ -402,7 +459,7 @@ namespace TinyWars.MapEditor {
                 return null;
             } else {
                 return {
-                    name    : Lang.getText(Lang.Type.B0287),
+                    name    : Lang.getText(LangTextType.B0287),
                     callback: () => {
                         MeConfirmSaveMapPanel.show();
                     },
@@ -416,10 +473,10 @@ namespace TinyWars.MapEditor {
                 return null;
             } else {
                 return {
-                    name    : Lang.getText(Lang.Type.B0288),
+                    name    : Lang.getText(LangTextType.B0288),
                     callback: () => {
-                        Common.CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0072),
+                        CommonConfirmPanel.show({
+                            content : Lang.getText(LangTextType.A0072),
                             callback: async () => {
                                 const slotIndex = war.getMapSlotIndex();
                                 const data      = MeModel.getData(slotIndex);
@@ -441,7 +498,7 @@ namespace TinyWars.MapEditor {
 
         private _createCommandWarRule(): DataForCommandRenderer | null {
             return {
-                name    : Lang.getText(Lang.Type.B0314),
+                name    : Lang.getText(LangTextType.B0314),
                 callback: () => {
                     const war = this._war;
                     if (!war.getIsReviewingMap()) {
@@ -452,7 +509,7 @@ namespace TinyWars.MapEditor {
                             MeWarRulePanel.show();
                             this.close();
                         } else {
-                            FloatText.show(Lang.getText(Lang.Type.A0100));
+                            FloatText.show(Lang.getText(LangTextType.A0100));
                         }
                     }
                 },
@@ -461,9 +518,9 @@ namespace TinyWars.MapEditor {
 
         private _createCommandWarEvent(): DataForCommandRenderer | null {
             return {
-                name    : Lang.getText(Lang.Type.B0469),
+                name    : Lang.getText(LangTextType.B0469),
                 callback: () => {
-                    WarEvent.WeEventListPanel.show({
+                    WeEventListPanel.show({
                         war: this._war,
                     });
                     this.close();
@@ -473,7 +530,7 @@ namespace TinyWars.MapEditor {
 
         private _createCommandMapTag(): DataForCommandRenderer | null {
             return {
-                name    : Lang.getText(Lang.Type.B0445),
+                name    : Lang.getText(LangTextType.B0445),
                 callback: () => {
                     MeMapTagPanel.show();
                 },
@@ -486,9 +543,9 @@ namespace TinyWars.MapEditor {
                 return null;
             } else {
                 return {
-                    name    : Lang.getText(Lang.Type.B0296),
+                    name    : Lang.getText(LangTextType.B0296),
                     callback: () => {
-                        MapManagement.MmAcceptMapPanel.show({ war });
+                        MmAcceptMapPanel.show({ war });
                     },
                 };
             }
@@ -500,9 +557,9 @@ namespace TinyWars.MapEditor {
                 return null;
             } else {
                 return {
-                    name    : Lang.getText(Lang.Type.B0297),
+                    name    : Lang.getText(LangTextType.B0297),
                     callback: () => {
-                        MapManagement.MmRejectMapPanel.show({ war });
+                        MmRejectMapPanel.show({ war });
                     },
                 };
             }
@@ -510,21 +567,21 @@ namespace TinyWars.MapEditor {
 
         private _createCommandChat(): DataForCommandRenderer | null {
             return {
-                name    : Lang.getText(Lang.Type.B0383),
+                name    : Lang.getText(LangTextType.B0383),
                 callback: () => {
                     this.close();
-                    Chat.ChatPanel.show({});
+                    TwnsChatPanel.ChatPanel.show({});
                 },
             };
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
             return {
-                name    : Lang.getText(Lang.Type.B0054),
+                name    : Lang.getText(LangTextType.B0054),
                 callback: () => {
-                    Common.CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0054),
-                        content : this._war.getIsMapModified() ? Lang.getText(Lang.Type.A0143) : Lang.getText(Lang.Type.A0025),
+                    CommonConfirmPanel.show({
+                        title   : Lang.getText(LangTextType.B0054),
+                        content : this._war.getIsMapModified() ? Lang.getText(LangTextType.A0143) : Lang.getText(LangTextType.A0025),
                         callback: () => FlowManager.gotoLobby(),
                     });
                 },
@@ -534,7 +591,7 @@ namespace TinyWars.MapEditor {
         private _createCommandSimulation(): DataForCommandRenderer | null {
             const war = this._war;
             return {
-                name    : Lang.getText(Lang.Type.B0325),
+                name    : Lang.getText(LangTextType.B0325),
                 callback: async () => {
                     const mapRawData    = war.serializeForMap();
                     const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
@@ -544,7 +601,7 @@ namespace TinyWars.MapEditor {
                     }
 
                     const cb = () => {
-                        MeModel.Sim.resetData(mapRawData, war.serializeForCreateSfw());
+                        MeSimModel.resetData(mapRawData, war.serializeForCreateSfw());
                         MeSimSettingsPanel.show();
                         this.close();
                     };
@@ -552,8 +609,8 @@ namespace TinyWars.MapEditor {
                     if (!war.getIsMapModified()) {
                         cb();
                     } else {
-                        Common.CommonConfirmPanel.show({
-                            content         : Lang.getText(Lang.Type.A0142),
+                        CommonConfirmPanel.show({
+                            content         : Lang.getText(LangTextType.A0142),
                             callback        : () => {
                                 MeConfirmSaveMapPanel.show();
                             },
@@ -569,7 +626,7 @@ namespace TinyWars.MapEditor {
         private _createCommandCreateMfr(): DataForCommandRenderer | null {
             const war = this._war;
             return {
-                name    : Lang.getText(Lang.Type.B0557),
+                name    : Lang.getText(LangTextType.B0557),
                 callback: async () => {
                     const mapRawData    = war.serializeForMap();
                     const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
@@ -579,7 +636,7 @@ namespace TinyWars.MapEditor {
                     }
 
                     const cb = () => {
-                        MeModel.Mfw.resetData(mapRawData, war.serializeForCreateMfr());
+                        MeMfwModel.resetData(mapRawData, war.serializeForCreateMfr());
                         MeMfwSettingsPanel.show();
                         this.close();
                     };
@@ -587,8 +644,8 @@ namespace TinyWars.MapEditor {
                     if (!war.getIsMapModified()) {
                         cb();
                     } else {
-                        Common.CommonConfirmPanel.show({
-                            content         : Lang.getText(Lang.Type.A0142),
+                        CommonConfirmPanel.show({
+                            content         : Lang.getText(LangTextType.A0142),
                             callback        : () => {
                                 MeConfirmSaveMapPanel.show();
                             },
@@ -602,9 +659,9 @@ namespace TinyWars.MapEditor {
         }
         private _createCommandUserSettings(): DataForCommandRenderer | null {
             return {
-                name    : Lang.getText(Lang.Type.B0560),
+                name    : Lang.getText(LangTextType.B0560),
                 callback: () => {
-                    User.UserSettingsPanel.show();
+                    UserSettingsPanel.show();
                 }
             };
         }
@@ -613,7 +670,7 @@ namespace TinyWars.MapEditor {
                 return null;
             } else {
                 return {
-                    name    : Lang.getText(Lang.Type.B0391),
+                    name    : Lang.getText(LangTextType.B0391),
                     callback: () => {
                         MeClearPanel.show();
                     },
@@ -625,7 +682,7 @@ namespace TinyWars.MapEditor {
                 return null;
             } else {
                 return {
-                    name    : Lang.getText(Lang.Type.B0290),
+                    name    : Lang.getText(LangTextType.B0290),
                     callback: () => {
                         MeResizePanel.show();
                     },
@@ -637,7 +694,7 @@ namespace TinyWars.MapEditor {
                 return null;
             } else {
                 return {
-                    name    : Lang.getText(Lang.Type.B0293),
+                    name    : Lang.getText(LangTextType.B0293),
                     callback: () => {
                         MeOffsetPanel.show();
                     },
@@ -649,7 +706,7 @@ namespace TinyWars.MapEditor {
                 return null;
             } else {
                 return {
-                    name    : Lang.getText(Lang.Type.B0313),
+                    name    : Lang.getText(LangTextType.B0313),
                     callback: () => {
                         this.close();
                         MeImportPanel.show();
@@ -664,9 +721,9 @@ namespace TinyWars.MapEditor {
         callback: () => void;
     };
 
-    class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
+    class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
         private _group      : eui.Group;
-        private _labelName  : GameUi.UiLabel;
+        private _labelName  : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._updateView();
@@ -690,16 +747,16 @@ namespace TinyWars.MapEditor {
         playerIndex : number;
     };
 
-    class TileRenderer extends GameUi.UiListItemRenderer<DataForTileRenderer> {
+    class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
         private _group          : eui.Group;
-        private _labelNum       : GameUi.UiLabel;
+        private _labelNum       : TwnsUiLabel.UiLabel;
         private _conTileView    : eui.Group;
 
-        private _tileView   = new MeTileSimpleView();
+        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+                { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
 
             const tileView = this._tileView;
@@ -731,16 +788,16 @@ namespace TinyWars.MapEditor {
         dataForDrawUnit : DataForDrawUnit;
     };
 
-    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
+    class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;
-        private _labelNum       : GameUi.UiLabel;
+        private _labelNum       : TwnsUiLabel.UiLabel;
         private _conUnitView    : eui.Group;
 
-        private _unitView   = new BaseWar.BwUnitView();
+        private _unitView   = new BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
 
             this._conUnitView.addChild(this._unitView);
@@ -758,7 +815,7 @@ namespace TinyWars.MapEditor {
             this._labelNum.text    = "" + data.count;
 
             const war   = MeModel.getWar();
-            const unit  = new BaseWar.BwUnit();
+            const unit  = new TwnsBwUnit.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
@@ -779,3 +836,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeWarMenuPanel;

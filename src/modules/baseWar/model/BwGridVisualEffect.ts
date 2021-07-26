@@ -1,9 +1,17 @@
 
-namespace TinyWars.BaseWar {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import ClientErrorCode  = Utility.ClientErrorCode;
-    import GridIndex        = Types.GridIndex;
+import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import Types                        from "../../tools/helpers/Types";
+import Notify                       from "../../tools/notify/Notify";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsBwGridVisualEffectView   from "../view/BwGridVisualEffectView";
+import TwnsBwWar                    from "./BwWar";
+
+namespace TwnsBwGridVisualEffect {
+    import GridIndex                = Types.GridIndex;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import BwGridVisualEffectView   = TwnsBwGridVisualEffectView.BwGridVisualEffectView;
+    import BwWar                    = TwnsBwWar.BwWar;
 
     export class BwGridVisualEffect {
         private readonly _view = new BwGridVisualEffectView();
@@ -11,13 +19,13 @@ namespace TinyWars.BaseWar {
         private _war: BwWar;
 
         private _notifyListeners: Notify.Listener[] = [
-            { type: Notify.Type.BwUnitBeAttacked,   callback: this._onNotifyBwUnitBeAttacked },
-            { type: Notify.Type.BwUnitBeDestroyed,  callback: this._onNotifyBwUnitBeDestroyed },
-            { type: Notify.Type.BwUnitBeRepaired,   callback: this._onNotifyBwUnitBeRepaired },
-            { type: Notify.Type.BwUnitBeSupplied,   callback: this._onNotifyBwUnitBeSupplied },
-            { type: Notify.Type.BwTileBeDestroyed,  callback: this._onNotifyBwTileBeDestroyed },
-            { type: Notify.Type.BwTileBeAttacked,   callback: this._onNotifyBwTileBeAttacked },
-            { type: Notify.Type.BwSiloExploded,     callback: this._onNotifyBwSiloExploded },
+            { type: NotifyType.BwUnitBeAttacked,   callback: this._onNotifyBwUnitBeAttacked },
+            { type: NotifyType.BwUnitBeDestroyed,  callback: this._onNotifyBwUnitBeDestroyed },
+            { type: NotifyType.BwUnitBeRepaired,   callback: this._onNotifyBwUnitBeRepaired },
+            { type: NotifyType.BwUnitBeSupplied,   callback: this._onNotifyBwUnitBeSupplied },
+            { type: NotifyType.BwTileBeDestroyed,  callback: this._onNotifyBwTileBeDestroyed },
+            { type: NotifyType.BwTileBeAttacked,   callback: this._onNotifyBwTileBeAttacked },
+            { type: NotifyType.BwSiloExploded,     callback: this._onNotifyBwSiloExploded },
         ];
 
         public init(): ClientErrorCode {
@@ -53,31 +61,31 @@ namespace TinyWars.BaseWar {
         // The callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyBwUnitBeAttacked(e: egret.Event): void {
-
+            // nothing to do
         }
 
         private _onNotifyBwUnitBeDestroyed(e: egret.Event): void {
-
+            // nothing to do
         }
 
         private _onNotifyBwUnitBeRepaired(e: egret.Event): void {
-
+            // nothing to do
         }
 
         private _onNotifyBwUnitBeSupplied(e: egret.Event): void {
-
+            // nothing to do
         }
 
         private _onNotifyBwTileBeAttacked(e: egret.Event): void {
-
+            // nothing to do
         }
 
         private _onNotifyBwTileBeDestroyed(e: egret.Event): void {
-
+            // nothing to do
         }
 
         private _onNotifyBwSiloExploded(e: egret.Event): void {
-
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,3 +132,5 @@ namespace TinyWars.BaseWar {
         }
     }
 }
+
+export default TwnsBwGridVisualEffect;

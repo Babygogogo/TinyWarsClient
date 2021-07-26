@@ -1,11 +1,15 @@
 
-namespace TinyWars.Chat.ChatModel {
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Logger       = Utility.Logger;
-    import FloatText    = Utility.FloatText;
-    import Types        = Utility.Types;
-    import ChatCategory = Types.ChatMessageToCategory;
-    import IChatMessage = ProtoTypes.Chat.IChatMessage;
+import TwnsChatPanel        from "../view/ChatPanel";
+import Logger               from "../../tools/helpers/Logger";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Types                from "../../tools/helpers/Types";
+import UserModel            from "../../user/model/UserModel";
+import FloatText            from "../../tools/helpers/FloatText";
+
+namespace ChatModel {
+    import ChatCategory     = Types.ChatMessageToCategory;
+    import IChatMessage     = ProtoTypes.Chat.IChatMessage;
+    import ChatPanel        = TwnsChatPanel.ChatPanel;
 
     type MessageDict                    = Map<number, IChatMessage[]>;
     const _allMessageDict               = new Map<ChatCategory, MessageDict>();
@@ -16,7 +20,7 @@ namespace TinyWars.Chat.ChatModel {
         _allMessageDict.clear();
 
         for (const msg of msgList || []) {
-           updateOnAddMessage(msg, false);
+            updateOnAddMessage(msg, false);
         }
     }
 
@@ -35,7 +39,7 @@ namespace TinyWars.Chat.ChatModel {
             const msgToCategory = msg.toCategory;
             const msgToTarget   = msg.toTarget;
             const msgContent    = msg.content;
-            const isSentBySelf  = User.UserModel.getSelfUserId() === fromUserId;
+            const isSentBySelf  = UserModel.getSelfUserId() === fromUserId;
 
             if (msgToCategory === ChatCategory.PublicChannel) {
                 addMessage(ChatCategory.PublicChannel, msg, msgToTarget);
@@ -43,7 +47,7 @@ namespace TinyWars.Chat.ChatModel {
             } else if (msgToCategory === ChatCategory.WarAndTeam) {
                 addMessage(ChatCategory.WarAndTeam, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
-                    User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.Private) {
@@ -52,20 +56,20 @@ namespace TinyWars.Chat.ChatModel {
                 } else {
                     addMessage(ChatCategory.Private, msg, fromUserId);
                     if ((showFloatText) && (!ChatPanel.getIsOpening())) {
-                        User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                        UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                     }
                 }
 
             } else if (msgToCategory === ChatCategory.McrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
-                    User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.MfrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
-                    User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else {
@@ -143,3 +147,5 @@ namespace TinyWars.Chat.ChatModel {
         }
     }
 }
+
+export default ChatModel;

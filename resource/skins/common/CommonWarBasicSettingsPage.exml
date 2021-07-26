@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+        xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group left="0" right="0" top="0" bottom="0">
+        <TwnsUiScrollList:UiScrollList id="_listSettings" left="0" right="20" bottom="20" top="0">
+            <e:List>
+                <e:itemRendererSkinName>
+                    <e:Skin width="450" height="40">
+                        <e:Group top="0" bottom="0" left="0" right="0">
+                            <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000"
+                                                 scale9Grid="1,1,2,2" />
+                            <TwnsUiLabel:UiLabel id="_labelTitle" text="War Password" textColor="0xFFFFFF" size="16"
+                                                 maxTextWidth="120" x="10" verticalCenter="0" bold="true" />
+                            <TwnsUiButton:UiButton id="_btnHelp" x="140" verticalCenter="0"
+                                                   skinName="Skins.Component.Button.ButtonHelp001" />
+                            <e:Group verticalCenter="0" height="32" x="170" width="300">
+                                <TwnsUiImage:UiImage source="commonRectangle0001" scale9Grid="2,2,1,1" left="0"
+                                                     right="0" top="0" bottom="0" />
+                                <TwnsUiLabel:UiLabel id="_labelValue" size="16" touchEnabled="false" text="Yes" x="10"
+                                                     verticalCenter="1" textColor="0xFFFFFF" />
+                                <TwnsUiButton:UiButton id="_btnModify" top="0" bottom="0" width="50" right="0"
+                                                       skinName="Skins.Component.Button.ButtonTriangle002" />
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:VerticalLayout gap="4" horizontalAlign="contentJustify" />
+                </e:layout>
+            </e:List>
+        </TwnsUiScrollList:UiScrollList>
+    </e:Group>
+</e:Skin>

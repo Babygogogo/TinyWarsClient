@@ -1,13 +1,17 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapEditor {
-    import ProtoTypes           = Utility.ProtoTypes;
-    import ConfigManager        = Utility.ConfigManager;
-    import Helpers              = Utility.Helpers;
-    import ClientErrorCode      = Utility.ClientErrorCode;
-    import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
+import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
+import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Helpers                      from "../../tools/helpers/Helpers";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import TwnsMeWar                    from "./MeWar";
 
-    export class MeCommonSettingManager extends BaseWar.BwCommonSettingManager {
+namespace TwnsMeCommonSettingManager {
+    import MeWar                = TwnsMeWar.MeWar;
+    import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+
+    export class MeCommonSettingManager extends TwnsBwCommonSettingManager.BwCommonSettingManager {
         public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
             settings                : ISettingsForCommon | null | undefined;
             allWarEventIdArray      : number[];
@@ -43,3 +47,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeCommonSettingManager;

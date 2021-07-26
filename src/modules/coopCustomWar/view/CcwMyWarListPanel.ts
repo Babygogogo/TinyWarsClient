@@ -1,50 +1,61 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.CoopCustomWar {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import Logger           = Utility.Logger;
-    import WarMapModel      = WarMap.WarMapModel;
-    import MpwModel         = MultiPlayerWar.MpwModel;
-    import MpwProxy         = MultiPlayerWar.MpwProxy;
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
+import TwnsCcrMainMenuPanel                 from "../../coopCustomRoom/view/CcrMainMenuPanel";
+import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import MpwModel                             from "../../multiPlayerWar/model/MpwModel";
+import MpwProxy                             from "../../multiPlayerWar/model/MpwProxy";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Logger                               from "../../tools/helpers/Logger";
+import Types                                from "../../tools/helpers/Types";
+import Lang                                 from "../../tools/lang/Lang";
+import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+import TwnsUiTab                            from "../../tools/ui/UiTab";
+import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+import WarMapModel                          from "../../warMap/model/WarMapModel";
 
-    export class CcwMyWarListPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+namespace TwnsCcwMyWarListPanel {
+    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+
+    // eslint-disable-next-line no-shadow
+    export class CcwMyWarListPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CcwMyWarListPanel;
 
-        // @ts-ignore
         private readonly _groupTab              : eui.Group;
-        // @ts-ignore
-        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, OpenDataForCcwWarMapInfoPage | OpenDataForCcwWarPlayerInfoPage | OpenDataForCcwWarAdvancedSettingsPage | OpenDataForCcwWarBasicSettingsPage>;
+        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
-        // @ts-ignore
         private readonly _groupNavigator        : eui.Group;
-        // @ts-ignore
-        private readonly _labelMultiPlayer      : GameUi.UiLabel;
-        // @ts-ignore
-        private readonly _labelMyWar            : GameUi.UiLabel;
-        // @ts-ignore
-        private readonly _labelChooseWar        : GameUi.UiLabel;
+        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
+        private readonly _labelMyWar            : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseWar        : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
-        private readonly _btnBack               : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _btnNextStep           : GameUi.UiButton;
+        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnNextStep           : TwnsUiButton.UiButton;
 
-        // @ts-ignore
         private readonly _groupWarList          : eui.Group;
-        // @ts-ignore
-        private readonly _listWar               : GameUi.UiScrollList<DataForWarRenderer>;
-        // @ts-ignore
-        private readonly _labelNoWar            : GameUi.UiLabel;
-        // @ts-ignore
-        private readonly _labelLoading          : GameUi.UiLabel;
+        private readonly _listWar               : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
+        private readonly _labelNoWar            : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
+        private _isTabInitialized   = false;
 
         public static show(): void {
             if (!CcwMyWarListPanel._instance) {
@@ -64,11 +75,11 @@ namespace TinyWars.CoopCustomWar {
             this.skinName = "resource/skins/coopCustomWar/CcwMyWarListPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.CcwPreviewingWarIdChanged,      callback: this._onNotifyCcwPreviewingWarIdChanged },
-                { type: Notify.Type.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.CcwPreviewingWarIdChanged,      callback: this._onNotifyCcwPreviewingWarIdChanged },
+                { type: NotifyType.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -79,8 +90,9 @@ namespace TinyWars.CoopCustomWar {
 
             this._showOpenAnimation();
 
-            this._hasReceivedData = false;
-            this._initTabSettings();
+            this._hasReceivedData   = false;
+            this._isTabInitialized  = false;
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
@@ -111,9 +123,9 @@ namespace TinyWars.CoopCustomWar {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            CoopCustomRoom.CcrMainMenuPanel.show();
-            Lobby.LobbyTopPanel.show();
-            Lobby.LobbyBottomPanel.show();
+            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.show();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         }
 
         private _onTouchedBtnNextStep(): void {
@@ -126,39 +138,40 @@ namespace TinyWars.CoopCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _initTabSettings(): void {
+        private async _initTabSettings(): Promise<void> {
             this._tabSettings.bindData([
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
-                    pageClass   : CcwWarMapInfoPage,
-                    pageData    : { warId: null } as OpenDataForCcwWarMapInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0298) },
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
-                    pageClass   : CcwWarPlayerInfoPage,
-                    pageData    : { warId: null } as OpenDataForCcwWarPlayerInfoPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0224) },
+                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : CcwWarBasicSettingsPage,
-                    pageData    : { warId: null } as OpenDataForCcwWarBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass   : CcwWarAdvancedSettingsPage,
-                    pageData    : { warId: null } as OpenDataForCcwWarAdvancedSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0003) },
+                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
+            this._isTabInitialized = true;
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-            this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0646);
-            this._labelMyWar.text           = Lang.getText(Lang.Type.B0588);
-            this._labelChooseWar.text       = Lang.getText(Lang.Type.B0589);
-            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-            this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
-            this._btnNextStep.label         = Lang.getText(Lang.Type.B0024);
+            this._labelLoading.text         = Lang.getText(LangTextType.A0040);
+            this._labelMultiPlayer.text     = Lang.getText(LangTextType.B0646);
+            this._labelMyWar.text           = Lang.getText(LangTextType.B0588);
+            this._labelChooseWar.text       = Lang.getText(LangTextType.B0589);
+            this._btnBack.label             = Lang.getText(LangTextType.B0146);
+            this._labelNoWar.text           = Lang.getText(LangTextType.B0210);
+            this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
         }
 
         private _updateGroupWarList(): void {
@@ -195,11 +208,34 @@ namespace TinyWars.CoopCustomWar {
                 btnNextStep.visible = true;
                 btnNextStep.setRedVisible(MpwModel.checkIsRedForMyWar(MpwModel.getMyWarInfo(warId)));
 
-                const tab = this._tabSettings;
-                tab.updatePageData(0, { warId } as OpenDataForCcwWarMapInfoPage);
-                tab.updatePageData(1, { warId } as OpenDataForCcwWarPlayerInfoPage);
-                tab.updatePageData(2, { warId } as OpenDataForCcwWarBasicSettingsPage);
-                tab.updatePageData(3, { warId } as OpenDataForCcwWarAdvancedSettingsPage);
+                this._updateCommonWarMapInfoPage();
+                this._updateCommonWarPlayerInfoPage();
+                this._updateCommonWarBasicSettingsPage();
+                this._updateCommonWarAdvancedSettingsPage();
+            }
+        }
+
+        private async _updateCommonWarMapInfoPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
+            }
+        }
+
+        private async _updateCommonWarPlayerInfoPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage());
+            }
+        }
+
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+            }
+        }
+
+        private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
             }
         }
 
@@ -217,6 +253,28 @@ namespace TinyWars.CoopCustomWar {
             }
 
             return dataArray.sort((v1, v2) => v1.warId - v2.warId);
+        }
+
+        private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
+            const warId = MpwModel.getCcwPreviewingWarId();
+            const mapId = warId == null
+                ? undefined
+                : MpwModel.getMyWarInfo(warId)?.settingsForCcw?.mapId;
+            return mapId == null
+                ? {}
+                : { mapInfo: { mapId }, };
+        }
+
+        private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
+            return await MpwModel.createDataForCommonWarPlayerInfoPage(MpwModel.getCcwPreviewingWarId());
+        }
+
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
+            return await MpwModel.createDataForCommonWarBasicSettingsPage(MpwModel.getCcwPreviewingWarId());
+        }
+
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+            return await MpwModel.createDataForCommonWarAdvancedSettingsPage(MpwModel.getCcwPreviewingWarId());
         }
 
         private _showOpenAnimation(): void {
@@ -281,9 +339,8 @@ namespace TinyWars.CoopCustomWar {
     type DataForTabItemRenderer = {
         name: string;
     };
-    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
-        // @ts-ignore
-        private _labelName: GameUi.UiLabel;
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
@@ -293,15 +350,11 @@ namespace TinyWars.CoopCustomWar {
     type DataForWarRenderer = {
         warId: number;
     };
-    class WarRenderer extends GameUi.UiListItemRenderer<DataForWarRenderer> {
-        // @ts-ignore
-        private readonly _btnChoose     : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _btnNext       : GameUi.UiButton;
-        // @ts-ignore
-        private readonly _labelName     : GameUi.UiLabel;
-        // @ts-ignore
-        private readonly _imgRed        : GameUi.UiLabel;
+    class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
+        private readonly _btnChoose     : TwnsUiButton.UiButton;
+        private readonly _btnNext       : TwnsUiButton.UiButton;
+        private readonly _labelName     : TwnsUiLabel.UiLabel;
+        private readonly _imgRed        : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -309,7 +362,7 @@ namespace TinyWars.CoopCustomWar {
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.CcwPreviewingWarIdChanged,  callback: this._onNotifyCcwPreviewingWarIdChanged },
+                { type: NotifyType.CcwPreviewingWarIdChanged,  callback: this._onNotifyCcwPreviewingWarIdChanged },
             ]);
         }
 
@@ -370,3 +423,5 @@ namespace TinyWars.CoopCustomWar {
         }
     }
 }
+
+export default TwnsCcwMyWarListPanel;

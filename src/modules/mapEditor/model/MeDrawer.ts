@@ -1,21 +1,33 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.MapEditor {
-    import Types                = Utility.Types;
-    import Notify               = Utility.Notify;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import ConfigManager        = Utility.ConfigManager;
-    import FloatText            = Utility.FloatText;
-    import DestructionHelpers   = Utility.DestructionHelpers;
-    import Lang                 = Utility.Lang;
-    import Logger               = Utility.Logger;
-    import BwUnit               = BaseWar.BwUnit;
-    import DrawerMode           = Types.MapEditorDrawerMode;
-    import GridIndex            = Types.GridIndex;
-    import SymmetryType         = Types.SymmetryType;
-    import UnitType             = Types.UnitType;
-    import TileBaseType         = Types.TileBaseType;
-    import TileObjectType       = Types.TileObjectType;
+import TwnsBwTileMap            from "../../baseWar/model/BwTileMap";
+import TwnsBwUnit               from "../../baseWar/model/BwUnit";
+import TwnsBwUnitMap            from "../../baseWar/model/BwUnitMap";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import FloatText                from "../../tools/helpers/FloatText";
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Logger                   from "../../tools/helpers/Logger";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import NotifyData               from "../../tools/notify/NotifyData";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import WarDestructionHelpers    from "../../tools/warHelpers/WarDestructionHelpers";
+import MeUtility                from "./MeUtility";
+import TwnsMeWar                from "./MeWar";
+
+namespace TwnsMeDrawer {
+    import MeWar            = TwnsMeWar.MeWar;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import DrawerMode       = Types.MapEditorDrawerMode;
+    import GridIndex        = Types.GridIndex;
+    import SymmetryType     = Types.SymmetryType;
+    import UnitType         = Types.UnitType;
+    import TileBaseType     = Types.TileBaseType;
+    import TileObjectType   = Types.TileObjectType;
+    import BwUnit           = TwnsBwUnit.BwUnit;
+    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
 
     export type DataForDrawTileObject = {
         objectType  : TileObjectType;
@@ -33,8 +45,8 @@ namespace TinyWars.MapEditor {
 
     export class MeDrawer {
         private _war                            : MeWar;
-        private _tileMap                        : BaseWar.BwTileMap;
-        private _unitMap                        : BaseWar.BwUnitMap;
+        private _tileMap                        : TwnsBwTileMap.BwTileMap;
+        private _unitMap                        : BwUnitMap;
         private _configVersion                  : string;
         private _mode                           = DrawerMode.Preview;
         private _drawTargetTileObjectData       : DataForDrawTileObject;
@@ -43,8 +55,8 @@ namespace TinyWars.MapEditor {
         private _symmetricalDrawType            = SymmetryType.None;
 
         private _notifyListeners: Notify.Listener[] = [
-            { type: Notify.Type.BwCursorTapped,     callback: this._onNotifyBwCursorTapped },
-            { type: Notify.Type.BwCursorDragged,    callback: this._onNotifyBwCursorDragged },
+            { type: NotifyType.BwCursorTapped,     callback: this._onNotifyBwCursorTapped },
+            { type: NotifyType.BwCursorDragged,    callback: this._onNotifyBwCursorDragged },
         ];
 
         public init(): MeDrawer {
@@ -68,12 +80,12 @@ namespace TinyWars.MapEditor {
         }
 
         private _onNotifyBwCursorTapped(e: egret.Event): void {
-            const data      = e.data as Notify.Data.BwCursorTapped;
+            const data      = e.data as NotifyData.BwCursorTapped;
             const gridIndex = data.tappedOn;
             this._handleAction(gridIndex);
         }
         private _onNotifyBwCursorDragged(e: egret.Event): void {
-            const data = e.data as Notify.Data.BwCursorDragged;
+            const data = e.data as NotifyData.BwCursorDragged;
             this._handleAction(data.draggedTo);
         }
 
@@ -86,7 +98,7 @@ namespace TinyWars.MapEditor {
 
         private _setMode(mode: DrawerMode): void {
             this._mode = mode;
-            Notify.dispatch(Notify.Type.MeDrawerModeChanged);
+            Notify.dispatch(NotifyType.MeDrawerModeChanged);
         }
         public setModeDeleteUnit(): void {
             this._setMode(DrawerMode.DeleteUnit);
@@ -126,7 +138,7 @@ namespace TinyWars.MapEditor {
 
         public setModeDrawUnit(data: DataForDrawUnit): void {
             const war   = this._getWar();
-            const unit  = new BaseWar.BwUnit();
+            const unit  = new BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
@@ -189,7 +201,7 @@ namespace TinyWars.MapEditor {
             tile.startRunning(this._getWar());
             tile.flushDataToView();
 
-            Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -206,7 +218,7 @@ namespace TinyWars.MapEditor {
                 t2.startRunning(this._getWar());
                 t2.flushDataToView();
 
-                Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
+                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
             }
         }
         private _handleDrawTileObject(gridIndex: GridIndex): void {
@@ -227,7 +239,7 @@ namespace TinyWars.MapEditor {
             tile.startRunning(this._getWar());
             tile.flushDataToView();
 
-            Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -244,7 +256,7 @@ namespace TinyWars.MapEditor {
                 t2.startRunning(this._getWar());
                 t2.flushDataToView();
 
-                Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
+                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
             }
         }
         private _handleDrawUnit(gridIndex: GridIndex): void {
@@ -256,14 +268,14 @@ namespace TinyWars.MapEditor {
                 return;
             }
             if (tile.getMaxHp() != null) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0067, Lang.getTileName(tile.getType())));
+                FloatText.show(Lang.getFormattedText(LangTextType.F0067, Lang.getTileName(tile.getType())));
                 return;
             }
 
             const unitMap       = this._unitMap;
             const unitId        = unitMap.getNextUnitId();
             const targetUnit    = this._drawTargetUnit;
-            const unit          = new BaseWar.BwUnit();
+            const unit          = new BwUnit();
             unit.init({
                 gridIndex,
                 playerIndex : targetUnit.getPlayerIndex(),
@@ -276,7 +288,7 @@ namespace TinyWars.MapEditor {
             unitMap.setUnitOnMap(unit);
             unitMap.setNextUnitId(unitId + 1);
 
-            Notify.dispatch(Notify.Type.MeUnitChanged, { gridIndex } as Notify.Data.MeUnitChanged);
+            Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as NotifyData.MeUnitChanged);
         }
         private _handleDeleteTileObject(gridIndex: GridIndex): void {
             const tileMap   = this._tileMap;
@@ -284,7 +296,7 @@ namespace TinyWars.MapEditor {
             tile.destroyTileObject();
             tile.flushDataToView();
 
-            Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -293,14 +305,16 @@ namespace TinyWars.MapEditor {
                 t2.destroyTileObject();
                 t2.flushDataToView();
 
-                Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
+                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
             }
         }
         private _handleDeleteUnit(gridIndex: GridIndex): void {
             if (this._unitMap.getUnitOnMap(gridIndex)) {
-                DestructionHelpers.destroyUnitOnMap(this._getWar(), gridIndex, true);
-                Notify.dispatch(Notify.Type.MeUnitChanged, { gridIndex } as Notify.Data.MeUnitChanged);
+                WarDestructionHelpers.destroyUnitOnMap(this._getWar(), gridIndex, true);
+                Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as NotifyData.MeUnitChanged);
             }
         }
     }
 }
+
+export default TwnsMeDrawer;

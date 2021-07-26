@@ -1,34 +1,47 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.User {
-    import FloatText        = Utility.FloatText;
-    import CommonConstants  = Utility.CommonConstants;
-    import Helpers          = Utility.Helpers;
-    import Lang             = Utility.Lang;
-    import NotifyType       = Utility.Notify.Type;
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
+import UserModel                from "../../user/model/UserModel";
+import UserProxy                from "../../user/model/UserProxy";
 
-    export class UserChangeDiscordIdPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+export namespace TwnsUserChangeDiscordIdPanel {
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+
+    export class UserChangeDiscordIdPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         // @ts-ignore
-        private readonly _imgMask           : GameUi.UiImage;
+        private readonly _imgMask           : TwnsUiImage.UiImage;
         // @ts-ignore
         private readonly _group             : eui.Group;
         // @ts-ignore
-        private readonly _labelTitle        : GameUi.UiLabel;
+        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelDiscordId    : GameUi.UiLabel;
+        private readonly _labelDiscordId    : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _labelNote         : GameUi.UiLabel;
+        private readonly _labelNote         : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _inputDiscordId    : GameUi.UiTextInput;
+        private readonly _inputDiscordId    : TwnsUiTextInput.UiTextInput;
         // @ts-ignore
-        private readonly _labelUrl          : GameUi.UiLabel;
+        private readonly _labelUrl          : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private readonly _btnConfirm        : GameUi.UiButton;
+        private readonly _btnConfirm        : TwnsUiButton.UiButton;
         // @ts-ignore
-        private readonly _btnClose          : GameUi.UiButton;
+        private readonly _btnClose          : TwnsUiButton.UiButton;
 
         private _isRequesting   = false;
 
@@ -86,11 +99,11 @@ namespace TinyWars.User {
 
         private _onTouchedBtnConfirm(): void {
             if (this._isRequesting) {
-                FloatText.show(Lang.getText(Lang.Type.A0046));
+                FloatText.show(Lang.getText(LangTextType.A0046));
             } else {
                 const discordId = this._inputDiscordId.text;
-                if (!Utility.Helpers.checkIsDiscordIdValid(discordId)) {
-                    FloatText.show(Lang.getText(Lang.Type.A0048));
+                if (!Helpers.checkIsDiscordIdValid(discordId)) {
+                    FloatText.show(Lang.getText(LangTextType.A0048));
                 } else {
                     this._isRequesting = true;
                     UserProxy.reqSetDiscordId(discordId);
@@ -100,8 +113,8 @@ namespace TinyWars.User {
 
         private _onTouchedLabelUrl(): void {
             if ((window) && (window.open)) {
-                Common.CommonConfirmPanel.show({
-                    content : Lang.getFormattedText(Lang.Type.F0065, `Discord`),
+                CommonConfirmPanel.show({
+                    content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                     callback: () => {
                         window.open(CommonConstants.DiscordUrl);
                     },
@@ -110,7 +123,7 @@ namespace TinyWars.User {
         }
 
         private _onMsgUserSetDiscordId(): void {
-            FloatText.show(Lang.getText(Lang.Type.A0049));
+            FloatText.show(Lang.getText(LangTextType.A0049));
             this.close();
         }
         private _onMsgUserSetDiscordIdFailed(): void {
@@ -125,11 +138,11 @@ namespace TinyWars.User {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getText(Lang.Type.B0150);
-            this._labelDiscordId.text   = Lang.getText(Lang.Type.B0243);
-            this._labelNote.text        = Lang.getText(Lang.Type.A0067);
-            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
-            this._btnClose.label        = Lang.getText(Lang.Type.B0154);
+            this._labelTitle.text       = Lang.getText(LangTextType.B0150);
+            this._labelDiscordId.text   = Lang.getText(LangTextType.B0243);
+            this._labelNote.text        = Lang.getText(LangTextType.A0067);
+            this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+            this._btnClose.label        = Lang.getText(LangTextType.B0154);
         }
 
         private _showOpenAnimation(): void {
@@ -161,3 +174,5 @@ namespace TinyWars.User {
         }
     }
 }
+
+export default TwnsUserChangeDiscordIdPanel;

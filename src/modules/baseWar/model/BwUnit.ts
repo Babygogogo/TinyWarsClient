@@ -1,12 +1,19 @@
 
-namespace TinyWars.BaseWar {
-    import Types                = Utility.Types;
-    import Logger               = Utility.Logger;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import ClientErrorCode      = Utility.ClientErrorCode;
-    import ConfigManager        = Utility.ConfigManager;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwUnitView       from "../view/BwUnitView";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsBwPlayer         from "./BwPlayer";
+import TwnsBwTile           from "./BwTile";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwWar            from "./BwWar";
+
+namespace TwnsBwUnit {
     import UnitActionState      = Types.UnitActionState;
     import ArmorType            = Types.ArmorType;
     import TileType             = Types.TileType;
@@ -15,12 +22,14 @@ namespace TinyWars.BaseWar {
     import UnitType             = Types.UnitType;
     import MoveType             = Types.MoveType;
     import GridIndex            = Types.GridIndex;
-    import MovePathNode         = Types.MovePathNode;
     import UnitTemplateCfg      = Types.UnitTemplateCfg;
     import ISerialUnit          = ProtoTypes.WarSerialization.ISerialUnit;
     import IWarUnitRepairData   = ProtoTypes.Structure.IDataForModifyUnit;
     import Config               = ProtoTypes.Config;
-    import CommonConstants      = Utility.CommonConstants;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar                = TwnsBwWar.BwWar;
+    import BwTile               = TwnsBwTile.BwTile;
+    import BwUnitView           = TwnsBwUnitView.BwUnitView;
 
     export class BwUnit {
         private _templateCfg                : UnitTemplateCfg;
@@ -50,7 +59,7 @@ namespace TinyWars.BaseWar {
         // Initializers and serializers.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public init(unitData: ISerialUnit, configVersion: string): ClientErrorCode {
-            const validationError = BwHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+            const validationError = WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                 unitData,
                 configVersion,
                 mapSize                 : undefined,
@@ -277,7 +286,7 @@ namespace TinyWars.BaseWar {
             return ConfigManager.getVisionBonusCfg(configVersion, unitType);
         }
 
-        public getPlayer(): BwPlayer {
+        public getPlayer(): TwnsBwPlayer.BwPlayer {
             const war = this.getWar();
             if (war == null) {
                 Logger.error(`BwUnit.getPlayer() empty war.`);
@@ -370,11 +379,11 @@ namespace TinyWars.BaseWar {
             return this._getTemplateCfg().maxHp;
         }
         public getNormalizedMaxHp(): number {
-            return BwHelpers.getNormalizedHp(this.getMaxHp());
+            return WarCommonHelpers.getNormalizedHp(this.getMaxHp());
         }
 
         public getNormalizedCurrentHp(): number {
-            return BwHelpers.getNormalizedHp(this.getCurrentHp());
+            return WarCommonHelpers.getNormalizedHp(this.getCurrentHp());
         }
         public getCurrentHp(): number {
             return this._currentHp;
@@ -520,7 +529,7 @@ namespace TinyWars.BaseWar {
                 const attackBonusCfg = skillCfg.attackBonus;
                 if ((attackBonusCfg)                                                                                                                        &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusCfg[1]))                                                   &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += attackBonusCfg[2];
                 }
@@ -529,7 +538,7 @@ namespace TinyWars.BaseWar {
                 if ((attackBonusByPromotionCfg)                                                                                                                     &&
                     (attackBonusByPromotionCfg[2] === promotion)                                                                                                    &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusByPromotionCfg[1]))                                                &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusByPromotionCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusByPromotionCfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += attackBonusByPromotionCfg[3];
                 }
@@ -585,7 +594,7 @@ namespace TinyWars.BaseWar {
                 const defenseBonusCfg = skillCfg.defenseBonus;
                 if ((defenseBonusCfg)                                                                                                                       &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, defenseBonusCfg[1]))                                                  &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, defenseBonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, defenseBonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += defenseBonusCfg[2];
                 }
@@ -594,7 +603,7 @@ namespace TinyWars.BaseWar {
                 if ((defenseBonusByPromotionCfg)                                                                                                                    &&
                     (defenseBonusByPromotionCfg[2] === promotion)                                                                                                   &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, defenseBonusByPromotionCfg[1]))                                               &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, defenseBonusByPromotionCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, defenseBonusByPromotionCfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += defenseBonusByPromotionCfg[3];
                 }
@@ -603,7 +612,7 @@ namespace TinyWars.BaseWar {
         }
 
         public checkHasSecondaryWeapon(): boolean {
-            return Utility.ConfigManager.checkHasSecondaryWeapon(this.getConfigVersion(), this.getUnitType());
+            return ConfigManager.checkHasSecondaryWeapon(this.getConfigVersion(), this.getUnitType());
         }
 
         public getCfgSecondaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
@@ -686,7 +695,7 @@ namespace TinyWars.BaseWar {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).maxAttackRangeBonus;
                 if ((cfg)                                                                                                                       &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += cfg[2];
                 }
@@ -737,7 +746,7 @@ namespace TinyWars.BaseWar {
                     return undefined;
                 }
 
-                if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     observerTeamIndex   : teamIndex,
                     gridIndex           : destination,
@@ -973,7 +982,7 @@ namespace TinyWars.BaseWar {
             if (type == null) {
                 return undefined;
             } else {
-                return Utility.ConfigManager.getUnitTemplateCfg(this.getConfigVersion(), type).productionCost;
+                return ConfigManager.getUnitTemplateCfg(this.getConfigVersion(), type).productionCost;
             }
         }
 
@@ -1094,7 +1103,7 @@ namespace TinyWars.BaseWar {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).moveRangeBonus;
                 if ((cfg)                                                                                                                       &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += cfg[2];
                 }
@@ -1120,7 +1129,7 @@ namespace TinyWars.BaseWar {
         // Functions for promotion.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxPromotion(): number {
-            return Utility.ConfigManager.getUnitMaxPromotion(this.getConfigVersion());
+            return ConfigManager.getUnitMaxPromotion(this.getConfigVersion());
         }
 
         public getCurrentPromotion(): number {
@@ -1135,11 +1144,11 @@ namespace TinyWars.BaseWar {
         }
 
         public getPromotionAttackBonus(): number {
-            return Utility.ConfigManager.getUnitPromotionAttackBonus(this.getConfigVersion(), this.getCurrentPromotion());
+            return ConfigManager.getUnitPromotionAttackBonus(this.getConfigVersion(), this.getCurrentPromotion());
         }
 
         public getPromotionDefenseBonus(): number {
-            return Utility.ConfigManager.getUnitPromotionDefenseBonus(this.getConfigVersion(), this.getCurrentPromotion());
+            return ConfigManager.getUnitPromotionDefenseBonus(this.getConfigVersion(), this.getCurrentPromotion());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1254,8 +1263,8 @@ namespace TinyWars.BaseWar {
             return (loadUnitCategory != null)
                 && (loadableTileCategory != null)
                 && (maxLoadUnitsCount != null)
-                && (Utility.ConfigManager.checkIsTileTypeInCategory(this.getConfigVersion(), this.getWar().getTileMap().getTile(this.getGridIndex()).getType(), loadableTileCategory))
-                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), loadUnitCategory))
+                && (ConfigManager.checkIsTileTypeInCategory(this.getConfigVersion(), this.getWar().getTileMap().getTile(this.getGridIndex()).getType(), loadableTileCategory))
+                && (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), loadUnitCategory))
                 && (this.getPlayerIndex() === unit.getPlayerIndex())
                 && (this.getLoadedUnitsCount() < maxLoadUnitsCount);
         }
@@ -1264,7 +1273,7 @@ namespace TinyWars.BaseWar {
             const category  = cfg.loadableTileCategory;
             return (cfg.canDropLoadedUnits === 1)
                 && (category != null)
-                && (Utility.ConfigManager.checkIsTileTypeInCategory(this.getConfigVersion(), tileType, category));
+                && (ConfigManager.checkIsTileTypeInCategory(this.getConfigVersion(), tileType, category));
         }
         public checkCanLaunchLoadedUnit(): boolean {
             return this._getTemplateCfg().canLaunchLoadedUnits === 1;
@@ -1478,7 +1487,7 @@ namespace TinyWars.BaseWar {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).unitVisionRangeBonus;
                 if ((cfg)                                                                                                                   &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                              &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     modifier += cfg[2];
                 }
@@ -1527,7 +1536,7 @@ namespace TinyWars.BaseWar {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).unitTrueVision;
                 if ((cfg)                                                                                                                   &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                              &&
-                    ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                 ) {
                     return true;
                 }
@@ -1700,7 +1709,7 @@ namespace TinyWars.BaseWar {
             const coId = this.getWar().getPlayer(this.getPlayerIndex()).getCoId();
             return coId == null
                 ? null
-                : Math.floor(Utility.ConfigManager.getCoBasicCfg(this.getConfigVersion(), coId).boardCostPercentage * this.getProductionBaseCost() / 100);
+                : Math.floor(ConfigManager.getCoBasicCfg(this.getConfigVersion(), coId).boardCostPercentage * this.getProductionBaseCost() / 100);
         }
     }
 
@@ -1757,3 +1766,5 @@ namespace TinyWars.BaseWar {
             : unitTemplateCfg.maxBuildMaterial;
     }
 }
+
+export default TwnsBwUnit;

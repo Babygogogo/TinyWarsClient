@@ -1,10 +1,23 @@
 
-namespace TinyWars.Lobby {
-    import UserModel    = User.UserModel;
-    import Notify       = Utility.Notify;
+import TwnsChatPanel            from "../../chat/view/ChatPanel";
+import Types                    from "../../tools/helpers/Types";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import UserModel                from "../../user/model/UserModel";
+import TwnsUserOnlineUsersPanel from "../../user/view/UserOnlineUsersPanel";
+import TwnsUserPanel            from "../../user/view/UserPanel";
+import TwnsUserSettingsPanel    from "../../user/view/UserSettingsPanel";
 
-    export class LobbyTopPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsLobbyTopPanel {
+    import UserPanel            = TwnsUserPanel.UserPanel;
+    import UserSettingsPanel    = TwnsUserSettingsPanel.UserSettingsPanel;
+    import UserOnlineUsersPanel = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+
+    export class LobbyTopPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: LobbyTopPanel;
@@ -12,10 +25,10 @@ namespace TinyWars.Lobby {
         private _group          : eui.Group;
 
         private _groupUserInfo  : eui.Group;
-        private _labelNickname  : GameUi.UiLabel;
-        private _labelUserId    : GameUi.UiLabel;
+        private _labelNickname  : TwnsUiLabel.UiLabel;
+        private _labelUserId    : TwnsUiLabel.UiLabel;
 
-        private _btnSettings    : GameUi.UiButton;
+        private _btnSettings    : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!LobbyTopPanel._instance) {
@@ -38,10 +51,10 @@ namespace TinyWars.Lobby {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgUserLogin,                   callback: this._onMsgUserLogin },
-                { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
-                { type: Notify.Type.MsgUserSetNickname,             callback: this._onMsgUserSetNickname },
+                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserLogin,                   callback: this._onMsgUserLogin },
+                { type: NotifyType.MsgUserLogout,                  callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgUserSetNickname,             callback: this._onMsgUserSetNickname },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupUserInfo,  callback: this._onTouchedGroupUserInfo },
@@ -69,16 +82,17 @@ namespace TinyWars.Lobby {
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
+            // nothing to do
         }
 
         private _onTouchedGroupUserInfo(e: egret.Event): void {
-            User.UserOnlineUsersPanel.hide();
-            Chat.ChatPanel.hide();
-            User.UserPanel.show({ userId: UserModel.getSelfUserId() });
+            UserOnlineUsersPanel.hide();
+            TwnsChatPanel.ChatPanel.hide();
+            UserPanel.show({ userId: UserModel.getSelfUserId() });
         }
 
         private _onTouchedBtnSettings(e: egret.TouchEvent): void {
-            User.UserSettingsPanel.show();
+            UserSettingsPanel.show();
         }
 
         private _showOpenAnimation(): void {
@@ -109,3 +123,5 @@ namespace TinyWars.Lobby {
         }
     }
 }
+
+export default TwnsLobbyTopPanel;

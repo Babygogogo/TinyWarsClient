@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
-        xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage source="bg_002_png" left="0" right="0" top="0" bottom="0" />
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+        xmlns:w="http://ns.egret.com/wing" xmlns:TwnsUiZoomableComponent="TwnsUiZoomableComponent.*">
+    <TwnsUiImage:UiImage source="bg_002_png" left="0" right="0" top="0" bottom="0" />
     <e:Group left="0" top="40" bottom="0" right="200">
-        <GameUi:UiZoomableComponent id="_zoomMap" left="20" right="20" top="20" bottom="20" />
+        <TwnsUiZoomableComponent:UiZoomableComponent id="_zoomMap" left="20" right="20" top="20" bottom="20" />
         <e:Group id="_groupInfo" x="8" y="10" touchThrough="true" touchEnabled="false" touchChildren="false">
-            <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" />
-            <GameUi:UiLabel id="_labelMapNameEnglish" text="地图名: 未知" y="10" stroke="2" size="20"
+            <TwnsUiLabel:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" />
+            <TwnsUiLabel:UiLabel id="_labelMapNameEnglish" text="地图名: 未知" y="10" stroke="2" size="20"
                             x="10" />
-            <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" />
-            <GameUi:UiLabel id="_labelPlayersCount" text="玩家数: 未知" y="50" stroke="2" size="20" />
-            <GameUi:UiLabel id="_labelRating" text="评分: 未知" y="75" stroke="2" size="20" />
-            <GameUi:UiLabel id="_labelPlayedTimes" text="全服游戏次数: 未知" y="100" stroke="2" size="20" />
-            <GameUi:UiLabel id="_labelModifyTime" text="修改时间: 未知" y="110" stroke="2" size="20"
+            <TwnsUiLabel:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" />
+            <TwnsUiLabel:UiLabel id="_labelPlayersCount" text="玩家数: 未知" y="50" stroke="2" size="20" />
+            <TwnsUiLabel:UiLabel id="_labelRating" text="评分: 未知" y="75" stroke="2" size="20" />
+            <TwnsUiLabel:UiLabel id="_labelPlayedTimes" text="全服游戏次数: 未知" y="100" stroke="2" size="20" />
+            <TwnsUiLabel:UiLabel id="_labelModifyTime" text="修改时间: 未知" y="110" stroke="2" size="20"
                             x="10" />
             <e:layout>
                 <e:VerticalLayout gap="2" />
@@ -20,29 +20,29 @@
         </e:Group>
     </e:Group>
     <e:Group top="40" bottom="0" width="200" right="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelMenuTitle" text="选择地图" y="14" bold="true" size="25" textColor="0xffffff"
+        <TwnsUiLabel:UiLabel id="_labelMenuTitle" text="选择地图" y="14" bold="true" size="25" textColor="0xffffff"
                         maxTextWidth="110" horizontalCenter="0" />
-        <GameUi:UiLabel id="_labelNoMap" text="没有符合条件的地图" bold="true" size="20" textColor="0xFFFFFF"
+        <TwnsUiLabel:UiLabel id="_labelNoMap" text="没有符合条件的地图" bold="true" size="20" textColor="0xFFFFFF"
                         horizontalCenter="0" width="160" textAlign="center" verticalCenter="0" />
-        <GameUi:UiScrollList id="_listMap" left="0" right="0" bottom="50" top="50">
+        <TwnsUiScrollList:UiScrollList id="_listMap" left="0" right="0" bottom="50" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40" currentState="up" states="up,down">
-                        <GameUi:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
+                        <TwnsUiButton:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
                                          visible.down="false">
-                            <GameUi:skinName>
+                            <TwnsUiButton:skinName>
                                 <e:Skin states="up,down,disabled">
                                     <e:Image source="commonColorTransparent0000" left="0" right="0" top="0" bottom="0" />
                                     <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
                                              bold="true" textColor="0x000000" />
                                 </e:Skin>
-                            </GameUi:skinName>
-                        </GameUi:UiButton>
-                        <GameUi:UiLabel id="_labelName" text="地图名称" size="16" verticalCenter="0"
+                            </TwnsUiButton:skinName>
+                        </TwnsUiButton:UiButton>
+                        <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="16" verticalCenter="0"
                                         textColor.down="0x00ff00" x="10" maxTextWidth="150" />
-                        <GameUi:UiButton id="_btnNext" label="&gt;&gt;" verticalCenter="0" visible.up="false" right="10">
+                        <TwnsUiButton:UiButton id="_btnNext" label="&gt;&gt;" verticalCenter="0" visible.up="false" right="10">
                             <e:skinName>
                                 <e:Skin states="up,down,disabled">
                                     <e:Image width="100%" height="100%" />
@@ -50,12 +50,12 @@
                                              bold="true" textColor="0x00ff00" />
                                 </e:Skin>
                             </e:skinName>
-                        </GameUi:UiButton>
+                        </TwnsUiButton:UiButton>
                     </e:Skin>
                 </e:itemRendererSkinName>
             </e:List>
-        </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回大厅" horizontalCenter="0" bottom="14">
+        </TwnsUiScrollList:UiScrollList>
+        <TwnsUiButton:UiButton id="_btnBack" label="返回大厅" horizontalCenter="0" bottom="14">
             <e:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -63,6 +63,6 @@
                              textColor="0xffffff" />
                 </e:Skin>
             </e:skinName>
-        </GameUi:UiButton>
+        </TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>

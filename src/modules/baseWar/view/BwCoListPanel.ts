@@ -1,56 +1,70 @@
 
-namespace TinyWars.BaseWar {
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import ConfigManager    = Utility.ConfigManager;
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsBwWar                from "../model/BwWar";
+import TwnsBwPlayer             from "../model/BwPlayer";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import Types                    from "../../tools/helpers/Types";
+
+namespace TwnsBwCoListPanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import BwWar            = TwnsBwWar.BwWar;
 
     type OpenDataForBwCoListPanel = {
         war             : BwWar;
         selectedIndex   : number;
-    }
-    export class BwCoListPanel extends GameUi.UiPanel<OpenDataForBwCoListPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    };
+    export class BwCoListPanel extends TwnsUiPanel.UiPanel<OpenDataForBwCoListPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: BwCoListPanel;
 
         private _groupList  : eui.Group;
-        private _listCo     : GameUi.UiScrollList<DataForCoRenderer>;
-        private _btnBack    : GameUi.UiButton;
+        private _listCo     : TwnsUiScrollList.UiScrollList<DataForCoRenderer>;
+        private _btnBack    : TwnsUiButton.UiButton;
 
         private _groupInfo                      : eui.Group;
         private _scrCoInfo                      : eui.Scroller;
-        private _imgCoPortrait                  : GameUi.UiImage;
-        private _labelCommanderInfo             : GameUi.UiLabel;
-        private _labelNameTitle                 : GameUi.UiLabel;
-        private _labelName                      : GameUi.UiLabel;
-        private _labelForceTitle                : GameUi.UiLabel;
-        private _labelForce                     : GameUi.UiLabel;
-        private _labelDesignerTitle             : GameUi.UiLabel;
-        private _labelDesigner                  : GameUi.UiLabel;
-        private _labelBoardCostPercentageTitle  : GameUi.UiLabel;
-        private _labelBoardCostPercentage       : GameUi.UiLabel;
-        private _labelZoneRadiusTitle           : GameUi.UiLabel;
-        private _labelZoneRadius                : GameUi.UiLabel;
-        private _labelEnergyBarTitle            : GameUi.UiLabel;
-        private _labelEnergyBar                 : GameUi.UiLabel;
+        private _imgCoPortrait                  : TwnsUiImage.UiImage;
+        private _labelCommanderInfo             : TwnsUiLabel.UiLabel;
+        private _labelNameTitle                 : TwnsUiLabel.UiLabel;
+        private _labelName                      : TwnsUiLabel.UiLabel;
+        private _labelForceTitle                : TwnsUiLabel.UiLabel;
+        private _labelForce                     : TwnsUiLabel.UiLabel;
+        private _labelDesignerTitle             : TwnsUiLabel.UiLabel;
+        private _labelDesigner                  : TwnsUiLabel.UiLabel;
+        private _labelBoardCostPercentageTitle  : TwnsUiLabel.UiLabel;
+        private _labelBoardCostPercentage       : TwnsUiLabel.UiLabel;
+        private _labelZoneRadiusTitle           : TwnsUiLabel.UiLabel;
+        private _labelZoneRadius                : TwnsUiLabel.UiLabel;
+        private _labelEnergyBarTitle            : TwnsUiLabel.UiLabel;
+        private _labelEnergyBar                 : TwnsUiLabel.UiLabel;
 
-        private _listPassiveSkill   : GameUi.UiScrollList<DataForSkillRenderer>;
-        private _labelNoPassiveSkill: GameUi.UiLabel;
+        private _listPassiveSkill   : TwnsUiScrollList.UiScrollList<DataForSkillRenderer>;
+        private _labelNoPassiveSkill: TwnsUiLabel.UiLabel;
 
-        private _listCop            : GameUi.UiScrollList<DataForSkillRenderer>;
-        private _labelNoCop         : GameUi.UiLabel;
-        private _labelCopEnergyTitle: GameUi.UiLabel;
-        private _labelCopEnergy     : GameUi.UiLabel;
+        private _listCop            : TwnsUiScrollList.UiScrollList<DataForSkillRenderer>;
+        private _labelNoCop         : TwnsUiLabel.UiLabel;
+        private _labelCopEnergyTitle: TwnsUiLabel.UiLabel;
+        private _labelCopEnergy     : TwnsUiLabel.UiLabel;
 
-        private _listScop               : GameUi.UiScrollList<DataForSkillRenderer>;
-        private _labelNoScop            : GameUi.UiLabel;
-        private _labelScopEnergyTitle   : GameUi.UiLabel;
-        private _labelScopEnergy        : GameUi.UiLabel;
+        private _listScop               : TwnsUiScrollList.UiScrollList<DataForSkillRenderer>;
+        private _labelNoScop            : TwnsUiLabel.UiLabel;
+        private _labelScopEnergyTitle   : TwnsUiLabel.UiLabel;
+        private _labelScopEnergy        : TwnsUiLabel.UiLabel;
 
         private _scrHelp    : eui.Scroller;
-        private _labelHelp  : GameUi.UiLabel;
+        private _labelHelp  : TwnsUiLabel.UiLabel;
 
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
@@ -82,7 +96,7 @@ namespace TinyWars.BaseWar {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -99,12 +113,12 @@ namespace TinyWars.BaseWar {
             this._listCo.bindData(this._dataForListCo);
             this.setSelectedIndex(this._getOpenData().selectedIndex);
 
-            Notify.dispatch(Notify.Type.BwCoListPanelOpened);
+            Notify.dispatch(NotifyType.BwCoListPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
 
-            Notify.dispatch(Notify.Type.BwCoListPanelClosed);
+            Notify.dispatch(NotifyType.BwCoListPanelClosed);
         }
 
         public setSelectedIndex(newIndex: number): void {
@@ -204,18 +218,18 @@ namespace TinyWars.BaseWar {
             } else {
                 this._scrCoInfo.visible = true;
 
-                this._labelNameTitle.text                   = `${Lang.getText(Lang.Type.B0162)}: `;
-                this._labelForceTitle.text                  = `${Lang.getText(Lang.Type.B0168)}: `;
-                this._labelDesignerTitle.text               = `${Lang.getText(Lang.Type.B0163)}: `;
-                this._labelBoardCostPercentageTitle.text    = `${Lang.getText(Lang.Type.B0164)}: `;
-                this._labelZoneRadiusTitle.text             = `${Lang.getText(Lang.Type.B0165)}: `;
-                this._labelEnergyBarTitle.text              = `${Lang.getText(Lang.Type.B0166)}: `;
-                this._labelCopEnergyTitle.text              = `${Lang.getText(Lang.Type.B0167)}: `;
-                this._labelScopEnergyTitle.text             = `${Lang.getText(Lang.Type.B0167)}: `;
+                this._labelNameTitle.text                   = `${Lang.getText(LangTextType.B0162)}: `;
+                this._labelForceTitle.text                  = `${Lang.getText(LangTextType.B0168)}: `;
+                this._labelDesignerTitle.text               = `${Lang.getText(LangTextType.B0163)}: `;
+                this._labelBoardCostPercentageTitle.text    = `${Lang.getText(LangTextType.B0164)}: `;
+                this._labelZoneRadiusTitle.text             = `${Lang.getText(LangTextType.B0165)}: `;
+                this._labelEnergyBarTitle.text              = `${Lang.getText(LangTextType.B0166)}: `;
+                this._labelCopEnergyTitle.text              = `${Lang.getText(LangTextType.B0167)}: `;
+                this._labelScopEnergyTitle.text             = `${Lang.getText(LangTextType.B0167)}: `;
 
                 const player    = data.player;
                 const coId      = player.getCoId();
-                const cfg       = coId != null ? Utility.ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
+                const cfg       = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
                 if (!cfg) {
                     this._imgCoPortrait.source          = "";
                     this._labelName.text                = "--";
@@ -224,10 +238,10 @@ namespace TinyWars.BaseWar {
                     this._labelBoardCostPercentage.text = "--";
                     this._labelZoneRadius.text          = "--";
                     this._labelEnergyBar.text           = "--";
-                    this._labelNoPassiveSkill.text      = Lang.getText(Lang.Type.B0001);
-                    this._labelNoCop.text               = Lang.getText(Lang.Type.B0001);
+                    this._labelNoPassiveSkill.text      = Lang.getText(LangTextType.B0001);
+                    this._labelNoCop.text               = Lang.getText(LangTextType.B0001);
                     this._labelCopEnergy.text           = "--";
-                    this._labelNoScop.text              = Lang.getText(Lang.Type.B0001);
+                    this._labelNoScop.text              = Lang.getText(LangTextType.B0001);
                     this._labelScopEnergy.text          = "--";
                     this._listPassiveSkill.clear();
                     this._listCop.clear();
@@ -244,56 +258,56 @@ namespace TinyWars.BaseWar {
 
                     const passiveSkills = cfg.passiveSkills || [];
                     if (!passiveSkills.length) {
-                        this._labelNoPassiveSkill.text = Lang.getText(Lang.Type.B0001);
+                        this._labelNoPassiveSkill.text = Lang.getText(LangTextType.B0001);
                         this._listPassiveSkill.clear();
                     } else {
                         this._labelNoPassiveSkill.text = "";
-                        const data: DataForSkillRenderer[] = [];
+                        const dataArray: DataForSkillRenderer[] = [];
                         for (let i = 0; i < passiveSkills.length; ++i) {
-                            data.push({
+                            dataArray.push({
                                 index   : i + 1,
                                 skillId : passiveSkills[i],
                             });
                         }
-                        this._listPassiveSkill.bindData(data);
+                        this._listPassiveSkill.bindData(dataArray);
                     }
 
                     const copSkills = player.getCoSkills(Types.CoSkillType.Power) || [];
                     if (!copSkills.length) {
-                        this._labelNoCop.text       = Lang.getText(Lang.Type.B0001);
+                        this._labelNoCop.text       = Lang.getText(LangTextType.B0001);
                         this._labelCopEnergy.text   = "--";
                         this._listCop.clear();
                     } else {
                         this._labelNoCop.text       = "";
                         this._labelCopEnergy.text   = `${player.getCoPowerEnergy()}`;
 
-                        const data: DataForSkillRenderer[] = [];
+                        const dataArray: DataForSkillRenderer[] = [];
                         for (let i = 0; i < copSkills.length; ++i) {
-                            data.push({
+                            dataArray.push({
                                 index   : i + 1,
                                 skillId : copSkills[i],
                             });
                         }
-                        this._listCop.bindData(data);
+                        this._listCop.bindData(dataArray);
                     }
 
                     const scopSkills = player.getCoSkills(Types.CoSkillType.SuperPower) || [];
                     if (!scopSkills.length) {
-                        this._labelNoScop.text      = Lang.getText(Lang.Type.B0001);
+                        this._labelNoScop.text      = Lang.getText(LangTextType.B0001);
                         this._labelScopEnergy.text  = "--";
                         this._listScop.clear();
                     } else {
                         this._labelNoScop.text      = "";
                         this._labelScopEnergy.text  = `${player.getCoSuperPowerEnergy()}`;
 
-                        const data: DataForSkillRenderer[] = [];
+                        const dataArray: DataForSkillRenderer[] = [];
                         for (let i = 0; i < scopSkills.length; ++i) {
-                            data.push({
+                            dataArray.push({
                                 index   : i + 1,
                                 skillId : scopSkills[i],
                             });
                         }
-                        this._listScop.bindData(data);
+                        this._listScop.bindData(dataArray);
                     }
                 }
             }
@@ -304,26 +318,25 @@ namespace TinyWars.BaseWar {
                 this._scrHelp.visible = false;
             } else {
                 this._scrHelp.visible = true;
-                this._labelHelp.setRichText(Lang.getText(Lang.Type.R0004));
+                this._labelHelp.setRichText(Lang.getText(LangTextType.R0004));
             }
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelCommanderInfo.text   = Lang.getText(Lang.Type.B0240);
-            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+            this._labelCommanderInfo.text   = Lang.getText(LangTextType.B0240);
+            this._btnBack.label             = Lang.getText(LangTextType.B0146);
         }
     }
 
     type DataForCoRenderer = {
         configVersion   : string;
-        player          : BaseWar.BwPlayer;
+        player          : TwnsBwPlayer.BwPlayer;
         index           : number;
         panel           : BwCoListPanel;
-    }
-
-    class CoNameRenderer extends GameUi.UiListItemRenderer<DataForCoRenderer> {
-        private _btnChoose: GameUi.UiButton;
-        private _labelName: GameUi.UiLabel;
+    };
+    class CoNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCoRenderer> {
+        private _btnChoose: TwnsUiButton.UiButton;
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -337,13 +350,13 @@ namespace TinyWars.BaseWar {
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
 
             if (!player) {
-                this._labelName.text    = Lang.getText(Lang.Type.B0143);
+                this._labelName.text    = Lang.getText(LangTextType.B0143);
             } else {
                 const coId              = player.getCoId();
-                const cfg               = coId != null ? Utility.ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
+                const cfg               = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
                 this._labelName.text    = cfg
                     ? `${cfg.name}`
-                    : `(${Lang.getText(Lang.Type.B0001)}CO)`;
+                    : `(${Lang.getText(LangTextType.B0001)}CO)`;
             }
         }
 
@@ -356,16 +369,17 @@ namespace TinyWars.BaseWar {
     type DataForSkillRenderer = {
         index   : number;
         skillId : number;
-    }
-
-    class SkillRenderer extends GameUi.UiListItemRenderer<DataForSkillRenderer> {
-        private _labelIndex : GameUi.UiLabel;
-        private _labelDesc  : GameUi.UiLabel;
+    };
+    class SkillRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkillRenderer> {
+        private _labelIndex : TwnsUiLabel.UiLabel;
+        private _labelDesc  : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             const data              = this.data;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
+            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
         }
     }
 }
+
+export default TwnsBwCoListPanel;

@@ -1,9 +1,11 @@
 
-namespace TinyWars.Common.CommonModel {
-    import Types                = Utility.Types;
-    import ConfigManager        = Utility.ConfigManager;
-    import Helpers              = Utility.Helpers;
-    import ProtoTypes           = Utility.ProtoTypes;
+import Types            from "../../tools/helpers/Types";
+import ConfigManager    from "../../tools/helpers/ConfigManager";
+import Helpers          from "../../tools/helpers/Helpers";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import UserModel        from "../../user/model/UserModel";
+
+namespace CommonModel {
     import UnitType             = Types.UnitType;
     import TileBaseType         = Types.TileBaseType;
     import TileObjectType       = Types.TileObjectType;
@@ -13,7 +15,7 @@ namespace TinyWars.Common.CommonModel {
     type FrameCfg = {
         source  : string;
         tick    : number;
-    }
+    };
 
     let _unitAndTileTexturePrefix       = `v01_`;
     const _unitImageSourceDict          = new Map<TextureVersion, Map<boolean, Map<boolean, Map<number, Map<UnitType, FrameCfg>>>>>();
@@ -37,7 +39,7 @@ namespace TinyWars.Common.CommonModel {
         return _unitAndTileTexturePrefix;
     }
     function updateUnitAndTileTexturePrefix(): void {
-        _unitAndTileTexturePrefix = `v${Helpers.getNumText(User.UserModel.getSelfSettingsTextureVersion())}_`;
+        _unitAndTileTexturePrefix = `v${Helpers.getNumText(UserModel.getSelfSettingsTextureVersion())}_`;
     }
 
     export function tickTileImageSources(): void {
@@ -198,3 +200,5 @@ namespace TinyWars.Common.CommonModel {
         return _rankList;
     }
 }
+
+export default CommonModel;

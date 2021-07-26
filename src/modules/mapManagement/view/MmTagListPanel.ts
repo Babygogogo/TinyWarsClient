@@ -1,30 +1,47 @@
 
-namespace TinyWars.MapManagement {
-    import Types        = Utility.Types;
-    import Lang         = Utility.Lang;
-    import Notify       = Utility.Notify;
-    import FloatText    = Utility.FloatText;
-    import WarMapModel  = WarMap.WarMapModel;
+import FloatText                    from "../../tools/helpers/FloatText";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+import TwnsUiZoomableMap            from "../../tools/ui/UiZoomableMap";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
+import TwnsMmAvailabilityListPanel  from "./MmAvailabilityListPanel";
+import TwnsMmMainMenuPanel          from "./MmMainMenuPanel";
+import TwnsMmTagChangePanel         from "./MmTagChangePanel";
+import TwnsMmTagSearchPanel         from "./MmTagSearchPanel";
 
-    export class MmTagListPanel extends GameUi.UiPanel<FiltersForMapList> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+namespace TwnsMmTagListPanel {
+    import FiltersForMapList    = TwnsMmAvailabilityListPanel.FiltersForMapList;
+    import MmTagSearchPanel     = TwnsMmTagSearchPanel.MmTagSearchPanel;
+    import MmTagChangePanel     = TwnsMmTagChangePanel.MmTagChangePanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+
+    export class MmTagListPanel extends TwnsUiPanel.UiPanel<FiltersForMapList> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MmTagListPanel;
 
-        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer>;
-        private _zoomMap        : GameUi.UiZoomableMap;
-        private _labelMenuTitle : GameUi.UiLabel;
-        private _btnSearch      : GameUi.UiButton;
-        private _btnBack        : GameUi.UiButton;
-        private _labelNoMap     : GameUi.UiLabel;
+        private _listMap        : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
+        private _zoomMap        : TwnsUiZoomableMap.UiZoomableMap;
+        private _labelMenuTitle : TwnsUiLabel.UiLabel;
+        private _btnSearch      : TwnsUiButton.UiButton;
+        private _btnBack        : TwnsUiButton.UiButton;
+        private _labelNoMap     : TwnsUiLabel.UiLabel;
 
         private _groupInfo          : eui.Group;
-        private _labelMapName       : GameUi.UiLabel;
-        private _labelDesigner      : GameUi.UiLabel;
-        private _labelRating        : GameUi.UiLabel;
-        private _labelPlayedTimes   : GameUi.UiLabel;
-        private _labelPlayersCount  : GameUi.UiLabel;
+        private _labelMapName       : TwnsUiLabel.UiLabel;
+        private _labelDesigner      : TwnsUiLabel.UiLabel;
+        private _labelRating        : TwnsUiLabel.UiLabel;
+        private _labelPlayedTimes   : TwnsUiLabel.UiLabel;
+        private _labelPlayersCount  : TwnsUiLabel.UiLabel;
 
         private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
@@ -54,8 +71,8 @@ namespace TinyWars.MapManagement {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMmSetMapTag,     callback: this._onMsgMmSetMapTag },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMmSetMapTag,     callback: this._onMsgMmSetMapTag },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
@@ -106,7 +123,7 @@ namespace TinyWars.MapManagement {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onMsgMmSetMapTag(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0151));
+            FloatText.show(Lang.getText(LangTextType.A0151));
             this.setMapFilters(this._mapFilters);
         }
 
@@ -116,7 +133,7 @@ namespace TinyWars.MapManagement {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            MmMainMenuPanel.show();
+            TwnsMmMainMenuPanel.MmMainMenuPanel.show();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -127,14 +144,16 @@ namespace TinyWars.MapManagement {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0227);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
+            this._labelMenuTitle.text   = Lang.getText(LangTextType.B0227);
+            this._btnBack.label         = Lang.getText(LangTextType.B0146);
+            this._btnSearch.label       = Lang.getText(LangTextType.B0228);
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const data: DataForMapNameRenderer[] = [];
-            let { mapName: mapNameForFilter, mapDesigner, playersCount, playedTimes, minRating } = this._mapFilters;
+            const data                                      : DataForMapNameRenderer[] = [];
+            const mapFilters                                = this._mapFilters;
+            const { playersCount, playedTimes, minRating }  = mapFilters;
+            let { mapName: mapNameForFilter, mapDesigner }  = mapFilters;
             (mapNameForFilter)  && (mapNameForFilter = mapNameForFilter.toLowerCase());
             (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
 
@@ -162,15 +181,15 @@ namespace TinyWars.MapManagement {
         private async _showMap(mapId: number): Promise<void> {
             const mapRawData                = await WarMapModel.getRawData(mapId);
             const rating                    = await WarMapModel.getAverageRating(mapId);
-            this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-            this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCountUnneutral);
-            this._labelRating.text          = Lang.getFormattedText(Lang.Type.F0003, rating != null ? rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormattedText(Lang.Type.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
+            this._labelMapName.text         = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+            this._labelDesigner.text        = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+            this._labelPlayersCount.text    = Lang.getFormattedText(LangTextType.F0002, mapRawData.playersCountUnneutral);
+            this._labelRating.text          = Lang.getFormattedText(LangTextType.F0003, rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001));
+            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
             this._groupInfo.visible         = true;
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);
-            egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
+            egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1;});
             this._zoomMap.showMapByMapData(mapRawData);
         }
     }
@@ -179,13 +198,12 @@ namespace TinyWars.MapManagement {
         mapId   : number;
         mapName : string;
         panel   : MmTagListPanel;
-    }
-
-    class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
-        private _btnChoose  : GameUi.UiButton;
-        private _btnNext    : GameUi.UiButton;
-        private _labelId    : GameUi.UiLabel;
-        private _labelName  : GameUi.UiLabel;
+    };
+    class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
+        private _btnChoose  : TwnsUiButton.UiButton;
+        private _btnNext    : TwnsUiButton.UiButton;
+        private _labelId    : TwnsUiLabel.UiLabel;
+        private _labelName  : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -214,3 +232,5 @@ namespace TinyWars.MapManagement {
         }
     }
 }
+
+export default TwnsMmTagListPanel;

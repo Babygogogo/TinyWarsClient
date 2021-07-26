@@ -1,27 +1,45 @@
 
-namespace TinyWars.MultiRankRoom {
-    import Tween        = egret.Tween;
-    import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
-    import Notify       = Utility.Notify;
+import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import TwnsMcrMainMenuPanel                 from "../../multiCustomRoom/view/McrMainMenuPanel";
+import MpwModel                             from "../../multiPlayerWar/model/MpwModel";
+import TwnsMrwMyWarListPanel                from "../../multiRankWar/view/MrwMyWarListPanel";
+import TwnsSpmMainMenuPanel                 from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import Helpers                              from "../../tools/helpers/Helpers";
+import Types                                from "../../tools/helpers/Types";
+import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+import TwnsUiButton                         from "../../tools/ui/UiButton";
+import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+import MrrModel                             from "../model/MrrModel";
+import TwnsMrrMyRoomListPanel               from "./MrrMyRoomListPanel";
+import TwnsMrrPreviewMapListPanel           from "./MrrPreviewMapListPanel";
+import TwnsMrrSetMaxConcurrentCountPanel    from "./MrrSetMaxConcurrentCountPanel";
 
-    export class MrrMainMenuPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+namespace TwnsMrrMainMenuPanel {
+    import SpmMainMenuPanel                 = TwnsSpmMainMenuPanel.SpmMainMenuPanel;
+    import MrrMyRoomListPanel               = TwnsMrrMyRoomListPanel.MrrMyRoomListPanel;
+    import MrrSetMaxConcurrentCountPanel    = TwnsMrrSetMaxConcurrentCountPanel.MrrSetMaxConcurrentCountPanel;
+    import MrrPreviewMapListPanel           = TwnsMrrPreviewMapListPanel.MrrPreviewMapListPanel;
+    import NotifyType                       = TwnsNotifyType.NotifyType;
+    import Tween                            = egret.Tween;
+
+    export class MrrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MrrMainMenuPanel;
 
         private readonly _group             : eui.Group;
-        private readonly _btnMultiPlayer    : TinyWars.GameUi.UiButton;
-        private readonly _btnRanking        : TinyWars.GameUi.UiButton;
-        private readonly _btnSinglePlayer   : TinyWars.GameUi.UiButton;
+        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
+        private readonly _btnRanking        : TwnsUiButton.UiButton;
+        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
 
         private readonly _groupLeft         : eui.Group;
-        private readonly _btnSetGameNumber  : TinyWars.GameUi.UiButton;
-        private readonly _btnMyRoom         : TinyWars.GameUi.UiButton;
-        private readonly _btnContinueWar    : TinyWars.GameUi.UiButton;
-        private readonly _btnPreviewStdMaps : TinyWars.GameUi.UiButton;
-        private readonly _btnPreviewFogMaps : TinyWars.GameUi.UiButton;
+        private readonly _btnSetGameNumber  : TwnsUiButton.UiButton;
+        private readonly _btnMyRoom         : TwnsUiButton.UiButton;
+        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
+        private readonly _btnPreviewStdMaps : TwnsUiButton.UiButton;
+        private readonly _btnPreviewFogMaps : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MrrMainMenuPanel._instance) {
@@ -53,9 +71,9 @@ namespace TinyWars.MultiRankRoom {
                 { ui: this._btnPreviewFogMaps,  callback: this._onTouchedBtnPreviewFogMaps },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
-                { type: Notify.Type.MsgMrrGetRoomPublicInfo,        callback: this._onMsgMrrGetRoomPublicInfo },
-                { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgUserLogout,                  callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgMrrGetRoomPublicInfo,        callback: this._onMsgMrrGetRoomPublicInfo },
+                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
             ]);
 
             this._showOpenAnimation();
@@ -72,37 +90,37 @@ namespace TinyWars.MultiRankRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
             this.close();
-            MultiCustomRoom.McrMainMenuPanel.show();
+            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
         }
         private _onTouchedBtnSinglePlayer(e: egret.TouchEvent): void {
             this.close();
-            SinglePlayerMode.SpmMainMenuPanel.show();
+            SpmMainMenuPanel.show();
         }
         private _onTouchedBtnSetGameNumber(e: egret.TouchEvent): void {
             MrrSetMaxConcurrentCountPanel.show();
         }
         private _onTouchedBtnMyRoom(e: egret.TouchEvent): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             MrrMyRoomListPanel.show();
         }
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
-            MultiRankWar.MrwMyWarListPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+            TwnsMrwMyWarListPanel.MrwMyWarListPanel.show();
         }
         private _onTouchedBtnPreviewStdMaps(e: egret.TouchEvent): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             MrrPreviewMapListPanel.show({ hasFog: false });
         }
         private _onTouchedBtnPreviewFogMaps(e: egret.TouchEvent): void {
             this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             MrrPreviewMapListPanel.show({ hasFog: true });
         }
 
@@ -125,7 +143,7 @@ namespace TinyWars.MultiRankRoom {
 
         private async _updateComponentsForRed(): Promise<void> {
             this._btnMyRoom.setRedVisible(await MrrModel.checkIsRed());
-            this._btnContinueWar.setRedVisible(MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars());
+            this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMrwWars());
         }
 
         private _showOpenAnimation(): void {
@@ -205,3 +223,5 @@ namespace TinyWars.MultiRankRoom {
         }
     }
 }
+
+export default TwnsMrrMainMenuPanel;

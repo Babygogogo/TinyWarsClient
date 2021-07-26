@@ -1,29 +1,46 @@
 
-namespace TinyWars.WarEvent {
-    import Helpers          = Utility.Helpers;
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import FloatText        = Utility.FloatText;
-    import Logger           = Utility.Logger;
-    import ColorValue       = Types.ColorValue;
-    import WarEventDescType = Types.WarEventDescType;
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import TwnsMeWar                from "../../mapEditor/model/MeWar";
+import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Logger                   from "../../tools/helpers/Logger";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import WarEventHelper           from "../model/WarEventHelper";
+import TwnsWeCommandPanel       from "./WeCommandPanel";
+
+namespace TwnsWeEventListPanel {
+    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import MeWar                = TwnsMeWar.MeWar;
+    import WeCommandPanel       = TwnsWeCommandPanel.WeCommandPanel;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import ColorValue           = Types.ColorValue;
+    import WarEventDescType     = Types.WarEventDescType;
 
     type OpenDataForWeEventListPanel = {
-        war: MapEditor.MeWar;
-    }
-    export class WeEventListPanel extends GameUi.UiPanel<OpenDataForWeEventListPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+        war: MeWar;
+    };
+    export class WeEventListPanel extends TwnsUiPanel.UiPanel<OpenDataForWeEventListPanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: WeEventListPanel;
 
-        private _btnBack        : GameUi.UiButton;
-        private _btnAddEvent    : GameUi.UiButton;
-        private _btnClear       : GameUi.UiButton;
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelNoEvent   : GameUi.UiLabel;
-        private _listWarEvent   : GameUi.UiScrollList<DataForWarEventDescRenderer>;
+        private _btnBack        : TwnsUiButton.UiButton;
+        private _btnAddEvent    : TwnsUiButton.UiButton;
+        private _btnClear       : TwnsUiButton.UiButton;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
+        private _labelNoEvent   : TwnsUiLabel.UiLabel;
+        private _listWarEvent   : TwnsUiScrollList.UiScrollList<DataForWarEventDescRenderer>;
 
         public static show(openData: OpenDataForWeEventListPanel): void {
             if (!WeEventListPanel._instance) {
@@ -50,8 +67,8 @@ namespace TinyWars.WarEvent {
                 { ui: this._btnBack,        callback: this.close },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.WarEventFullDataChanged,    callback: this._onNotifyMeWarEventFullDataChanged },
+                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyMeWarEventFullDataChanged },
             ]);
             this._listWarEvent.setItemRenderer(WarEventDescRenderer);
 
@@ -72,18 +89,18 @@ namespace TinyWars.WarEvent {
         private _onTouchedBtnAddEvent(e: egret.TouchEvent): void {
             const openData = this._getOpenData();
             if (WarEventHelper.addEvent(openData.war.getWarEventManager().getWarEventFullData()) != null) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
         private _onTouchedBtnClear(e: egret.TouchEvent): void {
             const openData = this._getOpenData();
-            Common.CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0188),
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0188),
                 callback: () => {
                     const result = WarEventHelper.checkAndDeleteUnusedComponents(openData.war.getWarEventManager().getWarEventFullData());
-                    FloatText.show(Lang.getFormattedText(Lang.Type.F0063, result.deletedNodesCount, result.deletedConditionsCount, result.deletedActionsCount));
-                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    FloatText.show(Lang.getFormattedText(LangTextType.F0063, result.deletedNodesCount, result.deletedConditionsCount, result.deletedActionsCount));
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -98,11 +115,11 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelNoEvent.text = Lang.getText(Lang.Type.B0278);
-            this._labelTitle.text   = Lang.getText(Lang.Type.B0469);
-            this._btnAddEvent.label = Lang.getText(Lang.Type.B0497);
-            this._btnClear.label    = Lang.getText(Lang.Type.B0498);
-            this._btnBack.label     = Lang.getText(Lang.Type.B0146);
+            this._labelNoEvent.text = Lang.getText(LangTextType.B0278);
+            this._labelTitle.text   = Lang.getText(LangTextType.B0469);
+            this._btnAddEvent.label = Lang.getText(LangTextType.B0497);
+            this._btnClear.label    = Lang.getText(LangTextType.B0498);
+            this._btnBack.label     = Lang.getText(LangTextType.B0146);
         }
 
         private _updateListWarEventAndLabelNoEvent(): void {
@@ -121,7 +138,7 @@ namespace TinyWars.WarEvent {
     }
 
     function generateDataArrayForListWarEventDesc({ war, eventId }: {
-        war         : MapEditor.MeWar;
+        war         : MeWar;
         eventId     : number;
     }): DataForWarEventDescRenderer[] {
         const prefixArray   = [`E${eventId}`];
@@ -176,7 +193,7 @@ namespace TinyWars.WarEvent {
         return dataArray;
     }
     function generateNodeDataArrayForListWarEventDesc({ war, eventId, parentNodeId, nodeId, prefixArray }: {
-        war         : MapEditor.MeWar;
+        war         : MeWar;
         eventId     : number;
         parentNodeId: number | undefined;
         nodeId      : number;
@@ -221,7 +238,7 @@ namespace TinyWars.WarEvent {
     }
 
     type DataForWarEventDescRenderer = {
-        war             : MapEditor.MeWar;
+        war             : MeWar;
         descType        : WarEventDescType;
         prefixArray     : string[];
         eventId         : number;
@@ -229,19 +246,19 @@ namespace TinyWars.WarEvent {
         conditionId?    : number;
         parentNodeId?   : number;
         nodeId?         : number;
-    }
-    class WarEventDescRenderer extends GameUi.UiListItemRenderer<DataForWarEventDescRenderer> {
-        private _btnModify  : GameUi.UiButton;
-        private _labelPrefix: GameUi.UiLabel;
-        private _labelDesc  : GameUi.UiLabel;
-        private _labelError : GameUi.UiLabel;
+    };
+    class WarEventDescRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventDescRenderer> {
+        private _btnModify  : TwnsUiButton.UiButton;
+        private _labelPrefix: TwnsUiLabel.UiLabel;
+        private _labelDesc  : TwnsUiLabel.UiLabel;
+        private _labelError : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnModify, callback: this._onTouchedBtnModify },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._updateComponentsForLanguage();
         }
@@ -270,7 +287,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnModify.label = Lang.getText(Lang.Type.B0317);
+            this._btnModify.label = Lang.getText(LangTextType.B0317);
 
             this._updateLabelDescAndError();
         }
@@ -297,7 +314,7 @@ namespace TinyWars.WarEvent {
                     // const prefix        = prefixArray.join(`.`);
                     this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
                     labelDesc.textColor = ColorValue.Red;
-                    labelDesc.text      = `${Lang.getText(Lang.Type.A0166)}`;
+                    labelDesc.text      = `${Lang.getText(LangTextType.A0166)}`;
                 }
             }
         }
@@ -314,7 +331,7 @@ namespace TinyWars.WarEvent {
             const prefixArray       = data.prefixArray;
             const errorTip          = WarEventHelper.getErrorTipForEvent(fullData, event);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
             this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
             this._labelDesc.text    = `${Lang.getLanguageText({ textArray: event.eventNameArray })}`;
@@ -332,10 +349,10 @@ namespace TinyWars.WarEvent {
             const prefixArray       = data.prefixArray;
             const errorTip          = WarEventHelper.getErrorTipForEventCallCountInPlayerTurn(event);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
             this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-            this._labelDesc.text    = `${Lang.getText(Lang.Type.B0476)}: ${event.maxCallCountInPlayerTurn}`;
+            this._labelDesc.text    = `${Lang.getText(LangTextType.B0476)}: ${event.maxCallCountInPlayerTurn}`;
         }
         private _updateForEventCallCountTotal(data: DataForWarEventDescRenderer): void {        // DONE
             const fullData  = data.war.getWarEventManager().getWarEventFullData();
@@ -350,10 +367,10 @@ namespace TinyWars.WarEvent {
             const prefixArray       = data.prefixArray;
             const errorTip          = WarEventHelper.getErrorTipForEventCallCountTotal(event);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
             this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-            this._labelDesc.text    = `${Lang.getText(Lang.Type.B0477)}: ${event.maxCallCountTotal}`;
+            this._labelDesc.text    = `${Lang.getText(LangTextType.B0477)}: ${event.maxCallCountTotal}`;
         }
         private _updateForConditionNode(data: DataForWarEventDescRenderer): void {              // DONE
             const fullData  = data.war.getWarEventManager().getWarEventFullData();
@@ -368,10 +385,10 @@ namespace TinyWars.WarEvent {
             const prefixArray       = data.prefixArray;
             const errorTip          = WarEventHelper.getErrorTipForConditionNode(fullData, node);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
             this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-            this._labelDesc.text    = `${node.isAnd ? Lang.getText(Lang.Type.A0162) : Lang.getText(Lang.Type.A0163)}`;
+            this._labelDesc.text    = `${node.isAnd ? Lang.getText(LangTextType.A0162) : Lang.getText(LangTextType.A0163)}`;
         }
         private _updateForCondition(data: DataForWarEventDescRenderer): void {                  // DONE
             const fullData      = data.war.getWarEventManager().getWarEventFullData();
@@ -386,7 +403,7 @@ namespace TinyWars.WarEvent {
             const prefixArray       = data.prefixArray;
             const errorTip          = WarEventHelper.getErrorTipForCondition(fullData, condition);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
             this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
             this._labelDesc.text    = `${WarEventHelper.getDescForCondition(condition)}`;
@@ -404,10 +421,12 @@ namespace TinyWars.WarEvent {
             const prefixArray       = data.prefixArray;
             const errorTip          = WarEventHelper.getErrorTipForAction(fullData, action, data.war);
             const labelError        = this._labelError;
-            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
             this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
             this._labelDesc.text    = `${WarEventHelper.getDescForAction(action)}`;
         }
     }
 }
+
+export default TwnsWeEventListPanel;

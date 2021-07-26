@@ -1,13 +1,18 @@
 
-namespace TinyWars.ReplayWar.RwModel {
-    import Logger       = Utility.Logger;
-    import ProtoManager = Utility.ProtoManager;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Helpers      = Utility.Helpers;
-    import Notify       = Utility.Notify;
-    import BwHelpers    = BaseWar.BwHelpers;
-    import WarMapModel  = WarMap.WarMapModel;
-    import IReplayInfo  = ProtoTypes.Replay.IReplayInfo;
+import Helpers          from "../../tools/helpers/Helpers";
+import Logger           from "../../tools/helpers/Logger";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoManager     from "../../tools/proto/ProtoManager";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
+import WarMapModel      from "../../warMap/model/WarMapModel";
+import TwnsRwWar        from "./RwWar";
+
+namespace RwModel {
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import IReplayInfo      = ProtoTypes.Replay.IReplayInfo;
+    import RwWar            = TwnsRwWar.RwWar;
 
     let _replayInfoList     : IReplayInfo[];
     let _replayData         : ProtoTypes.NetMessage.MsgReplayGetData.IS;
@@ -15,6 +20,7 @@ namespace TinyWars.ReplayWar.RwModel {
     let _war                : RwWar;
 
     export function init(): void {
+        // nothing to do
     }
 
     export function setReplayInfoList(infoList: IReplayInfo[]): void {
@@ -38,7 +44,7 @@ namespace TinyWars.ReplayWar.RwModel {
     export function setPreviewingReplayId(replayId: number): void {
         if (getPreviewingReplayId() != replayId) {
             _previewingReplayId = replayId;
-            Notify.dispatch(Notify.Type.RwPreviewingReplayIdChanged);
+            Notify.dispatch(NotifyType.RwPreviewingReplayIdChanged);
         }
     }
     export function getPreviewingReplayId(): number | null | undefined {
@@ -55,7 +61,7 @@ namespace TinyWars.ReplayWar.RwModel {
         }
 
         const warData                   = ProtoManager.decodeAsSerialWar(encodedWarData);
-        const mapRawData                = await WarMapModel.getRawData(BwHelpers.getMapId(warData));
+        const mapRawData                = await WarMapModel.getRawData(WarCommonHelpers.getMapId(warData));
         const unitDataArray             = mapRawData.unitDataArray || [];
         const field                     = warData.field;
         warData.seedRandomCurrentState  = Helpers.deepClone(warData.seedRandomInitialState);
@@ -89,3 +95,5 @@ namespace TinyWars.ReplayWar.RwModel {
         return _war;
     }
 }
+
+export default RwModel;

@@ -1,48 +1,90 @@
 
-namespace TinyWars.SinglePlayerWar {
-    import CommonConfirmPanel   = Common.CommonConfirmPanel;
-    import TimeModel            = Time.TimeModel;
-    import BwWarRuleHelper      = BaseWar.BwWarRuleHelper;
-    import WarMapModel          = WarMap.WarMapModel;
-    import Notify               = Utility.Notify;
-    import Lang                 = Utility.Lang;
-    import Types                = Utility.Types;
-    import FlowManager          = Utility.FlowManager;
-    import Logger               = Utility.Logger;
-    import FloatText            = Utility.FloatText;
-    import LocalStorage         = Utility.LocalStorage;
-    import ProtoManager         = Utility.ProtoManager;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import CommonConstants      = Utility.CommonConstants;
+import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
+import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
+import TwnsBwCoListPanel                from "../../baseWar/view/BwCoListPanel";
+import TwnsChatPanel                    from "../../chat/view/ChatPanel";
+import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
+import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
+import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
+import MfrCreateModel                   from "../../multiFreeRoom/model/MfrCreateModel";
+import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
+import SpmProxy                         from "../../singlePlayerMode/model/SpmProxy";
+import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
+import TwnsTwWar                        from "../../testWar/model/TwWar";
+import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import ConfigManager                    from "../../tools/helpers/ConfigManager";
+import FloatText                        from "../../tools/helpers/FloatText";
+import FlowManager                      from "../../tools/helpers/FlowManager";
+import Logger                           from "../../tools/helpers/Logger";
+import Types                            from "../../tools/helpers/Types";
+import Lang                             from "../../tools/lang/Lang";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import Notify                           from "../../tools/notify/Notify";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                     from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import WarRuleHelpers                   from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel                        from "../../user/model/UserModel";
+import UserProxy                        from "../../user/model/UserProxy";
+import TwnsUserSettingsPanel            from "../../user/view/UserSettingsPanel";
+import WarMapModel                      from "../../warMap/model/WarMapModel";
+import TwnsSpwActionPlanner             from "../model/SpwActionPlanner";
+import SpwModel                         from "../model/SpwModel";
+import TwnsSpwPlayerManager             from "../model/SpwPlayerManager";
+import TwnsSpwWar                       from "../model/SpwWar";
+import TwnsSpwLoadWarPanel              from "./SpwLoadWarPanel";
 
-    const enum MenuType {
+namespace TwnsSpwWarMenuPanel {
+    import ChatPanel                    = TwnsChatPanel.ChatPanel;
+    import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
+    import CommonInputPanel             = TwnsCommonInputPanel.CommonInputPanel;
+    import UserSettingsPanel            = TwnsUserSettingsPanel.UserSettingsPanel;
+    import MfrCreateSettingsPanel       = TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel;
+    import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
+    import BwCoListPanel                = TwnsBwCoListPanel.BwCoListPanel;
+    import SpwActionPlanner             = TwnsSpwActionPlanner.SpwActionPlanner;
+    import SpwPlayerManager             = TwnsSpwPlayerManager.SpwPlayerManager;
+    import SpwWar                       = TwnsSpwWar.SpwWar;
+    import SpwLoadWarPanel              = TwnsSpwLoadWarPanel.SpwLoadWarPanel;
+    import TwWar                        = TwnsTwWar.TwWar;
+    import LangTextType                 = TwnsLangTextType.LangTextType;
+    import NotifyType                   = TwnsNotifyType.NotifyType;
+    import BwPlayer                     = TwnsBwPlayer.BwPlayer;
+    import BwUnitMap                    = TwnsBwUnitMap.BwUnitMap;
+
+    // eslint-disable-next-line no-shadow
+    enum MenuType {
         Main,
         Advanced,
     }
 
-    export class SpwWarMenuPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class SpwWarMenuPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: SpwWarMenuPanel;
 
         private _group          : eui.Group;
-        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
-        private _labelNoCommand : GameUi.UiLabel;
-        private _btnBack        : GameUi.UiButton;
+        private _listCommand    : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
+        private _labelNoCommand : TwnsUiLabel.UiLabel;
+        private _btnBack        : TwnsUiButton.UiButton;
 
         private _groupInfo              : eui.Group;
-        private _labelMenuTitle         : GameUi.UiLabel;
-        private _labelWarInfoTitle      : GameUi.UiLabel;
-        private _labelPlayerInfoTitle   : GameUi.UiLabel;
-        private _btnMapNameTitle        : GameUi.UiButton;
-        private _labelMapName           : GameUi.UiLabel;
-        private _listWarInfo            : GameUi.UiScrollList<DataForInfoRenderer>;
-        private _btnBuildings           : GameUi.UiButton;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _labelMenuTitle         : TwnsUiLabel.UiLabel;
+        private _labelWarInfoTitle      : TwnsUiLabel.UiLabel;
+        private _labelPlayerInfoTitle   : TwnsUiLabel.UiLabel;
+        private _btnMapNameTitle        : TwnsUiButton.UiButton;
+        private _labelMapName           : TwnsUiLabel.UiLabel;
+        private _listWarInfo            : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private _btnBuildings           : TwnsUiButton.UiButton;
+        private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         private _war            : SpwWar;
-        private _unitMap        : BaseWar.BwUnitMap;
+        private _unitMap        : BwUnitMap;
         private _actionPlanner  : SpwActionPlanner;
         private _dataForList    : DataForCommandRenderer[];
         private _menuType       = MenuType.Main;
@@ -71,14 +113,14 @@ namespace TinyWars.SinglePlayerWar {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
-                { type: Notify.Type.BwCoIdChanged,                      callback: this._onNotifyBwCoIdChanged },
-                { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: Notify.Type.MsgSpmSaveScw,                      callback: this._onMsgSpmSaveScw },
-                { type: Notify.Type.MsgSpmSaveSfw,                      callback: this._onMsgSpmSaveSfw },
-                { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
-                { type: Notify.Type.MsgSpmDeleteWarSaveSlot,            callback: this._onNotifyMsgSpmDeleteWarSaveSlot },
+                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
+                { type: NotifyType.BwCoIdChanged,                      callback: this._onNotifyBwCoIdChanged },
+                { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: NotifyType.MsgSpmSaveScw,                      callback: this._onMsgSpmSaveScw },
+                { type: NotifyType.MsgSpmSaveSfw,                      callback: this._onMsgSpmSaveSfw },
+                { type: NotifyType.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
+                { type: NotifyType.MsgSpmDeleteWarSaveSlot,            callback: this._onNotifyMsgSpmDeleteWarSaveSlot },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -95,20 +137,20 @@ namespace TinyWars.SinglePlayerWar {
 
             this._updateView();
 
-            Notify.dispatch(Notify.Type.BwWarMenuPanelOpened);
+            Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
             this._war           = null;
             this._unitMap       = null;
             this._dataForList   = null;
 
-            Notify.dispatch(Notify.Type.BwWarMenuPanelClosed);
+            Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwPlannerStateChanged(): void {
             const war = this._war;
             if (war.checkIsHumanInTurn()) {
                 this.close();
@@ -117,26 +159,26 @@ namespace TinyWars.SinglePlayerWar {
             }
         }
 
-        private _onNotifyBwCoIdChanged(e: egret.Event): void {
+        private _onNotifyBwCoIdChanged(): void {
             this.updateListPlayer();
         }
 
-        private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
+        private _onNotifyUnitAndTileTextureVersionChanged(): void {
             this._updateView();
         }
 
-        private _onMsgSpmSaveScw(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0073));
+        private _onMsgSpmSaveScw(): void {
+            FloatText.show(Lang.getText(LangTextType.A0073));
         }
 
-        private _onMsgSpmSaveSfw(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0073));
+        private _onMsgSpmSaveSfw(): void {
+            FloatText.show(Lang.getText(LangTextType.A0073));
         }
 
         private _onMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
-            Common.CommonConfirmPanel.show({
-                content : Lang.getText(Lang.Type.A0107),
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
                         slotIndex       : data.slotIndex,
@@ -147,15 +189,15 @@ namespace TinyWars.SinglePlayerWar {
             });
         }
 
-        private _onNotifyMsgSpmDeleteWarSaveSlot(e: egret.Event): void {
-            FloatText.show(Lang.getFormattedText(Lang.Type.A0141));
+        private _onNotifyMsgSpmDeleteWarSaveSlot(): void {
+            FloatText.show(Lang.getFormattedText(LangTextType.A0141));
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             const type = this._menuType;
             if (type === MenuType.Main) {
                 this.close();
@@ -190,18 +232,18 @@ namespace TinyWars.SinglePlayerWar {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0155);
-            this._labelWarInfoTitle.text    = Lang.getText(Lang.Type.B0223);
-            this._labelPlayerInfoTitle.text = Lang.getText(Lang.Type.B0224);
-            this._btnMapNameTitle.label     = Lang.getText(Lang.Type.B0225);
-            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+            this._labelMenuTitle.text       = Lang.getText(LangTextType.B0155);
+            this._labelWarInfoTitle.text    = Lang.getText(LangTextType.B0223);
+            this._labelPlayerInfoTitle.text = Lang.getText(LangTextType.B0224);
+            this._btnMapNameTitle.label     = Lang.getText(LangTextType.B0225);
+            this._btnBack.label             = Lang.getText(LangTextType.B0146);
             this._updateListWarInfo();
         }
 
         private async _updateGroupInfo(): Promise<void> {
             const war               = this._war;
             const mapFileName       = war.getMapId();
-            this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
+            this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(LangTextType.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
         }
 
         private _updateListWarInfo(): void {
@@ -214,7 +256,7 @@ namespace TinyWars.SinglePlayerWar {
         public updateListPlayer(): void {
             const war   = this._war;
             const data  : DataForPlayerRenderer[] = [];
-            war.getPlayerManager().forEachPlayer(false, (player: BaseWar.BwPlayer) => {
+            war.getPlayerManager().forEachPlayer(false, (player: BwPlayer) => {
                 data.push({
                     war,
                     playerIndex : player.getPlayerIndex(),
@@ -232,8 +274,8 @@ namespace TinyWars.SinglePlayerWar {
             const turnIndex             = war.getTurnManager().getTurnIndex();
             const executedActionsCount  = war.getExecutedActionManager().getExecutedActionsCount();
             return {
-                titleText               : Lang.getText(Lang.Type.B0091),
-                infoText                : `${turnIndex} (${Lang.getText(Lang.Type.B0090)}: ${executedActionsCount})`,
+                titleText               : Lang.getText(LangTextType.B0091),
+                infoText                : `${turnIndex} (${Lang.getText(LangTextType.B0090)}: ${executedActionsCount})`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
             };
@@ -279,7 +321,7 @@ namespace TinyWars.SinglePlayerWar {
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
             return {
-                name    : Lang.getText(Lang.Type.B0080),
+                name    : Lang.getText(LangTextType.B0080),
                 callback: () => {
                     this._menuType = MenuType.Advanced;
                     this._updateListCommand();
@@ -289,20 +331,20 @@ namespace TinyWars.SinglePlayerWar {
 
         private _createCommandChat(): DataForCommandRenderer | null {
             return {
-                name    : Lang.getText(Lang.Type.B0383),
+                name    : Lang.getText(LangTextType.B0383),
                 callback: () => {
                     this.close();
-                    Chat.ChatPanel.show({});
+                    ChatPanel.show({});
                 },
-            }
+            };
         }
 
         private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
             return {
-                name    : Lang.getText(Lang.Type.B0140),
+                name    : Lang.getText(LangTextType.B0140),
                 callback: () => {
                     const war = this._war;
-                    BaseWar.BwCoListPanel.show({
+                    BwCoListPanel.show({
                         war,
                         selectedIndex: war.getPlayerIndexInTurn() - 1,
                     });
@@ -316,23 +358,27 @@ namespace TinyWars.SinglePlayerWar {
             if ((!war)                                                              ||
                 (!war.checkIsHumanInTurn())                                         ||
                 (!war.getTurnManager().getPhaseCode())                              ||
-                (!(war instanceof SingleCustomWar.ScwWar))                          ||
                 (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)
             ) {
                 return null;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0260),
-                    callback: () => {
-                        Common.CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0071),
-                            callback: () => {
-                                SinglePlayerMode.SpmProxy.reqSpmSaveScw(war);
-                            },
-                        })
-                    },
-                };
             }
+
+            const warType = war.getWarType();
+            if ((warType !== Types.WarType.ScwFog) && (warType !== Types.WarType.ScwStd)) {
+                return null;
+            }
+
+            return {
+                name    : Lang.getText(LangTextType.B0260),
+                callback: () => {
+                    CommonConfirmPanel.show({
+                        content : Lang.getText(LangTextType.A0071),
+                        callback: () => {
+                            SpmProxy.reqSpmSaveScw(war);
+                        },
+                    });
+                },
+            };
         }
 
         private _createCommandSaveSfw(): DataForCommandRenderer | null {
@@ -340,23 +386,27 @@ namespace TinyWars.SinglePlayerWar {
             if ((!war)                                                              ||
                 (!war.checkIsHumanInTurn())                                         ||
                 (!war.getTurnManager().getPhaseCode())                              ||
-                (!(war instanceof SingleFreeWar.SfwWar))                            ||
                 (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)
             ) {
                 return null;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0260),
-                    callback: () => {
-                        Common.CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0071),
-                            callback: () => {
-                                SinglePlayerMode.SpmProxy.reqSpmSaveSfw(war);
-                            },
-                        })
-                    },
-                };
             }
+
+            const warType = war.getWarType();
+            if ((warType !== Types.WarType.SfwFog) && (warType !== Types.WarType.SfwStd)) {
+                return null;
+            }
+
+            return {
+                name    : Lang.getText(LangTextType.B0260),
+                callback: () => {
+                    CommonConfirmPanel.show({
+                        content : Lang.getText(LangTextType.A0071),
+                        callback: () => {
+                            SpmProxy.reqSpmSaveSfw(war);
+                        },
+                    });
+                },
+            };
         }
 
         private _createCommandLoadGame(): DataForCommandRenderer | null {
@@ -369,7 +419,7 @@ namespace TinyWars.SinglePlayerWar {
                 return null;
             } else {
                 return {
-                    name    : Lang.getText(Lang.Type.B0261),
+                    name    : Lang.getText(LangTextType.B0261),
                     callback: () => {
                         SpwLoadWarPanel.show();
                     },
@@ -379,15 +429,15 @@ namespace TinyWars.SinglePlayerWar {
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
             return {
-                name    : Lang.getText(Lang.Type.B0054),
+                name    : Lang.getText(LangTextType.B0054),
                 callback: () => {
                     CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0054),
-                        content : Lang.getText(Lang.Type.A0025),
+                        title   : Lang.getText(LangTextType.B0054),
+                        content : Lang.getText(LangTextType.A0025),
                         callback: () => FlowManager.gotoLobby(),
                     });
                 },
-            }
+            };
         }
 
         private _createCommandPlayerDeleteUnit(): DataForCommandRenderer | undefined {
@@ -399,38 +449,38 @@ namespace TinyWars.SinglePlayerWar {
                 return undefined;
             } else {
                 return {
-                    name    : Lang.getText(Lang.Type.B0081),
+                    name    : Lang.getText(LangTextType.B0081),
                     callback: () => {
                         const unitMap       = war.getUnitMap();
                         const unit          = unitMap.getUnitOnMap(war.getCursor().getGridIndex());
                         const playerIndex   = war.getPlayerIndexInTurn();
                         if (!unit) {
-                            FloatText.show(Lang.getText(Lang.Type.A0027));
+                            FloatText.show(Lang.getText(LangTextType.A0027));
                         } else if ((unit.getPlayerIndex() !== playerIndex) || (unit.getActionState() !== Types.UnitActionState.Idle)) {
-                            FloatText.show(Lang.getText(Lang.Type.A0028));
+                            FloatText.show(Lang.getText(LangTextType.A0028));
                         } else if (unitMap.countUnitsOnMapForPlayer(playerIndex) <= 1) {
-                            FloatText.show(Lang.getText(Lang.Type.A0076));
+                            FloatText.show(Lang.getText(LangTextType.A0076));
                         } else {
                             CommonConfirmPanel.show({
-                                title   : Lang.getText(Lang.Type.B0081),
-                                content : Lang.getText(Lang.Type.A0029),
+                                title   : Lang.getText(LangTextType.B0081),
+                                content : Lang.getText(LangTextType.A0029),
                                 callback: () => this._actionPlanner.setStateRequestingPlayerDeleteUnit(),
                             });
                         }
                     },
-                }
+                };
             }
         }
 
         private _createCommandSimulation(): DataForCommandRenderer | null {
             const war = this._war;
             return {
-                name    : Lang.getText(Lang.Type.B0325),
+                name    : Lang.getText(LangTextType.B0325),
                 callback: () => {
                     if (war.getIsExecutingAction()) {
-                        FloatText.show(Lang.getText(Lang.Type.A0103));
+                        FloatText.show(Lang.getText(LangTextType.A0103));
                     } else {
-                        SinglePlayerMode.SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
+                        SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
                     }
                 },
             };
@@ -439,30 +489,30 @@ namespace TinyWars.SinglePlayerWar {
         private _createCommandCreateMfr(): DataForCommandRenderer | null {
             const war = this._war;
             return {
-                name    : Lang.getText(Lang.Type.B0557),
+                name    : Lang.getText(LangTextType.B0557),
                 callback: async () => {
                     if (war.getPlayerManager().getAliveOrDyingTeamsCount(false) < 2) {
-                        FloatText.show(Lang.getText(Lang.Type.A0199));
+                        FloatText.show(Lang.getText(LangTextType.A0199));
                         return;
                     }
 
                     const warData = war.serializeForCreateMfr();
                     if (warData == null) {
-                        FloatText.show(Lang.getText(Lang.Type.A0200));
+                        FloatText.show(Lang.getText(LangTextType.A0200));
                         return;
                     }
 
-                    const errorCode = await (new TestWar.TwWar()).init(warData);
+                    const errorCode = await (new TwWar()).init(warData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 
-                    Common.CommonConfirmPanel.show({
-                        content : Lang.getText(Lang.Type.A0201),
+                    CommonConfirmPanel.show({
+                        content : Lang.getText(LangTextType.A0201),
                         callback: () => {
-                            MultiFreeRoom.MfrModel.Create.resetDataByInitialWarData(warData);
-                            MultiFreeRoom.MfrCreateSettingsPanel.show();
+                            MfrCreateModel.resetDataByInitialWarData(warData);
+                            MfrCreateSettingsPanel.show();
                             this.close();
                         }
                     });
@@ -476,12 +526,12 @@ namespace TinyWars.SinglePlayerWar {
             return saveSlotIndex == null
                 ? null
                 : {
-                    name    : Lang.getText(Lang.Type.B0420),
+                    name    : Lang.getText(LangTextType.B0420),
                     callback: () => {
                         CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0140),
+                            content : Lang.getText(LangTextType.A0140),
                             callback: () => {
-                                SinglePlayerMode.SpmProxy.reqSpmDeleteWarSaveSlot(saveSlotIndex);
+                                SpmProxy.reqSpmDeleteWarSaveSlot(saveSlotIndex);
                             },
                         });
                     },
@@ -489,34 +539,34 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createCommandUserSettings(): DataForCommandRenderer | null {
             return {
-                name    : Lang.getText(Lang.Type.B0560),
+                name    : Lang.getText(LangTextType.B0560),
                 callback: () => {
-                    User.UserSettingsPanel.show();
+                    UserSettingsPanel.show();
                 }
             };
         }
         private _createCommandSetPathMode(): DataForCommandRenderer {
             return {
-                name    : Lang.getText(Lang.Type.B0430),
+                name    : Lang.getText(LangTextType.B0430),
                 callback: () => {
-                    const isEnabled = User.UserModel.getSelfSettingsIsSetPathMode();
+                    const isEnabled = UserModel.getSelfSettingsIsSetPathMode();
                     CommonConfirmPanel.show({
                         content : Lang.getFormattedText(
-                            Lang.Type.F0033,
-                            Lang.getText(isEnabled ? Lang.Type.B0431 : Lang.Type.B0432),
+                            LangTextType.F0033,
+                            Lang.getText(isEnabled ? LangTextType.B0431 : LangTextType.B0432),
                         ),
-                        textForConfirm  : Lang.getText(Lang.Type.B0433),
-                        textForCancel   : Lang.getText(Lang.Type.B0434),
+                        textForConfirm  : Lang.getText(LangTextType.B0433),
+                        textForCancel   : Lang.getText(LangTextType.B0434),
                         callback: () => {
                             if (!isEnabled) {
-                                User.UserProxy.reqUserSetSettings({
+                                UserProxy.reqUserSetSettings({
                                     isSetPathMode   : true,
                                 });
                             }
                         },
                         callbackOnCancel: () => {
                             if (isEnabled) {
-                                User.UserProxy.reqUserSetSettings({
+                                UserProxy.reqUserSetSettings({
                                     isSetPathMode   : false,
                                 });
                             }
@@ -540,17 +590,16 @@ namespace TinyWars.SinglePlayerWar {
     type DataForCommandRenderer = {
         name    : string;
         callback: () => void;
-    }
-
-    class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
+    };
+    class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
         private _group      : eui.Group;
-        private _labelName  : GameUi.UiLabel;
+        private _labelName  : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._updateView();
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             this.data.callback();
         }
 
@@ -564,14 +613,13 @@ namespace TinyWars.SinglePlayerWar {
         war         : SpwWar;
         playerIndex : number;
         panel       : SpwWarMenuPanel;
-    }
-
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
+    };
+    class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
         private _group          : eui.Group;
-        private _btnName        : GameUi.UiButton;
-        private _labelForce     : GameUi.UiLabel;
-        private _labelLost      : GameUi.UiLabel;
-        private _listInfo       : GameUi.UiScrollList<DataForInfoRenderer>;
+        private _btnName        : TwnsUiButton.UiButton;
+        private _labelForce     : TwnsUiLabel.UiLabel;
+        private _labelLost      : TwnsUiLabel.UiLabel;
+        private _listInfo       : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -584,18 +632,18 @@ namespace TinyWars.SinglePlayerWar {
             this._updateView();
         }
 
-        private _onTouchedBtnName(e: egret.TouchEvent): void {
+        private _onTouchedBtnName(): void {
             const data  = this.data;
             const war   = data.war;
             if (war.getCanCheat()) {
                 const playerIndex   = data.playerIndex;
                 const player        = war.getPlayer(playerIndex);
                 const isHuman       = player.getUserId() != null;
-                Common.CommonConfirmPanel.show({
-                    content : isHuman ? Lang.getText(Lang.Type.A0110) : Lang.getText(Lang.Type.A0111),
+                CommonConfirmPanel.show({
+                    content : isHuman ? Lang.getText(LangTextType.A0110) : Lang.getText(LangTextType.A0111),
                     callback: () => {
                         if (!isHuman) {
-                            player.setUserId(User.UserModel.getSelfUserId());
+                            player.setUserId(UserModel.getSelfUserId());
                         } else {
                             player.setUserId(null);
                             SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
@@ -612,11 +660,11 @@ namespace TinyWars.SinglePlayerWar {
             const playerIndex           = data.playerIndex;
             const player                = war.getPlayer(playerIndex);
             const isPlayerInTurn        = playerIndex === war.getPlayerIndexInTurn();
-            this._btnName.label         = player.getUserId() != null ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
+            this._btnName.label         = player.getUserId() != null ? Lang.getText(LangTextType.B0031) : Lang.getText(LangTextType.B0256);
             this._labelForce.textColor  = isPlayerInTurn ? 0x00FF00 : 0xFFFFFF;
             this._labelForce.text       = `${Lang.getPlayerForceName(playerIndex)}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
-                + `  ${isPlayerInTurn ? Lang.getText(Lang.Type.B0086) : ""}`;
+                + `  ${isPlayerInTurn ? Lang.getText(LangTextType.B0086) : ""}`;
             this._btnName.setTextColor(war.getCanCheat() ? 0x00FF00 : 0xFFFFFF);
 
             if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
@@ -656,12 +704,12 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataColor(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             return {
-                titleText               : Lang.getText(Lang.Type.B0397),
+                titleText               : Lang.getText(LangTextType.B0397),
                 infoText                : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
@@ -669,7 +717,7 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataFund(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -678,23 +726,23 @@ namespace TinyWars.SinglePlayerWar {
             const minValue      = CommonConstants.WarRuleInitialFundMinLimit;
             const isCheating    = war.getCanCheat();
             return {
-                titleText               : Lang.getText(Lang.Type.B0032),
+                titleText               : Lang.getText(LangTextType.B0032),
                 infoText                : (isInfoKnown || isCheating) ? `${player.getFund()}` : `?`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
-                        Common.CommonInputPanel.show({
-                            title           : `P${player.getPlayerIndex()} ${Lang.getText(Lang.Type.B0032)}`,
+                        CommonInputPanel.show({
+                            title           : `P${player.getPlayerIndex()} ${Lang.getText(LangTextType.B0032)}`,
                             currentValue    : "" + currValue,
                             maxChars        : 7,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
                                     player.setFund(value);
                                     menuPanel.updateListPlayer();
@@ -706,13 +754,13 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataBuildings(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const info = getTilesCountAndIncome(war, player.getPlayerIndex());
             return {
-                titleText               : Lang.getText(Lang.Type.B0158),
+                titleText               : Lang.getText(LangTextType.B0158),
                 infoText                : `${info.count} / +${info.income}${isInfoKnown ? `` : `  ?`}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
@@ -720,11 +768,11 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataCoName(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
-            const cfg = Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), player.getCoId());
+            const cfg = ConfigManager.getCoBasicCfg(war.getConfigVersion(), player.getCoId());
             return {
                 titleText               : `CO`,
                 infoText                : cfg.name,
@@ -732,16 +780,25 @@ namespace TinyWars.SinglePlayerWar {
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        SpwChooseCoPanel.show({
-                            war,
-                            playerIndex: player.getPlayerIndex(),
+                        const currentCoId = player.getCoId();
+                        TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                            currentCoId,
+                            availableCoIdArray  : ConfigManager.getEnabledCoArray(war.getConfigVersion()).map(v => v.coId),
+                            callbackOnConfirm   : (newCoId) => {
+                                if (newCoId !== currentCoId) {
+                                    player.setCoId(newCoId);
+                                    player.setCoCurrentEnergy(Math.min(player.getCoCurrentEnergy(), player.getCoMaxEnergy()));
+
+                                    war.getTileMap().getView().updateCoZone();
+                                }
+                            },
                         });
                     },
             };
         }
         private _createDataEnergy(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -758,26 +815,26 @@ namespace TinyWars.SinglePlayerWar {
                 : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
 
             return {
-                titleText               : Lang.getText(Lang.Type.B0159),
+                titleText               : Lang.getText(LangTextType.B0159),
                 infoText                : `${!hasLoadedCo ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : ((!war.getCanCheat()) || (!maxValue))
                     ? null
                     : () => {
                         if (!hasLoadedCo) {
-                            FloatText.show(Lang.getText(Lang.Type.A0109));
+                            FloatText.show(Lang.getText(LangTextType.A0109));
                         } else {
-                            Common.CommonInputPanel.show({
-                                title           : `P${playerIndex} ${Lang.getText(Lang.Type.B0159)}`,
+                            CommonInputPanel.show({
+                                title           : `P${playerIndex} ${Lang.getText(LangTextType.B0159)}`,
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,
                                 charRestrict    : "0-9",
-                                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                                 callback        : panel => {
                                     const text  = panel.getInputText();
                                     const value = text ? Number(text) : NaN;
                                     if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                                        FloatText.show(Lang.getText(LangTextType.A0098));
                                     } else {
                                         player.setCoCurrentEnergy(value);
                                         menuPanel.updateListPlayer();
@@ -790,13 +847,13 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataUnitAndValue(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel
         ): DataForInfoRenderer {
             const unitsCountAndValue = getUnitsCountAndValue(war, player.getPlayerIndex());
             return {
-                titleText               : Lang.getText(Lang.Type.B0160),
+                titleText               : Lang.getText(LangTextType.B0160),
                 infoText                : `${unitsCountAndValue.count} / ${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
@@ -804,14 +861,14 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataInitialFund(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
             return {
-                titleText               : Lang.getText(Lang.Type.B0178),
+                titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
                 callbackOnTouchedTitle  : !war.getCanCheat()
@@ -819,19 +876,19 @@ namespace TinyWars.SinglePlayerWar {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0178),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0178),
                             currentValue    : "" + currValue,
                             maxChars        : 7,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    BwWarRuleHelper.setInitialFund(war.getWarRule(), playerIndex, value);
+                                    WarRuleHelpers.setInitialFund(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -841,7 +898,7 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataIncomeMultiplier(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -850,25 +907,25 @@ namespace TinyWars.SinglePlayerWar {
             const maxValue      = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue      = CommonConstants.WarRuleIncomeMultiplierMinLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0179),
+                titleText               : Lang.getText(LangTextType.B0179),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0179),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0179),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
                             charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    BwWarRuleHelper.setIncomeMultiplier(war.getWarRule(), playerIndex, value);
+                                    WarRuleHelpers.setIncomeMultiplier(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -878,7 +935,7 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataEnergyAddPctOnLoadCo(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -887,25 +944,25 @@ namespace TinyWars.SinglePlayerWar {
             const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0180),
+                titleText               : Lang.getText(LangTextType.B0180),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0180),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0180),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
                             charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    BwWarRuleHelper.setEnergyAddPctOnLoadCo(war.getWarRule(), playerIndex, value);
+                                    WarRuleHelpers.setEnergyAddPctOnLoadCo(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -915,7 +972,7 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataEnergyGrowthMultiplier(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -924,25 +981,25 @@ namespace TinyWars.SinglePlayerWar {
             const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0181),
+                titleText               : Lang.getText(LangTextType.B0181),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0181),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0181),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
                             charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    BwWarRuleHelper.setEnergyGrowthMultiplier(war.getWarRule(), playerIndex, value);
+                                    WarRuleHelpers.setEnergyGrowthMultiplier(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -952,7 +1009,7 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataMoveRangeModifier(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -961,25 +1018,25 @@ namespace TinyWars.SinglePlayerWar {
             const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0182),
+                titleText               : Lang.getText(LangTextType.B0182),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0182),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0182),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    BwWarRuleHelper.setMoveRangeModifier(war.getWarRule(), playerIndex, value);
+                                    WarRuleHelpers.setMoveRangeModifier(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -989,7 +1046,7 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataAttackPowerModifier(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -998,25 +1055,25 @@ namespace TinyWars.SinglePlayerWar {
             const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
             const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0183),
+                titleText               : Lang.getText(LangTextType.B0183),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0183),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0183),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    BwWarRuleHelper.setAttackPowerModifier(war.getWarRule(), playerIndex, value);
+                                    WarRuleHelpers.setAttackPowerModifier(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -1026,7 +1083,7 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataVisionRangeModifier(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -1035,25 +1092,25 @@ namespace TinyWars.SinglePlayerWar {
             const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0184),
+                titleText               : Lang.getText(LangTextType.B0184),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0184),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0184),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    BwWarRuleHelper.setVisionRangeModifier(war.getWarRule(), playerIndex, value);
+                                    WarRuleHelpers.setVisionRangeModifier(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -1063,7 +1120,7 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataLuckLowerLimit(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -1072,31 +1129,31 @@ namespace TinyWars.SinglePlayerWar {
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0189),
+                titleText               : Lang.getText(LangTextType.B0189),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0189),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0189),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
                                     const upperLimit    = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
                                     const warRule       = war.getWarRule();
                                     if (value <= upperLimit) {
-                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, value);
+                                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
                                     } else {
-                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, value);
-                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, upperLimit);
+                                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
+                                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, upperLimit);
                                     }
                                     this._updateView();
                                 }
@@ -1107,7 +1164,7 @@ namespace TinyWars.SinglePlayerWar {
         }
         private _createDataLuckUpperLimit(
             war         : SpwWar,
-            player      : BaseWar.BwPlayer,
+            player      : BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -1116,31 +1173,31 @@ namespace TinyWars.SinglePlayerWar {
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0190),
+                titleText               : Lang.getText(LangTextType.B0190),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0190),
+                        CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0190),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
                             charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
                                 const value = text ? Number(text) : NaN;
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
                                     const lowerLimit    = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
                                     const warRule       = war.getWarRule();
                                     if (value >= lowerLimit) {
-                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, value);
+                                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
                                     } else {
-                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, value);
-                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
+                                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
+                                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
                                     }
                                     this._updateView();
                                 }
@@ -1156,11 +1213,10 @@ namespace TinyWars.SinglePlayerWar {
         infoText                : string;
         infoColor               : number;
         callbackOnTouchedTitle  : (() => void) | null;
-    }
-
-    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : GameUi.UiButton;
-        private _labelValue : GameUi.UiLabel;
+    };
+    class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+        private _btnTitle   : TwnsUiButton.UiButton;
+        private _labelValue : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -1176,7 +1232,7 @@ namespace TinyWars.SinglePlayerWar {
             this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
-        private _onTouchedBtnTitle(e: egret.TouchEvent): void {
+        private _onTouchedBtnTitle(): void {
             const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
@@ -1216,3 +1272,5 @@ namespace TinyWars.SinglePlayerWar {
         return { count, value };
     }
 }
+
+export default TwnsSpwWarMenuPanel;

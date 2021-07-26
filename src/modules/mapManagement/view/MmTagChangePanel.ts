@@ -1,27 +1,38 @@
 
-namespace TinyWars.MapManagement {
-    import Lang         = Utility.Lang;
-    import NotifyType   = Utility.Notify.Type;
-    import WarMapModel  = WarMap.WarMapModel;
-    import WarMapProxy  = WarMap.WarMapProxy;
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import WarMapModel          from "../../warMap/model/WarMapModel";
+import WarMapProxy          from "../../warMap/model/WarMapProxy";
+import TwnsMmWarRulePanel   from "./MmWarRulePanel";
+
+namespace TwnsMmTagChangePanel {
+    import MmWarRulePanel   = TwnsMmWarRulePanel.MmWarRulePanel;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     type OpenDataForMmTagChangePanel = {
         mapId   : number;
-    }
-    export class MmTagChangePanel extends GameUi.UiPanel<OpenDataForMmTagChangePanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    };
+    export class MmTagChangePanel extends TwnsUiPanel.UiPanel<OpenDataForMmTagChangePanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MmTagChangePanel;
 
-        private _labelTitle     : GameUi.UiLabel;
-        private _btnWarRule     : GameUi.UiButton;
-        private _btnCancel      : GameUi.UiButton;
-        private _btnConfirm     : GameUi.UiButton;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
+        private _btnWarRule     : TwnsUiButton.UiButton;
+        private _btnCancel      : TwnsUiButton.UiButton;
+        private _btnConfirm     : TwnsUiButton.UiButton;
 
         private _groupFog       : eui.Group;
-        private _labelFog       : GameUi.UiLabel;
-        private _imgFog         : GameUi.UiImage;
+        private _labelFog       : TwnsUiLabel.UiLabel;
+        private _imgFog         : TwnsUiImage.UiImage;
 
         private _mapId          : number;
 
@@ -90,11 +101,13 @@ namespace TinyWars.MapManagement {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text   = Lang.getText(Lang.Type.B0444);
-            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
-            this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-            this._btnWarRule.label  = Lang.getText(Lang.Type.B0314);
-            this._labelFog.text     = Lang.getText(Lang.Type.B0438);
+            this._labelTitle.text   = Lang.getText(LangTextType.B0444);
+            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
+            this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+            this._btnWarRule.label  = Lang.getText(LangTextType.B0314);
+            this._labelFog.text     = Lang.getText(LangTextType.B0438);
         }
     }
 }
+
+export default TwnsMmTagChangePanel;

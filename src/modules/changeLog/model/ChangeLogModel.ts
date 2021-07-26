@@ -1,6 +1,7 @@
 
-namespace TinyWars.ChangeLog.ChangeLogModel {
-    import ProtoTypes           = Utility.ProtoTypes;
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+
+namespace ChangeLogModel {
     import IChangeLogMessage    = ProtoTypes.ChangeLog.IChangeLogMessage;
 
     let _messageList: IChangeLogMessage[];
@@ -15,3 +16,5 @@ namespace TinyWars.ChangeLog.ChangeLogModel {
         return (getAllMessageList() || []).find(v => v.messageId === messageId);
     }
 }
+
+export default ChangeLogModel;

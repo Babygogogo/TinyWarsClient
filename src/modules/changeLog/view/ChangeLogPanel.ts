@@ -1,34 +1,49 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.ChangeLog {
-    import Notify           = Utility.Notify;
-    import Helpers          = Utility.Helpers;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Lang             = Utility.Lang;
-    import CommonConstants  = Utility.CommonConstants;
-    import FloatText        = Utility.FloatText;
+import ChangeLogModel           from "../../changeLog/model/ChangeLogModel";
+import ChangeLogProxy           from "../../changeLog/model/ChangeLogProxy";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import UserModel                from "../../user/model/UserModel";
+import TwnsChangeLogAddPanel    from "./ChangeLogAddPanel";
+import TwnsChangeLogModifyPanel from "./ChangeLogModifyPanel";
 
-    export class ChangeLogPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+namespace TwnsChangeLogPanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
+
+    export class ChangeLogPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: ChangeLogPanel;
 
         // @ts-ignore
-        private _imgMask        : GameUi.UiImage;
+        private _imgMask        : TwnsUiImage.UiImage;
         // @ts-ignore
         private _group          : eui.Group;
         // @ts-ignore
-        private _btnClose       : GameUi.UiButton;
+        private _btnClose       : TwnsUiButton.UiButton;
 
         // @ts-ignore
-        private _listMessage    : GameUi.UiScrollList<DataForMessageRenderer>;
+        private _listMessage    : TwnsUiScrollList.UiScrollList<DataForMessageRenderer>;
         // @ts-ignore
-        private _labelTitle     : GameUi.UiLabel;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelNoMessage : GameUi.UiLabel;
+        private _labelNoMessage : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _btnAddMessage  : GameUi.UiButton;
+        private _btnAddMessage  : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!ChangeLogPanel._instance) {
@@ -53,10 +68,10 @@ namespace TinyWars.ChangeLog {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgChangeLogGetMessageList, callback: this._onMsgChangeLogGetMessageList },
-                { type: Notify.Type.MsgChangeLogAddMessage,     callback: this._onMsgChangeLogAddMessage },
-                { type: Notify.Type.MsgChangeLogModifyMessage,  callback: this._onMsgChangeLogModifyMessage },
+                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgChangeLogGetMessageList, callback: this._onMsgChangeLogGetMessageList },
+                { type: NotifyType.MsgChangeLogAddMessage,     callback: this._onMsgChangeLogAddMessage },
+                { type: NotifyType.MsgChangeLogModifyMessage,  callback: this._onMsgChangeLogModifyMessage },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnAddMessage,  callback: this._onTouchedBtnAddMessage },
@@ -82,16 +97,16 @@ namespace TinyWars.ChangeLog {
             this._updateListMessageAndLabelNoMessage();
         }
         private _onMsgChangeLogAddMessage(): void {
-            FloatText.show(Lang.getText(Lang.Type.A0154));
+            FloatText.show(Lang.getText(LangTextType.A0154));
             ChangeLogProxy.reqChangeLogGetMessageList();
         }
         private _onMsgChangeLogModifyMessage(): void {
-            FloatText.show(Lang.getText(Lang.Type.A0154));
+            FloatText.show(Lang.getText(LangTextType.A0154));
             ChangeLogProxy.reqChangeLogGetMessageList();
         }
 
         private _onTouchedBtnAddMessage(): void {
-            ChangeLogAddPanel.show();
+            TwnsChangeLogAddPanel.ChangeLogAddPanel.show();
         }
 
         private _updateView(): void {
@@ -102,9 +117,9 @@ namespace TinyWars.ChangeLog {
 
         private _updateComponentsForLanguage(): void {
             this._updateListMessageAndLabelNoMessage();
-            this._labelTitle.text       = Lang.getText(Lang.Type.B0457);
-            this._labelNoMessage.text   = Lang.getText(Lang.Type.B0278);
-            this._btnAddMessage.label   = Lang.getText(Lang.Type.B0454);
+            this._labelTitle.text       = Lang.getText(LangTextType.B0457);
+            this._labelNoMessage.text   = Lang.getText(LangTextType.B0278);
+            this._btnAddMessage.label   = Lang.getText(LangTextType.B0454);
         }
         private _updateListMessageAndLabelNoMessage(): void {
             const messageList               = ChangeLogModel.getAllMessageList() || [];
@@ -114,7 +129,7 @@ namespace TinyWars.ChangeLog {
         private async _updateBtnAddMessage(): Promise<void> {
             const btn   = this._btnAddMessage;
             btn.visible = false;
-            btn.visible = await User.UserModel.checkCanSelfEditChangeLog();
+            btn.visible = await UserModel.checkCanSelfEditChangeLog();
         }
 
         private _showOpenAnimation(): void {
@@ -147,13 +162,13 @@ namespace TinyWars.ChangeLog {
     }
 
     type DataForMessageRenderer = ProtoTypes.ChangeLog.IChangeLogMessage;
-    class MessageRenderer extends GameUi.UiListItemRenderer<DataForMessageRenderer> {
+    class MessageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMessageRenderer> {
         // @ts-ignore
-        private _labelIndex     : GameUi.UiLabel;
+        private _labelIndex     : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _labelContent   : GameUi.UiLabel;
+        private _labelContent   : TwnsUiLabel.UiLabel;
         // @ts-ignore
-        private _btnModify      : GameUi.UiButton;
+        private _btnModify      : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -173,14 +188,16 @@ namespace TinyWars.ChangeLog {
                 : (Lang.getLanguageText({ textArray }) || CommonConstants.ErrorTextForUndefined);
 
             const btnModify     = this._btnModify;
-            btnModify.label     = Lang.getText(Lang.Type.B0317);
+            btnModify.label     = Lang.getText(LangTextType.B0317);
             btnModify.visible   = false;
-            btnModify.visible   = User.UserModel.checkCanSelfEditChangeLog();
+            btnModify.visible   = UserModel.checkCanSelfEditChangeLog();
         }
 
         private _onTouchedBtnModify(): void {
             const messageId = this.data.messageId;
-            (messageId != null) && (ChangeLogModifyPanel.show({ messageId }));
+            (messageId != null) && (TwnsChangeLogModifyPanel.ChangeLogModifyPanel.show({ messageId }));
         }
     }
 }
+
+export default TwnsChangeLogPanel;

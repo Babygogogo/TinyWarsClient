@@ -1,19 +1,29 @@
 
-namespace TinyWars.BaseWar {
-    import Types                = Utility.Types;
-    import Logger               = Utility.Logger;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import ConfigManager        = Utility.ConfigManager;
-    import ClientErrorCode      = Utility.ClientErrorCode;
-    import CommonConstants      = Utility.CommonConstants;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import TileType             = Types.TileType;
-    import TileObjectType       = Types.TileObjectType;
-    import TileBaseType         = Types.TileBaseType;
-    import TileTemplateCfg      = Types.TileTemplateCfg;
-    import UnitCategory         = Types.UnitCategory;
-    import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwTileView       from "../view/BwTileView";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsBwPlayer         from "./BwPlayer";
+import TwnsBwUnit           from "./BwUnit";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwWar            from "./BwWar";
+
+namespace TwnsBwTile {
+    import TileType         = Types.TileType;
+    import TileObjectType   = Types.TileObjectType;
+    import TileBaseType     = Types.TileBaseType;
+    import TileTemplateCfg  = Types.TileTemplateCfg;
+    import UnitCategory     = Types.UnitCategory;
+    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import BwUnit           = TwnsBwUnit.BwUnit;
+    import BwTileView       = TwnsBwTileView.BwTileView;
+    import BwWar            = TwnsBwWar.BwWar;
 
     export class BwTile {
         private _templateCfg    : TileTemplateCfg;
@@ -213,7 +223,7 @@ namespace TinyWars.BaseWar {
         }
         public serializeForCreateSfw(): ISerialTile | undefined {
             const war = this.getWar();
-            if (VisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
+            if (WarVisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
                 const data = this.serialize();
                 if (data == null) {
                     Logger.error(`BwTile.serializeForCreateSfw() empty data.`);
@@ -439,7 +449,7 @@ namespace TinyWars.BaseWar {
             return this._templateCfg.defenseUnitCategory;
         }
         public checkCanDefendUnit(unit: BwUnit): boolean {
-            return Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), this.getDefenseUnitCategory());
+            return ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), this.getDefenseUnitCategory());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -477,7 +487,7 @@ namespace TinyWars.BaseWar {
         }): void {
             const configVersion = this.getConfigVersion();
             if (configVersion == null) {
-                Logger.error(`BwTile.resetByTypeAndPlayerIndex() configVersion is empty.`)
+                Logger.error(`BwTile.resetByTypeAndPlayerIndex() configVersion is empty.`);
                 return;
             }
 
@@ -545,7 +555,7 @@ namespace TinyWars.BaseWar {
             return this._playerIndex;
         }
 
-        public getPlayer(): BwPlayer | undefined {
+        public getPlayer(): TwnsBwPlayer.BwPlayer | undefined {
             const war = this.getWar();
             if (war == null) {
                 Logger.error(`BwTile.getPlayer() empty war.`);
@@ -621,14 +631,14 @@ namespace TinyWars.BaseWar {
             return (category != null)
                 && ((attributes.hp < unit.getMaxHp()) || (unit.checkCanBeSupplied(attributes)))
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
+                && (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
         }
         public checkCanSupplyUnit(unit: BwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && (unit.checkCanBeSupplied())
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
+                && (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
         }
 
         public getRepairHpAndCostForUnit(
@@ -642,7 +652,7 @@ namespace TinyWars.BaseWar {
                 const currentHp             = attributes.hp;
                 const normalizedMaxHp       = unit.getNormalizedMaxHp();
                 const productionCost        = unit.getProductionFinalCost();
-                const normalizedCurrentHp   = BwHelpers.getNormalizedHp(currentHp);
+                const normalizedCurrentHp   = WarCommonHelpers.getNormalizedHp(currentHp);
                 const normalizedRepairHp    = Math.min(
                     normalizedMaxHp - normalizedCurrentHp,
                     this.getCfgNormalizedRepairHp()!,
@@ -662,7 +672,7 @@ namespace TinyWars.BaseWar {
             const category = this._templateCfg.hideUnitCategory;
             return category == null
                 ? false
-                : Utility.ConfigManager.getUnitTypesByCategory(this.getConfigVersion(), category).indexOf(unitType) >= 0;
+                : ConfigManager.getUnitTypesByCategory(this.getConfigVersion(), category).indexOf(unitType) >= 0;
         }
 
         public checkIsUnitHider(): boolean {
@@ -750,7 +760,7 @@ namespace TinyWars.BaseWar {
                     const tileCategory = skillCfg[2];
                     if ((tileCategory != null)                                                                                  &&
                         (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, tileCategory))                        &&
-                        (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, skillCfg[0], coGridIndexListOnMap, coZoneRadius))
+                        (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, skillCfg[0], coGridIndexListOnMap, coZoneRadius))
                     ) {
                         return skillCfg;
                     }
@@ -852,3 +862,5 @@ namespace TinyWars.BaseWar {
             : templateCfg.maxCapturePoint;
     }
 }
+
+export default TwnsBwTile;

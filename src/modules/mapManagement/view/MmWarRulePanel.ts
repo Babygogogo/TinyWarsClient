@@ -1,43 +1,55 @@
 
-namespace TinyWars.MapManagement {
-    import Types                = Utility.Types;
-    import Lang                 = Utility.Lang;
-    import Notify               = Utility.Notify;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import ConfigManager        = Utility.ConfigManager;
-    import CommonHelpPanel      = Common.CommonHelpPanel;
-    import IWarRule             = ProtoTypes.WarRule.IWarRule;
-    import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
-    import CommonConstants      = Utility.CommonConstants;
+import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
+import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import Types                            from "../../tools/helpers/Types";
+import Lang                             from "../../tools/lang/Lang";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                     from "../../tools/ui/UiButton";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+import TwnsMmWarRuleAvailableCoPanel    from "./MmWarRuleAvailableCoPanel";
+
+namespace TwnsMmWarRulePanel {
+    import CommonHelpPanel              = TwnsCommonHelpPanel.CommonHelpPanel;
+    import MmWarRuleAvailableCoPanel    = TwnsMmWarRuleAvailableCoPanel.MmWarRuleAvailableCoPanel;
+    import LangTextType                 = TwnsLangTextType.LangTextType;
+    import NotifyType                   = TwnsNotifyType.NotifyType;
+    import IWarRule                     = ProtoTypes.WarRule.IWarRule;
+    import IDataForPlayerRule           = ProtoTypes.WarRule.IDataForPlayerRule;
 
     type OpenDataForMmWarRulePanel = ProtoTypes.Map.IMapRawData;
-    export class MmWarRulePanel extends GameUi.UiPanel<OpenDataForMmWarRulePanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class MmWarRulePanel extends TwnsUiPanel.UiPanel<OpenDataForMmWarRulePanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MmWarRulePanel;
 
-        private _labelMenuTitle     : TinyWars.GameUi.UiLabel;
-        private _listWarRule        : TinyWars.GameUi.UiScrollList<DataForWarRuleNameRenderer>;
-        private _btnBack            : TinyWars.GameUi.UiButton;
+        private _labelMenuTitle     : TwnsUiLabel.UiLabel;
+        private _listWarRule        : TwnsUiScrollList.UiScrollList<DataForWarRuleNameRenderer>;
+        private _btnBack            : TwnsUiButton.UiButton;
 
-        private _btnModifyRuleName  : TinyWars.GameUi.UiButton;
-        private _labelRuleName      : TinyWars.GameUi.UiLabel;
+        private _btnModifyRuleName  : TwnsUiButton.UiButton;
+        private _labelRuleName      : TwnsUiLabel.UiLabel;
 
-        private _btnModifyHasFog    : TinyWars.GameUi.UiButton;
-        private _imgHasFog          : TinyWars.GameUi.UiImage;
-        private _btnHelpHasFog      : TinyWars.GameUi.UiButton;
+        private _btnModifyHasFog    : TwnsUiButton.UiButton;
+        private _imgHasFog          : TwnsUiImage.UiImage;
+        private _btnHelpHasFog      : TwnsUiButton.UiButton;
 
-        private _labelAvailability  : TinyWars.GameUi.UiLabel;
-        private _btnAvailabilityMcw : TinyWars.GameUi.UiButton;
-        private _imgAvailabilityMcw : TinyWars.GameUi.UiImage;
-        private _btnAvailabilityScw : TinyWars.GameUi.UiButton;
-        private _imgAvailabilityScw : TinyWars.GameUi.UiImage;
-        private _btnAvailabilityMrw : TinyWars.GameUi.UiButton;
-        private _imgAvailabilityMrw : TinyWars.GameUi.UiImage;
+        private _labelAvailability  : TwnsUiLabel.UiLabel;
+        private _btnAvailabilityMcw : TwnsUiButton.UiButton;
+        private _imgAvailabilityMcw : TwnsUiImage.UiImage;
+        private _btnAvailabilityScw : TwnsUiButton.UiButton;
+        private _imgAvailabilityScw : TwnsUiImage.UiImage;
+        private _btnAvailabilityMrw : TwnsUiButton.UiButton;
+        private _imgAvailabilityMrw : TwnsUiImage.UiImage;
 
-        private _labelPlayerList    : TinyWars.GameUi.UiLabel;
-        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _labelPlayerList    : TwnsUiLabel.UiLabel;
+        private _listPlayer         : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         private _dataForListWarRule : DataForWarRuleNameRenderer[] = [];
         private _selectedIndex      : number;
@@ -68,7 +80,7 @@ namespace TinyWars.MapManagement {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
@@ -116,8 +128,8 @@ namespace TinyWars.MapManagement {
 
         private _onTouchedBtnHelpHasFog(e: egret.TouchEvent): void {
             CommonHelpPanel.show({
-                title  : Lang.getText(Lang.Type.B0020),
-                content: Lang.getText(Lang.Type.R0002),
+                title  : Lang.getText(LangTextType.B0020),
+                content: Lang.getText(LangTextType.R0002),
             });
         }
 
@@ -133,15 +145,15 @@ namespace TinyWars.MapManagement {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0314);
-            this._labelAvailability.text    = Lang.getText(Lang.Type.B0406);
-            this._labelPlayerList.text      = Lang.getText(Lang.Type.B0407);
-            this._btnAvailabilityMcw.label  = Lang.getText(Lang.Type.B0137);
-            this._btnAvailabilityScw.label  = Lang.getText(Lang.Type.B0138);
-            this._btnAvailabilityMrw.label  = Lang.getText(Lang.Type.B0404);
-            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-            this._btnModifyRuleName.label   = Lang.getText(Lang.Type.B0315);
-            this._btnModifyHasFog.label     = Lang.getText(Lang.Type.B0020);
+            this._labelMenuTitle.text       = Lang.getText(LangTextType.B0314);
+            this._labelAvailability.text    = Lang.getText(LangTextType.B0406);
+            this._labelPlayerList.text      = Lang.getText(LangTextType.B0407);
+            this._btnAvailabilityMcw.label  = Lang.getText(LangTextType.B0137);
+            this._btnAvailabilityScw.label  = Lang.getText(LangTextType.B0138);
+            this._btnAvailabilityMrw.label  = Lang.getText(LangTextType.B0404);
+            this._btnBack.label             = Lang.getText(LangTextType.B0146);
+            this._btnModifyRuleName.label   = Lang.getText(LangTextType.B0315);
+            this._btnModifyHasFog.label     = Lang.getText(LangTextType.B0020);
         }
 
         private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
@@ -170,7 +182,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _updateLabelRuleName(rule: IWarRule): void {
-            this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(Lang.Type.B0001);
+            this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(LangTextType.B0001);
         }
         private _updateImgHasFog(rule: IWarRule): void {
             this._imgHasFog.visible = rule ? rule.ruleForGlobalParams.hasFogByDefault : false;
@@ -211,11 +223,10 @@ namespace TinyWars.MapManagement {
         index   : number;
         rule    : IWarRule;
         panel   : MmWarRulePanel;
-    }
-
-    class WarRuleNameRenderer extends GameUi.UiListItemRenderer<DataForWarRuleNameRenderer> {
-        private _btnChoose: GameUi.UiButton;
-        private _labelName: GameUi.UiLabel;
+    };
+    class WarRuleNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRuleNameRenderer> {
+        private _btnChoose: TwnsUiButton.UiButton;
+        private _labelName: TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -227,7 +238,7 @@ namespace TinyWars.MapManagement {
             const data              = this.data;
             const index             = data.index;
             this.currentState       = index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text    = `${Lang.getText(Lang.Type.B0318)} ${index}`;
+            this._labelName.text    = `${Lang.getText(LangTextType.B0318)} ${index}`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
@@ -242,10 +253,10 @@ namespace TinyWars.MapManagement {
         playerRule  : IDataForPlayerRule;
         isReviewing : boolean;
         panel       : MmWarRulePanel;
-    }
+    };
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
+    class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
+        private _listInfo   : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -281,7 +292,7 @@ namespace TinyWars.MapManagement {
         }
         private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
-                titleText               : Lang.getText(Lang.Type.B0018),
+                titleText               : Lang.getText(LangTextType.B0018),
                 infoText                : Lang.getPlayerForceName(playerRule.playerIndex),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
@@ -289,7 +300,7 @@ namespace TinyWars.MapManagement {
         }
         private _createDataTeamIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
-                titleText               : Lang.getText(Lang.Type.B0019),
+                titleText               : Lang.getText(LangTextType.B0019),
                 infoText                : Lang.getPlayerTeamName(playerRule.teamIndex),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
@@ -297,7 +308,7 @@ namespace TinyWars.MapManagement {
         }
         private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
-                titleText               : Lang.getText(Lang.Type.B0403),
+                titleText               : Lang.getText(LangTextType.B0403),
                 infoText                : `${(playerRule.bannedCoIdArray || []).length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
@@ -311,7 +322,7 @@ namespace TinyWars.MapManagement {
         private _createDataInitialFund(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const currValue = playerRule.initialFund;
             return {
-                titleText               : Lang.getText(Lang.Type.B0178),
+                titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
                 callbackOnTouchedTitle  : null,
@@ -320,7 +331,7 @@ namespace TinyWars.MapManagement {
         private _createDataIncomeMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const currValue = playerRule.incomeMultiplier;
             return {
-                titleText               : Lang.getText(Lang.Type.B0179),
+                titleText               : Lang.getText(LangTextType.B0179),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
                 callbackOnTouchedTitle  : null,
@@ -329,7 +340,7 @@ namespace TinyWars.MapManagement {
         private _createDataEnergyAddPctOnLoadCo(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const currValue = playerRule.energyAddPctOnLoadCo;
             return {
-                titleText               : Lang.getText(Lang.Type.B0180),
+                titleText               : Lang.getText(LangTextType.B0180),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : null,
@@ -338,7 +349,7 @@ namespace TinyWars.MapManagement {
         private _createDataEnergyGrowthMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const currValue = playerRule.energyGrowthMultiplier;
             return {
-                titleText               : Lang.getText(Lang.Type.B0181),
+                titleText               : Lang.getText(LangTextType.B0181),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
                 callbackOnTouchedTitle  : null,
@@ -347,7 +358,7 @@ namespace TinyWars.MapManagement {
         private _createDataMoveRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const currValue = playerRule.moveRangeModifier;
             return {
-                titleText               : Lang.getText(Lang.Type.B0182),
+                titleText               : Lang.getText(LangTextType.B0182),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
                 callbackOnTouchedTitle  : null,
@@ -356,7 +367,7 @@ namespace TinyWars.MapManagement {
         private _createDataAttackPowerModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const currValue = playerRule.attackPowerModifier;
             return {
-                titleText               : Lang.getText(Lang.Type.B0183),
+                titleText               : Lang.getText(LangTextType.B0183),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
                 callbackOnTouchedTitle  : null,
@@ -365,7 +376,7 @@ namespace TinyWars.MapManagement {
         private _createDataVisionRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const currValue = playerRule.visionRangeModifier;
             return {
-                titleText               : Lang.getText(Lang.Type.B0184),
+                titleText               : Lang.getText(LangTextType.B0184),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
                 callbackOnTouchedTitle  : null,
@@ -374,7 +385,7 @@ namespace TinyWars.MapManagement {
         private _createDataLuckLowerLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const currValue     = playerRule.luckLowerLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0189),
+                titleText               : Lang.getText(LangTextType.B0189),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
                 callbackOnTouchedTitle  : null,
@@ -383,7 +394,7 @@ namespace TinyWars.MapManagement {
         private _createDataLuckUpperLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const currValue     = playerRule.luckUpperLimit;
             return {
-                titleText               : Lang.getText(Lang.Type.B0190),
+                titleText               : Lang.getText(LangTextType.B0190),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
                 callbackOnTouchedTitle  : null,
@@ -396,11 +407,11 @@ namespace TinyWars.MapManagement {
         infoText                : string;
         infoColor               : number;
         callbackOnTouchedTitle  : (() => void) | null;
-    }
+    };
 
-    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : GameUi.UiButton;
-        private _labelValue : GameUi.UiLabel;
+    class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
+        private _btnTitle   : TwnsUiButton.UiButton;
+        private _labelValue : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -433,3 +444,5 @@ namespace TinyWars.MapManagement {
         }
     }
 }
+
+export default TwnsMmWarRulePanel;

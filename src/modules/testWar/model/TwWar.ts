@@ -1,24 +1,34 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.TestWar {
-    import Logger                   = Utility.Logger;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import ClientErrorCode          = Utility.ClientErrorCode;
-    import Types                    = Utility.Types;
-    import ConfigManager            = Utility.ConfigManager;
-    import CommonConstants          = Utility.CommonConstants;
-    import TimeModel                = Time.TimeModel;
-    import BwWarRuleHelper          = BaseWar.BwWarRuleHelper;
-    import WarEventHelper           = WarEvent.WarEventHelper;
-    import WarSerialization         = ProtoTypes.WarSerialization;
-    import ISerialWar               = WarSerialization.ISerialWar;
-    import IMapRawData              = ProtoTypes.Map.IMapRawData;
+import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
+import TwnsBwWar                    from "../../baseWar/model/BwWar";
+import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
+import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Logger                       from "../../tools/helpers/Logger";
+import Timer                        from "../../tools/helpers/Timer";
+import Types                        from "../../tools/helpers/Types";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers               from "../../tools/warHelpers/WarRuleHelpers";
+import WarEventHelper               from "../../warEvent/model/WarEventHelper";
+import TwnsTwField                  from "./TwField";
+import TwnsTwPlayerManager          from "./TwPlayerManager";
 
-    export class TwWar extends BaseWar.BwWar {
+namespace TwnsTwWar {
+    import BwWarEventManager    = TwnsBwWarEventManager.BwWarEventManager;
+    import TwPlayerManager      = TwnsTwPlayerManager.TwPlayerManager;
+    import TwField              = TwnsTwField.TwField;
+    import WarSerialization     = ProtoTypes.WarSerialization;
+    import ISerialWar           = WarSerialization.ISerialWar;
+    import IMapRawData          = ProtoTypes.Map.IMapRawData;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar                = TwnsBwWar.BwWar;
+
+    export class TwWar extends BwWar {
         private readonly _playerManager         = new TwPlayerManager();
         private readonly _field                 = new TwField();
-        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
-        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
+        private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();
+        private readonly _warEventManager       = new BwWarEventManager();
 
         public getCanCheat(): boolean {
             return false;
@@ -29,10 +39,10 @@ namespace TinyWars.TestWar {
         public getField(): TwField {
             return this._field;
         }
-        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
+        public getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): BaseWar.BwWarEventManager {
+        public getWarEventManager(): BwWarEventManager {
             return this._warEventManager;
         }
 
@@ -213,7 +223,7 @@ namespace TinyWars.TestWar {
             turnIndex       : CommonConstants.WarFirstTurnIndex,
             playerIndex     : 0,
             turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
-            enterTurnTime   : TimeModel.getServerTimestamp(),
+            enterTurnTime   : Timer.getServerTimestamp(),
         };
     }
 
@@ -264,7 +274,7 @@ namespace TinyWars.TestWar {
             return undefined;
         }
 
-        if ((BwWarRuleHelper.getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability })) ||
+        if ((WarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability })) ||
             ((ruleForPlayers.playerRuleDataArray || []).length !== playersCountUnneutral)
         ) {
             Logger.error(`TwWar._createInitialPlayerManagerDataForTw() invalid ruleForPlayers! ${JSON.stringify(bootTimerParams)}`);
@@ -272,7 +282,7 @@ namespace TinyWars.TestWar {
         }
 
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
-            const teamIndex = BwWarRuleHelper.getTeamIndexByRuleForPlayers(ruleForPlayers, playerIndex);
+            const teamIndex = WarRuleHelpers.getTeamIndexByRuleForPlayers(ruleForPlayers, playerIndex);
             if (teamIndex == null) {
                 Logger.error(`TwWar._createInitialPlayerManagerDataForTw() invalid teamIndex!`);
                 return undefined;
@@ -339,3 +349,5 @@ namespace TinyWars.TestWar {
         };
     }
 }
+
+export default TwnsTwWar;

@@ -1,15 +1,21 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.SingleRankWar {
-    import Types            = Utility.Types;
-    import ClientErrorCode  = Utility.ClientErrorCode;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Helpers          = Utility.Helpers;
-    import Logger           = Utility.Logger;
+import TwnsSpwWar           from "../../singlePlayerWar/model/SpwWar";
+import TwnsSpwWarMenuPanel  from "../../singlePlayerWar/view/SpwWarMenuPanel";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+
+namespace TwnsSrwWar {
+    import SpwWar           = TwnsSpwWar.SpwWar;
+    import SpwWarMenuPanel  = TwnsSpwWarMenuPanel.SpwWarMenuPanel;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForSrw  = ProtoTypes.WarSettings.ISettingsForSrw;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
-    export class SrwWar extends SinglePlayerWar.SpwWar {
+    export class SrwWar extends SpwWar {
         private _settingsForSrw : ISettingsForSrw;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
@@ -181,7 +187,7 @@ namespace TinyWars.SingleRankWar {
             return true;
         }
         public getIsWarMenuPanelOpening(): boolean {
-            return SinglePlayerWar.SpwWarMenuPanel.getIsOpening();
+            return SpwWarMenuPanel.getIsOpening();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -215,8 +221,10 @@ namespace TinyWars.SingleRankWar {
 
         public calculateTotalScore(): number {
             // TODO
-            Utility.FloatText.show("SrwWar.calculateTotalScore() TODO!");
+            FloatText.show("SrwWar.calculateTotalScore() TODO!");
             return 0;
         }
     }
 }
+
+export default TwnsSrwWar;

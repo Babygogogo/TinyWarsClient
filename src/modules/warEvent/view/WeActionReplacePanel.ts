@@ -1,25 +1,37 @@
 
-namespace TinyWars.WarEvent {
-    import Notify               = Utility.Notify;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Lang                 = Utility.Lang;
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import WarEventHelper           from "../model/WarEventHelper";
+
+namespace TwnsWeActionReplacePanel {
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
 
     type OpenDataForWeActionReplacePanel = {
         fullData    : IWarEventFullData;
         eventId     : number;
         actionId    : number;
-    }
-    export class WeActionReplacePanel extends GameUi.UiPanel<OpenDataForWeActionReplacePanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+    };
+    export class WeActionReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeActionReplacePanel> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: WeActionReplacePanel;
 
-        private _listAction     : GameUi.UiScrollList<DataForActionRenderer>;
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelNoAction  : GameUi.UiLabel;
-        private _btnClose       : GameUi.UiButton;
+        private _listAction     : TwnsUiScrollList.UiScrollList<DataForActionRenderer>;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
+        private _labelNoAction  : TwnsUiLabel.UiLabel;
+        private _btnClose       : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForWeActionReplacePanel): void {
             if (!WeActionReplacePanel._instance) {
@@ -44,7 +56,7 @@ namespace TinyWars.WarEvent {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
@@ -66,9 +78,9 @@ namespace TinyWars.WarEvent {
 
         private _updateComponentsForLanguage(): void {
             const openData              = this._getOpenData();
-            this._labelTitle.text       = `${Lang.getText(Lang.Type.B0615)} A${openData.actionId}`;
-            this._labelNoAction.text    = Lang.getText(Lang.Type.B0278);
-            this._btnClose.label        = Lang.getText(Lang.Type.B0146);
+            this._labelTitle.text       = `${Lang.getText(LangTextType.B0615)} A${openData.actionId}`;
+            this._labelNoAction.text    = Lang.getText(LangTextType.B0278);
+            this._btnClose.label        = Lang.getText(LangTextType.B0146);
         }
         private _updateComponentsForAction(): void {
             const openData      = this._getOpenData();
@@ -96,12 +108,12 @@ namespace TinyWars.WarEvent {
         srcActionId         : number;
         candidateActionId   : number;
         fullData            : IWarEventFullData;
-    }
-    class ActionRenderer extends GameUi.UiListItemRenderer<DataForActionRenderer> {
-        private _labelActionId  : GameUi.UiLabel;
-        private _labelAction    : GameUi.UiLabel;
-        private _btnCopy        : GameUi.UiButton;
-        private _btnSelect      : GameUi.UiButton;
+    };
+    class ActionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForActionRenderer> {
+        private _labelActionId  : TwnsUiLabel.UiLabel;
+        private _labelAction    : TwnsUiLabel.UiLabel;
+        private _btnCopy        : TwnsUiButton.UiButton;
+        private _btnSelect      : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -109,7 +121,7 @@ namespace TinyWars.WarEvent {
                 { ui: this._btnSelect,  callback: this._onTouchedBtnSelect },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
             this._updateComponentsForLanguage();
@@ -133,7 +145,7 @@ namespace TinyWars.WarEvent {
                 actionIdForDelete   : data.srcActionId,
                 actionIdForClone    : data.candidateActionId,
             }) != null) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 WeActionReplacePanel.hide();
             }
         }
@@ -149,7 +161,7 @@ namespace TinyWars.WarEvent {
                 oldActionId : data.srcActionId,
                 newActionId : data.candidateActionId,
             })) {
-                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 WeActionReplacePanel.hide();
             }
         }
@@ -158,8 +170,8 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnCopy.label     = Lang.getText(Lang.Type.B0487);
-            this._btnSelect.label   = Lang.getText(Lang.Type.B0492);
+            this._btnCopy.label     = Lang.getText(LangTextType.B0487);
+            this._btnSelect.label   = Lang.getText(LangTextType.B0492);
 
             this._updateLabelActionId();
             this._updateLabelAction();
@@ -168,7 +180,7 @@ namespace TinyWars.WarEvent {
         private _updateLabelActionId(): void {
             const data = this.data;
             if (data) {
-                this._labelActionId.text  = `${Lang.getText(Lang.Type.B0616)}: A${data.candidateActionId}`;
+                this._labelActionId.text  = `${Lang.getText(LangTextType.B0616)}: A${data.candidateActionId}`;
             }
         }
         private _updateLabelAction(): void {
@@ -180,7 +192,7 @@ namespace TinyWars.WarEvent {
             const action    = (data.fullData.actionArray || []).find(v => v.WeaCommonData.actionId === data.candidateActionId);
             const label     = this._labelAction;
             if (action == null) {
-                label.text = Lang.getText(Lang.Type.A0168);
+                label.text = Lang.getText(LangTextType.A0168);
             } else {
                 label.text = WarEventHelper.getDescForAction(action);
             }
@@ -193,3 +205,5 @@ namespace TinyWars.WarEvent {
         }
     }
 }
+
+export default TwnsWeActionReplacePanel;

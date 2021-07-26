@@ -1,11 +1,16 @@
 
-namespace TinyWars.BaseWar {
-    import Logger               = Utility.Logger;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import ConfigManager        = Utility.ConfigManager;
-    import Helpers              = Utility.Helpers;
-    import ClientErrorCode      = Utility.ClientErrorCode;
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsBwWar            from "./BwWar";
+import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+
+namespace TwnsBwCommonSettingManager {
     import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import BwWar                = TwnsBwWar.BwWar;
 
     export class BwCommonSettingManager {
         private _war?               : BwWar;
@@ -30,7 +35,7 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwCommonSettingManagerInit02;
             }
 
-            const errorCodeForWarRule = BwWarRuleHelper.getErrorCodeForWarRule({
+            const errorCodeForWarRule = WarRuleHelpers.getErrorCodeForWarRule({
                 rule                : warRule,
                 allWarEventIdArray,
                 configVersion,
@@ -92,7 +97,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwWarRuleHelper.getHasFogByDefault(warRule);
+            return WarRuleHelpers.getHasFogByDefault(warRule);
         }
         public getSettingsIncomeMultiplier(playerIndex: number): number | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();
@@ -107,7 +112,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwWarRuleHelper.getIncomeMultiplier(warRule, playerIndex);
+            return WarRuleHelpers.getIncomeMultiplier(warRule, playerIndex);
         }
         public getSettingsEnergyGrowthMultiplier(playerIndex: number): number | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();
@@ -122,7 +127,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwWarRuleHelper.getEnergyGrowthMultiplier(warRule, playerIndex);
+            return WarRuleHelpers.getEnergyGrowthMultiplier(warRule, playerIndex);
         }
         public getSettingsAttackPowerModifier(playerIndex: number): number | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();
@@ -137,7 +142,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwWarRuleHelper.getAttackPowerModifier(warRule, playerIndex);
+            return WarRuleHelpers.getAttackPowerModifier(warRule, playerIndex);
         }
         public getSettingsMoveRangeModifier(playerIndex: number): number | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();
@@ -152,7 +157,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwWarRuleHelper.getMoveRangeModifier(warRule, playerIndex);
+            return WarRuleHelpers.getMoveRangeModifier(warRule, playerIndex);
         }
         public getSettingsVisionRangeModifier(playerIndex: number): number | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();
@@ -167,7 +172,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwWarRuleHelper.getVisionRangeModifier(warRule, playerIndex);
+            return WarRuleHelpers.getVisionRangeModifier(warRule, playerIndex);
         }
         public getSettingsInitialFund(playerIndex: number): number | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();
@@ -182,7 +187,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwWarRuleHelper.getInitialFund(warRule, playerIndex);
+            return WarRuleHelpers.getInitialFund(warRule, playerIndex);
         }
         public getSettingsEnergyAddPctOnLoadCo(playerIndex: number): number | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();
@@ -197,7 +202,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwWarRuleHelper.getEnergyAddPctOnLoadCo(warRule, playerIndex);
+            return WarRuleHelpers.getEnergyAddPctOnLoadCo(warRule, playerIndex);
         }
         public getSettingsLuckLowerLimit(playerIndex: number): number | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();
@@ -212,7 +217,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwWarRuleHelper.getLuckLowerLimit(warRule, playerIndex);
+            return WarRuleHelpers.getLuckLowerLimit(warRule, playerIndex);
         }
         public getSettingsLuckUpperLimit(playerIndex: number): number | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();
@@ -227,7 +232,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwWarRuleHelper.getLuckUpperLimit(warRule, playerIndex);
+            return WarRuleHelpers.getLuckUpperLimit(warRule, playerIndex);
         }
         public getTeamIndex(playerIndex: number): number | undefined | null {
             const settingsForCommon = this.getSettingsForCommon();
@@ -242,7 +247,9 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwWarRuleHelper.getTeamIndex(warRule, playerIndex);
+            return WarRuleHelpers.getTeamIndex(warRule, playerIndex);
         }
     }
 }
+
+export default TwnsBwCommonSettingManager;

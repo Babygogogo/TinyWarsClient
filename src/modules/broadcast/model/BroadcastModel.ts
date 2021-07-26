@@ -1,7 +1,10 @@
 
-namespace TinyWars.Broadcast.BroadcastModel {
-    import ProtoTypes           = Utility.ProtoTypes;
-    import IBroadcastMessage    = ProtoTypes.Broadcast.IBroadcastMessage;
+
+import ProtoTypes   from "../../tools/proto/ProtoTypes";
+import Timer        from "../../tools/helpers/Timer";
+
+namespace BroadcastModel {
+    import IBroadcastMessage        = ProtoTypes.Broadcast.IBroadcastMessage;
 
     let _messageList    : IBroadcastMessage[] = [];
 
@@ -12,10 +15,12 @@ namespace TinyWars.Broadcast.BroadcastModel {
         return _messageList;
     }
     export function getOngoingMessageList(): IBroadcastMessage[] {
-        const currTime = Time.TimeModel.getServerTimestamp();
+        const currTime = Timer.getServerTimestamp();
         return _messageList.filter(v => {
             return (v.startTime <= currTime)
                 && (v.endTime >= currTime);
         });
     }
 }
+
+export default BroadcastModel;

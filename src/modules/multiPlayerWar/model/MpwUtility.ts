@@ -1,9 +1,12 @@
 
-namespace TinyWars.MultiPlayerWar.MpwUtility {
-    import Types                = Utility.Types;
-    import CommonConstants      = Utility.CommonConstants;
+import TwnsBwTile       from "../../baseWar/model/BwTile";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Types            from "../../tools/helpers/Types";
 
-    export function resetTileDataAsHasFog(tile: BaseWar.BwTile): void {
+namespace MpwUtility {
+    import BwTile = TwnsBwTile.BwTile;
+
+    export function resetTileDataAsHasFog(tile: BwTile): void {
         tile.setHasFog(true);
 
         tile.deserialize({
@@ -17,3 +20,5 @@ namespace TinyWars.MultiPlayerWar.MpwUtility {
         }, tile.getConfigVersion());
     }
 }
+
+export default MpwUtility;

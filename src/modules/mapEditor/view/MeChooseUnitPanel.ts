@@ -1,23 +1,38 @@
 
-namespace TinyWars.MapEditor {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import ConfigManager    = Utility.ConfigManager;
-    import Types            = Utility.Types;
-    import CommonConstants  = Utility.CommonConstants;
+import TwnsBwUnit               from "../../baseWar/model/BwUnit";
+import TwnsBwUnitView           from "../../baseWar/view/BwUnitView";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import TwnsMeDrawer             from "../model/MeDrawer";
+import MeModel                  from "../model/MeModel";
+
+namespace TwnsMeChooseUnitPanel {
+    import BwUnitView       = TwnsBwUnitView.BwUnitView;
+    import DataForDrawUnit  = TwnsMeDrawer.DataForDrawUnit;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
-    export class MeChooseUnitPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+    export class MeChooseUnitPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeChooseUnitPanel;
 
-        private _labelRecentTitle   : GameUi.UiLabel;
-        private _listRecent         : GameUi.UiScrollList<DataForUnitRenderer>;
-        private _listCategory       : GameUi.UiScrollList<DataForCategoryRenderer>;
-        private _btnCancel          : GameUi.UiButton;
+        private _labelRecentTitle   : TwnsUiLabel.UiLabel;
+        private _listRecent         : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private _listCategory       : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private _btnCancel          : TwnsUiButton.UiButton;
 
         private _dataListForRecent   : DataForUnitRenderer[] = [];
 
@@ -43,7 +58,7 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
@@ -90,8 +105,8 @@ namespace TinyWars.MapEditor {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
-            this._labelRecentTitle.text = `${Lang.getText(Lang.Type.B0372)}:`
+            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+            this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
         }
 
         private _createDataForListUnit(): DataForCategoryRenderer[] {
@@ -135,10 +150,9 @@ namespace TinyWars.MapEditor {
     type DataForCategoryRenderer = {
         dataListForDrawUnit : DataForDrawUnit[];
         panel               : MeChooseUnitPanel;
-    }
-
-    class CategoryRenderer extends GameUi.UiListItemRenderer<DataForCategoryRenderer> {
-        private _listUnit: GameUi.UiScrollList<DataForUnitRenderer>;
+    };
+    class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
+        private _listUnit: TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
 
         protected _onOpened(): void {
             this._listUnit.setItemRenderer(UnitRenderer);
@@ -163,18 +177,17 @@ namespace TinyWars.MapEditor {
     type DataForUnitRenderer = {
         dataForDrawUnit : DataForDrawUnit;
         panel           : MeChooseUnitPanel;
-    }
-
-    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
+    };
+    class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;
-        private _labelName      : GameUi.UiLabel;
+        private _labelName      : TwnsUiLabel.UiLabel;
         private _conUnitView    : eui.Group;
 
-        private _unitView   = new BaseWar.BwUnitView();
+        private _unitView   = new BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
 
             this._conUnitView.addChild(this._unitView);
@@ -194,7 +207,7 @@ namespace TinyWars.MapEditor {
             this._labelName.text    = Lang.getUnitName(unitType);
 
             const unitView  = this._unitView;
-            const unit      = new BaseWar.BwUnit();
+            const unit      = new TwnsBwUnit.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
@@ -216,3 +229,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeChooseUnitPanel;

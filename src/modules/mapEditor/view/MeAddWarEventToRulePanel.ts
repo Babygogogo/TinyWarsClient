@@ -1,24 +1,35 @@
 
-namespace TinyWars.MapEditor {
-    import Notify           = Utility.Notify;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Lang             = Utility.Lang;
-    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
+import MeModel                  from "../model/MeModel";
+
+namespace TwnsMeAddWarEventToRulePanel {
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     type OpenDataForMeAddWarEventId = {
         warRule     : ProtoTypes.WarRule.IWarRule;
-    }
-
-    export class MeAddWarEventToRulePanel extends GameUi.UiPanel<OpenDataForMeAddWarEventId>{
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+    };
+    export class MeAddWarEventToRulePanel extends TwnsUiPanel.UiPanel<OpenDataForMeAddWarEventId>{
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeAddWarEventToRulePanel;
 
-        private _listWarEvent   : GameUi.UiScrollList<DataForWarEventRenderer>;
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelNoWarEvent: GameUi.UiLabel;
-        private _btnClose       : GameUi.UiButton;
+        private _listWarEvent   : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
+        private _labelTitle     : TwnsUiLabel.UiLabel;
+        private _labelNoWarEvent: TwnsUiLabel.UiLabel;
+        private _btnClose       : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForMeAddWarEventId): void {
             if (!MeAddWarEventToRulePanel._instance) {
@@ -43,7 +54,7 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
@@ -63,9 +74,9 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getText(Lang.Type.B0468);
-            this._labelNoWarEvent.text  = Lang.getText(Lang.Type.B0278);
-            this._btnClose.label        = Lang.getText(Lang.Type.B0146);
+            this._labelTitle.text       = Lang.getText(LangTextType.B0468);
+            this._labelNoWarEvent.text  = Lang.getText(LangTextType.B0278);
+            this._btnClose.label        = Lang.getText(LangTextType.B0146);
         }
         private _updateListMessageAndLabelNoMessage(): void {
             const dataArray : DataForWarEventRenderer[] = [];
@@ -85,12 +96,12 @@ namespace TinyWars.MapEditor {
     type DataForWarEventRenderer = {
         warEventId  : number;
         warRule     : ProtoTypes.WarRule.IWarRule;
-    }
-    class WarEventRenderer extends GameUi.UiListItemRenderer<DataForWarEventRenderer> {
-        private _labelId    : GameUi.UiLabel;
-        private _btnDelete  : GameUi.UiButton;
-        private _labelName  : GameUi.UiLabel;
-        private _btnAdd     : GameUi.UiButton;
+    };
+    class WarEventRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventRenderer> {
+        private _labelId    : TwnsUiLabel.UiLabel;
+        private _btnDelete  : TwnsUiButton.UiButton;
+        private _labelName  : TwnsUiLabel.UiLabel;
+        private _btnAdd     : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -98,8 +109,8 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnDelete,  callback: this._onTouchedBtnDelete },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MeWarEventIdArrayChanged,   callback: this._onNotifyMeWarEventIdArrayChanged },
+                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MeWarEventIdArrayChanged,   callback: this._onNotifyMeWarEventIdArrayChanged },
             ]);
             this._updateComponentsForLanguage();
             this._btnDelete.setTextColor(0xFF0000);
@@ -114,15 +125,15 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnAdd(e: egret.TouchEvent): void {
             const data = this.data;
             if (data) {
-                BwWarRuleHelper.addWarEventId(data.warRule, data.warEventId);
-                Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+                WarRuleHelpers.addWarEventId(data.warRule, data.warEventId);
+                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDelete(e: egret.TouchEvent): void {
             const data = this.data;
             if (data) {
-                BwWarRuleHelper.deleteWarEventId(data.warRule, data.warEventId);
-                Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+                WarRuleHelpers.deleteWarEventId(data.warRule, data.warEventId);
+                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
 
@@ -134,8 +145,8 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnDelete.label   = Lang.getText(Lang.Type.B0220);
-            this._btnAdd.label      = Lang.getText(Lang.Type.B0467);
+            this._btnDelete.label   = Lang.getText(LangTextType.B0220);
+            this._btnAdd.label      = Lang.getText(LangTextType.B0467);
 
             this._updateLabelName();
         }
@@ -157,3 +168,5 @@ namespace TinyWars.MapEditor {
         }
     }
 }
+
+export default TwnsMeAddWarEventToRulePanel;

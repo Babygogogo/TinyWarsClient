@@ -1,18 +1,23 @@
 
-namespace TinyWars.ChangeLog.ChangeLogProxy {
-    import Notify           = Utility.Notify;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import NetManager           from "../../tools/network/NetManager";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import ChangeLogModel       from "./ChangeLogModel";
+
+namespace ChangeLogProxy {
+    import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
-    import NetManager       = Network.NetManager;
-    import NetworkCodes     = Network.Codes;
+    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetworkCodes.MsgChangeLogAddMessage,         callback: _onMsgChangeLogAddMessage },
-            { msgCode: NetworkCodes.MsgChangeLogModifyMessage,      callback: _onMsgChangeLogModifyMessage },
-            { msgCode: NetworkCodes.MsgChangeLogGetMessageList,     callback: _onMsgChangeLogGetMessageList, },
-        ], ChangeLogProxy);
+            { msgCode: NetMessageCodes.MsgChangeLogAddMessage,         callback: _onMsgChangeLogAddMessage },
+            { msgCode: NetMessageCodes.MsgChangeLogModifyMessage,      callback: _onMsgChangeLogModifyMessage },
+            { msgCode: NetMessageCodes.MsgChangeLogGetMessageList,     callback: _onMsgChangeLogGetMessageList, },
+        ], undefined);
     }
 
     export function reqChangeLogAddMessage(textList: ILanguageText[]): void {
@@ -25,7 +30,7 @@ namespace TinyWars.ChangeLog.ChangeLogProxy {
     function _onMsgChangeLogAddMessage(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgChangeLogAddMessage.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgChangeLogAddMessage, data);
+            Notify.dispatch(NotifyType.MsgChangeLogAddMessage, data);
         }
     }
 
@@ -35,12 +40,12 @@ namespace TinyWars.ChangeLog.ChangeLogProxy {
                 messageId,
                 textList,
             } },
-        })
+        });
     }
     function _onMsgChangeLogModifyMessage(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgChangeLogModifyMessage.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgChangeLogModifyMessage, data);
+            Notify.dispatch(NotifyType.MsgChangeLogModifyMessage, data);
         }
     }
 
@@ -52,7 +57,9 @@ namespace TinyWars.ChangeLog.ChangeLogProxy {
         const data = e.data as NetMessage.MsgChangeLogGetMessageList.IS;
         if (!data.errorCode) {
             ChangeLogModel.setAllMessageList(data.messageList);
-            Notify.dispatch(Notify.Type.MsgChangeLogGetMessageList, data);
+            Notify.dispatch(NotifyType.MsgChangeLogGetMessageList, data);
         }
     }
 }
+
+export default ChangeLogProxy;

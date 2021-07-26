@@ -1,13 +1,29 @@
 
-namespace TinyWars.Lobby {
-    import Tween        = egret.Tween;
-    import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
-    import Notify       = Utility.Notify;
-    import UserModel    = User.UserModel;
+import ChatModel                    from "../../chat/model/ChatModel";
+import TwnsChatPanel                from "../../chat/view/ChatPanel";
+import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
+import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
+import Helpers                      from "../../tools/helpers/Helpers";
+import Types                        from "../../tools/helpers/Types";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import TwnsUiImage                  from "../../tools/ui/UiImage";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import UserModel                    from "../../user/model/UserModel";
+import TwnsUserOnlineUsersPanel     from "../../user/view/UserOnlineUsersPanel";
+import TwnsUserPanel                from "../../user/view/UserPanel";
+import TwnsLobbyTopPanel            from "./LobbyTopPanel";
 
-    export class LobbyBottomPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+namespace TwnsLobbyBottomPanel {
+    import UserPanel                = TwnsUserPanel.UserPanel;
+    import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
+    import UserOnlineUsersPanel     = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
+    import MeMapListPanel           = TwnsMeMapListPanel.MeMapListPanel;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import Tween                    = egret.Tween;
+
+    // eslint-disable-next-line no-shadow
+    export class LobbyBottomPanel extends TwnsUiPanel.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: LobbyBottomPanel;
@@ -15,7 +31,7 @@ namespace TinyWars.Lobby {
         private _groupBottom    : eui.Group;
         private _groupMyInfo    : eui.Group;
         private _groupChat      : eui.Group;
-        private _imgChatRed     : GameUi.UiImage;
+        private _imgChatRed     : TwnsUiImage.UiImage;
         private _groupMapEditor : eui.Group;
         private _groupGameData  : eui.Group;
 
@@ -46,11 +62,11 @@ namespace TinyWars.Lobby {
                 { ui: this._groupGameData,      callback: this._onTouchedGroupGameData },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
-                { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
-                { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
-                { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
-                { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessages },
+                { type: NotifyType.MsgUserLogout,                  callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
+                { type: NotifyType.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
+                { type: NotifyType.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
+                { type: NotifyType.MsgChatAddMessage,              callback: this._onMsgChatAddMessages },
             ]);
 
             this._showOpenAnimation();
@@ -65,29 +81,29 @@ namespace TinyWars.Lobby {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedGroupMyInfo(e: egret.TouchEvent): void {
-            User.UserOnlineUsersPanel.hide();
-            Chat.ChatPanel.hide();
-            User.UserPanel.show({ userId: UserModel.getSelfUserId() });
+            UserOnlineUsersPanel.hide();
+            TwnsChatPanel.ChatPanel.hide();
+            UserPanel.show({ userId: UserModel.getSelfUserId() });
         }
 
         private _onTouchedGroupChat(e: egret.TouchEvent): void {
-            User.UserOnlineUsersPanel.hide();
-            User.UserPanel.hide();
-            if (!Chat.ChatPanel.getIsOpening()) {
-                Chat.ChatPanel.show({ toUserId: null });
+            UserOnlineUsersPanel.hide();
+            UserPanel.hide();
+            if (!TwnsChatPanel.ChatPanel.getIsOpening()) {
+                TwnsChatPanel.ChatPanel.show({ toUserId: null });
             } else {
-                Chat.ChatPanel.hide();
+                TwnsChatPanel.ChatPanel.hide();
             }
         }
 
         private _onTouchedGroupMapEditor(e: egret.TouchEvent): void {
             this.close();
-            LobbyTopPanel.hide();
-            MapEditor.MeMapListPanel.show();
+            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            MeMapListPanel.show();
         }
 
         private _onTouchedGroupGameData(e: egret.TouchEvent): void {
-            Common.CommonDamageChartPanel.show();
+            CommonDamageChartPanel.show();
         }
 
         private _onMsgUserLogout(e: egret.Event): void {
@@ -110,7 +126,7 @@ namespace TinyWars.Lobby {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateImgChatRed(): void {
-            this._imgChatRed.visible = Chat.ChatModel.checkHasUnreadMessage();
+            this._imgChatRed.visible = ChatModel.checkHasUnreadMessage();
         }
 
         private _showOpenAnimation(): void {
@@ -156,3 +172,5 @@ namespace TinyWars.Lobby {
         }
     }
 }
+
+export default TwnsLobbyBottomPanel;
