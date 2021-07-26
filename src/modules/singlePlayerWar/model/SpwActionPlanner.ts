@@ -61,6 +61,13 @@ namespace TwnsSpwActionPlanner {
             SpwLocalProxy.reqPlayerProduceUnit({ war: this._getWar() as SpwWar, gridIndex, unitType, unitHp });
         }
 
+        public setStateRequestingPlayerUseCoSkill(skillType: Types.CoSkillType): void {
+            this._setState(State.RequestingPlayerUseCoSkill);
+            this._updateView();
+
+            SpwLocalProxy.reqPlayerUseCoSkill(this._getWar(), skillType);
+        }
+
         private _setStateRequestingUnitProduceUnit(): void {
             this._setState(State.RequestingUnitProduceUnit);
             this._updateView();

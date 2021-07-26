@@ -1585,6 +1585,10 @@ namespace TwnsBwUnit {
         }
 
         public checkCanLoadCoAfterMovePath(movePath: GridIndex[]): boolean | undefined {
+            if (CommonConstants.GameMode !== Types.GameMode.ZonedCo) {
+                return false;
+            }
+
             const war = this.getWar();
             if (war == null) {
                 Logger.error(`BwUnit.checkCanLoadCoAfterMovePath() war is empty.`);
@@ -1677,6 +1681,10 @@ namespace TwnsBwUnit {
         }
 
         public checkCanUseCoSkill(skillType: Types.CoSkillType): boolean | undefined {
+            if (CommonConstants.GameMode !== Types.GameMode.ZonedCo) {
+                return false;
+            }
+
             const player = this.getPlayer();
             if ((!player)                               ||
                 (!this.getHasLoadedCo())                ||

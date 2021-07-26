@@ -309,6 +309,8 @@ namespace TwnsMpwWarMenuPanel {
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
                 this._createCommandOpenDamageChartPanel(),
+                this._createCommandPlayerUseCop(),
+                this._createCommandPlayerUseScop(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandSyncWar(),
             ].filter(c => !!c);
@@ -345,6 +347,54 @@ namespace TwnsMpwWarMenuPanel {
                     this.close();
                 },
             };
+        }
+
+        private _createCommandPlayerUseCop(): DataForCommandRenderer | undefined {
+            const war           = this._war;
+            const skillType     = Types.CoSkillType.Power;
+            const playerInTurn  = war.getPlayerInTurn();
+            if ((playerInTurn !== war.getPlayerLoggedIn())                          ||
+                (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
+                (this._actionPlanner.checkIsStateRequesting())
+            ) {
+                return undefined;
+            } else {
+                return {
+                    name    : Lang.getText(LangTextType.B0142),
+                    callback: () => {
+                        CommonConfirmPanel.show({
+                            title   : Lang.getText(LangTextType.B0142),
+                            content : Lang.getText(LangTextType.A0054),
+                            callback: () => this._actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
+                        });
+                    },
+                };
+            }
+        }
+
+        private _createCommandPlayerUseScop(): DataForCommandRenderer | undefined {
+            const war           = this._war;
+            const skillType     = Types.CoSkillType.SuperPower;
+            const playerInTurn  = war.getPlayerInTurn();
+            if ((playerInTurn !== war.getPlayerLoggedIn())                          ||
+                (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
+                (this._actionPlanner.checkIsStateRequesting())
+            ) {
+                return undefined;
+            } else {
+                return {
+                    name    : Lang.getText(LangTextType.B0144),
+                    callback: () => {
+                        CommonConfirmPanel.show({
+                            title   : Lang.getText(LangTextType.B0144),
+                            content : Lang.getText(LangTextType.A0058),
+                            callback: () => this._actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
+                        });
+                    },
+                };
+            }
         }
 
         private _createCommandSyncWar(): DataForCommandRenderer | undefined {

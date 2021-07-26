@@ -42,6 +42,15 @@ namespace SpwLocalProxy {
         });
     }
 
+    export function reqPlayerUseCoSkill(war: BwWar, skillType: Types.CoSkillType): void {
+        SpwModel.handlePlayerActionAndAutoActions(war, {
+            actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
+            WarActionPlayerUseCoSkill   : {
+                skillType,
+            },
+        });
+    }
+
     export function reqUnitAttackUnit({ war, path, launchUnitId, targetGridIndex }: {
         war             : BwWar;
         path            : IMovePath;

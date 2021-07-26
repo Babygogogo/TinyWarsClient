@@ -432,6 +432,7 @@ namespace Types {
         RequestingPlayerSurrender,
         RequestingPlayerVoteForDraw,
         RequestingPlayerProduceUnit,
+        RequestingPlayerUseCoSkill,
         RequestingUnitAttackUnit,
         RequestingUnitAttackTile,
         RequestingUnitBeLoaded,
@@ -665,6 +666,12 @@ namespace Types {
         TimerIncrementalParam2,
         SpmSaveSlotIndex,
         SpmSaveSlotComment,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export enum GameMode {
+        ZonedCo     = 0,
+        GlobalCo    = 1,
     }
 }
 

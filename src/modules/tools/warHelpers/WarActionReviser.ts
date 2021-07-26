@@ -57,6 +57,7 @@ namespace WarActionReviser {
         else if (rawAction.WarActionPlayerProduceUnit)          { return revisePlayerProduceUnit(war, rawAction.WarActionPlayerProduceUnit); }
         else if (rawAction.WarActionPlayerSurrender)            { return revisePlayerSurrender(war, rawAction.WarActionPlayerSurrender); }
         else if (rawAction.WarActionPlayerVoteForDraw)          { return revisePlayerVoteForDraw(war, rawAction.WarActionPlayerVoteForDraw); }
+        else if (rawAction.WarActionPlayerUseCoSkill)           { return revisePlayerUseCoSkill(war, rawAction.WarActionPlayerUseCoSkill); }
         else if (rawAction.WarActionSystemBeginTurn)            { return reviseSystemBeginTurn(war, rawAction.WarActionSystemBeginTurn); }
         else if (rawAction.WarActionSystemCallWarEvent)         { return reviseSystemCallWarEvent(war, rawAction.WarActionSystemCallWarEvent); }
         else if (rawAction.WarActionSystemDestroyPlayerForce)   { return reviseSystemDestroyPlayerForce(war, rawAction.WarActionSystemDestroyPlayerForce); }
@@ -294,6 +295,34 @@ namespace WarActionReviser {
             action      : {
                 WarActionPlayerVoteForDraw: {
                     isAgree,
+                },
+            },
+        };
+    }
+
+    function revisePlayerUseCoSkill(war: BwWar, rawAction: WarAction.IWarActionPlayerUseCoSkill): ErrorCodeAndAction {
+        if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerUseCoSkill_00 };
+        }
+
+        const playerInTurn = war.getPlayerInTurn();
+        if ((playerInTurn == null)                                                      ||
+            (playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex)   ||
+            (playerInTurn.getAliveState() !== PlayerAliveState.Alive)
+        ) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerUseCoSkill_01 };
+        }
+
+        const skillType = rawAction.skillType;
+        if (!playerInTurn.checkCanUseCoSkill(skillType)) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerUseCoSkill_02 };
+        }
+
+        return {
+            errorCode   : ClientErrorCode.NoError,
+            action      : {
+                WarActionPlayerUseCoSkill: {
+                    skillType,
                 },
             },
         };

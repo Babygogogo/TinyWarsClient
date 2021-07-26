@@ -537,6 +537,7 @@ namespace WarCommonHelpers {
             || (state === Types.ActionPlannerState.RequestingPlayerSurrender)
             || (state === Types.ActionPlannerState.RequestingPlayerVoteForDraw)
             || (state === Types.ActionPlannerState.RequestingPlayerProduceUnit)
+            || (state === Types.ActionPlannerState.RequestingPlayerUseCoSkill)
             || (state === Types.ActionPlannerState.RequestingUnitAttackUnit)
             || (state === Types.ActionPlannerState.RequestingUnitAttackTile)
             || (state === Types.ActionPlannerState.RequestingUnitBeLoaded)

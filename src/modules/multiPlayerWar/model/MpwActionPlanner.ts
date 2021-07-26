@@ -567,6 +567,24 @@ namespace TwnsMpwActionPlanner {
             this._updateView();
         }
 
+        public setStateRequestingPlayerUseCoSkill(skillType: Types.CoSkillType): void {
+            const war = this._getWar();
+            if (war == null) {
+                Logger.error(`MpwActionPlanner.setStateRequestingPlayerUseCoSkill() empty war.`);
+                return;
+            }
+
+            MpwProxy.reqMpwExecuteWarAction(war, {
+                actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
+                WarActionPlayerUseCoSkill   : {
+                    skillType,
+                },
+            });
+
+            this._setState(State.RequestingPlayerUseCoSkill);
+            this._updateView();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

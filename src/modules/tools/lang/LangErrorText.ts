@@ -147,7 +147,7 @@ namespace TwnsLangErrorText {
             `当前无法结束您的回合`,
             `Unable to end turn.`,
         ],
-        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0007]: [
+        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0008]: [
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
         ],

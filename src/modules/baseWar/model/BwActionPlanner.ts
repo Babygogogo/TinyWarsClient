@@ -1073,6 +1073,7 @@ namespace TwnsBwActionPlanner {
         protected abstract _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void;
         public abstract setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void;
         public abstract setStateRequestingPlayerEndTurn(): void;
+        public abstract setStateRequestingPlayerUseCoSkill(skillType: Types.CoSkillType): void;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.

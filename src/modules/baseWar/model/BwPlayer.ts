@@ -535,6 +535,35 @@ namespace TwnsBwPlayer {
                 return false;
             }
         }
+        public checkCanUseCoSkill(skillType: Types.CoSkillType): boolean | undefined {
+            if (CommonConstants.GameMode as number !== Types.GameMode.GlobalCo) {
+                return false;
+            }
+
+            if ((this.checkCoIsUsingActiveSkill())  ||
+                (!this.getCoSkills(skillType))
+            ) {
+                return false;
+            }
+
+            const energy = this.getCoCurrentEnergy();
+            if (energy == null) {
+                Logger.error(`BwPlayer.checkCanUseCoSkill() empty energy.`);
+                return undefined;
+            }
+
+            if (skillType === Types.CoSkillType.Power) {
+                const powerEnergy = this.getCoPowerEnergy();
+                return (powerEnergy != null) && (energy >= powerEnergy);
+
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                const superPowerEnergy = this.getCoSuperPowerEnergy();
+                return (superPowerEnergy != null) && (energy >= superPowerEnergy);
+
+            } else {
+                return false;
+            }
+        }
 
         public getCoIsDestroyedInTurn(): boolean {
             return this._coIsDestroyedInTurn;

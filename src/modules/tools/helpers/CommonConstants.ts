@@ -28,6 +28,7 @@ namespace CommonConstants {
     export const GameVersion                            = Types.GameVersion.Legacy;
     export const AdminUserId                            = 1000001;
     export const NameListMaxLength                      = 5;
+    export const GameMode                               = Types.GameMode.ZonedCo;
 
     export const ChangeLogTextMaxLength                 = 200;
     export const ChangeLogTextListMaxLength             = 2;

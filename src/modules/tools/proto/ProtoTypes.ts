@@ -10437,6 +10437,207 @@ export declare namespace WarAction {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WarActionPlayerUseCoSkill. */
+    interface IWarActionPlayerUseCoSkill {
+
+        /** WarActionPlayerUseCoSkill skillType */
+        skillType?: (number|null);
+
+        /** WarActionPlayerUseCoSkill extraData */
+        extraData?: (WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill|null);
+    }
+
+    /** Represents a WarActionPlayerUseCoSkill. */
+    class WarActionPlayerUseCoSkill implements IWarActionPlayerUseCoSkill {
+
+        /**
+         * Constructs a new WarActionPlayerUseCoSkill.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionPlayerUseCoSkill);
+
+        /** WarActionPlayerUseCoSkill skillType. */
+        public skillType: number;
+
+        /** WarActionPlayerUseCoSkill extraData. */
+        public extraData?: (WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill|null);
+
+        /**
+         * Creates a new WarActionPlayerUseCoSkill instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionPlayerUseCoSkill instance
+         */
+        public static create(properties?: WarAction.IWarActionPlayerUseCoSkill): WarAction.WarActionPlayerUseCoSkill;
+
+        /**
+         * Encodes the specified WarActionPlayerUseCoSkill message. Does not implicitly {@link WarAction.WarActionPlayerUseCoSkill.verify|verify} messages.
+         * @param message WarActionPlayerUseCoSkill message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionPlayerUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionPlayerUseCoSkill message, length delimited. Does not implicitly {@link WarAction.WarActionPlayerUseCoSkill.verify|verify} messages.
+         * @param message WarActionPlayerUseCoSkill message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionPlayerUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionPlayerUseCoSkill message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionPlayerUseCoSkill
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionPlayerUseCoSkill;
+
+        /**
+         * Decodes a WarActionPlayerUseCoSkill message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionPlayerUseCoSkill
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionPlayerUseCoSkill;
+
+        /**
+         * Verifies a WarActionPlayerUseCoSkill message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionPlayerUseCoSkill message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionPlayerUseCoSkill
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionPlayerUseCoSkill;
+
+        /**
+         * Creates a plain object from a WarActionPlayerUseCoSkill message. Also converts values to other types if specified.
+         * @param message WarActionPlayerUseCoSkill
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionPlayerUseCoSkill, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionPlayerUseCoSkill to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionPlayerUseCoSkill {
+
+        /** Properties of an ExtraDataForPlayerUseCoSkill. */
+        interface IExtraDataForPlayerUseCoSkill {
+
+            /** ExtraDataForPlayerUseCoSkill discoveredUnits */
+            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForPlayerUseCoSkill discoveredTiles */
+            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForPlayerUseCoSkill skillDataArray */
+            skillDataArray?: (Structure.IDataForUseCoSkill[]|null);
+        }
+
+        /** Represents an ExtraDataForPlayerUseCoSkill. */
+        class ExtraDataForPlayerUseCoSkill implements IExtraDataForPlayerUseCoSkill {
+
+            /**
+             * Constructs a new ExtraDataForPlayerUseCoSkill.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill);
+
+            /** ExtraDataForPlayerUseCoSkill discoveredUnits. */
+            public discoveredUnits: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForPlayerUseCoSkill discoveredTiles. */
+            public discoveredTiles: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForPlayerUseCoSkill skillDataArray. */
+            public skillDataArray: Structure.IDataForUseCoSkill[];
+
+            /**
+             * Creates a new ExtraDataForPlayerUseCoSkill instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForPlayerUseCoSkill instance
+             */
+            public static create(properties?: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill): WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerUseCoSkill message. Does not implicitly {@link WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill.verify|verify} messages.
+             * @param message ExtraDataForPlayerUseCoSkill message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerUseCoSkill message, length delimited. Does not implicitly {@link WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill.verify|verify} messages.
+             * @param message ExtraDataForPlayerUseCoSkill message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForPlayerUseCoSkill message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForPlayerUseCoSkill
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill;
+
+            /**
+             * Decodes an ExtraDataForPlayerUseCoSkill message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForPlayerUseCoSkill
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill;
+
+            /**
+             * Verifies an ExtraDataForPlayerUseCoSkill message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForPlayerUseCoSkill message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForPlayerUseCoSkill
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill;
+
+            /**
+             * Creates a plain object from an ExtraDataForPlayerUseCoSkill message. Also converts values to other types if specified.
+             * @param message ExtraDataForPlayerUseCoSkill
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForPlayerUseCoSkill to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a WarActionUnitWait. */
     interface IWarActionUnitWait {
 
@@ -13890,6 +14091,9 @@ export declare namespace WarAction {
         /** WarActionContainer WarActionPlayerVoteForDraw */
         WarActionPlayerVoteForDraw?: (WarAction.IWarActionPlayerVoteForDraw|null);
 
+        /** WarActionContainer WarActionPlayerUseCoSkill */
+        WarActionPlayerUseCoSkill?: (WarAction.IWarActionPlayerUseCoSkill|null);
+
         /** WarActionContainer WarActionUnitWait */
         WarActionUnitWait?: (WarAction.IWarActionUnitWait|null);
 
@@ -13983,6 +14187,9 @@ export declare namespace WarAction {
 
         /** WarActionContainer WarActionPlayerVoteForDraw. */
         public WarActionPlayerVoteForDraw?: (WarAction.IWarActionPlayerVoteForDraw|null);
+
+        /** WarActionContainer WarActionPlayerUseCoSkill. */
+        public WarActionPlayerUseCoSkill?: (WarAction.IWarActionPlayerUseCoSkill|null);
 
         /** WarActionContainer WarActionUnitWait. */
         public WarActionUnitWait?: (WarAction.IWarActionUnitWait|null);
@@ -54637,5 +54844,4 @@ export declare namespace NetMessage {
     }
 }
 }
-
 export default ProtoTypes;

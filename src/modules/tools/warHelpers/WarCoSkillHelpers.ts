@@ -29,7 +29,12 @@ namespace WarCoSkillHelpers {
         sameTeamMap : boolean[][];
     };
 
-    export function exeInstantSkill(war: BwWar, player: BwPlayer, gridIndex: GridIndex, skillId: number, extraData: IDataForUseCoSkill): void {
+    export function exeInstantSkill({ war, player, skillId, extraData }: {
+        war         : BwWar;
+        player      : BwPlayer;
+        skillId     : number;
+        extraData   : IDataForUseCoSkill;
+    }): void {
         const configVersion = war.getConfigVersion();
         if (configVersion == null) {
             Logger.error(`BwHelpers.exeInstantSkill() empty configVersion.`);
