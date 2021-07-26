@@ -3,6 +3,7 @@ import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdv
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import McrProxy                             from "../../multiCustomRoom/model/McrProxy";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
@@ -261,19 +262,21 @@ namespace McrModel {
             return undefined;
         }
 
-        const settingsForCommon = roomInfo.settingsForCommon;
-        const warRule           = settingsForCommon.warRule;
-        const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
-        for (const playerInfo of (roomInfo.playerDataList || [])) {
-            const playerIndex = playerInfo.playerIndex;
+        const settingsForCommon     = roomInfo.settingsForCommon;
+        const warRule               = settingsForCommon.warRule;
+        const playersCountUnneutral = WarRuleHelpers.getPlayersCount(warRule);
+        const playerDataList        = roomInfo.playerDataList || [];
+        const playerInfoArray       : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            const playerData = playerDataList.find(v => v.playerIndex === playerIndex);
             playerInfoArray.push({
                 playerIndex,
                 teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
                 isAi                : false,
-                userId              : playerInfo.userId,
-                coId                : playerInfo.coId,
-                unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
-                isReady             : playerInfo.isReady,
+                userId              : playerData?.userId,
+                coId                : playerData?.coId,
+                unitAndTileSkinId   : playerData?.unitAndTileSkinId,
+                isReady             : playerData?.isReady,
                 isInTurn            : undefined,
                 isDefeat            : undefined,
             });
@@ -281,7 +284,7 @@ namespace McrModel {
 
         return {
             configVersion           : settingsForCommon.configVersion,
-            playersCountUnneutral   : WarRuleHelpers.getPlayersCount(warRule),
+            playersCountUnneutral,
             roomOwnerPlayerIndex    : roomInfo.ownerPlayerIndex,
             callbackOnExitRoom      : () => McrProxy.reqMcrExitRoom(roomId),
             callbackOnDeletePlayer  : (playerIndex) => McrProxy.reqMcrDeletePlayer(roomId, playerIndex),

@@ -3,6 +3,7 @@ import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdv
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
@@ -259,18 +260,22 @@ namespace MfrModel {
             return undefined;
         }
 
-        const settingsForCommon = roomInfo.settingsForMfw.initialWarData.settingsForCommon;
-        const warRule           = settingsForCommon.warRule;
-        const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
-        for (const playerInfo of (roomInfo.playerDataList || [])) {
-            const { playerIndex, userId, isReady } = playerInfo;
+        const settingsForCommon     = roomInfo.settingsForMfw.initialWarData.settingsForCommon;
+        const warRule               = settingsForCommon.warRule;
+        const playersCountUnneutral = WarRuleHelpers.getPlayersCount(warRule);
+        const playerDataList        = roomInfo.playerDataList || [];
+        const playerInfoArray       : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            const playerData    = playerDataList.find(v => v.playerIndex === playerIndex);
+            const userId        = playerData?.userId;
+            const isReady       = playerData?.isReady;
             playerInfoArray.push({
                 playerIndex,
                 teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
-                isAi                : (userId == null) && (isReady),
+                isAi                : (userId == null) && (!!isReady),
                 userId,
-                coId                : playerInfo.coId,
-                unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
+                coId                : playerData?.coId,
+                unitAndTileSkinId   : playerData?.unitAndTileSkinId,
                 isReady,
                 isInTurn            : undefined,
                 isDefeat            : undefined,
@@ -279,7 +284,7 @@ namespace MfrModel {
 
         return {
             configVersion           : settingsForCommon.configVersion,
-            playersCountUnneutral   : WarRuleHelpers.getPlayersCount(warRule),
+            playersCountUnneutral,
             roomOwnerPlayerIndex    : roomInfo.ownerPlayerIndex,
             callbackOnExitRoom      : () => MfrProxy.reqMfrExitRoom(roomId),
             callbackOnDeletePlayer  : (playerIndex) => MfrProxy.reqMfrDeletePlayer(roomId, playerIndex),
