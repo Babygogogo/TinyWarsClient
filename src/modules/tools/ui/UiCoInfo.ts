@@ -1,5 +1,4 @@
 
-import CommonConstants          from "../helpers/CommonConstants";
 import ConfigManager            from "../helpers/ConfigManager";
 import Logger                   from "../helpers/Logger";
 import Types                    from "../helpers/Types";
@@ -59,7 +58,7 @@ namespace TwnsUiCoInfo {
             this._updateComponentsForCoInfo();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
             this._updateComponentsForCoInfo();
         }
@@ -127,23 +126,24 @@ namespace TwnsUiCoInfo {
                 return;
             }
 
-            const coId                          = coData.coId;
-            const cfg                           = ConfigManager.getCoBasicCfg(coData.configVersion, coId);
-            this._imgCoPortrait.source          = ConfigManager.getCoBustImageSource(coId);
-            this._labelCoName.text              = cfg.name;
-            this._labelDesigner.text            = cfg.designer;
+            const coId                  = coData.coId;
+            const configVersion         = coData.configVersion;
+            const cfg                   = ConfigManager.getCoBasicCfg(configVersion, coId);
+            this._imgCoPortrait.source  = ConfigManager.getCoBustImageSource(coId);
+            this._labelCoName.text      = cfg.name;
+            this._labelDesigner.text    = cfg.designer;
 
-            const gameMode      = CommonConstants.GameMode as number;
+            const coType        = ConfigManager.getCoType(configVersion, coId);
             const groupZoneInfo = this._groupZoneInfo;
             (groupZoneInfo.parent) && (groupZoneInfo.parent.removeChild(groupZoneInfo));
-            if (gameMode === Types.GameMode.ZonedCo) {
+            if (coType === Types.CoType.Zoned) {
                 this._groupInfo.addChildAt(groupZoneInfo, 0);
 
                 this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
                 this._labelZoneRadius.text          = `${cfg.zoneRadius}`;
                 this._labelEnergyBar.text           = (cfg.zoneExpansionEnergyList || []).join(` / `) || `--`;
 
-            } else if (gameMode === Types.GameMode.GlobalCo) {
+            } else if (coType === Types.CoType.Global) {
                 // nothing to do
 
             } else {
@@ -219,7 +219,7 @@ namespace TwnsUiCoInfo {
             }
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             const data = this.data;
             if (data) {
                 data.component.setSelectedSkillType(data.coSkillType);

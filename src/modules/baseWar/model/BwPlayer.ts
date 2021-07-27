@@ -17,6 +17,7 @@ namespace TwnsBwPlayer {
     import GridIndex        = Types.GridIndex;
     import PlayerAliveState = Types.PlayerAliveState;
     import CoSkillType      = Types.CoSkillType;
+    import CoType           = Types.CoType;
     import ISerialPlayer    = ProtoTypes.WarSerialization.ISerialPlayer;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import BwWar            = TwnsBwWar.BwWar;
@@ -433,13 +434,13 @@ namespace TwnsBwPlayer {
             const coBasicCfg    = this._getCoBasicCfg();
             const energyList    = coBasicCfg ? coBasicCfg.powerEnergyList : null;
             const energy        = energyList ? energyList[0] : null;
-            return energy! >= 0 ? energy : null;
+            return energy >= 0 ? energy : null;
         }
         public getCoSuperPowerEnergy(): number | null {
             const coBasicCfg    = this._getCoBasicCfg();
             const energyList    = coBasicCfg ? coBasicCfg.powerEnergyList : null;
             const energy        = energyList ? energyList[1] : null;
-            return energy! >= 0 ? energy : null;
+            return energy >= 0 ? energy : null;
         }
 
         public getCoZoneBaseRadius(): number | null {
@@ -536,7 +537,7 @@ namespace TwnsBwPlayer {
             }
         }
         public checkCanUseCoSkill(skillType: Types.CoSkillType): boolean | undefined {
-            if (CommonConstants.GameMode as number !== Types.GameMode.GlobalCo) {
+            if (this.getCoType() !== CoType.Global) {
                 return false;
             }
 
@@ -580,6 +581,14 @@ namespace TwnsBwPlayer {
             }
 
             return cfg.maxLoadCount;
+        }
+        public getCoType(): CoType {
+            const maxLoadCount = this.getCoMaxLoadCount();
+            if (maxLoadCount == null) {
+                return CoType.Undefined;
+            } else {
+                return maxLoadCount > 0 ? CoType.Zoned : CoType.Global;
+            }
         }
 
         private _getCoBasicCfg(): ProtoTypes.Config.ICoBasicCfg | null {

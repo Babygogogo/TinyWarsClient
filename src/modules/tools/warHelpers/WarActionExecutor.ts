@@ -8,6 +8,7 @@ import CommonConstants          from "../helpers/CommonConstants";
 import ConfigManager            from "../helpers/ConfigManager";
 import FloatText                from "../helpers/FloatText";
 import GridIndexHelpers         from "../helpers/GridIndexHelpers";
+import Logger                   from "../helpers/Logger";
 import Types                    from "../helpers/Types";
 import ProtoTypes               from "../proto/ProtoTypes";
 import WarCommonHelpers         from "./WarCommonHelpers";
@@ -828,34 +829,49 @@ namespace WarActionExecutor {
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
+                        const unit2 = unitMap.getUnitById(unitId2);
+                        if (unit2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_06;
+                        }
+
                         const unitGridIndex1 = unit1.getGridIndex();
                         if (unitGridIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_06;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_07;
+                        }
+
+                        const unitGridIndex2 = unit2.getGridIndex();
+                        if (unitGridIndex2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_08;
                         }
 
                         const playerIndex1 = unit1.getPlayerIndex();
                         if (playerIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_07;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_09;
+                        }
+
+                        const playerIndex2 = unit2.getPlayerIndex();
+                        if (playerIndex2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_10;
                         }
 
                         const coGridIndexArray1 = unitMap.getCoGridIndexListOnMap(playerIndex1);
                         if (coGridIndexArray1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_08;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_11;
                         }
 
-                        const unit2 = unitMap.getUnitById(unitId2);
-                        if (unit2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_09;
+                        const coGridIndexArray2 = unitMap.getCoGridIndexListOnMap(playerIndex2);
+                        if (coGridIndexArray2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_12;
                         }
 
                         const unitOldHp2 = unit2.getCurrentHp();
                         if (unitOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_10;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_13;
                         }
 
                         const player2 = unit2.getPlayer();
                         if (player2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_11;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_14;
                         }
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
@@ -888,6 +904,7 @@ namespace WarActionExecutor {
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             isAttackerInAttackerCoZone  : (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1)),
+                            isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
                         if (errorCodeForEnergy) {
                             return errorCodeForEnergy;
@@ -912,14 +929,13 @@ namespace WarActionExecutor {
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_12;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_15;
                         }
 
                         const tileOldHp2 = tile2.getCurrentHp();
                         if (tileOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_13;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_16;
                         }
-
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
                         if (errorCodeForPrimaryAmmo) {
@@ -950,13 +966,13 @@ namespace WarActionExecutor {
                         continue;
                     }
 
-                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_14;
+                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_17;
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
                     if (affectedPlayerIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_15;
+                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_18;
                     }
 
                     if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
@@ -1182,29 +1198,44 @@ namespace WarActionExecutor {
                             return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_06;
                         }
 
+                        const unit2 = unitMap.getUnitById(unitId2);
+                        if (unit2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_07;
+                        }
+
+                        const unitGridIndex2 = unit2.getGridIndex();
+                        if (unitGridIndex2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_08;
+                        }
+
                         const playerIndex1 = unit1.getPlayerIndex();
                         if (playerIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_07;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_09;
+                        }
+
+                        const playerIndex2 = unit2.getPlayerIndex();
+                        if (playerIndex2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_10;
                         }
 
                         const coGridIndexArray1 = unitMap.getCoGridIndexListOnMap(playerIndex1);
                         if (coGridIndexArray1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_08;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_11;
                         }
 
-                        const unit2 = unitMap.getUnitById(unitId2);
-                        if (unit2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_09;
+                        const coGridIndexArray2 = unitMap.getCoGridIndexListOnMap(playerIndex2);
+                        if (coGridIndexArray2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_12;
                         }
 
                         const unitOldHp2 = unit2.getCurrentHp();
                         if (unitOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_10;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_13;
                         }
 
                         const player2 = unit2.getPlayer();
                         if (player2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_11;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_14;
                         }
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
@@ -1237,6 +1268,7 @@ namespace WarActionExecutor {
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             isAttackerInAttackerCoZone  : (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1)),
+                            isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
                         if (errorCodeForEnergy) {
                             return errorCodeForEnergy;
@@ -1261,14 +1293,13 @@ namespace WarActionExecutor {
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_12;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_15;
                         }
 
                         const tileOldHp2 = tile2.getCurrentHp();
                         if (tileOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_13;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_16;
                         }
-
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
                         if (errorCodeForPrimaryAmmo) {
@@ -1299,13 +1330,13 @@ namespace WarActionExecutor {
                         continue;
                     }
 
-                    return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_14;
+                    return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_17;
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
                     if (affectedPlayerIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_15;
+                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_18;
                     }
 
                     if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
@@ -1488,34 +1519,49 @@ namespace WarActionExecutor {
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
+                        const unit2 = unitMap.getUnitById(unitId2);
+                        if (unit2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_06;
+                        }
+
                         const unitGridIndex1 = unit1.getGridIndex();
                         if (unitGridIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_06;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_07;
+                        }
+
+                        const unitGridIndex2 = unit2.getGridIndex();
+                        if (unitGridIndex2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_08;
                         }
 
                         const playerIndex1 = unit1.getPlayerIndex();
                         if (playerIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_07;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_09;
+                        }
+
+                        const playerIndex2 = unit2.getPlayerIndex();
+                        if (playerIndex2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_10;
                         }
 
                         const coGridIndexArray1 = unitMap.getCoGridIndexListOnMap(playerIndex1);
                         if (coGridIndexArray1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_08;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_11;
                         }
 
-                        const unit2 = unitMap.getUnitById(unitId2);
-                        if (unit2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_09;
+                        const coGridIndexArray2 = unitMap.getCoGridIndexListOnMap(playerIndex2);
+                        if (coGridIndexArray2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_12;
                         }
 
                         const unitOldHp2 = unit2.getCurrentHp();
                         if (unitOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_10;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_13;
                         }
 
                         const player2 = unit2.getPlayer();
                         if (player2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_11;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_14;
                         }
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
@@ -1548,6 +1594,7 @@ namespace WarActionExecutor {
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             isAttackerInAttackerCoZone  : (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1)),
+                            isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
                         if (errorCodeForEnergy) {
                             return errorCodeForEnergy;
@@ -1572,14 +1619,13 @@ namespace WarActionExecutor {
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_12;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_15;
                         }
 
                         const tileOldHp2 = tile2.getCurrentHp();
                         if (tileOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_13;
+                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_16;
                         }
-
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
                         if (errorCodeForPrimaryAmmo) {
@@ -1610,13 +1656,13 @@ namespace WarActionExecutor {
                         continue;
                     }
 
-                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_14;
+                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_17;
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
                     if (affectedPlayerIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_15;
+                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_18;
                     }
 
                     if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
@@ -1837,34 +1883,49 @@ namespace WarActionExecutor {
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
+                        const unit2 = unitMap.getUnitById(unitId2);
+                        if (unit2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_06;
+                        }
+
                         const unitGridIndex1 = unit1.getGridIndex();
                         if (unitGridIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_06;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_07;
+                        }
+
+                        const unitGridIndex2 = unit2.getGridIndex();
+                        if (unitGridIndex2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_08;
                         }
 
                         const playerIndex1 = unit1.getPlayerIndex();
                         if (playerIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_07;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_09;
+                        }
+
+                        const playerIndex2 = unit2.getPlayerIndex();
+                        if (playerIndex2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_10;
                         }
 
                         const coGridIndexArray1 = unitMap.getCoGridIndexListOnMap(playerIndex1);
                         if (coGridIndexArray1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_08;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_11;
                         }
 
-                        const unit2 = unitMap.getUnitById(unitId2);
-                        if (unit2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_09;
+                        const coGridIndexArray2 = unitMap.getCoGridIndexListOnMap(playerIndex2);
+                        if (coGridIndexArray2 == null) {
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_12;
                         }
 
                         const unitOldHp2 = unit2.getCurrentHp();
                         if (unitOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_10;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_13;
                         }
 
                         const player2 = unit2.getPlayer();
                         if (player2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_11;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_14;
                         }
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
@@ -1897,6 +1958,7 @@ namespace WarActionExecutor {
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             isAttackerInAttackerCoZone  : (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1)),
+                            isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
                         if (errorCodeForEnergy) {
                             return errorCodeForEnergy;
@@ -1921,14 +1983,13 @@ namespace WarActionExecutor {
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_12;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_15;
                         }
 
                         const tileOldHp2 = tile2.getCurrentHp();
                         if (tileOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_13;
+                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_16;
                         }
-
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
                         if (errorCodeForPrimaryAmmo) {
@@ -1959,13 +2020,13 @@ namespace WarActionExecutor {
                         continue;
                     }
 
-                    return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_14;
+                    return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_17;
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
                     if (affectedPlayerIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_15;
+                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_18;
                     }
 
                     if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
@@ -3638,64 +3699,67 @@ namespace WarActionExecutor {
 
         return ClientErrorCode.NoError;
     }
-    function handleEnergyForUnitAttackUnit({ war, attackerPlayer, targetPlayer, targetLostNormalizedHp, isAttackerInAttackerCoZone }: {
+    function handleEnergyForUnitAttackUnit({ war, attackerPlayer, targetPlayer, targetLostNormalizedHp, isAttackerInAttackerCoZone, isTargetInTargetCoZone }: {
         war                         : BwWar;
         attackerPlayer              : BwPlayer;
         targetPlayer                : BwPlayer;
         targetLostNormalizedHp      : number;
         isAttackerInAttackerCoZone  : boolean;
+        isTargetInTargetCoZone      : boolean;
     }): ClientErrorCode {
-        const attackerPlayerIndex = attackerPlayer.getPlayerIndex();
-        if (attackerPlayerIndex == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00;
+        if (targetLostNormalizedHp <= 0) {
+            return ClientErrorCode.NoError;
         }
 
-        const commonSettingManager  = war.getCommonSettingManager();
-        const multiplierForAttacker = commonSettingManager.getSettingsEnergyGrowthMultiplier(attackerPlayerIndex);
-        if (multiplierForAttacker == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01;
-        }
-
-        const attackerEnergy    = attackerPlayer.getCoCurrentEnergy();
-        const gameMode          = CommonConstants.GameMode as number;
-        if (gameMode == Types.GameMode.ZonedCo) {
-            if ((targetLostNormalizedHp > 0)                    &&
-                (attackerEnergy != null)                        &&
-                (!attackerPlayer.checkCoIsUsingActiveSkill())   &&
-                (isAttackerInAttackerCoZone)
+        const commonSettingManager = war.getCommonSettingManager();
+        if (!attackerPlayer.checkCoIsUsingActiveSkill()) {
+            const coType1 = attackerPlayer.getCoType();
+            if (((coType1 === Types.CoType.Zoned) && (isAttackerInAttackerCoZone)) ||
+                (coType1 === Types.CoType.Global)
             ) {
-                attackerPlayer.setCoCurrentEnergy(Math.min(
-                    attackerPlayer.getCoMaxEnergy(),
-                    attackerEnergy + Math.floor(targetLostNormalizedHp * multiplierForAttacker / 100)
-                ));
-            }
-
-        } else if (gameMode === Types.GameMode.GlobalCo) {
-            if (targetLostNormalizedHp > 0) {
-                if ((attackerEnergy != null) && (!attackerPlayer.checkCoIsUsingActiveSkill())) {
-                    attackerPlayer.setCoCurrentEnergy(Math.min(
-                        attackerPlayer.getCoMaxEnergy(),
-                        attackerEnergy + Math.floor(targetLostNormalizedHp * 2 * multiplierForAttacker / 100)
-                    ));
+                const playerIndex1  = attackerPlayer.getPlayerIndex();
+                const multiplier1   = playerIndex1 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex1);
+                if (multiplier1 == null) {
+                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier1.`);
+                    return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00;
                 }
 
-                const targetPlayerIndex     = targetPlayer.getPlayerIndex();
-                const multiplierForTarget   = targetPlayerIndex == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(targetPlayerIndex);
-                if (multiplierForTarget == null) {
+                const energy1 = attackerPlayer.getCoCurrentEnergy();
+                if (energy1 == null) {
+                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty energy1.`);
+                    return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01;
+                }
+
+                attackerPlayer.setCoCurrentEnergy(Math.min(
+                    attackerPlayer.getCoMaxEnergy(),
+                    energy1 + Math.floor(targetLostNormalizedHp * multiplier1 * CommonConstants.WarRuleEnergyGrowthMultiplierForAttacker / 100),
+                ));
+            }
+        }
+
+        if (!targetPlayer.checkCoIsUsingActiveSkill()) {
+            const coType2 = targetPlayer.getCoType();
+            if (((coType2 === Types.CoType.Zoned) && (isTargetInTargetCoZone)) ||
+                (coType2 === Types.CoType.Global)
+            ) {
+                const playerIndex2  = targetPlayer.getPlayerIndex();
+                const multiplier2   = playerIndex2 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex2);
+                if (multiplier2 == null) {
+                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier2.`);
                     return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_02;
                 }
 
-                const targetEnergy = targetPlayer.getCoCurrentEnergy();
-                if ((targetEnergy != null) && (!targetPlayer.checkCoIsUsingActiveSkill())) {
-                    targetPlayer.setCoCurrentEnergy(Math.min(
-                        targetPlayer.getCoMaxEnergy(),
-                        targetEnergy + Math.floor(targetLostNormalizedHp * multiplierForTarget / 100),
-                    ));
+                const energy2 = targetPlayer.getCoCurrentEnergy();
+                if (energy2 == null) {
+                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty energy2.`);
+                    return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_03;
                 }
-            }
 
-        } else {
-            return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_03;
+                targetPlayer.setCoCurrentEnergy(Math.min(
+                    targetPlayer.getCoMaxEnergy(),
+                    energy2 + Math.floor(targetLostNormalizedHp * multiplier2 * CommonConstants.WarRuleEnergyGrowthMultiplierForDefender / 100),
+                ));
+            }
         }
 
         return ClientErrorCode.NoError;

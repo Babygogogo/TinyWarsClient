@@ -527,6 +527,14 @@ namespace ConfigManager {
             ? `${coConfig.name}`
             : undefined;
     }
+    export function getCoType(version: string, coId: number): Types.CoType {
+        const maxLoadCount = getCoBasicCfg(version, coId)?.maxLoadCount;
+        if (maxLoadCount == null) {
+            return Types.CoType.Undefined;
+        } else {
+            return maxLoadCount > 0 ? Types.CoType.Zoned : Types.CoType.Global;
+        }
+    }
 
     export function getCoSkillCfg(version: string, skillId: number): CoSkillCfg | null {
         return _CACHED_CONFIGS.get(version)!.CoSkill[skillId];
@@ -610,22 +618,14 @@ namespace ConfigManager {
     }
 
     export function getCoBustImageSource(coId: number): string {
-        if (CommonConstants.GameMode as number === Types.GameMode.ZonedCo) {
-            return coId == null
-                ? null
-                : `coBust${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
-        } else {
-            return `coBust0012`;
-        }
+        return coId == null
+            ? null
+            : `coBust${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
     }
     export function getCoHeadImageSource(coId: number): string {
-        if (CommonConstants.GameMode as number === Types.GameMode.ZonedCo) {
-            return coId == null
-                ? null
-                : `coHead${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
-        } else {
-            return `coHead0012`;
-        }
+        return coId == null
+            ? null
+            : `coHead${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
     }
 
     export function checkIsUnitDivingByDefault(version: string, unitType: UnitType): boolean | undefined {

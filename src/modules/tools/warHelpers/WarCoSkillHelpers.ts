@@ -150,9 +150,9 @@ namespace WarCoSkillHelpers {
     ): void {
         const cfg = skillCfg.enemyHpGain;
         if (cfg) {
-            const playerIndex = player.getPlayerIndex();
-            if (playerIndex == null) {
-                Logger.error(`BwCoSkillHelpers.exeEnemyHpGain() empty playerIndex.`);
+            const teamIndex = player.getTeamIndex();
+            if (teamIndex == null) {
+                Logger.error(`BwCoSkillHelpers.exeEnemyHpGain() empty teamIndex.`);
                 return undefined;
             }
 
@@ -189,7 +189,7 @@ namespace WarCoSkillHelpers {
                     return undefined;
                 }
 
-                if ((unit.getPlayerIndex() !== playerIndex)                                                     &&
+                if ((unit.getTeamIndex() !== teamIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
                     (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
                 ) {

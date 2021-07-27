@@ -1585,10 +1585,6 @@ namespace TwnsBwUnit {
         }
 
         public checkCanLoadCoAfterMovePath(movePath: GridIndex[]): boolean | undefined {
-            if (CommonConstants.GameMode as number !== Types.GameMode.ZonedCo) {
-                return false;
-            }
-
             const war = this.getWar();
             if (war == null) {
                 Logger.error(`BwUnit.checkCanLoadCoAfterMovePath() war is empty.`);
@@ -1630,20 +1626,11 @@ namespace TwnsBwUnit {
                 Logger.error(`BwUnit.checkCanLoadCoAfterMovePath() empty maxLoadCount.`);
                 return undefined;
             }
-
-            const unitMap = war.getUnitMap();
-            if (unitMap == null) {
-                Logger.error(`BwUnit.checkCanLoadCoAfterMovePath() empty unitMap.`);
-                return undefined;
+            if (maxLoadCount <= 0) {
+                return false;
             }
 
-            const tileMap = war.getTileMap();
-            if (tileMap == null) {
-                Logger.error(`BwUnit.checkCanLoadCoAfterMovePath() empty tileMap.`);
-                return undefined;
-            }
-
-            const allCoUnits = unitMap.getAllCoUnits(playerIndex);
+            const allCoUnits = war.getUnitMap().getAllCoUnits(playerIndex);
             if (allCoUnits == null) {
                 Logger.error(`BwUnit.checkCanLoadCoAfterMovePath() empty allCoUnits.`);
                 return undefined;
@@ -1663,7 +1650,7 @@ namespace TwnsBwUnit {
             ) {
                 return false;
             } else {
-                const tile = tileMap.getTile(movePath[0]);
+                const tile = war.getTileMap().getTile(movePath[0]);
                 if (!tile) {
                     Logger.error(`BwUnit.checkCanLoadCoAfterMovePath() tile is empty.`);
                     return false;
@@ -1681,15 +1668,12 @@ namespace TwnsBwUnit {
         }
 
         public checkCanUseCoSkill(skillType: Types.CoSkillType): boolean | undefined {
-            if (CommonConstants.GameMode as number !== Types.GameMode.ZonedCo) {
-                return false;
-            }
-
             const player = this.getPlayer();
-            if ((!player)                               ||
-                (!this.getHasLoadedCo())                ||
-                (player.checkCoIsUsingActiveSkill())    ||
-                (!player.getCoSkills(skillType))
+            if ((!player)                                   ||
+                (!this.getHasLoadedCo())                    ||
+                (player.checkCoIsUsingActiveSkill())        ||
+                (!player.getCoSkills(skillType))            ||
+                (player.getCoType() !== Types.CoType.Zoned)
             ) {
                 return false;
             }

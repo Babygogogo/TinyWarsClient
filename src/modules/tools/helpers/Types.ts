@@ -669,9 +669,10 @@ namespace Types {
     }
 
     // eslint-disable-next-line no-shadow
-    export enum GameMode {
-        ZonedCo     = 0,
-        GlobalCo    = 1,
+    export const enum CoType {
+        Undefined   = 0,
+        Zoned       = 1,
+        Global      = 2,
     }
 }
 
