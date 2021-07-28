@@ -669,7 +669,7 @@ namespace Types {
     }
 
     // eslint-disable-next-line no-shadow
-    export const enum CoType {
+    export enum CoType {
         Undefined   = 0,
         Zoned       = 1,
         Global      = 2,

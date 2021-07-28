@@ -15,7 +15,7 @@ namespace ResManager {
         await _initTheme();
         // await RES.loadGroup("preload", 0, LoadingUiPanel.create());
         // LoadingUiPanel.destroy();
-        ResAutoRelease.startAutoRelease();
+        // ResAutoRelease.startAutoRelease();
     }
 
     export function loadMainRes(): Promise<void> {
