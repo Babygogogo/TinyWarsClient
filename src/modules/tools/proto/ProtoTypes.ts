@@ -1646,6 +1646,12 @@ export declare namespace Config {
 
         /** CoSkillCfg selfUnitProduction */
         selfUnitProduction?: (number[]|null);
+
+        /** CoSkillCfg selfFuelConsumption */
+        selfFuelConsumption?: (number[]|null);
+
+        /** CoSkillCfg selfUnitActionState */
+        selfUnitActionState?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1737,6 +1743,12 @@ export declare namespace Config {
 
         /** CoSkillCfg selfUnitProduction. */
         public selfUnitProduction: number[];
+
+        /** CoSkillCfg selfFuelConsumption. */
+        public selfFuelConsumption: number[];
+
+        /** CoSkillCfg selfUnitActionState. */
+        public selfUnitActionState: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.

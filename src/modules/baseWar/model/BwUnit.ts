@@ -870,9 +870,24 @@ namespace TwnsBwUnit {
         }
 
         public getFuelConsumptionPerTurn(): number | null | undefined {
+            const cfgValue = this._getCfgFuelConsumptionPerTurn();
+            if (cfgValue == null) {
+                Logger.error(`BwUnit.getFuelConsumptionPerTurn() empty cfgValue.`);
+                return undefined;
+            }
+
+            const modifier = this._getFuelConsumptionModifierByCo();
+            if (modifier == null) {
+                Logger.error(`BwUnit.getFuelConsumptionPerTurn() empty modifier.`);
+                return undefined;
+            }
+
+            return cfgValue + modifier;
+        }
+        private _getCfgFuelConsumptionPerTurn(): number | null | undefined {
             const templateCfg = this._getTemplateCfg();
             if (templateCfg == null) {
-                Logger.error(`BwUnit.getFuelConsumptionPerTurn() empty templateCfg.`);
+                Logger.error(`BwUnit._getCfgFuelConsumptionPerTurn() empty templateCfg.`);
                 return undefined;
             }
 
@@ -881,11 +896,61 @@ namespace TwnsBwUnit {
             } else {
                 const cfg = templateCfg.diveCfgs;
                 if (cfg == null) {
-                    Logger.error(`BwUnit.getFuelConsumptionPerTurn() empty cfg.`);
+                    Logger.error(`BwUnit._getCfgFuelConsumptionPerTurn() empty cfg.`);
                     return undefined;
                 }
                 return cfg[0];
             }
+        }
+        private _getFuelConsumptionModifierByCo(): number | undefined {
+            const player = this.getPlayer();
+            if (player == null) {
+                Logger.error(`BwUnit._getFuelConsumptionModifierByCo() no player.`);
+                return undefined;
+            }
+
+            const configVersion = this.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwUnit._getFuelConsumptionModifierByCo() configVersion is empty.`);
+                return undefined;
+            }
+
+            const unitType = this.getUnitType();
+            if (unitType == null) {
+                Logger.error(`BwUnit._getFuelConsumptionModifierByCo() unitType is empty.`);
+                return undefined;
+            }
+
+            const coGridIndexListOnMap = player.getCoGridIndexListOnMap();
+            if (coGridIndexListOnMap == null) {
+                Logger.error(`BwUnit._getFuelConsumptionModifierByCo() empty coGridIndexListOnMap.`);
+                return undefined;
+            }
+
+            const selfGridIndex = this.getGridIndex();
+            if (selfGridIndex == null) {
+                Logger.error(`BwUnit._getFuelConsumptionModifierByCo() empty selfGridIndex.`);
+                return undefined;
+            }
+
+            const coZoneRadius = player.getCoZoneRadius();
+            if (coZoneRadius == null) {
+                Logger.error(`BwUnit._getFuelConsumptionModifierByCo() empty coZoneRadius.`);
+                return undefined;
+            }
+
+            const hasLoadedCo   = this.getHasLoadedCo();
+            let modifier        = 0;
+            for (const skillId of player.getCoCurrentSkills() || []) {
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfFuelConsumption;
+                if ((cfg)                                                                                                                       &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                ) {
+                    modifier += cfg[2];
+                }
+            }
+            return modifier;
         }
 
         public checkIsDestroyedOnOutOfFuel(): boolean {
