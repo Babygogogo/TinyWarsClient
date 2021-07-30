@@ -1652,6 +1652,9 @@ export declare namespace Config {
 
         /** CoSkillCfg selfUnitActionState */
         selfUnitActionState?: (number[]|null);
+
+        /** CoSkillCfg selfLuckRangeBonus */
+        selfLuckRangeBonus?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1749,6 +1752,9 @@ export declare namespace Config {
 
         /** CoSkillCfg selfUnitActionState. */
         public selfUnitActionState: number[];
+
+        /** CoSkillCfg selfLuckRangeBonus. */
+        public selfLuckRangeBonus: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.

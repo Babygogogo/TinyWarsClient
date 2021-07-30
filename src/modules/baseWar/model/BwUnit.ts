@@ -611,6 +611,63 @@ namespace TwnsBwUnit {
             return modifier;
         }
 
+        public getLuckLimitModifierByCo(selfGridIndex: GridIndex): { lower: number, upper: number } | undefined {
+            const player = this.getPlayer();
+            if (player == null) {
+                Logger.error(`BwUnit.getLuckLimitModifierByCo() no player.`);
+                return undefined;
+            }
+
+            const configVersion = this.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwUnit.getLuckLimitModifierByCo() configVersion is empty.`);
+                return undefined;
+            }
+
+            const unitType = this.getUnitType();
+            if (unitType == null) {
+                Logger.error(`BwUnit.getLuckLimitModifierByCo() unitType is empty.`);
+                return undefined;
+            }
+
+            const coGridIndexListOnMap = player.getCoGridIndexListOnMap();
+            if (coGridIndexListOnMap == null) {
+                Logger.error(`BwUnit.getLuckLimitModifierByCo() empty coGridIndexListOnMap.`);
+                return undefined;
+            }
+
+            const coZoneRadius = player.getCoZoneRadius();
+            if (coZoneRadius == null) {
+                Logger.error(`BwUnit.getLuckLimitModifierByCo() empty coZoneRadius.`);
+                return undefined;
+            }
+
+            const hasLoadedCo   = this.getHasLoadedCo();
+            let lowerModifier   = 0;
+            let upperModifier   = 0;
+            for (const skillId of player.getCoCurrentSkills() || []) {
+                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
+                if (!skillCfg) {
+                    Logger.error(`BwUnit.getLuckLimitModifierByCo() failed getCoSkillCfg()! configVersion: ${configVersion}, skillId: ${skillId}`);
+                    return undefined;
+                }
+
+                const bonusCfg = skillCfg.selfLuckRangeBonus;
+                if ((bonusCfg)                                                                                                                        &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, bonusCfg[1]))                                                   &&
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, bonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                ) {
+                    lowerModifier += bonusCfg[2];
+                    upperModifier += bonusCfg[3];
+                }
+            }
+
+            return {
+                lower   : lowerModifier,
+                upper   : upperModifier,
+            };
+        }
+
         public checkHasSecondaryWeapon(): boolean {
             return ConfigManager.checkHasSecondaryWeapon(this.getConfigVersion(), this.getUnitType());
         }
