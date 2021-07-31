@@ -1439,6 +1439,15 @@ export declare namespace Config {
 
         /** CoBasicCfg superPowerSkills */
         superPowerSkills?: (number[]|null);
+
+        /** CoBasicCfg passiveDesc */
+        passiveDesc?: (string[]|null);
+
+        /** CoBasicCfg copDesc */
+        copDesc?: (string[]|null);
+
+        /** CoBasicCfg scopDesc */
+        scopDesc?: (string[]|null);
     }
 
     /** Represents a CoBasicCfg. */
@@ -1491,6 +1500,15 @@ export declare namespace Config {
 
         /** CoBasicCfg superPowerSkills. */
         public superPowerSkills: number[];
+
+        /** CoBasicCfg passiveDesc. */
+        public passiveDesc: string[];
+
+        /** CoBasicCfg copDesc. */
+        public copDesc: string[];
+
+        /** CoBasicCfg scopDesc. */
+        public scopDesc: string[];
 
         /**
          * Creates a new CoBasicCfg instance using the specified properties.

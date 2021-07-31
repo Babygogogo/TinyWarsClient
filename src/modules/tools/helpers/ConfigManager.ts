@@ -552,6 +552,19 @@ namespace ConfigManager {
             }
         }
     }
+    export function getCoSkillDescArray(version: string, coId: number, skillType: Types.CoSkillType): string[] | undefined {
+        const coConfig = getCoBasicCfg(version, coId);
+        if (coConfig == null) {
+            return undefined;
+        } else {
+            switch (skillType) {
+                case Types.CoSkillType.Passive      : return coConfig.passiveDesc;
+                case Types.CoSkillType.Power        : return coConfig.copDesc;
+                case Types.CoSkillType.SuperPower   : return coConfig.scopDesc;
+                default                             : return undefined;
+            }
+        }
+    }
 
     export function getEnabledCoArray(version: string): CoBasicCfg[] {
         if (!_AVAILABLE_CO_LIST.has(version)) {

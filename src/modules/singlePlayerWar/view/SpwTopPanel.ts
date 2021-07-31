@@ -1,10 +1,10 @@
 
 import TwnsBwWar                from "../../baseWar/model/BwWar";
-import TwnsBwCoListPanel        from "../../baseWar/view/BwCoListPanel";
 import TwnsBwUnitListPanel      from "../../baseWar/view/BwUnitListPanel";
 import ChatModel                from "../../chat/model/ChatModel";
 import TwnsChatPanel            from "../../chat/view/ChatPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
 import Types                    from "../../tools/helpers/Types";
@@ -22,7 +22,6 @@ namespace TwnsSpwTopPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import ChatPanel            = TwnsChatPanel.ChatPanel;
     import UserPanel            = TwnsUserPanel.UserPanel;
-    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
     import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
     import SpwWarMenuPanel      = TwnsSpwWarMenuPanel.SpwWarMenuPanel;
     import BwWar                = TwnsBwWar.BwWar;
@@ -155,10 +154,7 @@ namespace TwnsSpwTopPanel {
         }
         private _onTouchedGroupCo(): void {
             const war = this._war;
-            BwCoListPanel.show({
-                war,
-                selectedIndex: Math.max(war.getPlayerIndexInTurn() - 1, 0),
-            });
+            TwnsCommonCoListPanel.CommonCoListPanel.show({ war });
             SpwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(): void {

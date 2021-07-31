@@ -1,32 +1,32 @@
 
-import TwnsBwCoListPanel    from "../../baseWar/view/BwCoListPanel";
-import TwnsBwUnitListPanel  from "../../baseWar/view/BwUnitListPanel";
-import ChatModel            from "../../chat/model/ChatModel";
-import TwnsChatPanel        from "../../chat/view/ChatPanel";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import FloatText            from "../../tools/helpers/FloatText";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import TwnsUserPanel        from "../../user/view/UserPanel";
-import RwModel              from "../model/RwModel";
-import TwnsRwWar            from "../model/RwWar";
-import TwnsRwWarMenuPanel   from "./RwWarMenuPanel";
+import TwnsBwUnitListPanel      from "../../baseWar/view/BwUnitListPanel";
+import ChatModel                from "../../chat/model/ChatModel";
+import TwnsChatPanel            from "../../chat/view/ChatPanel";
+import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
+import ConfigManager            from "../../tools/helpers/ConfigManager";
+import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
+import Lang                     from "../../tools/lang/Lang";
+import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUserPanel            from "../../user/view/UserPanel";
+import RwModel                  from "../model/RwModel";
+import TwnsRwWar                from "../model/RwWar";
+import TwnsRwWarMenuPanel       from "./RwWarMenuPanel";
 
 namespace TwnsRwTopPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import ChatPanel        = TwnsChatPanel.ChatPanel;
-    import UserPanel        = TwnsUserPanel.UserPanel;
-    import BwCoListPanel    = TwnsBwCoListPanel.BwCoListPanel;
-    import BwUnitListPanel  = TwnsBwUnitListPanel.BwUnitListPanel;
-    import RwWar            = TwnsRwWar.RwWar;
-    import RwWarMenuPanel   = TwnsRwWarMenuPanel.RwWarMenuPanel;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import ChatPanel            = TwnsChatPanel.ChatPanel;
+    import UserPanel            = TwnsUserPanel.UserPanel;
+    import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
+    import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
+    import RwWar                = TwnsRwWar.RwWar;
+    import RwWarMenuPanel       = TwnsRwWarMenuPanel.RwWarMenuPanel;
 
     // eslint-disable-next-line no-shadow
     export class RwTopPanel extends TwnsUiPanel.UiPanel<void> {
@@ -153,10 +153,7 @@ namespace TwnsRwTopPanel {
         }
         private _onTouchedGroupCo(e: egret.TouchEvent): void {
             const war = this._war;
-            BwCoListPanel.show({
-                war,
-                selectedIndex: Math.max(war.getPlayerIndexInTurn() - 1, 0),
-            });
+            CommonCoListPanel.show({ war });
             RwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(e: egret.TouchEvent): void {

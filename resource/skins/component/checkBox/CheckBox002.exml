@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*"
         xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing" class="Skins.Component.CheckBox.CheckBox001" height="30" width="100">
+        xmlns:w="http://ns.egret.com/wing" class="Skins.Component.CheckBox.CheckBox002" height="30" width="150">
     <e:Group left="0" right="0" top="0" bottom="0">
         <TwnsUiImage:UiImage id="_imgSelected" source="commonRectangle0000" left="0" right="0" top="0" bottom="0"
                              scale9Grid="2,2,1,1" />
         <TwnsUiImage:UiImage id="_imgUnselected" left="0" right="0" top="0" bottom="0" source="commonRectangle0001"
                              scale9Grid="2,2,1,1" />
-        <TwnsUiLabel:UiLabel id="_labelName" text="Forsythe" textColor="0xFFFFFF" size="14" horizontalCenter="0"
-                             verticalCenter="0" />
+        <TwnsUiLabel:UiLabel id="_labelName" text="zhaotiantong(100)" textColor="0xFFFFFF" size="14" verticalCenter="0"
+                             x="20" />
     </e:Group>
 </e:Skin>

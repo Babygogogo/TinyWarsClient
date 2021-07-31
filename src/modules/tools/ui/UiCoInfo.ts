@@ -1,4 +1,5 @@
 
+import CommonConstants          from "../helpers/CommonConstants";
 import ConfigManager            from "../helpers/ConfigManager";
 import Logger                   from "../helpers/Logger";
 import Types                    from "../helpers/Types";
@@ -192,12 +193,16 @@ namespace TwnsUiCoInfo {
                 }
             }
 
-            const dataArrayForListSkillDesc: DataForSkillDescRenderer[] = [];
-            for (const skillId of skillIdArray) {
-                dataArrayForListSkillDesc.push({
-                    configVersion,
-                    skillId,
-                });
+            const dataArrayForListSkillDesc : DataForSkillDescRenderer[] = [];
+            const rawDesc                   = (ConfigManager.getCoSkillDescArray(configVersion, coId, skillType) || [])[Lang.getCurrentLanguageType()];
+            if (!rawDesc) {
+                dataArrayForListSkillDesc.push({ desc: CommonConstants.ErrorTextForUndefined });
+            } else {
+                for (const desc of rawDesc.split(`\n`)) {
+                    dataArrayForListSkillDesc.push({
+                        desc,
+                    });
+                }
             }
             this._listSkillDesc.bindData(dataArrayForListSkillDesc);
         }
@@ -228,15 +233,17 @@ namespace TwnsUiCoInfo {
     }
 
     type DataForSkillDescRenderer = {
-        skillId         : number;
-        configVersion   : string;
+        // skillId         : number;
+        // configVersion   : string;
+        desc            : string;
     };
     class SkillDescRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkillDescRenderer> {
         private _labelDesc  : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             const data              = this.data;
-            this._labelDesc.text    = `- ${ConfigManager.getCoSkillCfg(data.configVersion, data.skillId).desc[Lang.getCurrentLanguageType()]}`;
+            // this._labelDesc.text    = `- ${ConfigManager.getCoSkillCfg(data.configVersion, data.skillId).desc[Lang.getCurrentLanguageType()]}`;
+            this._labelDesc.text = `- ${data.desc || CommonConstants.ErrorTextForUndefined}`;
         }
     }
 }

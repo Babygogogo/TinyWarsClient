@@ -1,7 +1,7 @@
 
 import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
 import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
-import TwnsBwCoListPanel                from "../../baseWar/view/BwCoListPanel";
+import TwnsCommonCoListPanel            from "../../common/view/CommonCoListPanel";
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
@@ -39,13 +39,11 @@ import TwnsSpwWar                       from "../model/SpwWar";
 import TwnsSpwLoadWarPanel              from "./SpwLoadWarPanel";
 
 namespace TwnsSpwWarMenuPanel {
-    import ChatPanel                    = TwnsChatPanel.ChatPanel;
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonInputPanel             = TwnsCommonInputPanel.CommonInputPanel;
     import UserSettingsPanel            = TwnsUserSettingsPanel.UserSettingsPanel;
     import MfrCreateSettingsPanel       = TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel;
     import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
-    import BwCoListPanel                = TwnsBwCoListPanel.BwCoListPanel;
     import SpwActionPlanner             = TwnsSpwActionPlanner.SpwActionPlanner;
     import SpwPlayerManager             = TwnsSpwPlayerManager.SpwPlayerManager;
     import SpwWar                       = TwnsSpwWar.SpwWar;

@@ -12,14 +12,14 @@ import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsBwUnit               from "../model/BwUnit";
 import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsBwWar                from "../model/BwWar";
-import TwnsBwCoListPanel        from "./BwCoListPanel";
+import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
 import TwnsBwTileBriefPanel     from "./BwTileBriefPanel";
 import TwnsBwUnitDetailPanel    from "./BwUnitDetailPanel";
 import TwnsBwUnitView           from "./BwUnitView";
 
 namespace TwnsBwUnitBriefPanel {
-    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
+    import BwCoListPanel        = TwnsCommonCoListPanel.CommonCoListPanel;
     import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
     import BwUnitDetailPanel    = TwnsBwUnitDetailPanel.BwUnitDetailPanel;
     import BwUnitView           = TwnsBwUnitView.BwUnitView;

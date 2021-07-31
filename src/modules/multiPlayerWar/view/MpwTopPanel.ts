@@ -1,9 +1,9 @@
 
-import TwnsBwCoListPanel        from "../../baseWar/view/BwCoListPanel";
 import TwnsBwUnitListPanel      from "../../baseWar/view/BwUnitListPanel";
 import ChatModel                from "../../chat/model/ChatModel";
 import TwnsChatPanel            from "../../chat/view/ChatPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
 import TwnsMpwWar               from "../../multiPlayerWar/model/MpwWar";
@@ -27,7 +27,7 @@ namespace TwnsMpwTopPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import UserPanel            = TwnsUserPanel.UserPanel;
     import MpwWar               = TwnsMpwWar.MpwWar;
-    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
+    import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
     import MpwActionPlanner     = TwnsMpwActionPlanner.MpwActionPlanner;
     import MpwWarMenuPanel      = TwnsMpwWarMenuPanel.MpwWarMenuPanel;
     import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
@@ -171,9 +171,8 @@ namespace TwnsMpwTopPanel {
             (userId) && (UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(): void {
-            BwCoListPanel.show({
+            CommonCoListPanel.show({
                 war             : this._war,
-                selectedIndex   : Math.max(this._war.getPlayerIndexInTurn() - 1, 0),
             });
             MpwWarMenuPanel.hide();
         }
@@ -227,7 +226,7 @@ namespace TwnsMpwTopPanel {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            BwCoListPanel.hide();
+            CommonCoListPanel.hide();
             MpwWarMenuPanel.show();
         }
 

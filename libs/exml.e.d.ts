@@ -62,6 +62,10 @@ declare module Skins.Component.CheckBox{
 	class CheckBox001 extends eui.Skin{
 	}
 }
+declare module Skins.Component.CheckBox{
+	class CheckBox002 extends eui.Skin{
+	}
+}
 declare module Skins.Component.CoInfo{
 	class CoInfo001 extends eui.Skin{
 	}
