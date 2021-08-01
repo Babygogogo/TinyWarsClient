@@ -1676,6 +1676,12 @@ export declare namespace Config {
 
         /** CoSkillCfg selfUnitCost */
         selfUnitCost?: (number[]|null);
+
+        /** CoSkillCfg selfFund */
+        selfFund?: (number[]|null);
+
+        /** CoSkillCfg selfOffenseBonusByFund */
+        selfOffenseBonusByFund?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1779,6 +1785,12 @@ export declare namespace Config {
 
         /** CoSkillCfg selfUnitCost. */
         public selfUnitCost: number[];
+
+        /** CoSkillCfg selfFund. */
+        public selfFund: number[];
+
+        /** CoSkillCfg selfOffenseBonusByFund. */
+        public selfOffenseBonusByFund: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.

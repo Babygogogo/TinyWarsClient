@@ -65,6 +65,7 @@ namespace WarCoSkillHelpers {
             return undefined;
         }
 
+        exeSelfFund({ skillCfg, player });
         exeSelfHpGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeEnemyHpGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeSelfFuelGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
@@ -76,6 +77,24 @@ namespace WarCoSkillHelpers {
         exeIndiscriminateAreaDamage(configVersion, skillCfg, unitMap, player, coGridIndexList, extraData);
         exeSelfPromotionGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeSelfUnitActionState(configVersion, skillCfg, unitMap, player, coGridIndexList);
+    }
+
+    function exeSelfFund({ skillCfg, player }: {
+        skillCfg        : ProtoTypes.Config.ICoSkillCfg;
+        player          : BwPlayer;
+    }): void {
+        const cfg = skillCfg.selfFund;
+        if (cfg == null) {
+            return;
+        }
+
+        const currFund = player.getFund();
+        if (currFund == null) {
+            Logger.error(`WarCoSkillHelpers.exeSelfFund() empty currFund.`);
+            return;
+        }
+
+        player.setFund(Math.floor(currFund * cfg[0] / 100 + cfg[1]));
     }
 
     function exeSelfHpGain(

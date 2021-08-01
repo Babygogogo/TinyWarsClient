@@ -516,6 +516,12 @@ namespace TwnsBwUnit {
                 return undefined;
             }
 
+            const fund = player.getFund();
+            if (fund == null) {
+                Logger.error(`BwUnit.getAttackModifierByCo() empty fund.`);
+                return undefined;
+            }
+
             const promotion     = this.getCurrentPromotion();
             const hasLoadedCo   = this.getHasLoadedCo();
             let modifier        = 0;
@@ -526,21 +532,35 @@ namespace TwnsBwUnit {
                     return undefined;
                 }
 
-                const attackBonusCfg = skillCfg.attackBonus;
-                if ((attackBonusCfg)                                                                                                                        &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusCfg[1]))                                                   &&
-                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
-                ) {
-                    modifier += attackBonusCfg[2];
+                {
+                    const attackBonusCfg = skillCfg.attackBonus;
+                    if ((attackBonusCfg)                                                                                                                        &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusCfg[1]))                                                   &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ) {
+                        modifier += attackBonusCfg[2];
+                    }
                 }
 
-                const attackBonusByPromotionCfg = skillCfg.attackBonusByPromotion;
-                if ((attackBonusByPromotionCfg)                                                                                                                     &&
-                    (attackBonusByPromotionCfg[2] === promotion)                                                                                                    &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusByPromotionCfg[1]))                                                &&
-                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusByPromotionCfg[0], coGridIndexListOnMap, coZoneRadius)))
-                ) {
-                    modifier += attackBonusByPromotionCfg[3];
+                {
+                    const attackBonusByPromotionCfg = skillCfg.attackBonusByPromotion;
+                    if ((attackBonusByPromotionCfg)                                                                                                                     &&
+                        (attackBonusByPromotionCfg[2] === promotion)                                                                                                    &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusByPromotionCfg[1]))                                                &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusByPromotionCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ) {
+                        modifier += attackBonusByPromotionCfg[3];
+                    }
+                }
+
+                {
+                    const offenseBonusByFundCfg = skillCfg.selfOffenseBonusByFund;
+                    if ((offenseBonusByFundCfg)                                                                                                                             &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, offenseBonusByFundCfg[1]))                                                        &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, offenseBonusByFundCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ) {
+                        modifier += offenseBonusByFundCfg[2] * fund / 10000;
+                    }
                 }
             }
 
