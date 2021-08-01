@@ -522,6 +522,12 @@ namespace TwnsBwUnit {
                 return undefined;
             }
 
+            const tileType = this.getWar()?.getTileMap().getTile(selfGridIndex)?.getType();
+            if (tileType == null) {
+                Logger.error(`BwUnit.getAttackModifierByCo() empty tileType.`);
+                return undefined;
+            }
+
             const promotion     = this.getCurrentPromotion();
             const hasLoadedCo   = this.getHasLoadedCo();
             let modifier        = 0;
@@ -533,33 +539,44 @@ namespace TwnsBwUnit {
                 }
 
                 {
-                    const attackBonusCfg = skillCfg.attackBonus;
-                    if ((attackBonusCfg)                                                                                                                        &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusCfg[1]))                                                   &&
-                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    const cfg = skillCfg.attackBonus;
+                    if ((cfg)                                                                                                                        &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                   &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                     ) {
-                        modifier += attackBonusCfg[2];
+                        modifier += cfg[2];
                     }
                 }
 
                 {
-                    const attackBonusByPromotionCfg = skillCfg.attackBonusByPromotion;
-                    if ((attackBonusByPromotionCfg)                                                                                                                     &&
-                        (attackBonusByPromotionCfg[2] === promotion)                                                                                                    &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusByPromotionCfg[1]))                                                &&
-                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, attackBonusByPromotionCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    const cfg = skillCfg.attackBonusByPromotion;
+                    if ((cfg)                                                                                                                     &&
+                        (cfg[2] === promotion)                                                                                                    &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                     ) {
-                        modifier += attackBonusByPromotionCfg[3];
+                        modifier += cfg[3];
                     }
                 }
 
                 {
-                    const offenseBonusByFundCfg = skillCfg.selfOffenseBonusByFund;
-                    if ((offenseBonusByFundCfg)                                                                                                                             &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, offenseBonusByFundCfg[1]))                                                        &&
-                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, offenseBonusByFundCfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    const cfg = skillCfg.selfOffenseBonusByFund;
+                    if ((cfg)                                                                                                                             &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                        &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                     ) {
-                        modifier += offenseBonusByFundCfg[2] * fund / 10000;
+                        modifier += cfg[2] * fund / 10000;
+                    }
+                }
+
+                {
+                    const cfg = skillCfg.selfOffenseBonusByTile;
+                    if ((cfg)                                                                                                                           &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                      &&
+                        (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[2]))                                                      &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ) {
+                        modifier += cfg[3];
                     }
                 }
             }
@@ -869,10 +886,69 @@ namespace TwnsBwUnit {
                 && (tile.getMaxCapturePoint() != null);
         }
 
-        public getCaptureAmount(): number | undefined {
-            return this.checkIsCapturer() ? this.getNormalizedCurrentHp() : undefined;
+        public getCaptureAmount(selfGridIndex: GridIndex): number | undefined {
+            const cfgAmount = this._getCfgCaptureAmount();
+            if (cfgAmount == null) {
+                return undefined;
+            }
+
+            const player = this.getPlayer();
+            if (player == null) {
+                Logger.error(`BwUnit.getCaptureAmount() no player.`);
+                return undefined;
+            }
+
+            if (player.getCoId() === CommonConstants.CoEmptyId) {
+                return cfgAmount;
+            }
+
+            const configVersion = this.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwUnit.getCaptureAmount() configVersion is empty.`);
+                return undefined;
+            }
+
+            const unitType = this.getUnitType();
+            if (unitType == null) {
+                Logger.error(`BwUnit.getCaptureAmount() unitType is empty.`);
+                return undefined;
+            }
+
+            const coGridIndexListOnMap = player.getCoGridIndexListOnMap();
+            if (coGridIndexListOnMap == null) {
+                Logger.error(`BwUnit.getCaptureAmount() empty coGridIndexListOnMap.`);
+                return undefined;
+            }
+
+            const coZoneRadius = player.getCoZoneRadius();
+            if (coZoneRadius == null) {
+                Logger.error(`BwUnit.getCaptureAmount() empty coZoneRadius.`);
+                return undefined;
+            }
+
+            const hasLoadedCo   = this.getHasLoadedCo();
+            let modifier        = 100;
+            for (const skillId of player.getCoCurrentSkills() || []) {
+                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
+                if (!skillCfg) {
+                    Logger.error(`BwUnit.getCaptureAmount() failed getCoSkillCfg()! configVersion: ${configVersion}, skillId: ${skillId}`);
+                    return undefined;
+                }
+
+                {
+                    const cfg = skillCfg.selfCaptureAmount;
+                    if ((cfg)                                                                                                                       &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ) {
+                        modifier += cfg[2];
+                    }
+                }
+            }
+
+            return Math.floor(cfgAmount * modifier / 100);
         }
-        public getCfgCaptureAmount(): number | undefined {
+        private _getCfgCaptureAmount(): number | undefined {
             return this.checkIsCapturer() ? this.getNormalizedCurrentHp() : undefined;
         }
 

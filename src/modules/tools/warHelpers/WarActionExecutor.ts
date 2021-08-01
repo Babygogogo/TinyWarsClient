@@ -2265,7 +2265,7 @@ namespace WarActionExecutor {
         } else {
             const destination       = pathNodes[pathNodes.length - 1];
             const tile              = war.getTileMap().getTile(destination);
-            const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount();
+            const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount(destination);
             if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
                 tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
             }
@@ -2312,7 +2312,7 @@ namespace WarActionExecutor {
         } else {
             const destination       = pathNodes[pathNodes.length - 1];
             const tile              = war.getTileMap().getTile(destination);
-            const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount();
+            const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount(destination);
             if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
                 tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
             }

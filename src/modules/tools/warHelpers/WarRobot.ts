@@ -1705,7 +1705,7 @@ namespace WarRobot {
                     return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitJoin_04 };
                 }
 
-                const captureAmount = targetUnit.getCaptureAmount();
+                const captureAmount = targetUnit.getCaptureAmount(gridIndex);
                 if (captureAmount == null) {
                     return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitJoin_05 };
                 }
@@ -1854,7 +1854,7 @@ namespace WarRobot {
 
                     const gridIndex2 = (unit2 === focusUnit) ? focusUnitGridIndex : unitOriginGridIndex2;
                     if (GridIndexHelpers.checkIsEqual(gridIndex2, unitOriginGridIndex2)) {
-                        const captureAmount = unit2.getCaptureAmount();
+                        const captureAmount = unit2.getCaptureAmount(gridIndex2);
                         if (captureAmount == null) {
                             return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_16 };
                         }
@@ -1930,7 +1930,7 @@ namespace WarRobot {
             return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitCaptureTile_01 };
         }
 
-        const captureAmount = unit.getCaptureAmount();
+        const captureAmount = unit.getCaptureAmount(gridIndex);
         if (captureAmount == null) {
             return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitCaptureTile_02 };
         }
