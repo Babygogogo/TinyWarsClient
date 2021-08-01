@@ -38,12 +38,12 @@ namespace TwnsBwActionPlanner {
         destination : GridIndex;
     };
     export type DataForUnitAction = {
-        actionType      : UnitActionType;
-        callback        : () => void;
-        unitForLaunch?  : BwUnit;
-        unitForDrop?    : BwUnit;
-        produceUnitType?: Types.UnitType;
-        canProduceUnit? : boolean;
+        actionType          : UnitActionType;
+        callback            : () => void;
+        unitForLaunch?      : BwUnit;
+        unitForDrop?        : BwUnit;
+        produceUnitType?    : Types.UnitType;
+        costForProduceUnit? : number;
     };
 
     export abstract class BwActionPlanner {

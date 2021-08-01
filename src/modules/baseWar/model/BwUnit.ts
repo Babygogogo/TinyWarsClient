@@ -1100,12 +1100,49 @@ namespace TwnsBwUnit {
         }
 
         public getProduceUnitCost(): number | undefined {
-            const type = this.getProduceUnitType();
-            if (type == null) {
+            const configVersion = this.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwUnit.getProduceUnitCost() configVersion is empty.`);
                 return undefined;
-            } else {
-                return ConfigManager.getUnitTemplateCfg(this.getConfigVersion(), type).productionCost;
             }
+
+            const produceUnitType = this.getProduceUnitType();
+            if (produceUnitType == null) {
+                Logger.error(`BwUnit.getProduceUnitCost() produceUnitType is empty.`);
+                return undefined;
+            }
+
+            const cfgCost = ConfigManager.getUnitTemplateCfg(configVersion, produceUnitType)?.productionCost;
+            if (cfgCost == null) {
+                Logger.error(`BwUnit.getProduceUnitCost() empty cfgCost.`);
+                return undefined;
+            }
+
+            const player = this.getPlayer();
+            if (player == null) {
+                Logger.error(`BwUnit.getProduceUnitCost() empty player.`);
+                return undefined;
+            }
+
+            const gridIndex = this.getGridIndex();
+            if (gridIndex == null) {
+                Logger.error(`BwUnit.getProduceUnitCost() empty gridIndex.`);
+                return undefined;
+            }
+
+            const hasLoadedCo = this.getHasLoadedCo();
+            if (hasLoadedCo == null) {
+                Logger.error(`BwUnit.getProduceUnitCost() empty hasLoadedCo.`);
+                return undefined;
+            }
+
+            const modifier = player.getUnitCostModifier(gridIndex, hasLoadedCo, produceUnitType);
+            if (modifier == null) {
+                Logger.error(`BwUnit.getProduceUnitCost() empty modifier.`);
+                return undefined;
+            }
+
+            return Math.floor(cfgCost * modifier);
         }
 
         public getMaxProduceMaterial(): number | undefined {
@@ -1240,11 +1277,47 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce self.
         ////////////////////////////////////////////////////////////////////////////////
-        public getProductionBaseCost(): number {
+        public getProductionCfgCost(): number {
             return this._getTemplateCfg().productionCost;
         }
         public getProductionFinalCost(): number {
-            return this.getProductionBaseCost();
+            const cfgCost = this.getProductionCfgCost();
+            if (cfgCost == null) {
+                Logger.error(`BwUnit.getProductionFinalCost() empty cfgCost.`);
+                return undefined;
+            }
+
+            const player = this.getPlayer();
+            if (player == null) {
+                Logger.error(`BwUnit.getProductionFinalCost() empty player.`);
+                return undefined;
+            }
+
+            const gridIndex = this.getGridIndex();
+            if (gridIndex == null) {
+                Logger.error(`BwUnit.getProductionFinalCost() empty gridIndex.`);
+                return undefined;
+            }
+
+            const hasLoadedCo = this.getHasLoadedCo();
+            if (hasLoadedCo == null) {
+                Logger.error(`BwUnit.getProductionFinalCost() empty hasLoadedCo.`);
+                return undefined;
+            }
+
+            const unitType = this.getUnitType();
+            if (unitType == null) {
+                Logger.error(`BwUnit.getProductionFinalCost() empty unitType.`);
+                return undefined;
+            }
+
+            const modifier = player.getUnitCostModifier(gridIndex, hasLoadedCo, unitType);
+            if (modifier == null) {
+                Logger.error(`BwUnit.getProductionFinalCost() empty modifier.`);
+                return undefined;
+            }
+
+            return Math.floor(cfgCost * modifier);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1823,7 +1896,7 @@ namespace TwnsBwUnit {
             const coId = this.getWar().getPlayer(this.getPlayerIndex()).getCoId();
             return coId == null
                 ? null
-                : Math.floor(ConfigManager.getCoBasicCfg(this.getConfigVersion(), coId).boardCostPercentage * this.getProductionBaseCost() / 100);
+                : Math.floor(ConfigManager.getCoBasicCfg(this.getConfigVersion(), coId).boardCostPercentage * this.getProductionCfgCost() / 100);
         }
     }
 

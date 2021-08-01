@@ -447,7 +447,7 @@ namespace WarRobot {
                 return { errorCode: ClientErrorCode.SpwRobot_GetUnitValues_00 };
             }
 
-            const productionCost = unit.getProductionBaseCost();
+            const productionCost = unit.getProductionCfgCost();
             if (productionCost == null) {
                 return { errorCode: ClientErrorCode.SpwRobot_GetUnitValues_01 };
             }
@@ -1202,7 +1202,7 @@ namespace WarRobot {
 
         const data = damageMap ? damageMap[gridIndex.x][gridIndex.y] : undefined;
         if (data) {
-            const productionCost = unit.getProductionBaseCost();
+            const productionCost = unit.getProductionCfgCost();
             if (productionCost == null) {
                 return { errorCode: ClientErrorCode.SpwRobot_GetScoreForThreat_00 };
             }
@@ -1267,7 +1267,7 @@ namespace WarRobot {
                 score       : 0,
             };
         } else {
-            const productionCost = unit.getProductionBaseCost();
+            const productionCost = unit.getProductionCfgCost();
             if (productionCost == null) {
                 return { errorCode: ClientErrorCode.SpwRobot_GetScoreForDistanceToCapturableBuildings_02 };
             }
@@ -1318,7 +1318,7 @@ namespace WarRobot {
     async function getScoreForDistanceToOtherUnits(commonParams: CommonParams, unit: BwUnit, movableArea: MovableArea): Promise<ErrorCodeAndScore> {
         await checkAndCallLater();
 
-        const productionCost = unit.getProductionBaseCost();
+        const productionCost = unit.getProductionCfgCost();
         if (productionCost == null) {
             return { errorCode: ClientErrorCode.SpwRobot_GetScoreForDistanceToOtherUnits_00 };
         }
@@ -1592,7 +1592,7 @@ namespace WarRobot {
 
             let scoreForMovePath = 0;
             for (const unit of discoveredUnits) {
-                const productionCost = unit.getProductionBaseCost();
+                const productionCost = unit.getProductionCfgCost();
                 if (productionCost == null) {
                     return { errorCode: ClientErrorCode.SpwRobot_GetScoreForMovePath_01 };
                 }
@@ -1825,7 +1825,7 @@ namespace WarRobot {
                     return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_12 };
                 }
 
-                const unitProductionCost2 = unit2.getProductionBaseCost();
+                const unitProductionCost2 = unit2.getProductionCfgCost();
                 if (unitProductionCost2 == null) {
                     return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_13 };
                 }
@@ -1892,7 +1892,7 @@ namespace WarRobot {
                             return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_20 };
                         }
 
-                        const loadedUnitProductionCost = loadedUnit.getProductionBaseCost();
+                        const loadedUnitProductionCost = loadedUnit.getProductionCfgCost();
                         if (loadedUnitProductionCost == null) {
                             return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_21 };
                         }
@@ -2001,7 +2001,7 @@ namespace WarRobot {
         for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, mapSize)) {
             const u = unitMap.getUnitOnMap(gridIndex);
             if ((u) && (!u.getIsDiving()) && (!visibleUnits.has(u))) {
-                const productionCost = u.getProductionBaseCost();
+                const productionCost = u.getProductionCfgCost();
                 if (productionCost == null) {
                     return { errorCode: ClientErrorCode.SpwRobot_GetScoreForUnitLaunchFlare_01 };
                 }
@@ -2144,7 +2144,7 @@ namespace WarRobot {
                     const baseDamage = targetUnit.getBaseDamage(unitArmorType);
                     if (baseDamage != null) {
 
-                        const unitProductionCost = unit.getProductionBaseCost();
+                        const unitProductionCost = unit.getProductionCfgCost();
                         if (unitProductionCost == null) {
                             return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_08 };
                         }
@@ -2467,7 +2467,7 @@ namespace WarRobot {
                         return { errorCode: ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchSilo_01 };
                     }
 
-                    const targetUnitProductionCost = targetUnit.getProductionBaseCost();
+                    const targetUnitProductionCost = targetUnit.getProductionCfgCost();
                     if (targetUnitProductionCost == null) {
                         return { errorCode: ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchSilo_02 };
                     }
@@ -2483,7 +2483,7 @@ namespace WarRobot {
             return { errorCode: ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchSilo_03 };
         }
 
-        const unitProductionCost = unit.getProductionBaseCost();
+        const unitProductionCost = unit.getProductionCfgCost();
         if (unitProductionCost == null) {
             return { errorCode: ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchSilo_04 };
         }

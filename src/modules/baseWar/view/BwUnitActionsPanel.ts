@@ -90,10 +90,10 @@ namespace TwnsBwUnitActionsPanel {
                 if (produceUnitType == null) {
                     dataArray.push({
                         war,
-                        actionType      : data.actionType,
-                        callback        : data.callback,
-                        unit            : data.unitForDrop || data.unitForLaunch,
-                        canProduceUnit  : data.canProduceUnit,
+                        actionType          : data.actionType,
+                        callback            : data.callback,
+                        unit                : data.unitForDrop || data.unitForLaunch,
+                        costForProduceUnit  : data.costForProduceUnit,
                     });
                 } else {
                     const unitForProduce = new TwnsBwUnit.BwUnit();
@@ -107,10 +107,10 @@ namespace TwnsBwUnitActionsPanel {
 
                     dataArray.push({
                         war,
-                        actionType      : data.actionType,
-                        callback        : data.callback,
-                        unit            : unitForProduce,
-                        canProduceUnit  : data.canProduceUnit,
+                        actionType          : data.actionType,
+                        callback            : data.callback,
+                        unit                : unitForProduce,
+                        costForProduceUnit  : data.costForProduceUnit,
                     });
                 }
             }
@@ -158,13 +158,12 @@ namespace TwnsBwUnitActionsPanel {
     }
 
     type DataForUnitActionRenderer = {
-        war             : BwWar;
-        actionType      : UnitActionType;
-        callback        : () => void;
-        unit?           : TwnsBwUnit.BwUnit;
-        canProduceUnit? : boolean;
+        war                 : BwWar;
+        actionType          : UnitActionType;
+        callback            : () => void;
+        unit?               : TwnsBwUnit.BwUnit;
+        costForProduceUnit  : number | null | undefined;
     };
-
     class UnitActionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitActionRenderer> {
         private _labelAction: TwnsUiLabel.UiLabel;
         private _labelCost  : TwnsUiLabel.UiLabel;
@@ -185,15 +184,19 @@ namespace TwnsBwUnitActionsPanel {
             const data              = this.data;
             this._labelAction.text  = Lang.getUnitActionName(data.actionType);
 
-            const unit = data.unit;
+            const unit      = data.unit;
+            const labelCost = this._labelCost;
             if (unit == null) {
-                this.currentState       = "withoutUnit";
-                this._labelCost.text    = "";
+                this.currentState   = "withoutUnit";
+                labelCost.text      = "";
             } else {
-                this.currentState       = "withUnit";
-                this._labelCost.text    = data.actionType !== Types.UnitActionType.ProduceUnit
-                    ? ""
-                    : `${Lang.getText(LangTextType.B0079)}: ${unit.getProductionFinalCost()}`;
+                this.currentState   = "withUnit";
+                if (data.actionType !== Types.UnitActionType.ProduceUnit) {
+                    labelCost.text = ``;
+                } else {
+                    const cost      = data.costForProduceUnit;
+                    labelCost.text  = `${Lang.getText(LangTextType.B0079)}: ${cost != null ? cost : CommonConstants.ErrorTextForUndefined}`;
+                }
                 this._unitView.init(unit).startRunningView();
             }
         }

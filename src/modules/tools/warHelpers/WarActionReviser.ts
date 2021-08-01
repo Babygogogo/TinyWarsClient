@@ -228,9 +228,21 @@ namespace WarActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_13 };
         }
 
-        const cost = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * WarCommonHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
-        if (cost > fund) {
+        const modifier = playerInTurn.getUnitCostModifier(gridIndex, false, unitType);
+        if (modifier == null) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_14 };
+        }
+
+        const cost = Math.floor(
+            cfgCost
+            * (skillCfg ? skillCfg[5] : 100)
+            * WarCommonHelpers.getNormalizedHp(unitHp)
+            * modifier
+            / 100
+            / CommonConstants.UnitHpNormalizer
+        );
+        if (cost > fund) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_15 };
         }
 
         return {

@@ -184,7 +184,14 @@ namespace WarActionExecutor {
         const playerIndex   = playerInTurn.getPlayerIndex();
         const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
         const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
-        const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * WarCommonHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
+        const cost          = Math.floor(
+            cfgCost
+            * (skillCfg ? skillCfg[5] : 100)
+            * WarCommonHelpers.getNormalizedHp(unitHp)
+            * playerInTurn.getUnitCostModifier(gridIndex, false, unitType)
+            / 100
+            / CommonConstants.UnitHpNormalizer
+        );
         const unit          = new BwUnit();
         unit.init({
             gridIndex,
@@ -237,7 +244,14 @@ namespace WarActionExecutor {
             const playerIndex   = playerInTurn.getPlayerIndex();
             const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
-            const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * WarCommonHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
+            const cost          = Math.floor(
+                cfgCost
+                * (skillCfg ? skillCfg[5] : 100)
+                * WarCommonHelpers.getNormalizedHp(unitHp)
+                * playerInTurn.getUnitCostModifier(gridIndex, false, unitType)
+                / 100
+                / CommonConstants.UnitHpNormalizer
+            );
             const unit          = new BwUnit();
             unit.init({
                 gridIndex,

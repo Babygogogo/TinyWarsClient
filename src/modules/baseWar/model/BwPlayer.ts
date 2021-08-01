@@ -591,6 +591,43 @@ namespace TwnsBwPlayer {
             }
         }
 
+        public getUnitCostModifier(gridIndex: GridIndex, hasLoadedCo: boolean, unitType: Types.UnitType): number | undefined {
+            if (this.getCoId() === CommonConstants.CoEmptyId) {
+                return 0;
+            }
+
+            const coGridIndexListOnMap = this.getCoGridIndexListOnMap();
+            if (coGridIndexListOnMap == null) {
+                Logger.error(`BwPlayer.getUnitCostModifier() empty coGridIndexListOnMap.`);
+                return undefined;
+            }
+
+            const coZoneRadius = this.getCoZoneRadius();
+            if (coZoneRadius == null) {
+                Logger.error(`BwPlayer.getUnitCostModifier() empty coZoneRadius.`);
+                return undefined;
+            }
+
+            const configVersion = this._getWar()?.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwPlayer.getUnitCostModifier() empty configVersion.`);
+                return undefined;
+            }
+
+            let modifier = 1;
+            for (const skillId of this.getCoCurrentSkills() || []) {
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfUnitCost;
+                if ((cfg)                                                                                                                   &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                              &&
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                ) {
+                    modifier *= cfg[2] / 100;
+                }
+            }
+
+            return modifier;
+        }
+
         private _getCoBasicCfg(): ProtoTypes.Config.ICoBasicCfg | null {
             const coId = this.getCoId();
             return coId == null

@@ -566,32 +566,33 @@ namespace TwnsSpwActionPlanner {
                 if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
                     return [];
                 } else {
+                    const costForProduceUnit = focusUnit.getProduceUnitCost();
                     if (focusUnit.getCurrentProduceMaterial() < 1) {
                         return [{
-                            actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0051)),
-                            canProduceUnit  : false,
+                            actionType          : UnitActionType.ProduceUnit,
+                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0051)),
+                            costForProduceUnit,
                             produceUnitType,
                         }];
                     } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
                         return [{
-                            actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0052)),
-                            canProduceUnit  : false,
+                            actionType          : UnitActionType.ProduceUnit,
+                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0052)),
+                            costForProduceUnit,
                             produceUnitType,
                         }];
-                    } else if ((this._getWar() as SpwWar).getPlayerInTurn().getFund() < focusUnit.getProduceUnitCost()) {
+                    } else if ((this._getWar() as SpwWar).getPlayerInTurn().getFund() < costForProduceUnit) {
                         return [{
-                            actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0053)),
-                            canProduceUnit  : false,
+                            actionType          : UnitActionType.ProduceUnit,
+                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0053)),
+                            costForProduceUnit,
                             produceUnitType,
                         }];
                     } else {
                         return [{
-                            actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => this._setStateRequestingUnitProduceUnit(),
-                            canProduceUnit  : true,
+                            actionType          : UnitActionType.ProduceUnit,
+                            callback            : () => this._setStateRequestingUnitProduceUnit(),
+                            costForProduceUnit,
                             produceUnitType,
                         }];
                     }
@@ -634,8 +635,7 @@ namespace TwnsSpwActionPlanner {
             if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
                 return undefined;
             } else {
-                const war           = this._getWar();
-                const existingUnit  = this._getUnitMap().getVisibleUnitOnMap(targetGridIndex);
+                const existingUnit = this._getUnitMap().getVisibleUnitOnMap(targetGridIndex);
                 if ((existingUnit)                                              &&
                     (existingUnit.getTeamIndex() !== movingUnit.getTeamIndex())
                 ) {
