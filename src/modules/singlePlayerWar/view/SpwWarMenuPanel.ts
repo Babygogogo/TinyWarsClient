@@ -1,8 +1,6 @@
 
 import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
 import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
-import TwnsCommonCoListPanel            from "../../common/view/CommonCoListPanel";
-import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
@@ -304,6 +302,7 @@ namespace TwnsSpwWarMenuPanel {
                 this._createCommandLoadGame(),
                 this._createCommandOpenAdvancedMenu(),
                 // this._createCommandChat(),
+                this._createCommandGotoMyWarListPanel(),
                 this._createCommandGotoLobby(),
             ].filter(v => !!v);
         }
@@ -473,6 +472,19 @@ namespace TwnsSpwWarMenuPanel {
                     },
                 };
             }
+        }
+
+        private _createCommandGotoMyWarListPanel(): DataForCommandRenderer | undefined {
+            return {
+                name    : Lang.getText(LangTextType.B0652),
+                callback: () => {
+                    CommonConfirmPanel.show({
+                        title   : Lang.getText(LangTextType.B0652),
+                        content : Lang.getText(LangTextType.A0225),
+                        callback: () => FlowManager.gotoMyWarListPanel(this._war.getWarType()),
+                    });
+                },
+            };
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {

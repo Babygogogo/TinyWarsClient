@@ -279,10 +279,11 @@ namespace TwnsBwCursorView {
 
         private _updateConForNormal(): void {
             const actionPlanner = this._actionPlanner;
-            if (actionPlanner) {
-                const con       = this._conForNormal;
-                const gridIndex = this._cursor.getGridIndex();
+            const cursor        = this._cursor;
+            if ((actionPlanner) && (cursor)) {
+                const gridIndex = cursor.getGridIndex();
                 const state     = actionPlanner.getState();
+                const con       = this._conForNormal;
 
                 if (state === ActionPlannerState.Idle) {
                     con.visible = true;

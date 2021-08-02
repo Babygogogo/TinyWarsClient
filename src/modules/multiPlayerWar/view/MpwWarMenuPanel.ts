@@ -313,6 +313,7 @@ namespace TwnsMpwWarMenuPanel {
                 this._createCommandPlayerUseScop(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandSyncWar(),
+                this._createCommandGotoWarListPanel(),
             ].filter(c => !!c);
         }
 
@@ -409,6 +410,21 @@ namespace TwnsMpwWarMenuPanel {
                             : Types.SyncWarRequestType.PlayerRequest
                     );
                     this.close();
+                },
+            };
+        }
+
+        private _createCommandGotoWarListPanel(): DataForCommandRenderer | undefined {
+            return {
+                name    : Lang.getText(LangTextType.B0652),
+                callback: () => {
+                    CommonConfirmPanel.show({
+                        title   : Lang.getText(LangTextType.B0652),
+                        content : Lang.getText(LangTextType.A0225),
+                        callback: () => {
+                            FlowManager.gotoMyWarListPanel(this._war.getWarType());
+                        },
+                    });
                 },
             };
         }

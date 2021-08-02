@@ -258,6 +258,7 @@ namespace TwnsRwWarMenuPanel {
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandRate(),
                 // this._createCommandChat(),
+                this._createCommandGotoRwReplayListPanel(),
                 this._createCommandGotoLobby(),
             ].filter(v => !!v);
         }
@@ -311,6 +312,19 @@ namespace TwnsRwWarMenuPanel {
                 callback: () => {
                     this.close();
                     TwnsChatPanel.ChatPanel.show({});
+                },
+            };
+        }
+
+        private _createCommandGotoRwReplayListPanel(): DataForCommandRenderer | undefined {
+            return {
+                name    : Lang.getText(LangTextType.B0651),
+                callback: () => {
+                    CommonConfirmPanel.show({
+                        title   : Lang.getText(LangTextType.B0651),
+                        content : Lang.getText(LangTextType.A0225),
+                        callback: () => FlowManager.gotoRwReplayListPanel(),
+                    });
                 },
             };
         }

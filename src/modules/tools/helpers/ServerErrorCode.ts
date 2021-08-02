@@ -2592,6 +2592,7 @@ export const enum ServerErrorCode {
     MsgMfrStartWar0006,
     MsgMfrStartWar0007,
     MsgMfrStartWar0008,
+    MsgMfrStartWar0009,
 
     ExeMpwExecuteWarAction_ExecuteForHuman_0000,
     ExeMpwExecuteWarAction_ExecuteForHuman_0001,

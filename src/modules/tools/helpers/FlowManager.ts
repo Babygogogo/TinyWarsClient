@@ -18,6 +18,7 @@ import TwnsLobbyPanel               from "../../lobby/view/LobbyPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import MeModel                      from "../../mapEditor/model/MeModel";
 import MeProxy                      from "../../mapEditor/model/MeProxy";
+import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
 import TwnsMeTopPanel               from "../../mapEditor/view/MeTopPanel";
 import McrProxy                     from "../../multiCustomRoom/model/McrProxy";
 import TwnsMcwMyWarListPanel        from "../../multiCustomWar/view/McwMyWarListPanel";
@@ -30,10 +31,12 @@ import MrrProxy                     from "../../multiRankRoom/model/MrrProxy";
 import TwnsMrwMyWarListPanel        from "../../multiRankWar/view/MrwMyWarListPanel";
 import RwModel                      from "../../replayWar/model/RwModel";
 import RwProxy                      from "../../replayWar/model/RwProxy";
+import TwnsRwReplayListPanel        from "../../replayWar/view/RwReplayListPanel";
 import TwnsRwTopPanel               from "../../replayWar/view/RwTopPanel";
 import ScrCreateModel               from "../../singleCustomRoom/model/ScrCreateModel";
 import SpmModel                     from "../../singlePlayerMode/model/SpmModel";
 import SpmProxy                     from "../../singlePlayerMode/model/SpmProxy";
+import TwnsSpmWarListPanel          from "../../singlePlayerMode/view/SpmWarListPanel";
 import SpwModel                     from "../../singlePlayerWar/model/SpwModel";
 import TwnsSpwTopPanel              from "../../singlePlayerWar/view/SpwTopPanel";
 import UserModel                    from "../../user/model/UserModel";
@@ -68,6 +71,7 @@ namespace FlowManager {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import WarType          = Types.WarType;
 
     const _NET_EVENTS = [
         { msgCode: NetMessageCodes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
@@ -234,50 +238,27 @@ namespace FlowManager {
         SoundManager.playBgm(Types.BgmCode.MapEditor01);
     }
 
-    export function gotoMrwMyWarListPanel(): void {
-        MpwModel.unloadWar();
-        RwModel.unloadWar();
-        SpwModel.unloadWar();
-        MeModel.unloadWar();
-        StageManager.closeAllPanels();
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-        TwnsMrwMyWarListPanel.MrwMyWarListPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
-
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
+    export function gotoMyWarListPanel(warType: WarType): void {
+        if ((warType === WarType.MfwFog) || (warType === WarType.MfwStd)) {
+            _gotoMfwMyWarListPanel();
+        } else if ((warType === WarType.MrwFog) || (warType === WarType.MrwStd)) {
+            _gotoMrwMyWarListPanel();
+        } else if ((warType === WarType.McwFog) || (warType === WarType.McwStd)) {
+            _gotoMcwMyWarListPanel();
+        } else if ((warType === WarType.CcwFog) || (warType === WarType.CcwStd)) {
+            _gotoCcwMyWarListPanel();
+        } else if ((warType === WarType.ScwFog) || (warType === WarType.ScwStd) || (warType === WarType.SfwFog) || (warType === WarType.SfwStd) || (warType === WarType.SrwFog) || (warType === WarType.SrwStd)) {
+            _gotoSpmWarListPanel();
+        } else if (warType === WarType.Me) {
+            _gotoMeMapListPanel();
+        } else {
+            Logger.error(`FlowManager.gotoMyWarListPanel() invalid warType: ${warType}.`);
+        }
     }
-    export function gotoMcwMyWarListPanel(): void {
-        MpwModel.unloadWar();
-        RwModel.unloadWar();
-        SpwModel.unloadWar();
-        MeModel.unloadWar();
-        StageManager.closeAllPanels();
+    export function gotoRwReplayListPanel(): void {
+        _unloadAllWarsAndCloseAllPanels();
         TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-        TwnsMcwMyWarListPanel.McwMyWarListPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
-
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
-    }
-    export function gotoMfwMyWarListPanel(): void {
-        MpwModel.unloadWar();
-        RwModel.unloadWar();
-        SpwModel.unloadWar();
-        MeModel.unloadWar();
-        StageManager.closeAllPanels();
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-        TwnsMfwMyWarListPanel.MfwMyWarListPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
-
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
-    }
-    export function gotoCcwMyWarListPanel(): void {
-        MpwModel.unloadWar();
-        RwModel.unloadWar();
-        SpwModel.unloadWar();
-        MeModel.unloadWar();
-        StageManager.closeAllPanels();
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-        TwnsCcwMyWarListPanel.CcwMyWarListPanel.show();
+        TwnsRwReplayListPanel.RwReplayListPanel.show();
         TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);
@@ -365,6 +346,63 @@ namespace FlowManager {
             const outLoadingLayer = document.getElementById("outLoadingLayer");
             (outLoadingLayer) && (document.body.removeChild(outLoadingLayer));
         }
+    }
+
+    function _unloadAllWarsAndCloseAllPanels(): void {
+        MpwModel.unloadWar();
+        RwModel.unloadWar();
+        SpwModel.unloadWar();
+        MeModel.unloadWar();
+        StageManager.closeAllPanels();
+    }
+
+    function _gotoMrwMyWarListPanel(): void {
+        _unloadAllWarsAndCloseAllPanels();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsMrwMyWarListPanel.MrwMyWarListPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
+    }
+    function _gotoMcwMyWarListPanel(): void {
+        _unloadAllWarsAndCloseAllPanels();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsMcwMyWarListPanel.McwMyWarListPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
+    }
+    function _gotoMfwMyWarListPanel(): void {
+        _unloadAllWarsAndCloseAllPanels();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsMfwMyWarListPanel.MfwMyWarListPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
+    }
+    function _gotoCcwMyWarListPanel(): void {
+        _unloadAllWarsAndCloseAllPanels();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsCcwMyWarListPanel.CcwMyWarListPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
+    }
+    function _gotoSpmWarListPanel(): void {
+        _unloadAllWarsAndCloseAllPanels();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsSpmWarListPanel.SpmWarListPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
+    }
+    function _gotoMeMapListPanel(): void {
+        _unloadAllWarsAndCloseAllPanels();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsMeMapListPanel.MeMapListPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 }
 

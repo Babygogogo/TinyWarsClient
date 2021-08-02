@@ -428,6 +428,7 @@ namespace TwnsMeWarMenuPanel {
                 this._createCommandReviewReject(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandChat(),
+                this._createCommandGotoMapListPanel(),
                 this._createCommandGotoLobby(),
             ].filter(v => !!v);
         }
@@ -573,6 +574,24 @@ namespace TwnsMeWarMenuPanel {
                     TwnsChatPanel.ChatPanel.show({});
                 },
             };
+        }
+
+        private _createCommandGotoMapListPanel(): DataForCommandRenderer | undefined {
+            const war = this._war;
+            if (war.getIsReviewingMap()) {
+                return undefined;
+            } else {
+                return {
+                    name    : Lang.getText(LangTextType.B0650),
+                    callback: () => {
+                        CommonConfirmPanel.show({
+                            title   : Lang.getText(LangTextType.B0650),
+                            content : war.getIsMapModified() ? Lang.getText(LangTextType.A0143) : Lang.getText(LangTextType.A0225),
+                            callback: () => FlowManager.gotoMyWarListPanel(war.getWarType()),
+                        });
+                    },
+                };
+            }
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {

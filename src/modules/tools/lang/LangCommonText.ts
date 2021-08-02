@@ -938,6 +938,10 @@ namespace TwnsLangCommonText {
             `这是《高级战争》1、2、DS版的网络对战版，独立于Tiny Wars。主要开发维护者：Amarriner、Walker、Matsuzen。`,
             `This is a web version of Advance Wars 1/2/Dual Strike, and is independent of Tiny Wars. Mainly developed/maintained by Amarriner, Walker and Matsuzen.`,
         ],
+        [LangTextType.A0225]: [
+            `您确定要继续吗？`,
+            `Are you sure to continue?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3525,6 +3529,18 @@ namespace TwnsLangCommonText {
         [LangTextType.B0649]: [
             `Advance Wars by Web`,
             `Advance Wars by Web`,
+        ],
+        [LangTextType.B0650]: [
+            `返回地图列表`,
+            `Go to Map List`,
+        ],
+        [LangTextType.B0651]: [
+            `返回回放列表`,
+            `Go to Replay List`,
+        ],
+        [LangTextType.B0652]: [
+            `返回战局列表`,
+            `Go to War List`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
