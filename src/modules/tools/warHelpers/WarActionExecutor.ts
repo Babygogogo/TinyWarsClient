@@ -174,21 +174,38 @@ namespace WarActionExecutor {
             : await normalExePlayerProduceUnit(war, action);
     }
     async function fastExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<ClientErrorCode> {
-        const unitType      = action.unitType;
-        const gridIndex     = action.gridIndex as GridIndex;
-        const unitHp        = action.unitHp;
+        const unitType  = action.unitType as Types.UnitType;
+        const gridIndex = action.gridIndex as GridIndex;
+        const unitHp    = action.unitHp;
+        if (unitHp == null) {
+            return ClientErrorCode.WarActionExecutor_FastExePlayerProduceUnit_00;
+        }
+
         const configVersion = war.getConfigVersion();
+        if (configVersion == null) {
+            return ClientErrorCode.WarActionExecutor_FastExePlayerProduceUnit_01;
+        }
+
         const unitMap       = war.getUnitMap();
         const unitId        = unitMap.getNextUnitId();
         const playerInTurn  = war.getPlayerInTurn();
+        if (playerInTurn == null) {
+            return ClientErrorCode.WarActionExecutor_FastExePlayerProduceUnit_02;
+        }
+
         const playerIndex   = playerInTurn.getPlayerIndex();
         const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
         const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
-        const cost          = Math.floor(
+        const costModifier  = playerInTurn.getUnitCostModifier(gridIndex, false, unitType);
+        if (costModifier == null) {
+            return ClientErrorCode.WarActionExecutor_FastExePlayerProduceUnit_03;
+        }
+
+        const cost = Math.floor(
             cfgCost
             * (skillCfg ? skillCfg[5] : 100)
             * WarCommonHelpers.getNormalizedHp(unitHp)
-            * playerInTurn.getUnitCostModifier(gridIndex, false, unitType)
+            * costModifier
             / 100
             / CommonConstants.UnitHpNormalizer
         );

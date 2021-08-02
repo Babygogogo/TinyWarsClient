@@ -64,6 +64,7 @@ namespace Types {
     export interface CoBasicCfg extends ProtoTypes.Config.ICoBasicCfg {
         coId                : number;
         name                : string;
+        tier                : number;
         zoneRadius          : number;
         boardCostPercentage : number;
         maxLoadCount        : number;

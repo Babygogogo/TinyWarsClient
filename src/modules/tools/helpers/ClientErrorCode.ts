@@ -1504,6 +1504,17 @@ namespace TwnsClientErrorCode {
         BwWarActionExecutor_CheckAndExecute_08,
         BwWarActionExecutor_CheckAndExecute_09,
 
+        WarActionExecutor_FastExePlayerProduceUnit_00,
+        WarActionExecutor_FastExePlayerProduceUnit_01,
+        WarActionExecutor_FastExePlayerProduceUnit_02,
+        WarActionExecutor_FastExePlayerProduceUnit_03,
+        WarActionExecutor_FastExePlayerProduceUnit_04,
+        WarActionExecutor_FastExePlayerProduceUnit_05,
+        WarActionExecutor_FastExePlayerProduceUnit_06,
+        WarActionExecutor_FastExePlayerProduceUnit_07,
+        WarActionExecutor_FastExePlayerProduceUnit_08,
+        WarActionExecutor_FastExePlayerProduceUnit_09,
+
         BwWarActionExecutor_NormalExePlayerProduceUnit_00,
         BwWarActionExecutor_NormalExePlayerProduceUnit_01,
         BwWarActionExecutor_NormalExePlayerProduceUnit_02,
