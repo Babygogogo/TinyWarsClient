@@ -1688,6 +1688,12 @@ export declare namespace Config {
 
         /** CoSkillCfg selfCaptureAmount */
         selfCaptureAmount?: (number[]|null);
+
+        /** CoSkillCfg selfTileIncome */
+        selfTileIncome?: (number[]|null);
+
+        /** CoSkillCfg enemyEnergy */
+        enemyEnergy?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1803,6 +1809,12 @@ export declare namespace Config {
 
         /** CoSkillCfg selfCaptureAmount. */
         public selfCaptureAmount: number[];
+
+        /** CoSkillCfg selfTileIncome. */
+        public selfTileIncome: number[];
+
+        /** CoSkillCfg enemyEnergy. */
+        public enemyEnergy: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.

@@ -533,16 +533,86 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for income.
         ////////////////////////////////////////////////////////////////////////////////
-        public getIncomeAmountPerTurn(): number | undefined {
-            return this._templateCfg.incomePerTurn;
-        }
-        public getIncomeForPlayer(playerIndex: number): number {
-            const baseIncome = this.getIncomeAmountPerTurn();
-            if ((baseIncome == null) || (this.getPlayerIndex() !== playerIndex)) {
-                return 0;
-            } else {
-                return Math.floor(baseIncome * this.getWar().getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex) / 100);
+        private _getCfgIncome(): number | undefined {
+            const cfg = this._getTemplateCfg();
+            if (cfg == null) {
+                Logger.error(`BwTile._getCfgIncome() templateCfg is empty.`);
+                return undefined;
             }
+
+            return cfg.incomePerTurn || 0;
+        }
+        public getIncomeForPlayer(playerIndex: number): number | undefined {
+            if ((this.getPlayerIndex() !== playerIndex) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+                return 0;
+            }
+
+            const cfgIncome = this._getCfgIncome();
+            if (cfgIncome == null) {
+                Logger.error(`BwTile.getIncomeForPlayer() empty cfgIncome.`);
+                return undefined;
+            }
+
+            const war = this.getWar();
+            if (war == null) {
+                Logger.error(`BwTile.getIncomeForPlayer() war is empty.`);
+                return undefined;
+            }
+
+            const multiplierForSettings = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
+            if (multiplierForSettings == null) {
+                Logger.error(`BwTile.getIncomeForPlayer() empty multiplierForSettings.`);
+                return undefined;
+            }
+
+            const configVersion = war.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwTile.getIncomeForPlayer() empty configVersion.`);
+                return undefined;
+            }
+
+            const player = this.getPlayer();
+            if (player == null) {
+                Logger.error(`BwTile.getIncomeForPlayer() empty player.`);
+                return undefined;
+            }
+
+            const tileType = this.getType();
+            if (tileType == null) {
+                Logger.error(`BwTile.getIncomeForPlayer() empty tileType.`);
+                return undefined;
+            }
+
+            const gridIndex = this.getGridIndex();
+            if (gridIndex == null) {
+                Logger.error(`BwTile.getIncomeForPlayer() empty gridIndex.`);
+                return undefined;
+            }
+
+            const coZoneRadius = player.getCoZoneRadius();
+            if (coZoneRadius == null) {
+                Logger.error(`BwTile.getIncomeForPlayer() empty coZoneRadius.`);
+                return undefined;
+            }
+
+            const coGridIndexListOnMap = player.getCoGridIndexListOnMap();
+            if (coGridIndexListOnMap == null) {
+                Logger.error(`BwTile.getIncomeForPlayer() empty coGridIndexListOnMap.`);
+                return undefined;
+            }
+
+            let modifierForSkill = 1;
+            for (const skillId of player.getCoCurrentSkills() || []) {
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfTileIncome;
+                if ((cfg)                                                                                                       &&
+                    (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[1]))                                  &&
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius))
+                ) {
+                    modifierForSkill *= cfg[2] / 100;
+                }
+            }
+
+            return Math.floor(cfgIncome * multiplierForSettings / 100 * modifierForSkill);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

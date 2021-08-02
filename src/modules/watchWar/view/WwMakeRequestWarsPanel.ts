@@ -3,6 +3,7 @@ import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPa
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import ConfigManager                        from "../../tools/helpers/ConfigManager";
 import FloatText                            from "../../tools/helpers/FloatText";
+import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
 import TwnsLangTextType                     from "../../tools/lang/LangTextType";
@@ -32,23 +33,23 @@ namespace TwnsWwMakeRequestWarsPanel {
 
         private static _instance: WwMakeRequestWarsPanel;
 
-        private _labelPlayersTitle  : TwnsUiLabel.UiLabel;
-        private _labelCommentTitle  : TwnsUiLabel.UiLabel;
-        private _labelMenuTitle     : TwnsUiLabel.UiLabel;
-        private _listWar            : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
-        private _labelNoWar         : TwnsUiLabel.UiLabel;
-        private _zoomMap            : TwnsUiZoomableMap.UiZoomableMap;
-        private _btnBack            : TwnsUiButton.UiButton;
+        private readonly _labelPlayersTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelCommentTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _listWar!              : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
+        private readonly _labelNoWar!           : TwnsUiLabel.UiLabel;
+        private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
 
-        private _groupInfo      : eui.Group;
-        private _labelMapName   : TwnsUiLabel.UiLabel;
-        private _labelDesigner  : TwnsUiLabel.UiLabel;
-        private _labelHasFog    : TwnsUiLabel.UiLabel;
-        private _labelWarComment: TwnsUiLabel.UiLabel;
-        private _listPlayer     : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _groupInfo!            : eui.Group;
+        private readonly _labelMapName!         : TwnsUiLabel.UiLabel;
+        private readonly _labelDesigner!        : TwnsUiLabel.UiLabel;
+        private readonly _labelHasFog!          : TwnsUiLabel.UiLabel;
+        private readonly _labelWarComment!      : TwnsUiLabel.UiLabel;
+        private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
-        private _selectedWarIndex   : number;
+        private _selectedWarIndex   : number | undefined;
 
         public static show(): void {
             if (!WwMakeRequestWarsPanel._instance) {
@@ -95,7 +96,7 @@ namespace TwnsWwMakeRequestWarsPanel {
             const dataList         = this._dataForListWar;
             this._selectedWarIndex = dataList[newIndex] ? newIndex : undefined;
 
-            if (dataList[oldIndex]) {
+            if ((oldIndex != null) && (dataList[oldIndex])) {
                 this._listWar.updateSingleData(oldIndex, dataList[oldIndex]);
             }
 
@@ -107,7 +108,7 @@ namespace TwnsWwMakeRequestWarsPanel {
                 this._groupInfo.visible = false;
             }
         }
-        public getSelectedIndex(): number {
+        public getSelectedIndex(): number | undefined {
             return this._selectedWarIndex;
         }
 
@@ -147,7 +148,7 @@ namespace TwnsWwMakeRequestWarsPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListWar(infos: ProtoTypes.MultiPlayerWar.IMpwWatchInfo[]): DataForWarRenderer[] {
+        private _createDataForListWar(infos: ProtoTypes.MultiPlayerWar.IMpwWatchInfo[] | null): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             if (infos) {
                 for (let i = 0; i < infos.length; ++i) {
@@ -177,8 +178,13 @@ namespace TwnsWwMakeRequestWarsPanel {
         }
 
         private async _showMap(index: number): Promise<void> {
-            const warInfo           = this._dataForListWar[index].info.warInfo;
-            const hasFogByDefault   = warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
+            const warInfo = this._dataForListWar[index].info.warInfo;
+            if (warInfo == null) {
+                Logger.error(`WwMakeRequestWarsPanel._showMap() empty warInfo.`);
+                return;
+            }
+
+            const hasFogByDefault   = warInfo.settingsForCommon?.warRule?.ruleForGlobalParams?.hasFogByDefault;
             const {
                 settingsForMfw,
                 settingsForCcw,
@@ -194,8 +200,8 @@ namespace TwnsWwMakeRequestWarsPanel {
 
             if (settingsForMfw) {
                 const warData           = settingsForMfw.initialWarData;
-                labelMapName.text       = undefined;
-                labelDesigner.text      = undefined;
+                labelMapName.text       = ``;
+                labelDesigner.text      = ``;
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = settingsForMfw.warComment || "----";
                 listPlayer.bindData(this._createDataForListPlayer(warInfo, warData.playerManager.players.length - 1));

@@ -18,6 +18,7 @@ namespace WarCoSkillHelpers {
     import IDataForUseCoSkill   = Structure.IDataForUseCoSkill;
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
     import BwWar                = TwnsBwWar.BwWar;
+    import ICoSkillCfg          = ProtoTypes.Config.ICoSkillCfg;
 
     type DamageMaps = {
         hpMap   : number[][];
@@ -66,6 +67,7 @@ namespace WarCoSkillHelpers {
         }
 
         exeSelfFund({ skillCfg, player });
+        exeEnemyEnergy({ skillCfg, player, war });
         exeSelfHpGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeEnemyHpGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeSelfFuelGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
@@ -80,7 +82,7 @@ namespace WarCoSkillHelpers {
     }
 
     function exeSelfFund({ skillCfg, player }: {
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg;
+        skillCfg        : ICoSkillCfg;
         player          : BwPlayer;
     }): void {
         const cfg = skillCfg.selfFund;
@@ -97,9 +99,59 @@ namespace WarCoSkillHelpers {
         player.setFund(Math.floor(currFund * cfg[0] / 100 + cfg[1]));
     }
 
+    function exeEnemyEnergy({ skillCfg, player, war }: {
+        skillCfg        : ICoSkillCfg;
+        player          : BwPlayer;
+        war             : BwWar;
+    }): void {
+        const cfg = skillCfg.enemyEnergy;
+        if (cfg == null) {
+            return;
+        }
+
+        const selfFund = player.getFund();
+        if (selfFund == null) {
+            Logger.error(`WarCoSkillHelpers.exeEnemyEnergy() empty selfFund.`);
+            return;
+        }
+
+        const selfTeamIndex = player.getTeamIndex();
+        if (selfTeamIndex == null) {
+            Logger.error(`WarCoSkillHelpers.exeEnemyEnergy() empty selfTeamIndex.`);
+        }
+
+        const modifier = cfg[0] * selfFund / 10000 + cfg[1];
+        for (const p of war.getPlayerManager().getAllPlayers()) {
+            const teamIndex = p.getTeamIndex();
+            if (teamIndex == null) {
+                Logger.error(`WarCoSkillHelpers.exeEnemyEnergy() empty teamIndex.`);
+                return;
+            }
+
+            if ((teamIndex === selfTeamIndex) || (teamIndex === CommonConstants.WarNeutralTeamIndex)) {
+                continue;
+            }
+
+            const currentEnergy = p.getCoCurrentEnergy();
+            if (currentEnergy == null) {
+                Logger.error(`WarCoSkillHelpers.exeEnemyEnergy() empty currentEnergy.`);
+                return;
+            }
+
+            const maxEnergy = p.getCoMaxEnergy();
+            p.setCoCurrentEnergy(Math.max(
+                0,
+                Math.min(
+                    maxEnergy,
+                    Math.floor(currentEnergy + maxEnergy * modifier / 100),
+                ),
+            ));
+        }
+    }
+
     function exeSelfHpGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -163,7 +215,7 @@ namespace WarCoSkillHelpers {
 
     function exeEnemyHpGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -227,7 +279,7 @@ namespace WarCoSkillHelpers {
 
     function exeSelfFuelGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -295,7 +347,7 @@ namespace WarCoSkillHelpers {
 
     function exeEnemyFuelGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -363,7 +415,7 @@ namespace WarCoSkillHelpers {
 
     function exeSelfMaterialGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -453,7 +505,7 @@ namespace WarCoSkillHelpers {
 
     function exeEnemyMaterialGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -543,7 +595,7 @@ namespace WarCoSkillHelpers {
 
     function exeSelfPrimaryAmmoGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -610,7 +662,7 @@ namespace WarCoSkillHelpers {
 
     function exeEnemyPrimaryAmmoGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -677,7 +729,7 @@ namespace WarCoSkillHelpers {
 
     function exeIndiscriminateAreaDamage(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -715,7 +767,7 @@ namespace WarCoSkillHelpers {
 
     function exeSelfPromotionGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -779,7 +831,7 @@ namespace WarCoSkillHelpers {
 
     function exeSelfUnitActionState(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
