@@ -178,31 +178,68 @@ namespace TwnsWwMakeRequestWarsPanel {
 
         private async _showMap(index: number): Promise<void> {
             const warInfo           = this._dataForListWar[index].info.warInfo;
-            const settingsForMfw    = warInfo.settingsForMfw;
+            const hasFogByDefault   = warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
+            const {
+                settingsForMfw,
+                settingsForCcw,
+                settingsForMcw,
+                settingsForMrw,
+            } = warInfo;
+            const labelMapName      = this._labelMapName;
+            const labelDesigner     = this._labelDesigner;
+            const labelHasFog       = this._labelHasFog;
+            const labelWarComment   = this._labelWarComment;
+            const listPlayer        = this._listPlayer;
+            const zoomMap           = this._zoomMap;
+
             if (settingsForMfw) {
-                const warData               = settingsForMfw.initialWarData;
-                this._labelMapName.text     = undefined;
-                this._labelDesigner.text    = undefined;
-                this._labelHasFog.text      = Lang.getFormattedText(LangTextType.F0005, Lang.getText(warData.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
-                this._labelWarComment.text  = settingsForMfw.warComment || "----";
-                this._listPlayer.bindData(this._createDataForListPlayer(warInfo, warData.playerManager.players.length - 1));
-                this._zoomMap.showMapByWarData(warData);
-            } else {
-                const settingsForMcw        = warInfo.settingsForMcw;
-                const mapId                 = settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId;
-                const mapRawData            = await WarMapModel.getRawData(mapId);
-                this._labelMapName.text     = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                this._labelDesigner.text    = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
-                this._labelHasFog.text      = Lang.getFormattedText(LangTextType.F0005, Lang.getText(warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
-                this._labelWarComment.text  = (settingsForMcw ? settingsForMcw.warComment : null) || "----";
-                this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
-                this._zoomMap.showMapByMapData(mapRawData);
+                const warData           = settingsForMfw.initialWarData;
+                labelMapName.text       = undefined;
+                labelDesigner.text      = undefined;
+                labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
+                labelWarComment.text    = settingsForMfw.warComment || "----";
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, warData.playerManager.players.length - 1));
+                zoomMap.showMapByWarData(warData);
+            } else if (settingsForCcw) {
+                const mapId             = settingsForCcw.mapId;
+                const mapRawData        = await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+                labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
+                labelWarComment.text    = settingsForCcw.warComment || "----";
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
+                zoomMap.showMapByMapData(mapRawData);
+            } else if (settingsForMcw) {
+                const mapId             = settingsForMcw.mapId;
+                const mapRawData        = await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+                labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
+                labelWarComment.text    = settingsForMcw.warComment || "----";
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
+                zoomMap.showMapByMapData(mapRawData);
+            } else if (settingsForMrw) {
+                const mapId             = settingsForMrw.mapId;
+                const mapRawData        = await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+                labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
+                labelWarComment.text    = "----";
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
+                zoomMap.showMapByMapData(mapRawData);
             }
 
-            this._groupInfo.visible      = true;
-            this._groupInfo.alpha        = 1;
-            egret.Tween.removeTweens(this._groupInfo);
-            egret.Tween.get(this._groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1;});
+            const groupInfo     = this._groupInfo;
+            groupInfo.visible   = true;
+            groupInfo.alpha     = 1;
+            egret.Tween.removeTweens(groupInfo);
+            egret.Tween.get(groupInfo)
+                .wait(8000)
+                .to({alpha: 0}, 1000)
+                .call(() => {
+                    groupInfo.visible = false;
+                    groupInfo.alpha = 1;
+                });
         }
 
         private _updateComponentsForLanguage(): void {
@@ -233,23 +270,8 @@ namespace TwnsWwMakeRequestWarsPanel {
 
         protected _onDataChanged(): void {
             const data          = this.data;
-            const warInfo       = data.info.warInfo;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-
-            const labelName         = this._labelName;
-            const settingsForMfw    = warInfo.settingsForMfw;
-            if (settingsForMfw) {
-                labelName.text = settingsForMfw.warName || `----`;
-            } else {
-                const settingsForMcw    = warInfo.settingsForMcw;
-                const warName           = settingsForMcw ? settingsForMcw.warName : null;
-                if (warName) {
-                    labelName.text = warName;
-                } else {
-                    labelName.text = "";
-                    WarMapModel.getMapNameInCurrentLanguage(settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId).then(v => labelName.text = v);
-                }
-            }
+            this._updateLabelName();
         }
 
         private _onTouchTapBtnChoose(): void {
@@ -259,6 +281,23 @@ namespace TwnsWwMakeRequestWarsPanel {
 
         private async _onTouchTapBtnNext(): Promise<void> {
             McrWatchMakeRequestDetailPanel.show({ watchInfo: this.data.info });
+        }
+
+        private async _updateLabelName(): Promise<void> {
+            const warInfo   = this.data.info.warInfo;
+            const labelName = this._labelName;
+            labelName.text  = ``;
+
+            const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warInfo;
+            if (settingsForMfw) {
+                labelName.text = settingsForMfw.warName || `----`;
+            } else if (settingsForMcw) {
+                labelName.text = settingsForMcw.warName || await WarMapModel.getMapNameInCurrentLanguage(settingsForMcw.mapId);
+            } else if (settingsForCcw) {
+                labelName.text = settingsForCcw.warName || await WarMapModel.getMapNameInCurrentLanguage(settingsForCcw.mapId);
+            } else if (settingsForMrw) {
+                labelName.text = await WarMapModel.getMapNameInCurrentLanguage(settingsForMrw.mapId);
+            }
         }
     }
 
