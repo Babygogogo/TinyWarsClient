@@ -1694,6 +1694,12 @@ export declare namespace Config {
 
         /** CoSkillCfg enemyEnergy */
         enemyEnergy?: (number[]|null);
+
+        /** CoSkillCfg selfOffenseBonusByTileCount */
+        selfOffenseBonusByTileCount?: (number[]|null);
+
+        /** CoSkillCfg selfGetFundByAttackUnit */
+        selfGetFundByAttackUnit?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1815,6 +1821,12 @@ export declare namespace Config {
 
         /** CoSkillCfg enemyEnergy. */
         public enemyEnergy: number[];
+
+        /** CoSkillCfg selfOffenseBonusByTileCount. */
+        public selfOffenseBonusByTileCount: number[];
+
+        /** CoSkillCfg selfGetFundByAttackUnit. */
+        public selfGetFundByAttackUnit: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.

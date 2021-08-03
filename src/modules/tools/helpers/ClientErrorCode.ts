@@ -1793,6 +1793,17 @@ namespace TwnsClientErrorCode {
         BwWarActionExecutor_HandlePromotionForUnitAttackUnit_08,
         BwWarActionExecutor_HandlePromotionForUnitAttackUnit_09,
 
+        BwWarActionExecutor_HandleFundForUnitAttackUnit_00,
+        BwWarActionExecutor_HandleFundForUnitAttackUnit_01,
+        BwWarActionExecutor_HandleFundForUnitAttackUnit_02,
+        BwWarActionExecutor_HandleFundForUnitAttackUnit_03,
+        BwWarActionExecutor_HandleFundForUnitAttackUnit_04,
+        BwWarActionExecutor_HandleFundForUnitAttackUnit_05,
+        BwWarActionExecutor_HandleFundForUnitAttackUnit_06,
+        BwWarActionExecutor_HandleFundForUnitAttackUnit_07,
+        BwWarActionExecutor_HandleFundForUnitAttackUnit_08,
+        BwWarActionExecutor_HandleFundForUnitAttackUnit_09,
+
         BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00,
         BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01,
         BwWarActionExecutor_HandleEnergyForUnitAttackUnit_02,

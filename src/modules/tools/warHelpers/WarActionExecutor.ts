@@ -907,6 +907,7 @@ namespace WarActionExecutor {
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
                         const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
+                        const isInCoZone1           = (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1));
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
                         if (errorCodeForPrimaryAmmo) {
@@ -929,12 +930,23 @@ namespace WarActionExecutor {
                             return errorCodeForPromotion;
                         }
 
+                        const errorCodeForFund = handleFundForUnitAttackUnit({
+                            attackerPlayer              : player1,
+                            attackerUnit                : unit1,
+                            targetUnit                  : unit2,
+                            targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            isAttackerInAttackerCoZone  : isInCoZone1,
+                        });
+                        if (errorCodeForFund) {
+                            return errorCodeForFund;
+                        }
+
                         const errorCodeForEnergy = handleEnergyForUnitAttackUnit({
                             war,
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
-                            isAttackerInAttackerCoZone  : (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1)),
+                            isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
                         if (errorCodeForEnergy) {
@@ -1271,6 +1283,7 @@ namespace WarActionExecutor {
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
                         const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
+                        const isInCoZone1           = (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1));
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
                         if (errorCodeForPrimaryAmmo) {
@@ -1293,12 +1306,23 @@ namespace WarActionExecutor {
                             return errorCodeForPromotion;
                         }
 
+                        const errorCodeForFund = handleFundForUnitAttackUnit({
+                            attackerPlayer              : player1,
+                            attackerUnit                : unit1,
+                            targetUnit                  : unit2,
+                            targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            isAttackerInAttackerCoZone  : isInCoZone1,
+                        });
+                        if (errorCodeForFund) {
+                            return errorCodeForFund;
+                        }
+
                         const errorCodeForEnergy = handleEnergyForUnitAttackUnit({
                             war,
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
-                            isAttackerInAttackerCoZone  : (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1)),
+                            isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
                         if (errorCodeForEnergy) {
@@ -1597,6 +1621,7 @@ namespace WarActionExecutor {
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
                         const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
+                        const isInCoZone1           = (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1));
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
                         if (errorCodeForPrimaryAmmo) {
@@ -1619,12 +1644,23 @@ namespace WarActionExecutor {
                             return errorCodeForPromotion;
                         }
 
+                        const errorCodeForFund = handleFundForUnitAttackUnit({
+                            attackerPlayer              : player1,
+                            attackerUnit                : unit1,
+                            targetUnit                  : unit2,
+                            targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            isAttackerInAttackerCoZone  : isInCoZone1,
+                        });
+                        if (errorCodeForFund) {
+                            return errorCodeForFund;
+                        }
+
                         const errorCodeForEnergy = handleEnergyForUnitAttackUnit({
                             war,
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
-                            isAttackerInAttackerCoZone  : (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1)),
+                            isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
                         if (errorCodeForEnergy) {
@@ -1961,6 +1997,7 @@ namespace WarActionExecutor {
 
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
                         const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
+                        const isInCoZone1           = (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1));
 
                         const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
                         if (errorCodeForPrimaryAmmo) {
@@ -1983,12 +2020,23 @@ namespace WarActionExecutor {
                             return errorCodeForPromotion;
                         }
 
+                        const errorCodeForFund = handleFundForUnitAttackUnit({
+                            attackerPlayer              : player1,
+                            attackerUnit                : unit1,
+                            targetUnit                  : unit2,
+                            targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            isAttackerInAttackerCoZone  : isInCoZone1,
+                        });
+                        if (errorCodeForFund) {
+                            return errorCodeForFund;
+                        }
+
                         const errorCodeForEnergy = handleEnergyForUnitAttackUnit({
                             war,
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
-                            isAttackerInAttackerCoZone  : (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1)),
+                            isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
                         if (errorCodeForEnergy) {
@@ -3728,6 +3776,57 @@ namespace WarActionExecutor {
             }
         }
 
+        return ClientErrorCode.NoError;
+    }
+    function handleFundForUnitAttackUnit({ attackerPlayer, attackerUnit, targetUnit, targetLostNormalizedHp, isAttackerInAttackerCoZone } :{
+        attackerPlayer              : BwPlayer;
+        attackerUnit                : BwUnit;
+        targetUnit                  : BwUnit;
+        targetLostNormalizedHp      : number;
+        isAttackerInAttackerCoZone  : boolean;
+    }): ClientErrorCode {
+        if ((targetLostNormalizedHp == 0) || (attackerPlayer.getCoId() === CommonConstants.CoEmptyId)) {
+            return ClientErrorCode.NoError;
+        }
+
+        const currentFund = attackerPlayer.getFund();
+        if (currentFund == null) {
+            return ClientErrorCode.BwWarActionExecutor_HandleFundForUnitAttackUnit_00;
+        }
+
+        const configVersion = attackerUnit.getConfigVersion();
+        if (configVersion == null) {
+            return ClientErrorCode.BwWarActionExecutor_HandleFundForUnitAttackUnit_01;
+        }
+
+        const attackerUnitType = attackerUnit.getUnitType();
+        if (attackerUnitType == null) {
+            return ClientErrorCode.BwWarActionExecutor_HandleFundForUnitAttackUnit_02;
+        }
+
+        const targetUnitType = targetUnit.getUnitType();
+        if (targetUnitType == null) {
+            return ClientErrorCode.BwWarActionExecutor_HandleFundForUnitAttackUnit_03;
+        }
+
+        const targetUnitCost = targetUnit.getProductionFinalCost();
+        if (targetUnitCost == null) {
+            return ClientErrorCode.BwWarActionExecutor_HandleFundForUnitAttackUnit_04;
+        }
+
+        let addFund = 0;
+        for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
+            const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfGetFundByAttackUnit;
+            if ((cfg)                                                                               &&
+                ((isAttackerInAttackerCoZone) || (cfg[0] === Types.CoSkillAreaType.Halo))           &&
+                (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))  &&
+                (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[2]))
+            ) {
+                addFund += targetUnitCost / 10 * targetLostNormalizedHp * cfg[3] / 100;
+            }
+        }
+
+        attackerPlayer.setFund(Math.floor(currentFund + addFund));
         return ClientErrorCode.NoError;
     }
     function handleEnergyForUnitAttackUnit({ war, attackerPlayer, targetPlayer, targetLostNormalizedHp, isAttackerInAttackerCoZone, isTargetInTargetCoZone }: {

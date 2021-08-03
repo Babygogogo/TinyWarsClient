@@ -6,11 +6,11 @@ import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsBwUnitView       from "../view/BwUnitView";
 import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwUnitView       from "../view/BwUnitView";
 import TwnsBwPlayer         from "./BwPlayer";
 import TwnsBwTile           from "./BwTile";
-import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwUnit {
@@ -481,11 +481,15 @@ namespace TwnsBwUnit {
                 : undefined;
         }
 
-        public getAttackModifierByCo(selfGridIndex: GridIndex): number {
+        public getAttackModifierByCo(selfGridIndex: GridIndex): number | undefined {
             const player = this.getPlayer();
             if (player == null) {
                 Logger.error(`BwUnit.getAttackModifierByCo() no player.`);
                 return undefined;
+            }
+
+            if (player.getCoId() === CommonConstants.CoEmptyId) {
+                return 0;
             }
 
             const configVersion = this.getConfigVersion();
@@ -498,10 +502,6 @@ namespace TwnsBwUnit {
             if (unitType == null) {
                 Logger.error(`BwUnit.getAttackModifierByCo() unitType is empty.`);
                 return undefined;
-            }
-
-            if (!player.getCoId()) {
-                return 0;
             }
 
             const coGridIndexListOnMap = player.getCoGridIndexListOnMap();
@@ -522,14 +522,27 @@ namespace TwnsBwUnit {
                 return undefined;
             }
 
-            const tileType = this.getWar()?.getTileMap().getTile(selfGridIndex)?.getType();
-            if (tileType == null) {
-                Logger.error(`BwUnit.getAttackModifierByCo() empty tileType.`);
+            const tileMap = this.getWar()?.getTileMap();
+            if (tileMap == null) {
+                Logger.error(`BwUnit.getAttackModifierByCo() empty tileMap.`);
+                return undefined;
+            }
+
+            const selfTileType = tileMap.getTile(selfGridIndex)?.getType();
+            if (selfTileType == null) {
+                Logger.error(`BwUnit.getAttackModifierByCo() empty selfTileType.`);
+                return undefined;
+            }
+
+            const playerIndex = this.getPlayerIndex();
+            if (playerIndex == null) {
+                Logger.error(`BwUnit.getAttackModifierByCo() empty playerIndex.`);
                 return undefined;
             }
 
             const promotion     = this.getCurrentPromotion();
             const hasLoadedCo   = this.getHasLoadedCo();
+            const tileCountDict = new Map<Types.TileCategory, number>();
             let modifier        = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
@@ -573,10 +586,45 @@ namespace TwnsBwUnit {
                     const cfg = skillCfg.selfOffenseBonusByTile;
                     if ((cfg)                                                                                                                           &&
                         (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                      &&
-                        (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[2]))                                                      &&
+                        (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))                                                  &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
                     ) {
                         modifier += cfg[3];
+                    }
+                }
+
+                {
+                    const cfg = skillCfg.selfOffenseBonusByTileCount;
+                    if ((cfg)                                                                                                                           &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                      &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ) {
+                        const tileCategory      : Types.TileCategory = cfg[2];
+                        const modifierPerTile   = cfg[3];
+                        const currentTileCount  = tileCountDict.get(tileCategory);
+                        if (currentTileCount != null) {
+                            modifier += modifierPerTile * currentTileCount;
+                        } else {
+                            let tileCount = 0;
+                            for (const tile of tileMap.getAllTiles()) {
+                                if (tile.getPlayerIndex() !== playerIndex) {
+                                    continue;
+                                }
+
+                                const tileType = tile.getType();
+                                if (tileType == null) {
+                                    Logger.error(`BwUnit.getAttackModifierByCo() empty tileType.`);
+                                    return undefined;
+                                }
+
+                                if (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, tileCategory)) {
+                                    ++tileCount;
+                                }
+                            }
+
+                            tileCountDict.set(tileCategory, tileCount);
+                            modifier += modifierPerTile * tileCount;
+                        }
                     }
                 }
             }

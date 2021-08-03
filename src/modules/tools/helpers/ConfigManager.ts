@@ -694,7 +694,7 @@ namespace ConfigManager {
         return (diveCfgs != null) && (!!diveCfgs[1]);
     }
 
-    export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: number): boolean {
+    export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: number | null | undefined): boolean {
         if (tileObjectType === TileObjectType.Empty) {
             return !shapeId;
         } else {
@@ -703,7 +703,7 @@ namespace ConfigManager {
                 && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
         }
     }
-    export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: number): boolean {
+    export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: number | null | undefined): boolean {
         const cfg = CommonConstants.TileBaseShapeConfigs.get(tileBaseType);
         return (!!cfg)
             && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
