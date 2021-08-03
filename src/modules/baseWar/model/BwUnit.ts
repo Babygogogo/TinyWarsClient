@@ -32,28 +32,28 @@ namespace TwnsBwUnit {
     import BwUnitView           = TwnsBwUnitView.BwUnitView;
 
     export class BwUnit {
-        private _templateCfg                : UnitTemplateCfg;
-        private _playerIndex                : number;
-        private _gridX                      : number;
-        private _gridY                      : number;
-        private _unitId                     : number;
+        private _templateCfg?               : UnitTemplateCfg;
+        private _playerIndex?               : number;
+        private _gridX?                     : number;
+        private _gridY?                     : number;
+        private _unitId?                    : number;
 
-        private _actionState                : UnitActionState;
-        private _currentHp                  : number;
-        private _currentFuel                : number;
-        private _currentPromotion           : number;
-        private _currentBuildMaterial       : number;
-        private _currentProduceMaterial     : number;
-        private _flareCurrentAmmo           : number;
-        private _isBuildingTile             : boolean;
-        private _isCapturingTile            : boolean;
-        private _isDiving                   : boolean;
-        private _hasLoadedCo                : boolean;
-        private _loaderUnitId               : number;
-        private _primaryWeaponCurrentAmmo   : number;
+        private _actionState?               : UnitActionState;
+        private _currentHp?                 : number;
+        private _currentFuel?               : number;
+        private _currentPromotion?          : number;
+        private _currentBuildMaterial?      : number;
+        private _currentProduceMaterial?    : number;
+        private _flareCurrentAmmo?          : number;
+        private _isBuildingTile?            : boolean;
+        private _isCapturingTile?           : boolean;
+        private _isDiving?                  : boolean;
+        private _hasLoadedCo?               : boolean;
+        private _loaderUnitId?              : number;
+        private _primaryWeaponCurrentAmmo?  : number;
 
-        private _war                        : BwWar;
         private readonly _view              = new BwUnitView();
+        private _war?                       : BwWar;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
@@ -218,7 +218,7 @@ namespace TwnsBwUnit {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: BwWar): void {
+        private _setWar(war: BwWar | undefined): void {
             this._war = war;
         }
         public getWar(): BwWar | undefined {
@@ -358,7 +358,7 @@ namespace TwnsBwUnit {
         private _setPlayerIndex(index: number): void {
             this._playerIndex = index;
         }
-        public getPlayerIndex(): number {
+        public getPlayerIndex(): number | undefined {
             return this._playerIndex;
         }
 
@@ -834,7 +834,7 @@ namespace TwnsBwUnit {
             const hasLoadedCo   = this.getHasLoadedCo();
             let modifier        = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).maxAttackRangeBonus;
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.maxAttackRangeBonus;
                 if ((cfg)                                                                                                                       &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
@@ -846,10 +846,10 @@ namespace TwnsBwUnit {
         }
 
         public checkCanAttackAfterMove(): boolean {
-            return this._getTemplateCfg().canAttackAfterMove === 1;
+            return this._getTemplateCfg()?.canAttackAfterMove === 1;
         }
         public checkCanAttackDivingUnits(): boolean {
-            return this._getTemplateCfg().canAttackDivingUnits === 1;
+            return this._getTemplateCfg()?.canAttackDivingUnits === 1;
         }
 
         public checkCanAttackTargetAfterMovePath(movePath: GridIndex[], targetGridIndex: GridIndex): boolean {
@@ -1289,8 +1289,8 @@ namespace TwnsBwUnit {
             return Math.floor(cfgCost * modifier);
         }
 
-        public getMaxProduceMaterial(): number | undefined {
-            return this._getTemplateCfg().maxProduceMaterial;
+        public getMaxProduceMaterial(): number | undefined | null {
+            return this._getTemplateCfg()?.maxProduceMaterial;
         }
 
         public getCurrentProduceMaterial(): number | undefined {
@@ -1317,10 +1317,10 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for move.
         ////////////////////////////////////////////////////////////////////////////////
-        public getCfgMoveRange(): number {
-            return this._getTemplateCfg().moveRange;
+        public getCfgMoveRange(): number | undefined {
+            return this._getTemplateCfg()?.moveRange;
         }
-        public getFinalMoveRange(): number {
+        public getFinalMoveRange(): number | undefined {
             const war           = this.getWar();
             const currentFuel   = this.getCurrentFuel();
             const cfgMoveRange  = this.getCfgMoveRange();
@@ -1421,10 +1421,10 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce self.
         ////////////////////////////////////////////////////////////////////////////////
-        public getProductionCfgCost(): number {
-            return this._getTemplateCfg().productionCost;
+        public getProductionCfgCost(): number | undefined {
+            return this._getTemplateCfg()?.productionCost;
         }
-        public getProductionFinalCost(): number {
+        public getProductionFinalCost(): number | undefined {
             const cfgCost = this.getProductionCfgCost();
             if (cfgCost == null) {
                 Logger.error(`BwUnit.getProductionFinalCost() empty cfgCost.`);
@@ -1629,8 +1629,8 @@ namespace TwnsBwUnit {
             return this._getTemplateCfg().repairAmountForLoadedUnits;
         }
 
-        public setLoaderUnitId(id: number | undefined): void {
-            this._loaderUnitId = id;
+        public setLoaderUnitId(loaderUnitId: number | null | undefined): void {
+            this._loaderUnitId = loaderUnitId == null ? undefined : loaderUnitId;
         }
         public getLoaderUnitId(): number | undefined {
             return this._loaderUnitId;

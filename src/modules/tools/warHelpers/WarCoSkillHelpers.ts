@@ -1,15 +1,16 @@
 
-import TwnsBwWar            from "../../baseWar/model/BwWar";
-import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
-import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
-import CommonConstants      from "../helpers/CommonConstants";
-import ConfigManager        from "../helpers/ConfigManager";
-import GridIndexHelpers     from "../helpers/GridIndexHelpers";
-import Helpers              from "../helpers/Helpers";
-import Logger               from "../helpers/Logger";
-import ProtoTypes           from "../proto/ProtoTypes";
-import Types                from "../helpers/Types";
-import WarCommonHelpers     from "./WarCommonHelpers";
+import TwnsBwPlayer     from "../../baseWar/model/BwPlayer";
+import TwnsBwUnit       from "../../baseWar/model/BwUnit";
+import TwnsBwUnitMap    from "../../baseWar/model/BwUnitMap";
+import TwnsBwWar        from "../../baseWar/model/BwWar";
+import CommonConstants  from "../helpers/CommonConstants";
+import ConfigManager    from "../helpers/ConfigManager";
+import GridIndexHelpers from "../helpers/GridIndexHelpers";
+import Helpers          from "../helpers/Helpers";
+import Logger           from "../helpers/Logger";
+import Types            from "../helpers/Types";
+import ProtoTypes       from "../proto/ProtoTypes";
+import WarCommonHelpers from "./WarCommonHelpers";
 
 namespace WarCoSkillHelpers {
     import BwPlayer             = TwnsBwPlayer.BwPlayer;
@@ -68,6 +69,7 @@ namespace WarCoSkillHelpers {
 
         exeSelfFund({ skillCfg, player });
         exeEnemyEnergy({ skillCfg, player, war });
+        exeSelfAddUnit({ skillCfg, player, war });
         exeSelfHpGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeEnemyHpGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeSelfFuelGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
@@ -146,6 +148,95 @@ namespace WarCoSkillHelpers {
                     Math.floor(currentEnergy + maxEnergy * modifier / 100),
                 ),
             ));
+        }
+    }
+
+    function exeSelfAddUnit({ skillCfg, player, war }: {
+        skillCfg        : Types.CoSkillCfg;
+        player          : BwPlayer;
+        war             : BwWar;
+    }): void {
+        const cfg = skillCfg.selfAddUnit;
+        if (cfg == null) {
+            return;
+        }
+
+        const selfPlayerIndex = player.getPlayerIndex();
+        if ((selfPlayerIndex == null) || (selfPlayerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+            Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty selfPlayerIndex.`);
+            return;
+        }
+
+        const configVersion = war.getConfigVersion();
+        if (configVersion == null) {
+            Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty configVersion.`);
+            return;
+        }
+
+        const coZoneRadius = player.getCoZoneRadius();
+        if (coZoneRadius == null) {
+            Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty coZoneRadius.`);
+            return;
+        }
+
+        const coGridIndexListOnMap = player.getCoGridIndexListOnMap();
+        if (coGridIndexListOnMap == null) {
+            Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty coGridIndexListOnMap.`);
+            return;
+        }
+
+        const unitMap = war.getUnitMap();
+        for (const tile of war.getTileMap().getAllTiles()) {
+            if (tile.getPlayerIndex() !== selfPlayerIndex) {
+                continue;
+            }
+
+            const gridIndex = tile.getGridIndex();
+            if (gridIndex == null) {
+                Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty gridIndex.`);
+                return;
+            }
+
+            if (unitMap.getUnitOnMap(gridIndex)) {
+                continue;
+            }
+
+            const tileType = tile.getType();
+            if (tileType == null) {
+                Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty tileType.`);
+                return;
+            }
+
+            if ((!ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[1]))                                 ||
+                (!WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius))
+            ) {
+                continue;
+            }
+
+            const unitId = unitMap.getNextUnitId();
+            if (unitId == null) {
+                Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty unitId.`);
+                return;
+            }
+
+            // cfg:（范围类别，地形类别，部队种类，hp，状态（0=未行动，1=已行动））
+            const unit      = new TwnsBwUnit.BwUnit();
+            const unitError = unit.init({
+                gridIndex,
+                unitId,
+                playerIndex     : selfPlayerIndex,
+                unitType        : cfg[2],
+                currentHp       : cfg[3],
+                actionState     : cfg[4],
+            }, configVersion);
+            if (unitError) {
+                Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() unitError: ${unitError}.`);
+                return;
+            }
+
+            unit.startRunning(war);
+            unitMap.setNextUnitId(unitId + 1);
+            unitMap.setUnitOnMap(unit);
         }
     }
 

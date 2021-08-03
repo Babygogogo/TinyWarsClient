@@ -1700,6 +1700,9 @@ export declare namespace Config {
 
         /** CoSkillCfg selfGetFundByAttackUnit */
         selfGetFundByAttackUnit?: (number[]|null);
+
+        /** CoSkillCfg selfAddUnit */
+        selfAddUnit?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1827,6 +1830,9 @@ export declare namespace Config {
 
         /** CoSkillCfg selfGetFundByAttackUnit. */
         public selfGetFundByAttackUnit: number[];
+
+        /** CoSkillCfg selfAddUnit. */
+        public selfAddUnit: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.
