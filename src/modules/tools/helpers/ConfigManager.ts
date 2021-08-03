@@ -365,9 +365,9 @@ namespace ConfigManager {
         return _ALL_CONFIGS.get(version)?.maxUnitPromotion;
     }
 
-    export function checkHasSecondaryWeapon(version: string, unitType: UnitType): boolean | undefined {
-        const cfgDict = _ALL_CONFIGS.get(version)?.secondaryWeaponFlag;
-        return cfgDict ? cfgDict[unitType] : undefined;
+    export function checkHasSecondaryWeapon(version: string, unitType: UnitType): boolean {
+        const cfg = _ALL_CONFIGS.get(version)?.secondaryWeaponFlag;
+        return cfg ? cfg[unitType] : false;
     }
 
     export function getUnitPromotionAttackBonus(version: string, promotion: number): number | undefined {

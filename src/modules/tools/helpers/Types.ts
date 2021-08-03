@@ -188,13 +188,6 @@ namespace Types {
         movePathDestination: GridIndex;
     }[][];
 
-    export type UnitAttributes = {
-        hp          : number;
-        fuel        : number;
-        primaryAmmo : number | null;
-        flareAmmo   : number | null;
-    };
-
     export type SpmWarSaveSlotData = {
         slotIndex   : number;
         extraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
