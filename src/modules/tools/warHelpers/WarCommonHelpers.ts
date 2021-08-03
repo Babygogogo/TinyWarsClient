@@ -1,4 +1,9 @@
 
+import TwnsBwTile           from "../../baseWar/model/BwTile";
+import TwnsBwTileMap        from "../../baseWar/model/BwTileMap";
+import TwnsBwUnit           from "../../baseWar/model/BwUnit";
+import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
+import TwnsBwWar            from "../../baseWar/model/BwWar";
 import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
 import CommonConstants      from "../helpers/CommonConstants";
 import ConfigManager        from "../helpers/ConfigManager";
@@ -7,14 +12,8 @@ import Helpers              from "../helpers/Helpers";
 import Logger               from "../helpers/Logger";
 import Types                from "../helpers/Types";
 import ProtoTypes           from "../proto/ProtoTypes";
-import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
-import TwnsBwTile           from "../../baseWar/model/BwTile";
-import TwnsBwTileMap        from "../../baseWar/model/BwTileMap";
-import TwnsBwUnit           from "../../baseWar/model/BwUnit";
-import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
-import WarVisibilityHelpers from "./WarVisibilityHelpers";
-import TwnsBwWar            from "../../baseWar/model/BwWar";
 import WarRuleHelpers       from "./WarRuleHelpers";
+import WarVisibilityHelpers from "./WarVisibilityHelpers";
 
 namespace WarCommonHelpers {
     import GridIndex        = Types.GridIndex;
@@ -271,7 +270,7 @@ namespace WarCommonHelpers {
         } else {
             const unitMap = war.getUnitMap();
             if (unitMap == null) {
-                Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitMap.`);
+                Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitMap.`);
                 return undefined;
             }
 
@@ -282,31 +281,31 @@ namespace WarCommonHelpers {
             } else {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
-                    Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitType.`);
+                    Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitType.`);
                     return undefined;
                 }
 
                 const isDiving = unit.getIsDiving();
                 if (isDiving == null) {
-                    Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty isDiving.`);
+                    Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty isDiving.`);
                     return undefined;
                 }
 
                 const unitPlayerIndex = unit.getPlayerIndex();
                 if (unitPlayerIndex == null) {
-                    Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitPlayerIndex.`);
+                    Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitPlayerIndex.`);
                     return undefined;
                 }
 
                 const focusUnit = unitMap.getUnitOnMap(rawPath[0]);
                 if (focusUnit == null) {
-                    Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty focusUnit.`);
+                    Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty focusUnit.`);
                     return undefined;
                 }
 
                 const observerTeamIndex = focusUnit.getTeamIndex();
                 if (observerTeamIndex == null) {
-                    Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty observerTeamIndex.`);
+                    Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty observerTeamIndex.`);
                     return undefined;
                 }
 
@@ -474,7 +473,7 @@ namespace WarCommonHelpers {
             const distance = GridIndexHelpers.getMinDistance(gridIndex, coGridIndexListOnMap);
             return (distance != null) && (distance <= coZoneRadius);
         } else {
-            Logger.error(`BwHelpers.checkIsGridIndexInsideSkillArea() invalid areaType: ${coSkillAreaType}`);
+            Logger.error(`WarCommonHelpers.checkIsGridIndexInsideSkillArea() invalid areaType: ${coSkillAreaType}`);
             return undefined;
         }
     }
@@ -572,38 +571,38 @@ namespace WarCommonHelpers {
         const { war, pathNodes, launchUnitId, fuelConsumption } = params;
         const unitMap = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`BwHelpers.moveUnit() empty unitMap.`);
+            Logger.error(`WarCommonHelpers.moveUnit() empty unitMap.`);
             return undefined;
         }
 
         const tileMap = war.getTileMap();
         if (tileMap == null) {
-            Logger.error(`BwHelpers.getTileMap() empty tileMap.`);
+            Logger.error(`WarCommonHelpers.getTileMap() empty tileMap.`);
             return undefined;
         }
 
         const fogMap = war.getFogMap();
         if (fogMap == null) {
-            Logger.error(`BwHelpers.getFogMap() empty fogMap.`);
+            Logger.error(`WarCommonHelpers.getFogMap() empty fogMap.`);
             return undefined;
         }
 
         const beginningGridIndex    = pathNodes[0];
         const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId);
         if (focusUnit == null) {
-            Logger.error(`BwHelpers.moveUnit() empty focusUnit.`);
+            Logger.error(`WarCommonHelpers.moveUnit() empty focusUnit.`);
             return undefined;
         }
 
         const currentFuel = focusUnit.getCurrentFuel();
         if (currentFuel == null) {
-            Logger.error(`BwHelpers.moveUnit() empty currentFuel.`);
+            Logger.error(`WarCommonHelpers.moveUnit() empty currentFuel.`);
             return undefined;
         }
 
         const tile = tileMap.getTile(beginningGridIndex);
         if (tile == null) {
-            Logger.error(`BwHelpers.moveUnit() empty tile.`);
+            Logger.error(`WarCommonHelpers.moveUnit() empty tile.`);
             return undefined;
         }
 
@@ -653,12 +652,17 @@ namespace WarCommonHelpers {
         isViewVisible   : boolean
     ): void {
         if ((unitsData) && (unitsData.length)) {
-            const unitMap       = war.getUnitMap();
             const configVersion = war.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`WarCommonHelpers.addUnitsBeforeExecutingAction() empty configVersion.`);
+                return;
+            }
+
+            const unitMap = war.getUnitMap();
             for (const unitData of unitsData) {
                 const unitId = unitData.unitId;
                 if (unitId == null) {
-                    Logger.error(`BwHelpers.addUnitsBeforeExecutingAction() empty unitId.`);
+                    Logger.error(`WarCommonHelpers.addUnitsBeforeExecutingAction() empty unitId.`);
                     continue;
                 }
 
@@ -685,14 +689,14 @@ namespace WarCommonHelpers {
             for (const tileData of tilesData) {
                 const gridIndex = GridIndexHelpers.convertGridIndex(tileData.gridIndex);
                 if (gridIndex == null) {
-                    Logger.error(`BwHelpers.updateTilesBeforeExecutingAction() empty gridIndex.`);
+                    Logger.error(`WarCommonHelpers.updateTilesBeforeExecutingAction() empty gridIndex.`);
                     return undefined;
                 }
 
                 const tile          = tileMap.getTile(gridIndex);
                 const configVersion = tile.getConfigVersion();
                 if (configVersion == null) {
-                    Logger.error(`BwHelpers.updateTilesBeforeExecutingAction() empty configVersion.`);
+                    Logger.error(`WarCommonHelpers.updateTilesBeforeExecutingAction() empty configVersion.`);
                     return undefined;
                 }
 
@@ -702,324 +706,6 @@ namespace WarCommonHelpers {
                 }
             }
         }
-    }
-
-    export function exeInstantSkill(
-        war         : BwWar,
-        player      : TwnsBwPlayer.BwPlayer,
-        gridIndex   : GridIndex,
-        skillId     : number,
-        extraData   : ProtoTypes.Structure.IDataForUseCoSkill
-    ): ClientErrorCode {
-        const configVersion = war.getConfigVersion();
-        const skillCfg      = ConfigManager.getCoSkillCfg(configVersion, skillId);
-        if (skillCfg == null) {
-            return ClientErrorCode.BwHelpers_ExeInstantSkill_00;
-        }
-
-        const playerIndex   = player.getPlayerIndex();
-        const unitMap       = war.getUnitMap();
-        const zoneRadius    = player.getCoZoneRadius();
-        if (zoneRadius == null) {
-            return ClientErrorCode.BwHelpers_ExeInstantSkill_01;
-        }
-
-        if (skillCfg.selfHpGain) {
-            const cfg       = skillCfg.selfHpGain;
-            const category  = cfg[1];
-            const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
-            for (const unit of unitMap.getAllUnits()) {
-                if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
-                ) {
-                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
-                        (cfg[0] === 1)
-                    ) {
-                        unit.setCurrentHp(Math.max(
-                            1,
-                            Math.min(
-                                unit.getMaxHp(),
-                                unit.getCurrentHp() + modifier
-                            ),
-                        ));
-                    }
-                }
-            }
-        }
-
-        if (skillCfg.enemyHpGain) {
-            const cfg       = skillCfg.enemyHpGain;
-            const category  = cfg[1];
-            const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
-            for (const unit of unitMap.getAllUnits()) {
-                if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
-                ) {
-                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
-                        (cfg[0] === 1)
-                    ) {
-                        unit.setCurrentHp(Math.max(
-                            1,
-                            Math.min(
-                                unit.getMaxHp(),
-                                unit.getCurrentHp() + modifier
-                            ),
-                        ));
-                    }
-                }
-            }
-        }
-
-        if (skillCfg.selfFuelGain) {
-            const cfg       = skillCfg.selfFuelGain;
-            const category  = cfg[1];
-            const modifier  = cfg[2];
-            for (const unit of unitMap.getAllUnits()) {
-                if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
-                ) {
-                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
-                        (cfg[0] === 1)
-                    ) {
-                        const maxFuel = unit.getMaxFuel();
-                        if (maxFuel != null) {
-                            if (modifier > 0) {
-                                unit.setCurrentFuel(Math.min(
-                                    maxFuel,
-                                    unit.getCurrentFuel() + Math.floor(maxFuel * modifier / 100)
-                                ));
-                            } else {
-                                unit.setCurrentFuel(Math.max(
-                                    0,
-                                    Math.floor(unit.getCurrentFuel() * (100 + modifier) / 100)
-                                ));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (skillCfg.enemyFuelGain) {
-            const cfg       = skillCfg.enemyFuelGain;
-            const category  = cfg[1];
-            const modifier  = cfg[2];
-            for (const unit of unitMap.getAllUnits()) {
-                if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
-                ) {
-                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
-                        (cfg[0] === 1)
-                    ) {
-                        const maxFuel = unit.getMaxFuel();
-                        if (maxFuel != null) {
-                            if (modifier > 0) {
-                                unit.setCurrentFuel(Math.min(
-                                    maxFuel,
-                                    unit.getCurrentFuel() + Math.floor(maxFuel * modifier / 100)
-                                ));
-                            } else {
-                                unit.setCurrentFuel(Math.max(
-                                    0,
-                                    Math.floor(unit.getCurrentFuel() * (100 + modifier) / 100)
-                                ));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (skillCfg.selfMaterialGain) {
-            const cfg       = skillCfg.selfMaterialGain;
-            const category  = cfg[1];
-            const modifier  = cfg[2];
-            for (const unit of unitMap.getAllUnits()) {
-                if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
-                ) {
-                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
-                        (cfg[0] === 1)
-                    ) {
-                        const maxBuildMaterial = unit.getMaxBuildMaterial();
-                        if (maxBuildMaterial != null) {
-                            if (modifier > 0) {
-                                unit.setCurrentBuildMaterial(Math.min(
-                                    maxBuildMaterial,
-                                    unit.getCurrentBuildMaterial()! + Math.floor(maxBuildMaterial * modifier / 100)
-                                ));
-                            } else {
-                                unit.setCurrentBuildMaterial(Math.max(
-                                    0,
-                                    Math.floor(unit.getCurrentBuildMaterial()! * (100 + modifier) / 100)
-                                ));
-                            }
-                        }
-
-                        const maxProduceMaterial = unit.getMaxProduceMaterial();
-                        if (maxProduceMaterial != null) {
-                            if (modifier > 0) {
-                                unit.setCurrentProduceMaterial(Math.min(
-                                    maxProduceMaterial,
-                                    unit.getCurrentProduceMaterial()! + Math.floor(maxProduceMaterial * modifier / 100)
-                                ));
-                            } else {
-                                unit.setCurrentProduceMaterial(Math.max(
-                                    0,
-                                    Math.floor(unit.getCurrentProduceMaterial()! * (100 + modifier) / 100)
-                                ));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (skillCfg.enemyMaterialGain) {
-            const cfg       = skillCfg.enemyMaterialGain;
-            const category  = cfg[1];
-            const modifier  = cfg[2];
-            for (const unit of unitMap.getAllUnits()) {
-                if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
-                ) {
-                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
-                        (cfg[0] === 1)
-                    ) {
-                        const maxBuildMaterial = unit.getMaxBuildMaterial();
-                        if (maxBuildMaterial != null) {
-                            if (modifier > 0) {
-                                unit.setCurrentBuildMaterial(Math.min(
-                                    maxBuildMaterial,
-                                    unit.getCurrentBuildMaterial()! + Math.floor(maxBuildMaterial * modifier / 100)
-                                ));
-                            } else {
-                                unit.setCurrentBuildMaterial(Math.max(
-                                    0,
-                                    Math.floor(unit.getCurrentBuildMaterial()! * (100 + modifier) / 100)
-                                ));
-                            }
-                        }
-
-                        const maxProduceMaterial = unit.getMaxProduceMaterial();
-                        if (maxProduceMaterial != null) {
-                            if (modifier > 0) {
-                                unit.setCurrentProduceMaterial(Math.min(
-                                    maxProduceMaterial,
-                                    unit.getCurrentProduceMaterial()! + Math.floor(maxProduceMaterial * modifier / 100)
-                                ));
-                            } else {
-                                unit.setCurrentProduceMaterial(Math.max(
-                                    0,
-                                    Math.floor(unit.getCurrentProduceMaterial()! * (100 + modifier) / 100)
-                                ));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (skillCfg.selfPrimaryAmmoGain) {
-            const cfg       = skillCfg.selfPrimaryAmmoGain;
-            const category  = cfg[1];
-            const modifier  = cfg[2];
-            for (const unit of unitMap.getAllUnits()) {
-                if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
-                ) {
-                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
-                        (cfg[0] === 1)
-                    ) {
-                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
-                        if (maxAmmo != null) {
-                            if (modifier > 0) {
-                                unit.setPrimaryWeaponCurrentAmmo(Math.min(
-                                    maxAmmo,
-                                    unit.getPrimaryWeaponCurrentAmmo()! + Math.floor(maxAmmo * modifier / 100)
-                                ));
-                            } else {
-                                unit.setPrimaryWeaponCurrentAmmo(Math.max(
-                                    0,
-                                    Math.floor(unit.getPrimaryWeaponCurrentAmmo()! * (100 + modifier) / 100)
-                                ));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (skillCfg.enemyPrimaryAmmoGain) {
-            const cfg       = skillCfg.enemyPrimaryAmmoGain;
-            const category  = cfg[1];
-            const modifier  = cfg[2];
-            for (const unit of unitMap.getAllUnits()) {
-                if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
-                ) {
-                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
-                        (cfg[0] === 1)
-                    ) {
-                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
-                        if (maxAmmo != null) {
-                            if (modifier > 0) {
-                                unit.setPrimaryWeaponCurrentAmmo(Math.min(
-                                    maxAmmo,
-                                    unit.getPrimaryWeaponCurrentAmmo()! + Math.floor(maxAmmo * modifier / 100)
-                                ));
-                            } else {
-                                unit.setPrimaryWeaponCurrentAmmo(Math.max(
-                                    0,
-                                    Math.floor(unit.getPrimaryWeaponCurrentAmmo()! * (100 + modifier) / 100)
-                                ));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (skillCfg.indiscriminateAreaDamage) {
-            const center = extraData ? extraData.indiscriminateAreaDamageCenter : null;
-            if (!center) {
-                Logger.error("BwHelpers.exeInstantSkill() no center for indiscriminateAreaDamage!");
-            } else {
-                const hpDamage = skillCfg.indiscriminateAreaDamage[2] * CommonConstants.UnitHpNormalizer;
-                for (const g of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, skillCfg.indiscriminateAreaDamage[1], unitMap.getMapSize())) {
-                    const unit = unitMap.getUnitOnMap(g);
-                    if (unit) {
-                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - hpDamage));
-                    }
-                }
-            }
-        }
-
-        if (skillCfg.selfPromotionGain) {
-            const cfg           = skillCfg.selfPromotionGain;
-            const category      = cfg[1];
-            const modifier      = cfg[2];
-            const maxPromotion  = ConfigManager.getUnitMaxPromotion(configVersion);
-            for (const unit of unitMap.getAllUnits()) {
-                if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
-                ) {
-                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
-                        (cfg[0] === 1)
-                    ) {
-                        unit.setCurrentPromotion(Math.max(
-                            0,
-                            Math.min(
-                                maxPromotion,
-                                unit.getCurrentPromotion() + modifier
-                            ),
-                        ));
-                    }
-                }
-            }
-        }
-
-        return ClientErrorCode.NoError;
     }
 
     export function getAdjacentPlasmas(tileMap: TwnsBwTileMap.BwTileMap, origin: GridIndex): GridIndex[] {
@@ -1051,12 +737,17 @@ namespace WarCommonHelpers {
     }
 
     export function getIdleBuildingGridIndex(war: BwWar): Types.GridIndex | null {
+        const playerIndex = war.getPlayerIndexInTurn();
+        if (playerIndex == null) {
+            Logger.error(`WarCommonHelpers.getIdleBuildingGridIndex() empty playerIndex.`);
+            return null;
+        }
+
         const field                     = war.getField();
         const tileMap                   = field.getTileMap();
         const unitMap                   = field.getUnitMap();
         const { x: currX, y: currY }    = field.getCursor().getGridIndex();
         const { width, height}          = tileMap.getMapSize();
-        const playerIndex               = war.getPlayerIndexInTurn();
         const checkIsIdle               = (gridIndex: Types.GridIndex): boolean => {
             if (tileMap.getTile(gridIndex).checkIsUnitProducerForPlayer(playerIndex)) {
                 const unit = unitMap.getUnitOnMap(gridIndex);

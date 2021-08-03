@@ -29,17 +29,17 @@ namespace TwnsWwMainMenuPanel {
 
         private static _instance: WwMainMenuPanel;
 
-        private readonly _group             : eui.Group;
-        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
-        private readonly _btnRanking        : TwnsUiButton.UiButton;
-        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
+        private readonly _group!            : eui.Group;
+        private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
+        private readonly _btnRanking!       : TwnsUiButton.UiButton;
+        private readonly _btnSinglePlayer!  : TwnsUiButton.UiButton;
 
-        private readonly _groupLeft         : eui.Group;
-        private readonly _btnMakeRequest    : TwnsUiButton.UiButton;
-        private readonly _btnHandleRequest  : TwnsUiButton.UiButton;
-        private readonly _btnDeleteWatcher  : TwnsUiButton.UiButton;
-        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
-        private readonly _btnBack           : TwnsUiButton.UiButton;
+        private readonly _groupLeft!        : eui.Group;
+        private readonly _btnMakeRequest!   : TwnsUiButton.UiButton;
+        private readonly _btnHandleRequest! : TwnsUiButton.UiButton;
+        private readonly _btnDeleteWatcher! : TwnsUiButton.UiButton;
+        private readonly _btnContinueWar!   : TwnsUiButton.UiButton;
+        private readonly _btnBack!          : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!WwMainMenuPanel._instance) {

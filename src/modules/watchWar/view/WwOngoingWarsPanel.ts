@@ -2,6 +2,7 @@
 import TwnsCommonBlockPanel         from "../../common/view/CommonBlockPanel";
 import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FlowManager                  from "../../tools/helpers/FlowManager";
 import Logger                       from "../../tools/helpers/Logger";
@@ -171,17 +172,21 @@ namespace TwnsWwOngoingWarsPanel {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
-            const configVersion     = warInfo?.settingsForCommon?.configVersion;
+        private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, playersCountUnneutral: number | null | undefined): DataForPlayerRenderer[] {
+            const configVersion = warInfo.settingsForCommon?.configVersion;
+            if (configVersion == null) {
+                return [];
+            }
+
+            if (playersCountUnneutral == null) {
+                return [];
+            }
+
             const playerInfoList    = warInfo.playerInfoList || [];
             const dataArray         : DataForPlayerRenderer[] = [];
-            if (configVersion) {
-                for (let playerIndex = 1; playerIndex <= mapPlayersCount; ++playerIndex) {
-                    const playerInfo = playerInfoList.find(v => v.playerIndex === playerIndex);
-                    if (playerInfo == null) {
-                        Logger.error(`WwOngoingWarsPanel._createDataForListPlayer() empty playerInfo.`);
-                        continue;
-                    }
+            for (let playerIndex = 1; playerIndex <= playersCountUnneutral; ++playerIndex) {
+                const playerInfo = playerInfoList.find(v => v.playerIndex === playerIndex);
+                if (playerInfo) {
                     dataArray.push({
                         configVersion,
                         playerInfo,
@@ -215,39 +220,59 @@ namespace TwnsWwOngoingWarsPanel {
 
             if (settingsForMfw) {
                 const warData           = settingsForMfw.initialWarData;
+                const playersCount      = warData?.playerManager?.players?.length;
                 labelMapName.text       = ``;
                 labelDesigner.text      = ``;
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = settingsForMfw.warComment || "----";
-                listPlayer.bindData(this._createDataForListPlayer(warInfo, warData.playerManager.players.length - 1));
-                zoomMap.showMapByWarData(warData);
+                listPlayer.bindData(playersCount != null ? this._createDataForListPlayer(warInfo, playersCount - 1) : []);
+                if (warData) {
+                    zoomMap.showMapByWarData(warData);
+                } else {
+                    zoomMap.clearMap();
+                }
+
             } else if (settingsForCcw) {
                 const mapId             = settingsForCcw.mapId;
-                const mapRawData        = await WarMapModel.getRawData(mapId);
-                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = settingsForCcw.warComment || "----";
-                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
-                zoomMap.showMapByMapData(mapRawData);
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData?.playersCountUnneutral));
+                if (mapRawData) {
+                    zoomMap.showMapByMapData(mapRawData);
+                } else {
+                    zoomMap.clearMap();
+                }
+
             } else if (settingsForMcw) {
                 const mapId             = settingsForMcw.mapId;
-                const mapRawData        = await WarMapModel.getRawData(mapId);
-                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = settingsForMcw.warComment || "----";
-                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
-                zoomMap.showMapByMapData(mapRawData);
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData?.playersCountUnneutral));
+                if (mapRawData) {
+                    zoomMap.showMapByMapData(mapRawData);
+                } else {
+                    zoomMap.clearMap();
+                }
+
             } else if (settingsForMrw) {
                 const mapId             = settingsForMrw.mapId;
-                const mapRawData        = await WarMapModel.getRawData(mapId);
-                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = "----";
-                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
-                zoomMap.showMapByMapData(mapRawData);
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData?.playersCountUnneutral));
+                if (mapRawData) {
+                    zoomMap.showMapByMapData(mapRawData);
+                } else {
+                    zoomMap.clearMap();
+                }
             }
 
             this._groupInfo.visible      = true;
@@ -283,24 +308,9 @@ namespace TwnsWwOngoingWarsPanel {
         }
 
         protected _onDataChanged(): void {
-            const data              = this.data;
-            const warInfo           = data.info.warInfo;
-            this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-
-            const labelName         = this._labelName;
-            const settingsForMfw    = warInfo.settingsForMfw;
-            if (settingsForMfw) {
-                labelName.text = settingsForMfw.warName || `----`;
-            } else {
-                const settingsForMcw    = warInfo.settingsForMcw;
-                const warName           = settingsForMcw ? settingsForMcw.warName : null;
-                if (warName) {
-                    labelName.text = warName;
-                } else {
-                    labelName.text = "";
-                    WarMapModel.getMapNameInCurrentLanguage(settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId).then(v => labelName.text = v);
-                }
-            }
+            const data          = this.data;
+            this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this._updateLabelName();
         }
 
         private _onTouchTapBtnChoose(): void {
@@ -309,7 +319,45 @@ namespace TwnsWwOngoingWarsPanel {
         }
 
         private async _onTouchTapBtnNext(): Promise<void> {
-            WwProxy.reqWatchContinueWar(this.data.info.warInfo.warId);
+            const warId = this.data.info.warInfo?.warId;
+            if (warId != null) {
+                WwProxy.reqWatchContinueWar(warId);
+            }
+        }
+
+        private async _updateLabelName(): Promise<void> {
+            const labelName = this._labelName;
+            labelName.text  = ``;
+
+            const warInfo = this.data.info.warInfo;
+            if (warInfo != null) {
+                const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warInfo;
+                if (settingsForMfw) {
+                    labelName.text = settingsForMfw.warName || `----`;
+
+                } else if (settingsForMcw) {
+                    const warName = settingsForMcw.warName;
+                    if (warName) {
+                        labelName.text = warName;
+                    } else {
+                        const mapId     = settingsForMcw.mapId;
+                        labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                    }
+
+                } else if (settingsForCcw) {
+                    const warName = settingsForCcw.warName;
+                    if (warName) {
+                        labelName.text = warName;
+                    } else {
+                        const mapId     = settingsForCcw.mapId;
+                        labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                    }
+
+                } else if (settingsForMrw) {
+                    const mapId     = settingsForMrw.mapId;
+                    labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                }
+            }
         }
     }
 
@@ -323,14 +371,22 @@ namespace TwnsWwOngoingWarsPanel {
         private readonly _labelIndex!   : TwnsUiLabel.UiLabel;
         private readonly _labelTeam!    : TwnsUiLabel.UiLabel;
 
-        protected _onDataChanged(): void {
+        protected async _onDataChanged(): Promise<void> {
             const data              = this.data;
             const playerInfo        = data.playerInfo;
-            this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
-            this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
-            UserModel.getUserNickname(playerInfo.userId).then(name => {
-                this._labelName.text = name + ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
-            });
+            const playerIndex       = playerInfo.playerIndex;
+            const teamIndex         = playerInfo.teamIndex;
+            this._labelIndex.text   = playerIndex == null ? CommonConstants.ErrorTextForUndefined : Lang.getPlayerForceName(playerIndex);
+            this._labelTeam.text    = (teamIndex == null ? undefined : Lang.getPlayerTeamName(teamIndex)) || CommonConstants.ErrorTextForUndefined;
+
+            const userId    = playerInfo.userId;
+            const labelName = this._labelName;
+            const coName    = ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
+            if (userId == null) {
+                labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
+            } else {
+                labelName.text = `${await UserModel.getUserNickname(userId)} ${coName}`;
+            }
         }
     }
 }

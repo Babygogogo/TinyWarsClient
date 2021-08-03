@@ -26,16 +26,16 @@ namespace TwnsWwDeleteWatcherDetailPanel {
 
         private static _instance: WwDeleteWatcherDetailPanel;
 
-        private _labelMenuTitle         : TwnsUiLabel.UiLabel;
-        private _labelDelete            : TwnsUiLabel.UiLabel;
-        private _labelKeep              : TwnsUiLabel.UiLabel;
-        private _labelIsOpponent        : TwnsUiLabel.UiLabel;
-        private _labelIsWatchingOthers  : TwnsUiLabel.UiLabel;
-        private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForRequesterRenderer>;
-        private _btnConfirm             : TwnsUiButton.UiButton;
-        private _btnCancel              : TwnsUiButton.UiButton;
+        private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _labelDelete!              : TwnsUiLabel.UiLabel;
+        private readonly _labelKeep!                : TwnsUiLabel.UiLabel;
+        private readonly _labelIsOpponent!          : TwnsUiLabel.UiLabel;
+        private readonly _labelIsWatchingOthers!    : TwnsUiLabel.UiLabel;
+        private readonly _listPlayer!               : TwnsUiScrollList.UiScrollList<DataForRequesterRenderer>;
+        private readonly _btnConfirm!               : TwnsUiButton.UiButton;
+        private readonly _btnCancel!                : TwnsUiButton.UiButton;
 
-        private _dataForListPlayer  : DataForRequesterRenderer[];
+        private _dataForListPlayer  : DataForRequesterRenderer[] | undefined;
 
         public static show(openData: OpenDataForMcrWatchDeleteWatcherDetailPanel): void {
             if (!WwDeleteWatcherDetailPanel._instance) {
@@ -72,14 +72,16 @@ namespace TwnsWwDeleteWatcherDetailPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._dataForListPlayer = null;
+            this._dataForListPlayer = undefined;
         }
 
         public setRequesterSelected(index: number, selected: boolean): void {
-            const dataList  = this._dataForListPlayer;
-            const data      = dataList[index];
-            data.isDelete   = selected;
-            this._listPlayer.updateSingleData(index, data);
+            const dataList = this._dataForListPlayer;
+            if (dataList) {
+                const data      = dataList[index];
+                data.isDelete   = selected;
+                this._listPlayer.updateSingleData(index, data);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,13 +93,14 @@ namespace TwnsWwDeleteWatcherDetailPanel {
 
         private _onTouchedBtnConfirm(): void {
             const deleteUserIds : number[] = [];
-            for (const data of this._dataForListPlayer) {
+            for (const data of this._dataForListPlayer || []) {
                 if (data.isDelete) {
                     deleteUserIds.push(data.userId);
                 }
             }
             if (deleteUserIds.length) {
-                WwProxy.reqWatchDeleteWatcher(this._getOpenData().watchInfo.warInfo.warId, deleteUserIds);
+                const warId = this._getOpenData().watchInfo.warInfo?.warId;
+                (warId != null) && (WwProxy.reqWatchDeleteWatcher(warId, deleteUserIds));
             }
             this.close();
         }
@@ -107,7 +110,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
-            this._listPlayer.bindData(this._dataForListPlayer);
+            this._listPlayer.bindData(this._dataForListPlayer || []);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -122,18 +125,19 @@ namespace TwnsWwDeleteWatcherDetailPanel {
 
         private _generateDataForListPlayer(): DataForRequesterRenderer[] {
             const openData          = this._getOpenData().watchInfo;
-            const warInfo           = openData.warInfo;
-            const playerInfoList    = warInfo.playerInfoList;
+            const playerInfoList    = openData.warInfo?.playerInfoList || [];
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of openData.requesterInfos) {
+            for (const info of openData.requesterInfos || []) {
                 const userId = info.userId;
-                dataList.push({
-                    panel           : this,
-                    userId,
-                    isWatchingOthers: !!info.isRequestingOthers || !!info.isWatchingOthers,
-                    isOpponent      : playerInfoList.some(v => v.userId === userId),
-                    isDelete        : false,
-                });
+                if (userId != null) {
+                    dataList.push({
+                        panel           : this,
+                        userId,
+                        isWatchingOthers: !!info.isRequestingOthers || !!info.isWatchingOthers,
+                        isOpponent      : playerInfoList.some(v => v.userId === userId),
+                        isDelete        : false,
+                    });
+                }
             }
 
             return dataList;
@@ -148,11 +152,11 @@ namespace TwnsWwDeleteWatcherDetailPanel {
         isDelete        : boolean;
     };
     class RequesterRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRequesterRenderer> {
-        private _labelName              : TwnsUiLabel.UiLabel;
-        private _labelIsOpponent        : TwnsUiLabel.UiLabel;
-        private _labelIsWatchingOthers  : TwnsUiLabel.UiLabel;
-        private _imgDelete              : TwnsUiImage.UiImage;
-        private _imgKeep                : TwnsUiImage.UiImage;
+        private readonly _labelName!                : TwnsUiLabel.UiLabel;
+        private readonly _labelIsOpponent!          : TwnsUiLabel.UiLabel;
+        private readonly _labelIsWatchingOthers!    : TwnsUiLabel.UiLabel;
+        private readonly _imgDelete!                : TwnsUiImage.UiImage;
+        private readonly _imgKeep!                  : TwnsUiImage.UiImage;
 
         protected _onDataChanged(): void {
             const data                          = this.data;

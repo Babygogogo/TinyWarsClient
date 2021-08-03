@@ -33,7 +33,7 @@ namespace WwProxy {
     function _onMsgMpwWatchGetUnwatchedWarInfos(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetUnwatchedWarInfos.IS;
         if (!data.errorCode) {
-            WwModel.setUnwatchedWarInfos(data.infos);
+            WwModel.setUnwatchedWarInfos(data.infos || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetUnwatchedWarInfos, data);
         }
     }
@@ -47,7 +47,7 @@ namespace WwProxy {
     function _onMsgMpwWatchGetOngoingWarInfos(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetOngoingWarInfos.IS;
         if (!data.errorCode) {
-            WwModel.setWatchOngoingWarInfos(data.infos);
+            WwModel.setWatchOngoingWarInfos(data.infos || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetOngoingWarInfos, data);
         }
     }
@@ -61,7 +61,7 @@ namespace WwProxy {
     function _onMsgMpwWatchGetRequestedWarInfos(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetRequestedWarInfos.IS;
         if (!data.errorCode) {
-            WwModel.setWatchRequestedWarInfos(data.infos);
+            WwModel.setWatchRequestedWarInfos(data.infos || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetRequestedWarInfos, data);
         }
     }
@@ -75,7 +75,7 @@ namespace WwProxy {
     function _onMsgMpwWatchGetWatchedWarInfos(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetWatchedWarInfos.IS;
         if (!data.errorCode) {
-            WwModel.setWatchedWarInfos(data.infos);
+            WwModel.setWatchedWarInfos(data.infos || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetWatchedWarInfos, data);
         }
     }

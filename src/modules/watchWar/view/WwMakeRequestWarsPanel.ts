@@ -1,26 +1,27 @@
 
-import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
-import ConfigManager                        from "../../tools/helpers/ConfigManager";
-import FloatText                            from "../../tools/helpers/FloatText";
-import Logger                               from "../../tools/helpers/Logger";
-import Types                                from "../../tools/helpers/Types";
-import Lang                                 from "../../tools/lang/Lang";
-import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-import TwnsNotifyType                       from "../../tools/notify/NotifyType";
-import ProtoTypes                           from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                         from "../../tools/ui/UiButton";
-import TwnsUiLabel                          from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                          from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
-import TwnsUiZoomableMap                    from "../../tools/ui/UiZoomableMap";
-import UserModel                            from "../../user/model/UserModel";
-import WarMapModel                          from "../../warMap/model/WarMapModel";
-import WwModel                              from "../model/WwModel";
-import WwProxy                              from "../model/WwProxy";
-import TwnsWwMainMenuPanel                  from "./WwMainMenuPanel";
-import TwnsWwMakeRequestDetailPanel         from "./WwMakeRequestDetailPanel";
+import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
+import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import ConfigManager                from "../../tools/helpers/ConfigManager";
+import FloatText                    from "../../tools/helpers/FloatText";
+import Logger                       from "../../tools/helpers/Logger";
+import Types                        from "../../tools/helpers/Types";
+import Lang                         from "../../tools/lang/Lang";
+import TwnsLangTextType             from "../../tools/lang/LangTextType";
+import TwnsNotifyType               from "../../tools/notify/NotifyType";
+import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
+import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+import TwnsUiZoomableMap            from "../../tools/ui/UiZoomableMap";
+import UserModel                    from "../../user/model/UserModel";
+import WarMapModel                  from "../../warMap/model/WarMapModel";
+import WwModel                      from "../model/WwModel";
+import WwProxy                      from "../model/WwProxy";
+import TwnsWwMainMenuPanel          from "./WwMainMenuPanel";
+import TwnsWwMakeRequestDetailPanel from "./WwMakeRequestDetailPanel";
 
 namespace TwnsWwMakeRequestWarsPanel {
     import McrWatchMakeRequestDetailPanel   = TwnsWwMakeRequestDetailPanel.WwMakeRequestDetailPanel;
@@ -163,18 +164,29 @@ namespace TwnsWwMakeRequestWarsPanel {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
-            const configVersion     = warInfo.settingsForCommon.configVersion;
-            const playerInfoList    = warInfo.playerInfoList;
-            const dataList          : DataForPlayerRenderer[] = [];
-            for (let playerIndex = 1; playerIndex <= mapPlayersCount; ++playerIndex) {
-                dataList.push({
-                    configVersion,
-                    playerInfo  : playerInfoList.find(v => v.playerIndex === playerIndex),
-                });
+        private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, playersCountUnneutral: number | null | undefined): DataForPlayerRenderer[] {
+            const configVersion = warInfo.settingsForCommon?.configVersion;
+            if (configVersion == null) {
+                return [];
             }
 
-            return dataList;
+            if (playersCountUnneutral == null) {
+                return [];
+            }
+
+            const playerInfoList    = warInfo.playerInfoList || [];
+            const dataArray         : DataForPlayerRenderer[] = [];
+            for (let playerIndex = 1; playerIndex <= playersCountUnneutral; ++playerIndex) {
+                const playerInfo = playerInfoList.find(v => v.playerIndex === playerIndex);
+                if (playerInfo) {
+                    dataArray.push({
+                        configVersion,
+                        playerInfo,
+                    });
+                }
+            }
+
+            return dataArray;
         }
 
         private async _showMap(index: number): Promise<void> {
@@ -200,39 +212,59 @@ namespace TwnsWwMakeRequestWarsPanel {
 
             if (settingsForMfw) {
                 const warData           = settingsForMfw.initialWarData;
+                const playersCount      = warData?.playerManager?.players?.length;
                 labelMapName.text       = ``;
                 labelDesigner.text      = ``;
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = settingsForMfw.warComment || "----";
-                listPlayer.bindData(this._createDataForListPlayer(warInfo, warData.playerManager.players.length - 1));
-                zoomMap.showMapByWarData(warData);
+                listPlayer.bindData(playersCount != null ? this._createDataForListPlayer(warInfo, playersCount - 1) : []);
+                if (warData) {
+                    zoomMap.showMapByWarData(warData);
+                } else {
+                    zoomMap.clearMap();
+                }
+
             } else if (settingsForCcw) {
                 const mapId             = settingsForCcw.mapId;
-                const mapRawData        = await WarMapModel.getRawData(mapId);
-                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = settingsForCcw.warComment || "----";
-                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
-                zoomMap.showMapByMapData(mapRawData);
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData?.playersCountUnneutral));
+                if (mapRawData) {
+                    zoomMap.showMapByMapData(mapRawData);
+                } else {
+                    zoomMap.clearMap();
+                }
+
             } else if (settingsForMcw) {
                 const mapId             = settingsForMcw.mapId;
-                const mapRawData        = await WarMapModel.getRawData(mapId);
-                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = settingsForMcw.warComment || "----";
-                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
-                zoomMap.showMapByMapData(mapRawData);
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData?.playersCountUnneutral));
+                if (mapRawData) {
+                    zoomMap.showMapByMapData(mapRawData);
+                } else {
+                    zoomMap.clearMap();
+                }
+
             } else if (settingsForMrw) {
                 const mapId             = settingsForMrw.mapId;
-                const mapRawData        = await WarMapModel.getRawData(mapId);
-                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = "----";
-                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
-                zoomMap.showMapByMapData(mapRawData);
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData?.playersCountUnneutral));
+                if (mapRawData) {
+                    zoomMap.showMapByMapData(mapRawData);
+                } else {
+                    zoomMap.clearMap();
+                }
             }
 
             const groupInfo     = this._groupInfo;
@@ -263,9 +295,9 @@ namespace TwnsWwMakeRequestWarsPanel {
         panel   : WwMakeRequestWarsPanel;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
-        private _btnChoose      : TwnsUiButton.UiButton;
-        private _btnNext        : TwnsUiButton.UiButton;
-        private _labelName      : TwnsUiLabel.UiLabel;
+        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _btnNext!      : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -290,19 +322,37 @@ namespace TwnsWwMakeRequestWarsPanel {
         }
 
         private async _updateLabelName(): Promise<void> {
-            const warInfo   = this.data.info.warInfo;
             const labelName = this._labelName;
             labelName.text  = ``;
 
-            const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warInfo;
-            if (settingsForMfw) {
-                labelName.text = settingsForMfw.warName || `----`;
-            } else if (settingsForMcw) {
-                labelName.text = settingsForMcw.warName || await WarMapModel.getMapNameInCurrentLanguage(settingsForMcw.mapId);
-            } else if (settingsForCcw) {
-                labelName.text = settingsForCcw.warName || await WarMapModel.getMapNameInCurrentLanguage(settingsForCcw.mapId);
-            } else if (settingsForMrw) {
-                labelName.text = await WarMapModel.getMapNameInCurrentLanguage(settingsForMrw.mapId);
+            const warInfo = this.data.info.warInfo;
+            if (warInfo != null) {
+                const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warInfo;
+                if (settingsForMfw) {
+                    labelName.text = settingsForMfw.warName || `----`;
+
+                } else if (settingsForMcw) {
+                    const warName = settingsForMcw.warName;
+                    if (warName) {
+                        labelName.text = warName;
+                    } else {
+                        const mapId     = settingsForMcw.mapId;
+                        labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                    }
+
+                } else if (settingsForCcw) {
+                    const warName = settingsForCcw.warName;
+                    if (warName) {
+                        labelName.text = warName;
+                    } else {
+                        const mapId     = settingsForCcw.mapId;
+                        labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                    }
+
+                } else if (settingsForMrw) {
+                    const mapId     = settingsForMrw.mapId;
+                    labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                }
             }
         }
     }
@@ -312,18 +362,26 @@ namespace TwnsWwMakeRequestWarsPanel {
         configVersion   : string;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private _labelName : TwnsUiLabel.UiLabel;
-        private _labelIndex: TwnsUiLabel.UiLabel;
-        private _labelTeam : TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelIndex!   : TwnsUiLabel.UiLabel;
+        private readonly _labelTeam!    : TwnsUiLabel.UiLabel;
 
-        protected _onDataChanged(): void {
+        protected async _onDataChanged(): Promise<void> {
             const data              = this.data;
             const playerInfo        = data.playerInfo;
-            this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
-            this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
-            UserModel.getUserNickname(playerInfo.userId).then(name => {
-                this._labelName.text = `${name} ${ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId)}`;
-            });
+            const playerIndex       = playerInfo.playerIndex;
+            const teamIndex         = playerInfo.teamIndex;
+            this._labelIndex.text   = playerIndex == null ? CommonConstants.ErrorTextForUndefined : Lang.getPlayerForceName(playerIndex);
+            this._labelTeam.text    = (teamIndex == null ? undefined : Lang.getPlayerTeamName(teamIndex)) || CommonConstants.ErrorTextForUndefined;
+
+            const userId    = playerInfo.userId;
+            const labelName = this._labelName;
+            const coName    = ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
+            if (userId == null) {
+                labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
+            } else {
+                labelName.text = `${await UserModel.getUserNickname(userId)} ${coName}`;
+            }
         }
     }
 }

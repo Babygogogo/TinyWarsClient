@@ -535,7 +535,7 @@ namespace ConfigManager {
     export function getAllCoBasicCfgDict(version: string): { [coId: number]: CoBasicCfg } | null | undefined {
         return _ALL_CONFIGS.get(version)?.CoBasic;
     }
-    export function getCoNameAndTierText(version: string, coId: number | null): string | undefined {
+    export function getCoNameAndTierText(version: string, coId: number | null | undefined): string | undefined {
         const coConfig = coId == null ? null : getCoBasicCfg(version, coId);
         return coConfig
             // ? `(${coConfig.name}(T${coConfig.tier}))`
@@ -635,28 +635,39 @@ namespace ConfigManager {
         }
 
         const cfgs = _CO_ID_LIST_IN_TIER.get(version);
-        if (!cfgs.get(tier)) {
-            const idList: number[] = [];
+        if (cfgs == null) {
+            Logger.error(`ConfigManager.getEnabledCoIdListInTier() empty cfgs.`);
+            return [];
+        }
+
+        const currentIdArray = cfgs.get(tier);
+        if (currentIdArray) {
+            return currentIdArray;
+        } else {
+            const idArray: number[] = [];
             for (const cfg of getEnabledCoArray(version)) {
                 if (cfg.tier === tier) {
-                    idList.push(cfg.coId);
+                    idArray.push(cfg.coId);
                 }
             }
-            cfgs.set(tier, idList);
+            cfgs.set(tier, idArray);
+            return idArray;
         }
-        return cfgs.get(tier);
     }
     export function getEnabledCustomCoIdList(version: string): number[] {
-        if (!_CUSTOM_CO_ID_LIST.has(version)) {
-            const idList: number[] = [];
+        const currentIdArray = _CUSTOM_CO_ID_LIST.get(version);
+        if (currentIdArray) {
+            return currentIdArray;
+        } else {
+            const idArray: number[] = [];
             for (const cfg of getEnabledCoArray(version)) {
                 if (cfg.designer !== "Intelligent Systems") {
-                    idList.push(cfg.coId);
+                    idArray.push(cfg.coId);
                 }
             }
-            _CUSTOM_CO_ID_LIST.set(version, idList);
+            _CUSTOM_CO_ID_LIST.set(version, idArray);
+            return idArray;
         }
-        return _CUSTOM_CO_ID_LIST.get(version);
     }
 
     export function getCoBustImageSource(coId: number): string | undefined {

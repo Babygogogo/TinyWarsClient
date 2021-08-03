@@ -422,7 +422,7 @@ namespace TwnsBwPlayer {
         public getCoCurrentEnergy(): number {
             return this._coCurrentEnergy;
         }
-        public getCoMaxEnergy(): number | null | undefined {
+        public getCoMaxEnergy(): number {
             const config = this._getCoBasicCfg();
             return config ? WarCommonHelpers.getCoMaxEnergy(config) : 0;
         }
