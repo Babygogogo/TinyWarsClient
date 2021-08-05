@@ -1683,9 +1683,6 @@ export declare namespace Config {
         /** CoSkillCfg selfOffenseBonusByFund */
         selfOffenseBonusByFund?: (number[]|null);
 
-        /** CoSkillCfg selfOffenseBonusByTile */
-        selfOffenseBonusByTile?: (number[]|null);
-
         /** CoSkillCfg selfCaptureAmount */
         selfCaptureAmount?: (number[]|null);
 
@@ -1812,9 +1809,6 @@ export declare namespace Config {
 
         /** CoSkillCfg selfOffenseBonusByFund. */
         public selfOffenseBonusByFund: number[];
-
-        /** CoSkillCfg selfOffenseBonusByTile. */
-        public selfOffenseBonusByTile: number[];
 
         /** CoSkillCfg selfCaptureAmount. */
         public selfCaptureAmount: number[];

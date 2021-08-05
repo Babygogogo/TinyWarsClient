@@ -620,22 +620,6 @@ namespace TwnsBwUnit {
                 }
 
                 {
-                    const cfg = skillCfg.selfOffenseBonusByTile;
-                    if ((cfg)                                                                                                                           &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                      &&
-                        (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))                                                  &&
-                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
-                            gridIndex               : selfGridIndex,
-                            coSkillAreaType         : cfg[0],
-                            getCoGridIndexArrayOnMap,
-                            coZoneRadius,
-                        })))
-                    ) {
-                        modifier += cfg[3];
-                    }
-                }
-
-                {
                     const cfg = skillCfg.selfOffenseBonusByTileCount;
                     if ((cfg)                                                                                                                           &&
                         (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                      &&
