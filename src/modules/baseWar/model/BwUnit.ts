@@ -573,9 +573,10 @@ namespace TwnsBwUnit {
                 }
 
                 {
-                    const cfg = skillCfg.attackBonus;
-                    if ((cfg)                                                                                                                        &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                   &&
+                    const cfg = skillCfg.selfOffenseBonus;
+                    if ((cfg)                                                                           &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                        (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))  &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -583,7 +584,7 @@ namespace TwnsBwUnit {
                             coZoneRadius,
                         })))
                     ) {
-                        modifier += cfg[2];
+                        modifier += cfg[3];
                     }
                 }
 
@@ -1552,13 +1553,20 @@ namespace TwnsBwUnit {
                 return undefined;
             }
 
+            const tileType = this.getWar()?.getTileMap().getTile(selfGridIndex)?.getType();
+            if (tileType == null) {
+                Logger.error(`BwUnit._getMoveRangeModifierByCo() empty tileType.`);
+                return undefined;
+            }
+
             const hasLoadedCo               = this.getHasLoadedCo();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let modifier                    = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.moveRangeBonus;
-                if ((cfg)                                                                                                                       &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfMoveRangeBonus;
+                if ((cfg)                                                                           &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                    (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[2]))      &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -1566,7 +1574,7 @@ namespace TwnsBwUnit {
                         coZoneRadius,
                     })))
                 ) {
-                    modifier += cfg[2];
+                    modifier += cfg[3];
                 }
             }
             return modifier;

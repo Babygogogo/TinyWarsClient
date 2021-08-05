@@ -1596,14 +1596,14 @@ export declare namespace Config {
         /** CoSkillCfg desc */
         desc?: (string[]|null);
 
-        /** CoSkillCfg attackBonus */
-        attackBonus?: (number[]|null);
+        /** CoSkillCfg selfOffenseBonus */
+        selfOffenseBonus?: (number[]|null);
 
         /** CoSkillCfg defenseBonus */
         defenseBonus?: (number[]|null);
 
-        /** CoSkillCfg moveRangeBonus */
-        moveRangeBonus?: (number[]|null);
+        /** CoSkillCfg selfMoveRangeBonus */
+        selfMoveRangeBonus?: (number[]|null);
 
         /** CoSkillCfg maxAttackRangeBonus */
         maxAttackRangeBonus?: (number[]|null);
@@ -1726,14 +1726,14 @@ export declare namespace Config {
         /** CoSkillCfg desc. */
         public desc: string[];
 
-        /** CoSkillCfg attackBonus. */
-        public attackBonus: number[];
+        /** CoSkillCfg selfOffenseBonus. */
+        public selfOffenseBonus: number[];
 
         /** CoSkillCfg defenseBonus. */
         public defenseBonus: number[];
 
-        /** CoSkillCfg moveRangeBonus. */
-        public moveRangeBonus: number[];
+        /** CoSkillCfg selfMoveRangeBonus. */
+        public selfMoveRangeBonus: number[];
 
         /** CoSkillCfg maxAttackRangeBonus. */
         public maxAttackRangeBonus: number[];
