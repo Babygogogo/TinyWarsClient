@@ -395,6 +395,17 @@ namespace Helpers {
             });
         }
     }
+    export function createLazyFunc<T>(func: () => T): () => T | undefined {
+        let hasCalled   = false;
+        let result      : T | undefined;
+        return () => {
+            if (!hasCalled) {
+                hasCalled   = true;
+                result      = func();
+            }
+            return result;
+        };
+    }
 
     function getColorMatrix(color: Types.ColorType, value = 100): number[] | undefined {
         switch (color) {

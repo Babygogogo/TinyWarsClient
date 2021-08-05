@@ -3,13 +3,14 @@ import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import UserModel            from "../../user/model/UserModel";
 import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import UserModel            from "../../user/model/UserModel";
 import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwPlayer {
@@ -596,12 +597,6 @@ namespace TwnsBwPlayer {
                 return 0;
             }
 
-            const coGridIndexListOnMap = this.getCoGridIndexListOnMap();
-            if (coGridIndexListOnMap == null) {
-                Logger.error(`BwPlayer.getUnitCostModifier() empty coGridIndexListOnMap.`);
-                return undefined;
-            }
-
             const coZoneRadius = this.getCoZoneRadius();
             if (coZoneRadius == null) {
                 Logger.error(`BwPlayer.getUnitCostModifier() empty coZoneRadius.`);
@@ -614,12 +609,18 @@ namespace TwnsBwPlayer {
                 return undefined;
             }
 
+            const getCoGridIndexArrayOnMap = Helpers.createLazyFunc(() => this.getCoGridIndexListOnMap());
             let modifier = 1;
             for (const skillId of this.getCoCurrentSkills() || []) {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfUnitCost;
                 if ((cfg)                                                                                                                   &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                              &&
-                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap,
+                        coZoneRadius,
+                    })))
                 ) {
                     modifier *= cfg[2] / 100;
                 }

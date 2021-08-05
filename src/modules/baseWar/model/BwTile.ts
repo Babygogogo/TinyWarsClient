@@ -3,6 +3,7 @@ import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
@@ -721,18 +722,18 @@ namespace TwnsBwTile {
                 return undefined;
             }
 
-            const coGridIndexListOnMap = player.getCoGridIndexListOnMap();
-            if (coGridIndexListOnMap == null) {
-                Logger.error(`BwTile.getIncomeForPlayer() empty coGridIndexListOnMap.`);
-                return undefined;
-            }
-
-            let modifierForSkill = 1;
+            const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+            let modifierForSkill            = 1;
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfTileIncome;
                 if ((cfg)                                                                                                       &&
                     (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[1]))                                  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap,
+                        coZoneRadius,
+                    }))
                 ) {
                     modifierForSkill *= cfg[2] / 100;
                 }
@@ -1053,7 +1054,7 @@ namespace TwnsBwTile {
                 return undefined;
             }
 
-            const configVersion = this.getConfigVersion();
+            const configVersion = war.getConfigVersion();
             if (configVersion == null) {
                 Logger.error(`BwTile.getEffectiveSelfUnitProductionSkillCfg() configVersion is empty.`);
                 return undefined;
@@ -1075,25 +1076,25 @@ namespace TwnsBwTile {
                 return undefined;
             }
 
-            const coGridIndexListOnMap = player.getCoGridIndexListOnMap();
-            if (coGridIndexListOnMap == null) {
-                Logger.error(`BwTile.getEffectiveSelfUnitProductionSkillCfg() empty coGridIndexListOnMap.`);
-                return undefined;
-            }
-
             const coZoneRadius = player.getCoZoneRadius();
             if (coZoneRadius == null) {
                 Logger.error(`BwTile.getEffectiveSelfUnitProductionSkillCfg() empty coZoneRadius.`);
                 return undefined;
             }
 
+            const getCoGridIndexArrayOnMap = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfUnitProduction;
                 if (skillCfg) {
                     const tileCategory = skillCfg[2];
                     if ((tileCategory != null)                                                                                  &&
                         (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, tileCategory))                        &&
-                        (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, skillCfg[0], coGridIndexListOnMap, coZoneRadius))
+                        (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                            gridIndex,
+                            coSkillAreaType         : skillCfg[0],
+                            getCoGridIndexArrayOnMap,
+                            coZoneRadius,
+                        }))
                     ) {
                         return skillCfg;
                     }

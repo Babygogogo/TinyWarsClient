@@ -459,19 +459,29 @@ namespace WarCommonHelpers {
         const { x, y } = gridIndex;
         return (!!area[x]) && (!!area[x][y]);
     }
-    export function checkIsGridIndexInsideCoSkillArea(
-        gridIndex               : GridIndex,
-        coSkillAreaType         : CoSkillAreaType,
-        coGridIndexListOnMap    : GridIndex[],
-        coZoneRadius            : number,
+    export function checkIsGridIndexInsideCoSkillArea({ gridIndex, coSkillAreaType, getCoGridIndexArrayOnMap, coZoneRadius }: {
+        gridIndex               : GridIndex;
+        coSkillAreaType         : CoSkillAreaType;
+        getCoGridIndexArrayOnMap: () => GridIndex[] | undefined;
+        coZoneRadius            : number;
+    },
     ): boolean | undefined {
         if (coSkillAreaType === CoSkillAreaType.Halo) {
             return true;
+
         } else if (coSkillAreaType === CoSkillAreaType.OnMap) {
-            return coGridIndexListOnMap.length > 0;
+            return getCoGridIndexArrayOnMap.length > 0;
+
         } else if (coSkillAreaType === CoSkillAreaType.Zone) {
-            const distance = GridIndexHelpers.getMinDistance(gridIndex, coGridIndexListOnMap);
-            return (distance != null) && (distance <= coZoneRadius);
+            const coGridIndexArray = getCoGridIndexArrayOnMap();
+            if (coGridIndexArray == null) {
+                Logger.error(`WarCommonHelpers.checkIsGridIndexInsideCoSkillArea() empty coGridIndexArray.`);
+                return undefined;
+            } else {
+                const distance = GridIndexHelpers.getMinDistance(gridIndex, coGridIndexArray);
+                return (distance != null) && (distance <= coZoneRadius);
+            }
+
         } else {
             Logger.error(`WarCommonHelpers.checkIsGridIndexInsideSkillArea() invalid areaType: ${coSkillAreaType}`);
             return undefined;

@@ -3769,7 +3769,12 @@ namespace WarActionExecutor {
                 if ((cfg)                                                                                                                                                   &&
                     (targetLostNormalizedHp >= cfg[2])                                                                                                                      &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))                                                                      &&
-                    ((hasAttackerLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(attackerGridIndex, cfg[0], attackerCoGridIndexListOnMap, attackerCoZoneRadius)))
+                    ((hasAttackerLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex               : attackerGridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => attackerCoGridIndexListOnMap,
+                        coZoneRadius            : attackerCoZoneRadius,
+                    })))
                 ) {
                     attackerUnit.addPromotion();
                 }
