@@ -594,7 +594,7 @@ namespace TwnsBwPlayer {
 
         public getUnitCostModifier(gridIndex: GridIndex, hasLoadedCo: boolean, unitType: Types.UnitType): number | undefined {
             if (this.getCoId() === CommonConstants.CoEmptyId) {
-                return 0;
+                return 1;
             }
 
             const coZoneRadius = this.getCoZoneRadius();
