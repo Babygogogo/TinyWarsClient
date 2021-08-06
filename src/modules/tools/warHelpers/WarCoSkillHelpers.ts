@@ -60,7 +60,7 @@ namespace WarCoSkillHelpers {
         exeEnemyEnergy({ skillCfg, player, war });
         exeSelfAddUnit({ skillCfg, player, war, coGridIndexList });
         exeSelfHpGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeEnemyHpGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
+        exeEnemyHpGain({ configVersion, skillCfg, war, player, coGridIndexList });
         exeSelfFuelGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeEnemyFuelGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeSelfMaterialGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
@@ -298,13 +298,13 @@ namespace WarCoSkillHelpers {
         }
     }
 
-    function exeEnemyHpGain(
-        configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    function exeEnemyHpGain({ configVersion, skillCfg, war, player, coGridIndexList }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        war             : BwWar;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+    }): void {
         const cfg = skillCfg.enemyHpGain;
         if (cfg) {
             const teamIndex = player.getTeamIndex();
@@ -319,9 +319,11 @@ namespace WarCoSkillHelpers {
                 return undefined;
             }
 
-            const category  = cfg[1];
-            const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
-            for (const unit of unitMap.getAllUnits()) {
+            const tileMap       = war.getTileMap();
+            const unitCategory  = cfg[1];
+            const tileCategory  = cfg[2];
+            const modifier      = cfg[3] * CommonConstants.UnitHpNormalizer;
+            for (const unit of war.getUnitMap().getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`WarCoSkillHelpers.exeEnemyHpGain() empty unitType.`);
@@ -346,8 +348,15 @@ namespace WarCoSkillHelpers {
                     return undefined;
                 }
 
-                if ((unit.getTeamIndex() !== teamIndex)                                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
+                const tileType = tileMap.getTile(gridIndex)?.getType();
+                if (tileType == null) {
+                    Logger.error(`WarCoSkillHelpers.exeEnemyHpGain() empty tileType.`);
+                    return undefined;
+                }
+
+                if ((unit.getTeamIndex() !== teamIndex)                                                 &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, unitCategory))    &&
+                    (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, tileCategory))    &&
                     (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],

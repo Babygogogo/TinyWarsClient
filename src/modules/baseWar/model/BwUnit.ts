@@ -691,10 +691,16 @@ namespace TwnsBwUnit {
                 return undefined;
             }
 
+            const selfTileType = this.getWar()?.getTileMap().getTile(selfGridIndex)?.getType();
+            if (selfTileType == null) {
+                Logger.error(`BwUnit.getDefenseModifierByCo() empty selfTileType.`);
+                return undefined;
+            }
+
             const promotion                 = this.getCurrentPromotion();
             const hasLoadedCo               = this.getHasLoadedCo();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
-            let modifier                    = 0;
+            let modifier = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
                 if (!skillCfg) {
@@ -702,31 +708,36 @@ namespace TwnsBwUnit {
                     return undefined;
                 }
 
-                const defenseBonusCfg = skillCfg.defenseBonus;
-                if ((defenseBonusCfg)                                                                                                                       &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, defenseBonusCfg[1]))                                                  &&
-                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
-                        gridIndex               : selfGridIndex,
-                        coSkillAreaType         : defenseBonusCfg[0],
-                        getCoGridIndexArrayOnMap,
-                        coZoneRadius
-                    })))
-                ) {
-                    modifier += defenseBonusCfg[2];
+                {
+                    const cfg = skillCfg.selfDefenseBonus;
+                    if ((cfg)                                                                           &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                        (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))  &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                            gridIndex               : selfGridIndex,
+                            coSkillAreaType         : cfg[0],
+                            getCoGridIndexArrayOnMap,
+                            coZoneRadius
+                        })))
+                    ) {
+                        modifier += cfg[3];
+                    }
                 }
 
-                const defenseBonusByPromotionCfg = skillCfg.defenseBonusByPromotion;
-                if ((defenseBonusByPromotionCfg)                                                                                                                    &&
-                    (defenseBonusByPromotionCfg[2] === promotion)                                                                                                   &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, defenseBonusByPromotionCfg[1]))                                               &&
-                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
-                        gridIndex               : selfGridIndex,
-                        coSkillAreaType         : defenseBonusByPromotionCfg[0],
-                        getCoGridIndexArrayOnMap,
-                        coZoneRadius,
-                    })))
-                ) {
-                    modifier += defenseBonusByPromotionCfg[3];
+                {
+                    const cfg = skillCfg.defenseBonusByPromotion;
+                    if ((cfg)                                                                       &&
+                        (cfg[2] === promotion)                                                      &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))  &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                            gridIndex               : selfGridIndex,
+                            coSkillAreaType         : cfg[0],
+                            getCoGridIndexArrayOnMap,
+                            coZoneRadius,
+                        })))
+                    ) {
+                        modifier += cfg[3];
+                    }
                 }
             }
             return modifier;
