@@ -242,8 +242,15 @@ namespace Types {
         Co0000,
         Co0001,
         Co0002,
+        Co0003,
+        Co0004,
         Co0005,
+        Co0006,
         Co0007,
+        Co0008,
+        Co0009,
+        Co0010,
+        Co0011,
         Co9999,
     }
 

@@ -3542,6 +3542,34 @@ namespace TwnsLangCommonText {
             `返回战局列表`,
             `Go to War List`,
         ],
+        [LangTextType.B0653]: [
+            `Supreme Logician`,
+            `Supreme Logician`,
+        ],
+        [LangTextType.B0654]: [
+            `Goddess of Revenge`,
+            `Goddess of Revenge`,
+        ],
+        [LangTextType.B0655]: [
+            `Hero of Legend`,
+            `Hero of Legend`,
+        ],
+        [LangTextType.B0656]: [
+            `Flight of the Coward`,
+            `Flight of the Coward`,
+        ],
+        [LangTextType.B0657]: [
+            `Madman's Reign`,
+            `Madman's Reign`,
+        ],
+        [LangTextType.B0658]: [
+            `Cruel Rose`,
+            `Cruel Rose`,
+        ],
+        [LangTextType.B0659]: [
+            `Puppet Master`,
+            `Puppet Master`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
