@@ -31,6 +31,7 @@ namespace SoundManager {
     const _BGM_PARAMS   = new Map<BgmCode, BgmParams>([
         [ BgmCode.Lobby01,      { name: "lobby01.mp3",      start: 16.07,   end: 58.07  } ],
         [ BgmCode.MapEditor01,  { name: "mapEditor01.mp3",  start: 0.7,     end: 36     } ],
+        [ BgmCode.Power00,      { name: "power00.mp3",      start: 2.97,    end: 38     } ],
         [ BgmCode.Co0000,       { name: "co0000.mp3",       start: 8.5,     end: 72.5   } ],
         [ BgmCode.Co0001,       { name: "co0001.mp3",       start: 1.75,    end: 56.75  } ],
         [ BgmCode.Co0002,       { name: "co0002.mp3",       start: 1,       end: 65     } ],
@@ -147,8 +148,14 @@ namespace SoundManager {
             return;
         }
 
-        if ((!player.checkIsNeutral()) || (force)) {
-            playCoBgm(war.getPlayerInTurn().getCoId());
+        if ((player.checkIsNeutral()) && (!force)) {
+            return;
+        }
+
+        if (player.checkCoIsUsingActiveSkill()) {
+            playBgm(BgmCode.Power00);
+        } else {
+            playCoBgm(player.getCoId());
         }
     }
 

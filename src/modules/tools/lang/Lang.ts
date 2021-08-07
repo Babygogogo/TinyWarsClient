@@ -351,6 +351,7 @@ namespace Lang {
             case BgmCode.None           : return getText(LangTextType.B0001);
             case BgmCode.Lobby01        : return getText(LangTextType.B0632);
             case BgmCode.MapEditor01    : return getText(LangTextType.B0633);
+            case BgmCode.Power00        : return getText(LangTextType.B0660);
             case BgmCode.Co0000         : return getText(LangTextType.B0638);
             case BgmCode.Co0001         : return getText(LangTextType.B0634);
             case BgmCode.Co0002         : return getText(LangTextType.B0636);

@@ -3570,6 +3570,10 @@ namespace TwnsLangCommonText {
             `Puppet Master`,
             `Puppet Master`,
         ],
+        [LangTextType.B0660]: [
+            `Power Up`,
+            `Power Up`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

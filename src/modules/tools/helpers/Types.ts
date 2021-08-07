@@ -239,6 +239,7 @@ namespace Types {
         None        = 0,
         Lobby01,
         MapEditor01,
+        Power00,
         Co0000,
         Co0001,
         Co0002,

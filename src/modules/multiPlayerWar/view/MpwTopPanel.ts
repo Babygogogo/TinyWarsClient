@@ -148,6 +148,7 @@ namespace TwnsMpwTopPanel {
         }
         private _onNotifyBwCoUsingSkillChanged(): void {
             this._updateLabelCoAndEnergy();
+            SoundManager.playCoBgmWithWar(this._war, false);
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
             this._updateBtnUnitList();

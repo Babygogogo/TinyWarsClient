@@ -132,6 +132,7 @@ namespace TwnsRwTopPanel {
         }
         private _onNotifyBwCoUsingSkillChanged(e: egret.Event): void {
             this._updateLabelCo();
+            SoundManager.playCoBgmWithWar(this._war, false);
         }
         private _onNotifyReplayAutoReplayChanged(e: egret.Event): void {
             this._updateView();
