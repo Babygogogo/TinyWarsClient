@@ -239,12 +239,12 @@ namespace Types {
         None        = 0,
         Lobby01,
         MapEditor01,
-        War01,
-        War02,
-        War03,
-        War04,
-        War05,
-        War06,
+        Co0000,
+        Co0001,
+        Co0002,
+        Co0005,
+        Co0007,
+        Co9999,
     }
 
     export const UiState = {

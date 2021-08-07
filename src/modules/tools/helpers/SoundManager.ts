@@ -1,10 +1,12 @@
 
-import Types            from "./Types";
+import TwnsBwWar        from "../../baseWar/model/BwWar";
 import Lang             from "../lang/Lang";
 import TwnsLangTextType from "../lang/LangTextType";
-import Logger           from "./Logger";
-import LocalStorage     from "./LocalStorage";
 import FloatText        from "./FloatText";
+import Helpers          from "./Helpers";
+import LocalStorage     from "./LocalStorage";
+import Logger           from "./Logger";
+import Types            from "./Types";
 
 namespace SoundManager {
     import SoundType            = Types.SoundType;
@@ -15,9 +17,9 @@ namespace SoundManager {
     export const DEFAULT_VOLUME = 1;
 
     const AllBgmMinCode = BgmCode.Lobby01;
-    const AllBgmMaxCode = BgmCode.War06;
-    const WarBgmMinCode = BgmCode.War01;
-    const WarBgmMaxCode = BgmCode.War06;
+    const AllBgmMaxCode = BgmCode.Co9999;
+    const CoBgmMinCode  = BgmCode.Co0001;
+    const CoBgmMaxCode  = BgmCode.Co9999;
 
     type BgmParams = {
         name    : string;
@@ -29,13 +31,13 @@ namespace SoundManager {
     const _BGM_PARAMS   = new Map<BgmCode, BgmParams>([
         [ BgmCode.Lobby01,      { name: "lobby01.mp3",      start: 16.07,   end: 58.07  } ],
         [ BgmCode.MapEditor01,  { name: "mapEditor01.mp3",  start: 0.7,     end: 36     } ],
-        [ BgmCode.War01,        { name: "war01.mp3",        start: 1.75,    end: 56.75  } ],
-        [ BgmCode.War02,        { name: "war02.mp3",        start: 1.15,    end: 60     } ],
-        [ BgmCode.War03,        { name: "war03.mp3",        start: 1,       end: 65     } ],
-        [ BgmCode.War04,        { name: "war04.mp3",        start: 1.92,    end: 63     } ],
-        [ BgmCode.War05,        { name: "war05.mp3",        start: 8.5,     end: 72.5   } ],
+        [ BgmCode.Co0000,       { name: "co0000.mp3",       start: 8.5,     end: 72.5   } ],
+        [ BgmCode.Co0001,       { name: "co0001.mp3",       start: 1.75,    end: 56.75  } ],
+        [ BgmCode.Co0002,       { name: "co0002.mp3",       start: 1,       end: 65     } ],
+        [ BgmCode.Co0005,       { name: "co0005.mp3",       start: 1.92,    end: 63     } ],
+        [ BgmCode.Co0007,       { name: "co0007.mp3",       start: 1.15,    end: 60     } ],
+        [ BgmCode.Co9999,       { name: "co9999.mp3",       start: 4.7,     end: 115.44 } ],
         // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],
-        [ BgmCode.War06,        { name: "war06.mp3",        start: 4.7,     end: 115.44 } ],
     ]);
 
     let _isInitialized          = false;
@@ -117,8 +119,30 @@ namespace SoundManager {
         const code = getPlayingBgmCode() + 1;
         playBgm(code <= AllBgmMaxCode ? code : AllBgmMinCode);
     }
-    export function playRandomWarBgm(): void {
-        playBgm(Math.floor(Math.random() * (WarBgmMaxCode - WarBgmMinCode + 1)) + WarBgmMinCode);
+    export function playRandomCoBgm(): void {
+        playBgm(Math.floor(Math.random() * (CoBgmMaxCode - CoBgmMinCode + 1)) + CoBgmMinCode);
+    }
+    export function playCoBgm(coId: number): void {
+        const bgmFileName = `co${Helpers.getNumText(Math.floor(coId / 10000), 4)}.mp3`;
+        for (const [bgmCode, param] of _BGM_PARAMS) {
+            if (param.name === bgmFileName) {
+                playBgm(bgmCode);
+                return;
+            }
+        }
+
+        playRandomCoBgm();
+    }
+    export function playCoBgmWithWar(war: TwnsBwWar.BwWar, force: boolean): void {
+        const player = war.getPlayerInTurn();
+        if (player == null) {
+            Logger.error(`SoundManager.playCoBgmWithWar() empty player.`);
+            return;
+        }
+
+        if ((!player.checkIsNeutral()) || (force)) {
+            playCoBgm(war.getPlayerInTurn().getCoId());
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

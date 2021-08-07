@@ -348,16 +348,16 @@ namespace Lang {
 
     export function getBgmName(code: BgmCode): string | undefined {
         switch (code) {
-            case BgmCode.None       : return getText(LangTextType.B0001);
-            case BgmCode.Lobby01    : return getText(LangTextType.B0632);
-            case BgmCode.MapEditor01: return getText(LangTextType.B0633);
-            case BgmCode.War01      : return getText(LangTextType.B0634);
-            case BgmCode.War02      : return getText(LangTextType.B0635);
-            case BgmCode.War03      : return getText(LangTextType.B0636);
-            case BgmCode.War04      : return getText(LangTextType.B0637);
-            case BgmCode.War05      : return getText(LangTextType.B0638);
-            case BgmCode.War06      : return getText(LangTextType.B0639);
-            default                 : return undefined;
+            case BgmCode.None           : return getText(LangTextType.B0001);
+            case BgmCode.Lobby01        : return getText(LangTextType.B0632);
+            case BgmCode.MapEditor01    : return getText(LangTextType.B0633);
+            case BgmCode.Co0000         : return getText(LangTextType.B0638);
+            case BgmCode.Co0001         : return getText(LangTextType.B0634);
+            case BgmCode.Co0002         : return getText(LangTextType.B0636);
+            case BgmCode.Co0005         : return getText(LangTextType.B0637);
+            case BgmCode.Co0007         : return getText(LangTextType.B0635);
+            case BgmCode.Co9999         : return getText(LangTextType.B0639);
+            default                     : return undefined;
         }
     }
 

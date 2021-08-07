@@ -3,10 +3,11 @@ import TwnsBwWar                from "../../baseWar/model/BwWar";
 import TwnsBwUnitListPanel      from "../../baseWar/view/BwUnitListPanel";
 import ChatModel                from "../../chat/model/ChatModel";
 import TwnsChatPanel            from "../../chat/view/ChatPanel";
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -124,6 +125,7 @@ namespace TwnsSpwTopPanel {
         }
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
             this._updateView();
+            SoundManager.playCoBgmWithWar(this._war, false);
         }
         private _onNotifyBwCoEnergyChanged(): void {
             this._updateLabelCoAndEnergy();

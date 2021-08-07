@@ -6,6 +6,7 @@ import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Logger                       from "../../tools/helpers/Logger";
+import SoundManager                 from "../../tools/helpers/SoundManager";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
@@ -466,6 +467,7 @@ namespace TwnsRwWar {
 
             await Helpers.checkAndCallLater();
             this._fastInitView();
+            SoundManager.playCoBgmWithWar(this, false);
         }
 
         public getTotalActionsCount(): number {

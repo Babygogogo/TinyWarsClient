@@ -179,7 +179,7 @@ namespace FlowManager {
         TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
         TwnsBroadcastPanel.BroadcastPanel.show();
 
-        SoundManager.playRandomWarBgm();
+        SoundManager.playCoBgmWithWar(war, true);
 
         return ClientErrorCode.NoError;
     }
@@ -197,7 +197,7 @@ namespace FlowManager {
         TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
         TwnsBroadcastPanel.BroadcastPanel.show();
 
-        SoundManager.playRandomWarBgm();
+        SoundManager.playCoBgmWithWar(war, true);
     }
     export async function gotoSinglePlayerWar({ warData, slotIndex, slotExtraData }: {
         slotIndex       : number;
@@ -217,7 +217,7 @@ namespace FlowManager {
         TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
         TwnsBroadcastPanel.BroadcastPanel.show();
 
-        SoundManager.playRandomWarBgm();
+        SoundManager.playCoBgmWithWar(war, true);
 
         await SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
     }

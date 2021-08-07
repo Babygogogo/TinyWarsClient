@@ -6,6 +6,7 @@ import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -121,6 +122,7 @@ namespace TwnsRwTopPanel {
         }
         private _onNotifyBwPlayerIndexInTurnChanged(e: egret.Event): void {
             this._updateView();
+            SoundManager.playCoBgmWithWar(this._war, false);
         }
         private _onNotifyBwNextActionIdChanged(e: egret.Event): void {
             this._updateLabelAction();

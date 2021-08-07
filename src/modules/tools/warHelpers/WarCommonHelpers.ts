@@ -464,18 +464,23 @@ namespace WarCommonHelpers {
         coSkillAreaType         : CoSkillAreaType;
         getCoGridIndexArrayOnMap: () => GridIndex[] | undefined;
         coZoneRadius            : number;
-    },
-    ): boolean | undefined {
+    }): boolean | undefined {
         if (coSkillAreaType === CoSkillAreaType.Halo) {
             return true;
 
         } else if (coSkillAreaType === CoSkillAreaType.OnMap) {
-            return getCoGridIndexArrayOnMap.length > 0;
+            const coGridIndexArray = getCoGridIndexArrayOnMap();
+            if (coGridIndexArray == null) {
+                Logger.error(`WarCommonHelpers.checkIsGridIndexInsideCoSkillArea() empty coGridIndexArray 1.`);
+                return undefined;
+            } else {
+                return coGridIndexArray.length > 0;
+            }
 
         } else if (coSkillAreaType === CoSkillAreaType.Zone) {
             const coGridIndexArray = getCoGridIndexArrayOnMap();
             if (coGridIndexArray == null) {
-                Logger.error(`WarCommonHelpers.checkIsGridIndexInsideCoSkillArea() empty coGridIndexArray.`);
+                Logger.error(`WarCommonHelpers.checkIsGridIndexInsideCoSkillArea() empty coGridIndexArray 2.`);
                 return undefined;
             } else {
                 const distance = GridIndexHelpers.getMinDistance(gridIndex, coGridIndexArray);
@@ -483,7 +488,7 @@ namespace WarCommonHelpers {
             }
 
         } else {
-            Logger.error(`WarCommonHelpers.checkIsGridIndexInsideSkillArea() invalid areaType: ${coSkillAreaType}`);
+            Logger.error(`WarCommonHelpers.checkIsGridIndexInsideCoSkillArea() invalid areaType: ${coSkillAreaType}`);
             return undefined;
         }
     }
