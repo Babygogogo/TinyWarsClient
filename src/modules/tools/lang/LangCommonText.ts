@@ -911,8 +911,8 @@ namespace TwnsLangCommonText {
             `All data of units and tiles is the same as Advance Wars: Days of Ruin.`,
         ],
         [LangTextType.A0218]: [
-            `相比原版，部分兵种的数据已被重新设计。设计者：NGC6240。`,
-            `Some units' data is rebalanced. Designed by NGC6240.`,
+            `此版本引入了高战1/2/DS的CO（比如Andy）。这些CO仍然具有全局效果，并由zhaotiantong进行了平衡。使用了由NGC6240设计的兵种数据。`,
+            `COs from AW 1/2/DS (Andy for example) are introduced into this version. They still have global effects and are rebalanced by zhaotiantong. Units are rebalanced by NGC6240.`,
         ],
         [LangTextType.A0219]: [
             `注意：各版本的玩家数据不互通。您可能需要重新注册账户。`,

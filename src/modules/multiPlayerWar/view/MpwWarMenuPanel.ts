@@ -311,8 +311,10 @@ namespace TwnsMpwWarMenuPanel {
                 this._createCommandOpenDamageChartPanel(),
                 this._createCommandPlayerUseCop(),
                 this._createCommandPlayerUseScop(),
-                this._createCommandOpenAdvancedMenu(),
+                this._createCommandPlayerAgreeDraw(),
+                this._createCommandPlayerDeclineDraw(),
                 this._createCommandSyncWar(),
+                this._createCommandOpenAdvancedMenu(),
                 this._createCommandGotoWarListPanel(),
             ].filter(c => !!c);
         }
@@ -320,8 +322,7 @@ namespace TwnsMpwWarMenuPanel {
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
             return [
                 this._createCommandPlayerDeleteUnit(),
-                this._createCommandPlayerAgreeDraw(),
-                this._createCommandPlayerDeclineDraw(),
+                this._createCommandPlayerRequestDraw(),
                 this._createCommandPlayerSurrender(),
                 this._createCommandSimulation(),
                 this._createCommandCreateMfr(),
@@ -439,6 +440,29 @@ namespace TwnsMpwWarMenuPanel {
             };
         }
 
+        private _createCommandPlayerRequestDraw(): DataForCommandRenderer | undefined {
+            const war       = this._war;
+            const player    = war.getPlayerInTurn();
+            if ((player !== war.getPlayerLoggedIn())                                ||
+                (player.getHasVotedForDraw())                                       ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
+                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)  ||
+                (war.getDrawVoteManager().getRemainingVotes() != null)
+            ) {
+                return undefined;
+            } else {
+                return {
+                    name    : Lang.getText(LangTextType.B0083),
+                    callback: () => {
+                        CommonConfirmPanel.show({
+                            content : Lang.getText(LangTextType.A0031),
+                            callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(true),
+                        });
+                    },
+                };
+            }
+        }
+
         private _createCommandPlayerSurrender(): DataForCommandRenderer | undefined {
             const war = this._war;
             if ((war.getPlayerInTurn() !== war.getPlayerLoggedIn())                 ||
@@ -511,21 +535,19 @@ namespace TwnsMpwWarMenuPanel {
         private _createCommandPlayerAgreeDraw(): DataForCommandRenderer | undefined {
             const war       = this._war;
             const player    = war.getPlayerInTurn();
-            if ((player !== war.getPlayerLoggedIn())                                    ||
-                (player.getHasVotedForDraw())                                           ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)      ||
-                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)
+            if ((player !== war.getPlayerLoggedIn())                                ||
+                (player.getHasVotedForDraw())                                       ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
+                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)  ||
+                (!war.getDrawVoteManager().getRemainingVotes())
             ) {
                 return undefined;
             } else {
-                const drawVoteManager   = war.getDrawVoteManager();
-                const title             = drawVoteManager.getRemainingVotes() == null ? Lang.getText(LangTextType.B0083) : Lang.getText(LangTextType.B0084);
                 return {
-                    name    : title,
+                    name    : Lang.getText(LangTextType.B0084),
                     callback: () => {
                         CommonConfirmPanel.show({
-                            title,
-                            content : drawVoteManager.getRemainingVotes() == null ? Lang.getText(LangTextType.A0031) : Lang.getText(LangTextType.A0032),
+                            content : Lang.getText(LangTextType.A0032),
                             callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(true),
                         });
                     },
@@ -544,12 +566,10 @@ namespace TwnsMpwWarMenuPanel {
             ) {
                 return undefined;
             } else {
-                const title = Lang.getText(LangTextType.B0085);
                 return {
-                    name    : title,
+                    name    : Lang.getText(LangTextType.B0085),
                     callback: () => {
                         CommonConfirmPanel.show({
-                            title,
                             content : Lang.getText(LangTextType.A0033),
                             callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(false),
                         });

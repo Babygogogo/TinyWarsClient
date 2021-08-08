@@ -500,8 +500,10 @@ namespace TwnsBwPlayer {
             return this._coUsingSkillType;
         }
         public setCoUsingSkillType(skillType: Types.CoSkillType): void {
-            this._coUsingSkillType = skillType;
-            Notify.dispatch(NotifyType.BwCoUsingSkillTypeChanged);
+            if (this.getCoUsingSkillType() !== skillType) {
+                this._coUsingSkillType = skillType;
+                Notify.dispatch(NotifyType.BwCoUsingSkillTypeChanged);
+            }
         }
         public getCoCurrentSkills(): number[] | null {
             return this.getCoSkills(this.getCoUsingSkillType());
