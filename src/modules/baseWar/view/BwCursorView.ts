@@ -325,9 +325,10 @@ namespace TwnsBwCursorView {
         }
         private _updateConForTarget(): void {
             const actionPlanner = this._actionPlanner;
-            if (actionPlanner) {
+            const cursor        = this._cursor;
+            if ((actionPlanner) && (cursor)) {
                 const con       = this._conForTarget;
-                const gridIndex = this._cursor.getGridIndex();
+                const gridIndex = cursor.getGridIndex();
                 const state     = actionPlanner.getState();
 
                 if (state === ActionPlannerState.Idle) {
@@ -414,11 +415,11 @@ namespace TwnsBwCursorView {
         }
         private _updateConForDamage(): void {
             const actionPlanner = this._getActionPlanner();
+            const cursor        = this._cursor;
             const con           = this._getConForDamage();
-            if (!actionPlanner) {
+            if ((!actionPlanner) || (!cursor)) {
                 con.visible = false;
             } else {
-                const cursor        = this._getCursor();
                 const gridIndex     = cursor.getGridIndex();
                 const labelDamage   = this._getLabelDamage();
                 const state         = actionPlanner.getState();
