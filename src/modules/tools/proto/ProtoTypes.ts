@@ -19866,6 +19866,102 @@ export declare namespace User {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a UserMapRating. */
+    interface IUserMapRating {
+
+        /** UserMapRating mapId */
+        mapId?: (number|null);
+
+        /** UserMapRating rating */
+        rating?: (number|null);
+    }
+
+    /** Represents a UserMapRating. */
+    class UserMapRating implements IUserMapRating {
+
+        /**
+         * Constructs a new UserMapRating.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: User.IUserMapRating);
+
+        /** UserMapRating mapId. */
+        public mapId: number;
+
+        /** UserMapRating rating. */
+        public rating: number;
+
+        /**
+         * Creates a new UserMapRating instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns UserMapRating instance
+         */
+        public static create(properties?: User.IUserMapRating): User.UserMapRating;
+
+        /**
+         * Encodes the specified UserMapRating message. Does not implicitly {@link User.UserMapRating.verify|verify} messages.
+         * @param message UserMapRating message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: User.IUserMapRating, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified UserMapRating message, length delimited. Does not implicitly {@link User.UserMapRating.verify|verify} messages.
+         * @param message UserMapRating message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: User.IUserMapRating, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a UserMapRating message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns UserMapRating
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserMapRating;
+
+        /**
+         * Decodes a UserMapRating message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns UserMapRating
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserMapRating;
+
+        /**
+         * Verifies a UserMapRating message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a UserMapRating message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UserMapRating
+         */
+        public static fromObject(object: { [k: string]: any }): User.UserMapRating;
+
+        /**
+         * Creates a plain object from a UserMapRating message. Also converts values to other types if specified.
+         * @param message UserMapRating
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: User.UserMapRating, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UserMapRating to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a UserComplexInfo. */
     interface IUserComplexInfo {
 
@@ -19880,6 +19976,9 @@ export declare namespace User {
 
         /** UserComplexInfo userSettings */
         userSettings?: (User.IUserSettings|null);
+
+        /** UserComplexInfo userMapRatingArray */
+        userMapRatingArray?: (User.IUserMapRating[]|null);
     }
 
     /** Represents a UserComplexInfo. */
@@ -19902,6 +20001,9 @@ export declare namespace User {
 
         /** UserComplexInfo userSettings. */
         public userSettings?: (User.IUserSettings|null);
+
+        /** UserComplexInfo userMapRatingArray. */
+        public userMapRatingArray: User.IUserMapRating[];
 
         /**
          * Creates a new UserComplexInfo instance using the specified properties.
@@ -20484,6 +20586,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgUserSetSettings */
         MsgUserSetSettings?: (NetMessage.IMsgUserSetSettings|null);
 
+        /** MessageContainer MsgUserSetMapRating */
+        MsgUserSetMapRating?: (NetMessage.IMsgUserSetMapRating|null);
+
         /** MessageContainer MsgMapGetEnabledBriefDataList */
         MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
 
@@ -20844,6 +20949,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserSetSettings. */
         public MsgUserSetSettings?: (NetMessage.IMsgUserSetSettings|null);
+
+        /** MessageContainer MsgUserSetMapRating. */
+        public MsgUserSetMapRating?: (NetMessage.IMsgUserSetMapRating|null);
 
         /** MessageContainer MsgMapGetEnabledBriefDataList. */
         public MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
@@ -27507,6 +27615,303 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgUserSetSettings.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgUserSetMapRating. */
+    interface IMsgUserSetMapRating {
+
+        /** MsgUserSetMapRating c */
+        c?: (NetMessage.MsgUserSetMapRating.IC|null);
+
+        /** MsgUserSetMapRating s */
+        s?: (NetMessage.MsgUserSetMapRating.IS|null);
+    }
+
+    /** Represents a MsgUserSetMapRating. */
+    class MsgUserSetMapRating implements IMsgUserSetMapRating {
+
+        /**
+         * Constructs a new MsgUserSetMapRating.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserSetMapRating);
+
+        /** MsgUserSetMapRating c. */
+        public c?: (NetMessage.MsgUserSetMapRating.IC|null);
+
+        /** MsgUserSetMapRating s. */
+        public s?: (NetMessage.MsgUserSetMapRating.IS|null);
+
+        /**
+         * Creates a new MsgUserSetMapRating instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserSetMapRating instance
+         */
+        public static create(properties?: NetMessage.IMsgUserSetMapRating): NetMessage.MsgUserSetMapRating;
+
+        /**
+         * Encodes the specified MsgUserSetMapRating message. Does not implicitly {@link NetMessage.MsgUserSetMapRating.verify|verify} messages.
+         * @param message MsgUserSetMapRating message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserSetMapRating, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserSetMapRating message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapRating.verify|verify} messages.
+         * @param message MsgUserSetMapRating message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserSetMapRating, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserSetMapRating message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserSetMapRating
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapRating;
+
+        /**
+         * Decodes a MsgUserSetMapRating message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserSetMapRating
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapRating;
+
+        /**
+         * Verifies a MsgUserSetMapRating message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserSetMapRating message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserSetMapRating
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapRating;
+
+        /**
+         * Creates a plain object from a MsgUserSetMapRating message. Also converts values to other types if specified.
+         * @param message MsgUserSetMapRating
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserSetMapRating, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserSetMapRating to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserSetMapRating {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C mapId */
+            mapId?: (number|null);
+
+            /** C rating */
+            rating?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetMapRating.IC);
+
+            /** C mapId. */
+            public mapId: number;
+
+            /** C rating. */
+            public rating: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetMapRating.IC): NetMessage.MsgUserSetMapRating.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserSetMapRating.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetMapRating.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapRating.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetMapRating.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapRating.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapRating.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapRating.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetMapRating.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S mapId */
+            mapId?: (number|null);
+
+            /** S rating */
+            rating?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetMapRating.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S mapId. */
+            public mapId: number;
+
+            /** S rating. */
+            public rating: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetMapRating.IS): NetMessage.MsgUserSetMapRating.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserSetMapRating.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetMapRating.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapRating.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetMapRating.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapRating.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapRating.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapRating.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetMapRating.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

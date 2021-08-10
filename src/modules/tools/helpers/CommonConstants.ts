@@ -36,6 +36,8 @@ namespace CommonConstants {
     export const MapMaxGridsCount                       = 1000;
     export const MapMaxNameLength                       = 30;
     export const MapMaxDesignerLength                   = 30;
+    export const MapMaxRating                           = 10;
+    export const MapMinRating                           = 0;
 
     export const WarEventNameMaxLength                  = 150;
     export const WarEventMaxEventsPerMap                = 10;

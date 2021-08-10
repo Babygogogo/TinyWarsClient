@@ -8,6 +8,7 @@ import UserProxy            from "./UserProxy";
 import FloatText            from "../../tools/helpers/FloatText";
 import Lang                 from "../../tools/lang/Lang";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Logger from "../../tools/helpers/Logger";
 
 namespace UserModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -187,6 +188,9 @@ namespace UserModel {
         const info = await getUserPublicInfo(userId);
         return (info ? info.userMpwStatisticsArray || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
     }
+    export function getMapRating(mapId: number): number | undefined {
+        return getSelfUserComplexInfo()?.userMapRatingArray?.find(v => v.mapId === mapId)?.rating;
+    }
 
     function getSelfSettings(): IUserSettings | null {
         const userComplexInfo = getSelfUserComplexInfo();
@@ -247,6 +251,32 @@ namespace UserModel {
         }
         if (oldIsShowGridBorder !== getSelfSettingsIsShowGridBorder()) {
             Notify.dispatch(NotifyType.IsShowGridBorderChanged);
+        }
+    }
+    export function updateOnMsgUserSetMapRating(data: NetMessage.MsgUserSetMapRating.IS): void {
+        const complexInfo = getSelfUserComplexInfo();
+        if (complexInfo == null) {
+            Logger.error(`UserModel.updateOnMsgUserSetMapRating() empty complexInfo.`);
+            return;
+        }
+
+        const { mapId, rating } = data;
+        if (complexInfo.userMapRatingArray == null) {
+            complexInfo.userMapRatingArray = [{
+                mapId,
+                rating,
+            }];
+        } else {
+            const array = complexInfo.userMapRatingArray;
+            const info  = array.find(v => v.mapId === mapId);
+            if (info) {
+                info.rating = rating;
+            } else {
+                array.push({
+                    mapId,
+                    rating,
+                });
+            }
         }
     }
 
