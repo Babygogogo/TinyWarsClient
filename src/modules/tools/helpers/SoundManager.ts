@@ -11,6 +11,7 @@ import Types            from "./Types";
 namespace SoundManager {
     import SoundType            = Types.SoundType;
     import BgmCode              = Types.BgmCode;
+    import ShortSfxCode         = Types.ShortSfxCode;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export const DEFAULT_MUTE   = false;
@@ -25,6 +26,9 @@ namespace SoundManager {
         name    : string;
         start   : number;
         end     : number;
+    };
+    type ShortSfxParams = {
+        name    : string;
     };
 
     const _SOUND_PATH   = "resource/assets/sound/";
@@ -47,6 +51,13 @@ namespace SoundManager {
         [ BgmCode.Co9999,       { name: "co9999.mp3",       start: 4.7,     end: 115.44 } ],
         // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],
     ]);
+    const _SHORT_SFX_PARAM = new Map<ShortSfxCode, ShortSfxParams>([
+        [ ShortSfxCode.ButtonNeutral01,   { name: "buttonNeutral01.mp3" } ],
+        [ ShortSfxCode.ButtonConfirm01,   { name: "buttonConfirm01.mp3" } ],
+        [ ShortSfxCode.ButtonCancel01,    { name: "buttonCancel01.mp3"  } ],
+        [ ShortSfxCode.CursorConfirm01,   { name: "cursorConfirm01.mp3" } ],
+        [ ShortSfxCode.CursorMove01,      { name: "cursorMove01.mp3"    } ],
+    ]);
 
     let _isInitialized          = false;
     let _audioContext           : AudioContext;
@@ -62,8 +73,9 @@ namespace SoundManager {
     let _effectMute             = DEFAULT_MUTE;
     let _effectVolume           = DEFAULT_VOLUME;
 
-    let _effectCacheForNormal   : { [name: string]: egret.Sound } = {};
-    let _effectsForNormal       : { [name: string]: egret.SoundChannel | undefined } = {};
+    const _shortSfxBufferCache  = new Map<ShortSfxCode, AudioBuffer>();
+    // const _shortSfxDict         : { [shortSfxCode: number]: egret.SoundChannel | undefined } = {};
+    let _sfxGain                : GainNode;
 
     // const audio = new Audio(getResourcePath("war01.mp3", SoundType.Bgm));
     // audio.play();
@@ -87,7 +99,9 @@ namespace SoundManager {
         try {
             _audioContext   = new AudioContext();
             _bgmGain        = _audioContext.createGain();
+            _sfxGain        = _audioContext.createGain();
             _bgmGain.connect(_audioContext.destination);
+            _sfxGain.connect(_audioContext.destination);
         } catch (e) {
             FloatText.show(Lang.getText(LangTextType.A0196));
         }
@@ -116,7 +130,7 @@ namespace SoundManager {
         } catch (e) {
             // Logger.error(`SoundManager.pause() error.`);
         }
-        _stopAllEffects();
+        _stopAllShortSfx();
     }
 
     export function playPreviousBgm(): void {
@@ -139,7 +153,8 @@ namespace SoundManager {
             }
         }
 
-        playRandomCoBgm();
+        // playRandomCoBgm();
+        playBgm(BgmCode.Co0000);
     }
     export function playCoBgmWithWar(war: TwnsBwWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
@@ -238,8 +253,8 @@ namespace SoundManager {
             return;
         }
 
-        const cache         = _bgmBufferCache;
-        const cachedBuffer  = cache.get(bgmCode);
+        const cacheDict     = _bgmBufferCache;
+        const cachedBuffer  = cacheDict.get(bgmCode);
         if (cachedBuffer) {
             _doPlayBgmForNormal(cachedBuffer, params);
         } else {
@@ -255,7 +270,7 @@ namespace SoundManager {
                 return;
             }
 
-            cache.set(bgmCode, audioBuffer);
+            cacheDict.set(bgmCode, audioBuffer);
             _doPlayBgmForNormal(audioBuffer, params);
         }
     }
@@ -302,7 +317,7 @@ namespace SoundManager {
         }
 
         _effectMute = isMute;
-        _updateEffectVolumeForNormal();
+        _updateSfxVolume();
     }
     export function setIsEffectMuteToStore(): void {
         LocalStorage.setIsSoundEffectMute(getIsEffectMute());
@@ -321,7 +336,7 @@ namespace SoundManager {
         }
 
         _effectVolume = volume;
-        _updateEffectVolumeForNormal();
+        _updateSfxVolume();
     }
     export function setEffectVolumeToStore(): void {
         LocalStorage.setSoundEffectVolume(getEffectVolume());
@@ -329,95 +344,92 @@ namespace SoundManager {
     export function getEffectVolume(): number {
         return _effectVolume;
     }
-    function _getRevisedEffectVolume(): number {
+    function _getRevisedSfxVolume(): number {
         return getIsEffectMute() ? 0 : getEffectVolume();
     }
-    function _updateEffectVolumeForNormal(): void {
-        const effects   = _effectsForNormal;
-        const volume    = _getRevisedEffectVolume();
-        for (const name in effects) {
-            const eff = effects[name];
-            if (eff) {
-                try {
-                    eff.volume = volume;
-                } catch (e) {
-                    // Logger.error(`SoundManager._updateEffectVolumeForNormal() error.`);
-                }
-            }
+    function _updateSfxVolume(): void {
+        const gain = _sfxGain;
+        if (gain) {
+            gain.gain.value = _getRevisedSfxVolume();
         }
     }
 
     /** 技能或按钮的点击音效，可以同时播放多个 */
-    export function playEffect(musicName: string): void {
-        if (musicName) {
-            _playEffectForNormal(musicName);
+    export async function playShortSfx(shortSfxCode: ShortSfxCode): Promise<void> {
+        if (!_isInitialized) {
+            return;
         }
-    }
-    function _playEffectForNormal(musicName: string): void {
-        const cache = _effectCacheForNormal;
-        if (cache[musicName]) {
-            _doPlayEffectForNormal(musicName, cache[musicName]);
+
+        if ((shortSfxCode == null) || (shortSfxCode === ShortSfxCode.None)) {
+            return;
+        }
+
+        const params = _SHORT_SFX_PARAM.get(shortSfxCode);
+        if (params == null) {
+            Logger.error(`SoundManager.playShortSfx() empty params.`);
+            return;
+        }
+
+        const cacheDict     = _shortSfxBufferCache;
+        const cachedBuffer  = cacheDict.get(shortSfxCode);
+        if (cachedBuffer) {
+            _doPlayShortSfx(cachedBuffer);
         } else {
-            const path = getResourcePath(musicName, SoundType.Effect);
+            const path = getResourcePath(params.name, SoundType.Effect);
             if (path == null) {
                 Logger.error(`SoundManager._playEffectForNormal() empty path.`);
                 return;
             }
-            RES.getResByUrl(
-                path,
-                (sound: egret.Sound) => {
-                    cache[musicName] = sound;
-                    _doPlayEffectForNormal(musicName, sound);
-                },
-                undefined,
-                RES.ResourceItem.TYPE_SOUND
-            );
+
+            const audioBuffer = await loadAudioBuffer(path);
+            if (audioBuffer == null) {
+                Logger.error(`SoundManager.playShortSfx() empty audioBuffer.`);
+                return;
+            }
+
+            cacheDict.set(shortSfxCode, audioBuffer);
+            _doPlayShortSfx(audioBuffer);
         }
     }
-    function _doPlayEffectForNormal(musicName: string, sound: egret.Sound): void {
-        if (!sound) {
+    function _doPlayShortSfx(buffer: AudioBuffer): void {
+        if (!buffer) {
             return;
         }
 
-        _stopEffect(musicName);
+        // _stopShortSfx(buffer);
 
-        const channel                   = sound.play(0, 1);
-        channel.volume                  = _getRevisedEffectVolume();
-        _effectsForNormal[musicName]    = channel;
-    }
-
-    function _stopEffect(musicName: string): void {
-        _stopEffectForNormal(musicName);
-    }
-    function _stopEffectForNormal(musicName: string): void {
-        const effects   = _effectsForNormal;
-        const eff       = effects[musicName];
-        if (eff) {
-            try {
-                eff.stop();
-            } catch (e) {
-                Logger.error(`SoundManager._stopEffectForNormal() error.`);
-            }
-            effects[musicName] = undefined;
-        }
+        const sourceNode    = _audioContext.createBufferSource();
+        sourceNode.buffer   = buffer;
+        sourceNode.connect(_sfxGain);
+        sourceNode.start();
     }
 
-    function _stopAllEffects(): void {
-        _stopAllEffectsForNormal();
-    }
-    function _stopAllEffectsForNormal(): void {
-        const effects = _effectsForNormal;
-        for (const name in effects) {
-            const eff = effects[name];
-            if (eff) {
-                try {
-                    eff.stop();
-                } catch (e) {
-                    Logger.error(`SoundManager._stopAllEffectsForNormal() error.`);
-                }
-            }
-        }
-        _effectsForNormal = {};
+    // function _stopShortSfx(shortSfxCode: ShortSfxCode): void {
+    //     const effectDict    = _shortSfxDict;
+    //     const eff           = effectDict[shortSfxCode];
+    //     if (eff) {
+    //         try {
+    //             eff.stop();
+    //         } catch (e) {
+    //             Logger.error(`SoundManager._stopShortSfx() error.`);
+    //         }
+    //         effectDict[shortSfxCode] = undefined;
+    //     }
+    // }
+
+    function _stopAllShortSfx(): void {
+        // const dict = _shortSfxDict;
+        // for (const name in dict) {
+        //     const eff = dict[name];
+        //     if (eff) {
+        //         try {
+        //             eff.stop();
+        //         } catch (e) {
+        //             Logger.error(`SoundManager._stopAllShortSfx() error.`);
+        //         }
+        //     }
+        // }
+        // _shortSfxDict = {};
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -425,41 +437,17 @@ namespace SoundManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function dispose(): void {
         _disposeAllBgm();
-        _disposeAllEffects();
+        _disposeAllSfx();
     }
     function _disposeAllBgm(): void {
         _bgmBufferCache.clear();
 
-        if (_bgmSourceNode) {
-            try {
-                _bgmSourceNode.stop();
-                _bgmSourceNode.disconnect();
-            } catch (e) {
-                Logger.error(`SoundManager._disposeAllBgm() error.`);
-            }
-            _bgmSourceNode = undefined;
-        }
+        _stopBgm();
     }
-    function _disposeAllEffects(): void {
-        const cache = _effectCacheForNormal;
-        for (const name in cache) {
-            const eff = cache[name];
-            (eff) && (eff.close());
-        }
-        _effectCacheForNormal = {};
+    function _disposeAllSfx(): void {
+        _shortSfxBufferCache.clear();
 
-        const effects = _effectsForNormal;
-        for (const name in effects) {
-            const eff = effects[name];
-            if (eff) {
-                try {
-                    eff.stop();
-                } catch (e) {
-                    Logger.error(`SoundManager._disposeAllEffects() error.`);
-                }
-            }
-        }
-        _effectsForNormal = {};
+        _stopAllShortSfx();
     }
 
     function getResourcePath(musicName: string, soundType: SoundType): string | undefined {

@@ -1019,7 +1019,6 @@ namespace TwnsBwUnit {
 
                 const armorType = targetTile.getArmorType();
                 if (armorType == null) {
-                    Logger.error(`BwUnit.checkCanAttackTargetAfterMovePath() the targetTile has no armorType! unit: ${JSON.stringify(targetTile?.serialize())}`);
                     return false;
                 } else {
                     return this.getBaseDamage(armorType) != null;

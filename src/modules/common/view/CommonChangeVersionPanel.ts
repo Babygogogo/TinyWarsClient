@@ -24,19 +24,12 @@ namespace TwnsCommonChangeVersionPanel {
 
         private static _instance: CommonChangeVersionPanel;
 
-        // @ts-ignore
         private readonly _group         : eui.Group;
-        // @ts-ignore
         private readonly _imgMask       : TwnsUiImage.UiImage;
-        // @ts-ignore
         private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private readonly _btnBack       : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnConfirm    : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _listVersion   : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
-        // @ts-ignore
         private readonly _labelTips     : TwnsUiLabel.UiLabel;
 
         public static show(): void {
@@ -72,6 +65,8 @@ namespace TwnsCommonChangeVersionPanel {
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._listVersion.setItemRenderer(MapNameRenderer);
+            this._btnBack.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
+            this._btnConfirm.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
 
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
@@ -181,11 +176,8 @@ namespace TwnsCommonChangeVersionPanel {
         gameVersion : GameVersion;
     };
     class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
-        // @ts-ignore
         private _labelName      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private _labelDesc      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private _labelCurrent   : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {

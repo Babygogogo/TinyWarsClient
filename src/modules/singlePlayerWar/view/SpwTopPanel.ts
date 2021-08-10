@@ -99,6 +99,7 @@ namespace TwnsSpwTopPanel {
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
+            this._btnCancel.setShortSfxCode(Types.ShortSfxCode.None);
 
             this._war = this._getOpenData().war;
             this._updateView();

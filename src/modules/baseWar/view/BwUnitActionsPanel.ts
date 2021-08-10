@@ -61,6 +61,7 @@ namespace TwnsBwUnitActionsPanel {
                 // { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
                 { type: NotifyType.ZoomableContentsMoved,      callback: this._onNotifyZoomableContentsMoved },
             ]);
+            this._listAction.setShortSfxCode(Types.ShortSfxCode.CursorConfirm01);
             this._listAction.setItemRenderer(UnitActionRenderer);
 
             this._showOpenAnimation();

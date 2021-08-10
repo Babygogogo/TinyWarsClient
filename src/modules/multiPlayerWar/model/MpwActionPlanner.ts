@@ -8,6 +8,7 @@ import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
 import FloatText                from "../../tools/helpers/FloatText";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import Logger                   from "../../tools/helpers/Logger";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -272,6 +273,7 @@ namespace TwnsMpwActionPlanner {
 
             this._setState(State.RequestingUnitAttackUnit);
             this._updateView();
+            SoundManager.playShortSfx(Types.ShortSfxCode.CursorConfirm01);
         }
 
         protected _setStateRequestingUnitAttackTile(targetGridIndex: GridIndex): void {
@@ -294,6 +296,7 @@ namespace TwnsMpwActionPlanner {
 
             this._setState(State.RequestingUnitAttackTile);
             this._updateView();
+            SoundManager.playShortSfx(Types.ShortSfxCode.CursorConfirm01);
         }
 
         private _setStateRequestingUnitBuildTile(): void {

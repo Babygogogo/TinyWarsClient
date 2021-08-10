@@ -24,29 +24,17 @@ namespace TwnsUserRegisterPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        // @ts-ignore
         private _imgMask            : TwnsUiImage.UiImage;
-        // @ts-ignore
         private _group              : eui.Group;
-        // @ts-ignore
         private _labelTitle         : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private _labelAccount       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private _inputAccount       : TwnsUiTextInput.UiTextInput;
-        // @ts-ignore
         private _labelPassword      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private _inputPassword      : TwnsUiTextInput.UiTextInput;
-        // @ts-ignore
         private _labelNickname      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private _inputNickname      : TwnsUiTextInput.UiTextInput;
-        // @ts-ignore
         private _btnRegister        : TwnsUiButton.UiButton;
-        // @ts-ignore
         private _btnClose           : TwnsUiButton.UiButton;
-        // @ts-ignore
         private _labelTips          : TwnsUiLabel.UiLabel;
 
         private static _instance: UserRegisterPanel;
@@ -81,6 +69,9 @@ namespace TwnsUserRegisterPanel {
                 { ui: this._btnClose,    callback: this.close },
                 { ui: this._btnRegister, callback: this._onTouchedBtnRegister },
             ]);
+
+            this._btnClose.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
+            this._btnRegister.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
 
             this._showOpenAnimation();
             this._updateComponentsForLanguage();

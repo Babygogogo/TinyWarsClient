@@ -21,53 +21,31 @@ namespace TwnsUserSetSoundPanel {
 
         private static _instance: UserSetSoundPanel;
 
-        // @ts-ignore
         private readonly _imgMask           : TwnsUiImage.UiImage;
-        // @ts-ignore
         private readonly _group             : eui.Group;
-        // @ts-ignore
         private readonly _labelTitle        : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
         private readonly _labelBgmTitle     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private readonly _imgBgmMute        : TwnsUiImage.UiImage;
-        // @ts-ignore
         private readonly _groupBgmVolume    : eui.Group;
-        // @ts-ignore
         private readonly _imgBgmBar         : TwnsUiImage.UiImage;
-        // @ts-ignore
         private readonly _imgBgmPoint       : TwnsUiImage.UiImage;
-        // @ts-ignore
         private readonly _labelBgmVolume    : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
         private readonly _labelEffectTitle  : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private readonly _imgEffectMute     : TwnsUiImage.UiImage;
-        // @ts-ignore
         private readonly _groupEffectVolume : eui.Group;
-        // @ts-ignore
         private readonly _imgEffectBar      : TwnsUiImage.UiImage;
-        // @ts-ignore
         private readonly _imgEffectPoint    : TwnsUiImage.UiImage;
-        // @ts-ignore
         private readonly _labelEffectVolume : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
         private readonly _labelSwitchBgm    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private readonly _labelBgmName      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private readonly _btnPrevBgm        : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnNextBgm        : TwnsUiButton.UiButton;
 
-        // @ts-ignore
         private readonly _btnCancel         : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnDefault        : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnConfirm        : TwnsUiButton.UiButton;
 
         private _prevBgmMute                : boolean | undefined;
@@ -120,6 +98,8 @@ namespace TwnsUserSetSoundPanel {
 
             this._imgBgmMute.touchEnabled       = true;
             this._imgEffectMute.touchEnabled    = true;
+            this._btnCancel.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
+            this._btnConfirm.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
 
             this._prevBgmMute                   = SoundManager.getIsBgmMute();
             this._prevBgmVolume                 = SoundManager.getBgmVolume();
@@ -152,7 +132,7 @@ namespace TwnsUserSetSoundPanel {
         }
         private _onTouchedGroupBgmMute(): void {
             const soundManager = SoundManager;
-            soundManager.playEffect("button.mp3");
+            soundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             soundManager.setIsBgmMute(!soundManager.getIsBgmMute());
             this._updateGroupBgmMute();
         }
@@ -167,14 +147,14 @@ namespace TwnsUserSetSoundPanel {
             this._updateGroupEffectVolume();
         }
         private _onTouchEndGroupEffectVolume(): void {
-            SoundManager.playEffect("button.mp3");
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchReleaseOutsideGroupEffectVolume(): void {
-            SoundManager.playEffect("button.mp3");
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupEffectMute(): void {
             const soundManager = SoundManager;
-            soundManager.playEffect("button.mp3");
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             soundManager.setIsEffectMute(!soundManager.getIsEffectMute());
             this._updateGroupEffectMute();
         }

@@ -1,6 +1,7 @@
 
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import Helpers              from "../../tools/helpers/Helpers";
+import SoundManager         from "../../tools/helpers/SoundManager";
 import Types                from "../../tools/helpers/Types";
 import Notify               from "../../tools/notify/Notify";
 import NotifyData           from "../../tools/notify/NotifyData";
@@ -73,6 +74,7 @@ namespace TwnsBwCursor {
                 const data = e.data as NotifyData.BwCursorDragged;
                 this.setGridIndex(data.draggedTo);
                 this.updateView();
+                SoundManager.playShortSfx(Types.ShortSfxCode.CursorMove01);
             }
         }
         private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {

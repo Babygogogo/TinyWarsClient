@@ -255,6 +255,16 @@ namespace Types {
         Co9999,
     }
 
+    // eslint-disable-next-line no-shadow
+    export enum ShortSfxCode {
+        None,
+        ButtonNeutral01,
+        ButtonConfirm01,
+        ButtonCancel01,
+        CursorConfirm01,
+        CursorMove01,
+    }
+
     export const UiState = {
         Up  : "up",
         Down: "down",

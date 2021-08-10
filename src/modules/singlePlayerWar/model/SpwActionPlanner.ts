@@ -6,6 +6,7 @@ import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import FloatText                from "../../tools/helpers/FloatText";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -127,6 +128,7 @@ namespace TwnsSpwActionPlanner {
         protected _setStateRequestingUnitAttackUnit(targetGridIndex: GridIndex): void {
             this._setState(State.RequestingUnitAttackUnit);
             this._updateView();
+            SoundManager.playShortSfx(Types.ShortSfxCode.CursorConfirm01);
 
             const unit = this.getFocusUnitLoaded();
             SpwLocalProxy.reqUnitAttackUnit({ war: this._getWar() as SpwWar, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : undefined, targetGridIndex });
@@ -135,6 +137,7 @@ namespace TwnsSpwActionPlanner {
         protected _setStateRequestingUnitAttackTile(targetGridIndex: GridIndex): void {
             this._setState(State.RequestingUnitAttackTile);
             this._updateView();
+            SoundManager.playShortSfx(Types.ShortSfxCode.CursorConfirm01);
 
             const unit = this.getFocusUnitLoaded();
             SpwLocalProxy.reqUnitAttackTile({ war: this._getWar() as SpwWar, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : undefined, targetGridIndex });

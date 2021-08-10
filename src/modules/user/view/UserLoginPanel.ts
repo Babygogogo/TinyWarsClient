@@ -25,39 +25,24 @@ namespace TwnsUserLoginPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        // @ts-ignore
         private _imgTitle                   : TwnsUiImage.UiImage;
 
-        // @ts-ignore
         private _groupAccount               : eui.Group;
-        // @ts-ignore
         private _labelAccount               : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private _inputAccount               : TwnsUiTextInput.UiTextInput;
 
-        // @ts-ignore
         private _groupPassword              : eui.Group;
-        // @ts-ignore
         private _labelPassword              : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private _inputPassword              : TwnsUiTextInput.UiTextInput;
 
-        // @ts-ignore
         private _groupPasswordCommand       : eui.Group;
-        // @ts-ignore
         private _groupRememberPassword      : eui.Group;
-        // @ts-ignore
         private _labelRememberPassword      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private _imgRememberPasswordCheck   : TwnsUiImage.UiImage;
-        // @ts-ignore
         private _btnForgetPassword          : TwnsUiButton.UiButton;
 
-        // @ts-ignore
         private _groupButton                : eui.Group;
-        // @ts-ignore
         private _btnRegister                : TwnsUiButton.UiButton;
-        // @ts-ignore
         private _btnLogin                   : TwnsUiButton.UiButton;
 
         private static _instance: UserLoginPanel;
@@ -101,6 +86,7 @@ namespace TwnsUserLoginPanel {
             this._inputPassword.text                = isRememberPassword ? LocalStorage.getPassword() : ``;
             this._btnLogin.enabled                  = true;
             this._imgRememberPasswordCheck.visible  = isRememberPassword;
+            this._btnLogin.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
             this._updateComponentsForLanguage();
         }
         protected async _onClosed(): Promise<void> {
@@ -152,6 +138,7 @@ namespace TwnsUserLoginPanel {
         private _onTouchedGroupRememberPassword(): void {
             const isRemember = LocalStorage.getIsRememberPassword();
             LocalStorage.setIsRememberPassword(!isRemember);
+            SoundManager.playShortSfx(isRemember ? Types.ShortSfxCode.ButtonCancel01 : Types.ShortSfxCode.ButtonConfirm01);
             this._imgRememberPasswordCheck.visible = !isRemember;
         }
 

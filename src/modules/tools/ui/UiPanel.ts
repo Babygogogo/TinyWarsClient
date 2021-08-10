@@ -1,7 +1,8 @@
 
 import Logger           from "../helpers/Logger";
-import Types            from "../helpers/Types";
+import SoundManager     from "../helpers/SoundManager";
 import StageManager     from "../helpers/StageManager";
+import Types            from "../helpers/Types";
 import TwnsUiComponent  from "./UiComponent";
 
 namespace TwnsUiPanel {
@@ -194,6 +195,7 @@ namespace TwnsUiPanel {
             }
 
             if (this._getIsCloseOnTouchedMask()) {
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonCancel01);
                 this.close();
             }
         }
