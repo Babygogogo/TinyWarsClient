@@ -1,8 +1,8 @@
 
-import TwnsBwCoListPanel        from "../../baseWar/view/BwCoListPanel";
 import TwnsBwUnitListPanel      from "../../baseWar/view/BwUnitListPanel";
 import ChatModel                from "../../chat/model/ChatModel";
 import TwnsChatPanel            from "../../chat/view/ChatPanel";
+import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
@@ -10,6 +10,7 @@ import TwnsMpwWar               from "../../multiPlayerWar/model/MpwWar";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -27,7 +28,7 @@ namespace TwnsMpwTopPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import UserPanel            = TwnsUserPanel.UserPanel;
     import MpwWar               = TwnsMpwWar.MpwWar;
-    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
+    import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
     import MpwActionPlanner     = TwnsMpwActionPlanner.MpwActionPlanner;
     import MpwWarMenuPanel      = TwnsMpwWarMenuPanel.MpwWarMenuPanel;
     import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
@@ -81,18 +82,18 @@ namespace TwnsMpwTopPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.TimeTick,                       callback: this._onNotifyTimeTick },
-                { type: NotifyType.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
-                { type: NotifyType.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
-                { type: NotifyType.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
-                { type: NotifyType.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
-                { type: NotifyType.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
-                { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: NotifyType.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
-                { type: NotifyType.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
-                { type: NotifyType.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
-                { type: NotifyType.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
+                { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.TimeTick,                        callback: this._onNotifyTimeTick },
+                { type: NotifyType.BwTurnPhaseCodeChanged,          callback: this._onNotifyBwTurnPhaseCodeChanged },
+                { type: NotifyType.BwPlayerFundChanged,             callback: this._onNotifyBwPlayerFundChanged },
+                { type: NotifyType.BwPlayerIndexInTurnChanged,      callback: this._onNotifyBwPlayerIndexInTurnChanged },
+                { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
+                { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
+                { type: NotifyType.BwActionPlannerStateChanged,     callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: NotifyType.MsgChatGetAllReadProgressList,   callback: this._onMsgChatGetAllReadProgressList },
+                { type: NotifyType.MsgChatUpdateReadProgress,       callback: this._onMsgChatUpdateReadProgress },
+                { type: NotifyType.MsgChatGetAllMessages,           callback: this._onMsgChatGetAllMessages },
+                { type: NotifyType.MsgChatAddMessage,               callback: this._onMsgChatAddMessage },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
@@ -104,6 +105,7 @@ namespace TwnsMpwTopPanel {
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
+            this._btnCancel.setShortSfxCode(Types.ShortSfxCode.None);
 
             this._war = MpwModel.getWar();
             this._updateView();
@@ -140,12 +142,14 @@ namespace TwnsMpwTopPanel {
         }
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
             this._updateView();
+            SoundManager.playCoBgmWithWar(this._war, false);
         }
         private _onNotifyBwCoEnergyChanged(): void {
             this._updateLabelCoAndEnergy();
         }
         private _onNotifyBwCoUsingSkillChanged(): void {
             this._updateLabelCoAndEnergy();
+            SoundManager.playCoBgmWithWar(this._war, false);
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
             this._updateBtnUnitList();
@@ -171,9 +175,8 @@ namespace TwnsMpwTopPanel {
             (userId) && (UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(): void {
-            BwCoListPanel.show({
+            CommonCoListPanel.show({
                 war             : this._war,
-                selectedIndex   : Math.max(this._war.getPlayerIndexInTurn() - 1, 0),
             });
             MpwWarMenuPanel.hide();
         }
@@ -227,7 +230,7 @@ namespace TwnsMpwTopPanel {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            BwCoListPanel.hide();
+            CommonCoListPanel.hide();
             MpwWarMenuPanel.show();
         }
 

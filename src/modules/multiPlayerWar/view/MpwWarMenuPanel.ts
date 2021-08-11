@@ -309,16 +309,20 @@ namespace TwnsMpwWarMenuPanel {
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
                 this._createCommandOpenDamageChartPanel(),
-                this._createCommandOpenAdvancedMenu(),
+                this._createCommandPlayerUseCop(),
+                this._createCommandPlayerUseScop(),
+                this._createCommandPlayerAgreeDraw(),
+                this._createCommandPlayerDeclineDraw(),
                 this._createCommandSyncWar(),
+                this._createCommandOpenAdvancedMenu(),
+                this._createCommandGotoWarListPanel(),
             ].filter(c => !!c);
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
             return [
                 this._createCommandPlayerDeleteUnit(),
-                this._createCommandPlayerAgreeDraw(),
-                this._createCommandPlayerDeclineDraw(),
+                this._createCommandPlayerRequestDraw(),
                 this._createCommandPlayerSurrender(),
                 this._createCommandSimulation(),
                 this._createCommandCreateMfr(),
@@ -347,6 +351,54 @@ namespace TwnsMpwWarMenuPanel {
             };
         }
 
+        private _createCommandPlayerUseCop(): DataForCommandRenderer | undefined {
+            const war           = this._war;
+            const skillType     = Types.CoSkillType.Power;
+            const playerInTurn  = war.getPlayerInTurn();
+            if ((playerInTurn !== war.getPlayerLoggedIn())                          ||
+                (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
+                (this._actionPlanner.checkIsStateRequesting())
+            ) {
+                return undefined;
+            } else {
+                return {
+                    name    : Lang.getText(LangTextType.B0142),
+                    callback: () => {
+                        CommonConfirmPanel.show({
+                            title   : Lang.getText(LangTextType.B0142),
+                            content : Lang.getText(LangTextType.A0054),
+                            callback: () => this._actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
+                        });
+                    },
+                };
+            }
+        }
+
+        private _createCommandPlayerUseScop(): DataForCommandRenderer | undefined {
+            const war           = this._war;
+            const skillType     = Types.CoSkillType.SuperPower;
+            const playerInTurn  = war.getPlayerInTurn();
+            if ((playerInTurn !== war.getPlayerLoggedIn())                          ||
+                (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
+                (this._actionPlanner.checkIsStateRequesting())
+            ) {
+                return undefined;
+            } else {
+                return {
+                    name    : Lang.getText(LangTextType.B0144),
+                    callback: () => {
+                        CommonConfirmPanel.show({
+                            title   : Lang.getText(LangTextType.B0144),
+                            content : Lang.getText(LangTextType.A0058),
+                            callback: () => this._actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
+                        });
+                    },
+                };
+            }
+        }
+
         private _createCommandSyncWar(): DataForCommandRenderer | undefined {
             return {
                 name    : Lang.getText(LangTextType.B0089),
@@ -363,6 +415,21 @@ namespace TwnsMpwWarMenuPanel {
             };
         }
 
+        private _createCommandGotoWarListPanel(): DataForCommandRenderer | undefined {
+            return {
+                name    : Lang.getText(LangTextType.B0652),
+                callback: () => {
+                    CommonConfirmPanel.show({
+                        title   : Lang.getText(LangTextType.B0652),
+                        content : Lang.getText(LangTextType.A0225),
+                        callback: () => {
+                            FlowManager.gotoMyWarListPanel(this._war.getWarType());
+                        },
+                    });
+                },
+            };
+        }
+
         private _createCommandChat(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0383),
@@ -371,6 +438,29 @@ namespace TwnsMpwWarMenuPanel {
                     TwnsChatPanel.ChatPanel.show({});
                 },
             };
+        }
+
+        private _createCommandPlayerRequestDraw(): DataForCommandRenderer | undefined {
+            const war       = this._war;
+            const player    = war.getPlayerInTurn();
+            if ((player !== war.getPlayerLoggedIn())                                ||
+                (player.getHasVotedForDraw())                                       ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
+                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)  ||
+                (war.getDrawVoteManager().getRemainingVotes() != null)
+            ) {
+                return undefined;
+            } else {
+                return {
+                    name    : Lang.getText(LangTextType.B0083),
+                    callback: () => {
+                        CommonConfirmPanel.show({
+                            content : Lang.getText(LangTextType.A0031),
+                            callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(true),
+                        });
+                    },
+                };
+            }
         }
 
         private _createCommandPlayerSurrender(): DataForCommandRenderer | undefined {
@@ -445,21 +535,19 @@ namespace TwnsMpwWarMenuPanel {
         private _createCommandPlayerAgreeDraw(): DataForCommandRenderer | undefined {
             const war       = this._war;
             const player    = war.getPlayerInTurn();
-            if ((player !== war.getPlayerLoggedIn())                                    ||
-                (player.getHasVotedForDraw())                                           ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)      ||
-                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)
+            if ((player !== war.getPlayerLoggedIn())                                ||
+                (player.getHasVotedForDraw())                                       ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
+                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)  ||
+                (!war.getDrawVoteManager().getRemainingVotes())
             ) {
                 return undefined;
             } else {
-                const drawVoteManager   = war.getDrawVoteManager();
-                const title             = drawVoteManager.getRemainingVotes() == null ? Lang.getText(LangTextType.B0083) : Lang.getText(LangTextType.B0084);
                 return {
-                    name    : title,
+                    name    : Lang.getText(LangTextType.B0084),
                     callback: () => {
                         CommonConfirmPanel.show({
-                            title,
-                            content : drawVoteManager.getRemainingVotes() == null ? Lang.getText(LangTextType.A0031) : Lang.getText(LangTextType.A0032),
+                            content : Lang.getText(LangTextType.A0032),
                             callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(true),
                         });
                     },
@@ -478,12 +566,10 @@ namespace TwnsMpwWarMenuPanel {
             ) {
                 return undefined;
             } else {
-                const title = Lang.getText(LangTextType.B0085);
                 return {
-                    name    : title,
+                    name    : Lang.getText(LangTextType.B0085),
                     callback: () => {
                         CommonConfirmPanel.show({
-                            title,
                             content : Lang.getText(LangTextType.A0033),
                             callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(false),
                         });

@@ -52,7 +52,7 @@ namespace Helpers {
     }
 
     export function checkIsDiscordIdValid(str: string | null): boolean {
-        return (typeof str == "string") && (str.length === 18);
+        return (typeof str == "string") && (str.length >= 17) && (str.length <= 18);
     }
 
     export function formatString(...args: (number | string | null | undefined)[]): string {
@@ -394,6 +394,17 @@ namespace Helpers {
                 }, null);
             });
         }
+    }
+    export function createLazyFunc<T>(func: () => T): () => T | undefined {
+        let hasCalled   = false;
+        let result      : T | undefined;
+        return () => {
+            if (!hasCalled) {
+                hasCalled   = true;
+                result      = func();
+            }
+            return result;
+        };
     }
 
     function getColorMatrix(color: Types.ColorType, value = 100): number[] | undefined {

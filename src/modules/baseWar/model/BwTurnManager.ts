@@ -3,16 +3,17 @@ import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Logger                   from "../../tools/helpers/Logger";
 import Timer                    from "../../tools/helpers/Timer";
 import Types                    from "../../tools/helpers/Types";
 import Notify                   from "../../tools/notify/Notify";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import WarDestructionHelpers    from "../../tools/warHelpers/WarDestructionHelpers";
 import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
-import TwnsBwUnit               from "./BwUnit";
+import WarDestructionHelpers    from "../../tools/warHelpers/WarDestructionHelpers";
 import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwUnit               from "./BwUnit";
 import TwnsBwWar                from "./BwWar";
 
 namespace TwnsBwTurnManager {
@@ -814,11 +815,6 @@ namespace TwnsBwTurnManager {
             }
 
             if (player.getCoId()) {
-                const coGridIndexListOnMap = player.getCoGridIndexListOnMap();
-                if (coGridIndexListOnMap == null) {
-                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_03;
-                }
-
                 const configVersion = war.getConfigVersion();
                 if (configVersion == null) {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_04;
@@ -834,8 +830,9 @@ namespace TwnsBwTurnManager {
                     return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_06;
                 }
 
-                const unitMap           = war.getUnitMap();
-                const gridVisionEffect  = war.getGridVisionEffect();
+                const unitMap                   = war.getUnitMap();
+                const gridVisionEffect          = war.getGridVisionEffect();
+                const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
                 for (const skillId of player.getCoCurrentSkills() || []) {
                     const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
                     if (skillCfg == null) {
@@ -858,7 +855,12 @@ namespace TwnsBwTurnManager {
 
                             if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
                                 (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
-                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                                    gridIndex               : unitGridIndex,
+                                    coSkillAreaType         : recoverCfg[0],
+                                    getCoGridIndexArrayOnMap,
+                                    coZoneRadius,
+                                }))
                             ) {
                                 targetUnits.push(unit);
                             }
@@ -932,7 +934,12 @@ namespace TwnsBwTurnManager {
 
                             if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
                                 (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
-                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                                    gridIndex               : unitGridIndex,
+                                    coSkillAreaType         : recoverCfg[0],
+                                    getCoGridIndexArrayOnMap,
+                                    coZoneRadius,
+                                }))
                             ) {
                                 const maxFuel = unit.getMaxFuel();
                                 if (maxFuel == null) {
@@ -978,7 +985,12 @@ namespace TwnsBwTurnManager {
 
                             if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
                                 (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
-                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                                    gridIndex               : unitGridIndex,
+                                    coSkillAreaType         : recoverCfg[0],
+                                    getCoGridIndexArrayOnMap,
+                                    coZoneRadius,
+                                }))
                             ) {
                                 const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                                 if (maxAmmo) {

@@ -1,15 +1,16 @@
 
-import TwnsBwWar            from "../../baseWar/model/BwWar";
-import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
-import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
-import CommonConstants      from "../helpers/CommonConstants";
-import ConfigManager        from "../helpers/ConfigManager";
-import GridIndexHelpers     from "../helpers/GridIndexHelpers";
-import Helpers              from "../helpers/Helpers";
-import Logger               from "../helpers/Logger";
-import ProtoTypes           from "../proto/ProtoTypes";
-import Types                from "../helpers/Types";
-import WarCommonHelpers     from "./WarCommonHelpers";
+import TwnsBwPlayer     from "../../baseWar/model/BwPlayer";
+import TwnsBwUnit       from "../../baseWar/model/BwUnit";
+import TwnsBwUnitMap    from "../../baseWar/model/BwUnitMap";
+import TwnsBwWar        from "../../baseWar/model/BwWar";
+import CommonConstants  from "../helpers/CommonConstants";
+import ConfigManager    from "../helpers/ConfigManager";
+import GridIndexHelpers from "../helpers/GridIndexHelpers";
+import Helpers          from "../helpers/Helpers";
+import Logger           from "../helpers/Logger";
+import Types            from "../helpers/Types";
+import ProtoTypes       from "../proto/ProtoTypes";
+import WarCommonHelpers from "./WarCommonHelpers";
 
 namespace WarCoSkillHelpers {
     import BwPlayer             = TwnsBwPlayer.BwPlayer;
@@ -18,6 +19,7 @@ namespace WarCoSkillHelpers {
     import IDataForUseCoSkill   = Structure.IDataForUseCoSkill;
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
     import BwWar                = TwnsBwWar.BwWar;
+    import ICoSkillCfg          = ProtoTypes.Config.ICoSkillCfg;
 
     type DamageMaps = {
         hpMap   : number[][];
@@ -29,16 +31,15 @@ namespace WarCoSkillHelpers {
         sameTeamMap : boolean[][];
     };
 
-    export function exeInstantSkill(war: BwWar, player: BwPlayer, gridIndex: GridIndex, skillId: number, extraData: IDataForUseCoSkill): void {
+    export function exeInstantSkill({ war, player, skillId, extraData }: {
+        war         : BwWar;
+        player      : BwPlayer;
+        skillId     : number;
+        extraData   : IDataForUseCoSkill;
+    }): void {
         const configVersion = war.getConfigVersion();
         if (configVersion == null) {
             Logger.error(`BwHelpers.exeInstantSkill() empty configVersion.`);
-            return undefined;
-        }
-
-        const unitMap = war.getUnitMap();
-        if (unitMap == null) {
-            Logger.error(`BwHelpers.exeInstantSkill() empty unitMap.`);
             return undefined;
         }
 
@@ -48,20 +49,18 @@ namespace WarCoSkillHelpers {
             return undefined;
         }
 
-        const playerIndex = player.getPlayerIndex();
-        if (playerIndex == null) {
-            Logger.error(`BwHelpers.exeInstantSkill() empty playerIndex.`);
-            return undefined;
-        }
-
-        const coGridIndexList = unitMap.getCoGridIndexListOnMap(playerIndex);
+        const coGridIndexList = player.getCoGridIndexListOnMap();
         if (coGridIndexList == null) {
-            Logger.error(`BwCoSkillHelpers.exeInstantSkill() empty coGridIndexList.`);
+            Logger.error(`WarCoSkillHelpers.exeInstantSkill() empty coGridIndexList.`);
             return undefined;
         }
 
+        const unitMap = war.getUnitMap();
+        exeSelfFund({ skillCfg, player });
+        exeEnemyEnergy({ skillCfg, player, war });
+        exeSelfAddUnit({ skillCfg, player, war, coGridIndexList });
         exeSelfHpGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeEnemyHpGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
+        exeEnemyHpGain({ configVersion, skillCfg, war, player, coGridIndexList });
         exeSelfFuelGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeEnemyFuelGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeSelfMaterialGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
@@ -70,11 +69,169 @@ namespace WarCoSkillHelpers {
         exeEnemyPrimaryAmmoGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeIndiscriminateAreaDamage(configVersion, skillCfg, unitMap, player, coGridIndexList, extraData);
         exeSelfPromotionGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
+        exeSelfUnitActionState(configVersion, skillCfg, unitMap, player, coGridIndexList);
+    }
+
+    function exeSelfFund({ skillCfg, player }: {
+        skillCfg        : ICoSkillCfg;
+        player          : BwPlayer;
+    }): void {
+        const cfg = skillCfg.selfFund;
+        if (cfg == null) {
+            return;
+        }
+
+        const currFund = player.getFund();
+        if (currFund == null) {
+            Logger.error(`WarCoSkillHelpers.exeSelfFund() empty currFund.`);
+            return;
+        }
+
+        player.setFund(Math.floor(currFund * cfg[0] / 100 + cfg[1]));
+    }
+
+    function exeEnemyEnergy({ skillCfg, player, war }: {
+        skillCfg        : ICoSkillCfg;
+        player          : BwPlayer;
+        war             : BwWar;
+    }): void {
+        const cfg = skillCfg.enemyEnergy;
+        if (cfg == null) {
+            return;
+        }
+
+        const selfFund = player.getFund();
+        if (selfFund == null) {
+            Logger.error(`WarCoSkillHelpers.exeEnemyEnergy() empty selfFund.`);
+            return;
+        }
+
+        const selfTeamIndex = player.getTeamIndex();
+        if (selfTeamIndex == null) {
+            Logger.error(`WarCoSkillHelpers.exeEnemyEnergy() empty selfTeamIndex.`);
+        }
+
+        const modifier = cfg[0] * selfFund / 10000 + cfg[1];
+        for (const p of war.getPlayerManager().getAllPlayers()) {
+            const teamIndex = p.getTeamIndex();
+            if (teamIndex == null) {
+                Logger.error(`WarCoSkillHelpers.exeEnemyEnergy() empty teamIndex.`);
+                return;
+            }
+
+            if ((teamIndex === selfTeamIndex) || (teamIndex === CommonConstants.WarNeutralTeamIndex)) {
+                continue;
+            }
+
+            const currentEnergy = p.getCoCurrentEnergy();
+            if (currentEnergy == null) {
+                Logger.error(`WarCoSkillHelpers.exeEnemyEnergy() empty currentEnergy.`);
+                return;
+            }
+
+            const maxEnergy = p.getCoMaxEnergy();
+            p.setCoCurrentEnergy(Math.max(
+                0,
+                Math.min(
+                    maxEnergy,
+                    Math.floor(currentEnergy + currentEnergy * modifier / 100),
+                ),
+            ));
+        }
+    }
+
+    function exeSelfAddUnit({ skillCfg, player, war, coGridIndexList }: {
+        skillCfg        : Types.CoSkillCfg;
+        player          : BwPlayer;
+        war             : BwWar;
+        coGridIndexList : GridIndex[];
+    }): void {
+        const cfg = skillCfg.selfAddUnit;
+        if (cfg == null) {
+            return;
+        }
+
+        const selfPlayerIndex = player.getPlayerIndex();
+        if ((selfPlayerIndex == null) || (selfPlayerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+            Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty selfPlayerIndex.`);
+            return;
+        }
+
+        const configVersion = war.getConfigVersion();
+        if (configVersion == null) {
+            Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty configVersion.`);
+            return;
+        }
+
+        const coZoneRadius = player.getCoZoneRadius();
+        if (coZoneRadius == null) {
+            Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty coZoneRadius.`);
+            return;
+        }
+
+        const unitMap = war.getUnitMap();
+        for (const tile of war.getTileMap().getAllTiles()) {
+            if (tile.getPlayerIndex() !== selfPlayerIndex) {
+                continue;
+            }
+
+            const gridIndex = tile.getGridIndex();
+            if (gridIndex == null) {
+                Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty gridIndex.`);
+                return;
+            }
+
+            if (unitMap.getUnitOnMap(gridIndex)) {
+                continue;
+            }
+
+            const tileType = tile.getType();
+            if (tileType == null) {
+                Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty tileType.`);
+                return;
+            }
+
+            if ((!ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[1]))                                 ||
+                (!WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    gridIndex,
+                    coSkillAreaType         : cfg[0],
+                    getCoGridIndexArrayOnMap: () => coGridIndexList,
+                    coZoneRadius,
+                }))
+            ) {
+                continue;
+            }
+
+            const unitId = unitMap.getNextUnitId();
+            if (unitId == null) {
+                Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() empty unitId.`);
+                return;
+            }
+
+            // cfg:（范围类别，地形类别，部队种类，hp，状态（0=未行动，1=已行动））
+            const unit      = new TwnsBwUnit.BwUnit();
+            const unitError = unit.init({
+                gridIndex,
+                unitId,
+                playerIndex     : selfPlayerIndex,
+                unitType        : cfg[2],
+                currentHp       : cfg[3],
+                actionState     : cfg[4],
+            }, configVersion);
+            if (unitError) {
+                Logger.error(`WarCoSkillHelpers.exeSelfAddUnit() unitError: ${unitError}.`);
+                return;
+            }
+
+            unit.startRunning(war);
+            unitMap.setNextUnitId(unitId + 1);
+            unitMap.setUnitOnMap(unit);
+        }
     }
 
     function exeSelfHpGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : Types.CoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -83,13 +240,13 @@ namespace WarCoSkillHelpers {
         if (cfg) {
             const playerIndex = player.getPlayerIndex();
             if (playerIndex == null) {
-                Logger.error(`BwCoSkillHelpers.exeSelfHpGain() empty playerIndex.`);
+                Logger.error(`WarCoSkillHelpers.exeSelfHpGain() empty playerIndex.`);
                 return undefined;
             }
 
             const zoneRadius = player.getCoZoneRadius();
             if (zoneRadius == null) {
-                Logger.error(`BwCoSkillHelpers.exeSelfHpGain() empty zoneRadius.`);
+                Logger.error(`WarCoSkillHelpers.exeSelfHpGain() empty zoneRadius.`);
                 return undefined;
             }
 
@@ -98,31 +255,36 @@ namespace WarCoSkillHelpers {
             for (const unit of unitMap.getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfHpGain() empty unitType.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfHpGain() empty unitType.`);
                     return undefined;
                 }
 
                 const gridIndex = unit.getGridIndex();
                 if (gridIndex == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfHpGain() empty gridIndex.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfHpGain() empty gridIndex.`);
                     return undefined;
                 }
 
                 const maxHp = unit.getMaxHp();
                 if (maxHp == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfHpGain() empty maxHp.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfHpGain() empty maxHp.`);
                     return undefined;
                 }
 
                 const currentHp = unit.getCurrentHp();
                 if (currentHp == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfHpGain() empty currentHp.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfHpGain() empty currentHp.`);
                     return undefined;
                 }
 
                 if ((unit.getPlayerIndex() === playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => coGridIndexList,
+                        coZoneRadius            : zoneRadius,
+                    }))
                 ) {
                     unit.setCurrentHp(Math.max(
                         1,
@@ -136,57 +298,71 @@ namespace WarCoSkillHelpers {
         }
     }
 
-    function exeEnemyHpGain(
-        configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    function exeEnemyHpGain({ configVersion, skillCfg, war, player, coGridIndexList }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        war             : BwWar;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+    }): void {
         const cfg = skillCfg.enemyHpGain;
         if (cfg) {
-            const playerIndex = player.getPlayerIndex();
-            if (playerIndex == null) {
-                Logger.error(`BwCoSkillHelpers.exeEnemyHpGain() empty playerIndex.`);
+            const teamIndex = player.getTeamIndex();
+            if (teamIndex == null) {
+                Logger.error(`WarCoSkillHelpers.exeEnemyHpGain() empty teamIndex.`);
                 return undefined;
             }
 
             const zoneRadius = player.getCoZoneRadius();
             if (zoneRadius == null) {
-                Logger.error(`BwCoSkillHelpers.exeEnemyHpGain() empty zoneRadius.`);
+                Logger.error(`WarCoSkillHelpers.exeEnemyHpGain() empty zoneRadius.`);
                 return undefined;
             }
 
-            const category  = cfg[1];
-            const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
-            for (const unit of unitMap.getAllUnits()) {
+            const tileMap       = war.getTileMap();
+            const unitCategory  = cfg[1];
+            const tileCategory  = cfg[2];
+            const modifier      = cfg[3] * CommonConstants.UnitHpNormalizer;
+            for (const unit of war.getUnitMap().getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
-                    Logger.error(`BwCoSkillHelpers.exeEnemyHpGain() empty unitType.`);
+                    Logger.error(`WarCoSkillHelpers.exeEnemyHpGain() empty unitType.`);
                     return undefined;
                 }
 
                 const gridIndex = unit.getGridIndex();
                 if (gridIndex == null) {
-                    Logger.error(`BwCoSkillHelpers.exeEnemyHpGain() empty gridIndex.`);
+                    Logger.error(`WarCoSkillHelpers.exeEnemyHpGain() empty gridIndex.`);
                     return undefined;
                 }
 
                 const maxHp = unit.getMaxHp();
                 if (maxHp == null) {
-                    Logger.error(`BwCoSkillHelpers.exeEnemyHpGain() empty maxHp.`);
+                    Logger.error(`WarCoSkillHelpers.exeEnemyHpGain() empty maxHp.`);
                     return undefined;
                 }
 
                 const currentHp = unit.getCurrentHp();
                 if (currentHp == null) {
-                    Logger.error(`BwCoSkillHelpers.exeEnemyHpGain() empty currentHp.`);
+                    Logger.error(`WarCoSkillHelpers.exeEnemyHpGain() empty currentHp.`);
                     return undefined;
                 }
 
-                if ((unit.getPlayerIndex() !== playerIndex)                                                     &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                const tileType = tileMap.getTile(gridIndex)?.getType();
+                if (tileType == null) {
+                    Logger.error(`WarCoSkillHelpers.exeEnemyHpGain() empty tileType.`);
+                    return undefined;
+                }
+
+                if ((unit.getTeamIndex() !== teamIndex)                                                 &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, unitCategory))    &&
+                    (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, tileCategory))    &&
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => coGridIndexList,
+                        coZoneRadius            : zoneRadius,
+                    }))
                 ) {
                     unit.setCurrentHp(Math.max(
                         1,
@@ -202,7 +378,7 @@ namespace WarCoSkillHelpers {
 
     function exeSelfFuelGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : Types.CoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -211,13 +387,13 @@ namespace WarCoSkillHelpers {
         if (cfg) {
             const playerIndex = player.getPlayerIndex();
             if (playerIndex == null) {
-                Logger.error(`BwCoSkillHelpers.exeSelfFuelGain() empty playerIndex.`);
+                Logger.error(`WarCoSkillHelpers.exeSelfFuelGain() empty playerIndex.`);
                 return undefined;
             }
 
             const zoneRadius = player.getCoZoneRadius();
             if (zoneRadius == null) {
-                Logger.error(`BwCoSkillHelpers.exeSelfFuelGain() empty zoneRadius.`);
+                Logger.error(`WarCoSkillHelpers.exeSelfFuelGain() empty zoneRadius.`);
                 return undefined;
             }
 
@@ -226,29 +402,34 @@ namespace WarCoSkillHelpers {
             for (const unit of unitMap.getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfFuelGain() empty unitType.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfFuelGain() empty unitType.`);
                     return undefined;
                 }
 
                 const gridIndex = unit.getGridIndex();
                 if (gridIndex == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfFuelGain() empty gridIndex.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfFuelGain() empty gridIndex.`);
                     return undefined;
                 }
 
                 if ((unit.getPlayerIndex() === playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => coGridIndexList,
+                        coZoneRadius            : zoneRadius,
+                    }))
                 ) {
                     const maxFuel = unit.getMaxFuel();
                     if (maxFuel == null) {
-                        Logger.error(`BwCoSkillHelpers.exeSelfFuelGain() empty maxFuel.`);
+                        Logger.error(`WarCoSkillHelpers.exeSelfFuelGain() empty maxFuel.`);
                         return undefined;
                     }
 
                     const currentFuel = unit.getCurrentFuel();
                     if (currentFuel == null) {
-                        Logger.error(`BwCoSkillHelpers.exeSelfFuelGain() empty currentFuel.`);
+                        Logger.error(`WarCoSkillHelpers.exeSelfFuelGain() empty currentFuel.`);
                         return undefined;
                     }
 
@@ -270,7 +451,7 @@ namespace WarCoSkillHelpers {
 
     function exeEnemyFuelGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : Types.CoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -279,13 +460,13 @@ namespace WarCoSkillHelpers {
         if (cfg) {
             const playerIndex = player.getPlayerIndex();
             if (playerIndex == null) {
-                Logger.error(`BwCoSkillHelpers.exeEnemyFuelGain() empty playerIndex.`);
+                Logger.error(`WarCoSkillHelpers.exeEnemyFuelGain() empty playerIndex.`);
                 return undefined;
             }
 
             const zoneRadius = player.getCoZoneRadius();
             if (zoneRadius == null) {
-                Logger.error(`BwCoSkillHelpers.exeEnemyFuelGain() empty zoneRadius.`);
+                Logger.error(`WarCoSkillHelpers.exeEnemyFuelGain() empty zoneRadius.`);
                 return undefined;
             }
 
@@ -294,29 +475,34 @@ namespace WarCoSkillHelpers {
             for (const unit of unitMap.getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
-                    Logger.error(`BwCoSkillHelpers.exeEnemyFuelGain() empty unitType.`);
+                    Logger.error(`WarCoSkillHelpers.exeEnemyFuelGain() empty unitType.`);
                     return undefined;
                 }
 
                 const gridIndex = unit.getGridIndex();
                 if (gridIndex == null) {
-                    Logger.error(`BwCoSkillHelpers.exeEnemyFuelGain() empty gridIndex.`);
+                    Logger.error(`WarCoSkillHelpers.exeEnemyFuelGain() empty gridIndex.`);
                     return undefined;
                 }
 
                 if ((unit.getPlayerIndex() !== playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => coGridIndexList,
+                        coZoneRadius            : zoneRadius
+                    }))
                 ) {
                     const maxFuel = unit.getMaxFuel();
                     if (maxFuel == null) {
-                        Logger.error(`BwCoSkillHelpers.exeEnemyFuelGain() empty maxFuel.`);
+                        Logger.error(`WarCoSkillHelpers.exeEnemyFuelGain() empty maxFuel.`);
                         return undefined;
                     }
 
                     const currentFuel = unit.getCurrentFuel();
                     if (currentFuel == null) {
-                        Logger.error(`BwCoSkillHelpers.exeEnemyFuelGain() empty currentFuel.`);
+                        Logger.error(`WarCoSkillHelpers.exeEnemyFuelGain() empty currentFuel.`);
                         return undefined;
                     }
 
@@ -338,7 +524,7 @@ namespace WarCoSkillHelpers {
 
     function exeSelfMaterialGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : Types.CoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -347,13 +533,13 @@ namespace WarCoSkillHelpers {
         if (cfg) {
             const playerIndex = player.getPlayerIndex();
             if (playerIndex == null) {
-                Logger.error(`BwCoSkillHelpers.exeSelfMaterialGain() empty playerIndex.`);
+                Logger.error(`WarCoSkillHelpers.exeSelfMaterialGain() empty playerIndex.`);
                 return undefined;
             }
 
             const zoneRadius = player.getCoZoneRadius();
             if (zoneRadius == null) {
-                Logger.error(`BwCoSkillHelpers.exeSelfMaterialGain() empty zoneRadius.`);
+                Logger.error(`WarCoSkillHelpers.exeSelfMaterialGain() empty zoneRadius.`);
                 return undefined;
             }
 
@@ -368,24 +554,29 @@ namespace WarCoSkillHelpers {
 
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfMaterialGain() empty unitType.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfMaterialGain() empty unitType.`);
                     return undefined;
                 }
 
                 const gridIndex = unit.getGridIndex();
                 if (gridIndex == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfMaterialGain() empty gridIndex.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfMaterialGain() empty gridIndex.`);
                     return undefined;
                 }
 
                 if ((unit.getPlayerIndex() === playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => coGridIndexList,
+                        coZoneRadius            : zoneRadius,
+                    }))
                 ) {
                     if (maxBuildMaterial != null) {
                         const currentBuildMaterial = unit.getCurrentBuildMaterial();
                         if (currentBuildMaterial == null) {
-                            Logger.error(`BwCoSkillHelpers.exeSelfMaterialGain() empty currentBuildMaterial.`);
+                            Logger.error(`WarCoSkillHelpers.exeSelfMaterialGain() empty currentBuildMaterial.`);
                             return undefined;
                         }
 
@@ -405,7 +596,7 @@ namespace WarCoSkillHelpers {
                     if (maxProduceMaterial != null) {
                         const currentProduceMaterial = unit.getCurrentProduceMaterial();
                         if (currentProduceMaterial == null) {
-                            Logger.error(`BwCoSkillHelpers.exeSelfMaterialGain() empty currentProduceMaterial.`);
+                            Logger.error(`WarCoSkillHelpers.exeSelfMaterialGain() empty currentProduceMaterial.`);
                             return undefined;
                         }
 
@@ -428,7 +619,7 @@ namespace WarCoSkillHelpers {
 
     function exeEnemyMaterialGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : Types.CoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -437,13 +628,13 @@ namespace WarCoSkillHelpers {
         if (cfg) {
             const playerIndex = player.getPlayerIndex();
             if (playerIndex == null) {
-                Logger.error(`BwCoSkillHelpers.exeEnemyMaterialGain() empty playerIndex.`);
+                Logger.error(`WarCoSkillHelpers.exeEnemyMaterialGain() empty playerIndex.`);
                 return undefined;
             }
 
             const zoneRadius = player.getCoZoneRadius();
             if (zoneRadius == null) {
-                Logger.error(`BwCoSkillHelpers.exeEnemyMaterialGain() empty zoneRadius.`);
+                Logger.error(`WarCoSkillHelpers.exeEnemyMaterialGain() empty zoneRadius.`);
                 return undefined;
             }
 
@@ -458,24 +649,29 @@ namespace WarCoSkillHelpers {
 
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
-                    Logger.error(`BwCoSkillHelpers.exeEnemyMaterialGain() empty unitType.`);
+                    Logger.error(`WarCoSkillHelpers.exeEnemyMaterialGain() empty unitType.`);
                     return undefined;
                 }
 
                 const gridIndex = unit.getGridIndex();
                 if (gridIndex == null) {
-                    Logger.error(`BwCoSkillHelpers.exeEnemyMaterialGain() empty gridIndex.`);
+                    Logger.error(`WarCoSkillHelpers.exeEnemyMaterialGain() empty gridIndex.`);
                     return undefined;
                 }
 
                 if ((unit.getPlayerIndex() !== playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => coGridIndexList,
+                        coZoneRadius            : zoneRadius,
+                    }))
                 ) {
                     if (maxBuildMaterial != null) {
                         const currentBuildMaterial = unit.getCurrentBuildMaterial();
                         if (currentBuildMaterial == null) {
-                            Logger.error(`BwCoSkillHelpers.exeEnemyMaterialGain() empty currentBuildMaterial.`);
+                            Logger.error(`WarCoSkillHelpers.exeEnemyMaterialGain() empty currentBuildMaterial.`);
                             return undefined;
                         }
 
@@ -495,7 +691,7 @@ namespace WarCoSkillHelpers {
                     if (maxProduceMaterial != null) {
                         const currentProduceMaterial = unit.getCurrentProduceMaterial();
                         if (currentProduceMaterial == null) {
-                            Logger.error(`BwCoSkillHelpers.exeEnemyMaterialGain() empty currentProduceMaterial.`);
+                            Logger.error(`WarCoSkillHelpers.exeEnemyMaterialGain() empty currentProduceMaterial.`);
                             return undefined;
                         }
 
@@ -518,7 +714,7 @@ namespace WarCoSkillHelpers {
 
     function exeSelfPrimaryAmmoGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : Types.CoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -527,13 +723,13 @@ namespace WarCoSkillHelpers {
         if (cfg) {
             const playerIndex = player.getPlayerIndex();
             if (playerIndex == null) {
-                Logger.error(`BwCoSkillHelpers.exeSelfPrimaryAmmoGain() empty playerIndex.`);
+                Logger.error(`WarCoSkillHelpers.exeSelfPrimaryAmmoGain() empty playerIndex.`);
                 return undefined;
             }
 
             const zoneRadius = player.getCoZoneRadius();
             if (zoneRadius == null) {
-                Logger.error(`BwCoSkillHelpers.exeSelfPrimaryAmmoGain() empty zoneRadius.`);
+                Logger.error(`WarCoSkillHelpers.exeSelfPrimaryAmmoGain() empty zoneRadius.`);
                 return undefined;
             }
 
@@ -547,25 +743,30 @@ namespace WarCoSkillHelpers {
 
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfPrimaryAmmoGain() empty unitType.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfPrimaryAmmoGain() empty unitType.`);
                     return undefined;
                 }
 
                 const gridIndex = unit.getGridIndex();
                 if (gridIndex == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfPrimaryAmmoGain() empty gridIndex.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfPrimaryAmmoGain() empty gridIndex.`);
                     return undefined;
                 }
 
                 const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
                 if (currentAmmo == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfPrimaryAmmoGain() empty currentAmmo.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfPrimaryAmmoGain() empty currentAmmo.`);
                     return undefined;
                 }
 
                 if ((unit.getPlayerIndex() === playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => coGridIndexList,
+                        coZoneRadius            : zoneRadius,
+                    }))
                 ) {
                     if (modifier > 0) {
                         unit.setPrimaryWeaponCurrentAmmo(Math.min(
@@ -585,7 +786,7 @@ namespace WarCoSkillHelpers {
 
     function exeEnemyPrimaryAmmoGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : Types.CoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -594,13 +795,13 @@ namespace WarCoSkillHelpers {
         if (cfg) {
             const playerIndex = player.getPlayerIndex();
             if (playerIndex == null) {
-                Logger.error(`BwCoSkillHelpers.exeEnemyPrimaryAmmoGain() empty playerIndex.`);
+                Logger.error(`WarCoSkillHelpers.exeEnemyPrimaryAmmoGain() empty playerIndex.`);
                 return undefined;
             }
 
             const zoneRadius = player.getCoZoneRadius();
             if (zoneRadius == null) {
-                Logger.error(`BwCoSkillHelpers.exeEnemyPrimaryAmmoGain() empty zoneRadius.`);
+                Logger.error(`WarCoSkillHelpers.exeEnemyPrimaryAmmoGain() empty zoneRadius.`);
                 return undefined;
             }
 
@@ -614,25 +815,30 @@ namespace WarCoSkillHelpers {
 
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
-                    Logger.error(`BwCoSkillHelpers.exeEnemyPrimaryAmmoGain() empty unitType.`);
+                    Logger.error(`WarCoSkillHelpers.exeEnemyPrimaryAmmoGain() empty unitType.`);
                     return undefined;
                 }
 
                 const gridIndex = unit.getGridIndex();
                 if (gridIndex == null) {
-                    Logger.error(`BwCoSkillHelpers.exeEnemyPrimaryAmmoGain() empty gridIndex.`);
+                    Logger.error(`WarCoSkillHelpers.exeEnemyPrimaryAmmoGain() empty gridIndex.`);
                     return undefined;
                 }
 
                 const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
                 if (currentAmmo == null) {
-                    Logger.error(`BwCoSkillHelpers.exeEnemyPrimaryAmmoGain() empty currentAmmo.`);
+                    Logger.error(`WarCoSkillHelpers.exeEnemyPrimaryAmmoGain() empty currentAmmo.`);
                     return undefined;
                 }
 
                 if ((unit.getPlayerIndex() !== playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => coGridIndexList,
+                        coZoneRadius            : zoneRadius,
+                    }))
                 ) {
                     if (modifier > 0) {
                         unit.setPrimaryWeaponCurrentAmmo(Math.min(
@@ -652,7 +858,7 @@ namespace WarCoSkillHelpers {
 
     function exeIndiscriminateAreaDamage(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -662,13 +868,13 @@ namespace WarCoSkillHelpers {
         if (cfg) {
             const center = extraData.indiscriminateAreaDamageCenter;
             if (center == null) {
-                Logger.error(`BwCoSkillHelpers.exeIndiscriminateAreaDamage() empty center.`);
+                Logger.error(`WarCoSkillHelpers.exeIndiscriminateAreaDamage() empty center.`);
                 return undefined;
             }
 
             const mapSize = unitMap.getMapSize();
             if (mapSize == null) {
-                Logger.error(`BwCoSkillHelpers.exeIndiscriminateAreaDamage() empty mapSize.`);
+                Logger.error(`WarCoSkillHelpers.exeIndiscriminateAreaDamage() empty mapSize.`);
                 return undefined;
             }
 
@@ -678,7 +884,7 @@ namespace WarCoSkillHelpers {
                 if (unit) {
                     const currentHp = unit.getCurrentHp();
                     if (currentHp == null) {
-                        Logger.error(`BwCoSkillHelpers.exeIndiscriminateAreaDamage() empty currentHp.`);
+                        Logger.error(`WarCoSkillHelpers.exeIndiscriminateAreaDamage() empty currentHp.`);
                         return undefined;
                     }
 
@@ -690,7 +896,7 @@ namespace WarCoSkillHelpers {
 
     function exeSelfPromotionGain(
         configVersion   : string,
-        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
+        skillCfg        : Types.CoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -699,19 +905,19 @@ namespace WarCoSkillHelpers {
         if (cfg) {
             const playerIndex = player.getPlayerIndex();
             if (playerIndex == null) {
-                Logger.error(`BwCoSkillHelpers.exeSelfPromotionGain() empty playerIndex.`);
+                Logger.error(`WarCoSkillHelpers.exeSelfPromotionGain() empty playerIndex.`);
                 return undefined;
             }
 
             const zoneRadius = player.getCoZoneRadius();
             if (zoneRadius == null) {
-                Logger.error(`BwCoSkillHelpers.exeSelfPromotionGain() empty zoneRadius.`);
+                Logger.error(`WarCoSkillHelpers.exeSelfPromotionGain() empty zoneRadius.`);
                 return undefined;
             }
 
             const maxPromotion = ConfigManager.getUnitMaxPromotion(configVersion);
             if (maxPromotion == null) {
-                Logger.error(`BwCoSkillHelpers.exeSelfPromotionGain() empty maxPromotion.`);
+                Logger.error(`WarCoSkillHelpers.exeSelfPromotionGain() empty maxPromotion.`);
                 return undefined;
             }
 
@@ -720,23 +926,28 @@ namespace WarCoSkillHelpers {
             for (const unit of unitMap.getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfPromotionGain() empty unitType.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfPromotionGain() empty unitType.`);
                     return undefined;
                 }
 
                 const gridIndex = unit.getGridIndex();
                 if (gridIndex == null) {
-                    Logger.error(`BwCoSkillHelpers.exeSelfPromotionGain() empty gridIndex.`);
+                    Logger.error(`WarCoSkillHelpers.exeSelfPromotionGain() empty gridIndex.`);
                     return undefined;
                 }
 
                 if ((unit.getPlayerIndex() === playerIndex)                                                     &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexList, zoneRadius))
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => coGridIndexList,
+                        coZoneRadius            : zoneRadius
+                    }))
                 ) {
                     const currentPromotion = unit.getCurrentPromotion();
                     if (currentPromotion == null) {
-                        Logger.error(`BwCoSkillHelpers.exeSelfPromotionGain() empty currentPromotion.`);
+                        Logger.error(`WarCoSkillHelpers.exeSelfPromotionGain() empty currentPromotion.`);
                         return undefined;
                     }
 
@@ -747,6 +958,68 @@ namespace WarCoSkillHelpers {
                             currentPromotion + modifier
                         ),
                     ));
+                }
+            }
+        }
+    }
+
+    function exeSelfUnitActionState(
+        configVersion   : string,
+        skillCfg        : Types.CoSkillCfg,
+        unitMap         : BwUnitMap,
+        player          : BwPlayer,
+        coGridIndexList : GridIndex[],
+    ): void {
+        const cfg = skillCfg.selfPromotionGain;
+        if (cfg) {
+            const playerIndex = player.getPlayerIndex();
+            if (playerIndex == null) {
+                Logger.error(`WarCoSkillHelpers.exeSelfUnitActionState() empty playerIndex.`);
+                return undefined;
+            }
+
+            const zoneRadius = player.getCoZoneRadius();
+            if (zoneRadius == null) {
+                Logger.error(`WarCoSkillHelpers.exeSelfUnitActionState() empty zoneRadius.`);
+                return undefined;
+            }
+
+            const maxPromotion = ConfigManager.getUnitMaxPromotion(configVersion);
+            if (maxPromotion == null) {
+                Logger.error(`WarCoSkillHelpers.exeSelfUnitActionState() empty maxPromotion.`);
+                return undefined;
+            }
+
+            const category      = cfg[1];
+            const actionState   : Types.UnitActionState = cfg[2];
+            if ((actionState !== Types.UnitActionState.Acted) && (actionState !== Types.UnitActionState.Idle)) {
+                Logger.error(`WarCoSkillHelpers.exeSelfUnitActionState() invalid actionState.`);
+                return undefined;
+            }
+
+            for (const unit of unitMap.getAllUnits()) {
+                const unitType = unit.getUnitType();
+                if (unitType == null) {
+                    Logger.error(`WarCoSkillHelpers.exeSelfUnitActionState() empty unitType.`);
+                    return undefined;
+                }
+
+                const gridIndex = unit.getGridIndex();
+                if (gridIndex == null) {
+                    Logger.error(`WarCoSkillHelpers.exeSelfUnitActionState() empty gridIndex.`);
+                    return undefined;
+                }
+
+                if ((unit.getPlayerIndex() === playerIndex)                                                     &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))                &&
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => coGridIndexList,
+                        coZoneRadius            : zoneRadius
+                    }))
+                ) {
+                    unit.setActionState(actionState);
                 }
             }
         }

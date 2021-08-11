@@ -134,7 +134,7 @@ namespace TwnsBwUnitListPanel {
             let value = 0;
             for (const data of this._dataForList) {
                 const unit = data.unit;
-                value += unit.getProductionBaseCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp();
+                value += unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp();
             }
             this._labelValue.text = `${value}`;
         }

@@ -9,14 +9,14 @@ import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsBwWar                from "../model/BwWar";
-import TwnsBwCoListPanel        from "./BwCoListPanel";
+import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
 import TwnsBwTileDetailPanel    from "./BwTileDetailPanel";
 import TwnsBwTileView           from "./BwTileView";
 import TwnsBwUnitBriefPanel     from "./BwUnitBriefPanel";
 
 namespace TwnsBwTileBriefPanel {
-    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
+    import BwCoListPanel        = TwnsCommonCoListPanel.CommonCoListPanel;
     import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
     import BwTileDetailPanel    = TwnsBwTileDetailPanel.BwTileDetailPanel;
     import BwTileView           = TwnsBwTileView.BwTileView;

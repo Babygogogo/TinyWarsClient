@@ -2,8 +2,10 @@
 import TwnsCommonBlockPanel         from "../../common/view/CommonBlockPanel";
 import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FlowManager                  from "../../tools/helpers/FlowManager";
+import Logger                       from "../../tools/helpers/Logger";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
@@ -32,23 +34,23 @@ namespace TwnsWwOngoingWarsPanel {
 
         private static _instance: McrWatchOngoingWarsPanel;
 
-        private _labelMenuTitle     : TwnsUiLabel.UiLabel;
-        private _labelPlayersTitle  : TwnsUiLabel.UiLabel;
-        private _labelCommentTitle  : TwnsUiLabel.UiLabel;
-        private _listWar            : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
-        private _labelNoWar         : TwnsUiLabel.UiLabel;
-        private _zoomMap            : TwnsUiZoomableMap.UiZoomableMap;
-        private _btnBack            : TwnsUiButton.UiButton;
+        private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayersTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelCommentTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _listWar!              : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
+        private readonly _labelNoWar!           : TwnsUiLabel.UiLabel;
+        private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
 
-        private _groupInfo      : eui.Group;
-        private _labelMapName   : TwnsUiLabel.UiLabel;
-        private _labelDesigner  : TwnsUiLabel.UiLabel;
-        private _labelHasFog    : TwnsUiLabel.UiLabel;
-        private _labelWarComment: TwnsUiLabel.UiLabel;
-        private _listPlayer     : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _groupInfo!            : eui.Group;
+        private readonly _labelMapName!         : TwnsUiLabel.UiLabel;
+        private readonly _labelDesigner!        : TwnsUiLabel.UiLabel;
+        private readonly _labelHasFog!          : TwnsUiLabel.UiLabel;
+        private readonly _labelWarComment!      : TwnsUiLabel.UiLabel;
+        private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
-        private _selectedWarIndex   : number;
+        private _selectedWarIndex   : number | undefined;
 
         public static show(): void {
             if (!McrWatchOngoingWarsPanel._instance) {
@@ -70,10 +72,10 @@ namespace TwnsWwOngoingWarsPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMpwWatchGetOngoingWarInfos,    callback: this._onNotifySMcwWatchGetOngoingWarInfos },
-                { type: NotifyType.MsgMpwWatchContinueWar,           callback: this._onNotifySMcwWatchContinueWar },
-                { type: NotifyType.MsgMpwWatchContinueWarFailed,     callback: this._onNotifySMcwWatchContinueWarFailed },
+                { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMpwWatchGetOngoingWarInfos,   callback: this._onNotifySMcwWatchGetOngoingWarInfos },
+                { type: NotifyType.MsgMpwWatchContinueWar,          callback: this._onNotifySMcwWatchContinueWar },
+                { type: NotifyType.MsgMpwWatchContinueWarFailed,    callback: this._onNotifySMcwWatchContinueWarFailed },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -96,7 +98,7 @@ namespace TwnsWwOngoingWarsPanel {
             const dataList         = this._dataForListWar;
             this._selectedWarIndex = dataList[newIndex] ? newIndex : undefined;
 
-            if (dataList[oldIndex]) {
+            if ((oldIndex != null) && (dataList[oldIndex])) {
                 this._listWar.updateSingleData(oldIndex, dataList[oldIndex]);
             }
 
@@ -108,7 +110,7 @@ namespace TwnsWwOngoingWarsPanel {
                 this._groupInfo.visible = false;
             }
         }
-        public getSelectedIndex(): number {
+        public getSelectedIndex(): number | undefined {
             return this._selectedWarIndex;
         }
 
@@ -134,7 +136,10 @@ namespace TwnsWwOngoingWarsPanel {
         }
 
         private _onNotifySMcwWatchContinueWar(e: egret.Event): void {
-            FlowManager.gotoMultiPlayerWar((e.data as ProtoTypes.NetMessage.MsgMpwWatchContinueWar.IS).war);
+            const warData = (e.data as ProtoTypes.NetMessage.MsgMpwWatchContinueWar.IS).war;
+            if (warData) {
+                FlowManager.gotoMultiPlayerWar(warData);
+            }
         }
 
         private _onNotifySMcwWatchContinueWarFailed(): void {
@@ -152,7 +157,7 @@ namespace TwnsWwOngoingWarsPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListWar(infos: ProtoTypes.MultiPlayerWar.IMpwWatchInfo[]): DataForWarRenderer[] {
+        private _createDataForListWar(infos: ProtoTypes.MultiPlayerWar.IMpwWatchInfo[] | null): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             if (infos) {
                 for (let i = 0; i < infos.length; ++i) {
@@ -167,41 +172,107 @@ namespace TwnsWwOngoingWarsPanel {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
-            const configVersion     = warInfo.settingsForCommon.configVersion;
-            const playerInfoList    = warInfo.playerInfoList;
-            const dataList          : DataForPlayerRenderer[] = [];
-            for (let playerIndex = 1; playerIndex <= mapPlayersCount; ++playerIndex) {
-                dataList.push({
-                    configVersion,
-                    playerInfo  : playerInfoList.find(v => v.playerIndex === playerIndex),
-                });
+        private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, playersCountUnneutral: number | null | undefined): DataForPlayerRenderer[] {
+            const configVersion = warInfo.settingsForCommon?.configVersion;
+            if (configVersion == null) {
+                return [];
             }
 
-            return dataList;
+            if (playersCountUnneutral == null) {
+                return [];
+            }
+
+            const playerInfoList    = warInfo.playerInfoList || [];
+            const dataArray         : DataForPlayerRenderer[] = [];
+            for (let playerIndex = 1; playerIndex <= playersCountUnneutral; ++playerIndex) {
+                const playerInfo = playerInfoList.find(v => v.playerIndex === playerIndex);
+                if (playerInfo) {
+                    dataArray.push({
+                        configVersion,
+                        playerInfo,
+                    });
+                }
+            }
+
+            return dataArray;
         }
 
         private async _showMap(index: number): Promise<void> {
-            const warInfo           = this._dataForListWar[index].info.warInfo;
-            const settingsForMfw    = warInfo.settingsForMfw;
+            const warInfo = this._dataForListWar[index].info.warInfo;
+            if (warInfo == null) {
+                Logger.error(`WwOngoingWarsPanel._showMap() empty warInfo.`);
+                return;
+            }
+
+            const hasFogByDefault   = warInfo?.settingsForCommon?.warRule?.ruleForGlobalParams?.hasFogByDefault;
+            const {
+                settingsForMfw,
+                settingsForCcw,
+                settingsForMcw,
+                settingsForMrw,
+            } = warInfo;
+            const labelMapName      = this._labelMapName;
+            const labelDesigner     = this._labelDesigner;
+            const labelHasFog       = this._labelHasFog;
+            const labelWarComment   = this._labelWarComment;
+            const listPlayer        = this._listPlayer;
+            const zoomMap           = this._zoomMap;
+
             if (settingsForMfw) {
-                const warData               = settingsForMfw.initialWarData;
-                this._labelMapName.text     = undefined;
-                this._labelDesigner.text    = undefined;
-                this._labelHasFog.text      = Lang.getFormattedText(LangTextType.F0005, Lang.getText(warData.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
-                this._labelWarComment.text  = settingsForMfw.warComment || "----";
-                this._listPlayer.bindData(this._createDataForListPlayer(warInfo, warData.playerManager.players.length - 1));
-                this._zoomMap.showMapByWarData(warData);
-            } else {
-                const settingsForMcw        = warInfo.settingsForMcw;
-                const mapId                 = settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId;
-                const mapRawData            = await WarMapModel.getRawData(mapId);
-                this._labelMapName.text     = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                this._labelDesigner.text    = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
-                this._labelHasFog.text      = Lang.getFormattedText(LangTextType.F0005, Lang.getText(warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
-                this._labelWarComment.text  = (settingsForMcw ? settingsForMcw.warComment : null) || "----";
-                this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
-                this._zoomMap.showMapByMapData(mapRawData);
+                const warData           = settingsForMfw.initialWarData;
+                const playersCount      = warData?.playerManager?.players?.length;
+                labelMapName.text       = ``;
+                labelDesigner.text      = ``;
+                labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
+                labelWarComment.text    = settingsForMfw.warComment || "----";
+                listPlayer.bindData(playersCount != null ? this._createDataForListPlayer(warInfo, playersCount - 1) : []);
+                if (warData) {
+                    zoomMap.showMapByWarData(warData);
+                } else {
+                    zoomMap.clearMap();
+                }
+
+            } else if (settingsForCcw) {
+                const mapId             = settingsForCcw.mapId;
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
+                labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
+                labelWarComment.text    = settingsForCcw.warComment || "----";
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData?.playersCountUnneutral));
+                if (mapRawData) {
+                    zoomMap.showMapByMapData(mapRawData);
+                } else {
+                    zoomMap.clearMap();
+                }
+
+            } else if (settingsForMcw) {
+                const mapId             = settingsForMcw.mapId;
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
+                labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
+                labelWarComment.text    = settingsForMcw.warComment || "----";
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData?.playersCountUnneutral));
+                if (mapRawData) {
+                    zoomMap.showMapByMapData(mapRawData);
+                } else {
+                    zoomMap.clearMap();
+                }
+
+            } else if (settingsForMrw) {
+                const mapId             = settingsForMrw.mapId;
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
+                labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
+                labelWarComment.text    = "----";
+                listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData?.playersCountUnneutral));
+                if (mapRawData) {
+                    zoomMap.showMapByMapData(mapRawData);
+                } else {
+                    zoomMap.clearMap();
+                }
             }
 
             this._groupInfo.visible      = true;
@@ -225,9 +296,9 @@ namespace TwnsWwOngoingWarsPanel {
         panel   : McrWatchOngoingWarsPanel;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
-        private _btnChoose      : TwnsUiButton.UiButton;
-        private _btnNext        : TwnsUiButton.UiButton;
-        private _labelName      : TwnsUiLabel.UiLabel;
+        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _btnNext!      : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -237,24 +308,9 @@ namespace TwnsWwOngoingWarsPanel {
         }
 
         protected _onDataChanged(): void {
-            const data              = this.data;
-            const warInfo           = data.info.warInfo;
-            this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-
-            const labelName         = this._labelName;
-            const settingsForMfw    = warInfo.settingsForMfw;
-            if (settingsForMfw) {
-                labelName.text = settingsForMfw.warName || `----`;
-            } else {
-                const settingsForMcw    = warInfo.settingsForMcw;
-                const warName           = settingsForMcw ? settingsForMcw.warName : null;
-                if (warName) {
-                    labelName.text = warName;
-                } else {
-                    labelName.text = "";
-                    WarMapModel.getMapNameInCurrentLanguage(settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId).then(v => labelName.text = v);
-                }
-            }
+            const data          = this.data;
+            this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this._updateLabelName();
         }
 
         private _onTouchTapBtnChoose(): void {
@@ -263,7 +319,45 @@ namespace TwnsWwOngoingWarsPanel {
         }
 
         private async _onTouchTapBtnNext(): Promise<void> {
-            WwProxy.reqWatchContinueWar(this.data.info.warInfo.warId);
+            const warId = this.data.info.warInfo?.warId;
+            if (warId != null) {
+                WwProxy.reqWatchContinueWar(warId);
+            }
+        }
+
+        private async _updateLabelName(): Promise<void> {
+            const labelName = this._labelName;
+            labelName.text  = ``;
+
+            const warInfo = this.data.info.warInfo;
+            if (warInfo != null) {
+                const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warInfo;
+                if (settingsForMfw) {
+                    labelName.text = settingsForMfw.warName || `----`;
+
+                } else if (settingsForMcw) {
+                    const warName = settingsForMcw.warName;
+                    if (warName) {
+                        labelName.text = warName;
+                    } else {
+                        const mapId     = settingsForMcw.mapId;
+                        labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                    }
+
+                } else if (settingsForCcw) {
+                    const warName = settingsForCcw.warName;
+                    if (warName) {
+                        labelName.text = warName;
+                    } else {
+                        const mapId     = settingsForCcw.mapId;
+                        labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                    }
+
+                } else if (settingsForMrw) {
+                    const mapId     = settingsForMrw.mapId;
+                    labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                }
+            }
         }
     }
 
@@ -273,18 +367,26 @@ namespace TwnsWwOngoingWarsPanel {
     };
 
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private _labelName : TwnsUiLabel.UiLabel;
-        private _labelIndex: TwnsUiLabel.UiLabel;
-        private _labelTeam : TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelIndex!   : TwnsUiLabel.UiLabel;
+        private readonly _labelTeam!    : TwnsUiLabel.UiLabel;
 
-        protected _onDataChanged(): void {
+        protected async _onDataChanged(): Promise<void> {
             const data              = this.data;
             const playerInfo        = data.playerInfo;
-            this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
-            this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
-            UserModel.getUserNickname(playerInfo.userId).then(name => {
-                this._labelName.text = name + ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
-            });
+            const playerIndex       = playerInfo.playerIndex;
+            const teamIndex         = playerInfo.teamIndex;
+            this._labelIndex.text   = playerIndex == null ? CommonConstants.ErrorTextForUndefined : Lang.getPlayerForceName(playerIndex);
+            this._labelTeam.text    = (teamIndex == null ? undefined : Lang.getPlayerTeamName(teamIndex)) || CommonConstants.ErrorTextForUndefined;
+
+            const userId    = playerInfo.userId;
+            const labelName = this._labelName;
+            const coName    = ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
+            if (userId == null) {
+                labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
+            } else {
+                labelName.text = `${await UserModel.getUserNickname(userId)} ${coName}`;
+            }
         }
     }
 }

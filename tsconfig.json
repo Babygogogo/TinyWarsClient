@@ -4,6 +4,7 @@
         "outDir": "bin-debug",
         "experimentalDecorators": true,
         "types": [],
+        "strict": false,
         "sourceMap": true
     },
     "include": [

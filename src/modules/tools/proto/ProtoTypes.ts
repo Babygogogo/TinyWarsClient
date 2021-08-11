@@ -1439,6 +1439,15 @@ export declare namespace Config {
 
         /** CoBasicCfg superPowerSkills */
         superPowerSkills?: (number[]|null);
+
+        /** CoBasicCfg passiveDesc */
+        passiveDesc?: (string[]|null);
+
+        /** CoBasicCfg copDesc */
+        copDesc?: (string[]|null);
+
+        /** CoBasicCfg scopDesc */
+        scopDesc?: (string[]|null);
     }
 
     /** Represents a CoBasicCfg. */
@@ -1491,6 +1500,15 @@ export declare namespace Config {
 
         /** CoBasicCfg superPowerSkills. */
         public superPowerSkills: number[];
+
+        /** CoBasicCfg passiveDesc. */
+        public passiveDesc: string[];
+
+        /** CoBasicCfg copDesc. */
+        public copDesc: string[];
+
+        /** CoBasicCfg scopDesc. */
+        public scopDesc: string[];
 
         /**
          * Creates a new CoBasicCfg instance using the specified properties.
@@ -1578,14 +1596,14 @@ export declare namespace Config {
         /** CoSkillCfg desc */
         desc?: (string[]|null);
 
-        /** CoSkillCfg attackBonus */
-        attackBonus?: (number[]|null);
+        /** CoSkillCfg selfOffenseBonus */
+        selfOffenseBonus?: (number[]|null);
 
-        /** CoSkillCfg defenseBonus */
-        defenseBonus?: (number[]|null);
+        /** CoSkillCfg selfDefenseBonus */
+        selfDefenseBonus?: (number[]|null);
 
-        /** CoSkillCfg moveRangeBonus */
-        moveRangeBonus?: (number[]|null);
+        /** CoSkillCfg selfMoveRangeBonus */
+        selfMoveRangeBonus?: (number[]|null);
 
         /** CoSkillCfg maxAttackRangeBonus */
         maxAttackRangeBonus?: (number[]|null);
@@ -1646,6 +1664,42 @@ export declare namespace Config {
 
         /** CoSkillCfg selfUnitProduction */
         selfUnitProduction?: (number[]|null);
+
+        /** CoSkillCfg selfFuelConsumption */
+        selfFuelConsumption?: (number[]|null);
+
+        /** CoSkillCfg selfUnitActionState */
+        selfUnitActionState?: (number[]|null);
+
+        /** CoSkillCfg selfLuckRangeBonus */
+        selfLuckRangeBonus?: (number[]|null);
+
+        /** CoSkillCfg selfUnitCost */
+        selfUnitCost?: (number[]|null);
+
+        /** CoSkillCfg selfFund */
+        selfFund?: (number[]|null);
+
+        /** CoSkillCfg selfOffenseBonusByFund */
+        selfOffenseBonusByFund?: (number[]|null);
+
+        /** CoSkillCfg selfCaptureAmount */
+        selfCaptureAmount?: (number[]|null);
+
+        /** CoSkillCfg selfTileIncome */
+        selfTileIncome?: (number[]|null);
+
+        /** CoSkillCfg enemyEnergy */
+        enemyEnergy?: (number[]|null);
+
+        /** CoSkillCfg selfOffenseBonusByTileCount */
+        selfOffenseBonusByTileCount?: (number[]|null);
+
+        /** CoSkillCfg selfGetFundByAttackUnit */
+        selfGetFundByAttackUnit?: (number[]|null);
+
+        /** CoSkillCfg selfAddUnit */
+        selfAddUnit?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1669,14 +1723,14 @@ export declare namespace Config {
         /** CoSkillCfg desc. */
         public desc: string[];
 
-        /** CoSkillCfg attackBonus. */
-        public attackBonus: number[];
+        /** CoSkillCfg selfOffenseBonus. */
+        public selfOffenseBonus: number[];
 
-        /** CoSkillCfg defenseBonus. */
-        public defenseBonus: number[];
+        /** CoSkillCfg selfDefenseBonus. */
+        public selfDefenseBonus: number[];
 
-        /** CoSkillCfg moveRangeBonus. */
-        public moveRangeBonus: number[];
+        /** CoSkillCfg selfMoveRangeBonus. */
+        public selfMoveRangeBonus: number[];
 
         /** CoSkillCfg maxAttackRangeBonus. */
         public maxAttackRangeBonus: number[];
@@ -1737,6 +1791,42 @@ export declare namespace Config {
 
         /** CoSkillCfg selfUnitProduction. */
         public selfUnitProduction: number[];
+
+        /** CoSkillCfg selfFuelConsumption. */
+        public selfFuelConsumption: number[];
+
+        /** CoSkillCfg selfUnitActionState. */
+        public selfUnitActionState: number[];
+
+        /** CoSkillCfg selfLuckRangeBonus. */
+        public selfLuckRangeBonus: number[];
+
+        /** CoSkillCfg selfUnitCost. */
+        public selfUnitCost: number[];
+
+        /** CoSkillCfg selfFund. */
+        public selfFund: number[];
+
+        /** CoSkillCfg selfOffenseBonusByFund. */
+        public selfOffenseBonusByFund: number[];
+
+        /** CoSkillCfg selfCaptureAmount. */
+        public selfCaptureAmount: number[];
+
+        /** CoSkillCfg selfTileIncome. */
+        public selfTileIncome: number[];
+
+        /** CoSkillCfg enemyEnergy. */
+        public enemyEnergy: number[];
+
+        /** CoSkillCfg selfOffenseBonusByTileCount. */
+        public selfOffenseBonusByTileCount: number[];
+
+        /** CoSkillCfg selfGetFundByAttackUnit. */
+        public selfGetFundByAttackUnit: number[];
+
+        /** CoSkillCfg selfAddUnit. */
+        public selfAddUnit: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.
@@ -10437,6 +10527,207 @@ export declare namespace WarAction {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WarActionPlayerUseCoSkill. */
+    interface IWarActionPlayerUseCoSkill {
+
+        /** WarActionPlayerUseCoSkill skillType */
+        skillType?: (number|null);
+
+        /** WarActionPlayerUseCoSkill extraData */
+        extraData?: (WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill|null);
+    }
+
+    /** Represents a WarActionPlayerUseCoSkill. */
+    class WarActionPlayerUseCoSkill implements IWarActionPlayerUseCoSkill {
+
+        /**
+         * Constructs a new WarActionPlayerUseCoSkill.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionPlayerUseCoSkill);
+
+        /** WarActionPlayerUseCoSkill skillType. */
+        public skillType: number;
+
+        /** WarActionPlayerUseCoSkill extraData. */
+        public extraData?: (WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill|null);
+
+        /**
+         * Creates a new WarActionPlayerUseCoSkill instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionPlayerUseCoSkill instance
+         */
+        public static create(properties?: WarAction.IWarActionPlayerUseCoSkill): WarAction.WarActionPlayerUseCoSkill;
+
+        /**
+         * Encodes the specified WarActionPlayerUseCoSkill message. Does not implicitly {@link WarAction.WarActionPlayerUseCoSkill.verify|verify} messages.
+         * @param message WarActionPlayerUseCoSkill message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionPlayerUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionPlayerUseCoSkill message, length delimited. Does not implicitly {@link WarAction.WarActionPlayerUseCoSkill.verify|verify} messages.
+         * @param message WarActionPlayerUseCoSkill message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionPlayerUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionPlayerUseCoSkill message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionPlayerUseCoSkill
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionPlayerUseCoSkill;
+
+        /**
+         * Decodes a WarActionPlayerUseCoSkill message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionPlayerUseCoSkill
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionPlayerUseCoSkill;
+
+        /**
+         * Verifies a WarActionPlayerUseCoSkill message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionPlayerUseCoSkill message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionPlayerUseCoSkill
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionPlayerUseCoSkill;
+
+        /**
+         * Creates a plain object from a WarActionPlayerUseCoSkill message. Also converts values to other types if specified.
+         * @param message WarActionPlayerUseCoSkill
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionPlayerUseCoSkill, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionPlayerUseCoSkill to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionPlayerUseCoSkill {
+
+        /** Properties of an ExtraDataForPlayerUseCoSkill. */
+        interface IExtraDataForPlayerUseCoSkill {
+
+            /** ExtraDataForPlayerUseCoSkill discoveredUnits */
+            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForPlayerUseCoSkill discoveredTiles */
+            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForPlayerUseCoSkill skillDataArray */
+            skillDataArray?: (Structure.IDataForUseCoSkill[]|null);
+        }
+
+        /** Represents an ExtraDataForPlayerUseCoSkill. */
+        class ExtraDataForPlayerUseCoSkill implements IExtraDataForPlayerUseCoSkill {
+
+            /**
+             * Constructs a new ExtraDataForPlayerUseCoSkill.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill);
+
+            /** ExtraDataForPlayerUseCoSkill discoveredUnits. */
+            public discoveredUnits: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForPlayerUseCoSkill discoveredTiles. */
+            public discoveredTiles: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForPlayerUseCoSkill skillDataArray. */
+            public skillDataArray: Structure.IDataForUseCoSkill[];
+
+            /**
+             * Creates a new ExtraDataForPlayerUseCoSkill instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForPlayerUseCoSkill instance
+             */
+            public static create(properties?: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill): WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerUseCoSkill message. Does not implicitly {@link WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill.verify|verify} messages.
+             * @param message ExtraDataForPlayerUseCoSkill message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerUseCoSkill message, length delimited. Does not implicitly {@link WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill.verify|verify} messages.
+             * @param message ExtraDataForPlayerUseCoSkill message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForPlayerUseCoSkill message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForPlayerUseCoSkill
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill;
+
+            /**
+             * Decodes an ExtraDataForPlayerUseCoSkill message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForPlayerUseCoSkill
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill;
+
+            /**
+             * Verifies an ExtraDataForPlayerUseCoSkill message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForPlayerUseCoSkill message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForPlayerUseCoSkill
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill;
+
+            /**
+             * Creates a plain object from an ExtraDataForPlayerUseCoSkill message. Also converts values to other types if specified.
+             * @param message ExtraDataForPlayerUseCoSkill
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionPlayerUseCoSkill.ExtraDataForPlayerUseCoSkill, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForPlayerUseCoSkill to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a WarActionUnitWait. */
     interface IWarActionUnitWait {
 
@@ -13890,6 +14181,9 @@ export declare namespace WarAction {
         /** WarActionContainer WarActionPlayerVoteForDraw */
         WarActionPlayerVoteForDraw?: (WarAction.IWarActionPlayerVoteForDraw|null);
 
+        /** WarActionContainer WarActionPlayerUseCoSkill */
+        WarActionPlayerUseCoSkill?: (WarAction.IWarActionPlayerUseCoSkill|null);
+
         /** WarActionContainer WarActionUnitWait */
         WarActionUnitWait?: (WarAction.IWarActionUnitWait|null);
 
@@ -13983,6 +14277,9 @@ export declare namespace WarAction {
 
         /** WarActionContainer WarActionPlayerVoteForDraw. */
         public WarActionPlayerVoteForDraw?: (WarAction.IWarActionPlayerVoteForDraw|null);
+
+        /** WarActionContainer WarActionPlayerUseCoSkill. */
+        public WarActionPlayerUseCoSkill?: (WarAction.IWarActionPlayerUseCoSkill|null);
 
         /** WarActionContainer WarActionUnitWait. */
         public WarActionUnitWait?: (WarAction.IWarActionUnitWait|null);
@@ -19569,6 +19866,102 @@ export declare namespace User {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a UserMapRating. */
+    interface IUserMapRating {
+
+        /** UserMapRating mapId */
+        mapId?: (number|null);
+
+        /** UserMapRating rating */
+        rating?: (number|null);
+    }
+
+    /** Represents a UserMapRating. */
+    class UserMapRating implements IUserMapRating {
+
+        /**
+         * Constructs a new UserMapRating.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: User.IUserMapRating);
+
+        /** UserMapRating mapId. */
+        public mapId: number;
+
+        /** UserMapRating rating. */
+        public rating: number;
+
+        /**
+         * Creates a new UserMapRating instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns UserMapRating instance
+         */
+        public static create(properties?: User.IUserMapRating): User.UserMapRating;
+
+        /**
+         * Encodes the specified UserMapRating message. Does not implicitly {@link User.UserMapRating.verify|verify} messages.
+         * @param message UserMapRating message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: User.IUserMapRating, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified UserMapRating message, length delimited. Does not implicitly {@link User.UserMapRating.verify|verify} messages.
+         * @param message UserMapRating message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: User.IUserMapRating, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a UserMapRating message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns UserMapRating
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserMapRating;
+
+        /**
+         * Decodes a UserMapRating message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns UserMapRating
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserMapRating;
+
+        /**
+         * Verifies a UserMapRating message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a UserMapRating message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UserMapRating
+         */
+        public static fromObject(object: { [k: string]: any }): User.UserMapRating;
+
+        /**
+         * Creates a plain object from a UserMapRating message. Also converts values to other types if specified.
+         * @param message UserMapRating
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: User.UserMapRating, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UserMapRating to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a UserComplexInfo. */
     interface IUserComplexInfo {
 
@@ -19583,6 +19976,9 @@ export declare namespace User {
 
         /** UserComplexInfo userSettings */
         userSettings?: (User.IUserSettings|null);
+
+        /** UserComplexInfo userMapRatingArray */
+        userMapRatingArray?: (User.IUserMapRating[]|null);
     }
 
     /** Represents a UserComplexInfo. */
@@ -19605,6 +20001,9 @@ export declare namespace User {
 
         /** UserComplexInfo userSettings. */
         public userSettings?: (User.IUserSettings|null);
+
+        /** UserComplexInfo userMapRatingArray. */
+        public userMapRatingArray: User.IUserMapRating[];
 
         /**
          * Creates a new UserComplexInfo instance using the specified properties.
@@ -20187,6 +20586,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgUserSetSettings */
         MsgUserSetSettings?: (NetMessage.IMsgUserSetSettings|null);
 
+        /** MessageContainer MsgUserSetMapRating */
+        MsgUserSetMapRating?: (NetMessage.IMsgUserSetMapRating|null);
+
         /** MessageContainer MsgMapGetEnabledBriefDataList */
         MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
 
@@ -20547,6 +20949,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserSetSettings. */
         public MsgUserSetSettings?: (NetMessage.IMsgUserSetSettings|null);
+
+        /** MessageContainer MsgUserSetMapRating. */
+        public MsgUserSetMapRating?: (NetMessage.IMsgUserSetMapRating|null);
 
         /** MessageContainer MsgMapGetEnabledBriefDataList. */
         public MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
@@ -27210,6 +27615,303 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgUserSetSettings.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgUserSetMapRating. */
+    interface IMsgUserSetMapRating {
+
+        /** MsgUserSetMapRating c */
+        c?: (NetMessage.MsgUserSetMapRating.IC|null);
+
+        /** MsgUserSetMapRating s */
+        s?: (NetMessage.MsgUserSetMapRating.IS|null);
+    }
+
+    /** Represents a MsgUserSetMapRating. */
+    class MsgUserSetMapRating implements IMsgUserSetMapRating {
+
+        /**
+         * Constructs a new MsgUserSetMapRating.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserSetMapRating);
+
+        /** MsgUserSetMapRating c. */
+        public c?: (NetMessage.MsgUserSetMapRating.IC|null);
+
+        /** MsgUserSetMapRating s. */
+        public s?: (NetMessage.MsgUserSetMapRating.IS|null);
+
+        /**
+         * Creates a new MsgUserSetMapRating instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserSetMapRating instance
+         */
+        public static create(properties?: NetMessage.IMsgUserSetMapRating): NetMessage.MsgUserSetMapRating;
+
+        /**
+         * Encodes the specified MsgUserSetMapRating message. Does not implicitly {@link NetMessage.MsgUserSetMapRating.verify|verify} messages.
+         * @param message MsgUserSetMapRating message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserSetMapRating, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserSetMapRating message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapRating.verify|verify} messages.
+         * @param message MsgUserSetMapRating message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserSetMapRating, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserSetMapRating message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserSetMapRating
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapRating;
+
+        /**
+         * Decodes a MsgUserSetMapRating message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserSetMapRating
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapRating;
+
+        /**
+         * Verifies a MsgUserSetMapRating message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserSetMapRating message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserSetMapRating
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapRating;
+
+        /**
+         * Creates a plain object from a MsgUserSetMapRating message. Also converts values to other types if specified.
+         * @param message MsgUserSetMapRating
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserSetMapRating, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserSetMapRating to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserSetMapRating {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C mapId */
+            mapId?: (number|null);
+
+            /** C rating */
+            rating?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetMapRating.IC);
+
+            /** C mapId. */
+            public mapId: number;
+
+            /** C rating. */
+            public rating: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetMapRating.IC): NetMessage.MsgUserSetMapRating.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserSetMapRating.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetMapRating.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapRating.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetMapRating.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapRating.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapRating.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapRating.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetMapRating.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S mapId */
+            mapId?: (number|null);
+
+            /** S rating */
+            rating?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetMapRating.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S mapId. */
+            public mapId: number;
+
+            /** S rating. */
+            public rating: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetMapRating.IS): NetMessage.MsgUserSetMapRating.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserSetMapRating.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetMapRating.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapRating.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetMapRating.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapRating.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapRating.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapRating.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetMapRating.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -54637,5 +55339,4 @@ export declare namespace NetMessage {
     }
 }
 }
-
 export default ProtoTypes;

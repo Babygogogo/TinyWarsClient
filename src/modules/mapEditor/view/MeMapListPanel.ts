@@ -175,6 +175,7 @@ namespace TwnsMeMapListPanel {
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
+            this._btnChoose.setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {

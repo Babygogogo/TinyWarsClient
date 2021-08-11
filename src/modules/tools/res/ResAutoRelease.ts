@@ -50,209 +50,209 @@ namespace ResAutoRelease {
             }
         };
 
-        _releaseTime = new Date().getTime();
-        const timer = new egret.Timer(3000);
-        timer.addEventListener(egret.TimerEvent.TIMER, updateDelayRelease, ResAutoRelease);
-        timer.start();
+        // _releaseTime = new Date().getTime();
+        // const timer = new egret.Timer(3000);
+        // timer.addEventListener(egret.TimerEvent.TIMER, updateDelayRelease, ResAutoRelease);
+        // timer.start();
 
-        // const EgretArmatureDisplay  = dragonBones.EgretArmatureDisplay.prototype
-        // const onAddToStageSke       = EgretArmatureDisplay.$onAddToStage
-        // EgretArmatureDisplay.$onAddToStage = function (stage: egret.Stage, nestLevel: number) {
-        //     onAddToStageSke.call(this, stage, nestLevel);
+        // // const EgretArmatureDisplay  = dragonBones.EgretArmatureDisplay.prototype
+        // // const onAddToStageSke       = EgretArmatureDisplay.$onAddToStage
+        // // EgretArmatureDisplay.$onAddToStage = function (stage: egret.Stage, nestLevel: number) {
+        // //     onAddToStageSke.call(this, stage, nestLevel);
 
-        //     const datas: egret.sys.BitmapNode[] = this.$renderNode.drawData;
-        //     BitmapData.$addDisplayObject(this, datas && datas[0].image);
+        // //     const datas: egret.sys.BitmapNode[] = this.$renderNode.drawData;
+        // //     BitmapData.$addDisplayObject(this, datas && datas[0].image);
+        // // }
+
+        // // const onRemoveFromStageSke = EgretArmatureDisplay.$onRemoveFromStage;
+        // // EgretArmatureDisplay.$onRemoveFromStage = function() {
+        // //     onRemoveFromStageSke.call(this);
+
+        // //     const datas: egret.sys.BitmapNode[] = this.$renderNode.drawData;
+        // //     BitmapData.$removeDisplayObject(this, datas && datas[0].image);
+        // // }
+
+        // // @ts-ignore
+        // interface MyMovieClip extends egret.MovieClip {
+        //     _image_     : egret.BitmapData | null;
+        // }
+        // const MovieClip         = egret.MovieClip.prototype as MyMovieClip;
+        // const onAddToStageMC    = MovieClip.$onAddToStage;
+        // MovieClip.$onAddToStage = function (stage: egret.Stage, nestLevel: number) {
+        //     onAddToStageMC.call(this, stage, nestLevel);
+
+        //     this._image_ && BitmapData.$removeDisplayObject(this, this._image_);
+        //     this._image_ = this.$texture && this.$texture.$bitmapData;
+        //     this._image_ && BitmapData.$addDisplayObject(this, this._image_);
+        // };
+
+        // const onRemoveFromStageMC = MovieClip.$onRemoveFromStage;
+        // MovieClip.$onRemoveFromStage = function() {
+        //     onRemoveFromStageMC.call(this);
+
+        //     this._image_ && BitmapData.$removeDisplayObject(this, this._image_);
+        //     this._image_ = null;
+        // };
+
+        // const setMovieClipData = MovieClip["setMovieClipData"];
+        // MovieClip["setMovieClipData"] = function(value: egret.MovieClipData) {
+        //     if (this.$movieClipData == value) {
+        //         return;
+        //     }
+
+        //     setMovieClipData.call(this, value);
+        //     this._image_ && BitmapData.$removeDisplayObject(this, this._image_);
+        //     this._image_ = this.$stage && this.$texture && this.$texture.$bitmapData;
+        //     this._image_ && BitmapData.$addDisplayObject(this, this._image_);
+        // };
+
+        // interface MyImageLoader extends egret.ImageLoader {
+        //     _url_           : string;
+        //     onImageComplete : (e: egret.Event) => void;
+        // }
+        // const ImageLoader   = egret.ImageLoader.prototype as MyImageLoader;
+        // const load          = ImageLoader.load;
+        // ImageLoader.load    = function (url: string) {
+        //     load.call(this, url);
+        //     const index = url.indexOf("?");
+        //     this._url_  = index < 0 ? url : url.substr(0, index);
+        // };
+
+        // const onImageComplete       = ImageLoader.onImageComplete;
+        // ImageLoader.onImageComplete = function (event: egret.Event) {
+        //     onImageComplete.call(this, event);
+        //     (this.data as MyBitmapData)._url_ = this._url_;
+        // };
+
+        // function loadBitmapData(url: string, succeed: (t: egret.BitmapData) => egret.Texture | void, loadNum = 3) {
+        //     if (!url) {
+        //         return Logger.error("纹理复用错误!");
+        //     }
+
+        //     const r = {
+        //         name    : url,
+        //         url     : url,
+        //         type    : RES.ResourceItem.TYPE_IMAGE,
+        //         root    : "",
+        //         extra   : 1,
+        //         _image_ : true,
+        //     };
+        //     return (RES as any).queue.pushResItem(r).then(
+        //         function (value: egret.Texture) {
+        //             return succeed(value && value.bitmapData) || value;
+        //         },
+        //         (error: any) => {
+        //             // @ts-ignore
+        //             (RES.ResourceEvent as any)["dispatchResourceEvent"](this, RES.ResourceEvent.ITEM_LOAD_ERROR, "", r);
+        //             if (loadNum > 0) {
+        //                 setTimeout(() => {
+        //                     loadBitmapData(url, succeed, loadNum - 1);
+        //                 }, 100);
+        //             }
+        //             return Promise.reject(error);
+        //         }
+        //     );
         // }
 
-        // const onRemoveFromStageSke = EgretArmatureDisplay.$onRemoveFromStage;
-        // EgretArmatureDisplay.$onRemoveFromStage = function() {
-        //     onRemoveFromStageSke.call(this);
+        // const ResourceLoader    = RES.ResourceLoader.prototype;
+        // const loadResource      = ResourceLoader["loadResource"];
+        // ResourceLoader["loadResource"] = function (r, p) {
+        //     if (r["_image_"]) {
+        //         const t = (RES.processor as any)["isSupport"](r);
+        //         if (t) {
+        //             return t.onLoadStart((RES as any)["host"], r);
+        //         }
+        //     }
 
-        //     const datas: egret.sys.BitmapNode[] = this.$renderNode.drawData;
-        //     BitmapData.$removeDisplayObject(this, datas && datas[0].image);
-        // }
+        //     return loadResource.call(this, r, p);
+        // };
 
-        // @ts-ignore
-        interface MyMovieClip extends egret.MovieClip {
-            _image_     : egret.BitmapData | null;
-        }
-        const MovieClip         = egret.MovieClip.prototype as MyMovieClip;
-        const onAddToStageMC    = MovieClip.$onAddToStage;
-        MovieClip.$onAddToStage = function (stage: egret.Stage, nestLevel: number) {
-            onAddToStageMC.call(this, stage, nestLevel);
+        // const save = (RES as any)["host"].save;
+        // (RES as any)["host"].save = function (resource: any, data: any) {
+        //     !resource["_image_"] && save.call(this, resource, data);
+        // };
 
-            this._image_ && BitmapData.$removeDisplayObject(this, this._image_);
-            this._image_ = this.$texture && this.$texture.$bitmapData;
-            this._image_ && BitmapData.$addDisplayObject(this, this._image_);
-        };
+        // const BitmapData = egret.BitmapData;
+        // BitmapData.$addDisplayObject = function (displayObject: egret.DisplayObject, bitmapData: MyBitmapData) {
+        //     const hashCode = bitmapData && bitmapData.hashCode;
+        //     if(!hashCode) {
+        //         return;
+        //     }
 
-        const onRemoveFromStageMC = MovieClip.$onRemoveFromStage;
-        MovieClip.$onRemoveFromStage = function() {
-            onRemoveFromStageMC.call(this);
+        //     let tempList: egret.DisplayObject[] = BitmapData["_displayList"][hashCode];
+        //     if (!tempList) {
+        //         tempList = BitmapData["_displayList"][hashCode] = [];
+        //     }
+        //     if (tempList.indexOf(displayObject) >= 0) {
+        //         return;
+        //     }
 
-            this._image_ && BitmapData.$removeDisplayObject(this, this._image_);
-            this._image_ = null;
-        };
+        //     tempList.push(displayObject);
+        //     if ((!popDelayRelease(hashCode))    &&
+        //         (!bitmapData.format)            &&
+        //         (tempList.length == 1)
+        //     ) {
+        //         loadBitmapData(bitmapData._url_, (data: egret.BitmapData) => {
+        //             bitmapData.source = data.source;
+        //             bitmapData.format = data.format;
 
-        const setMovieClipData = MovieClip["setMovieClipData"];
-        MovieClip["setMovieClipData"] = function(value: egret.MovieClipData) {
-            if (this.$movieClipData == value) {
-                return;
-            }
+        //             for (const display of (BitmapData["_displayList"][hashCode] || [])) {
+        //                 display.$renderDirty = true;
 
-            setMovieClipData.call(this, value);
-            this._image_ && BitmapData.$removeDisplayObject(this, this._image_);
-            this._image_ = this.$stage && this.$texture && this.$texture.$bitmapData;
-            this._image_ && BitmapData.$addDisplayObject(this, this._image_);
-        };
+        //                 const p = display.$parent;
+        //                 if (p && !p.$cacheDirty) {
+        //                     p.$cacheDirty = true;
+        //                     p.$cacheDirtyUp();
+        //                 }
 
-        interface MyImageLoader extends egret.ImageLoader {
-            _url_           : string;
-            onImageComplete : (e: egret.Event) => void;
-        }
-        const ImageLoader   = egret.ImageLoader.prototype as MyImageLoader;
-        const load          = ImageLoader.load;
-        ImageLoader.load    = function (url: string) {
-            load.call(this, url);
-            const index = url.indexOf("?");
-            this._url_  = index < 0 ? url : url.substr(0, index);
-        };
+        //                 const maskedObject = display.$maskedObject;
+        //                 if (maskedObject && !maskedObject.$cacheDirty) {
+        //                     maskedObject.$cacheDirty = true;
+        //                     maskedObject.$cacheDirtyUp();
+        //                 }
+        //             }
+        //         });
+        //     } else if (!bitmapData.format) {
+        //         bitmapData.format = "image";
+        //     }
+        // };
 
-        const onImageComplete       = ImageLoader.onImageComplete;
-        ImageLoader.onImageComplete = function (event: egret.Event) {
-            onImageComplete.call(this, event);
-            (this.data as MyBitmapData)._url_ = this._url_;
-        };
+        // BitmapData.$removeDisplayObject = function (displayObject: egret.DisplayObject, bitmapData: MyBitmapData) {
+        //     const hashCode: number = bitmapData && bitmapData.hashCode;
+        //     if (!hashCode) {
+        //         return;
+        //     }
 
-        function loadBitmapData(url: string, succeed: (t: egret.BitmapData) => egret.Texture | void, loadNum = 3) {
-            if (!url) {
-                return Logger.error("纹理复用错误!");
-            }
+        //     const tempList: egret.DisplayObject[] = BitmapData["_displayList"][hashCode];
+        //     if (!tempList) {
+        //         return;
+        //     }
 
-            const r = {
-                name    : url,
-                url     : url,
-                type    : RES.ResourceItem.TYPE_IMAGE,
-                root    : "",
-                extra   : 1,
-                _image_ : true,
-            };
-            return (RES as any).queue.pushResItem(r).then(
-                function (value: egret.Texture) {
-                    return succeed(value && value.bitmapData) || value;
-                },
-                (error: any) => {
-                    // @ts-ignore
-                    (RES.ResourceEvent as any)["dispatchResourceEvent"](this, RES.ResourceEvent.ITEM_LOAD_ERROR, "", r);
-                    if (loadNum > 0) {
-                        setTimeout(() => {
-                            loadBitmapData(url, succeed, loadNum - 1);
-                        }, 100);
-                    }
-                    return Promise.reject(error);
-                }
-            );
-        }
+        //     const index = tempList.indexOf(displayObject);
+        //     if (index < 0) {
+        //         return;
+        //     }
 
-        const ResourceLoader    = RES.ResourceLoader.prototype;
-        const loadResource      = ResourceLoader["loadResource"];
-        ResourceLoader["loadResource"] = function (r, p) {
-            if (r["_image_"]) {
-                const t = (RES.processor as any)["isSupport"](r);
-                if (t) {
-                    return t.onLoadStart((RES as any)["host"], r);
-                }
-            }
+        //     tempList.splice(index, 1);
+        //     if (tempList.length) {
+        //         return;
+        //     }
 
-            return loadResource.call(this, r, p);
-        };
+        //     if (!bitmapData._url_) {
+        //         return;
+        //     }
 
-        const save = (RES as any)["host"].save;
-        (RES as any)["host"].save = function (resource: any, data: any) {
-            !resource["_image_"] && save.call(this, resource, data);
-        };
+        //     if (NO_RELEASE_DICT[bitmapData._url_]) {
+        //         return;
+        //     }
 
-        const BitmapData = egret.BitmapData;
-        BitmapData.$addDisplayObject = function (displayObject: egret.DisplayObject, bitmapData: MyBitmapData) {
-            const hashCode = bitmapData && bitmapData.hashCode;
-            if(!hashCode) {
-                return;
-            }
-
-            let tempList: egret.DisplayObject[] = BitmapData["_displayList"][hashCode];
-            if (!tempList) {
-                tempList = BitmapData["_displayList"][hashCode] = [];
-            }
-            if (tempList.indexOf(displayObject) >= 0) {
-                return;
-            }
-
-            tempList.push(displayObject);
-            if ((!popDelayRelease(hashCode))    &&
-                (!bitmapData.format)            &&
-                (tempList.length == 1)
-            ) {
-                loadBitmapData(bitmapData._url_, (data: egret.BitmapData) => {
-                    bitmapData.source = data.source;
-                    bitmapData.format = data.format;
-
-                    for (const display of (BitmapData["_displayList"][hashCode] || [])) {
-                        display.$renderDirty = true;
-
-                        const p = display.$parent;
-                        if (p && !p.$cacheDirty) {
-                            p.$cacheDirty = true;
-                            p.$cacheDirtyUp();
-                        }
-
-                        const maskedObject = display.$maskedObject;
-                        if (maskedObject && !maskedObject.$cacheDirty) {
-                            maskedObject.$cacheDirty = true;
-                            maskedObject.$cacheDirtyUp();
-                        }
-                    }
-                });
-            } else if (!bitmapData.format) {
-                bitmapData.format = "image";
-            }
-        };
-
-        BitmapData.$removeDisplayObject = function (displayObject: egret.DisplayObject, bitmapData: MyBitmapData) {
-            const hashCode: number = bitmapData && bitmapData.hashCode;
-            if (!hashCode) {
-                return;
-            }
-
-            const tempList: egret.DisplayObject[] = BitmapData["_displayList"][hashCode];
-            if (!tempList) {
-                return;
-            }
-
-            const index = tempList.indexOf(displayObject);
-            if (index < 0) {
-                return;
-            }
-
-            tempList.splice(index, 1);
-            if (tempList.length) {
-                return;
-            }
-
-            if (!bitmapData._url_) {
-                return;
-            }
-
-            if (NO_RELEASE_DICT[bitmapData._url_]) {
-                return;
-            }
-
-            addDelayRelease(bitmapData.hashCode, bitmapData, () => {
-                if (bitmapData.format) {
-                    bitmapData.$dispose();
-                    bitmapData.format = "";
-                }
-            });
-        };
+        //     addDelayRelease(bitmapData.hashCode, bitmapData, () => {
+        //         if (bitmapData.format) {
+        //             bitmapData.$dispose();
+        //             bitmapData.format = "";
+        //         }
+        //     });
+        // };
     }
 
     function addDelayRelease(key: string | number, data: MyBitmapData, finish: () => void, delay?: number) {

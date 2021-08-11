@@ -59,31 +59,35 @@ namespace TwnsRwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for settings the state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _setStateRequestingUnitAttackUnit(gridIndex: GridIndex): void {
+        protected _setStateRequestingUnitAttackUnit(): void {
             // nothing to do
         }
 
-        protected _setStateRequestingUnitAttackTile(gridIndex: GridIndex): void {
+        protected _setStateRequestingUnitAttackTile(): void {
             // nothing to do
         }
 
-        protected _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void {
+        protected _setStateRequestingUnitDropOnTap(): void {
             // nothing to do
         }
 
-        protected _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void {
+        protected _setStateRequestingUnitLaunchSilo(): void {
             // nothing to do
         }
 
-        protected _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
+        protected _setStateRequestingUnitLaunchFlare(): void {
             // nothing to do
         }
 
-        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void {
+        public setStateRequestingPlayerProduceUnit(): void {
             // nothing to do
         }
 
         public setStateRequestingPlayerEndTurn(): void {
+            // nothing to do
+        }
+
+        public setStateRequestingPlayerUseCoSkill(): void {
             // nothing to do
         }
 
@@ -145,7 +149,7 @@ namespace TwnsRwActionPlanner {
                 return State.ChoosingFlareDestination;
             }
         }
-        protected _getNextStateOnTapWhenChoosingSiloDestination(gridIndex: GridIndex): State {
+        protected _getNextStateOnTapWhenChoosingSiloDestination(): State {
             return State.ChoosingSiloDestination;
         }
         protected _getNextStateOnTapWhenChoosingProductionTarget(gridIndex: GridIndex): State {
@@ -370,25 +374,26 @@ namespace TwnsRwActionPlanner {
                 if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
                     return [];
                 } else {
+                    const costForProduceUnit = focusUnit.getProduceUnitCost();
                     if (focusUnit.getCurrentProduceMaterial() < 1) {
                         return [{
-                            actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0051)),
-                            canProduceUnit  : false,
+                            actionType          : UnitActionType.ProduceUnit,
+                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0051)),
+                            costForProduceUnit,
                             produceUnitType,
                         }];
                     } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
                         return [{
-                            actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0052)),
-                            canProduceUnit  : false,
+                            actionType          : UnitActionType.ProduceUnit,
+                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0052)),
+                            costForProduceUnit,
                             produceUnitType,
                         }];
                     } else if (this._getWar().getPlayerInTurn().getFund() < focusUnit.getProduceUnitCost()) {
                         return [{
-                            actionType      : UnitActionType.ProduceUnit,
-                            callback        : () => FloatText.show(Lang.getText(LangTextType.B0053)),
-                            canProduceUnit  : false,
+                            actionType          : UnitActionType.ProduceUnit,
+                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0053)),
+                            costForProduceUnit,
                             produceUnitType,
                         }];
                     } else {
@@ -397,14 +402,14 @@ namespace TwnsRwActionPlanner {
                             callback        : () => {
                                 // nothing to do
                             },
-                            canProduceUnit  : true,
+                            costForProduceUnit,
                             produceUnitType,
                         }];
                     }
                 }
             }
         }
-        protected _getActionUnitWait(hasOtherAction: boolean): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitWait(): TwnsBwActionPlanner.DataForUnitAction[] {
             const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];

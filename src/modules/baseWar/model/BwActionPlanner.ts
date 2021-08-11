@@ -3,20 +3,21 @@ import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Logger                   from "../../tools/helpers/Logger";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Notify                   from "../../tools/notify/Notify";
 import NotifyData               from "../../tools/notify/NotifyData";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelpers";
 import UserModel                from "../../user/model/UserModel";
 import TwnsBwActionPlannerView  from "../view/BwActionPlannerView";
 import TwnsBwUnitActionsPanel   from "../view/BwUnitActionsPanel";
 import TwnsBwCursor             from "./BwCursor";
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsBwTileMap            from "./BwTileMap";
 import TwnsBwTurnManager        from "./BwTurnManager";
 import TwnsBwUnit               from "./BwUnit";
 import TwnsBwUnitMap            from "./BwUnitMap";
-import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsBwWar                from "./BwWar";
 
 namespace TwnsBwActionPlanner {
@@ -29,6 +30,7 @@ namespace TwnsBwActionPlanner {
     import AttackableArea   = Types.AttackableArea;
     import MovePathNode     = Types.MovePathNode;
     import UnitActionType   = Types.UnitActionType;
+    import ShortSfxCode     = Types.ShortSfxCode;
     import BwUnit           = TwnsBwUnit.BwUnit;
     import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
     import BwWar            = TwnsBwWar.BwWar;
@@ -38,12 +40,12 @@ namespace TwnsBwActionPlanner {
         destination : GridIndex;
     };
     export type DataForUnitAction = {
-        actionType      : UnitActionType;
-        callback        : () => void;
-        unitForLaunch?  : BwUnit;
-        unitForDrop?    : BwUnit;
-        produceUnitType?: Types.UnitType;
-        canProduceUnit? : boolean;
+        actionType          : UnitActionType;
+        callback            : () => void;
+        unitForLaunch?      : BwUnit;
+        unitForDrop?        : BwUnit;
+        produceUnitType?    : Types.UnitType;
+        costForProduceUnit? : number;
     };
 
     export abstract class BwActionPlanner {
@@ -52,7 +54,7 @@ namespace TwnsBwActionPlanner {
         private _war        : BwWar;
         private _mapSize    : Types.MapSize;
 
-        private _state      : State;
+        private _state      = State.Idle;
         private _prevState  : State;
 
         private _focusUnitOnMap             : BwUnit;
@@ -127,7 +129,7 @@ namespace TwnsBwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyBwCursorTapped(e: egret.Event): void {
+        private _onNotifyBwCursorTapped(): void {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnTap(gridIndex);
             this._getWar().getView().tweenGridToCentralArea(gridIndex);
@@ -261,7 +263,7 @@ namespace TwnsBwActionPlanner {
             }
         }
 
-        private _onNotifyBwCursorDragEnded(e: egret.Event): void {
+        private _onNotifyBwCursorDragEnded(): void {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnDragEnded(gridIndex);
 
@@ -302,6 +304,13 @@ namespace TwnsBwActionPlanner {
             this._clearDataForPreviewingAttackableArea();
             this._clearDataForPreviewingMovableArea();
 
+            const currentState = this.getState();
+            if ((!this.checkIsStateRequesting())        &&
+                (currentState !== State.Idle)           &&
+                (currentState !== State.ExecutingAction)
+            ) {
+                SoundManager.playShortSfx(ShortSfxCode.ButtonCancel01);
+            }
             this._setState(State.Idle);
             this._updateView();
         }
@@ -319,7 +328,7 @@ namespace TwnsBwActionPlanner {
             this._updateView();
         }
 
-        protected _setStateMakingMovePathOnTap(gridIndex: GridIndex): void {
+        private _setStateMakingMovePathOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             const unitMap   = this._getUnitMap();
 
@@ -328,13 +337,14 @@ namespace TwnsBwActionPlanner {
                 this._resetMovableArea();
                 this._resetAttackableArea();
                 this._resetMovePathAsShortest(gridIndex);
+                SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
 
             } else if (currState === State.ExecutingAction) {
                 Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
                 if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
-                    // Nothing to do.
+                    SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                 } else {
                     const existingUnit = this._getUnitMap().getUnitOnMap(gridIndex);
                     if ((existingUnit === this.getFocusUnitOnMap()) && (this.getFocusUnitLoaded())) {
@@ -356,14 +366,18 @@ namespace TwnsBwActionPlanner {
                                 this._resetMovableArea();
                                 this._resetAttackableArea();
                                 this._resetMovePathAsShortest(gridIndex);
+                                SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                             } else {
                                 this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                                SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                             }
                         } else {
                             if (this._getTileMap().getTile(gridIndex).getMaxHp() != null) {
                                 this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                                SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                             } else {
                                 this._updateMovePathByDestination(gridIndex);
+                                SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                             }
                         }
                     }
@@ -549,6 +563,7 @@ namespace TwnsBwActionPlanner {
             } else if (currState === State.MakingMovePath) {
                 if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
+                    SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                 } else {
                     if (!this.getFocusUnitLoaded()) {
                         Logger.error(`BwActionPlanner._setStateChoosingActionOnTap() error 3, currState: ${currState}`);
@@ -557,29 +572,32 @@ namespace TwnsBwActionPlanner {
                         this._resetMovableArea();
                         this._resetAttackableArea();
                         this._resetMovePathAsShortest(this.getFocusUnitOnMap().getGridIndex());
+                        SoundManager.playShortSfx(ShortSfxCode.ButtonCancel01);
                     }
                 }
 
             } else if (currState === State.ChoosingAction) {
                 if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
+                    SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                 } else {
                     if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
-                        // Nothing to do.
+                        SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                     } else {
                         if (this.getFocusUnitLoaded()) {
                             this._clearFocusUnitLoaded();
                             this._resetMovableArea();
                             this._resetAttackableArea();
                             this._resetMovePathAsShortest(this.getFocusUnitOnMap().getGridIndex());
+                            SoundManager.playShortSfx(ShortSfxCode.ButtonCancel01);
                         } else {
-                            // Nothing to do.
+                            SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                         }
                     }
                 }
 
             } else if (currState === State.ChoosingAttackTarget) {
-                // Nothing to do.
+                SoundManager.playShortSfx(ShortSfxCode.ButtonCancel01);
 
             } else if (currState === State.ChoosingDropDestination) {
                 if (this.getAvailableDropDestinations().some(g => GridIndexHelpers.checkIsEqual(g, gridIndex))) {
@@ -640,7 +658,7 @@ namespace TwnsBwActionPlanner {
                 Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                // Nothing to do.
+                SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
 
             } else if (currState === State.ChoosingDropDestination) {
                 Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 5, currState: ${currState}`);
@@ -1028,6 +1046,7 @@ namespace TwnsBwActionPlanner {
 
             this._setState(State.PreviewingAttackableArea);
             this._updateView();
+            SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
         }
         private _setStatePreviewingAttackableAreaOnDrag(gridIndex: GridIndex): void {
             // Nothing to do.
@@ -1044,6 +1063,7 @@ namespace TwnsBwActionPlanner {
 
             this._setState(State.PreviewingMovableArea);
             this._updateView();
+            SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
         }
         private _setStatePreviewingMovableAreaOnDrag(gridIndex: GridIndex): void {
             // Nothing to do.
@@ -1064,6 +1084,7 @@ namespace TwnsBwActionPlanner {
 
             this._setState(State.ChoosingAction);
             this._updateView();
+            SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
         }
 
         protected abstract _setStateRequestingUnitAttackUnit(gridIndex: GridIndex): void;
@@ -1073,6 +1094,7 @@ namespace TwnsBwActionPlanner {
         protected abstract _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void;
         public abstract setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void;
         public abstract setStateRequestingPlayerEndTurn(): void;
+        public abstract setStateRequestingPlayerUseCoSkill(skillType: Types.CoSkillType): void;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.

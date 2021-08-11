@@ -10,6 +10,7 @@ import TwnsUiListItemRenderer   from "./UiListItemRenderer";
 namespace TwnsUiScrollList {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import UiListener               = Types.UiListener;
+    import ShortSfxCode             = Types.ShortSfxCode;
 
     export class UiScrollList<DataForRenderer> extends eui.Scroller {
         private _isChildrenCreated  = false;
@@ -17,8 +18,8 @@ namespace TwnsUiScrollList {
 
         private _notifyListenerArray: Notify.Listener[] | undefined;
         private _uiListenerArray    : UiListener[] | undefined;
+        private _shortSfxCode       = ShortSfxCode.ButtonNeutral01;
 
-        // @ts-ignore
         private _list                   : eui.List;
 
         private _cachedItemRenderer         : (new () => TwnsUiListItemRenderer.UiListItemRenderer<DataForRenderer>) | undefined;
@@ -197,7 +198,7 @@ namespace TwnsUiScrollList {
             this._cachedScrollVerPercentage = undefined;
         }
         private _onTouchBeginList(): void {
-            SoundManager.playEffect("button.mp3");
+            SoundManager.playShortSfx(this.getShortSfxCode());
         }
         private _onNotifyMouseWheel(e: egret.Event): void {
             if (!this.getIsOpening()) {
@@ -329,6 +330,13 @@ namespace TwnsUiScrollList {
         }
         public setScrollPolicyH(policy: string): void {
             this.scrollPolicyH = policy;
+        }
+
+        public setShortSfxCode(code: ShortSfxCode): void {
+            this._shortSfxCode = code;
+        }
+        public getShortSfxCode(): ShortSfxCode {
+            return this._shortSfxCode;
         }
 
         private _getDataProvider(): eui.ArrayCollection | null {

@@ -3,7 +3,8 @@ import Notify      from "../notify/Notify";
 import Types       from "../helpers/Types";
 
 namespace TwnsUiListItemRenderer {
-    import UiListener      = Types.UiListener;
+    import UiListener       = Types.UiListener;
+    import ShortSfxCode     = Types.ShortSfxCode;
 
     export class UiListItemRenderer<DataForRenderer> extends eui.ItemRenderer {
         private _isChildrenCreated  = false;
@@ -13,7 +14,6 @@ namespace TwnsUiListItemRenderer {
         private _notifyListenerArray: Notify.Listener[] | undefined;
         private _uiListenerArray    : UiListener[] | undefined;
 
-        // @ts-ignore
         public data                         : DataForRenderer;
         private _isDataChangedBeforeOpen    = false;
 

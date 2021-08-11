@@ -6,7 +6,7 @@ import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import TwnsUiImage                  from "../../tools/ui/UiImage";
+import TwnsUiButton                 from "../../tools/ui/UiButton";
 import TwnsUiPanel                  from "../../tools/ui/UiPanel";
 import UserModel                    from "../../user/model/UserModel";
 import TwnsUserOnlineUsersPanel     from "../../user/view/UserOnlineUsersPanel";
@@ -29,11 +29,10 @@ namespace TwnsLobbyBottomPanel {
         private static _instance: LobbyBottomPanel;
 
         private _groupBottom    : eui.Group;
-        private _groupMyInfo    : eui.Group;
-        private _groupChat      : eui.Group;
-        private _imgChatRed     : TwnsUiImage.UiImage;
-        private _groupMapEditor : eui.Group;
-        private _groupGameData  : eui.Group;
+        private _btnMyInfo      : TwnsUiButton.UiButton;
+        private _btnChat        : TwnsUiButton.UiButton;
+        private _btnMapEditor   : TwnsUiButton.UiButton;
+        private _btnGameData    : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!LobbyBottomPanel._instance) {
@@ -56,10 +55,10 @@ namespace TwnsLobbyBottomPanel {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._groupMyInfo,        callback: this._onTouchedGroupMyInfo },
-                { ui: this._groupChat,          callback: this._onTouchedGroupChat },
-                { ui: this._groupMapEditor,     callback: this._onTouchedGroupMapEditor },
-                { ui: this._groupGameData,      callback: this._onTouchedGroupGameData },
+                { ui: this._btnMyInfo,          callback: this._onTouchedBtnMyInfo },
+                { ui: this._btnChat,            callback: this._onTouchedBtnChat },
+                { ui: this._btnMapEditor,       callback: this._onTouchedBtnMapEditor },
+                { ui: this._btnGameData,        callback: this._onTouchedBtnGameData },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserLogout,                  callback: this._onMsgUserLogout },
@@ -80,13 +79,13 @@ namespace TwnsLobbyBottomPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedGroupMyInfo(e: egret.TouchEvent): void {
+        private _onTouchedBtnMyInfo(): void {
             UserOnlineUsersPanel.hide();
             TwnsChatPanel.ChatPanel.hide();
             UserPanel.show({ userId: UserModel.getSelfUserId() });
         }
 
-        private _onTouchedGroupChat(e: egret.TouchEvent): void {
+        private _onTouchedBtnChat(): void {
             UserOnlineUsersPanel.hide();
             UserPanel.hide();
             if (!TwnsChatPanel.ChatPanel.getIsOpening()) {
@@ -96,29 +95,29 @@ namespace TwnsLobbyBottomPanel {
             }
         }
 
-        private _onTouchedGroupMapEditor(e: egret.TouchEvent): void {
+        private _onTouchedBtnMapEditor(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             MeMapListPanel.show();
         }
 
-        private _onTouchedGroupGameData(e: egret.TouchEvent): void {
+        private _onTouchedBtnGameData(): void {
             CommonDamageChartPanel.show();
         }
 
-        private _onMsgUserLogout(e: egret.Event): void {
+        private _onMsgUserLogout(): void {
             this.close();
         }
-        private _onMsgChatGetAllReadProgressList(e: egret.Event): void {
+        private _onMsgChatGetAllReadProgressList(): void {
             this._updateImgChatRed();
         }
-        private _onMsgChatUpdateReadProgress(e: egret.Event): void {
+        private _onMsgChatUpdateReadProgress(): void {
             this._updateImgChatRed();
         }
-        private _onMsgChatGetAllMessages(e: egret.Event): void {
+        private _onMsgChatGetAllMessages(): void {
             this._updateImgChatRed();
         }
-        private _onMsgChatAddMessages(e: egret.Event): void {
+        private _onMsgChatAddMessages(): void {
             this._updateImgChatRed();
         }
 
@@ -126,7 +125,7 @@ namespace TwnsLobbyBottomPanel {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateImgChatRed(): void {
-            this._imgChatRed.visible = ChatModel.checkHasUnreadMessage();
+            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
         }
 
         private _showOpenAnimation(): void {
@@ -137,31 +136,31 @@ namespace TwnsLobbyBottomPanel {
                 .to({ alpha: 1, bottom: 0 }, 200);
 
             Helpers.resetTween({
-                obj         : this._groupMyInfo,
+                obj         : this._btnMyInfo,
                 beginProps  : { alpha: 0, top: 40 },
                 endProps    : { alpha: 1, top: 0 },
             });
             Helpers.resetTween({
-                obj         : this._groupChat,
+                obj         : this._btnChat,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 66,
                 endProps    : { alpha: 1, top: 0 },
             });
             Helpers.resetTween({
-                obj         : this._groupMapEditor,
+                obj         : this._btnMapEditor,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 132,
                 endProps    : { alpha: 1, top: 0 },
             });
             Helpers.resetTween({
-                obj         : this._groupGameData,
+                obj         : this._btnGameData,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, top: 0 },
             });
         }
         private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve, reject) => {
+            return new Promise<void>((resolve) => {
                 const groupBottom = this._groupBottom;
                 Tween.removeTweens(groupBottom);
                 Tween.get(groupBottom)

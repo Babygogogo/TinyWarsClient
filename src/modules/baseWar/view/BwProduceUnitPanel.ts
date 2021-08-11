@@ -163,7 +163,9 @@ namespace TwnsBwProduceUnitPanel {
                     playerIndex,
                 }, configVersion);
                 unit.startRunning(war);
-                const cfgCost = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
+
+                const costModifier  = player.getUnitCostModifier(gridIndex, false, unitType);
+                const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
                 dataList.push({
                     unitType,
                     currentFund,
@@ -171,10 +173,11 @@ namespace TwnsBwProduceUnitPanel {
                     gridIndex,
                     unit,
                     cfgCost,
+                    costModifier,
                     unitProductionSkillCfg  : skillCfg,
                     minCost                 : skillCfg
-                        ? Math.floor(cfgCost * minNormalizedHp * skillCfg[5] / CommonConstants.UnitHpNormalizer / 100)
-                        : cfgCost,
+                        ? Math.floor(cfgCost * costModifier * minNormalizedHp * skillCfg[5] / CommonConstants.UnitHpNormalizer / 100)
+                        : Math.floor(cfgCost * costModifier),
                     panel: this,
                 });
             }
@@ -221,6 +224,7 @@ namespace TwnsBwProduceUnitPanel {
         unit                    : TwnsBwUnit.BwUnit;
         minCost                 : number;
         cfgCost                 : number;
+        costModifier            : number;
         currentFund             : number;
         actionPlanner           : TwnsBwActionPlanner.BwActionPlanner;
         gridIndex               : GridIndex;
@@ -295,7 +299,7 @@ namespace TwnsBwProduceUnitPanel {
                     const minHp         = rawMinHp;
                     const maxHp         = Math.min(
                         rawMaxHp,
-                        Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * skillCfg[5] / 100) / normalizer) * normalizer
+                        Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * data.costModifier * skillCfg[5] / 100) / normalizer) * normalizer
                     );
                     CommonInputPanel.show({
                         title           : `${Lang.getUnitName(unitType)} HP`,

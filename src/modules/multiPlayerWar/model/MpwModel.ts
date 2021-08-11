@@ -582,15 +582,7 @@ namespace MpwModel {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0023),
                     callback: () => {
-                        if (war instanceof MrwWar) {
-                            FlowManager.gotoMrwMyWarListPanel();
-                        } else if (war instanceof MfwWar) {
-                            FlowManager.gotoMfwMyWarListPanel();
-                        } else if (war instanceof CcwWar) {
-                            FlowManager.gotoCcwMyWarListPanel();
-                        } else if (war instanceof McwWar) {
-                            FlowManager.gotoMcwMyWarListPanel();
-                        }
+                        FlowManager.gotoMyWarListPanel(war.getWarType());
                     },
                 });
 
@@ -600,15 +592,7 @@ namespace MpwModel {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0035),
                     callback: () => {
-                        if (war instanceof MrwWar) {
-                            FlowManager.gotoMrwMyWarListPanel();
-                        } else if (war instanceof MfwWar) {
-                            FlowManager.gotoMfwMyWarListPanel();
-                        } else if (war instanceof CcwWar) {
-                            FlowManager.gotoCcwMyWarListPanel();
-                        } else if (war instanceof McwWar) {
-                            FlowManager.gotoMcwMyWarListPanel();
-                        }
+                        FlowManager.gotoMyWarListPanel(war.getWarType());
                     },
                 });
 
@@ -728,15 +712,7 @@ namespace MpwModel {
         const remainingVotes    = war.getDrawVoteManager().getRemainingVotes();
         const selfPlayer        = playerManager.getPlayerByUserId(selfUserId);
         const callbackForGoBack = () => {
-            if (war instanceof MrwWar) {
-                FlowManager.gotoMrwMyWarListPanel();
-            } else if (war instanceof MfwWar) {
-                FlowManager.gotoMfwMyWarListPanel();
-            } else if (war instanceof CcwWar) {
-                FlowManager.gotoCcwMyWarListPanel();
-            } else if (war instanceof McwWar) {
-                FlowManager.gotoMcwMyWarListPanel();
-            }
+            FlowManager.gotoMyWarListPanel(war.getWarType());
         };
         if (war.getIsEnded()) {
             if (remainingVotes === 0) {

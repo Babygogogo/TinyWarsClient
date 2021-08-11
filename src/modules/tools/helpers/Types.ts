@@ -64,6 +64,7 @@ namespace Types {
     export interface CoBasicCfg extends ProtoTypes.Config.ICoBasicCfg {
         coId                : number;
         name                : string;
+        tier                : number;
         zoneRadius          : number;
         boardCostPercentage : number;
         maxLoadCount        : number;
@@ -187,13 +188,6 @@ namespace Types {
         movePathDestination: GridIndex;
     }[][];
 
-    export type UnitAttributes = {
-        hp          : number;
-        fuel        : number;
-        primaryAmmo : number | null;
-        flareAmmo   : number | null;
-    };
-
     export type SpmWarSaveSlotData = {
         slotIndex   : number;
         extraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
@@ -245,12 +239,30 @@ namespace Types {
         None        = 0,
         Lobby01,
         MapEditor01,
-        War01,
-        War02,
-        War03,
-        War04,
-        War05,
-        War06,
+        Power00,
+        Co0000,
+        Co0001,
+        Co0002,
+        Co0003,
+        Co0004,
+        Co0005,
+        Co0006,
+        Co0007,
+        Co0008,
+        Co0009,
+        Co0010,
+        Co0011,
+        Co9999,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export enum ShortSfxCode {
+        None,
+        ButtonNeutral01,
+        ButtonConfirm01,
+        ButtonCancel01,
+        CursorConfirm01,
+        CursorMove01,
     }
 
     export const UiState = {
@@ -432,6 +444,7 @@ namespace Types {
         RequestingPlayerSurrender,
         RequestingPlayerVoteForDraw,
         RequestingPlayerProduceUnit,
+        RequestingPlayerUseCoSkill,
         RequestingUnitAttackUnit,
         RequestingUnitAttackTile,
         RequestingUnitBeLoaded,
@@ -665,6 +678,13 @@ namespace Types {
         TimerIncrementalParam2,
         SpmSaveSlotIndex,
         SpmSaveSlotComment,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export enum CoType {
+        Undefined   = 0,
+        Zoned       = 1,
+        Global      = 2,
     }
 }
 

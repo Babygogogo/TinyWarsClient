@@ -1,8 +1,6 @@
 
 import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
 import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
-import TwnsBwCoListPanel                from "../../baseWar/view/BwCoListPanel";
-import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
@@ -39,13 +37,11 @@ import TwnsSpwWar                       from "../model/SpwWar";
 import TwnsSpwLoadWarPanel              from "./SpwLoadWarPanel";
 
 namespace TwnsSpwWarMenuPanel {
-    import ChatPanel                    = TwnsChatPanel.ChatPanel;
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonInputPanel             = TwnsCommonInputPanel.CommonInputPanel;
     import UserSettingsPanel            = TwnsUserSettingsPanel.UserSettingsPanel;
     import MfrCreateSettingsPanel       = TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel;
     import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
-    import BwCoListPanel                = TwnsBwCoListPanel.BwCoListPanel;
     import SpwActionPlanner             = TwnsSpwActionPlanner.SpwActionPlanner;
     import SpwPlayerManager             = TwnsSpwPlayerManager.SpwPlayerManager;
     import SpwWar                       = TwnsSpwWar.SpwWar;
@@ -299,11 +295,14 @@ namespace TwnsSpwWarMenuPanel {
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
                 // this._createCommandOpenCoInfoMenu(),
+                this._createCommandPlayerUseCop(),
+                this._createCommandPlayerUseScop(),
                 this._createCommandSaveScw(),
                 this._createCommandSaveSfw(),
                 this._createCommandLoadGame(),
                 this._createCommandOpenAdvancedMenu(),
                 // this._createCommandChat(),
+                this._createCommandGotoMyWarListPanel(),
                 this._createCommandGotoLobby(),
             ].filter(v => !!v);
         }
@@ -329,28 +328,76 @@ namespace TwnsSpwWarMenuPanel {
             };
         }
 
-        private _createCommandChat(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(LangTextType.B0383),
-                callback: () => {
-                    this.close();
-                    ChatPanel.show({});
-                },
-            };
+        // private _createCommandChat(): DataForCommandRenderer | null {
+        //     return {
+        //         name    : Lang.getText(LangTextType.B0383),
+        //         callback: () => {
+        //             this.close();
+        //             ChatPanel.show({});
+        //         },
+        //     };
+        // }
+
+        // private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
+        //     return {
+        //         name    : Lang.getText(LangTextType.B0140),
+        //         callback: () => {
+        //             const war = this._war;
+        //             BwCoListPanel.show({
+        //                 war,
+        //                 selectedIndex: war.getPlayerIndexInTurn() - 1,
+        //             });
+        //             this.close();
+        //         },
+        //     };
+        // }
+
+        private _createCommandPlayerUseCop(): DataForCommandRenderer | undefined {
+            const war           = this._war;
+            const skillType     = Types.CoSkillType.Power;
+            const playerInTurn  = war.getPlayerInTurn();
+            if ((!war.checkIsHumanInTurn())                                         ||
+                (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
+                (this._actionPlanner.checkIsStateRequesting())
+            ) {
+                return undefined;
+            } else {
+                return {
+                    name    : Lang.getText(LangTextType.B0142),
+                    callback: () => {
+                        CommonConfirmPanel.show({
+                            title   : Lang.getText(LangTextType.B0142),
+                            content : Lang.getText(LangTextType.A0054),
+                            callback: () => this._actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
+                        });
+                    },
+                };
+            }
         }
 
-        private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
-            return {
-                name    : Lang.getText(LangTextType.B0140),
-                callback: () => {
-                    const war = this._war;
-                    BwCoListPanel.show({
-                        war,
-                        selectedIndex: war.getPlayerIndexInTurn() - 1,
-                    });
-                    this.close();
-                },
-            };
+        private _createCommandPlayerUseScop(): DataForCommandRenderer | undefined {
+            const war           = this._war;
+            const skillType     = Types.CoSkillType.SuperPower;
+            const playerInTurn  = war.getPlayerInTurn();
+            if ((!war.checkIsHumanInTurn())                                         ||
+                (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
+                (this._actionPlanner.checkIsStateRequesting())
+            ) {
+                return undefined;
+            } else {
+                return {
+                    name    : Lang.getText(LangTextType.B0144),
+                    callback: () => {
+                        CommonConfirmPanel.show({
+                            title   : Lang.getText(LangTextType.B0144),
+                            content : Lang.getText(LangTextType.A0058),
+                            callback: () => this._actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
+                        });
+                    },
+                };
+            }
         }
 
         private _createCommandSaveScw(): DataForCommandRenderer | null {
@@ -425,6 +472,19 @@ namespace TwnsSpwWarMenuPanel {
                     },
                 };
             }
+        }
+
+        private _createCommandGotoMyWarListPanel(): DataForCommandRenderer | undefined {
+            return {
+                name    : Lang.getText(LangTextType.B0652),
+                callback: () => {
+                    CommonConfirmPanel.show({
+                        title   : Lang.getText(LangTextType.B0652),
+                        content : Lang.getText(LangTextType.A0225),
+                        callback: () => FlowManager.gotoMyWarListPanel(this._war.getWarType()),
+                    });
+                },
+            };
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {

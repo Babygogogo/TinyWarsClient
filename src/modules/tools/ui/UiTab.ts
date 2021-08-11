@@ -1,9 +1,10 @@
 
+import Logger                   from "../helpers/Logger";
+import SoundManager             from "../helpers/SoundManager";
+import Types                    from "../helpers/Types";
 import TwnsUiComponent          from "./UiComponent";
 import TwnsUiTabItemRenderer    from "./UiTabItemRenderer";
 import TwnsUiTabPage            from "./UiTabPage";
-import Logger                   from "../helpers/Logger";
-import SoundManager             from "../helpers/SoundManager";
 
 namespace TwnsUiTab {
     export class UiTab<DataForTabItemRenderer, DataForPage> extends TwnsUiComponent.UiComponent {
@@ -62,8 +63,8 @@ namespace TwnsUiTab {
                 this._bar.selectedIndex = this.getSelectedIndex();
             }
         }
-        private _onTouchBeginBar(e: egret.Event): void {
-            SoundManager.playEffect("button.mp3");
+        private _onTouchBeginBar(): void {
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _setSelectedIndex(index: number): void {

@@ -17,6 +17,7 @@ import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel                  from "../../tools/ui/UiPanel";
 import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
 import TwnsWarMapUnitView           from "../../warMap/view/WarMapUnitView";
+import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
 
 namespace TwnsUserLoginBackgroundPanel {
     import WarMapUnitView           = TwnsWarMapUnitView.WarMapUnitView;
@@ -31,18 +32,16 @@ namespace TwnsUserLoginBackgroundPanel {
 
         private static _instance: UserLoginBackgroundPanel;
 
-        // @ts-ignore
-        private _imgBackground      : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private _btnVersion         : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private _labelVersion       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _listLanguage       : TwnsUiScrollList.UiScrollList<DataForLanguageRenderer>;
-        // @ts-ignore
-        private _groupCopyright     : eui.Group;
-        // @ts-ignore
-        private _groupUnits         : eui.Group;
+        private readonly _imgBackground     : TwnsUiImage.UiImage;
+
+        private readonly _groupRightButton  : eui.Group;
+        private readonly _btnVersion        : TwnsUiButton.UiButton;
+        private readonly _btnSound          : TwnsUiButton.UiButton;
+
+        private readonly _labelVersion      : TwnsUiLabel.UiLabel;
+        private readonly _listLanguage      : TwnsUiScrollList.UiScrollList<DataForLanguageRenderer>;
+        private readonly _groupCopyright    : eui.Group;
+        private readonly _groupUnits        : eui.Group;
 
         public static show(): void {
             if (!UserLoginBackgroundPanel._instance) {
@@ -72,6 +71,7 @@ namespace TwnsUserLoginBackgroundPanel {
             this._setUiListenerArray([
                 { ui: this,                 callback: this._onTouchedSelf },
                 { ui: this._btnVersion,     callback: this._onTouchedBtnVersion },
+                { ui: this._btnSound,       callback: this._onTouchedBtnSound },
             ]);
             this._listLanguage.setItemRenderer(LanguageRenderer);
 
@@ -112,9 +112,13 @@ namespace TwnsUserLoginBackgroundPanel {
         private _onTouchedBtnVersion(): void {
             CommonChangeVersionPanel.show();
         }
+        private _onTouchedBtnSound(): void {
+            TwnsUserSetSoundPanel.UserSetSoundPanel.show();
+        }
 
         private _updateComponentsForLanguage(): void {
-            this._btnVersion.label = Lang.getText(LangTextType.B0620);
+            this._btnVersion.label  = Lang.getText(LangTextType.B0620);
+            this._btnSound.label    = Lang.getText(LangTextType.B0540);
             this._labelVersion.text = `${Lang.getGameVersionName(CommonConstants.GameVersion)}\nv.${window.CLIENT_VERSION}`;
         }
         private _initListLanguage(): void {
@@ -141,7 +145,7 @@ namespace TwnsUserLoginBackgroundPanel {
                 endProps    : { left: 0, alpha: 1 },
             });
             Helpers.resetTween({
-                obj         : this._btnVersion,
+                obj         : this._groupRightButton,
                 waitTime    : 1500,
                 beginProps  : { right: -40, alpha: 0 },
                 endProps    : { right: 0, alpha: 1 },
@@ -178,7 +182,7 @@ namespace TwnsUserLoginBackgroundPanel {
                     endProps    : { right: -20, alpha: 0 },
                 });
                 Helpers.resetTween({
-                    obj         : this._btnVersion,
+                    obj         : this._groupRightButton,
                     beginProps  : { right: 0, alpha: 1 },
                     endProps    : { right: -40, alpha: 0 },
                 });
@@ -219,8 +223,7 @@ namespace TwnsUserLoginBackgroundPanel {
         languageType: Types.LanguageType;
     };
     class LanguageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForLanguageRenderer> {
-        // @ts-ignore
-        private _labelLanguage  : TwnsUiLabel.UiLabel;
+        private readonly _labelLanguage : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

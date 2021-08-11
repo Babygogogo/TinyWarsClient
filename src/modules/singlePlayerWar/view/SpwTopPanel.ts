@@ -1,12 +1,13 @@
 
 import TwnsBwWar                from "../../baseWar/model/BwWar";
-import TwnsBwCoListPanel        from "../../baseWar/view/BwCoListPanel";
 import TwnsBwUnitListPanel      from "../../baseWar/view/BwUnitListPanel";
 import ChatModel                from "../../chat/model/ChatModel";
 import TwnsChatPanel            from "../../chat/view/ChatPanel";
+import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -22,7 +23,6 @@ namespace TwnsSpwTopPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import ChatPanel            = TwnsChatPanel.ChatPanel;
     import UserPanel            = TwnsUserPanel.UserPanel;
-    import BwCoListPanel        = TwnsBwCoListPanel.BwCoListPanel;
     import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
     import SpwWarMenuPanel      = TwnsSpwWarMenuPanel.SpwWarMenuPanel;
     import BwWar                = TwnsBwWar.BwWar;
@@ -99,6 +99,7 @@ namespace TwnsSpwTopPanel {
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
+            this._btnCancel.setShortSfxCode(Types.ShortSfxCode.None);
 
             this._war = this._getOpenData().war;
             this._updateView();
@@ -125,12 +126,14 @@ namespace TwnsSpwTopPanel {
         }
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
             this._updateView();
+            SoundManager.playCoBgmWithWar(this._war, false);
         }
         private _onNotifyBwCoEnergyChanged(): void {
             this._updateLabelCoAndEnergy();
         }
         private _onNotifyBwCoUsingSkillChanged(): void {
             this._updateLabelCoAndEnergy();
+            SoundManager.playCoBgmWithWar(this._war, false);
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
             this._updateBtnEndTurn();
@@ -155,10 +158,7 @@ namespace TwnsSpwTopPanel {
         }
         private _onTouchedGroupCo(): void {
             const war = this._war;
-            BwCoListPanel.show({
-                war,
-                selectedIndex: Math.max(war.getPlayerIndexInTurn() - 1, 0),
-            });
+            TwnsCommonCoListPanel.CommonCoListPanel.show({ war });
             SpwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(): void {

@@ -1,4 +1,5 @@
 
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -27,14 +28,14 @@ namespace TwnsWwMakeRequestDetailPanel {
 
         private static _instance: WwMakeRequestDetailPanel;
 
-        private _labelMenuTitle : TwnsUiLabel.UiLabel;
-        private _labelYes       : TwnsUiLabel.UiLabel;
-        private _labelNo        : TwnsUiLabel.UiLabel;
-        private _listPlayer     : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
-        private _btnConfirm     : TwnsUiButton.UiButton;
-        private _btnCancel      : TwnsUiButton.UiButton;
+        private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelYes!         : TwnsUiLabel.UiLabel;
+        private readonly _labelNo!          : TwnsUiLabel.UiLabel;
+        private readonly _listPlayer!       : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _btnConfirm!       : TwnsUiButton.UiButton;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
-        private _dataForListPlayer  : DataForPlayerRenderer[];
+        private _dataForListPlayer  : DataForPlayerRenderer[] | undefined;
 
         public static show(openData: OpenDataForMcrWatchMakeRequestDetailPanel): void {
             if (!WwMakeRequestDetailPanel._instance) {
@@ -71,15 +72,17 @@ namespace TwnsWwMakeRequestDetailPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._dataForListPlayer = null;
+            this._dataForListPlayer = undefined;
         }
 
         public setPlayerSelected(playerIndex: number, selected: boolean): void {
-            const dataList      = this._dataForListPlayer;
-            const index         = dataList.findIndex(value => value.playerInfo.playerIndex === playerIndex);
-            const data          = dataList[index];
-            data.isRequesting   = selected;
-            this._listPlayer.updateSingleData(index, data);
+            const dataList = this._dataForListPlayer;
+            if (dataList) {
+                const index         = dataList.findIndex(value => value.playerInfo.playerIndex === playerIndex);
+                const data          = dataList[index];
+                data.isRequesting   = selected;
+                this._listPlayer.updateSingleData(index, data);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,13 +94,15 @@ namespace TwnsWwMakeRequestDetailPanel {
 
         private _onTouchedBtnConfirm(): void {
             const userIds: number[] = [];
-            for (const data of this._dataForListPlayer) {
+            for (const data of this._dataForListPlayer || []) {
                 if (data.isRequesting) {
-                    userIds.push(data.playerInfo.userId);
+                    const userId = data.playerInfo.userId;
+                    (userId != null) && (userIds.push(userId));
                 }
             }
             if (userIds.length > 0) {
-                WwProxy.reqWatchMakeRequest(this._getOpenData().watchInfo.warInfo.warId, userIds);
+                const warId = this._getOpenData().watchInfo.warInfo?.warId;
+                (warId != null) && (WwProxy.reqWatchMakeRequest(warId, userIds));
             }
             this.close();
         }
@@ -107,7 +112,7 @@ namespace TwnsWwMakeRequestDetailPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
-            this._listPlayer.bindData(this._dataForListPlayer);
+            this._listPlayer.bindData(this._dataForListPlayer || []);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -121,15 +126,27 @@ namespace TwnsWwMakeRequestDetailPanel {
         private _generateDataForListPlayer(): DataForPlayerRenderer[] {
             const openData          = this._getOpenData().watchInfo;
             const warInfo           = openData.warInfo;
-            const configVersion     = warInfo.settingsForCommon.configVersion;
+            const configVersion     = warInfo?.settingsForCommon?.configVersion;
+            if (configVersion == null) {
+                return [];
+            }
+
             const ongoingDstUserIds = openData.ongoingDstUserIds || [];
             const requestDstUserIds = openData.requestDstUserIds || [];
-            const playerInfoList    = warInfo.playerInfoList;
+            const playerInfoList    = warInfo?.playerInfoList || [];
 
             const dataList: DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playerInfoList.length; ++playerIndex) {
-                const playerInfo    = playerInfoList.find(v => v.playerIndex === playerIndex);
-                const userId        = playerInfo.userId;
+                const playerInfo = playerInfoList.find(v => v.playerIndex === playerIndex);
+                if (playerInfo == null) {
+                    continue;
+                }
+
+                const userId = playerInfo.userId;
+                if (userId == null) {
+                    continue;
+                }
+
                 dataList.push({
                     panel           : this,
                     configVersion,
@@ -153,21 +170,21 @@ namespace TwnsWwMakeRequestDetailPanel {
         isRequesting    : boolean;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private _labelIndex     : TwnsUiLabel.UiLabel;
-        private _labelTeam      : TwnsUiLabel.UiLabel;
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _labelState     : TwnsUiLabel.UiLabel;
-        private _imgAccept      : TwnsUiImage.UiImage;
-        private _imgDecline     : TwnsUiImage.UiImage;
+        private readonly _labelIndex!   : TwnsUiLabel.UiLabel;
+        private readonly _labelTeam!    : TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelState!   : TwnsUiLabel.UiLabel;
+        private readonly _imgAccept!    : TwnsUiImage.UiImage;
+        private readonly _imgDecline!   : TwnsUiImage.UiImage;
 
-        protected _onDataChanged(): void {
+        protected async _onDataChanged(): Promise<void> {
             const data              = this.data;
             const playerInfo        = data.playerInfo;
-            this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
-            this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
-            UserModel.getUserNickname(playerInfo.userId).then(name => {
-                this._labelName.text = name + ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
-            });
+            const playerIndex       = playerInfo.playerIndex;
+            const teamIndex         = playerInfo.teamIndex;
+            this._labelIndex.text   = playerIndex == null ? CommonConstants.ErrorTextForUndefined : Lang.getPlayerForceName(playerIndex);
+            this._labelTeam.text    = (teamIndex == null ? null : Lang.getPlayerTeamName(teamIndex)) || CommonConstants.ErrorTextForUndefined;
+
             if (!playerInfo.isAlive) {
                 this._imgAccept.visible     = false;
                 this._imgDecline.visible    = false;
@@ -199,12 +216,22 @@ namespace TwnsWwMakeRequestDetailPanel {
                     }
                 }
             }
+
+            const userId    = playerInfo.userId;
+            const labelName = this._labelName;
+            const coName    = ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
+            if (userId == null) {
+                labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
+            } else {
+                labelName.text = `${await UserModel.getUserNickname(userId)} ${coName}`;
+            }
         }
 
         public onItemTapEvent(): void {
             if ((this._imgAccept.visible) || (this._imgDecline.visible)) {
-                const data = this.data;
-                data.panel.setPlayerSelected(data.playerInfo.playerIndex, !data.isRequesting);
+                const data          = this.data;
+                const playerIndex   = data.playerInfo.playerIndex;
+                (playerIndex != null) && (data.panel.setPlayerSelected(playerIndex, !data.isRequesting));
             }
         }
     }

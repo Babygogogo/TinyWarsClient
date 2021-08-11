@@ -53,57 +53,32 @@ namespace TwnsUserSettingsPanel {
 
         private static _instance: UserSettingsPanel;
 
-        // @ts-ignore
         private readonly _imgMask               : TwnsUiImage.UiImage;
-        // @ts-ignore
         private readonly _labelTitle            : TwnsUiLabel.UiLabel;
-        // @ts-ignore
         private readonly _btnClose              : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _group                 : eui.Group;
-        // @ts-ignore
         private readonly _scroller              : eui.Scroller;
 
-        // @ts-ignore
         private readonly _uiRadioLanguage       : TwnsUiRadioButton.UiRadioButton;
-        // @ts-ignore
         private readonly _uiRadioTexture        : TwnsUiRadioButton.UiRadioButton;
-        // @ts-ignore
         private readonly _uiRadioUnitAnimation  : TwnsUiRadioButton.UiRadioButton;
-        // @ts-ignore
         private readonly _uiRadioTileAnimation  : TwnsUiRadioButton.UiRadioButton;
-        // @ts-ignore
         private readonly _uiRadioShowGridBorder : TwnsUiRadioButton.UiRadioButton;
 
-        // @ts-ignore
         private readonly _groupButtons          : eui.Group;
-        // @ts-ignore
         private readonly _btnChangeNickname     : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnChangePassword     : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnChangeDiscordId    : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnChangeGameVersion  : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnRankList           : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnShowOnlineUsers    : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnSetSound           : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnSetStageScaler     : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnServerStatus       : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnComplaint          : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnUnitsInfo          : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnChangeLog          : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnSetPrivilege       : TwnsUiButton.UiButton;
-        // @ts-ignore
         private readonly _btnMapManagement      : TwnsUiButton.UiButton;
 
         public static show(): void {
@@ -153,6 +128,7 @@ namespace TwnsUserSettingsPanel {
                 { ui: this._btnSetPrivilege,        callback: this._onTouchedBtnSetPrivilege },
                 { ui: this._btnMapManagement,       callback: this._onTouchedBtnMapManagement },
             ]);
+            this._btnClose.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
 
             this._uiRadioLanguage.setData({
                 titleTextType   : LangTextType.B0627,

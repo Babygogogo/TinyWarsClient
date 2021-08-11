@@ -18,6 +18,7 @@ MsgUserSetDiscordId = 26,
 MsgUserSetPrivilege = 27,
 MsgUserSetPassword = 28,
 MsgUserSetSettings = 29,
+MsgUserSetMapRating = 30,
 MsgMapGetEnabledBriefDataList = 40,
 MsgMapGetEnabledRawDataList = 41,
 MsgMapGetBriefData = 42,
@@ -120,5 +121,4 @@ MsgCcrGetJoinedRoomInfoList = 350,
 MsgCcrGetRoomInfo = 351,
 MsgCcrGetJoinableRoomInfoList = 352,
 }}
-
 export default TwnsNetMessageCodes;

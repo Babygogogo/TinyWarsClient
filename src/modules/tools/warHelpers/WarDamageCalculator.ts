@@ -33,25 +33,39 @@ namespace WarDamageCalculator {
         }
     }
 
-    function getLuckValue(war: BwWar, playerIndex: number): number | undefined {
+    function getLuckValue(war: BwWar, attackerUnit: BwUnit, attackerGridIndex: GridIndex): number | undefined {
         const randomNumber = war.getRandomNumberManager().getRandomNumber();
         if (randomNumber == null) {
-            Logger.error(`DamageCalculator.getLuckValue() empty randomNumber.`);
+            Logger.error(`WarDamageCalculator.getLuckValue() empty randomNumber.`);
             return undefined;
         }
 
-        const lowerLimit = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
-        if (lowerLimit == null) {
-            Logger.error(`DamageCalculator.getLuckValue() empty lowerLimit.`);
+        const playerIndex = attackerUnit.getPlayerIndex();
+        if (playerIndex == null) {
+            Logger.error(`WarDamageCalculator.getLuckValue() empty playerIndex.`);
             return undefined;
         }
 
-        const upperLimit = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
-        if (upperLimit == null) {
-            Logger.error(`DamageCalculator.getLuckValue() empty upperLimit.`);
+        const lowerLimitForSettings = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
+        if (lowerLimitForSettings == null) {
+            Logger.error(`WarDamageCalculator.getLuckValue() empty lowerLimit.`);
             return undefined;
         }
 
+        const upperLimitForSettings = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
+        if (upperLimitForSettings == null) {
+            Logger.error(`WarDamageCalculator.getLuckValue() empty upperLimit.`);
+            return undefined;
+        }
+
+        const modifierByCo = attackerUnit.getLuckLimitModifierByCo(attackerGridIndex);
+        if (modifierByCo == null) {
+            Logger.error(`WarDamageCalculator.getLuckValue() empty modifierByCo.`);
+            return undefined;
+        }
+
+        const upperLimit = upperLimitForSettings + modifierByCo.upper;
+        const lowerLimit = lowerLimitForSettings + modifierByCo.lower;
         return Math.floor(randomNumber * (upperLimit - lowerLimit + 1)) + lowerLimit;
     }
 
@@ -231,12 +245,6 @@ namespace WarDamageCalculator {
             return undefined;
         }
 
-        const playerIndex = attacker.getPlayerIndex();
-        if (playerIndex == null) {
-            Logger.error(`DamageCalculator.getAttackDamage() the attacker has no playerIndex!`);
-            return undefined;
-        }
-
         if (attackerHp <= 0) {
             return 0;
         }
@@ -254,7 +262,7 @@ namespace WarDamageCalculator {
         }
 
         const luckValue = ((isWithLuck) && (target.checkIsArmorAffectByLuck()))
-            ? getLuckValue(war, playerIndex)
+            ? getLuckValue(war, attacker, attackerGridIndex)
             : 0;
         if (luckValue == null) {
             Logger.error(`DamageCalculator.getAttackDamage() empty luckValue.`);

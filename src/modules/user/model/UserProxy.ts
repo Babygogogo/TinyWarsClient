@@ -24,6 +24,7 @@ namespace UserProxy {
             { msgCode: NetMessageCodes.MsgUserSetPrivilege,     callback: _onMsgUserSetPrivilege, },
             { msgCode: NetMessageCodes.MsgUserSetPassword,      callback: _onMsgUserSetPassword, },
             { msgCode: NetMessageCodes.MsgUserSetSettings,      callback: _onMsgUserSetSettings, },
+            { msgCode: NetMessageCodes.MsgUserSetMapRating,     callback: _onMsgUserSetMapRating },
         ]);
     }
 
@@ -173,6 +174,20 @@ namespace UserProxy {
         if (!data.errorCode) {
             UserModel.updateOnMsgUserSetSettings(data);
             Notify.dispatch(NotifyType.MsgUserSetSettings, data);
+        }
+    }
+
+    export function reqUserSetMapRating(mapId: number, rating: number): void {
+        NetManager.send({ MsgUserSetMapRating: { c: {
+            mapId,
+            rating,
+        } } });
+    }
+    function _onMsgUserSetMapRating(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgUserSetMapRating.IS;
+        if (!data.errorCode) {
+            UserModel.updateOnMsgUserSetMapRating(data);
+            Notify.dispatch(NotifyType.MsgUserSetMapRating, data);
         }
     }
 }

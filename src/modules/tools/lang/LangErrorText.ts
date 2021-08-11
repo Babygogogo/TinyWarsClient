@@ -147,7 +147,7 @@ namespace TwnsLangErrorText {
             `当前无法结束您的回合`,
             `Unable to end turn.`,
         ],
-        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0007]: [
+        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0008]: [
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
         ],
@@ -166,6 +166,10 @@ namespace TwnsLangErrorText {
         [ServerErrorCode.MsgMfrCreateRoom0016]: [
             `您已创建了许多未开始的房间，请删除部分后重试`,
             `You have created too many rooms simultaneously.`,
+        ],
+        [ServerErrorCode.MsgMfrStartWar0006]: [
+            `玩家数量不足，请等待更多玩家进入房间。`,
+            `There not enough players in the room. Please wait until more players join.`,
         ],
         [ServerErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,

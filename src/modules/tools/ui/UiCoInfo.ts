@@ -1,14 +1,16 @@
 
-import TwnsUiImage              from "./UiImage";
-import TwnsUiListItemRenderer   from "./UiListItemRenderer";
-import TwnsUiComponent          from "./UiComponent";
-import TwnsUiLabel              from "./UiLabel";
-import TwnsUiScrollList         from "./UiScrollList";
+import CommonConstants          from "../helpers/CommonConstants";
 import ConfigManager            from "../helpers/ConfigManager";
+import Logger                   from "../helpers/Logger";
+import Types                    from "../helpers/Types";
 import Lang                     from "../lang/Lang";
 import TwnsLangTextType         from "../lang/LangTextType";
 import TwnsNotifyType           from "../notify/NotifyType";
-import Types                    from "../helpers/Types";
+import TwnsUiComponent          from "./UiComponent";
+import TwnsUiImage              from "./UiImage";
+import TwnsUiLabel              from "./UiLabel";
+import TwnsUiListItemRenderer   from "./UiListItemRenderer";
+import TwnsUiScrollList         from "./UiScrollList";
 
 namespace TwnsUiCoInfo {
     import CoSkillType      = Types.CoSkillType;
@@ -21,6 +23,8 @@ namespace TwnsUiCoInfo {
     };
     export class UiCoInfo extends TwnsUiComponent.UiComponent {
         private readonly _labelCoName                   : TwnsUiLabel.UiLabel;
+        private readonly _groupInfo                     : eui.Group;
+        private readonly _groupZoneInfo                 : eui.Group;
         private readonly _labelDesignerTitle            : TwnsUiLabel.UiLabel;
         private readonly _labelDesigner                 : TwnsUiLabel.UiLabel;
         private readonly _imgCoPortrait                 : TwnsUiImage.UiImage;
@@ -55,7 +59,7 @@ namespace TwnsUiCoInfo {
             this._updateComponentsForCoInfo();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
             this._updateComponentsForCoInfo();
         }
@@ -123,14 +127,29 @@ namespace TwnsUiCoInfo {
                 return;
             }
 
-            const coId                          = coData.coId;
-            const cfg                           = ConfigManager.getCoBasicCfg(coData.configVersion, coId);
-            this._imgCoPortrait.source          = ConfigManager.getCoBustImageSource(coId);
-            this._labelCoName.text              = cfg.name;
-            this._labelDesigner.text            = cfg.designer;
-            this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
-            this._labelZoneRadius.text          = `${cfg.zoneRadius}`;
-            this._labelEnergyBar.text           = (cfg.zoneExpansionEnergyList || []).join(` / `) || `--`;
+            const coId                  = coData.coId;
+            const configVersion         = coData.configVersion;
+            const cfg                   = ConfigManager.getCoBasicCfg(configVersion, coId);
+            this._imgCoPortrait.source  = ConfigManager.getCoBustImageSource(coId);
+            this._labelCoName.text      = cfg.name;
+            this._labelDesigner.text    = cfg.designer;
+
+            const coType        = ConfigManager.getCoType(configVersion, coId);
+            const groupZoneInfo = this._groupZoneInfo;
+            (groupZoneInfo.parent) && (groupZoneInfo.parent.removeChild(groupZoneInfo));
+            if (coType === Types.CoType.Zoned) {
+                this._groupInfo.addChildAt(groupZoneInfo, 0);
+
+                this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
+                this._labelZoneRadius.text          = `${cfg.zoneRadius}`;
+                this._labelEnergyBar.text           = (cfg.zoneExpansionEnergyList || []).join(` / `) || `--`;
+
+            } else if (coType === Types.CoType.Global) {
+                // nothing to do
+
+            } else {
+                Logger.error(`UiCoInfo._updateComponentsForCoInfo() invalid gameMode.`);
+            }
 
             this._updateComponentsForSkill();
         }
@@ -174,12 +193,16 @@ namespace TwnsUiCoInfo {
                 }
             }
 
-            const dataArrayForListSkillDesc: DataForSkillDescRenderer[] = [];
-            for (const skillId of skillIdArray) {
-                dataArrayForListSkillDesc.push({
-                    configVersion,
-                    skillId,
-                });
+            const dataArrayForListSkillDesc : DataForSkillDescRenderer[] = [];
+            const rawDesc                   = (ConfigManager.getCoSkillDescArray(configVersion, coId, skillType) || [])[Lang.getCurrentLanguageType()];
+            if (!rawDesc) {
+                dataArrayForListSkillDesc.push({ desc: CommonConstants.ErrorTextForUndefined });
+            } else {
+                for (const desc of rawDesc.split(`\n`)) {
+                    dataArrayForListSkillDesc.push({
+                        desc,
+                    });
+                }
             }
             this._listSkillDesc.bindData(dataArrayForListSkillDesc);
         }
@@ -201,7 +224,7 @@ namespace TwnsUiCoInfo {
             }
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             const data = this.data;
             if (data) {
                 data.component.setSelectedSkillType(data.coSkillType);
@@ -210,15 +233,17 @@ namespace TwnsUiCoInfo {
     }
 
     type DataForSkillDescRenderer = {
-        skillId         : number;
-        configVersion   : string;
+        // skillId         : number;
+        // configVersion   : string;
+        desc            : string;
     };
     class SkillDescRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkillDescRenderer> {
         private _labelDesc  : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             const data              = this.data;
-            this._labelDesc.text    = `- ${ConfigManager.getCoSkillCfg(data.configVersion, data.skillId).desc[Lang.getCurrentLanguageType()]}`;
+            // this._labelDesc.text    = `- ${ConfigManager.getCoSkillCfg(data.configVersion, data.skillId).desc[Lang.getCurrentLanguageType()]}`;
+            this._labelDesc.text = `- ${data.desc || CommonConstants.ErrorTextForUndefined}`;
         }
     }
 }

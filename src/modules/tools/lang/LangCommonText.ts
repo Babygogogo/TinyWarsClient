@@ -911,8 +911,8 @@ namespace TwnsLangCommonText {
             `All data of units and tiles is the same as Advance Wars: Days of Ruin.`,
         ],
         [LangTextType.A0218]: [
-            `相比原版，部分兵种的数据已被重新设计。设计者：NGC6240。`,
-            `Some units' data is rebalanced. Designed by NGC6240.`,
+            `此版本引入了高战1/2/DS的CO（比如Andy）。这些CO仍然具有全局效果，并由zhaotiantong进行了平衡。使用了由NGC6240设计的兵种数据。`,
+            `COs from AW 1/2/DS (Andy for example) are introduced into this version. They still have global effects and are rebalanced by zhaotiantong. Units are rebalanced by NGC6240.`,
         ],
         [LangTextType.A0219]: [
             `注意：各版本的玩家数据不互通。您可能需要重新注册账户。`,
@@ -937,6 +937,10 @@ namespace TwnsLangCommonText {
         [LangTextType.A0224]: [
             `这是《高级战争》1、2、DS版的网络对战版，独立于Tiny Wars。主要开发维护者：Amarriner、Walker、Matsuzen。`,
             `This is a web version of Advance Wars 1/2/Dual Strike, and is independent of Tiny Wars. Mainly developed/maintained by Amarriner, Walker and Matsuzen.`,
+        ],
+        [LangTextType.A0225]: [
+            `您确定要继续吗？`,
+            `Are you sure to continue?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3525,6 +3529,50 @@ namespace TwnsLangCommonText {
         [LangTextType.B0649]: [
             `Advance Wars by Web`,
             `Advance Wars by Web`,
+        ],
+        [LangTextType.B0650]: [
+            `返回地图列表`,
+            `Go to Map List`,
+        ],
+        [LangTextType.B0651]: [
+            `返回回放列表`,
+            `Go to Replay List`,
+        ],
+        [LangTextType.B0652]: [
+            `返回战局列表`,
+            `Go to War List`,
+        ],
+        [LangTextType.B0653]: [
+            `Supreme Logician`,
+            `Supreme Logician`,
+        ],
+        [LangTextType.B0654]: [
+            `Goddess of Revenge`,
+            `Goddess of Revenge`,
+        ],
+        [LangTextType.B0655]: [
+            `Hero of Legend`,
+            `Hero of Legend`,
+        ],
+        [LangTextType.B0656]: [
+            `Flight of the Coward`,
+            `Flight of the Coward`,
+        ],
+        [LangTextType.B0657]: [
+            `Madman's Reign`,
+            `Madman's Reign`,
+        ],
+        [LangTextType.B0658]: [
+            `Cruel Rose`,
+            `Cruel Rose`,
+        ],
+        [LangTextType.B0659]: [
+            `Puppet Master`,
+            `Puppet Master`,
+        ],
+        [LangTextType.B0660]: [
+            `Power Up`,
+            `Power Up`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,13 +3,14 @@ import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import UserModel            from "../../user/model/UserModel";
 import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import UserModel            from "../../user/model/UserModel";
 import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwPlayer {
@@ -17,6 +18,7 @@ namespace TwnsBwPlayer {
     import GridIndex        = Types.GridIndex;
     import PlayerAliveState = Types.PlayerAliveState;
     import CoSkillType      = Types.CoSkillType;
+    import CoType           = Types.CoType;
     import ISerialPlayer    = ProtoTypes.WarSerialization.ISerialPlayer;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import BwWar            = TwnsBwWar.BwWar;
@@ -421,7 +423,7 @@ namespace TwnsBwPlayer {
         public getCoCurrentEnergy(): number {
             return this._coCurrentEnergy;
         }
-        public getCoMaxEnergy(): number | null | undefined {
+        public getCoMaxEnergy(): number {
             const config = this._getCoBasicCfg();
             return config ? WarCommonHelpers.getCoMaxEnergy(config) : 0;
         }
@@ -433,13 +435,13 @@ namespace TwnsBwPlayer {
             const coBasicCfg    = this._getCoBasicCfg();
             const energyList    = coBasicCfg ? coBasicCfg.powerEnergyList : null;
             const energy        = energyList ? energyList[0] : null;
-            return energy! >= 0 ? energy : null;
+            return energy >= 0 ? energy : null;
         }
         public getCoSuperPowerEnergy(): number | null {
             const coBasicCfg    = this._getCoBasicCfg();
             const energyList    = coBasicCfg ? coBasicCfg.powerEnergyList : null;
             const energy        = energyList ? energyList[1] : null;
-            return energy! >= 0 ? energy : null;
+            return energy >= 0 ? energy : null;
         }
 
         public getCoZoneBaseRadius(): number | null {
@@ -498,8 +500,10 @@ namespace TwnsBwPlayer {
             return this._coUsingSkillType;
         }
         public setCoUsingSkillType(skillType: Types.CoSkillType): void {
-            this._coUsingSkillType = skillType;
-            Notify.dispatch(NotifyType.BwCoUsingSkillTypeChanged);
+            if (this.getCoUsingSkillType() !== skillType) {
+                this._coUsingSkillType = skillType;
+                Notify.dispatch(NotifyType.BwCoUsingSkillTypeChanged);
+            }
         }
         public getCoCurrentSkills(): number[] | null {
             return this.getCoSkills(this.getCoUsingSkillType());
@@ -535,6 +539,35 @@ namespace TwnsBwPlayer {
                 return false;
             }
         }
+        public checkCanUseCoSkill(skillType: Types.CoSkillType): boolean | undefined {
+            if (this.getCoType() !== CoType.Global) {
+                return false;
+            }
+
+            if ((this.checkCoIsUsingActiveSkill())  ||
+                (!this.getCoSkills(skillType))
+            ) {
+                return false;
+            }
+
+            const energy = this.getCoCurrentEnergy();
+            if (energy == null) {
+                Logger.error(`BwPlayer.checkCanUseCoSkill() empty energy.`);
+                return undefined;
+            }
+
+            if (skillType === Types.CoSkillType.Power) {
+                const powerEnergy = this.getCoPowerEnergy();
+                return (powerEnergy != null) && (energy >= powerEnergy);
+
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                const superPowerEnergy = this.getCoSuperPowerEnergy();
+                return (superPowerEnergy != null) && (energy >= superPowerEnergy);
+
+            } else {
+                return false;
+            }
+        }
 
         public getCoIsDestroyedInTurn(): boolean {
             return this._coIsDestroyedInTurn;
@@ -551,6 +584,51 @@ namespace TwnsBwPlayer {
             }
 
             return cfg.maxLoadCount;
+        }
+        public getCoType(): CoType {
+            const maxLoadCount = this.getCoMaxLoadCount();
+            if (maxLoadCount == null) {
+                return CoType.Undefined;
+            } else {
+                return maxLoadCount > 0 ? CoType.Zoned : CoType.Global;
+            }
+        }
+
+        public getUnitCostModifier(gridIndex: GridIndex, hasLoadedCo: boolean, unitType: Types.UnitType): number | undefined {
+            if (this.getCoId() === CommonConstants.CoEmptyId) {
+                return 1;
+            }
+
+            const coZoneRadius = this.getCoZoneRadius();
+            if (coZoneRadius == null) {
+                Logger.error(`BwPlayer.getUnitCostModifier() empty coZoneRadius.`);
+                return undefined;
+            }
+
+            const configVersion = this._getWar()?.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwPlayer.getUnitCostModifier() empty configVersion.`);
+                return undefined;
+            }
+
+            const getCoGridIndexArrayOnMap = Helpers.createLazyFunc(() => this.getCoGridIndexListOnMap());
+            let modifier = 1;
+            for (const skillId of this.getCoCurrentSkills() || []) {
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfUnitCost;
+                if ((cfg)                                                                                                                   &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                              &&
+                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap,
+                        coZoneRadius,
+                    })))
+                ) {
+                    modifier *= cfg[2] / 100;
+                }
+            }
+
+            return modifier;
         }
 
         private _getCoBasicCfg(): ProtoTypes.Config.ICoBasicCfg | null {

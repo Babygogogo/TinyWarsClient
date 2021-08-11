@@ -167,6 +167,7 @@ namespace TwnsNotifyType {
         MsgUserSetPassword,
         MsgUserGetSettings,
         MsgUserSetSettings,
+        MsgUserSetMapRating,
 
         MsgMeGetDataList,
         MsgMeGetData,
