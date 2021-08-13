@@ -3574,6 +3574,22 @@ namespace TwnsLangCommonText {
             `Power Up`,
             `Power Up`,
         ],
+        [LangTextType.B0661]: [
+            `删除地形装饰物`,
+            `Del Tile Decorator`,
+        ],
+        [LangTextType.B0662]: [
+            `绘制地形装饰物`,
+            `Draw Tile Decorator`,
+        ],
+        [LangTextType.B0663]: [
+            `陆地边角`,
+            `Land Corner`,
+        ],
+        [LangTextType.B0664]: [
+            `地形装饰物`,
+            `Tile Decorator`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

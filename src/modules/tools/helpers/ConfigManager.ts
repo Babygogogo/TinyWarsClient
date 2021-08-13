@@ -11,6 +11,7 @@ import Types            from "./Types";
 namespace ConfigManager {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import TileBaseType         = Types.TileBaseType;
+    import TileDecoratorType    = Types.TileDecoratorType;
     import TileObjectType       = Types.TileObjectType;
     import TileType             = Types.TileType;
     import UnitType             = Types.UnitType;
@@ -439,6 +440,38 @@ namespace ConfigManager {
             return `tileBase_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
         }
     }
+    export function getTileDecoratorImageSource(
+        params: {
+            version         : Types.UnitAndTileTextureVersion;
+            skinId          : number;
+            decoratorType   : TileDecoratorType;
+            isDark          : boolean;
+            shapeId         : number;
+            tickCount       : number;
+        },
+    ): string | undefined {
+        const { version, skinId, decoratorType, isDark, shapeId, tickCount } = params;
+        if (decoratorType === TileDecoratorType.Empty) {
+            return undefined;
+        }
+
+        const cfgForVersion = CommonConstants.TileDecoratorFrameConfigs.get(version);
+        const cfgForFrame   = cfgForVersion ? cfgForVersion.get(decoratorType) : undefined;
+        if (cfgForFrame == null) {
+            return undefined;
+        } else {
+            const ticksPerFrame     = cfgForFrame.ticksPerFrame;
+            const textForDark       = isDark ? `state01` : `state00`;
+            const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
+            const textForVersion    = `ver${Helpers.getNumText(version)}`;
+            const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
+            const textForType       = `type${Helpers.getNumText(decoratorType)}`;
+            const textForFrame      = ticksPerFrame < Number.MAX_VALUE
+                ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
+                : `frame00`;
+            return `tileDecorator_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+        }
+    }
     export function getTileObjectImageSource(
         params: {
             version     : Types.UnitAndTileTextureVersion;
@@ -708,10 +741,24 @@ namespace ConfigManager {
         return (!!cfg)
             && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
+    export function checkIsValidTileDecoratorShapeId(type: TileDecoratorType | null | undefined, shapeId: number | null | undefined): boolean {
+        if (type == null) {
+            return shapeId == null;
+        }
+
+        const cfg = CommonConstants.TileDecoratorShapeConfigs.get(type);
+        return (cfg != null)
+            && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
+    }
 
     export function getSymmetricalTileBaseShapeId(baseType: TileBaseType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
         const cfg           = CommonConstants.TileBaseSymmetry.get(baseType);
         const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
+        return shapeIdList ? shapeIdList[symmetryType] : null;
+    }
+    export function getSymmetricalTileDecoratorShapeId(decoratorType: TileDecoratorType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
+        const cfg           = CommonConstants.TileDecoratorSymmetry.get(decoratorType);
+        const shapeIdList   = cfg ? cfg.get(shapeId) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }
     export function getSymmetricalTileObjectShapeId(objectType: TileObjectType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
@@ -726,6 +773,21 @@ namespace ConfigManager {
         symmetryType: Types.SymmetryType;
     }): boolean {
         return getSymmetricalTileBaseShapeId(params.baseType, params.shapeId1, params.symmetryType) === (params.shapeId2 || 0);
+    }
+    export function checkIsTileDecoratorSymmetrical(params: {
+        decoratorType   : TileDecoratorType;
+        shapeId1        : number | null | undefined;
+        shapeId2        : number | null | undefined;
+        symmetryType    : Types.SymmetryType;
+    }): boolean {
+        const { shapeId1, shapeId2 } = params;
+        if (shapeId1 == null) {
+            return shapeId2 == null;
+        } else if (shapeId2 == null) {
+            return shapeId1 == null;
+        } else {
+            return getSymmetricalTileDecoratorShapeId(params.decoratorType, shapeId1, params.symmetryType) === shapeId2;
+        }
     }
     export function checkIsTileObjectSymmetrical(params: {
         objectType  : TileObjectType;

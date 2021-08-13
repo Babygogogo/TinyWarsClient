@@ -8,45 +8,52 @@ import Timer            from "../../tools/helpers/Timer";
 import UserModel        from "../../user/model/UserModel";
 
 namespace TwnsMeTileSimpleView {
-    import TileObjectType           = Types.TileObjectType;
     import TileBaseType             = Types.TileBaseType;
+    import TileDecoratorType        = Types.TileDecoratorType;
+    import TileObjectType           = Types.TileObjectType;
 
     const { height: GRID_HEIGHT }   = CommonConstants.GridSize;
 
     export class MeTileSimpleView {
         private _imgBase        = new TwnsUiImage.UiImage();
+        private _imgDecorator   = new TwnsUiImage.UiImage();
         private _imgObject      = new TwnsUiImage.UiImage();
 
-        private _baseType       : TileBaseType;
-        private _baseShapeId    : number;
-        private _objectType     : TileObjectType;
-        private _objectShapeId  : number;
-        private _playerIndex    : number;
+        private _baseType           : TileBaseType;
+        private _baseShapeId        : number;
+        private _decoratorType      : TileDecoratorType;
+        private _decoratorShapeId   : number;
+        private _objectType         : TileObjectType;
+        private _objectShapeId      : number;
+        private _playerIndex        : number;
 
         public constructor() {
-            this._imgBase.anchorOffsetY     = GRID_HEIGHT;
-            this._imgObject.anchorOffsetY   = GRID_HEIGHT * 2;
+            this.getImgBase().anchorOffsetY         = GRID_HEIGHT;
+            this.getImgDecorator().anchorOffsetY    = GRID_HEIGHT;
+            this.getImgObject().anchorOffsetY       = GRID_HEIGHT * 2;
         }
 
-        public init(
-            { tileBaseType, tileBaseShapeId, tileObjectType, tileObjectShapeId, playerIndex }: {
-                tileBaseType        : TileBaseType;
-                tileBaseShapeId     : number;
-                tileObjectType      : TileObjectType;
-                tileObjectShapeId   : number;
-                playerIndex         : number;
-            }
-        ): MeTileSimpleView {
+        public init({ tileBaseType, tileBaseShapeId, tileDecoratorType, tileDecoratorShapeId, tileObjectType, tileObjectShapeId, playerIndex }: {
+            tileBaseType        : TileBaseType;
+            tileBaseShapeId     : number;
+            tileDecoratorType   : TileDecoratorType;
+            tileDecoratorShapeId: number;
+            tileObjectType      : TileObjectType;
+            tileObjectShapeId   : number;
+            playerIndex         : number;
+        }): MeTileSimpleView {
             if (playerIndex == null) {
                 Logger.error(`MeTileSimpleView.init() empty playerIndex.`);
                 return undefined;
             }
 
-            this._baseType      = tileBaseType;
-            this._baseShapeId   = tileBaseShapeId;
-            this._objectType    = tileObjectType;
-            this._objectShapeId = tileObjectShapeId;
-            this._playerIndex   = playerIndex;
+            this._baseType          = tileBaseType;
+            this._baseShapeId       = tileBaseShapeId;
+            this._decoratorType     = tileDecoratorType;
+            this._decoratorShapeId  = tileDecoratorShapeId;
+            this._objectType        = tileObjectType;
+            this._objectShapeId     = tileObjectShapeId;
+            this._playerIndex       = playerIndex;
 
             return this;
         }
@@ -69,6 +76,9 @@ namespace TwnsMeTileSimpleView {
         public getImgBase(): TwnsUiImage.UiImage {
             return this._imgBase;
         }
+        public getImgDecorator(): TwnsUiImage.UiImage {
+            return this._imgDecorator;
+        }
 
         public updateOnAnimationTick(): void {
             this._updateImages();
@@ -79,34 +89,58 @@ namespace TwnsMeTileSimpleView {
             const tickCount = Timer.getTileAnimationTickCount();
             const skinId    = this._playerIndex;
 
-            const objectType = this._objectType;
-            if ((objectType == null) || (objectType === TileObjectType.Empty)) {
-                this._imgObject.visible = false;
-            } else {
-                this._imgObject.visible = true;
-                this._imgObject.source  = CommonModel.getCachedTileObjectImageSource({
-                    version,
-                    skinId,
-                    objectType,
-                    isDark      : false,
-                    shapeId     : this._objectShapeId,
-                    tickCount,
-                });
+            {
+                const objectType    = this._objectType;
+                const imgObject     = this.getImgObject();
+                if ((objectType == null) || (objectType === TileObjectType.Empty)) {
+                    imgObject.visible = false;
+                } else {
+                    imgObject.visible = true;
+                    imgObject.source  = CommonModel.getCachedTileObjectImageSource({
+                        version,
+                        skinId,
+                        objectType,
+                        isDark      : false,
+                        shapeId     : this._objectShapeId,
+                        tickCount,
+                    });
+                }
             }
 
-            const baseType = this._baseType;
-            if ((baseType == null) || (baseType === TileBaseType.Empty)) {
-                this._imgBase.visible = false;
-            } else {
-                this._imgBase.visible = true;
-                this._imgBase.source  = CommonModel.getCachedTileBaseImageSource({
-                    version,
-                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
-                    baseType,
-                    isDark      : false,
-                    shapeId     : this._baseShapeId,
-                    tickCount,
-                });
+            {
+                const baseType  = this._baseType;
+                const imgBase   = this.getImgBase();
+                if ((baseType == null) || (baseType === TileBaseType.Empty)) {
+                    imgBase.visible = false;
+                } else {
+                    imgBase.visible = true;
+                    imgBase.source  = CommonModel.getCachedTileBaseImageSource({
+                        version,
+                        skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                        baseType,
+                        isDark      : false,
+                        shapeId     : this._baseShapeId,
+                        tickCount,
+                    });
+                }
+            }
+
+            {
+                const decoratorType = this._decoratorType;
+                const imgDecorator  = this.getImgDecorator();
+                if ((decoratorType == null) || (decoratorType === TileDecoratorType.Empty)) {
+                    imgDecorator.visible = false;
+                } else {
+                    imgDecorator.visible = true;
+                    imgDecorator.source  = CommonModel.getCachedTileDecoratorImageSource({
+                        version,
+                        skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                        decoratorType,
+                        isDark      : false,
+                        shapeId     : this._decoratorShapeId,
+                        tickCount,
+                    });
+                }
             }
         }
     }

@@ -78,6 +78,7 @@
 		"resource/skins/mapEditor/MeAddWarEventToRulePanel.exml",
 		"resource/skins/mapEditor/MeAvailableCoPanel.exml",
 		"resource/skins/mapEditor/MeChooseTileBasePanel.exml",
+		"resource/skins/mapEditor/MeChooseTileDecoratorPanel.exml",
 		"resource/skins/mapEditor/MeChooseTileObjectPanel.exml",
 		"resource/skins/mapEditor/MeChooseUnitPanel.exml",
 		"resource/skins/mapEditor/MeClearPanel.exml",

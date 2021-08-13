@@ -81,9 +81,10 @@ namespace MeUtility {
     function createDefaultTileData(gridIndex: GridIndex, tileBaseType: TileBaseType): ISerialTile {
         return {
             gridIndex,
-            baseType    : tileBaseType,
-            objectType  : TileObjectType.Empty,
-            playerIndex : CommonConstants.WarNeutralPlayerIndex,
+            baseType        : tileBaseType,
+            decoratorType   : undefined,
+            objectType      : TileObjectType.Empty,
+            playerIndex     : CommonConstants.WarNeutralPlayerIndex,
         };
     }
 
@@ -423,8 +424,10 @@ namespace MeUtility {
     function checkIsSymmetrical(tile1: BwTile, tile2: BwTile, symmetryType: SymmetryType): boolean {
         const baseType      = tile1.getBaseType();
         const objectType    = tile1.getObjectType();
+        const decoratorType = tile1.getDecoratorType();
         return (baseType === tile2.getBaseType())
             && (objectType === tile2.getObjectType())
+            && (decoratorType == tile2.getDecoratorType())
             && (ConfigManager.checkIsTileBaseSymmetrical({
                 baseType,
                 shapeId1    : tile1.getBaseShapeId(),
@@ -435,6 +438,12 @@ namespace MeUtility {
                 objectType,
                 shapeId1    : tile1.getObjectShapeId(),
                 shapeId2    : tile2.getObjectShapeId(),
+                symmetryType,
+            }))
+            && (ConfigManager.checkIsTileDecoratorSymmetrical({
+                decoratorType,
+                shapeId1    : tile1.getDecoratorShapeId(),
+                shapeId2    : tile2.getDecoratorShapeId(),
                 symmetryType,
             }));
     }

@@ -111,11 +111,11 @@ namespace TwnsMeChooseTileBasePanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedGroupFill(e: egret.Event): void {
+        private _onTouchedGroupFill(): void {
             this._needFill = !this._needFill;
             this._updateImgFill();
         }
@@ -142,6 +142,10 @@ namespace TwnsMeChooseTileBasePanel {
 
                 const list = typeMap.get(baseType);
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
+                    if ((baseType === Types.TileBaseType.Sea) && (shapeId !== 0)) {
+                        continue;
+                    }
+
                     list.push({
                         baseType,
                         shapeId,
@@ -216,9 +220,11 @@ namespace TwnsMeChooseTileBasePanel {
                 { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
 
-            const tileView = this._tileView;
-            this._conTileView.addChild(tileView.getImgBase());
-            this._conTileView.addChild(tileView.getImgObject());
+            const tileView      = this._tileView;
+            const conTileView   = this._conTileView;
+            conTileView.addChild(tileView.getImgBase());
+            conTileView.addChild(tileView.getImgDecorator());
+            conTileView.addChild(tileView.getImgObject());
             tileView.startRunningView();
         }
 
@@ -232,6 +238,8 @@ namespace TwnsMeChooseTileBasePanel {
             this._tileView.init({
                 tileBaseShapeId     : dataForDrawTileBase.shapeId,
                 tileBaseType        : dataForDrawTileBase.baseType,
+                tileDecoratorType   : null,
+                tileDecoratorShapeId: null,
                 tileObjectShapeId   : null,
                 tileObjectType      : null,
                 playerIndex         : CommonConstants.WarNeutralPlayerIndex,

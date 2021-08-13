@@ -1,6 +1,5 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
-import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -14,35 +13,35 @@ import TwnsMeDrawer             from "../model/MeDrawer";
 import MeModel                  from "../model/MeModel";
 import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
-namespace TwnsMeChooseTileObjectPanel {
-    import DataForDrawTileObject    = TwnsMeDrawer.DataForDrawTileObject;
+namespace TwnsMeChooseTileDecoratorPanel {
+    import DataForDrawTileDecorator = TwnsMeDrawer.DataForDrawTileDecorator;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
-    export class MeChooseTileObjectPanel extends TwnsUiPanel.UiPanel<void> {
+    export class MeChooseTileDecoratorPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: MeChooseTileObjectPanel;
+        private static _instance: MeChooseTileDecoratorPanel;
 
-        private _labelRecentTitle   : TwnsUiLabel.UiLabel;
-        private _listRecent         : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
         private _listCategory       : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private _listRecent         : TwnsUiScrollList.UiScrollList<DataForTileDecoratorRenderer>;
+        private _labelRecentTitle   : TwnsUiLabel.UiLabel;
         private _btnCancel          : TwnsUiButton.UiButton;
 
-        private _dataListForRecent  : DataForTileObjectRenderer[] = [];
+        private _dataListForRecent  : DataForTileDecoratorRenderer[] = [];
 
         public static show(): void {
-            if (!MeChooseTileObjectPanel._instance) {
-                MeChooseTileObjectPanel._instance = new MeChooseTileObjectPanel();
+            if (!MeChooseTileDecoratorPanel._instance) {
+                MeChooseTileDecoratorPanel._instance = new MeChooseTileDecoratorPanel();
             }
-            MeChooseTileObjectPanel._instance.open(undefined);
+            MeChooseTileDecoratorPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (MeChooseTileObjectPanel._instance) {
-                await MeChooseTileObjectPanel._instance.close();
+            if (MeChooseTileDecoratorPanel._instance) {
+                await MeChooseTileDecoratorPanel._instance.close();
             }
         }
 
@@ -51,7 +50,7 @@ namespace TwnsMeChooseTileObjectPanel {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeChooseTileObjectPanel.exml";
+            this.skinName = "resource/skins/mapEditor/MeChooseTileDecoratorPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -61,27 +60,26 @@ namespace TwnsMeChooseTileObjectPanel {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
             ]);
-            this._listRecent.setItemRenderer(TileObjectRenderer);
             this._listCategory.setItemRenderer(CategoryRenderer);
+            this._listRecent.setItemRenderer(TileDecoratorRenderer);
 
             this._updateComponentsForLanguage();
 
+            this._updateListTileDecorator();
             this._updateListRecent();
-            this._updateListCategory();
         }
 
-        public updateOnChooseTileObject(data: DataForDrawTileObject): void {
+        public updateOnChooseTileDecorator(data: DataForDrawTileDecorator): void {
             const dataList      = this._dataListForRecent;
             const filteredList  = dataList.filter(v => {
-                const oldData = v.dataForDrawTileObject;
-                return (oldData.objectType != data.objectType)
-                    || (oldData.playerIndex != data.playerIndex)
+                const oldData = v.dataForDrawTileDecorator;
+                return (oldData.decoratorType != data.decoratorType)
                     || (oldData.shapeId != data.shapeId);
             });
             dataList.length     = 0;
             dataList[0]         = {
-                dataForDrawTileObject   : data,
-                panel                   : this,
+                dataForDrawTileDecorator : data,
+                panel               : this,
             };
             for (const v of filteredList) {
                 if (dataList.length < MAX_RECENT_COUNT) {
@@ -109,28 +107,29 @@ namespace TwnsMeChooseTileObjectPanel {
         }
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
-            const mapping = new Map<number, DataForDrawTileObject[]>();
-            for (const [objectType, cfg] of CommonConstants.TileObjectShapeConfigs) {
-                for (let playerIndex = cfg.minPlayerIndex; playerIndex <= cfg.maxPlayerIndex; ++playerIndex) {
-                    if (!mapping.has(playerIndex)) {
-                        mapping.set(playerIndex, []);
+            const typeMap = new Map<number, DataForDrawTileDecorator[]>();
+            for (const [decoratorType, cfg] of CommonConstants.TileDecoratorShapeConfigs) {
+                if (!typeMap.has(decoratorType)) {
+                    typeMap.set(decoratorType, []);
+                }
+
+                const list = typeMap.get(decoratorType);
+                for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
+                    if ((decoratorType === Types.TileDecoratorType.Corner) && (shapeId === 0)) {
+                        continue;
                     }
 
-                    const dataListForDrawTileObject = mapping.get(playerIndex);
-                    for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                        dataListForDrawTileObject.push({
-                            objectType,
-                            playerIndex,
-                            shapeId
-                        });
-                    }
+                    list.push({
+                        decoratorType,
+                        shapeId,
+                    });
                 }
             }
 
             const dataList: DataForCategoryRenderer[] = [];
-            for (const [, dataListForDrawTileObject] of mapping) {
+            for (const [, dataListForDrawTileDecorator] of typeMap) {
                 dataList.push({
-                    dataListForDrawTileObject,
+                    dataListForDrawTileDecorator,
                     panel                       : this,
                 });
             }
@@ -138,9 +137,8 @@ namespace TwnsMeChooseTileObjectPanel {
             return dataList;
         }
 
-        private _updateListCategory(): void {
-            const dataList = this._createDataForListCategory();
-            this._listCategory.bindData(dataList);
+        private _updateListTileDecorator(): void {
+            this._listCategory.bindData(this._createDataForListCategory());
             this._listCategory.scrollVerticalTo(0);
         }
 
@@ -151,43 +149,43 @@ namespace TwnsMeChooseTileObjectPanel {
     }
 
     type DataForCategoryRenderer = {
-        dataListForDrawTileObject   : DataForDrawTileObject[];
-        panel                       : MeChooseTileObjectPanel;
+        dataListForDrawTileDecorator: DataForDrawTileDecorator[];
+        panel                       : MeChooseTileDecoratorPanel;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
-        private _labelCategory  : TwnsUiLabel.UiLabel;
-        private _listTileObject : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
+        private _labelCategory      : TwnsUiLabel.UiLabel;
+        private _listTileDecorator  : TwnsUiScrollList.UiScrollList<DataForTileDecoratorRenderer>;
 
         protected _onOpened(): void {
-            this._listTileObject.setItemRenderer(TileObjectRenderer);
-            this._listTileObject.setScrollPolicyH(eui.ScrollPolicy.OFF);
+            this._listTileDecorator.setItemRenderer(TileDecoratorRenderer);
+            this._listTileDecorator.setScrollPolicyH(eui.ScrollPolicy.OFF);
         }
 
         protected _onDataChanged(): void {
-            const data                      = this.data;
-            const dataListForDrawTileObject = data.dataListForDrawTileObject;
-            this._labelCategory.text        = Lang.getPlayerForceName(dataListForDrawTileObject[0].playerIndex);
+            const data                          = this.data;
+            const dataListForDrawTileDecorator  = data.dataListForDrawTileDecorator;
+            this._labelCategory.text            = Lang.getTileDecoratorName(dataListForDrawTileDecorator[0].decoratorType);
 
-            const dataListForTileObject : DataForTileObjectRenderer[] = [];
-            const panel                 = data.panel;
-            for (const dataForDrawTileObject of dataListForDrawTileObject) {
-                dataListForTileObject.push({
+            const dataListForTileDecorator  : DataForTileDecoratorRenderer[] = [];
+            const panel                     = data.panel;
+            for (const dataForDrawTileDecorator of dataListForDrawTileDecorator) {
+                dataListForTileDecorator.push({
                     panel,
-                    dataForDrawTileObject,
+                    dataForDrawTileDecorator,
                 });
             }
-            this._listTileObject.bindData(dataListForTileObject);
+            this._listTileDecorator.bindData(dataListForTileDecorator);
         }
     }
 
-    type DataForTileObjectRenderer = {
-        dataForDrawTileObject   : DataForDrawTileObject;
-        panel                   : MeChooseTileObjectPanel;
+    type DataForTileDecoratorRenderer = {
+        dataForDrawTileDecorator : DataForDrawTileDecorator;
+        panel               : MeChooseTileDecoratorPanel;
     };
-    class TileObjectRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileObjectRenderer> {
+    class TileDecoratorRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileDecoratorRenderer> {
         private _group          : eui.Group;
-        private _labelName      : TwnsUiLabel.UiLabel;
         private _conTileView    : eui.Group;
+        private _labelName      : TwnsUiLabel.UiLabel;
 
         private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
@@ -209,31 +207,33 @@ namespace TwnsMeChooseTileObjectPanel {
         }
 
         protected _onDataChanged(): void {
-            const data                  = this.data;
-            const dataForDrawTileObject = data.dataForDrawTileObject;
-            const tileObjectType        = dataForDrawTileObject.objectType;
-            this._labelName.text        = Lang.getTileName(ConfigManager.getTileType(Types.TileBaseType.Plain, tileObjectType));
-            this._tileView.init({
-                tileObjectType,
-                tileObjectShapeId   : dataForDrawTileObject.shapeId,
+            const data                      = this.data;
+            const dataForDrawTileDecorator  = data.dataForDrawTileDecorator;
+            const shapeId                   = dataForDrawTileDecorator.shapeId;
+            this._labelName.text            = `${shapeId}`;
+
+            const tileView = this._tileView;
+            tileView.init({
                 tileBaseShapeId     : null,
                 tileBaseType        : null,
-                tileDecoratorType   : null,
-                tileDecoratorShapeId: null,
-                playerIndex         : dataForDrawTileObject.playerIndex,
+                tileDecoratorType   : dataForDrawTileDecorator.decoratorType,
+                tileDecoratorShapeId: shapeId,
+                tileObjectShapeId   : null,
+                tileObjectType      : null,
+                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
             });
-            this._tileView.updateView();
+            tileView.updateView();
         }
 
         public onItemTapEvent(): void {
-            const data                  = this.data;
-            const panel                 = data.panel;
-            const dataForDrawTileObject = data.dataForDrawTileObject;
-            panel.updateOnChooseTileObject(dataForDrawTileObject);
+            const data                      = this.data;
+            const panel                     = data.panel;
+            const dataForDrawTileDecorator  = data.dataForDrawTileDecorator;
+            panel.updateOnChooseTileDecorator(dataForDrawTileDecorator);
             panel.close();
-            MeModel.getWar().getDrawer().setModeDrawTileObject(dataForDrawTileObject);
+            MeModel.getWar().getDrawer().setModeDrawTileDecorator(dataForDrawTileDecorator);
         }
     }
 }
 
-export default TwnsMeChooseTileObjectPanel;
+export default TwnsMeChooseTileDecoratorPanel;

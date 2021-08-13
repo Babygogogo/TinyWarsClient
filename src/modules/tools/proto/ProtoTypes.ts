@@ -7502,6 +7502,12 @@ export declare namespace WarSerialization {
 
         /** SerialTile currentCapturePoint */
         currentCapturePoint?: (number|null);
+
+        /** SerialTile decoratorType */
+        decoratorType?: (number|null);
+
+        /** SerialTile decoratorShapeId */
+        decoratorShapeId?: (number|null);
     }
 
     /** Represents a SerialTile. */
@@ -7539,6 +7545,12 @@ export declare namespace WarSerialization {
 
         /** SerialTile currentCapturePoint. */
         public currentCapturePoint: number;
+
+        /** SerialTile decoratorType. */
+        public decoratorType: number;
+
+        /** SerialTile decoratorShapeId. */
+        public decoratorShapeId: number;
 
         /**
          * Creates a new SerialTile instance using the specified properties.

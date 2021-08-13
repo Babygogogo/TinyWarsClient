@@ -68,6 +68,7 @@ namespace TwnsWarMapView {
 
     class TileMapView extends egret.DisplayObjectContainer {
         private readonly _baseLayer             = new TileBaseLayer();
+        private readonly _decoratorLayer        = new TileDecoratorLayer();
         private readonly _gridBorderLayer       = new egret.DisplayObjectContainer();
         private readonly _objectLayer           = new TileObjectLayer();
 
@@ -81,6 +82,7 @@ namespace TwnsWarMapView {
 
             this._gridBorderLayer.alpha = 0.3;
             this.addChild(this._baseLayer);
+            this.addChild(this._decoratorLayer);
             this.addChild(this._gridBorderLayer);
             this.addChild(this._objectLayer);
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
@@ -88,6 +90,7 @@ namespace TwnsWarMapView {
 
         public showTileMap(dataList: ISerialTile[], players?: ISerialPlayer[]): void {
             this._baseLayer.updateWithTileDataList(dataList, players);
+            this._decoratorLayer.updateWithTileDataList(dataList, players);
             this._objectLayer.updateWithTileDataList(dataList, players);
             this._resetGridBorderLayer(dataList);
         }
@@ -95,24 +98,25 @@ namespace TwnsWarMapView {
             this.showTileMap([]);
         }
 
-        private _onAddedToStage(e: egret.Event): void {
+        private _onAddedToStage(): void {
             this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
             Notify.addEventListeners(this._notifyListenerArray, this);
         }
-        private _onRemovedFromStage(e: egret.Event): void {
+        private _onRemovedFromStage(): void {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
             Notify.removeEventListeners(this._notifyListenerArray, this);
         }
-        private _onNotifyTileAnimationTick(e: egret.Event): void {
+        private _onNotifyTileAnimationTick(): void {
             this._baseLayer.updateViewOnTick();
+            this._decoratorLayer.updateViewOnTick();
             this._objectLayer.updateViewOnTick();
         }
 
-        private _onNotifyIsShowGridBorderChanged(e: egret.Event): void {
+        private _onNotifyIsShowGridBorderChanged(): void {
             this._updateGridBorderLayerVisible();
         }
 
@@ -248,6 +252,25 @@ namespace TwnsWarMapView {
         }
     }
 
+    class TileDecoratorLayer extends TileLayerBase {
+        protected _getImageSource(tileData: ISerialTile, tickCount: number): string {
+            return tileData == null
+                ? undefined
+                : CommonModel.getCachedTileDecoratorImageSource({
+                    version         : UserModel.getSelfSettingsTextureVersion(),
+                    decoratorType   : tileData.decoratorType,
+                    shapeId         : tileData.decoratorShapeId,
+                    isDark          : false,
+                    skinId          : CommonConstants.UnitAndTileNeutralSkinId,
+                    tickCount,
+                });
+        }
+
+        protected _getImageY(gridY: number): number {
+            return GRID_HEIGHT * gridY;
+        }
+    }
+
     class TileObjectLayer extends TileLayerBase {
         protected _getImageSource(tileData: Types.WarMapTileViewData, tickCount: number): string {
             return tileData == null
@@ -319,19 +342,19 @@ namespace TwnsWarMapView {
             this._unitViews.length = 0;
         }
 
-        private _onAddedToStage(e: egret.Event): void {
+        private _onAddedToStage(): void {
             this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
             Notify.addEventListeners(this._notifyListenerArray, this);
         }
-        private _onRemovedFromStage(e: egret.Event): void {
+        private _onRemovedFromStage(): void {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
             Notify.removeEventListeners(this._notifyListenerArray, this);
         }
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
+        private _onNotifyUnitAnimationTick(): void {
             const tickCount = Timer.getUnitAnimationTickCount();
             for (const view of this._unitViews) {
                 view.updateOnAnimationTick(tickCount);

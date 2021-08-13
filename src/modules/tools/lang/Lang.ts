@@ -123,6 +123,14 @@ namespace Lang {
         }
     }
 
+    export function getTileDecoratorName(decoratorType: Types.TileDecoratorType): string | undefined {
+        switch (decoratorType) {
+            case Types.TileDecoratorType.Corner : return getText(LangTextType.B0663);
+            case Types.TileDecoratorType.Empty  : return getText(LangTextType.B0001);
+            default                             : return undefined;
+        }
+    }
+
     export function getUnitName(unitType: Types.UnitType): string | undefined {
         switch (unitType) {
             case Types.UnitType.Infantry        : return getText(LangTextType.B1200);
@@ -282,13 +290,14 @@ namespace Lang {
 
     export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string | undefined{
         switch (mode) {
-            case Types.MapEditorDrawerMode.Preview          : return getText(LangTextType.B0286);
-            case Types.MapEditorDrawerMode.DrawUnit         : return getText(LangTextType.B0281);
-            case Types.MapEditorDrawerMode.DrawTileBase     : return getText(LangTextType.B0282);
-            case Types.MapEditorDrawerMode.DrawTileObject   : return getText(LangTextType.B0283);
-            case Types.MapEditorDrawerMode.DeleteUnit       : return getText(LangTextType.B0284);
-            case Types.MapEditorDrawerMode.DeleteTileObject : return getText(LangTextType.B0285);
-            default                                         : return undefined;
+            case Types.MapEditorDrawerMode.Preview              : return getText(LangTextType.B0286);
+            case Types.MapEditorDrawerMode.DrawUnit             : return getText(LangTextType.B0281);
+            case Types.MapEditorDrawerMode.DrawTileBase         : return getText(LangTextType.B0282);
+            case Types.MapEditorDrawerMode.DrawTileObject       : return getText(LangTextType.B0283);
+            case Types.MapEditorDrawerMode.DeleteUnit           : return getText(LangTextType.B0284);
+            case Types.MapEditorDrawerMode.DeleteTileDecorator  : return getText(LangTextType.B0661);
+            case Types.MapEditorDrawerMode.DeleteTileObject     : return getText(LangTextType.B0285);
+            default                                             : return undefined;
         }
     }
 

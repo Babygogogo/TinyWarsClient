@@ -15,27 +15,30 @@ import TwnsBwUnit           from "./BwUnit";
 import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwTile {
-    import TileType         = Types.TileType;
-    import TileObjectType   = Types.TileObjectType;
-    import TileBaseType     = Types.TileBaseType;
-    import TileTemplateCfg  = Types.TileTemplateCfg;
-    import UnitCategory     = Types.UnitCategory;
-    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnit           = TwnsBwUnit.BwUnit;
-    import BwTileView       = TwnsBwTileView.BwTileView;
-    import BwWar            = TwnsBwWar.BwWar;
+    import TileType             = Types.TileType;
+    import TileObjectType       = Types.TileObjectType;
+    import TileDecoratorType    = Types.TileDecoratorType;
+    import TileBaseType         = Types.TileBaseType;
+    import TileTemplateCfg      = Types.TileTemplateCfg;
+    import UnitCategory         = Types.UnitCategory;
+    import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import BwUnit               = TwnsBwUnit.BwUnit;
+    import BwTileView           = TwnsBwTileView.BwTileView;
+    import BwWar                = TwnsBwWar.BwWar;
 
     export class BwTile {
         private _templateCfg?           : TileTemplateCfg;
         private _gridX?                 : number;
         private _gridY?                 : number;
         private _playerIndex?           : number;
-        private _baseType?              : Types.TileBaseType;
+        private _baseType?              : TileBaseType;
+        private _decoratorType?         : TileDecoratorType | null;
         private _objectType?            : TileObjectType;
 
         private _baseShapeId?           : number | null;
         private _objectShapeId?         : number | null;
+        private _decoratorShapeId?      : number | null;
         private _currentHp?             : number;
         private _currentBuildPoint?     : number;
         private _currentCapturePoint?   : number;
@@ -68,7 +71,7 @@ namespace TwnsBwTile {
         public deserialize(data: ISerialTile, configVersion: string): ClientErrorCode {
             const gridIndex = GridIndexHelpers.convertGridIndex(data.gridIndex);
             if (gridIndex == null) {
-                return ClientErrorCode.BwTileDeserialize00;
+                return ClientErrorCode.BwTile_Deserialize_00;
             }
 
             const gridX = gridIndex.x;
@@ -77,46 +80,46 @@ namespace TwnsBwTile {
                 (gridY < 0)                                                 ||
                 ((gridX + 1) * (gridY + 1) > CommonConstants.MapMaxGridsCount)
             ) {
-                return ClientErrorCode.BwTileDeserialize01;
+                return ClientErrorCode.BwTile_Deserialize_01;
             }
 
             const objectType = data.objectType as TileObjectType;
             if (objectType == null) {
-                return ClientErrorCode.BwTileDeserialize02;
+                return ClientErrorCode.BwTile_Deserialize_02;
             }
 
             const baseType = data.baseType as TileBaseType;
             if (baseType == null) {
-                return ClientErrorCode.BwTileDeserialize03;
+                return ClientErrorCode.BwTile_Deserialize_03;
             }
 
             const playerIndex = data.playerIndex;
             if ((playerIndex == null)                                                           ||
                 (!ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType))
             ) {
-                return ClientErrorCode.BwTileDeserialize04;
+                return ClientErrorCode.BwTile_Deserialize_04;
             }
 
             const templateCfg = ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType);
             if (templateCfg == null) {
-                return ClientErrorCode.BwTileDeserialize05;
+                return ClientErrorCode.BwTile_Deserialize_05;
             }
 
             if (ConfigManager.getMoveCostCfg(configVersion, baseType, objectType) == null) {
-                return ClientErrorCode.BwTileDeserialize06;
+                return ClientErrorCode.BwTile_Deserialize_06;
             }
 
             const maxBuildPoint     = templateCfg.maxBuildPoint;
             const currentBuildPoint = data.currentBuildPoint;
             if (maxBuildPoint == null) {
                 if (currentBuildPoint != null) {
-                    return ClientErrorCode.BwTileDeserialize07;
+                    return ClientErrorCode.BwTile_Deserialize_07;
                 }
             } else {
                 if ((currentBuildPoint != null)                                     &&
                     ((currentBuildPoint > maxBuildPoint) || (currentBuildPoint < 0))
                 ) {
-                    return ClientErrorCode.BwTileDeserialize08;
+                    return ClientErrorCode.BwTile_Deserialize_08;
                 }
             }
 
@@ -124,13 +127,13 @@ namespace TwnsBwTile {
             const currentCapturePoint   = data.currentCapturePoint;
             if (maxCapturePoint == null) {
                 if (currentCapturePoint != null) {
-                    return ClientErrorCode.BwTileDeserialize09;
+                    return ClientErrorCode.BwTile_Deserialize_09;
                 }
             } else {
                 if ((currentCapturePoint != null)                                       &&
                     ((currentCapturePoint > maxCapturePoint) || (currentCapturePoint < 0))
                 ) {
-                    return ClientErrorCode.BwTileDeserialize10;
+                    return ClientErrorCode.BwTile_Deserialize_10;
                 }
             }
 
@@ -138,35 +141,43 @@ namespace TwnsBwTile {
             const currentHp = data.currentHp;
             if (maxHp == null) {
                 if (currentHp != null) {
-                    return ClientErrorCode.BwTileDeserialize11;
+                    return ClientErrorCode.BwTile_Deserialize_11;
                 }
             } else {
                 if ((currentHp != null)                     &&
                     ((currentHp > maxHp) || (currentHp < 0))
                 ) {
-                    return ClientErrorCode.BwTileDeserialize12;
+                    return ClientErrorCode.BwTile_Deserialize_12;
                 }
             }
 
             const baseShapeId = data.baseShapeId;
             if (!ConfigManager.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
-                return ClientErrorCode.BwTileDeserialize13;
+                return ClientErrorCode.BwTile_Deserialize_13;
             }
 
             const objectShapeId = data.objectShapeId;
             if (!ConfigManager.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
-                return ClientErrorCode.BwTileDeserialize14;
+                return ClientErrorCode.BwTile_Deserialize_14;
+            }
+
+            const decoratorType     = data.decoratorType;
+            const decoratorShapeId  = data.decoratorShapeId;
+            if (!ConfigManager.checkIsValidTileDecoratorShapeId(decoratorType, decoratorShapeId)) {
+                return ClientErrorCode.BwTile_Deserialize_15;
             }
 
             this._setTemplateCfg(templateCfg);
             this._setGridX(gridX);
             this._setGridY(gridY);
             this._setBaseType(baseType);
+            this._setDecoratorType(decoratorType);
             this._setObjectType(objectType);
             this._setPlayerIndex(playerIndex);
 
             this._setBaseShapeId(baseShapeId);
             this._setObjectShapeId(objectShapeId);
+            this._setDecoratorShapeId(decoratorShapeId);
             this.setCurrentHp(getRevisedCurrentHp(currentHp, templateCfg));
             this.setCurrentBuildPoint(getRevisedCurrentBuildPoint(currentBuildPoint, templateCfg));
             this.setCurrentCapturePoint(getRevisedCurrentCapturePoint(currentCapturePoint, templateCfg));
@@ -219,6 +230,12 @@ namespace TwnsBwTile {
 
             const objectShapeId = this.getObjectShapeId();
             (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
+
+            const decoratorType = this.getDecoratorType();
+            (decoratorType !== TileDecoratorType.Empty) && (data.decoratorType = decoratorType);
+
+            const decoratorShapeId = this.getDecoratorShapeId();
+            (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
 
             return data;
         }
@@ -277,6 +294,12 @@ namespace TwnsBwTile {
 
                 const objectShapeId = this.getObjectShapeId();
                 (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
+
+                const decoratorType = this.getDecoratorType();
+                (decoratorType !== TileDecoratorType.Empty) && (data.decoratorType = decoratorType);
+
+                const decoratorShapeId = this.getDecoratorShapeId();
+                (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
 
                 return data;
             }
@@ -351,6 +374,13 @@ namespace TwnsBwTile {
             return this._objectType;
         }
 
+        private _setDecoratorType(decoratorType: TileDecoratorType | null | undefined): void {
+            this._decoratorType = decoratorType;
+        }
+        public getDecoratorType(): TileDecoratorType | null | undefined {
+            return this._decoratorType;
+        }
+
         private _setBaseShapeId(id: number | null | undefined): void {
             this._baseShapeId = id;
         }
@@ -363,6 +393,13 @@ namespace TwnsBwTile {
         }
         public getObjectShapeId(): number {
             return this._objectShapeId || 0;
+        }
+
+        private _setDecoratorShapeId(id: number | null | undefined): void {
+            this._decoratorShapeId = id;
+        }
+        public getDecoratorShapeId(): number | null | undefined {
+            return this._decoratorShapeId;
         }
 
         public getSkinId(): number | undefined {
@@ -638,13 +675,18 @@ namespace TwnsBwTile {
                 playerIndex,
                 baseShapeId     : baseType === this.getBaseType() ? this.getBaseShapeId() : null,
                 objectShapeId   : objectType === this.getObjectType() ? this.getObjectShapeId() : null,
+                decoratorType   : this.getDecoratorType(),
+                decoratorShapeId: this.getDecoratorShapeId(),
             }, configVersion)) {
                 Logger.error(`BwTile.resetByTypeAndPlayerIndex() failed to init!`);
                 return undefined;
             }
             this.startRunning(war);
         }
-
+        public deleteTileDecorator(): void {
+            this._setDecoratorType(null);
+            this._setDecoratorShapeId(null);
+        }
         public destroyTileObject(): void {
             const tileBaseType = this.getBaseType();
             if (tileBaseType == null) {

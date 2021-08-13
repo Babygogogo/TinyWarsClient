@@ -778,9 +778,11 @@ namespace TwnsMeWarMenuPanel {
                 { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
 
-            const tileView = this._tileView;
-            this._conTileView.addChild(tileView.getImgBase());
-            this._conTileView.addChild(tileView.getImgObject());
+            const tileView      = this._tileView;
+            const conTileView   = this._conTileView;
+            conTileView.addChild(tileView.getImgBase());
+            conTileView.addChild(tileView.getImgDecorator());
+            conTileView.addChild(tileView.getImgObject());
             tileView.startRunningView();
         }
 
@@ -794,6 +796,8 @@ namespace TwnsMeWarMenuPanel {
             this._tileView.init({
                 tileBaseType        : data.baseType,
                 tileBaseShapeId     : 0,
+                tileDecoratorType   : null,
+                tileDecoratorShapeId: null,
                 tileObjectType      : data.objectType,
                 tileObjectShapeId   : 0,
                 playerIndex         : data.playerIndex,

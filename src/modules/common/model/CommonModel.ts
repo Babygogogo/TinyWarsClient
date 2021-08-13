@@ -8,6 +8,7 @@ import UserModel        from "../../user/model/UserModel";
 namespace CommonModel {
     import UnitType             = Types.UnitType;
     import TileBaseType         = Types.TileBaseType;
+    import TileDecoratorType    = Types.TileDecoratorType;
     import TileObjectType       = Types.TileObjectType;
     import TextureVersion       = Types.UnitAndTileTextureVersion;
     import IDataForPlayerRank   = ProtoTypes.Structure.IDataForPlayerRank;
@@ -20,6 +21,7 @@ namespace CommonModel {
     let _unitAndTileTexturePrefix       = `v01_`;
     const _unitImageSourceDict          = new Map<TextureVersion, Map<boolean, Map<boolean, Map<number, Map<UnitType, FrameCfg>>>>>();
     const _tileBaseImageSourceDict      = new Map<TextureVersion, Map<number, Map<TileBaseType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
+    const _tileDecoratorImageSourceDict = new Map<TextureVersion, Map<number, Map<TileDecoratorType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
     const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<number, Map<TileObjectType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
 
     let _rankList: IDataForPlayerRank[];
@@ -44,6 +46,7 @@ namespace CommonModel {
 
     export function tickTileImageSources(): void {
         _tileBaseImageSourceDict.clear();
+        _tileDecoratorImageSourceDict.clear();
         _tileObjectImageSourceDict.clear();
     }
 
@@ -140,6 +143,61 @@ namespace CommonModel {
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
             cfg.source  = ConfigManager.getTileBaseImageSource(params);
+        }
+        return cfg.source;
+    }
+
+    export function getCachedTileDecoratorImageSource(
+        params: {
+            version         : TextureVersion;
+            skinId          : number;
+            decoratorType   : TileDecoratorType;
+            isDark          : boolean;
+            shapeId         : number;
+            tickCount       : number;
+        },
+    ): string | undefined {
+        const { version, skinId, decoratorType, isDark, shapeId, tickCount } = params;
+        if ((decoratorType == null)                     ||
+            (decoratorType === TileDecoratorType.Empty) ||
+            (shapeId == null)
+        ) {
+            return undefined;
+        }
+
+        if (!_tileDecoratorImageSourceDict.has(version)) {
+            _tileDecoratorImageSourceDict.set(version, new Map());
+        }
+        const dict1 = _tileDecoratorImageSourceDict.get(version);
+
+        if (!dict1.has(skinId)) {
+            dict1.set(skinId, new Map());
+        }
+        const dict2 = dict1.get(skinId);
+
+        if (!dict2.has(decoratorType)) {
+            dict2.set(decoratorType, new Map());
+        }
+        const dict3 = dict2.get(decoratorType);
+
+        if (!dict3.has(isDark)) {
+            dict3.set(isDark, new Map());
+        }
+        const dict4 = dict3.get(isDark);
+
+        if (!dict4.has(shapeId)) {
+            dict4.set(shapeId, new Map());
+        }
+        const dict5 = dict4.get(shapeId);
+
+        if (!dict5.has(tickCount)) {
+            dict5.set(tickCount, { source: undefined, tick: undefined });
+        }
+        const cfg = dict5.get(tickCount);
+
+        if (cfg.tick !== tickCount) {
+            cfg.tick    = tickCount;
+            cfg.source  = ConfigManager.getTileDecoratorImageSource(params);
         }
         return cfg.source;
     }

@@ -306,6 +306,11 @@ namespace Types {
     }
 
     // eslint-disable-next-line no-shadow
+    export enum TileDecoratorType {
+        Empty,  /* 0 */             Corner,  /* 1 */
+    }
+
+    // eslint-disable-next-line no-shadow
     export enum TileObjectType {
         Empty,        /* 0 */             Road,         /* 1 */             Bridge,       /* 2 */             Wood,         /* 3 */
         Mountain,     /* 4 */             Wasteland,    /* 5 */             Ruins,        /* 6 */             Fire,         /* 7 */
@@ -547,8 +552,10 @@ namespace Types {
         Preview,
         DrawUnit,
         DrawTileBase,
+        DrawTileDecorator,
         DrawTileObject,
         DeleteUnit,
+        DeleteTileDecorator,
         DeleteTileObject,
     }
 
