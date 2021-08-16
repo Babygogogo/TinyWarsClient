@@ -481,69 +481,166 @@ namespace WarEventHelper {
         }
         const mapSize: Types.MapSize = { width: mapWidth, height: mapHeight };
 
-        if (action.WeaAddUnit) {
-            const { unitArray } = action.WeaAddUnit;
-            if ((unitArray == null)                                              ||
-                (unitArray.length <= 0)                                          ||
-                (unitArray.length > CommonConstants.WarEventActionAddUnitMaxCount)
-            ) {
-                return false;
+        {
+            const actionData = action.WeaAddUnit;
+            if (actionData) {
+                return checkIsValidWeaAddUnit(actionData, configVersion, mapSize);
             }
+        }
 
-            for (const data of unitArray) {
-                const {
-                    needMovableTile,
-                    canBeBlockedByUnit,
-                    unitData,
-                } = data;
-                if ((needMovableTile == null) || (canBeBlockedByUnit == null) || (unitData == null)) {
-                    return false;
-                }
-
-                if (unitData.loaderUnitId != null) {
-                    return false;
-                }
-
-                if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
-                    unitData,
-                    playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
-                    configVersion,
-                    mapSize,
-                })) {
-                    return false;
-                }
+        {
+            const actionData = action.WeaSetPlayerAliveState;
+            if (actionData) {
+                return checkIsValidWeaSetPlayerAliveState(actionData);
             }
+        }
 
-            return true;
-
-        } else if (action.WeaSetPlayerAliveState) {
-            const actionData    = action.WeaSetPlayerAliveState;
-            const playerIndex   = actionData.playerIndex;
-            if ((playerIndex == null)                                   ||
-                (playerIndex === CommonConstants.WarNeutralPlayerIndex) ||
-                (playerIndex > CommonConstants.WarMaxPlayerIndex)
-            ) {
-                return false;
+        {
+            const actionData = action.WeaDialogue;
+            if (actionData) {
+                return checkIsValidWeaDialogue(actionData);
             }
-
-            const playerAliveState: PlayerAliveState | null | undefined = actionData.playerAliveState;
-            if (playerAliveState == null) {
-                return false;
-            }
-            if ((playerAliveState !== PlayerAliveState.Alive) &&
-                (playerAliveState !== PlayerAliveState.Dying) &&
-                (playerAliveState !== PlayerAliveState.Dead)
-            ) {
-                return false;
-            }
-
-            return true;
         }
 
         // TODO add more checkers when the action types grow.
 
         return false;
     }
+    function checkIsValidWeaAddUnit(action: ProtoTypes.WarEvent.IWeaAddUnit, configVersion: string, mapSize: Types.MapSize): boolean {
+        const { unitArray } = action;
+        if ((unitArray == null)                                              ||
+            (unitArray.length <= 0)                                          ||
+            (unitArray.length > CommonConstants.WarEventActionAddUnitMaxCount)
+        ) {
+            return false;
+        }
+
+        for (const data of unitArray) {
+            const {
+                needMovableTile,
+                canBeBlockedByUnit,
+                unitData,
+            } = data;
+            if ((needMovableTile == null) || (canBeBlockedByUnit == null) || (unitData == null)) {
+                return false;
+            }
+
+            if (unitData.loaderUnitId != null) {
+                return false;
+            }
+
+            if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+                unitData,
+                playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
+                configVersion,
+                mapSize,
+            })) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    function checkIsValidWeaSetPlayerAliveState(actionData: ProtoTypes.WarEvent.IWeaSetPlayerAliveState): boolean {
+        const playerIndex   = actionData.playerIndex;
+        if ((playerIndex == null)                                   ||
+            (playerIndex === CommonConstants.WarNeutralPlayerIndex) ||
+            (playerIndex > CommonConstants.WarMaxPlayerIndex)
+        ) {
+            return false;
+        }
+
+        const playerAliveState: Types.PlayerAliveState | null | undefined = actionData.playerAliveState;
+        if (playerAliveState == null) {
+            return false;
+        }
+        if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
+            (playerAliveState !== Types.PlayerAliveState.Dying) &&
+            (playerAliveState !== Types.PlayerAliveState.Dead)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaDialogue(action: ProtoTypes.WarEvent.IWeaDialogue): boolean {
+        const dataArray = action.dataArray;
+        if (dataArray == null) {
+            return false;
+        }
+
+        const dialogueCount = dataArray.length;
+        if ((dialogueCount <= 0) || (dialogueCount > CommonConstants.WarEventActionDialogueMaxCount)) {
+            return false;
+        }
+
+        for (const data of dataArray) {
+            if (Object.keys(data).length !== 1) {
+                return false;
+            }
+
+            {
+                const subData = data.dataForCoDialogue;
+                if ((subData) && (!checkIsValidDataForCoDialogue(subData))) {
+                    return false;
+                }
+            }
+
+            {
+                const subData = data.dataForNeutralDialogue;
+                if ((subData) && (!checkIsValidDataForNeutralDialogue(subData))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    function checkIsValidDataForCoDialogue(data: ProtoTypes.WarEvent.WeaDialogue.IDataForCoDialogue): boolean {
+        const configVersion = ConfigManager.getLatestFormalVersion();
+        if (configVersion == null) {
+            return false;
+        }
+
+        const coId = data.coId;
+        if ((coId == null)                                          ||
+            (coId === CommonConstants.CoEmptyId)                    ||
+            (ConfigManager.getCoBasicCfg(configVersion, coId) == null)
+        ) {
+            return false;
+        }
+
+        const side = data.side;
+        if ((side !== Types.WarEventActionDialogueSide.Left) &&
+            (side !== Types.WarEventActionDialogueSide.Right)
+        ) {
+            return false;
+        }
+
+        if (!Helpers.checkIsValidLanguageTextArray({
+            list            : data.textArray,
+            minTextLength   : 1,
+            maxTextLength   : CommonConstants.WarEventActionDialogueTextMaxLength,
+            minTextCount    : 1,
+        })) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidDataForNeutralDialogue(data: ProtoTypes.WarEvent.WeaDialogue.IDataForNeutralDialogue): boolean {
+        if (!Helpers.checkIsValidLanguageTextArray({
+            list            : data.textArray,
+            minTextLength   : 1,
+            maxTextLength   : CommonConstants.WarEventActionDialogueTextMaxLength,
+            minTextCount    : 1,
+        })) {
+            return false;
+        }
+
+        return true;
+    }
+
     function checkIsValidWarEventCondition({ condition, eventDict }: {  // DONE
         condition   : IWarEventCondition;
         eventDict   : WarEventDict;

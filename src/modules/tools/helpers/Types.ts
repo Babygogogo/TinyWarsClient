@@ -693,6 +693,12 @@ namespace Types {
         Zoned       = 1,
         Global      = 2,
     }
+
+    // eslint-disable-next-line no-shadow
+    export enum WarEventActionDialogueSide {
+        Left    = 1,
+        Right   = 2,
+    }
 }
 
 export default Types;

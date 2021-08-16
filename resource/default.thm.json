@@ -4,6 +4,8 @@
 	"exmls": [
 		"resource/skins/baseWar/BwBackgroundPanel.exml",
 		"resource/skins/baseWar/BwBuildingListPanel.exml",
+		"resource/skins/component/button/ButtonGrey001.exml",
+		"resource/skins/baseWar/BwDialoguePanel.exml",
 		"resource/skins/component/button/ButtonSelfAdaption001.exml",
 		"resource/skins/baseWar/BwProduceUnitPanel.exml",
 		"resource/skins/baseWar/BwTileBriefPanel.exml",
@@ -19,7 +21,6 @@
 		"resource/skins/changeLog/ChangeLogModifyPanel.exml",
 		"resource/skins/component/button/ButtonClose001.exml",
 		"resource/skins/changeLog/ChangeLogPanel.exml",
-		"resource/skins/component/button/ButtonGrey001.exml",
 		"resource/skins/component/button/ButtonYellow001.exml",
 		"resource/skins/chat/ChatPanel.exml",
 		"resource/skins/common/CommonAlertPanel.exml",

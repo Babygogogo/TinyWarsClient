@@ -942,6 +942,10 @@ namespace TwnsLangCommonText {
             `您确定要继续吗？`,
             `Are you sure to continue?`,
         ],
+        [LangTextType.A0226]: [
+            `您确定要跳过剧情吗？`,
+            `Are you sure to skip the story?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3589,6 +3593,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B0664]: [
             `地形装饰物`,
             `Tile Decorator`,
+        ],
+        [LangTextType.B0665]: [
+            `跳过`,
+            `Skip`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
