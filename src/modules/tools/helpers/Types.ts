@@ -650,6 +650,7 @@ namespace Types {
     export enum WarEventActionType {
         AddUnit,
         SetPlayerAliveState,
+        Dialogue,
     }
 
     // eslint-disable-next-line no-shadow

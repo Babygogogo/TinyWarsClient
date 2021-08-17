@@ -20,6 +20,7 @@ namespace TwnsCommonInputPanel {
         tips            : string | null;
         maxChars        : number | null;
         charRestrict    : string | null;
+        canBeEmpty?     : boolean;
         callback        : (panel: CommonInputPanel) => any;
     };
     export class CommonInputPanel extends TwnsUiPanel.UiPanel<OpenData> {
@@ -94,8 +95,10 @@ namespace TwnsCommonInputPanel {
         }
 
         private _onFocusOutInput(): void {
-            if (!this._input.text) {
-                this._input.text = this._getOpenData().currentValue;
+            const input = this._input;
+            if (!input.text) {
+                const openData  = this._getOpenData();
+                input.text      = openData.canBeEmpty ? `` : openData.currentValue;
             }
         }
 

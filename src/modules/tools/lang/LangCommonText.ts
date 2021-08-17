@@ -946,6 +946,30 @@ namespace TwnsLangCommonText {
             `您确定要跳过剧情吗？`,
             `Are you sure to skip the story?`,
         ],
+        [LangTextType.A0227]: [
+            `此动作包含的对话数量不合法`,
+            `The number of the dialogues is invalid.`,
+        ],
+        [LangTextType.A0228]: [
+            `此动作已包含太多对话`,
+            `There are too many dialogues in this action.`,
+        ],
+        [LangTextType.A0229]: [
+            `此剧情不合法，无法播放`,
+            `This dialogue is invalid.`,
+        ],
+        [LangTextType.A0230]: [
+            `此对白的类型不合法`,
+            `The type of this dialogue is invalid.`,
+        ],
+        [LangTextType.A0231]: [
+            `此CO对白的数据不合法`,
+            `The data of the CO dialogue is invalid.`,
+        ],
+        [LangTextType.A0232]: [
+            `此旁白的数据不合法`,
+            `The data of the aside is invalid.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3598,6 +3622,46 @@ namespace TwnsLangCommonText {
             `跳过`,
             `Skip`,
         ],
+        [LangTextType.B0666]: [
+            `增加对白`,
+            `Add Dialogue`,
+        ],
+        [LangTextType.B0667]: [
+            `播放`,
+            `Play`,
+        ],
+        [LangTextType.B0668]: [
+            `切换类型`,
+            `Switch Type`,
+        ],
+        [LangTextType.B0669]: [
+            `对白类型`,
+            `Dialogue Type`,
+        ],
+        [LangTextType.B0670]: [
+            `旁白`,
+            `Aside`,
+        ],
+        [LangTextType.B0671]: [
+            `CO对白`,
+            `CO Dialogue`,
+        ],
+        [LangTextType.B0672]: [
+            `未知`,
+            `Unknown`,
+        ],
+        [LangTextType.B0673]: [
+            `显示在左侧`,
+            `Show on left`,
+        ],
+        [LangTextType.B0674]: [
+            `播放剧情对白`,
+            `Show Dialogue`,
+        ],
+        [LangTextType.B0675]: [
+            `对白总数`,
+            `Total Dialogues`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4120,6 +4184,18 @@ namespace TwnsLangCommonText {
         [LangTextType.F0068]: [
             `请输入数字，最多 %d 位`,
             `Please enter a number, up to %d digits.`,
+        ],
+        [LangTextType.F0069]: [
+            `您已成功加入房间 #%d`,
+            `You have successfully joined room #%d`,
+        ],
+        [LangTextType.F0070]: [
+            `发生剧情对话，参与CO: %s`,
+            `Start a dialogue, COs: %s`,
+        ],
+        [LangTextType.F0071]: [
+            `#%d 对话数据不合法`,
+            `The #%d dialogue is invalid.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

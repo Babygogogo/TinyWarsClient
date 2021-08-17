@@ -409,6 +409,7 @@ namespace Lang {
         switch (type) {
             case WarEventActionType.AddUnit                 : return getText(LangTextType.B0617);
             case WarEventActionType.SetPlayerAliveState     : return getText(LangTextType.B0618);
+            case WarEventActionType.Dialogue                : return getText(LangTextType.B0674);
             default                                         : return undefined;
         }
     }

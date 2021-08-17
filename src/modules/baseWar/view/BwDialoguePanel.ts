@@ -24,7 +24,7 @@ namespace TwnsBwDialoguePanel {
 
     export class BwDialoguePanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = true;
+        protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: BwDialoguePanel;
 
@@ -112,14 +112,36 @@ namespace TwnsBwDialoguePanel {
                 return;
             }
 
-            const { dataForCoDialogue, dataForNeutralDialogue } = data;
-            const groupName1                                    = this._groupName1;
-            const groupName2                                    = this._groupName2;
-            const labelName1                                    = this._labelName1;
-            const labelName2                                    = this._labelName2;
-            const labelContent                                  = this._labelContent;
-            const imgCo1                                        = this._imgCo1;
-            const imgCo2                                        = this._imgCo2;
+            const { dataForCoDialogue, dataForAside }   = data;
+            const groupName1                            = this._groupName1;
+            const groupName2                            = this._groupName2;
+            const labelName1                            = this._labelName1;
+            const labelName2                            = this._labelName2;
+            const labelContent                          = this._labelContent;
+            const imgCo1                                = this._imgCo1;
+            const imgCo2                                = this._imgCo2;
+
+            if (index === 0) {
+                groupName1.visible  = false;
+                groupName2.visible  = false;
+                imgCo1.source       = ``;
+                imgCo2.source       = ``;
+
+                if (dataForCoDialogue) {
+                    const nextData = dataArray[index + 1]?.dataForCoDialogue;
+                    if (nextData) {
+                        const nextSide = nextData.side;
+                        if (nextSide !== dataForCoDialogue.side) {
+                            const coImageSource = ConfigManager.getCoBustImageSource(nextData.coId);
+                            if (nextSide === Types.WarEventActionDialogueSide.Left) {
+                                imgCo1.source = coImageSource;
+                            } else if (nextSide === Types.WarEventActionDialogueSide.Right) {
+                                imgCo2.source = coImageSource;
+                            }
+                        }
+                    }
+                }
+            }
 
             if (dataForCoDialogue) {
                 const { side, coId }    = dataForCoDialogue;
@@ -148,30 +170,15 @@ namespace TwnsBwDialoguePanel {
                     textArray   : dataForCoDialogue.textArray,
                 });
 
-            } else if (dataForNeutralDialogue) {
+            } else if (dataForAside) {
                 groupName1.visible  = false;
                 groupName2.visible  = false;
                 Helpers.changeColor(imgCo1, Types.ColorType.Dark);
                 Helpers.changeColor(imgCo2, Types.ColorType.Dark);
 
                 labelContent.text = Lang.getLanguageText({
-                    textArray   : dataForNeutralDialogue.textArray,
+                    textArray   : dataForAside.textArray,
                 });
-            }
-
-            if ((index === 0) && (dataForCoDialogue)) {
-                const nextData = dataArray[index + 1]?.dataForCoDialogue;
-                if (nextData) {
-                    const nextSide = nextData.side;
-                    if (nextSide !== dataForCoDialogue.side) {
-                        const coImageSource = ConfigManager.getCoBustImageSource(nextData.coId);
-                        if (nextSide === Types.WarEventActionDialogueSide.Left) {
-                            imgCo1.source = coImageSource;
-                        } else if (nextSide === Types.WarEventActionDialogueSide.Right) {
-                            imgCo2.source = coImageSource;
-                        }
-                    }
-                }
             }
         }
 

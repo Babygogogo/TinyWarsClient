@@ -78,22 +78,22 @@ namespace TwnsWeEventListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyMeWarEventFullDataChanged(e: egret.Event): void {
+        private _onNotifyMeWarEventFullDataChanged(): void {
             this._updateListWarEventAndLabelNoEvent();
         }
 
-        private _onTouchedBtnAddEvent(e: egret.TouchEvent): void {
+        private _onTouchedBtnAddEvent(): void {
             const openData = this._getOpenData();
             if (WarEventHelper.addEvent(openData.war.getWarEventManager().getWarEventFullData()) != null) {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
-        private _onTouchedBtnClear(e: egret.TouchEvent): void {
+        private _onTouchedBtnClear(): void {
             const openData = this._getOpenData();
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0188),
@@ -263,7 +263,7 @@ namespace TwnsWeEventListPanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnModify(e: egret.TouchEvent): void {
+        private _onTouchedBtnModify(): void {
             const data = this.data;
             if (data) {
                 WeCommandPanel.show({
@@ -278,7 +278,7 @@ namespace TwnsWeEventListPanel {
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 

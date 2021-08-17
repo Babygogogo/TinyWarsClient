@@ -1419,6 +1419,9 @@ export declare namespace Config {
         /** CoBasicCfg isEnabled */
         isEnabled?: (number|null);
 
+        /** CoBasicCfg isEnabledForDialogue */
+        isEnabledForDialogue?: (number|null);
+
         /** CoBasicCfg designer */
         designer?: (string|null);
 
@@ -1479,6 +1482,9 @@ export declare namespace Config {
 
         /** CoBasicCfg isEnabled. */
         public isEnabled: number;
+
+        /** CoBasicCfg isEnabledForDialogue. */
+        public isEnabledForDialogue: number;
 
         /** CoBasicCfg designer. */
         public designer: string;
@@ -5486,91 +5492,91 @@ export declare namespace WarEvent {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a DataForNeutralDialogue. */
-        interface IDataForNeutralDialogue {
+        /** Properties of a DataForAside. */
+        interface IDataForAside {
 
-            /** DataForNeutralDialogue textArray */
+            /** DataForAside textArray */
             textArray?: (Structure.ILanguageText[]|null);
         }
 
-        /** Represents a DataForNeutralDialogue. */
-        class DataForNeutralDialogue implements IDataForNeutralDialogue {
+        /** Represents a DataForAside. */
+        class DataForAside implements IDataForAside {
 
             /**
-             * Constructs a new DataForNeutralDialogue.
+             * Constructs a new DataForAside.
              * @param [properties] Properties to set
              */
-            constructor(properties?: WarEvent.WeaDialogue.IDataForNeutralDialogue);
+            constructor(properties?: WarEvent.WeaDialogue.IDataForAside);
 
-            /** DataForNeutralDialogue textArray. */
+            /** DataForAside textArray. */
             public textArray: Structure.ILanguageText[];
 
             /**
-             * Creates a new DataForNeutralDialogue instance using the specified properties.
+             * Creates a new DataForAside instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns DataForNeutralDialogue instance
+             * @returns DataForAside instance
              */
-            public static create(properties?: WarEvent.WeaDialogue.IDataForNeutralDialogue): WarEvent.WeaDialogue.DataForNeutralDialogue;
+            public static create(properties?: WarEvent.WeaDialogue.IDataForAside): WarEvent.WeaDialogue.DataForAside;
 
             /**
-             * Encodes the specified DataForNeutralDialogue message. Does not implicitly {@link WarEvent.WeaDialogue.DataForNeutralDialogue.verify|verify} messages.
-             * @param message DataForNeutralDialogue message or plain object to encode
+             * Encodes the specified DataForAside message. Does not implicitly {@link WarEvent.WeaDialogue.DataForAside.verify|verify} messages.
+             * @param message DataForAside message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: WarEvent.WeaDialogue.IDataForNeutralDialogue, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: WarEvent.WeaDialogue.IDataForAside, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified DataForNeutralDialogue message, length delimited. Does not implicitly {@link WarEvent.WeaDialogue.DataForNeutralDialogue.verify|verify} messages.
-             * @param message DataForNeutralDialogue message or plain object to encode
+             * Encodes the specified DataForAside message, length delimited. Does not implicitly {@link WarEvent.WeaDialogue.DataForAside.verify|verify} messages.
+             * @param message DataForAside message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: WarEvent.WeaDialogue.IDataForNeutralDialogue, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: WarEvent.WeaDialogue.IDataForAside, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a DataForNeutralDialogue message from the specified reader or buffer.
+             * Decodes a DataForAside message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns DataForNeutralDialogue
+             * @returns DataForAside
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaDialogue.DataForNeutralDialogue;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaDialogue.DataForAside;
 
             /**
-             * Decodes a DataForNeutralDialogue message from the specified reader or buffer, length delimited.
+             * Decodes a DataForAside message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns DataForNeutralDialogue
+             * @returns DataForAside
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaDialogue.DataForNeutralDialogue;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaDialogue.DataForAside;
 
             /**
-             * Verifies a DataForNeutralDialogue message.
+             * Verifies a DataForAside message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a DataForNeutralDialogue message from a plain object. Also converts values to their respective internal types.
+             * Creates a DataForAside message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns DataForNeutralDialogue
+             * @returns DataForAside
              */
-            public static fromObject(object: { [k: string]: any }): WarEvent.WeaDialogue.DataForNeutralDialogue;
+            public static fromObject(object: { [k: string]: any }): WarEvent.WeaDialogue.DataForAside;
 
             /**
-             * Creates a plain object from a DataForNeutralDialogue message. Also converts values to other types if specified.
-             * @param message DataForNeutralDialogue
+             * Creates a plain object from a DataForAside message. Also converts values to other types if specified.
+             * @param message DataForAside
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: WarEvent.WeaDialogue.DataForNeutralDialogue, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: WarEvent.WeaDialogue.DataForAside, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this DataForNeutralDialogue to JSON.
+             * Converts this DataForAside to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -5582,8 +5588,8 @@ export declare namespace WarEvent {
             /** DataForDialogue dataForCoDialogue */
             dataForCoDialogue?: (WarEvent.WeaDialogue.IDataForCoDialogue|null);
 
-            /** DataForDialogue dataForNeutralDialogue */
-            dataForNeutralDialogue?: (WarEvent.WeaDialogue.IDataForNeutralDialogue|null);
+            /** DataForDialogue dataForAside */
+            dataForAside?: (WarEvent.WeaDialogue.IDataForAside|null);
         }
 
         /** Represents a DataForDialogue. */
@@ -5598,8 +5604,8 @@ export declare namespace WarEvent {
             /** DataForDialogue dataForCoDialogue. */
             public dataForCoDialogue?: (WarEvent.WeaDialogue.IDataForCoDialogue|null);
 
-            /** DataForDialogue dataForNeutralDialogue. */
-            public dataForNeutralDialogue?: (WarEvent.WeaDialogue.IDataForNeutralDialogue|null);
+            /** DataForDialogue dataForAside. */
+            public dataForAside?: (WarEvent.WeaDialogue.IDataForAside|null);
 
             /**
              * Creates a new DataForDialogue instance using the specified properties.

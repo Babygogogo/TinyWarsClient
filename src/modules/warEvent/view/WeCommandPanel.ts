@@ -43,7 +43,7 @@ namespace TwnsWeCommandPanel {
         nodeId?         : number;
     };
     export class WeCommandPanel extends TwnsUiPanel.UiPanel<OpenDataForWeCommandPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
+        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: WeCommandPanel;

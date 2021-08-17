@@ -147,6 +147,7 @@ namespace TwnsMfrJoinRoomListPanel {
             if (data.userId === UserModel.getSelfUserId()) {
                 this.close();
                 TwnsMfrRoomInfoPanel.MfrRoomInfoPanel.show({ roomId });
+                FloatText.show(Lang.getFormattedText(LangTextType.F0069, roomId));
             } else if (roomId === MfrJoinModel.getTargetRoomId()) {
                 this._updateCommonWarPlayerInfoPage();
             }

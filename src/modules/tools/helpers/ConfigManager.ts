@@ -645,6 +645,30 @@ namespace ConfigManager {
             return coArray;
         }
     }
+    export function getCoIdArrayForDialogue(version: string): number[] {
+        const coCfgArray    : CoBasicCfg[] = [];
+        const cfgs          = _ALL_CONFIGS.get(version)?.CoBasic;
+        if (cfgs != null) {
+            for (const k in cfgs || {}) {
+                const cfg = cfgs[k];
+                if (cfg.isEnabledForDialogue) {
+                    coCfgArray.push(cfg);
+                }
+            }
+
+            coCfgArray.sort((c1, c2) => {
+                const name1 = c1.name;
+                const name2 = c2.name;
+                if (name1 !== name2) {
+                    return name1.localeCompare(name2, "zh");
+                } else {
+                    return c1.tier - c2.tier;
+                }
+            });
+        }
+
+        return coCfgArray.map(v => v.coId);
+    }
 
     export function getCoTiers(version: string): number[] {
         const currentArray = _CO_TIERS.get(version);
