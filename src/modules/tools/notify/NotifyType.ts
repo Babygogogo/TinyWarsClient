@@ -158,6 +158,7 @@ namespace TwnsNotifyType {
 
         MsgUserGetPublicInfo,
         MsgUserGetPublicInfoFailed,
+        MsgUserGetOnlineState,
         MsgUserSetNickname,
         MsgUserSetNicknameFailed,
         MsgUserSetDiscordId,

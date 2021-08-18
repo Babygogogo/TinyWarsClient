@@ -20601,6 +20601,12 @@ export declare namespace User {
         /** UserPublicInfo discordId */
         discordId?: (string|null);
 
+        /** UserPublicInfo isOnline */
+        isOnline?: (boolean|null);
+
+        /** UserPublicInfo lastActivityTime */
+        lastActivityTime?: (number|null);
+
         /** UserPublicInfo userPrivilege */
         userPrivilege?: (User.IUserPrivilege|null);
 
@@ -20640,6 +20646,12 @@ export declare namespace User {
 
         /** UserPublicInfo discordId. */
         public discordId: string;
+
+        /** UserPublicInfo isOnline. */
+        public isOnline: boolean;
+
+        /** UserPublicInfo lastActivityTime. */
+        public lastActivityTime: number;
 
         /** UserPublicInfo userPrivilege. */
         public userPrivilege?: (User.IUserPrivilege|null);
@@ -20972,6 +20984,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserGetPublicInfo */
         MsgUserGetPublicInfo?: (NetMessage.IMsgUserGetPublicInfo|null);
+
+        /** MessageContainer MsgUserGetOnlineState */
+        MsgUserGetOnlineState?: (NetMessage.IMsgUserGetOnlineState|null);
 
         /** MessageContainer MsgUserGetOnlineUsers */
         MsgUserGetOnlineUsers?: (NetMessage.IMsgUserGetOnlineUsers|null);
@@ -21336,6 +21351,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserGetPublicInfo. */
         public MsgUserGetPublicInfo?: (NetMessage.IMsgUserGetPublicInfo|null);
+
+        /** MessageContainer MsgUserGetOnlineState. */
+        public MsgUserGetOnlineState?: (NetMessage.IMsgUserGetOnlineState|null);
 
         /** MessageContainer MsgUserGetOnlineUsers. */
         public MsgUserGetOnlineUsers?: (NetMessage.IMsgUserGetOnlineUsers|null);
@@ -26298,6 +26316,303 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgUserGetPublicInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgUserGetOnlineState. */
+    interface IMsgUserGetOnlineState {
+
+        /** MsgUserGetOnlineState c */
+        c?: (NetMessage.MsgUserGetOnlineState.IC|null);
+
+        /** MsgUserGetOnlineState s */
+        s?: (NetMessage.MsgUserGetOnlineState.IS|null);
+    }
+
+    /** Represents a MsgUserGetOnlineState. */
+    class MsgUserGetOnlineState implements IMsgUserGetOnlineState {
+
+        /**
+         * Constructs a new MsgUserGetOnlineState.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserGetOnlineState);
+
+        /** MsgUserGetOnlineState c. */
+        public c?: (NetMessage.MsgUserGetOnlineState.IC|null);
+
+        /** MsgUserGetOnlineState s. */
+        public s?: (NetMessage.MsgUserGetOnlineState.IS|null);
+
+        /**
+         * Creates a new MsgUserGetOnlineState instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserGetOnlineState instance
+         */
+        public static create(properties?: NetMessage.IMsgUserGetOnlineState): NetMessage.MsgUserGetOnlineState;
+
+        /**
+         * Encodes the specified MsgUserGetOnlineState message. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.verify|verify} messages.
+         * @param message MsgUserGetOnlineState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserGetOnlineState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserGetOnlineState message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.verify|verify} messages.
+         * @param message MsgUserGetOnlineState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserGetOnlineState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserGetOnlineState message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserGetOnlineState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetOnlineState;
+
+        /**
+         * Decodes a MsgUserGetOnlineState message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserGetOnlineState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetOnlineState;
+
+        /**
+         * Verifies a MsgUserGetOnlineState message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserGetOnlineState message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserGetOnlineState
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetOnlineState;
+
+        /**
+         * Creates a plain object from a MsgUserGetOnlineState message. Also converts values to other types if specified.
+         * @param message MsgUserGetOnlineState
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserGetOnlineState, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserGetOnlineState to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserGetOnlineState {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C userId */
+            userId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserGetOnlineState.IC);
+
+            /** C userId. */
+            public userId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserGetOnlineState.IC): NetMessage.MsgUserGetOnlineState.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserGetOnlineState.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserGetOnlineState.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetOnlineState.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetOnlineState.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetOnlineState.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserGetOnlineState.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S userId */
+            userId?: (number|null);
+
+            /** S isOnline */
+            isOnline?: (boolean|null);
+
+            /** S lastActivityTime */
+            lastActivityTime?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserGetOnlineState.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S userId. */
+            public userId: number;
+
+            /** S isOnline. */
+            public isOnline: boolean;
+
+            /** S lastActivityTime. */
+            public lastActivityTime: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserGetOnlineState.IS): NetMessage.MsgUserGetOnlineState.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserGetOnlineState.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserGetOnlineState.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetOnlineState.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetOnlineState.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetOnlineState.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserGetOnlineState.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

@@ -221,6 +221,13 @@ namespace UserModel {
         const userSelfInfo = data.userSelfInfo;
         (userSelfInfo) && (setSelfInfo(userSelfInfo));
     }
+    export async function updateOnMsgUserGetOnlineState(data: NetMessage.MsgUserGetOnlineState.IS): Promise<void> {
+        const userPublicInfo = await getUserPublicInfo(data.userId);
+        if (userPublicInfo) {
+            userPublicInfo.isOnline         = data.isOnline;
+            userPublicInfo.lastActivityTime = data.lastActivityTime;
+        }
+    }
     export function updateOnMsgUserSetNickname(data: NetMessage.MsgUserSetNickname.IS): void {
         setSelfNickname(data.nickname);
     }

@@ -6,17 +6,6 @@ export const enum ServerErrorCode {
 
     ServerDisconnect0001,               // 服务器维护
 
-    ConfigManager_InitAllConfigs_0000,
-    ConfigManager_InitAllConfigs_0001,
-    ConfigManager_InitAllConfigs_0002,
-    ConfigManager_InitAllConfigs_0003,
-    ConfigManager_InitAllConfigs_0004,
-    ConfigManager_InitAllConfigs_0005,
-    ConfigManager_InitAllConfigs_0006,
-    ConfigManager_InitAllConfigs_0007,
-    ConfigManager_InitAllConfigs_0008,
-    ConfigManager_InitAllConfigs_0009,
-
     ConfigManager_ValidateUnitTemplateCfgDict_0000,
     ConfigManager_ValidateUnitTemplateCfgDict_0001,
     ConfigManager_ValidateUnitTemplateCfgDict_0002,
@@ -720,6 +709,17 @@ export const enum ServerErrorCode {
     UserManager_UpdateOnMpwWarEnded_0007,
     UserManager_UpdateOnMpwWarEnded_0008,
     UserManager_UpdateOnMpwWarEnded_0009,
+
+    UserManager_UpdateRankDictAndUserRankByWarType_0000,
+    UserManager_UpdateRankDictAndUserRankByWarType_0001,
+    UserManager_UpdateRankDictAndUserRankByWarType_0002,
+    UserManager_UpdateRankDictAndUserRankByWarType_0003,
+    UserManager_UpdateRankDictAndUserRankByWarType_0004,
+    UserManager_UpdateRankDictAndUserRankByWarType_0005,
+    UserManager_UpdateRankDictAndUserRankByWarType_0006,
+    UserManager_UpdateRankDictAndUserRankByWarType_0007,
+    UserManager_UpdateRankDictAndUserRankByWarType_0008,
+    UserManager_UpdateRankDictAndUserRankByWarType_0009,
 
     User_UpdateMapRating_0000,
     User_UpdateMapRating_0001,
@@ -4045,6 +4045,17 @@ export const enum ServerErrorCode {
 
     MsgUserGetPublicInfo0000,
     MsgUserGetPublicInfo0001,
+
+    ExeUserGetOnlineState_ExeWithSocket_0000,
+    ExeUserGetOnlineState_ExeWithSocket_0001,
+    ExeUserGetOnlineState_ExeWithSocket_0002,
+    ExeUserGetOnlineState_ExeWithSocket_0003,
+    ExeUserGetOnlineState_ExeWithSocket_0004,
+    ExeUserGetOnlineState_ExeWithSocket_0005,
+    ExeUserGetOnlineState_ExeWithSocket_0006,
+    ExeUserGetOnlineState_ExeWithSocket_0007,
+    ExeUserGetOnlineState_ExeWithSocket_0008,
+    ExeUserGetOnlineState_ExeWithSocket_0009,
 
     MsgUserGetSettings0000,
 

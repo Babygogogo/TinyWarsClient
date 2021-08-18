@@ -441,6 +441,14 @@ namespace Helpers {
                     0, 0, 0, 1, 0
                 ];
 
+            case Types.ColorType.Yellow:
+                return [
+                    1, 0, 0, 0, value,
+                    0, 1, 0, 0, value,
+                    0, 0, 1, 0, 0,
+                    0, 0, 0, 1, 0
+                ];
+
             default:
                 return undefined;
         }

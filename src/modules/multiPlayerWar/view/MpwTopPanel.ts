@@ -11,14 +11,18 @@ import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
 import SoundManager             from "../../tools/helpers/SoundManager";
+import Timer                    from "../../tools/helpers/Timer";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import ProtoTypes               from "../../tools/proto/ProtoTypes";
 import TwnsUiButton             from "../../tools/ui/UiButton";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import UserModel                from "../../user/model/UserModel";
+import UserProxy                from "../../user/model/UserProxy";
 import TwnsUserPanel            from "../../user/view/UserPanel";
 import TwnsMpwActionPlanner     from "../model/MpwActionPlanner";
 import TwnsMpwWarMenuPanel      from "./MpwWarMenuPanel";
@@ -42,6 +46,7 @@ namespace TwnsMpwTopPanel {
         private static _instance: MpwTopPanel;
 
         private _groupPlayer        : eui.Group;
+        private _labelPlayerState   : TwnsUiLabel.UiLabel;
         private _labelPlayer        : TwnsUiLabel.UiLabel;
         private _labelFund          : TwnsUiLabel.UiLabel;
         private _groupTimer         : eui.Group;
@@ -90,10 +95,11 @@ namespace TwnsMpwTopPanel {
                 { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: NotifyType.BwActionPlannerStateChanged,     callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: NotifyType.MsgChatGetAllReadProgressList,   callback: this._onMsgChatGetAllReadProgressList },
-                { type: NotifyType.MsgChatUpdateReadProgress,       callback: this._onMsgChatUpdateReadProgress },
-                { type: NotifyType.MsgChatGetAllMessages,           callback: this._onMsgChatGetAllMessages },
-                { type: NotifyType.MsgChatAddMessage,               callback: this._onMsgChatAddMessage },
+                { type: NotifyType.MsgChatGetAllReadProgressList,   callback: this._onNotifyMsgChatGetAllReadProgressList },
+                { type: NotifyType.MsgChatUpdateReadProgress,       callback: this._onNotifyMsgChatUpdateReadProgress },
+                { type: NotifyType.MsgChatGetAllMessages,           callback: this._onNotifyMsgChatGetAllMessages },
+                { type: NotifyType.MsgChatAddMessage,               callback: this._onNotifyMsgChatAddMessage },
+                { type: NotifyType.MsgUserGetOnlineState,           callback: this._onNotifyMsgUserGetOnlineState },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
@@ -125,11 +131,20 @@ namespace TwnsMpwTopPanel {
             this._updateGroupTimer();
 
             const war = this._war;
-            if ((war)                           &&
-                (!war.getIsExecutingAction())   &&
-                (war.checkIsBoot())
-            ) {
+            if (war == null) {
+                return;
+            }
+
+            if ((!war.getIsExecutingAction()) && (war.checkIsBoot())) {
                 MpwProxy.reqMpwCommonHandleBoot(war.getWarId());
+            }
+
+            const userId = war.getPlayerInTurn().getUserId();
+            if ((userId != null)                        &&
+                (userId !== UserModel.getSelfUserId())  &&
+                (Timer.getServerTimestamp() % 60 == 0)
+            ) {
+                UserProxy.reqUserGetOnlineState(userId);
             }
         }
         private _onNotifyBwTurnPhaseCodeChanged(): void {
@@ -141,8 +156,14 @@ namespace TwnsMpwTopPanel {
             this._updateLabelFund();
         }
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
+            const war = this._war;
             this._updateView();
-            SoundManager.playCoBgmWithWar(this._war, false);
+            SoundManager.playCoBgmWithWar(war, false);
+
+            const userId = war.getPlayerInTurn().getUserId();
+            if ((userId != null) && (userId !== UserModel.getSelfUserId())) {
+                UserProxy.reqUserGetOnlineState(userId);
+            }
         }
         private _onNotifyBwCoEnergyChanged(): void {
             this._updateLabelCoAndEnergy();
@@ -157,22 +178,34 @@ namespace TwnsMpwTopPanel {
             this._updateBtnCancel();
         }
 
-        private _onMsgChatGetAllReadProgressList(): void {
+        private _onNotifyMsgChatGetAllReadProgressList(): void {
             this._updateBtnChat();
         }
-        private _onMsgChatUpdateReadProgress(): void {
+        private _onNotifyMsgChatUpdateReadProgress(): void {
             this._updateBtnChat();
         }
-        private _onMsgChatGetAllMessages(): void {
+        private _onNotifyMsgChatGetAllMessages(): void {
             this._updateBtnChat();
         }
-        private _onMsgChatAddMessage(): void {
+        private _onNotifyMsgChatAddMessage(): void {
             this._updateBtnChat();
+        }
+        private _onNotifyMsgUserGetOnlineState(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgUserGetOnlineState.IS;
+            if (data.userId === this._war.getPlayerInTurn().getUserId()) {
+                this._updateLabelPlayerState();
+            }
         }
 
         private _onTouchedGroupPlayer(): void {
             const userId = this._war.getPlayerInTurn().getUserId();
-            (userId) && (UserPanel.show({ userId }));
+            if (userId != null) {
+                UserPanel.show({ userId });
+
+                if (userId !== UserModel.getSelfUserId()) {
+                    UserProxy.reqUserGetOnlineState(userId);
+                }
+            }
         }
         private _onTouchedGroupCo(): void {
             CommonCoListPanel.show({
@@ -239,6 +272,7 @@ namespace TwnsMpwTopPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
+            this._updateLabelPlayerState();
             this._updateLabelPlayer();
             this._updateGroupTimer();
             this._updateLabelFund();
@@ -252,6 +286,24 @@ namespace TwnsMpwTopPanel {
 
         private _updateComponentsForLanguage(): void {
             this._labelTimerTitle.text = Lang.getText(LangTextType.B0188);
+        }
+
+        private async _updateLabelPlayerState(): Promise<void> {
+            const userId    = this._war.getPlayerInTurn().getUserId();
+            const label     = this._labelPlayerState;
+            if ((userId == null) || (userId === UserModel.getSelfUserId())) {
+                label.text      = Lang.getText(LangTextType.B0676);
+                label.textColor = Types.ColorValue.Green;
+            } else {
+                const userPublicInfo = await UserModel.getUserPublicInfo(userId);
+                if ((userPublicInfo == null) || (!userPublicInfo.isOnline)) {
+                    label.text      = Lang.getText(LangTextType.B0677);
+                    label.textColor = Types.ColorValue.Red;
+                } else {
+                    label.text      = Lang.getText(LangTextType.B0676);
+                    label.textColor = (Timer.getServerTimestamp() - userPublicInfo.lastActivityTime > 60) ? Types.ColorValue.Yellow : Types.ColorValue.Green;
+                }
+            }
         }
 
         private async _updateLabelPlayer(): Promise<void> {

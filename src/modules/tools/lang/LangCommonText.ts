@@ -879,8 +879,8 @@ namespace TwnsLangCommonText {
             `It's not allowed to change your force in ranking matches.`,
         ],
         [LangTextType.A0210]: [
-            `请禁用CO`,
-            `Please ban COs for the match.`
+            `请选择您想要禁用的CO`,
+            `Please choose the COs you want to ban for the match.`
         ],
         [LangTextType.A0211]: [
             `请选择您的CO和颜色，并进入准备就绪状态`,
@@ -3661,6 +3661,14 @@ namespace TwnsLangCommonText {
         [LangTextType.B0675]: [
             `对白总数`,
             `Total Dialogues`,
+        ],
+        [LangTextType.B0676]: [
+            `在线`,
+            `Online`,
+        ],
+        [LangTextType.B0677]: [
+            `离线`,
+            `Offline`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

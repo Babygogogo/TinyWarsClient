@@ -18,6 +18,7 @@ namespace UserProxy {
             { msgCode: NetMessageCodes.MsgUserRegister,         callback: _onMsgUserRegister, },
             { msgCode: NetMessageCodes.MsgUserLogout,           callback: _onMsgUserLogout, },
             { msgCode: NetMessageCodes.MsgUserGetPublicInfo,    callback: _onMsgUserGetPublicInfo, },
+            { msgCode: NetMessageCodes.MsgUserGetOnlineState,   callback: _onMsgUserGetOnlineState },
             { msgCode: NetMessageCodes.MsgUserSetNickname,      callback: _onMsgUserSetNickname, },
             { msgCode: NetMessageCodes.MsgUserSetDiscordId,     callback: _onMsgUserSetDiscordId, },
             { msgCode: NetMessageCodes.MsgUserGetOnlineUsers,   callback: _onMsgUserGetOnlineUsers, },
@@ -88,6 +89,21 @@ namespace UserProxy {
         } else {
             UserModel.setUserPublicInfo(data.userPublicInfo);
             Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
+        }
+    }
+
+    export function reqUserGetOnlineState(userId: number): void {
+        NetManager.send({
+            MsgUserGetOnlineState: { c: {
+                userId,
+            } },
+        });
+    }
+    function _onMsgUserGetOnlineState(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserGetOnlineState.IS;
+        if (!data.errorCode) {
+            UserModel.updateOnMsgUserGetOnlineState(data);
+            Notify.dispatch(NotifyType.MsgUserGetOnlineState, data);
         }
     }
 

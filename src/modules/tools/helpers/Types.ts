@@ -220,11 +220,13 @@ namespace Types {
         Green,
         Blue,
         White,
+        Yellow,
     }
     // eslint-disable-next-line no-shadow
     export enum ColorValue {
         Red     = 0xFF0000,
         White   = 0xFFFFFF,
+        Yellow  = 0xFFFF00,
         Green   = 0x00FF00,
     }
 
