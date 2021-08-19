@@ -525,6 +525,7 @@ namespace CommonConstants {
             [   33, [   32,     35,     33,     34,     32, ]],
             [   34, [   34,     32,     35,     33,     35, ]],
             [   35, [   35,     33,     34,     32,     34, ]],
+            [   36, [   36,     36,     36,     36,     36, ]],
         ])],
     ]);
     export const TileDecoratorSymmetry = new Map<TileDecoratorType, Map<number, number[]>>([

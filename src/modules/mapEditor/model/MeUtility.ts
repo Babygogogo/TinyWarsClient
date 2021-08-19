@@ -490,36 +490,134 @@ namespace MeUtility {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | undefined, shapeId: number | undefined } {
         const tile = tileMap.getTile(gridIndex);
-        if ((tile == null) || (tile.getBaseType() !== Types.TileBaseType.Sea)) {
+        if (tile == null) {
             return {
                 decoratorType   : undefined,
                 shapeId         : undefined,
             };
         }
 
-        const mapSize   = tileMap.getMapSize();
-        let weight      = Math.pow(2, 7);
-        let index       = 0;
-        for (let offsetY = -1; offsetY <= 1; ++offsetY) {
-            for (let offsetX = -1; offsetX <= 1; ++offsetX) {
-                if ((offsetX === 0) && (offsetY === 0)) {
-                    continue;
+        const baseType = tile.getBaseType();
+        if (baseType === TileBaseType.Sea) {
+            const mapSize   = tileMap.getMapSize();
+            let weight      = Math.pow(2, 7);
+            let index       = 0;
+            for (let offsetY = -1; offsetY <= 1; ++offsetY) {
+                for (let offsetX = -1; offsetX <= 1; ++offsetX) {
+                    if ((offsetX === 0) && (offsetY === 0)) {
+                        continue;
+                    }
+
+                    const g = GridIndexHelpers.add(gridIndex, { x: offsetX, y: offsetY });
+                    const t = GridIndexHelpers.checkIsInsideMap(g, mapSize) ? tileMap.getTile(g).getBaseType() : null;
+                    if ((t != null)              &&
+                        (t !== TileBaseType.Sea) &&
+                        (t !== TileBaseType.Beach)
+                    ) {
+                        index += weight;
+                    }
+                    weight /= 2;
+                }
+            }
+
+            return {
+                decoratorType   : TileDecoratorType.Corner,
+                shapeId         : TileDecoratorAutoShapeIdArray[index],
+            };
+
+        } else if (baseType === TileBaseType.Beach) {
+            const shapeId = tile.getBaseShapeId();
+            if ((shapeId === 0) || (shapeId === 4) || (shapeId === 8) || (shapeId === 12)) {
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
+                if (isSea1) {
+                    return isSea2
+                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+                } else {
+                    return isSea2
+                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 4 }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 5 };
                 }
 
-                const g = GridIndexHelpers.add(gridIndex, { x: offsetX, y: offsetY });
-                if ((GridIndexHelpers.checkIsInsideMap(g, mapSize))             &&
-                    (tileMap.getTile(g).getBaseType() !== Types.TileBaseType.Sea)
-                ) {
-                    index += weight;
+            } else if ((shapeId === 1) || (shapeId === 5) || (shapeId === 9) || (shapeId === 13)) {
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
+                if (isSea1) {
+                    return isSea2
+                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
+                } else {
+                    return isSea2
+                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 8 }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 10 };
                 }
-                weight /= 2;
+
+            } else if ((shapeId === 2) || (shapeId === 6) || (shapeId === 10) || (shapeId === 14)) {
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
+                if (isSea1) {
+                    return isSea2
+                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+                } else {
+                    return isSea2
+                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 2 }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 3 };
+                }
+
+            } else if ((shapeId === 3) || (shapeId === 7) || (shapeId === 11) || (shapeId === 15)) {
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
+                if (isSea1) {
+                    return isSea2
+                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
+                } else {
+                    return isSea2
+                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 8 }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 12 };
+                }
+
+            } else if ((shapeId === 16) || (shapeId === 20) || (shapeId === 24) || (shapeId === 28)) {
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 })))
+                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+
+            } else if ((shapeId === 17) || (shapeId === 21) || (shapeId === 25) || (shapeId === 29)) {
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 })))
+                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
+
+            } else if ((shapeId === 18) || (shapeId === 22) || (shapeId === 26) || (shapeId === 30)) {
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 })))
+                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 8 };
+
+            } else if ((shapeId === 19) || (shapeId === 23) || (shapeId === 27) || (shapeId === 31)) {
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 })))
+                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
+
+            } else {
+                return {
+                    decoratorType   : undefined,
+                    shapeId         : undefined,
+                };
             }
         }
 
         return {
-            decoratorType   : TileDecoratorType.Corner,
-            shapeId         : TileDecoratorAutoShapeIdArray[index],
+            decoratorType   : undefined,
+            shapeId         : undefined,
         };
+    }
+    function checkIsSeaOrEmpty(tileMap: TwnsBwTileMap.BwTileMap, gridIndex): boolean {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+            return true;
+        } else {
+            return tileMap.getTile(gridIndex)?.getBaseType() === TileBaseType.Sea;
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
