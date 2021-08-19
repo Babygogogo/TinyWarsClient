@@ -1,21 +1,23 @@
 
-import TwnsBwPlayer             from "../../baseWar/model/BwPlayer";
-import TwnsBwTile               from "../../baseWar/model/BwTile";
-import TwnsBwUnit               from "../../baseWar/model/BwUnit";
-import TwnsBwWar                from "../../baseWar/model/BwWar";
-import TwnsClientErrorCode      from "../helpers/ClientErrorCode";
-import CommonConstants          from "../helpers/CommonConstants";
-import ConfigManager            from "../helpers/ConfigManager";
-import FloatText                from "../helpers/FloatText";
-import GridIndexHelpers         from "../helpers/GridIndexHelpers";
-import Logger                   from "../helpers/Logger";
-import Types                    from "../helpers/Types";
-import ProtoTypes               from "../proto/ProtoTypes";
-import WarCommonHelpers         from "./WarCommonHelpers";
-import WarCoSkillHelpers        from "./WarCoSkillHelpers";
-import WarDamageCalculator      from "./WarDamageCalculator";
-import WarDestructionHelpers    from "./WarDestructionHelpers";
-import WarVisibilityHelpers     from "./WarVisibilityHelpers";
+import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
+import TwnsBwTile                   from "../../baseWar/model/BwTile";
+import TwnsBwUnit                   from "../../baseWar/model/BwUnit";
+import TwnsBwWar                    from "../../baseWar/model/BwWar";
+import TwnsBwCaptureProgressPanel   from "../../baseWar/view/BwCaptureProgressPanel";
+import UserModel                    from "../../user/model/UserModel";
+import TwnsClientErrorCode          from "../helpers/ClientErrorCode";
+import CommonConstants              from "../helpers/CommonConstants";
+import ConfigManager                from "../helpers/ConfigManager";
+import FloatText                    from "../helpers/FloatText";
+import GridIndexHelpers             from "../helpers/GridIndexHelpers";
+import Logger                       from "../helpers/Logger";
+import Types                        from "../helpers/Types";
+import ProtoTypes                   from "../proto/ProtoTypes";
+import WarCommonHelpers             from "./WarCommonHelpers";
+import WarCoSkillHelpers            from "./WarCoSkillHelpers";
+import WarDamageCalculator          from "./WarDamageCalculator";
+import WarDestructionHelpers        from "./WarDestructionHelpers";
+import WarVisibilityHelpers         from "./WarVisibilityHelpers";
 
 namespace WarActionExecutor {
     import GridIndex                            = Types.GridIndex;
@@ -2328,6 +2330,7 @@ namespace WarActionExecutor {
         if (path.isBlocked) {
             // nothing to do.
         } else {
+            // TODO: capture amount is incorrect if the co has zoned capture skill and is invisible!
             const destination       = pathNodes[pathNodes.length - 1];
             const tile              = war.getTileMap().getTile(destination);
             const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount(destination);
@@ -2375,9 +2378,12 @@ namespace WarActionExecutor {
             focusUnit.updateView();
 
         } else {
-            const destination       = pathNodes[pathNodes.length - 1];
-            const tile              = war.getTileMap().getTile(destination);
-            const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount(destination);
+            // TODO: capture amount is incorrect if the co has zoned capture skill and is invisible!
+            const destination           = pathNodes[pathNodes.length - 1];
+            const tile                  = war.getTileMap().getTile(destination);
+            const maxCapturePoint       = tile.getMaxCapturePoint();
+            const currentCapturePoint   = tile.getCurrentCapturePoint();
+            const restCapturePoint      = currentCapturePoint - focusUnit.getCaptureAmount(destination);
             if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
                 tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
             }
@@ -2397,6 +2403,16 @@ namespace WarActionExecutor {
             }
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
+            if (war.getPlayerInTurn().getUserId() === UserModel.getSelfUserId()) {
+                await new Promise<void>(resolve => {
+                    TwnsBwCaptureProgressPanel.BwCaptureProgressPanel.show({
+                        maxValue            : maxCapturePoint,
+                        newValue            : maxCapturePoint - restCapturePoint,
+                        currentValue        : maxCapturePoint - currentCapturePoint,
+                        callbackOnFinish    : () => resolve(),
+                    });
+                });
+            }
             focusUnit.updateView();
             tile.flushDataToView();
         }

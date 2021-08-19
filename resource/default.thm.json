@@ -4,6 +4,7 @@
 	"exmls": [
 		"resource/skins/baseWar/BwBackgroundPanel.exml",
 		"resource/skins/baseWar/BwBuildingListPanel.exml",
+		"resource/skins/baseWar/BwCaptureProgressPanel.exml",
 		"resource/skins/component/button/ButtonGrey001.exml",
 		"resource/skins/baseWar/BwDialoguePanel.exml",
 		"resource/skins/component/button/ButtonSelfAdaption001.exml",

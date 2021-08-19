@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group id="_group" width="240" horizontalCenter="0" verticalCenter="0" height="50">
+        <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+                             left="0" right="0" top="0" bottom="0" />
+        <e:ProgressBar id="_pbarProgress" width="200" horizontalCenter="0" verticalCenter="0" value="60.8"
+                       slideDuration="0">
+            <e:skinName>
+                <e:Skin>
+                    <e:Group left="0" right="0" y="0">
+                        <e:Group y="0" left="0" right="0">
+                            <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" left="0" right="0" top="0" bottom="0" />
+                            <TwnsUiImage:UiImage id="thumb" source="commonColorWhite0000" scale9Grid="1,1,1,1" left="4"
+                                                 top="4" bottom="4" right="4" />
+                        </e:Group>
+                        <TwnsUiLabel:UiLabel id="labelDisplay" size="12" text="asdf" textAlign="center"
+                                             verticalAlign="middle" wordWrap="true" y="22" horizontalCenter="0"
+                                             textColor="0xFFFFFF" />
+                    </e:Group>
+                </e:Skin>
+            </e:skinName>
+        </e:ProgressBar>
+    </e:Group>
+</e:Skin>
