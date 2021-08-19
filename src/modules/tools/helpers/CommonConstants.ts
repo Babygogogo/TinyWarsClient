@@ -305,7 +305,7 @@ namespace CommonConstants {
         ],
     ]);
     export const TileBaseShapeConfigs = new Map<TileBaseType, TileBaseShapeCfg>([
-        [ TileBaseType.Beach,   { shapesCount: 36,  }],
+        [ TileBaseType.Beach,   { shapesCount: 37,  }],
         [ TileBaseType.Plain,   { shapesCount: 1,   }],
         [ TileBaseType.River,   { shapesCount: 16,  }],
         [ TileBaseType.Sea,     { shapesCount: 47,  }],

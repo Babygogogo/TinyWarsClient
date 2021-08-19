@@ -1,25 +1,25 @@
 
-import TwnsBwUnit                   from "../../baseWar/model/BwUnit";
-import TwnsBwUnitView               from "../../baseWar/view/BwUnitView";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Types                        from "../../tools/helpers/Types";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-import TwnsMeDrawer                 from "../model/MeDrawer";
-import MeModel                      from "../model/MeModel";
-import TwnsMeWar                    from "../model/MeWar";
-import TwnsMeChooseTileBasePanel    from "./MeChooseTileBasePanel";
-import TwnsMeChooseTileDecoratorPanel from "./MeChooseTileDecoratorPanel";
-import TwnsMeChooseTileObjectPanel  from "./MeChooseTileObjectPanel";
-import TwnsMeChooseUnitPanel        from "./MeChooseUnitPanel";
-import TwnsMeSymmetryPanel          from "./MeSymmetryPanel";
-import TwnsMeTileSimpleView         from "./MeTileSimpleView";
-import TwnsMeVisibilityPanel        from "./MeVisibilityPanel";
-import TwnsMeWarMenuPanel           from "./MeWarMenuPanel";
+import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
+import TwnsBwUnitView                   from "../../baseWar/view/BwUnitView";
+import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import Types                            from "../../tools/helpers/Types";
+import Lang                             from "../../tools/lang/Lang";
+import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+import TwnsUiButton                     from "../../tools/ui/UiButton";
+import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+import TwnsMeDrawer                     from "../model/MeDrawer";
+import MeModel                          from "../model/MeModel";
+import TwnsMeWar                        from "../model/MeWar";
+import TwnsMeChooseTileBasePanel        from "./MeChooseTileBasePanel";
+import TwnsMeChooseTileDecoratorPanel   from "./MeChooseTileDecoratorPanel";
+import TwnsMeChooseTileObjectPanel      from "./MeChooseTileObjectPanel";
+import TwnsMeChooseUnitPanel            from "./MeChooseUnitPanel";
+import TwnsMeSymmetryPanel              from "./MeSymmetryPanel";
+import TwnsMeTileSimpleView             from "./MeTileSimpleView";
+import TwnsMeVisibilityPanel            from "./MeVisibilityPanel";
+import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
 namespace TwnsMeTopPanel {
     import BwUnitView               = TwnsBwUnitView.BwUnitView;
@@ -392,6 +392,7 @@ namespace TwnsMeTopPanel {
             case DrawerMode.DrawUnit            : return 0x00ff00;
             case DrawerMode.DrawTileBase        : return 0x00ff00;
             case DrawerMode.DrawTileObject      : return 0x00ff00;
+            case DrawerMode.DrawTileDecorator   : return 0x00ff00;
             case DrawerMode.DeleteUnit          : return 0xff0000;
             case DrawerMode.DeleteTileDecorator : return 0xff0000;
             case DrawerMode.DeleteTileObject    : return 0xff0000;

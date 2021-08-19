@@ -1418,7 +1418,7 @@ namespace TwnsBwActionPlanner {
         }
         protected abstract _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State;
         private _getNextStateOnTapWhenMakingMovePath(gridIndex: GridIndex): State {
-            const existingUnit = this._getUnitMap().getUnitOnMap(gridIndex);
+            const existingUnit = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
             if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                 if (!existingUnit) {
                     if (!UserModel.getSelfSettingsIsSetPathMode()) {
@@ -1499,7 +1499,7 @@ namespace TwnsBwActionPlanner {
                 return State.ChoosingDropDestination;
             } else {
                 // return State.MakingMovePath;
-                const existingUnit      = this._getUnitMap().getUnitOnMap(gridIndex);
+                const existingUnit      = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
                 const selfPlayerIndex   = this._getWar().getPlayerIndexInTurn();
                 if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                     if (!existingUnit) {
@@ -1610,7 +1610,7 @@ namespace TwnsBwActionPlanner {
         }
         private _getNextStateOnDragEndedWhenMakingMovePath(gridIndex: GridIndex): State {
             if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
-                const existingUnit = this._getUnitMap().getUnitOnMap(gridIndex);
+                const existingUnit = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
                 if (!existingUnit) {
                     if (!UserModel.getSelfSettingsIsSetPathMode()) {
                         return State.ChoosingAction;

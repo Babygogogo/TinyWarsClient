@@ -970,6 +970,10 @@ namespace TwnsLangCommonText {
             `此旁白的数据不合法`,
             `The data of the aside is invalid.`,
         ],
+        [LangTextType.A0233]: [
+            `已有的地形装饰物会被覆盖。您确定要自动填充吗？`,
+            `The current tile decorators will be overwritten. Are you sure to auto fill?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3669,6 +3673,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B0677]: [
             `离线`,
             `Offline`,
+        ],
+        [LangTextType.B0678]: [
+            `自动填充`,
+            `Auto Fill`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

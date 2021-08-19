@@ -61,13 +61,40 @@
                 <e:HorizontalLayout verticalAlign="middle" />
             </e:layout>
         </e:Group>
-        <TwnsUiButton:UiButton id="_btnCancel" label="取消" bottom="10" height="40" width="90" right="10" locked="true">
-            <TwnsUiButton:skinName>
-                <e:Skin states="up,down,disabled">
-                    <TwnsUiLabel:UiLabel id="labelDisplay" size="22" verticalCenter="0" horizontalCenter="0"
-                                         maxTextWidth="60" textColor="0xff0000" bold="true" />
-                </e:Skin>
-            </TwnsUiButton:skinName>
-        </TwnsUiButton:UiButton>
+        <e:Group right="10" bottom="10">
+            <TwnsUiButton:UiButton id="_btnAutoFill" label="自动填充" height="40" width="90" x="0" y="0">
+                <TwnsUiButton:skinName>
+                    <e:Skin>
+                        <e:Group left="0" right="0" top="0" bottom="0">
+                            <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" left="0" right="0" top="0" bottom="0"
+                                     locked="true" />
+                            <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="asdf"
+                                                 textAlign="center" verticalAlign="middle" left="8" right="8" top="8"
+                                                 bottom="8" wordWrap="true" />
+                            <TwnsUiImage:UiImage id="_imgRed" width="14" height="14" source="c04_t01_s01_f01" right="0"
+                                                 top="0" locked="true" />
+                        </e:Group>
+                    </e:Skin>
+                </TwnsUiButton:skinName>
+            </TwnsUiButton:UiButton>
+            <TwnsUiButton:UiButton id="_btnCancel" label="取消" height="40" width="90" x="0" y="0">
+                <TwnsUiButton:skinName>
+                    <e:Skin>
+                        <e:Group left="0" right="0" top="0" bottom="0">
+                            <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" left="0" right="0" top="0" bottom="0"
+                                     locked="true" />
+                            <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="asdf"
+                                                 textAlign="center" verticalAlign="middle" left="8" right="8" top="8"
+                                                 bottom="8" wordWrap="true" />
+                            <TwnsUiImage:UiImage id="_imgRed" width="14" height="14" source="c04_t01_s01_f01" right="0"
+                                                 top="0" locked="true" />
+                        </e:Group>
+                    </e:Skin>
+                </TwnsUiButton:skinName>
+            </TwnsUiButton:UiButton>
+            <e:layout>
+                <e:HorizontalLayout gap="20" />
+            </e:layout>
+        </e:Group>
     </e:Group>
 </e:Skin>

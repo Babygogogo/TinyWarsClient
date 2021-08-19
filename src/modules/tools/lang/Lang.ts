@@ -293,6 +293,7 @@ namespace Lang {
             case Types.MapEditorDrawerMode.Preview              : return getText(LangTextType.B0286);
             case Types.MapEditorDrawerMode.DrawUnit             : return getText(LangTextType.B0281);
             case Types.MapEditorDrawerMode.DrawTileBase         : return getText(LangTextType.B0282);
+            case Types.MapEditorDrawerMode.DrawTileDecorator    : return getText(LangTextType.B0662);
             case Types.MapEditorDrawerMode.DrawTileObject       : return getText(LangTextType.B0283);
             case Types.MapEditorDrawerMode.DeleteUnit           : return getText(LangTextType.B0284);
             case Types.MapEditorDrawerMode.DeleteTileDecorator  : return getText(LangTextType.B0661);

@@ -187,6 +187,30 @@ namespace TwnsMeDrawer {
             this._symmetricalDrawType = type;
         }
 
+        public autoFillTileDecorators(): void {
+            const tileMap = this._tileMap;
+            for (const tile of tileMap.getAllTiles()) {
+                const gridIndex         = tile.getGridIndex();
+                const targetBaseData    = MeUtility.getAutoTileDecoratorTypeAndShapeId(tileMap, gridIndex);
+                const decoratorType     = targetBaseData.decoratorType;
+                const decoratorShapeId  = targetBaseData.shapeId;
+                tile.init({
+                    gridIndex       : tile.getGridIndex(),
+                    playerIndex     : tile.getPlayerIndex(),
+                    objectType      : tile.getObjectType(),
+                    objectShapeId   : tile.getObjectShapeId(),
+                    baseType        : tile.getBaseType(),
+                    baseShapeId     : tile.getBaseShapeId(),
+                    decoratorType,
+                    decoratorShapeId,
+                }, this._configVersion);
+                tile.startRunning(this._getWar());
+                tile.flushDataToView();
+
+                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+            }
+        }
+
         private _handleAction(gridIndex: GridIndex): void {
             const mode = this.getMode();
             if (mode === DrawerMode.DrawTileBase) {

@@ -1,4 +1,5 @@
 
+import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -26,10 +27,11 @@ namespace TwnsMeChooseTileDecoratorPanel {
 
         private static _instance: MeChooseTileDecoratorPanel;
 
-        private _listCategory       : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
-        private _listRecent         : TwnsUiScrollList.UiScrollList<DataForTileDecoratorRenderer>;
-        private _labelRecentTitle   : TwnsUiLabel.UiLabel;
-        private _btnCancel          : TwnsUiButton.UiButton;
+        private readonly _listCategory      : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private readonly _listRecent        : TwnsUiScrollList.UiScrollList<DataForTileDecoratorRenderer>;
+        private readonly _labelRecentTitle  : TwnsUiLabel.UiLabel;
+        private readonly _btnAutoFill       : TwnsUiButton.UiButton;
+        private readonly _btnCancel         : TwnsUiButton.UiButton;
 
         private _dataListForRecent  : DataForTileDecoratorRenderer[] = [];
 
@@ -58,7 +60,8 @@ namespace TwnsMeChooseTileDecoratorPanel {
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnCancel,  callback: this.close },
+                { ui: this._btnAutoFill,    callback: this._onTouchedBtnAutoFill },
+                { ui: this._btnCancel,      callback: this.close },
             ]);
             this._listCategory.setItemRenderer(CategoryRenderer);
             this._listRecent.setItemRenderer(TileDecoratorRenderer);
@@ -98,10 +101,21 @@ namespace TwnsMeChooseTileDecoratorPanel {
             this._updateComponentsForLanguage();
         }
 
+        private _onTouchedBtnAutoFill(): void {
+            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0233),
+                callback: () => {
+                    MeModel.getWar().getDrawer().autoFillTileDecorators();
+                    this.close();
+                },
+            });
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
+            this._btnAutoFill.label     = Lang.getText(LangTextType.B0678);
             this._btnCancel.label       = Lang.getText(LangTextType.B0154);
             this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
         }
