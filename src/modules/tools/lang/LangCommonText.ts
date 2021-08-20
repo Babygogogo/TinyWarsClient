@@ -974,6 +974,22 @@ namespace TwnsLangCommonText {
             `已有的地形装饰物会被覆盖。您确定要自动填充吗？`,
             `The current tile decorators will be overwritten. Are you sure to auto fill?`,
         ],
+        [LangTextType.A0234]: [
+            `导出失败，请使用chrome浏览器重试`,
+            `Failed to export. Please retry with chrome browser.`,
+        ],
+        [LangTextType.A0235]: [
+            `导出成功`,
+            `Exported successfully.`,
+        ],
+        [LangTextType.A0236]: [
+            `导入失败，请确保剪贴板数据无误`,
+            `Failed to import. Please ensure the clipboard data is valid.`,
+        ],
+        [LangTextType.A0237]: [
+            `当前的地图数据将被覆盖（但存档不受影响）。您确定要继续导入吗？`,
+            `The current map data will be overwritten, but the saved data will not be affected. Are you sure to import?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3677,6 +3693,18 @@ namespace TwnsLangCommonText {
         [LangTextType.B0678]: [
             `自动填充`,
             `Auto Fill`,
+        ],
+        [LangTextType.B0679]: [
+            `回合开始！`,
+            `Turn Start!`,
+        ],
+        [LangTextType.B0680]: [
+            `导出到剪贴板`,
+            `Export to Clipboard`,
+        ],
+        [LangTextType.B0681]: [
+            `从剪贴板导入`,
+            `Import from Clipboard`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,6 +3,7 @@ import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
 import TwnsBwTile                   from "../../baseWar/model/BwTile";
 import TwnsBwUnit                   from "../../baseWar/model/BwUnit";
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
+import TwnsBwBeginTurnPanel from "../../baseWar/view/BwBeginTurnPanel";
 import TwnsBwCaptureProgressPanel   from "../../baseWar/view/BwCaptureProgressPanel";
 import UserModel                    from "../../user/model/UserModel";
 import TwnsClientErrorCode          from "../helpers/ClientErrorCode";
@@ -163,8 +164,8 @@ namespace WarActionExecutor {
         return war.getTurnManager().endPhaseMain(action);
     }
     async function normalExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<ClientErrorCode> {
-        const desc = await war.getDescForExePlayerEndTurn(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExePlayerEndTurn(action);
+        // (desc) && (FloatText.show(desc));
 
         return war.getTurnManager().endPhaseMain(action);
     }
@@ -586,8 +587,28 @@ namespace WarActionExecutor {
         return war.getTurnManager().endPhaseWaitBeginTurn(action);
     }
     async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<ClientErrorCode> {
-        const desc = await war.getDescForExeSystemBeginTurn(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeSystemBeginTurn(action);
+        // (desc) && (FloatText.show(desc));
+
+        // return war.getTurnManager().endPhaseWaitBeginTurn(action);
+
+        const playerInTurn = war.getPlayerInTurn();
+        if (playerInTurn == null) {
+            throw new Error(`WarActionExecutor.normalExeSystemBeginTurn() empty playerInTurn.`);
+        }
+
+        const playerIndex = playerInTurn.getPlayerIndex();
+        if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
+            const nickname = await playerInTurn.getNickname();
+            await new Promise<void>(resolve => {
+                TwnsBwBeginTurnPanel.BwBeginTurnPanel.show({
+                    playerIndex,
+                    teamIndex           : playerInTurn.getTeamIndex(),
+                    nickname,
+                    callbackOnFinish    : () => resolve(),
+                });
+            });
+        }
 
         return war.getTurnManager().endPhaseWaitBeginTurn(action);
     }
@@ -700,8 +721,8 @@ namespace WarActionExecutor {
         return war.getTurnManager().endPhaseMain(action);
     }
     async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<ClientErrorCode> {
-        const desc = await war.getDescForExeSystemEndTurn(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeSystemEndTurn(action);
+        // (desc) && (FloatText.show(desc));
 
         return war.getTurnManager().endPhaseMain(action);
     }

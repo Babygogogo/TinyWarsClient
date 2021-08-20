@@ -3,6 +3,7 @@
 	"autoGenerateExmlsList": true,
 	"exmls": [
 		"resource/skins/baseWar/BwBackgroundPanel.exml",
+		"resource/skins/baseWar/BwBeginTurnPanel.exml",
 		"resource/skins/baseWar/BwBuildingListPanel.exml",
 		"resource/skins/baseWar/BwCaptureProgressPanel.exml",
 		"resource/skins/component/button/ButtonGrey001.exml",

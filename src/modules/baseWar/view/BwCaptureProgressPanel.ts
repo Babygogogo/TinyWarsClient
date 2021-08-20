@@ -1,5 +1,5 @@
 
-import Helpers          from "../../tools/helpers/Helpers";
+import SoundManager     from "../../tools/helpers/SoundManager";
 import Types            from "../../tools/helpers/Types";
 import TwnsUiPanel      from "../../tools/ui/UiPanel";
 
@@ -40,23 +40,25 @@ namespace TwnsBwCaptureProgressPanel {
         }
 
         protected _onOpened(): void {
+            this._setCallbackOnTouchedMask(() => {
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                this.close();
+            });
+
             const openData  = this._getOpenData();
             const pbar      = this._pbarProgress;
             pbar.maximum    = openData.maxValue;
             pbar.value      = openData.currentValue;
 
-            Helpers.resetTween({
-                obj         : pbar,
-                beginProps  : {},
-                endProps    : { value: openData.newValue },
-                waitTime    : 500,
-                tweenTime   : 250,
-                callback    : () => {
-                    egret.setTimeout(() => this.close(), this, 500);
-                },
-            });
+            egret.Tween.removeTweens(pbar);
+            egret.Tween.get(pbar)
+                .wait(500)
+                .to({ value: openData.newValue }, 250)
+                .wait(500)
+                .call(() => this.close());
         }
         protected async _onClosed(): Promise<void> {
+            egret.Tween.removeTweens(this._pbarProgress);
             this._getOpenData().callbackOnFinish();
         }
     }

@@ -5,7 +5,7 @@
     <e:Group id="_group" width="240" horizontalCenter="0" verticalCenter="0" height="50">
         <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
                              left="0" right="0" top="0" bottom="0" />
-        <e:ProgressBar id="_pbarProgress" width="200" horizontalCenter="0" verticalCenter="0" value="60.8"
+        <e:ProgressBar id="_pbarProgress" width="200" horizontalCenter="0" verticalCenter="0" value="60"
                        slideDuration="0">
             <e:skinName>
                 <e:Skin>
