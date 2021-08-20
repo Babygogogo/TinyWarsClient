@@ -205,6 +205,8 @@ namespace TwnsWeActionModifyPanel3 {
     class DialogueRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDialogueRenderer> {
         private readonly _labelError        : TwnsUiLabel.UiLabel;
         private readonly _btnChangeType     : TwnsUiButton.UiButton;
+        private readonly _btnInsert         : TwnsUiButton.UiButton;
+        private readonly _btnUp             : TwnsUiButton.UiButton;
         private readonly _btnDelete         : TwnsUiButton.UiButton;
         private readonly _labelDialogueType : TwnsUiLabel.UiLabel;
         private readonly _groupCoDialogue   : eui.Group;
@@ -221,6 +223,8 @@ namespace TwnsWeActionModifyPanel3 {
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChangeType,  callback: this._onTouchedBtnChangeType },
+                { ui: this._btnInsert,      callback: this._onTouchedBtnInsert },
+                { ui: this._btnUp,          callback: this._onTouchedBtnUp },
                 { ui: this._btnDelete,      callback: this._onTouchedBtnDelete },
                 { ui: this._groupLeftSide,  callback: this._onTouchedGroupLeftSide },
                 { ui: this._btnCo,          callback: this._onTouchedBtnCo },
@@ -269,6 +273,27 @@ namespace TwnsWeActionModifyPanel3 {
             }
 
             Logger.error(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnChangeType() invalid dataForDialogue.`);
+        }
+
+        private _onTouchedBtnInsert(): void {
+            const data          = this.data;
+            const dialogueArray = data.action.WeaDialogue.dataArray;
+            if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
+                FloatText.show(Lang.getText(LangTextType.A0228));
+            } else {
+                dialogueArray.splice(dialogueArray.indexOf(data.dataForDialogue), 0, WarEventHelper.getDefaultCoDialogueData());
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            }
+        }
+
+        private _onTouchedBtnUp(): void {
+            const data          = this.data;
+            const dialogueArray = data.action.WeaDialogue.dataArray;
+            const index         = dialogueArray.indexOf(data.dataForDialogue);
+            if (index > 0) {
+                [dialogueArray[index - 1], dialogueArray[index]] = [dialogueArray[index], dialogueArray[index - 1]];
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            }
         }
 
         private _onTouchedBtnDelete(): void {
@@ -424,6 +449,8 @@ namespace TwnsWeActionModifyPanel3 {
             this._updateLabelDialogueType();
 
             this._btnChangeType.label   = Lang.getText(LangTextType.B0668);
+            this._btnInsert.label       = Lang.getText(LangTextType.B0682);
+            this._btnUp.label           = Lang.getText(LangTextType.B0463);
             this._btnDelete.label       = Lang.getText(LangTextType.B0220);
             this._labelLeftSide.text    = Lang.getText(LangTextType.B0673);
             this._btnCo.label           = Lang.getText(LangTextType.B0425);

@@ -3706,6 +3706,10 @@ namespace TwnsLangCommonText {
             `从剪贴板导入`,
             `Import from Clipboard`,
         ],
+        [LangTextType.B0682]: [
+            `插入`,
+            `Insert`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

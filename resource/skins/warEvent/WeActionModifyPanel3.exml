@@ -38,12 +38,18 @@
                             <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
                                                  anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0" />
                             <e:Group left="0" right="0">
-                                <TwnsUiLabel:UiLabel id="_labelError" text="error" size="16" textColor="0xffffff"
+                                <TwnsUiLabel:UiLabel id="_labelError" text="error" size="14" textColor="0xffffff"
                                                      verticalCenter="0" x="10" />
                                 <e:Group y="0" right="0">
                                     <TwnsUiButton:UiButton id="_btnChangeType" label="Switch Type"
                                                            skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                                            width="100" x="0" y="0" />
+                                    <TwnsUiButton:UiButton id="_btnUp" label="Switch Type"
+                                                           skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                           width="100" x="10" y="10" />
+                                    <TwnsUiButton:UiButton id="_btnInsert" label="Switch Type"
+                                                           skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                           width="100" x="20" y="20" />
                                     <TwnsUiButton:UiButton id="_btnDelete" label="Delete"
                                                            skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                                            width="100" x="0" y="0" />
