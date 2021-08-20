@@ -118,7 +118,7 @@ namespace TwnsBwUnitDetailPanel {
             this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
         }
         private _onNotifyBwPlannerStateChanged(): void {
-            this.close();
+            // this.close();
         }
 
         private _onTouchedBtnUnitsInfo(): void {

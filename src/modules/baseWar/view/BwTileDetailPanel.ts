@@ -98,7 +98,7 @@ namespace TwnsBwTileDetailPanel {
             this._updateComponentsForLanguage();
         }
         private _onNotifyBwPlannerStateChanged(): void {
-            this.close();
+            // this.close();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
