@@ -44,7 +44,7 @@ namespace CommonConstants {
     export const MapMinRating                           = 0;
 
     export const WarEventNameMaxLength                  = 150;
-    export const WarEventMaxEventsPerMap                = 10;
+    export const WarEventMaxEventsPerMap                = 30;
     export const WarEventMaxConditionNodesPerMap        = 50;
     export const WarEventMaxConditionsPerMap            = 100;
     export const WarEventMaxActionsPerMap               = 100;
