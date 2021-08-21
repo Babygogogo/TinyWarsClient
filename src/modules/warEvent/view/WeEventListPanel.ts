@@ -87,8 +87,13 @@ namespace TwnsWeEventListPanel {
         }
 
         private _onTouchedBtnAddEvent(): void {
-            const openData = this._getOpenData();
-            if (WarEventHelper.addEvent(openData.war.getWarEventManager().getWarEventFullData()) != null) {
+            const fullData  = this._getOpenData().war.getWarEventManager().getWarEventFullData();
+            const eventId   = WarEventHelper.addEvent(fullData);
+            if (eventId != null) {
+                WarEventHelper.createAndReplaceSubNodeInEvent({
+                    fullData,
+                    eventId,
+                });
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
