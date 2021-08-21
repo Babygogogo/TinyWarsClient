@@ -166,9 +166,9 @@ namespace TwnsBwDialoguePanel {
                     Logger.error(`BwDialoguePanel._updateComponentsForDialogue() invalid side.`);
                 }
 
-                labelContent.text = Lang.getLanguageText({
+                labelContent.setRichText(Lang.getLanguageText({
                     textArray   : dataForCoDialogue.textArray,
-                });
+                }).replace(/\\n/g, "\n"));
 
             } else if (dataForAside) {
                 groupName1.visible  = false;
@@ -176,9 +176,9 @@ namespace TwnsBwDialoguePanel {
                 Helpers.changeColor(imgCo1, Types.ColorType.Dark);
                 Helpers.changeColor(imgCo2, Types.ColorType.Dark);
 
-                labelContent.text = Lang.getLanguageText({
+                labelContent.setRichText(Lang.getLanguageText({
                     textArray   : dataForAside.textArray,
-                });
+                }).replace(/\\n/g, "\n"));
             }
         }
 

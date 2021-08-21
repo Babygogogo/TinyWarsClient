@@ -349,6 +349,7 @@ namespace TwnsWeActionModifyPanel3 {
                 maxChars        : CommonConstants.WarEventActionDialogueTextMaxLength,
                 tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueTextMaxLength),
                 canBeEmpty      : true,
+                isMultiLine     : true,
                 callback        : panel => {
                     const text = (panel.getInputText() || ``).trim();
                     if (text === currentText) {
@@ -385,6 +386,7 @@ namespace TwnsWeActionModifyPanel3 {
                 maxChars        : CommonConstants.WarEventActionDialogueTextMaxLength,
                 tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueTextMaxLength),
                 canBeEmpty      : true,
+                isMultiLine     : true,
                 callback        : panel => {
                     const text = (panel.getInputText() || ``).trim();
                     if (text === currentText) {

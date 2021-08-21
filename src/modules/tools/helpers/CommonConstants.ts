@@ -52,7 +52,7 @@ namespace CommonConstants {
     export const WarEventMaxCallCountTotal              = 100;
     export const WarEventMaxCallCountInPlayerTurn       = 10;
     export const WarEventActionAddUnitMaxCount          = 50;
-    export const WarEventActionDialogueTextMaxLength    = 150;
+    export const WarEventActionDialogueTextMaxLength    = 300;
     export const WarEventActionDialogueMaxCount         = 100;
 
     export const MapEditorSlotMaxCountForNormal         = 3;

@@ -21,6 +21,7 @@ namespace TwnsCommonInputPanel {
         maxChars        : number | null;
         charRestrict    : string | null;
         canBeEmpty?     : boolean;
+        isMultiLine?    : boolean;
         callback        : (panel: CommonInputPanel) => any;
     };
     export class CommonInputPanel extends TwnsUiPanel.UiPanel<OpenData> {
@@ -73,9 +74,12 @@ namespace TwnsCommonInputPanel {
             const openData          = this._getOpenData();
             this._labelTitle.text   = openData.title;
             this._labelTips.text    = openData.tips;
-            this._input.text        = openData.currentValue;
-            this._input.maxChars    = openData.maxChars;
-            this._input.restrict    = openData.charRestrict;
+
+            const input                 = this._input;
+            input.text                  = openData.currentValue;
+            input.maxChars              = openData.maxChars;
+            input.restrict              = openData.charRestrict;
+            input.textDisplay.multiline = !!openData.isMultiLine;
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
