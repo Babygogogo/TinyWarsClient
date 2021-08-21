@@ -3710,6 +3710,14 @@ namespace TwnsLangCommonText {
             `插入`,
             `Insert`,
         ],
+        [LangTextType.B0683]: [
+            `中文名称`,
+            `Chinese Name`,
+        ],
+        [LangTextType.B0684]: [
+            `英文名称`,
+            `English Name`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

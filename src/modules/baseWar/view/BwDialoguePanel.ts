@@ -144,9 +144,10 @@ namespace TwnsBwDialoguePanel {
             }
 
             if (dataForCoDialogue) {
-                const { side, coId }    = dataForCoDialogue;
-                const coImageSource     = ConfigManager.getCoBustImageSource(coId);
-                const coName            = ConfigManager.getCoNameAndTierText(ConfigManager.getLatestFormalVersion(), coId);
+                const { side, coId, nameArray } = dataForCoDialogue;
+                const coImageSource             = ConfigManager.getCoBustImageSource(coId);
+                const customName                = Lang.getLanguageText({ textArray: nameArray });
+                const coName                    = customName != null ? customName : ConfigManager.getCoNameAndTierText(ConfigManager.getLatestFormalVersion(), coId);
 
                 if (side === Types.WarEventActionDialogueSide.Left) {
                     groupName1.visible  = true;

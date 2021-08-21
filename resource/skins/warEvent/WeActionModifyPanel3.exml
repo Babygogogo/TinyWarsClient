@@ -2,8 +2,9 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*"
         xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
         xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" locked="true" />
-    <e:Group top="40" bottom="0" width="760" horizontalCenter="0">
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" scale9Grid="1,1,2,2"
+                         locked="true" />
+    <e:Group top="40" bottom="0" width="960" horizontalCenter="0">
         <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
         <TwnsUiLabel:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
@@ -33,7 +34,7 @@
         <TwnsUiScrollList:UiScrollList id="_listDialogue" left="5" right="5" top="70" bottom="10">
             <e:List>
                 <e:itemRendererSkinName>
-                    <e:Skin currentState="up" states="down,up" width="750" height="200">
+                    <e:Skin currentState="up" states="down,up" width="950" height="200">
                         <e:Group left="0" right="0" top="0" bottom="0">
                             <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
                                                  anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0" />
@@ -60,7 +61,7 @@
                             </e:Group>
                             <e:Group left="0" right="0" top="30">
                                 <e:Group y="11" left="0" right="0">
-                                    <TwnsUiLabel:UiLabel id="_labelDialogueType" text="对白类型：CO对白" size="18"
+                                    <TwnsUiLabel:UiLabel id="_labelDialogueType" text="对白类型：CO对白" size="14"
                                                          textColor="0xFFFFFF" x="20" y="20" />
                                     <e:Group id="_groupCoDialogue" y="206" left="0" right="0" x="0" scaleX="1"
                                              scaleY="1">
@@ -72,24 +73,44 @@
                                                                      anchorOffsetY="0" alpha="0.8" x="0"
                                                                      source="common0006" y="0" />
                                             </e:Group>
-                                            <TwnsUiLabel:UiLabel id="_labelLeftSide" text="左侧" size="18"
+                                            <TwnsUiLabel:UiLabel id="_labelLeftSide" text="左侧" size="14"
                                                                  textColor="0xFFFFFF" x="10" y="10" />
                                             <e:layout>
                                                 <e:HorizontalLayout verticalAlign="middle" />
                                             </e:layout>
                                         </e:Group>
-                                        <e:Group x="171" y="0">
+                                        <e:Group x="170" y="0">
                                             <TwnsUiButton:UiButton id="_btnCo" label="CO"
                                                                    skinName="Skins.Component.Button.ButtonSelfAdaption001"
-                                                                   width="100" x="-200" y="0" />
+                                                                   width="50" x="-200" y="0" />
                                             <TwnsUiLabel:UiLabel id="_labelCo" text="Brenner" size="14"
                                                                  textColor="0xFFFFFF" x="-940" y="0" />
                                             <e:layout>
                                                 <e:HorizontalLayout verticalAlign="middle" />
                                             </e:layout>
                                         </e:Group>
+                                        <e:Group x="180" y="10">
+                                            <TwnsUiButton:UiButton id="_btnChineseName" label="ChineseName"
+                                                                   skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                                   x="-200" y="0" />
+                                            <TwnsUiLabel:UiLabel id="_labelChineseName" text="Brenner" size="14"
+                                                                 textColor="0xFFFFFF" x="-940" y="0" />
+                                            <e:layout>
+                                                <e:HorizontalLayout verticalAlign="middle" />
+                                            </e:layout>
+                                        </e:Group>
+                                        <e:Group x="190" y="20">
+                                            <TwnsUiButton:UiButton id="_btnEnglishName" label="English Name"
+                                                                   skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                                   x="-200" y="0" />
+                                            <TwnsUiLabel:UiLabel id="_labelEnglishName" text="Brenner" size="14"
+                                                                 textColor="0xFFFFFF" x="-940" y="0" />
+                                            <e:layout>
+                                                <e:HorizontalLayout verticalAlign="middle" />
+                                            </e:layout>
+                                        </e:Group>
                                         <e:layout>
-                                            <e:HorizontalLayout gap="100" />
+                                            <e:HorizontalLayout gap="40" />
                                         </e:layout>
                                     </e:Group>
                                     <e:layout>
@@ -101,14 +122,14 @@
                                                            skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                                            width="100" left="0" top="0" />
                                     <TwnsUiLabel:UiLabel id="_labelChinese" text="asdf\nasdf\nasdf" size="14"
-                                                         textColor="0xFFFFFF" x="110" y="6" width="640" />
+                                                         textColor="0xFFFFFF" x="110" width="840" />
                                 </e:Group>
                                 <e:Group x="10" y="10" scaleX="1" scaleY="1" height="60">
                                     <TwnsUiButton:UiButton id="_btnEnglish" label="Unit Type"
                                                            skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                                            width="100" left="0" top="0" />
                                     <TwnsUiLabel:UiLabel id="_labelEnglish" text="asdf\nasdf\nasdf" size="14"
-                                                         textColor="0xFFFFFF" x="110" y="6" width="640" />
+                                                         textColor="0xFFFFFF" x="110" width="840" />
                                 </e:Group>
                                 <e:layout>
                                     <e:VerticalLayout/>

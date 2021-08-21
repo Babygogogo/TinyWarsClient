@@ -629,6 +629,18 @@ namespace WarEventHelper {
             return false;
         }
 
+        const nameArray = data.nameArray;
+        if ((nameArray)                             &&
+            (!Helpers.checkIsValidLanguageTextArray({
+                list            : nameArray,
+                minTextLength   : 1,
+                maxTextLength   : CommonConstants.WarEventActionDialogueNameMaxLength,
+                minTextCount    : 1,
+            }))
+        ) {
+            return false;
+        }
+
         return true;
     }
     function checkIsValidDataForAside(data: ProtoTypes.WarEvent.WeaDialogue.IDataForAside): boolean {
@@ -1288,7 +1300,7 @@ namespace WarEventHelper {
         {
             const dataForCoDialogue = dialogueData.dataForCoDialogue;
             if (dataForCoDialogue) {
-                const { coId, side, textArray } = dataForCoDialogue;
+                const { coId, side, textArray, nameArray } = dataForCoDialogue;
                 if ((coId == null)                                                                                          ||
                     (coId === CommonConstants.CoEmptyId)                                                                    ||
                     (ConfigManager.getCoNameAndTierText(configVersion, coId) == null)                                       ||
@@ -1298,7 +1310,13 @@ namespace WarEventHelper {
                         minTextCount    : 1,
                         minTextLength   : 1,
                         maxTextLength   : CommonConstants.WarEventActionDialogueTextMaxLength,
-                    }))
+                    }))                                                                                                     ||
+                    ((nameArray) && (!Helpers.checkIsValidLanguageTextArray({
+                        list            : nameArray,
+                        minTextCount    : 1,
+                        minTextLength   : 1,
+                        maxTextLength   : CommonConstants.WarEventActionDialogueNameMaxLength,
+                    })))
                 ) {
                     return Lang.getText(LangTextType.A0231);
                 }

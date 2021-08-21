@@ -7,13 +7,13 @@
                              scale9Grid="1,1,2,2" />
         <TwnsUiImage:UiImage id="_imgCo1" source="coBust0001" scaleX="-1" bottom="114" horizontalCenter="-250" />
         <TwnsUiImage:UiImage id="_imgCo2" bottom="114" y="75" source="coBust0011" horizontalCenter="250" />
-        <e:Group id="_groupName1" width="220" bottom="120" visible="true" left="0">
-            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+        <e:Group id="_groupName1" width="220" bottom="118" visible="true" left="0">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="42"
                                  source="commonColorGrey0001" y="0" left="0" right="0" />
             <TwnsUiLabel:UiLabel id="_labelName1" text="Will" x="20" size="22" bold="true" verticalCenter="2" />
         </e:Group>
-        <e:Group width="220" bottom="120" id="_groupName2" y="390" right="0">
-            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+        <e:Group width="220" bottom="118" id="_groupName2" right="0">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="42"
                                  source="commonColorGrey0001" y="0" left="0" right="0" />
             <TwnsUiLabel:UiLabel id="_labelName2" text="Caulder" size="22" bold="true" verticalCenter="2" right="20" />
         </e:Group>

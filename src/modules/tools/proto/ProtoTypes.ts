@@ -5401,6 +5401,9 @@ export declare namespace WarEvent {
 
             /** DataForCoDialogue textArray */
             textArray?: (Structure.ILanguageText[]|null);
+
+            /** DataForCoDialogue nameArray */
+            nameArray?: (Structure.ILanguageText[]|null);
         }
 
         /** Represents a DataForCoDialogue. */
@@ -5420,6 +5423,9 @@ export declare namespace WarEvent {
 
             /** DataForCoDialogue textArray. */
             public textArray: Structure.ILanguageText[];
+
+            /** DataForCoDialogue nameArray. */
+            public nameArray: Structure.ILanguageText[];
 
             /**
              * Creates a new DataForCoDialogue instance using the specified properties.

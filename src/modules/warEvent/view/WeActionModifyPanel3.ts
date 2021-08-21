@@ -3,7 +3,7 @@ import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import TwnsBwDialoguePanel          from "../../baseWar/view/BwDialoguePanel";
 import TwnsCommonChooseCoPanel      from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
-import TwnsCommonInputPanel from "../../common/view/CommonInputPanel";
+import TwnsCommonInputPanel         from "../../common/view/CommonInputPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
@@ -215,6 +215,10 @@ namespace TwnsWeActionModifyPanel3 {
         private readonly _labelLeftSide     : TwnsUiLabel.UiLabel;
         private readonly _btnCo             : TwnsUiButton.UiButton;
         private readonly _labelCo           : TwnsUiLabel.UiLabel;
+        private readonly _btnChineseName    : TwnsUiButton.UiButton;
+        private readonly _labelChineseName  : TwnsUiLabel.UiLabel;
+        private readonly _btnEnglishName    : TwnsUiButton.UiButton;
+        private readonly _labelEnglishName  : TwnsUiLabel.UiLabel;
         private readonly _btnChinese        : TwnsUiButton.UiButton;
         private readonly _labelChinese      : TwnsUiLabel.UiLabel;
         private readonly _btnEnglish        : TwnsUiButton.UiButton;
@@ -228,6 +232,8 @@ namespace TwnsWeActionModifyPanel3 {
                 { ui: this._btnDelete,      callback: this._onTouchedBtnDelete },
                 { ui: this._groupLeftSide,  callback: this._onTouchedGroupLeftSide },
                 { ui: this._btnCo,          callback: this._onTouchedBtnCo },
+                { ui: this._btnChineseName, callback: this._onTouchedBtnChineseName },
+                { ui: this._btnEnglishName, callback: this._onTouchedBtnEnglishName },
                 { ui: this._btnChinese,     callback: this._onTouchedBtnChinese },
                 { ui: this._btnEnglish,     callback: this._onTouchedBtnEnglish },
             ]);
@@ -336,6 +342,92 @@ namespace TwnsWeActionModifyPanel3 {
             }
         }
 
+        private _onTouchedBtnChineseName(): void {
+            const dataForDialogue = this.data.dataForDialogue.dataForCoDialogue;
+            if (dataForDialogue == null) {
+                throw new Error(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnChineseName() empty dataForDialogue.`);
+            }
+            dataForDialogue.nameArray   = dataForDialogue.nameArray || [];
+            const textArray             = dataForDialogue.nameArray;
+            const textData              = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
+            const currentText           = textData?.text;
+
+            TwnsCommonInputPanel.CommonInputPanel.show({
+                title           : Lang.getText(LangTextType.B0455),
+                currentValue    : currentText || ``,
+                charRestrict    : null,
+                maxChars        : CommonConstants.WarEventActionDialogueNameMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueNameMaxLength),
+                canBeEmpty      : true,
+                callback        : panel => {
+                    const text = (panel.getInputText() || ``).trim();
+                    if (text === currentText) {
+                        return;
+                    }
+
+                    if (!text.length) {
+                        Helpers.deleteElementFromArray(textArray, textData);
+                        if (!textArray.length) {
+                            delete dataForDialogue.nameArray;
+                        }
+                    } else {
+                        if (textData) {
+                            textData.text = text;
+                        } else {
+                            textArray.push({
+                                languageType    : Types.LanguageType.Chinese,
+                                text,
+                            });
+                        }
+                    }
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+
+        private _onTouchedBtnEnglishName(): void {
+            const dataForDialogue = this.data.dataForDialogue.dataForCoDialogue;
+            if (dataForDialogue == null) {
+                throw new Error(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnEnglishName() empty dataForDialogue.`);
+            }
+            dataForDialogue.nameArray   = dataForDialogue.nameArray || [];
+            const textArray             = dataForDialogue.nameArray;
+            const textData              = textArray.find(v => v.languageType === Types.LanguageType.English);
+            const currentText           = textData?.text;
+
+            TwnsCommonInputPanel.CommonInputPanel.show({
+                title           : Lang.getText(LangTextType.B0455),
+                currentValue    : currentText || ``,
+                charRestrict    : null,
+                maxChars        : CommonConstants.WarEventActionDialogueNameMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueNameMaxLength),
+                canBeEmpty      : true,
+                callback        : panel => {
+                    const text = (panel.getInputText() || ``).trim();
+                    if (text === currentText) {
+                        return;
+                    }
+
+                    if (!text.length) {
+                        Helpers.deleteElementFromArray(textArray, textData);
+                        if (!textArray.length) {
+                            delete dataForDialogue.nameArray;
+                        }
+                    } else {
+                        if (textData) {
+                            textData.text = text;
+                        } else {
+                            textArray.push({
+                                languageType    : Types.LanguageType.English,
+                                text,
+                            });
+                        }
+                    }
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+
         private _onTouchedBtnChinese(): void {
             const dataForDialogue   = this.data.dataForDialogue;
             const textArray         = dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray;
@@ -431,19 +523,33 @@ namespace TwnsWeActionModifyPanel3 {
                 this._labelCo.text          = ConfigManager.getCoNameAndTierText(ConfigManager.getLatestFormalVersion(), dataForCoDialogue.coId);
             }
 
-            const labelChinese  = this._labelChinese;
-            const labelEnglish  = this._labelEnglish;
-            const textArray     = dataForCoDialogue ? dataForCoDialogue.textArray : dataForDialogue.dataForAside.textArray;
-            labelChinese.text = Lang.getLanguageText({
-                textArray,
-                useAlternate: false,
-                languageType: Types.LanguageType.Chinese,
-            }) || "";
-            labelEnglish.text = Lang.getLanguageText({
-                textArray,
-                useAlternate: false,
-                languageType: Types.LanguageType.English,
-            }) || "";
+            {
+                const nameArray = dataForCoDialogue?.nameArray;
+                this._labelChineseName.text = Lang.getLanguageText({
+                    textArray: nameArray,
+                    useAlternate: false,
+                    languageType: Types.LanguageType.Chinese,
+                }) || "";
+                this._labelEnglishName.text = Lang.getLanguageText({
+                    textArray: nameArray,
+                    useAlternate: false,
+                    languageType: Types.LanguageType.English,
+                }) || "";
+            }
+
+            {
+                const textArray = dataForCoDialogue ? dataForCoDialogue.textArray : dataForDialogue.dataForAside.textArray;
+                this._labelChinese.text = Lang.getLanguageText({
+                    textArray,
+                    useAlternate: false,
+                    languageType: Types.LanguageType.Chinese,
+                }) || "";
+                this._labelEnglish.text = Lang.getLanguageText({
+                    textArray,
+                    useAlternate: false,
+                    languageType: Types.LanguageType.English,
+                }) || "";
+            }
         }
 
         private _updateComponentsForLanguage(): void {
@@ -456,6 +562,8 @@ namespace TwnsWeActionModifyPanel3 {
             this._btnDelete.label       = Lang.getText(LangTextType.B0220);
             this._labelLeftSide.text    = Lang.getText(LangTextType.B0673);
             this._btnCo.label           = Lang.getText(LangTextType.B0425);
+            this._btnChineseName.label  = Lang.getText(LangTextType.B0683);
+            this._btnEnglishName.label  = Lang.getText(LangTextType.B0684);
             this._btnChinese.label      = Lang.getText(LangTextType.B0455);
             this._btnEnglish.label      = Lang.getText(LangTextType.B0456);
         }

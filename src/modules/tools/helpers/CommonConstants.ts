@@ -54,6 +54,7 @@ namespace CommonConstants {
     export const WarEventActionAddUnitMaxCount          = 50;
     export const WarEventActionDialogueTextMaxLength    = 300;
     export const WarEventActionDialogueMaxCount         = 100;
+    export const WarEventActionDialogueNameMaxLength    = 30;
 
     export const MapEditorSlotMaxCountForNormal         = 3;
     export const MapEditorSlotMaxCountForCommittee      = 100;

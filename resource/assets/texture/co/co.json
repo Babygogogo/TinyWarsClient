@@ -44,6 +44,7 @@
     "coBust0037": {"x":1711,"y":1059,"w":183,"h":351,"offX":57,"offY":9,"sourceW":240,"sourceH":360},
     "coBust0038": {"x":633,"y":1542,"w":182,"h":376,"offX":29,"offY":0,"sourceW":240,"sourceH":376},
     "coBust0039": {"x":1862,"y":358,"w":103,"h":360,"offX":107,"offY":0,"sourceW":240,"sourceH":360},
+    "coBust9999": {"x":1620,"y":358,"w":240,"h":320},
     "coHead0000": {"x":1182,"y":1505,"w":3,"h":3,"offX":0,"offY":0,"sourceW":4,"sourceH":4},
     "coHead0001": {"x":1711,"y":1412,"w":100,"h":100},
     "coHead0002": {"x":1813,"y":1412,"w":99,"h":100,"offX":1,"offY":0,"sourceW":100,"sourceH":100},
@@ -84,6 +85,7 @@
     "coHead0037": {"x":2161,"y":1782,"w":89,"h":100,"offX":11,"offY":0,"sourceW":100,"sourceH":100},
     "coHead0038": {"x":2068,"y":1678,"w":90,"h":100,"offX":10,"offY":0,"sourceW":100,"sourceH":100},
     "coHead0039": {"x":2263,"y":1578,"w":87,"h":100,"offX":6,"offY":0,"sourceW":100,"sourceH":100},
+    "coHead9999": {"x":2262,"y":1680,"w":88,"h":100,"offX":6,"offY":0,"sourceW":100,"sourceH":100},
     "David": {"x":520,"y":0,"w":397,"h":788,"offX":134,"offY":12,"sourceW":640,"sourceH":800},
     "Doctor": {"x":0,"y":0,"w":518,"h":791,"offX":50,"offY":9,"sourceW":640,"sourceH":800},
     "Penny": {"x":1896,"y":1089,"w":215,"h":281}
@@ -92,6 +94,6 @@
     "app": "https://www.codeandweb.com/texturepacker",
     "exporter": "egret",
     "sheetsize": "2350x1948",
-    "smartupdate": "$TexturePacker:SmartUpdate:2baba755037d4b944f8e61265584d50e:e1f2ee74ad0bb90361fcdc2595d70b17:5397756d7a8435641bb2e6ae91fdf413$"
+    "smartupdate": "$TexturePacker:SmartUpdate:7fb3af75524a16317e7bd79be74a5350:d78e30607ffbfebc04d49b77a0fb058a:5397756d7a8435641bb2e6ae91fdf413$"
   }
 }
