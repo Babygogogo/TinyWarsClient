@@ -52,7 +52,7 @@ namespace TwnsBwCaptureProgressPanel {
 
             egret.Tween.removeTweens(pbar);
             egret.Tween.get(pbar)
-                .wait(500)
+                .wait(250)
                 .to({ value: openData.newValue }, 250)
                 .wait(500)
                 .call(() => this.close());
