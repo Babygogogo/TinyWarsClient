@@ -12,9 +12,11 @@ namespace MpwUtility {
         tile.deserialize({
             gridIndex       : tile.getGridIndex(),
             baseType        : tile.getBaseType(),
+            decoratorType   : tile.getDecoratorType(),
             objectType      : tile.getObjectType(),
             playerIndex     : tile.getType() === Types.TileType.Headquarters ? tile.getPlayerIndex() : CommonConstants.WarNeutralPlayerIndex,
             baseShapeId     : tile.getBaseShapeId(),
+            decoratorShapeId: tile.getDecoratorShapeId(),
             objectShapeId   : tile.getObjectShapeId(),
             currentHp       : tile.getCurrentHp(),
         }, tile.getConfigVersion());

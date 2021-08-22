@@ -2,10 +2,11 @@
 import Types    from "./Types";
 
 namespace CommonConstants {
-    import TileBaseType     = Types.TileBaseType;
-    import TileObjectType   = Types.TileObjectType;
-    import TileType         = Types.TileType;
-    import UnitType         = Types.UnitType;
+    import TileBaseType         = Types.TileBaseType;
+    import TileDecoratorType    = Types.TileDecoratorType;
+    import TileObjectType       = Types.TileObjectType;
+    import TileType             = Types.TileType;
+    import UnitType             = Types.UnitType;
 
     type FrameCfg = {
         framesCount     : number;
@@ -17,6 +18,9 @@ namespace CommonConstants {
         shapesCount     : number;
     };
     type TileBaseShapeCfg = {
+        shapesCount     : number;
+    };
+    type TileDecoratorShapeCfg = {
         shapesCount     : number;
     };
 
@@ -40,7 +44,7 @@ namespace CommonConstants {
     export const MapMinRating                           = 0;
 
     export const WarEventNameMaxLength                  = 150;
-    export const WarEventMaxEventsPerMap                = 10;
+    export const WarEventMaxEventsPerMap                = 30;
     export const WarEventMaxConditionNodesPerMap        = 50;
     export const WarEventMaxConditionsPerMap            = 100;
     export const WarEventMaxActionsPerMap               = 100;
@@ -48,6 +52,9 @@ namespace CommonConstants {
     export const WarEventMaxCallCountTotal              = 100;
     export const WarEventMaxCallCountInPlayerTurn       = 10;
     export const WarEventActionAddUnitMaxCount          = 50;
+    export const WarEventActionDialogueTextMaxLength    = 300;
+    export const WarEventActionDialogueMaxCount         = 100;
+    export const WarEventActionDialogueNameMaxLength    = 30;
 
     export const MapEditorSlotMaxCountForNormal         = 3;
     export const MapEditorSlotMaxCountForCommittee      = 100;
@@ -299,10 +306,27 @@ namespace CommonConstants {
         ],
     ]);
     export const TileBaseShapeConfigs = new Map<TileBaseType, TileBaseShapeCfg>([
-        [ TileBaseType.Beach,   { shapesCount: 36,  }],
+        [ TileBaseType.Beach,   { shapesCount: 37,  }],
         [ TileBaseType.Plain,   { shapesCount: 1,   }],
         [ TileBaseType.River,   { shapesCount: 16,  }],
         [ TileBaseType.Sea,     { shapesCount: 47,  }],
+    ]);
+    export const TileDecoratorFrameConfigs = new Map([
+        [
+            Types.UnitAndTileTextureVersion.V0,
+            new Map<TileDecoratorType, FrameCfg>([
+                [ TileDecoratorType.Corner, { framesCount: 6, ticksPerFrame: 1 } ],
+            ]),
+        ],
+        [
+            Types.UnitAndTileTextureVersion.V1,
+            new Map<TileDecoratorType, FrameCfg>([
+                [ TileDecoratorType.Corner, { framesCount: 6, ticksPerFrame: 1 } ],
+            ]),
+        ],
+    ]);
+    export const TileDecoratorShapeConfigs = new Map<TileDecoratorType, TileDecoratorShapeCfg>([
+        [ TileDecoratorType.Corner, { shapesCount: 47 } ],
     ]);
     export const TileObjectFrameConfigs = new Map([
         [
@@ -502,9 +526,65 @@ namespace CommonConstants {
             [   33, [   32,     35,     33,     34,     32, ]],
             [   34, [   34,     32,     35,     33,     35, ]],
             [   35, [   35,     33,     34,     32,     34, ]],
+            [   36, [   36,     36,     36,     36,     36, ]],
         ])],
     ]);
-
+    export const TileDecoratorSymmetry = new Map<TileDecoratorType, Map<number, number[]>>([
+        //          上下对称 左下右上 左右对称 左上右下 旋转对称    // 对称方式
+        // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
+        [TileDecoratorType.Empty, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileDecoratorType.Corner, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+            [   1,  [   2,      1,      4,      8,      8,  ]],
+            [   2,  [   1,      4,      8,      2,      4,  ]],
+            [   3,  [   3,      5,      12,     10,     12, ]],
+            [   4,  [   8,      2,      1,      4,      2,  ]],
+            [   5,  [   10,     3,      5,      12,     10, ]],
+            [   6,  [   9,      6,      9,      6,      6,  ]],
+            [   7,  [   11,     7,      13,     14,     14, ]],
+            [   8,  [   4,      8,      2,      1,      1,  ]],
+            [   9,  [   6,      9,      6,      9,      9,  ]],
+            [   10, [   5,      12,     10,     3,      5,  ]],
+            [   11, [   7,      13,     14,     11,     13, ]],
+            [   12, [   12,     10,     3,      5,      3,  ]],
+            [   13, [   14,     11,     7,      13,     11, ]],
+            [   14, [   13,     14,     11,     7,      7,  ]],
+            [   15, [   15,     15,     15,     15,     15, ]],
+            [   16, [   16,     25,     20,     34,     20, ]],
+            [   17, [   18,     26,     21,     36,     22, ]],
+            [   18, [   17,     27,     22,     35,     21, ]],
+            [   19, [   19,     28,     23,     37,     23, ]],
+            [   20, [   20,     34,     16,     25,     16, ]],
+            [   21, [   22,     35,     17,     27,     18, ]],
+            [   22, [   21,     36,     18,     26,     17, ]],
+            [   23, [   23,     37,     19,     28,     19, ]],
+            [   24, [   24,     43,     24,     43,     24, ]],
+            [   25, [   34,     16,     25,     20,     34, ]],
+            [   26, [   35,     17,     27,     22,     36, ]],
+            [   27, [   36,     18,     26,     21,     35, ]],
+            [   28, [   37,     19,     28,     23,     37, ]],
+            [   29, [   38,     29,     31,     40,     40, ]],
+            [   30, [   39,     30,     32,     41,     41, ]],
+            [   31, [   40,     38,     29,     31,     38, ]],
+            [   32, [   41,     39,     30,     32,     39, ]],
+            [   33, [   42,     44,     33,     45,     42, ]],
+            [   34, [   25,     20,     34,     16,     25, ]],
+            [   35, [   26,     21,     36,     18,     27, ]],
+            [   36, [   27,     22,     35,     17,     26, ]],
+            [   37, [   28,     23,     37,     19,     28, ]],
+            [   38, [   29,     31,     40,     38,     31, ]],
+            [   39, [   30,     32,     41,     39,     32, ]],
+            [   40, [   31,     40,     38,     29,     29, ]],
+            [   41, [   32,     41,     39,     30,     30, ]],
+            [   42, [   33,     45,     42,     44,     33, ]],
+            [   43, [   43,     24,     43,     24,     43, ]],
+            [   44, [   44,     33,     45,     42,     45, ]],
+            [   45, [   45,     42,     44,     33,     44, ]],
+            [   46, [   46,     46,     46,     46,     46, ]],
+        ])],
+    ]);
     export const TileObjectSymmetry = new Map<TileObjectType, Map<number, number[]>>([
         // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
         [TileObjectType.Empty, new Map([

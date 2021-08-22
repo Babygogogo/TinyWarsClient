@@ -12,6 +12,7 @@ import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import UserModel                from "../../user/model/UserModel";
 import TwnsBwCursor             from "../model/BwCursor";
 import TwnsBwUnitMap            from "../model/BwUnitMap";
 import TwnsBwUnitView           from "./BwUnitView";
@@ -68,8 +69,6 @@ namespace TwnsBwUnitListPanel {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
-                { type: NotifyType.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
                 { type: NotifyType.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
             ]);
@@ -93,23 +92,20 @@ namespace TwnsBwUnitListPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyGlobalTouchBegin(e: egret.Event): void {
-            this._adjustPositionOnTouch(e.data);
+        private _onNotifyBwPlannerStateChanged(): void {
+            const war = this._getOpenData().war;
+            if (war.getPlayerInTurn()?.getUserId() === UserModel.getSelfUserId()) {
+                this.close();
+            }
         }
-        private _onNotifyGlobalTouchMove(e: egret.Event): void {
-            this._adjustPositionOnTouch(e.data);
-        }
-        private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
-            this.close();
-        }
-        private _onNotifyBwWarMenuPanelOpened(e: egret.Event): void {
+        private _onNotifyBwWarMenuPanelOpened(): void {
             this.close();
         }
 
-        private _onTouchedBtnSwitch(e: egret.TouchEvent): void {
+        private _onTouchedBtnSwitch(): void {
             this._playerIndex = this._getOpenData().war.getTurnManager().getNextPlayerIndex(this._playerIndex);
             this._updateView();
         }
@@ -137,10 +133,6 @@ namespace TwnsBwUnitListPanel {
                 value += unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp();
             }
             this._labelValue.text = `${value}`;
-        }
-
-        private _adjustPositionOnTouch(e: egret.TouchEvent): void {
-            // do nothing
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
@@ -217,7 +209,7 @@ namespace TwnsBwUnitListPanel {
             this._updateView();
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             const data      = this.data;
             const cursor    = data.cursor;
             const gridIndex = data.unit.getGridIndex();

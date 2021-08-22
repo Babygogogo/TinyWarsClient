@@ -43,6 +43,7 @@ namespace TwnsBwTileDetailPanel {
         private _group              : eui.Group;
         private _labelName          : TwnsUiLabel.UiLabel;
         private _imgTileBase        : TwnsUiImage.UiImage;
+        private _imgTileDecorator   : TwnsUiImage.UiImage;
         private _imgTileObject      : TwnsUiImage.UiImage;
         private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
         private _labelMoveCost      : TwnsUiLabel.UiLabel;
@@ -93,11 +94,11 @@ namespace TwnsBwTileDetailPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
-            this.close();
+        private _onNotifyBwPlannerStateChanged(): void {
+            // this.close();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +127,14 @@ namespace TwnsBwTileDetailPanel {
                 baseType    : tile.getBaseType(),
                 isDark      : false,
                 shapeId     : tile.getBaseShapeId(),
+                tickCount,
+            });
+            this._imgTileDecorator.source = CommonModel.getCachedTileDecoratorImageSource({
+                version,
+                skinId,
+                decoratorType   : tile.getDecoratorType(),
+                isDark          : false,
+                shapeId         : tile.getDecoratorShapeId(),
                 tickCount,
             });
             this._imgTileObject.source  = CommonModel.getCachedTileObjectImageSource({
@@ -368,7 +377,7 @@ namespace TwnsBwTileDetailPanel {
             this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
-        private _onTouchedBtnTitle(e: egret.TouchEvent): void {
+        private _onTouchedBtnTitle(): void {
             const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());

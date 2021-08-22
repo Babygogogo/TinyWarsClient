@@ -232,9 +232,11 @@ namespace TwnsUiMapInfo {
                 { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
 
-            const tileView = this._tileView;
-            this._conTileView.addChild(tileView.getImgBase());
-            this._conTileView.addChild(tileView.getImgObject());
+            const tileView      = this._tileView;
+            const conTileView   = this._conTileView;
+            conTileView.addChild(tileView.getImgBase());
+            conTileView.addChild(tileView.getImgDecorator());
+            conTileView.addChild(tileView.getImgObject());
             tileView.startRunningView();
 
         }
@@ -250,6 +252,8 @@ namespace TwnsUiMapInfo {
             this._tileView.init({
                 tileBaseType        : null,
                 tileBaseShapeId     : null,
+                tileDecoratorType   : null,
+                tileDecoratorShapeId: null,
                 tileObjectType      : tileObjectType,
                 tileObjectShapeId   : 0,
                 playerIndex         : tileObjectType === Types.TileObjectType.Headquarters

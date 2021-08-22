@@ -365,25 +365,74 @@ namespace TwnsMeWarRulePanel {
                     }
                 ],
                 actionArray: [                          // 动作列表
+                    // {
+                    //     WeaCommonData: {
+                    //         actionId    : 1,            // 动作id
+                    //     },
+                    //     WeaAddUnit: {        // 增加部队
+                    //         unitArray: [
+                    //             {
+                    //                 canBeBlockedByUnit  : false,    // 是否会被指定位置的已有部队阻断增援
+                    //                 needMovableTile     : true,     // 是否自动寻找合适的地形，比如海军不在陆地上刷出
+                    //                 unitData            : {         // 部队属性
+                    //                     gridIndex       : { x: 10, y: 1 },
+                    //                     unitType        : 8,
+                    //                     playerIndex     : 2,
+                    //                     currentHp       : 89,
+                    //                 },
+                    //             }
+                    //         ],
+                    //     },
+                    // },
                     {
                         WeaCommonData: {
-                            actionId    : 1,            // 动作id
+                            actionId    : 1,
                         },
-                        WeaAddUnit: {        // 增加部队
-                            unitArray: [
+                        WeaDialogue: {
+                            dataArray: [
                                 {
-                                    canBeBlockedByUnit  : false,    // 是否会被指定位置的已有部队阻断增援
-                                    needMovableTile     : true,     // 是否自动寻找合适的地形，比如海军不在陆地上刷出
-                                    unitData            : {         // 部队属性
-                                        gridIndex       : { x: 10, y: 1 },
-                                        unitType        : 8,
-                                        playerIndex     : 2,
-                                        currentHp       : 89,
+                                    dataForCoDialogue   : {
+                                        coId        : 10001,
+                                        side        : Types.WarEventActionDialogueSide.Left,
+                                        textArray   : [
+                                            { languageType: Types.LanguageType.Chinese, text: `这是啥10001` },
+                                            { languageType: Types.LanguageType.English, text: `Hello World 10001` },
+                                        ],
                                     },
-                                }
+                                },
+                                {
+                                    dataForCoDialogue   : {
+                                        coId        : 20001,
+                                        side        : Types.WarEventActionDialogueSide.Right,
+                                        textArray   : [
+                                            { languageType: Types.LanguageType.Chinese, text: `这是啥20001` },
+                                            { languageType: Types.LanguageType.English, text: `Hello World 20001` },
+                                        ],
+                                    },
+                                },
+                                {
+                                    dataForCoDialogue   : {
+                                        coId        : 10001,
+                                        side        : Types.WarEventActionDialogueSide.Left,
+                                        textArray   : [
+                                            { languageType: Types.LanguageType.Chinese, text: `这是啥10001-2` },
+                                            { languageType: Types.LanguageType.English, text: `Hello World 10001-2` },
+                                        ],
+                                    },
+                                },
+                                {
+                                    dataForCoDialogue   : {
+                                        coId        : 20001,
+                                        side        : Types.WarEventActionDialogueSide.Right,
+                                        textArray   : [
+                                            { languageType: Types.LanguageType.Chinese, text: `这是啥20001-2` },
+                                            { languageType: Types.LanguageType.English, text: `Hello World 20001-2` },
+                                        ],
+                                    },
+                                },
                             ],
                         },
-                    },
+                    }
                 ],
                 eventArray: [                            // 事件列表
                     {
@@ -395,7 +444,8 @@ namespace TwnsMeWarRulePanel {
                         maxCallCountInPlayerTurn    : 1,                // 每回合最多1次
                         maxCallCountTotal           : 1,                // 每局最多一次
                         conditionNodeId             : 2,                // 条件组合id，满足时执行动作列表
-                        actionIdArray               : [1, 1, 1, 1, 1, ],// 动作id列表，
+                        // actionIdArray               : [1, 1, 1, 1, 1, ],// 动作id列表，
+                        actionIdArray               : [1],              // 动作id列表，
                         // 动作1是刷出1个坦克，这里指定执行5次，而且坦克不会被已有部队阻断，所以执行时就直接刷出5个坦克
                     },
                     {
@@ -407,7 +457,8 @@ namespace TwnsMeWarRulePanel {
                         maxCallCountInPlayerTurn    : 1,                // 每回合最多1次
                         maxCallCountTotal           : 1,                // 每局最多一次
                         conditionNodeId             : 1,                // 条件组合id，满足时执行动作列表
-                        actionIdArray               : [1, 1, 1, 1, 1, ],// 动作id列表，
+                        // actionIdArray               : [1, 1, 1, 1, 1, ],// 动作id列表，
+                        actionIdArray               : [1],              // 动作id列表，
                         // 动作1是刷出1个坦克，这里指定执行5次，而且坦克不会被已有部队阻断，所以执行时就直接刷出5个坦克
                     },
                 ],

@@ -76,6 +76,13 @@ namespace TwnsBwFieldView {
         public getTileBasesVisible(): boolean {
             return this._getTileMapView().getBaseLayerVisible();
         }
+
+        public setTileDecoratorsVisible(visible: boolean): void {
+            this._getTileMapView().setDecoratorLayerVisible(visible);
+        }
+        public getTileDecoratorsVisible(): boolean {
+            return this._getTileMapView().getDecoratorLayerVisible();
+        }
     }
 }
 

@@ -1,14 +1,14 @@
 
-import CommonModel          from "../../common/model/CommonModel";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import Types                from "../../tools/helpers/Types";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import UserProxy            from "./UserProxy";
-import FloatText            from "../../tools/helpers/FloatText";
-import Lang                 from "../../tools/lang/Lang";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import Logger from "../../tools/helpers/Logger";
+import CommonModel      from "../../common/model/CommonModel";
+import FloatText        from "../../tools/helpers/FloatText";
+import Logger           from "../../tools/helpers/Logger";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsLangTextType from "../../tools/lang/LangTextType";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import UserProxy        from "./UserProxy";
 
 namespace UserModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -220,6 +220,13 @@ namespace UserModel {
 
         const userSelfInfo = data.userSelfInfo;
         (userSelfInfo) && (setSelfInfo(userSelfInfo));
+    }
+    export async function updateOnMsgUserGetOnlineState(data: NetMessage.MsgUserGetOnlineState.IS): Promise<void> {
+        const userPublicInfo = await getUserPublicInfo(data.userId);
+        if (userPublicInfo) {
+            userPublicInfo.isOnline         = data.isOnline;
+            userPublicInfo.lastActivityTime = data.lastActivityTime;
+        }
     }
     export function updateOnMsgUserSetNickname(data: NetMessage.MsgUserSetNickname.IS): void {
         setSelfNickname(data.nickname);

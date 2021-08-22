@@ -91,8 +91,11 @@ namespace TwnsBwTileBriefPanel {
                 { ui: this, callback: this._onTouchedThis, },
             ]);
 
-            this._conTileView.addChild(this._tileView.getImgBase());
-            this._conTileView.addChild(this._tileView.getImgObject());
+            const tileView      = this._tileView;
+            const conTileView   = this._conTileView;
+            conTileView.addChild(tileView.getImgBase());
+            conTileView.addChild(tileView.getImgDecorator());
+            conTileView.addChild(tileView.getImgObject());
 
             const group     = this._group;
             group.alpha     = 0;

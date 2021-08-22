@@ -144,10 +144,12 @@ namespace TwnsMcrJoinRoomListPanel {
         }
 
         private _onNotifyMsgMcrJoinRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrJoinRoom.IS;
+            const data      = e.data as ProtoTypes.NetMessage.MsgMcrJoinRoom.IS;
+            const roomId    = data.roomId;
             if (data.userId === UserModel.getSelfUserId()) {
                 this.close();
-                McrRoomInfoPanel.show({ roomId: data.roomId });
+                McrRoomInfoPanel.show({ roomId });
+                FloatText.show(Lang.getFormattedText(LangTextType.F0069, roomId));
             }
         }
 

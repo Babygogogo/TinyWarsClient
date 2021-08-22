@@ -1,5 +1,4 @@
 
-import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
@@ -8,6 +7,8 @@ import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsBwDialoguePanel  from "../view/BwDialoguePanel";
 import TwnsBwTileMap        from "./BwTileMap";
 import TwnsBwUnit           from "./BwUnit";
 import TwnsBwUnitMap        from "./BwUnitMap";
@@ -118,6 +119,8 @@ namespace TwnsBwWarEventManager {
                 return await this._callActionAddUnit(indexForActionIdList, action.WeaAddUnit, isFastExecute);
             } else if (action.WeaSetPlayerAliveState) {
                 return await this._callActionSetPlayerAliveState(action.WeaSetPlayerAliveState);
+            } else if (action.WeaDialogue) {
+                return await this._callActionDialogue(action.WeaDialogue, isFastExecute);
             }
 
             // TODO add more actions.
@@ -165,8 +168,7 @@ namespace TwnsBwWarEventManager {
                 return undefined;
             }
 
-            const playersCountUnneutral = playerManager.getTotalPlayersCount(false);
-            const resultingUnitList     : ProtoTypes.WarSerialization.ISerialUnit[] = [];
+            const resultingUnitList: ProtoTypes.WarSerialization.ISerialUnit[] = [];
             for (const data of unitArray) {
                 const { canBeBlockedByUnit, needMovableTile, unitData } = data;
                 if (canBeBlockedByUnit == null) {
@@ -309,6 +311,18 @@ namespace TwnsBwWarEventManager {
             }
 
             return undefined;
+        }
+        private async _callActionDialogue(action: WarEvent.IWeaDialogue, isFast: boolean): Promise<undefined> {
+            if (isFast) {
+                return undefined;
+            }
+
+            return new Promise<undefined>(resolve => {
+                TwnsBwDialoguePanel.BwDialoguePanel.show({
+                    actionData      : action,
+                    callbackOnClose : () => resolve(undefined),
+                });
+            });
         }
 
         public updateWarEventCalledCountOnCall(eventId: number): void {                     // DONE

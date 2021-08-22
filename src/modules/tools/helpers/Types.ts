@@ -220,11 +220,13 @@ namespace Types {
         Green,
         Blue,
         White,
+        Yellow,
     }
     // eslint-disable-next-line no-shadow
     export enum ColorValue {
         Red     = 0xFF0000,
         White   = 0xFFFFFF,
+        Yellow  = 0xFFFF00,
         Green   = 0x00FF00,
     }
 
@@ -303,6 +305,11 @@ namespace Types {
     export enum TileBaseType {
         Empty,  /* 0 */            Plain,  /* 1 */            River,  /* 2 */            Sea,    /* 3 */
         Beach,  /* 4 */
+    }
+
+    // eslint-disable-next-line no-shadow
+    export enum TileDecoratorType {
+        Empty,  /* 0 */             Corner,  /* 1 */
     }
 
     // eslint-disable-next-line no-shadow
@@ -547,8 +554,10 @@ namespace Types {
         Preview,
         DrawUnit,
         DrawTileBase,
+        DrawTileDecorator,
         DrawTileObject,
         DeleteUnit,
+        DeleteTileDecorator,
         DeleteTileObject,
     }
 
@@ -643,6 +652,7 @@ namespace Types {
     export enum WarEventActionType {
         AddUnit,
         SetPlayerAliveState,
+        Dialogue,
     }
 
     // eslint-disable-next-line no-shadow
@@ -685,6 +695,12 @@ namespace Types {
         Undefined   = 0,
         Zoned       = 1,
         Global      = 2,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export enum WarEventActionDialogueSide {
+        Left    = 1,
+        Right   = 2,
     }
 }
 

@@ -1,11 +1,13 @@
 
 import TwnsBwTile           from "../../baseWar/model/BwTile";
+import TwnsBwTileMap from "../../baseWar/model/BwTileMap";
 import TwnsBwUnit           from "../../baseWar/model/BwUnit";
 import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
 import TwnsTwWar            from "../../testWar/model/TwWar";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import Timer                from "../../tools/helpers/Timer";
 import Types                from "../../tools/helpers/Types";
@@ -19,22 +21,23 @@ import WarEventHelper       from "../../warEvent/model/WarEventHelper";
 import TwnsMeWar            from "./MeWar";
 
 namespace MeUtility {
-    import BwTile           = TwnsBwTile.BwTile;
-    import MeWar            = TwnsMeWar.MeWar;
-    import TwWar            = TwnsTwWar.TwWar;
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import GridIndex        = Types.GridIndex;
-    import TileObjectType   = Types.TileObjectType;
-    import TileBaseType     = Types.TileBaseType;
-    import SymmetryType     = Types.SymmetryType;
-    import LanguageType     = Types.LanguageType;
-    import IMapRawData      = ProtoTypes.Map.IMapRawData;
-    import WarSerialization = ProtoTypes.WarSerialization;
-    import ISerialTile      = WarSerialization.ISerialTile;
-    import ISerialUnit      = WarSerialization.ISerialUnit;
-    import ISerialPlayer    = WarSerialization.ISerialPlayer;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+    import BwTile               = TwnsBwTile.BwTile;
+    import MeWar                = TwnsMeWar.MeWar;
+    import TwWar                = TwnsTwWar.TwWar;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import GridIndex            = Types.GridIndex;
+    import TileObjectType       = Types.TileObjectType;
+    import TileBaseType         = Types.TileBaseType;
+    import SymmetryType         = Types.SymmetryType;
+    import LanguageType         = Types.LanguageType;
+    import TileDecoratorType    = Types.TileDecoratorType;
+    import IMapRawData          = ProtoTypes.Map.IMapRawData;
+    import WarSerialization     = ProtoTypes.WarSerialization;
+    import ISerialTile          = WarSerialization.ISerialTile;
+    import ISerialUnit          = WarSerialization.ISerialUnit;
+    import ISerialPlayer        = WarSerialization.ISerialPlayer;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
 
     export type AsymmetricalCounters = {
         UpToDown            : number | null;
@@ -43,6 +46,42 @@ namespace MeUtility {
         UpLeftToDownRight   : number | null;
         Rotation            : number | null;
     };
+
+    const TileDecoratorAutoShapeIdArray = [
+    //  000     001     010     011     100     101     110     111
+        0,      1,      25,     25,     4,      5,      25,     25,     // 000 0 0
+        16,     16,     29,     29,     17,     17,     29,     29,     // 000 0 1
+        20,     21,     31,     31,     20,     21,     31,     31,     // 000 1 0
+        24,     24,     33,     33,     24,     24,     33,     33,     // 000 1 1
+        2,      3,      26,     26,     6,      7,      26,     26,     // 001 0 0
+        16,     16,     29,     29,     17,     17,     29,     29,     // 001 0 1
+        22,     23,     32,     32,     22,     23,     32,     32,     // 001 1 0
+        24,     24,     33,     33,     24,     24,     33,     33,     // 001 1 1
+        34,     35,     43,     43,     36,     37,     43,     43,     // 010 0 0
+        38,     38,     44,     44,     39,     39,     44,     44,     // 010 0 1
+        40,     41,     45,     45,     40,     41,     45,     45,     // 010 1 0
+        42,     42,     46,     46,     42,     42,     46,     46,     // 010 1 1
+        34,     35,     43,     43,     36,     37,     43,     43,     // 011 0 0
+        38,     38,     44,     44,     39,     39,     44,     44,     // 011 0 1
+        40,     41,     45,     45,     40,     41,     45,     45,     // 011 1 0
+        42,     42,     46,     46,     42,     42,     46,     46,     // 011 1 1
+        8,      9,      27,     27,     12,     13,     27,     27,     // 100 0 0
+        18,     18,     30,     30,     19,     19,     30,     30,     // 100 0 1
+        20,     21,     31,     31,     20,     21,     31,     31,     // 100 1 0
+        24,     24,     33,     33,     24,     24,     33,     33,     // 100 1 1
+        10,     11,     28,     28,     14,     15,     28,     28,     // 101 0 0
+        18,     18,     30,     30,     19,     19,     30,     30,     // 100 0 1
+        22,     23,     32,     32,     22,     23,     32,     32,     // 101 1 0
+        24,     24,     33,     33,     24,     24,     33,     33,     // 101 1 1
+        34,     35,     43,     43,     36,     37,     43,     43,     // 110 0 0
+        38,     38,     44,     44,     39,     39,     44,     44,     // 110 0 1
+        40,     41,     45,     45,     40,     41,     45,     45,     // 110 1 0
+        42,     42,     46,     46,     42,     42,     46,     46,     // 110 1 1
+        34,     35,     43,     43,     36,     37,     43,     43,     // 111 0 0
+        38,     38,     44,     44,     39,     39,     44,     44,     // 111 0 1
+        40,     41,     45,     45,     40,     41,     45,     45,     // 111 1 0
+        42,     42,     46,     46,     42,     42,     46,     46,     // 111 1 1
+    ];
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function createDefaultMapRawData(slotIndex: number): Promise<IMapRawData> {
@@ -81,9 +120,10 @@ namespace MeUtility {
     function createDefaultTileData(gridIndex: GridIndex, tileBaseType: TileBaseType): ISerialTile {
         return {
             gridIndex,
-            baseType    : tileBaseType,
-            objectType  : TileObjectType.Empty,
-            playerIndex : CommonConstants.WarNeutralPlayerIndex,
+            baseType        : tileBaseType,
+            decoratorType   : undefined,
+            objectType      : TileObjectType.Empty,
+            playerIndex     : CommonConstants.WarNeutralPlayerIndex,
         };
     }
 
@@ -423,8 +463,10 @@ namespace MeUtility {
     function checkIsSymmetrical(tile1: BwTile, tile2: BwTile, symmetryType: SymmetryType): boolean {
         const baseType      = tile1.getBaseType();
         const objectType    = tile1.getObjectType();
+        const decoratorType = tile1.getDecoratorType();
         return (baseType === tile2.getBaseType())
             && (objectType === tile2.getObjectType())
+            && (decoratorType == tile2.getDecoratorType())
             && (ConfigManager.checkIsTileBaseSymmetrical({
                 baseType,
                 shapeId1    : tile1.getBaseShapeId(),
@@ -436,7 +478,146 @@ namespace MeUtility {
                 shapeId1    : tile1.getObjectShapeId(),
                 shapeId2    : tile2.getObjectShapeId(),
                 symmetryType,
+            }))
+            && (ConfigManager.checkIsTileDecoratorSymmetrical({
+                decoratorType,
+                shapeId1    : tile1.getDecoratorShapeId(),
+                shapeId2    : tile2.getDecoratorShapeId(),
+                symmetryType,
             }));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | undefined, shapeId: number | undefined } {
+        const tile = tileMap.getTile(gridIndex);
+        if (tile == null) {
+            return {
+                decoratorType   : undefined,
+                shapeId         : undefined,
+            };
+        }
+
+        const baseType = tile.getBaseType();
+        if (baseType === TileBaseType.Sea) {
+            const mapSize   = tileMap.getMapSize();
+            let weight      = Math.pow(2, 7);
+            let index       = 0;
+            for (let offsetY = -1; offsetY <= 1; ++offsetY) {
+                for (let offsetX = -1; offsetX <= 1; ++offsetX) {
+                    if ((offsetX === 0) && (offsetY === 0)) {
+                        continue;
+                    }
+
+                    const g = GridIndexHelpers.add(gridIndex, { x: offsetX, y: offsetY });
+                    const t = GridIndexHelpers.checkIsInsideMap(g, mapSize) ? tileMap.getTile(g).getBaseType() : null;
+                    if ((t != null)              &&
+                        (t !== TileBaseType.Sea) &&
+                        (t !== TileBaseType.Beach)
+                    ) {
+                        index += weight;
+                    }
+                    weight /= 2;
+                }
+            }
+
+            return {
+                decoratorType   : TileDecoratorType.Corner,
+                shapeId         : TileDecoratorAutoShapeIdArray[index],
+            };
+
+        } else if (baseType === TileBaseType.Beach) {
+            const shapeId = tile.getBaseShapeId();
+            if ((shapeId === 0) || (shapeId === 4) || (shapeId === 8) || (shapeId === 12)) {
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
+                if (isSea1) {
+                    return isSea2
+                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+                } else {
+                    return isSea2
+                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 4 }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 5 };
+                }
+
+            } else if ((shapeId === 1) || (shapeId === 5) || (shapeId === 9) || (shapeId === 13)) {
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
+                if (isSea1) {
+                    return isSea2
+                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
+                } else {
+                    return isSea2
+                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 8 }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 10 };
+                }
+
+            } else if ((shapeId === 2) || (shapeId === 6) || (shapeId === 10) || (shapeId === 14)) {
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
+                if (isSea1) {
+                    return isSea2
+                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+                } else {
+                    return isSea2
+                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 2 }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 3 };
+                }
+
+            } else if ((shapeId === 3) || (shapeId === 7) || (shapeId === 11) || (shapeId === 15)) {
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
+                if (isSea1) {
+                    return isSea2
+                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
+                } else {
+                    return isSea2
+                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 8 }
+                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 12 };
+                }
+
+            } else if ((shapeId === 16) || (shapeId === 20) || (shapeId === 24) || (shapeId === 28)) {
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 })))
+                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+
+            } else if ((shapeId === 17) || (shapeId === 21) || (shapeId === 25) || (shapeId === 29)) {
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 })))
+                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
+
+            } else if ((shapeId === 18) || (shapeId === 22) || (shapeId === 26) || (shapeId === 30)) {
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 })))
+                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 8 };
+
+            } else if ((shapeId === 19) || (shapeId === 23) || (shapeId === 27) || (shapeId === 31)) {
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 })))
+                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
+
+            } else {
+                return {
+                    decoratorType   : undefined,
+                    shapeId         : undefined,
+                };
+            }
+        }
+
+        return {
+            decoratorType   : undefined,
+            shapeId         : undefined,
+        };
+    }
+    function checkIsSeaOrEmpty(tileMap: TwnsBwTileMap.BwTileMap, gridIndex): boolean {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+            return true;
+        } else {
+            return tileMap.getTile(gridIndex)?.getBaseType() === TileBaseType.Sea;
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

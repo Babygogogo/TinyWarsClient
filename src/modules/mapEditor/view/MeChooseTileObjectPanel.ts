@@ -96,7 +96,7 @@ namespace TwnsMeChooseTileObjectPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -196,9 +196,11 @@ namespace TwnsMeChooseTileObjectPanel {
                 { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
 
-            const tileView = this._tileView;
-            this._conTileView.addChild(tileView.getImgBase());
-            this._conTileView.addChild(tileView.getImgObject());
+            const tileView      = this._tileView;
+            const conTileView   = this._conTileView;
+            conTileView.addChild(tileView.getImgBase());
+            conTileView.addChild(tileView.getImgDecorator());
+            conTileView.addChild(tileView.getImgObject());
             tileView.startRunningView();
         }
 
@@ -216,6 +218,8 @@ namespace TwnsMeChooseTileObjectPanel {
                 tileObjectShapeId   : dataForDrawTileObject.shapeId,
                 tileBaseShapeId     : null,
                 tileBaseType        : null,
+                tileDecoratorType   : null,
+                tileDecoratorShapeId: null,
                 playerIndex         : dataForDrawTileObject.playerIndex,
             });
             this._tileView.updateView();

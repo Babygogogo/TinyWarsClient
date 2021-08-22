@@ -1419,6 +1419,9 @@ export declare namespace Config {
         /** CoBasicCfg isEnabled */
         isEnabled?: (number|null);
 
+        /** CoBasicCfg isEnabledForDialogue */
+        isEnabledForDialogue?: (number|null);
+
         /** CoBasicCfg designer */
         designer?: (string|null);
 
@@ -1479,6 +1482,9 @@ export declare namespace Config {
 
         /** CoBasicCfg isEnabled. */
         public isEnabled: number;
+
+        /** CoBasicCfg isEnabledForDialogue. */
+        public isEnabledForDialogue: number;
 
         /** CoBasicCfg designer. */
         public designer: string;
@@ -5292,6 +5298,393 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WeaDialogue. */
+    interface IWeaDialogue {
+
+        /** WeaDialogue dataArray */
+        dataArray?: (WarEvent.WeaDialogue.IDataForDialogue[]|null);
+    }
+
+    /** Represents a WeaDialogue. */
+    class WeaDialogue implements IWeaDialogue {
+
+        /**
+         * Constructs a new WeaDialogue.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaDialogue);
+
+        /** WeaDialogue dataArray. */
+        public dataArray: WarEvent.WeaDialogue.IDataForDialogue[];
+
+        /**
+         * Creates a new WeaDialogue instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaDialogue instance
+         */
+        public static create(properties?: WarEvent.IWeaDialogue): WarEvent.WeaDialogue;
+
+        /**
+         * Encodes the specified WeaDialogue message. Does not implicitly {@link WarEvent.WeaDialogue.verify|verify} messages.
+         * @param message WeaDialogue message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaDialogue message, length delimited. Does not implicitly {@link WarEvent.WeaDialogue.verify|verify} messages.
+         * @param message WeaDialogue message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaDialogue message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaDialogue
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaDialogue;
+
+        /**
+         * Decodes a WeaDialogue message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaDialogue
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaDialogue;
+
+        /**
+         * Verifies a WeaDialogue message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaDialogue message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaDialogue
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaDialogue;
+
+        /**
+         * Creates a plain object from a WeaDialogue message. Also converts values to other types if specified.
+         * @param message WeaDialogue
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaDialogue, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaDialogue to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace WeaDialogue {
+
+        /** Properties of a DataForCoDialogue. */
+        interface IDataForCoDialogue {
+
+            /** DataForCoDialogue side */
+            side?: (number|null);
+
+            /** DataForCoDialogue coId */
+            coId?: (number|null);
+
+            /** DataForCoDialogue textArray */
+            textArray?: (Structure.ILanguageText[]|null);
+
+            /** DataForCoDialogue nameArray */
+            nameArray?: (Structure.ILanguageText[]|null);
+        }
+
+        /** Represents a DataForCoDialogue. */
+        class DataForCoDialogue implements IDataForCoDialogue {
+
+            /**
+             * Constructs a new DataForCoDialogue.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.WeaDialogue.IDataForCoDialogue);
+
+            /** DataForCoDialogue side. */
+            public side: number;
+
+            /** DataForCoDialogue coId. */
+            public coId: number;
+
+            /** DataForCoDialogue textArray. */
+            public textArray: Structure.ILanguageText[];
+
+            /** DataForCoDialogue nameArray. */
+            public nameArray: Structure.ILanguageText[];
+
+            /**
+             * Creates a new DataForCoDialogue instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns DataForCoDialogue instance
+             */
+            public static create(properties?: WarEvent.WeaDialogue.IDataForCoDialogue): WarEvent.WeaDialogue.DataForCoDialogue;
+
+            /**
+             * Encodes the specified DataForCoDialogue message. Does not implicitly {@link WarEvent.WeaDialogue.DataForCoDialogue.verify|verify} messages.
+             * @param message DataForCoDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.WeaDialogue.IDataForCoDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified DataForCoDialogue message, length delimited. Does not implicitly {@link WarEvent.WeaDialogue.DataForCoDialogue.verify|verify} messages.
+             * @param message DataForCoDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.WeaDialogue.IDataForCoDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a DataForCoDialogue message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns DataForCoDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaDialogue.DataForCoDialogue;
+
+            /**
+             * Decodes a DataForCoDialogue message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns DataForCoDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaDialogue.DataForCoDialogue;
+
+            /**
+             * Verifies a DataForCoDialogue message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a DataForCoDialogue message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns DataForCoDialogue
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.WeaDialogue.DataForCoDialogue;
+
+            /**
+             * Creates a plain object from a DataForCoDialogue message. Also converts values to other types if specified.
+             * @param message DataForCoDialogue
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.WeaDialogue.DataForCoDialogue, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this DataForCoDialogue to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a DataForAside. */
+        interface IDataForAside {
+
+            /** DataForAside textArray */
+            textArray?: (Structure.ILanguageText[]|null);
+        }
+
+        /** Represents a DataForAside. */
+        class DataForAside implements IDataForAside {
+
+            /**
+             * Constructs a new DataForAside.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.WeaDialogue.IDataForAside);
+
+            /** DataForAside textArray. */
+            public textArray: Structure.ILanguageText[];
+
+            /**
+             * Creates a new DataForAside instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns DataForAside instance
+             */
+            public static create(properties?: WarEvent.WeaDialogue.IDataForAside): WarEvent.WeaDialogue.DataForAside;
+
+            /**
+             * Encodes the specified DataForAside message. Does not implicitly {@link WarEvent.WeaDialogue.DataForAside.verify|verify} messages.
+             * @param message DataForAside message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.WeaDialogue.IDataForAside, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified DataForAside message, length delimited. Does not implicitly {@link WarEvent.WeaDialogue.DataForAside.verify|verify} messages.
+             * @param message DataForAside message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.WeaDialogue.IDataForAside, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a DataForAside message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns DataForAside
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaDialogue.DataForAside;
+
+            /**
+             * Decodes a DataForAside message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns DataForAside
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaDialogue.DataForAside;
+
+            /**
+             * Verifies a DataForAside message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a DataForAside message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns DataForAside
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.WeaDialogue.DataForAside;
+
+            /**
+             * Creates a plain object from a DataForAside message. Also converts values to other types if specified.
+             * @param message DataForAside
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.WeaDialogue.DataForAside, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this DataForAside to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a DataForDialogue. */
+        interface IDataForDialogue {
+
+            /** DataForDialogue dataForCoDialogue */
+            dataForCoDialogue?: (WarEvent.WeaDialogue.IDataForCoDialogue|null);
+
+            /** DataForDialogue dataForAside */
+            dataForAside?: (WarEvent.WeaDialogue.IDataForAside|null);
+        }
+
+        /** Represents a DataForDialogue. */
+        class DataForDialogue implements IDataForDialogue {
+
+            /**
+             * Constructs a new DataForDialogue.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.WeaDialogue.IDataForDialogue);
+
+            /** DataForDialogue dataForCoDialogue. */
+            public dataForCoDialogue?: (WarEvent.WeaDialogue.IDataForCoDialogue|null);
+
+            /** DataForDialogue dataForAside. */
+            public dataForAside?: (WarEvent.WeaDialogue.IDataForAside|null);
+
+            /**
+             * Creates a new DataForDialogue instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns DataForDialogue instance
+             */
+            public static create(properties?: WarEvent.WeaDialogue.IDataForDialogue): WarEvent.WeaDialogue.DataForDialogue;
+
+            /**
+             * Encodes the specified DataForDialogue message. Does not implicitly {@link WarEvent.WeaDialogue.DataForDialogue.verify|verify} messages.
+             * @param message DataForDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.WeaDialogue.IDataForDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified DataForDialogue message, length delimited. Does not implicitly {@link WarEvent.WeaDialogue.DataForDialogue.verify|verify} messages.
+             * @param message DataForDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.WeaDialogue.IDataForDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a DataForDialogue message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns DataForDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaDialogue.DataForDialogue;
+
+            /**
+             * Decodes a DataForDialogue message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns DataForDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaDialogue.DataForDialogue;
+
+            /**
+             * Verifies a DataForDialogue message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a DataForDialogue message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns DataForDialogue
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.WeaDialogue.DataForDialogue;
+
+            /**
+             * Creates a plain object from a DataForDialogue message. Also converts values to other types if specified.
+             * @param message DataForDialogue
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.WeaDialogue.DataForDialogue, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this DataForDialogue to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a WarEventAction. */
     interface IWarEventAction {
 
@@ -5303,6 +5696,9 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSetPlayerAliveState */
         WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
+
+        /** WarEventAction WeaDialogue */
+        WeaDialogue?: (WarEvent.IWeaDialogue|null);
     }
 
     /** Represents a WarEventAction. */
@@ -5322,6 +5718,9 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSetPlayerAliveState. */
         public WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
+
+        /** WarEventAction WeaDialogue. */
+        public WeaDialogue?: (WarEvent.IWeaDialogue|null);
 
         /**
          * Creates a new WarEventAction instance using the specified properties.
@@ -7502,6 +7901,12 @@ export declare namespace WarSerialization {
 
         /** SerialTile currentCapturePoint */
         currentCapturePoint?: (number|null);
+
+        /** SerialTile decoratorType */
+        decoratorType?: (number|null);
+
+        /** SerialTile decoratorShapeId */
+        decoratorShapeId?: (number|null);
     }
 
     /** Represents a SerialTile. */
@@ -7539,6 +7944,12 @@ export declare namespace WarSerialization {
 
         /** SerialTile currentCapturePoint. */
         public currentCapturePoint: number;
+
+        /** SerialTile decoratorType. */
+        public decoratorType: number;
+
+        /** SerialTile decoratorShapeId. */
+        public decoratorShapeId: number;
 
         /**
          * Creates a new SerialTile instance using the specified properties.
@@ -20196,6 +20607,12 @@ export declare namespace User {
         /** UserPublicInfo discordId */
         discordId?: (string|null);
 
+        /** UserPublicInfo isOnline */
+        isOnline?: (boolean|null);
+
+        /** UserPublicInfo lastActivityTime */
+        lastActivityTime?: (number|null);
+
         /** UserPublicInfo userPrivilege */
         userPrivilege?: (User.IUserPrivilege|null);
 
@@ -20235,6 +20652,12 @@ export declare namespace User {
 
         /** UserPublicInfo discordId. */
         public discordId: string;
+
+        /** UserPublicInfo isOnline. */
+        public isOnline: boolean;
+
+        /** UserPublicInfo lastActivityTime. */
+        public lastActivityTime: number;
 
         /** UserPublicInfo userPrivilege. */
         public userPrivilege?: (User.IUserPrivilege|null);
@@ -20567,6 +20990,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserGetPublicInfo */
         MsgUserGetPublicInfo?: (NetMessage.IMsgUserGetPublicInfo|null);
+
+        /** MessageContainer MsgUserGetOnlineState */
+        MsgUserGetOnlineState?: (NetMessage.IMsgUserGetOnlineState|null);
 
         /** MessageContainer MsgUserGetOnlineUsers */
         MsgUserGetOnlineUsers?: (NetMessage.IMsgUserGetOnlineUsers|null);
@@ -20931,6 +21357,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserGetPublicInfo. */
         public MsgUserGetPublicInfo?: (NetMessage.IMsgUserGetPublicInfo|null);
+
+        /** MessageContainer MsgUserGetOnlineState. */
+        public MsgUserGetOnlineState?: (NetMessage.IMsgUserGetOnlineState|null);
 
         /** MessageContainer MsgUserGetOnlineUsers. */
         public MsgUserGetOnlineUsers?: (NetMessage.IMsgUserGetOnlineUsers|null);
@@ -25893,6 +26322,303 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgUserGetPublicInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgUserGetOnlineState. */
+    interface IMsgUserGetOnlineState {
+
+        /** MsgUserGetOnlineState c */
+        c?: (NetMessage.MsgUserGetOnlineState.IC|null);
+
+        /** MsgUserGetOnlineState s */
+        s?: (NetMessage.MsgUserGetOnlineState.IS|null);
+    }
+
+    /** Represents a MsgUserGetOnlineState. */
+    class MsgUserGetOnlineState implements IMsgUserGetOnlineState {
+
+        /**
+         * Constructs a new MsgUserGetOnlineState.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserGetOnlineState);
+
+        /** MsgUserGetOnlineState c. */
+        public c?: (NetMessage.MsgUserGetOnlineState.IC|null);
+
+        /** MsgUserGetOnlineState s. */
+        public s?: (NetMessage.MsgUserGetOnlineState.IS|null);
+
+        /**
+         * Creates a new MsgUserGetOnlineState instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserGetOnlineState instance
+         */
+        public static create(properties?: NetMessage.IMsgUserGetOnlineState): NetMessage.MsgUserGetOnlineState;
+
+        /**
+         * Encodes the specified MsgUserGetOnlineState message. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.verify|verify} messages.
+         * @param message MsgUserGetOnlineState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserGetOnlineState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserGetOnlineState message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.verify|verify} messages.
+         * @param message MsgUserGetOnlineState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserGetOnlineState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserGetOnlineState message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserGetOnlineState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetOnlineState;
+
+        /**
+         * Decodes a MsgUserGetOnlineState message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserGetOnlineState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetOnlineState;
+
+        /**
+         * Verifies a MsgUserGetOnlineState message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserGetOnlineState message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserGetOnlineState
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetOnlineState;
+
+        /**
+         * Creates a plain object from a MsgUserGetOnlineState message. Also converts values to other types if specified.
+         * @param message MsgUserGetOnlineState
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserGetOnlineState, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserGetOnlineState to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserGetOnlineState {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C userId */
+            userId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserGetOnlineState.IC);
+
+            /** C userId. */
+            public userId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserGetOnlineState.IC): NetMessage.MsgUserGetOnlineState.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserGetOnlineState.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserGetOnlineState.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetOnlineState.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetOnlineState.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetOnlineState.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserGetOnlineState.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S userId */
+            userId?: (number|null);
+
+            /** S isOnline */
+            isOnline?: (boolean|null);
+
+            /** S lastActivityTime */
+            lastActivityTime?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserGetOnlineState.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S userId. */
+            public userId: number;
+
+            /** S isOnline. */
+            public isOnline: boolean;
+
+            /** S lastActivityTime. */
+            public lastActivityTime: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserGetOnlineState.IS): NetMessage.MsgUserGetOnlineState.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserGetOnlineState.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetOnlineState.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserGetOnlineState.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetOnlineState.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetOnlineState.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetOnlineState.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserGetOnlineState.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

@@ -20,6 +20,7 @@ namespace TwnsBwTileMapView {
     export class BwTileMapView extends egret.DisplayObjectContainer {
         private readonly _tileViewArray     : BwTileView[] = [];
         private readonly _baseLayer         = new egret.DisplayObjectContainer();
+        private readonly _decoratorLayer    = new egret.DisplayObjectContainer();
         private readonly _gridBorderLayer   = new egret.DisplayObjectContainer();
         private readonly _objectLayer       = new egret.DisplayObjectContainer();
         private readonly _coZoneContainer   = new egret.DisplayObjectContainer();
@@ -36,6 +37,7 @@ namespace TwnsBwTileMapView {
             super();
 
             this.addChild(this._baseLayer);
+            this.addChild(this._decoratorLayer);
             this.addChild(this._gridBorderLayer);
             this.addChild(this._objectLayer);
             this.addChild(this._coZoneContainer);
@@ -47,9 +49,11 @@ namespace TwnsBwTileMapView {
 
             const tileViewArray     = this._tileViewArray;
             const baseLayer         = this._baseLayer;
+            const decoratorLayer    = this._decoratorLayer;
             const objectLayer       = this._objectLayer;
             tileViewArray.length    = 0;
             baseLayer.removeChildren();
+            decoratorLayer.removeChildren();
             objectLayer.removeChildren();
 
             for (const tile of tileMap.getAllTiles()) {
@@ -62,6 +66,11 @@ namespace TwnsBwTileMapView {
                 imgBase.x       = x;
                 imgBase.y       = y;
                 baseLayer.addChild(imgBase);
+
+                const imgDecorator  = view.getImgDecorator();
+                imgDecorator.x      = x;
+                imgDecorator.y      = y;
+                decoratorLayer.addChild(imgDecorator);
 
                 const imgObject = view.getImgObject();
                 imgObject.x     = x;
@@ -113,6 +122,13 @@ namespace TwnsBwTileMapView {
         }
         public getBaseLayerVisible(): boolean {
             return this._baseLayer.visible;
+        }
+
+        public setDecoratorLayerVisible(visible: boolean): void {
+            this._decoratorLayer.visible = visible;
+        }
+        public getDecoratorLayerVisible(): boolean {
+            return this._decoratorLayer.visible;
         }
 
         public setObjectLayerVisible(visible: boolean): void {
@@ -226,13 +242,13 @@ namespace TwnsBwTileMapView {
             egret.Tween.removeTweens(this._coZoneContainer);
         }
 
-        private _onNotifyTileAnimationTick(e: egret.Event): void {
+        private _onNotifyTileAnimationTick(): void {
             for (const view of this._tileViewArray) {
                 view.updateView();
             }
         }
 
-        private _onNotifyIsShowGridBorderChanged(e: egret.Event): void {
+        private _onNotifyIsShowGridBorderChanged(): void {
             this._updateGridBorderLayerVisible();
         }
 

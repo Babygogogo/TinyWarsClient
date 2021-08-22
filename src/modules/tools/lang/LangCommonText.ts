@@ -879,8 +879,8 @@ namespace TwnsLangCommonText {
             `It's not allowed to change your force in ranking matches.`,
         ],
         [LangTextType.A0210]: [
-            `请禁用CO`,
-            `Please ban COs for the match.`
+            `请选择您想要禁用的CO`,
+            `Please choose the COs you want to ban for the match.`
         ],
         [LangTextType.A0211]: [
             `请选择您的CO和颜色，并进入准备就绪状态`,
@@ -941,6 +941,54 @@ namespace TwnsLangCommonText {
         [LangTextType.A0225]: [
             `您确定要继续吗？`,
             `Are you sure to continue?`,
+        ],
+        [LangTextType.A0226]: [
+            `您确定要跳过剧情吗？`,
+            `Are you sure to skip the story?`,
+        ],
+        [LangTextType.A0227]: [
+            `此动作包含的对话数量不合法`,
+            `The number of the dialogues is invalid.`,
+        ],
+        [LangTextType.A0228]: [
+            `此动作已包含太多对话`,
+            `There are too many dialogues in this action.`,
+        ],
+        [LangTextType.A0229]: [
+            `此剧情不合法，无法播放`,
+            `This dialogue is invalid.`,
+        ],
+        [LangTextType.A0230]: [
+            `此对白的类型不合法`,
+            `The type of this dialogue is invalid.`,
+        ],
+        [LangTextType.A0231]: [
+            `此CO对白的数据不合法`,
+            `The data of the CO dialogue is invalid.`,
+        ],
+        [LangTextType.A0232]: [
+            `此旁白的数据不合法`,
+            `The data of the aside is invalid.`,
+        ],
+        [LangTextType.A0233]: [
+            `已有的地形装饰物会被覆盖。您确定要自动填充吗？`,
+            `The current tile decorators will be overwritten. Are you sure to auto fill?`,
+        ],
+        [LangTextType.A0234]: [
+            `导出失败，请使用chrome浏览器重试`,
+            `Failed to export. Please retry with chrome browser.`,
+        ],
+        [LangTextType.A0235]: [
+            `导出成功`,
+            `Exported successfully.`,
+        ],
+        [LangTextType.A0236]: [
+            `导入失败，请确保剪贴板数据无误`,
+            `Failed to import. Please ensure the clipboard data is valid.`,
+        ],
+        [LangTextType.A0237]: [
+            `当前的地图数据将被覆盖（但存档不受影响）。您确定要继续导入吗？`,
+            `The current map data will be overwritten, but the saved data will not be affected. Are you sure to import?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3574,6 +3622,102 @@ namespace TwnsLangCommonText {
             `Power Up`,
             `Power Up`,
         ],
+        [LangTextType.B0661]: [
+            `删除地形装饰物`,
+            `Del Tile Decorator`,
+        ],
+        [LangTextType.B0662]: [
+            `绘制地形装饰物`,
+            `Draw Tile Decorator`,
+        ],
+        [LangTextType.B0663]: [
+            `陆地边角`,
+            `Land Corner`,
+        ],
+        [LangTextType.B0664]: [
+            `地形装饰物`,
+            `Tile Decorator`,
+        ],
+        [LangTextType.B0665]: [
+            `跳过`,
+            `Skip`,
+        ],
+        [LangTextType.B0666]: [
+            `增加对白`,
+            `Add Dialogue`,
+        ],
+        [LangTextType.B0667]: [
+            `播放`,
+            `Play`,
+        ],
+        [LangTextType.B0668]: [
+            `切换类型`,
+            `Switch Type`,
+        ],
+        [LangTextType.B0669]: [
+            `对白类型`,
+            `Dialogue Type`,
+        ],
+        [LangTextType.B0670]: [
+            `旁白`,
+            `Aside`,
+        ],
+        [LangTextType.B0671]: [
+            `CO对白`,
+            `CO Dialogue`,
+        ],
+        [LangTextType.B0672]: [
+            `未知`,
+            `Unknown`,
+        ],
+        [LangTextType.B0673]: [
+            `显示在左侧`,
+            `Show on left`,
+        ],
+        [LangTextType.B0674]: [
+            `播放剧情对白`,
+            `Show Dialogue`,
+        ],
+        [LangTextType.B0675]: [
+            `对白总数`,
+            `Total Dialogues`,
+        ],
+        [LangTextType.B0676]: [
+            `在线`,
+            `Online`,
+        ],
+        [LangTextType.B0677]: [
+            `离线`,
+            `Offline`,
+        ],
+        [LangTextType.B0678]: [
+            `自动填充`,
+            `Auto Fill`,
+        ],
+        [LangTextType.B0679]: [
+            `回合开始！`,
+            `Turn Start!`,
+        ],
+        [LangTextType.B0680]: [
+            `导出到剪贴板`,
+            `Export to Clipboard`,
+        ],
+        [LangTextType.B0681]: [
+            `从剪贴板导入`,
+            `Import from Clipboard`,
+        ],
+        [LangTextType.B0682]: [
+            `插入`,
+            `Insert`,
+        ],
+        [LangTextType.B0683]: [
+            `中文名称`,
+            `Chinese Name`,
+        ],
+        [LangTextType.B0684]: [
+            `英文名称`,
+            `English Name`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4096,6 +4240,18 @@ namespace TwnsLangCommonText {
         [LangTextType.F0068]: [
             `请输入数字，最多 %d 位`,
             `Please enter a number, up to %d digits.`,
+        ],
+        [LangTextType.F0069]: [
+            `您已成功加入房间 #%d`,
+            `You have successfully joined room #%d`,
+        ],
+        [LangTextType.F0070]: [
+            `发生剧情对话，参与CO: %s`,
+            `Start a dialogue, COs: %s`,
+        ],
+        [LangTextType.F0071]: [
+            `#%d 对话数据不合法`,
+            `The #%d dialogue is invalid.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

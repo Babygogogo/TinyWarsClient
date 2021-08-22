@@ -442,6 +442,8 @@ namespace TwnsMeWarMenuPanel {
                 this._createCommandResize(),
                 this._createCommandOffset(),
                 this._createCommandImport(),
+                this._createCommandImportFromClipboard(),
+                this._createCommandExportToClipboard(),
             ].filter(v => !!v);
         }
 
@@ -733,6 +735,54 @@ namespace TwnsMeWarMenuPanel {
                 };
             }
         }
+        private _createCommandImportFromClipboard(): DataForCommandRenderer | null {
+            if (this._war.getIsReviewingMap()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(LangTextType.B0681),
+                    callback: () => {
+                        CommonConfirmPanel.show({
+                            content : Lang.getText(LangTextType.A0237),
+                            callback: async () => {
+                                try {
+                                    const war = this._war;
+                                    war.stopRunning();
+                                    await war.initWithMapEditorData({
+                                        mapRawData  : JSON.parse(await navigator.clipboard.readText()),
+                                        slotIndex   : war.getMapSlotIndex(),
+                                    });
+                                    war.setIsMapModified(true);
+                                    war.startRunning()
+                                        .startRunningView();
+
+                                    this.close();
+                                } catch (e) {
+                                    Logger.error(e);
+                                    FloatText.show(Lang.getText(LangTextType.A0236));
+                                }
+                            },
+                        });
+                    },
+                };
+            }
+        }
+        private _createCommandExportToClipboard(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(LangTextType.B0680),
+                callback: () => {
+                    try {
+                        navigator.clipboard.writeText(JSON.stringify(this._war.serializeForMap()));
+                    } catch (e) {
+                        Logger.error(e);
+                        FloatText.show(Lang.getText(LangTextType.A0234));
+                        return;
+                    }
+
+                    FloatText.show(Lang.getText(LangTextType.A0235));
+                },
+            };
+        }
     }
 
     type DataForCommandRenderer = {
@@ -778,9 +828,11 @@ namespace TwnsMeWarMenuPanel {
                 { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
 
-            const tileView = this._tileView;
-            this._conTileView.addChild(tileView.getImgBase());
-            this._conTileView.addChild(tileView.getImgObject());
+            const tileView      = this._tileView;
+            const conTileView   = this._conTileView;
+            conTileView.addChild(tileView.getImgBase());
+            conTileView.addChild(tileView.getImgDecorator());
+            conTileView.addChild(tileView.getImgObject());
             tileView.startRunningView();
         }
 
@@ -794,6 +846,8 @@ namespace TwnsMeWarMenuPanel {
             this._tileView.init({
                 tileBaseType        : data.baseType,
                 tileBaseShapeId     : 0,
+                tileDecoratorType   : null,
+                tileDecoratorShapeId: null,
                 tileObjectType      : data.objectType,
                 tileObjectShapeId   : 0,
                 playerIndex         : data.playerIndex,

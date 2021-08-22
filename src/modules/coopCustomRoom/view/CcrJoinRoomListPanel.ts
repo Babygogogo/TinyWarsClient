@@ -144,12 +144,14 @@ namespace TwnsCcrJoinRoomListPanel {
         }
 
         private _onNotifyMsgCcrJoinRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrJoinRoom.IS;
+            const data      = e.data as ProtoTypes.NetMessage.MsgCcrJoinRoom.IS;
+            const roomId    = data.roomId;
             if (data.userId === UserModel.getSelfUserId()) {
                 this.close();
-                CcrRoomInfoPanel.show({ roomId: data.roomId });
+                CcrRoomInfoPanel.show({ roomId });
+                FloatText.show(Lang.getFormattedText(LangTextType.F0069, roomId));
             } else {
-                if (data.roomId === CcrJoinModel.getTargetRoomId()) {
+                if (roomId === CcrJoinModel.getTargetRoomId()) {
                     this._updateCommonWarPlayerInfoPage();
                 }
 
