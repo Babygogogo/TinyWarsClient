@@ -4,7 +4,7 @@ import TwnsUiComponent  from "./UiComponent";
 
 namespace TwnsUiTabPage {
     export abstract class UiTabPage<OpenData> extends TwnsUiComponent.UiComponent {
-        private _openData   : OpenData;
+        private _openData?  : OpenData;
 
         protected constructor() {
             super();
@@ -23,10 +23,10 @@ namespace TwnsUiTabPage {
             this._doOpen();
         }
 
-        private _setOpenData(data: OpenData): void {
+        private _setOpenData(data: OpenData | undefined): void {
             this._openData = data;
         }
-        protected _getOpenData(): OpenData {
+        protected _getOpenData(): OpenData | undefined {
             return this._openData;
         }
 

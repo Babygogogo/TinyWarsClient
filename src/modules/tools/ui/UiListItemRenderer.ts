@@ -7,14 +7,15 @@ namespace TwnsUiListItemRenderer {
     import ShortSfxCode     = Types.ShortSfxCode;
 
     export class UiListItemRenderer<DataForRenderer> extends eui.ItemRenderer {
-        private _isChildrenCreated  = false;
-        private _isSkinLoaded       = false;
-        private _isOpening          = false;
+        private _isChildrenCreated          = false;
+        private _isSkinLoaded               = false;
+        private _isOpening                  = false;
 
-        private _notifyListenerArray: Notify.Listener[] | undefined;
-        private _uiListenerArray    : UiListener[] | undefined;
+        private _shortSfxCode               = ShortSfxCode.ButtonNeutral01;
+        private _notifyListenerArray        : Notify.Listener[] | undefined;
+        private _uiListenerArray            : UiListener[] | undefined;
 
-        public data                         : DataForRenderer;
+        public data                         : DataForRenderer | null | undefined;
         private _isDataChangedBeforeOpen    = false;
 
         public constructor() {
@@ -120,6 +121,13 @@ namespace TwnsUiListItemRenderer {
         }
         private _setIsDataChangedBeforeOpen(isChanged: boolean): void {
             this._isDataChangedBeforeOpen = isChanged;
+        }
+
+        protected _setShortSfxCode(code: ShortSfxCode): void {
+            this._shortSfxCode = code;
+        }
+        public getShortSfxCode(): ShortSfxCode {
+            return this._shortSfxCode;
         }
 
         protected _setNotifyListenerArray(array: Notify.Listener[] | undefined): void {

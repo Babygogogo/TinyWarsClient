@@ -156,7 +156,7 @@ namespace TwnsMcrCreateSettingsPanel {
             const currentCoId = McrCreateModel.getSelfCoId();
             TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
                 currentCoId,
-                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(McrCreateModel.getWarRule(), McrCreateModel.getSelfPlayerIndex(), ConfigManager.getLatestFormalVersion()),
+                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(McrCreateModel.getWarRule(), McrCreateModel.getSelfPlayerIndex(), ConfigManager.getLatestConfigVersion()),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
                         McrCreateModel.setSelfCoId(newCoId);
@@ -450,7 +450,7 @@ namespace TwnsMcrCreateSettingsPanel {
                 const playerIndex   = data.playerIndex;
                 creator.setSelfPlayerIndex(playerIndex);
 
-                const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer(creator.getWarRule(), playerIndex, ConfigManager.getLatestFormalVersion());
+                const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer(creator.getWarRule(), playerIndex, ConfigManager.getLatestConfigVersion());
                 if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
                     creator.setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
                 }

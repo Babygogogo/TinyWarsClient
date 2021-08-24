@@ -111,7 +111,7 @@ namespace TwnsMeChooseUnitPanel {
 
         private _createDataForListUnit(): DataForCategoryRenderer[] {
             const mapping = new Map<number, DataForDrawUnit[]>();
-            for (const unitType of ConfigManager.getUnitTypesByCategory(ConfigManager.getLatestFormalVersion(), Types.UnitCategory.All)) {
+            for (const unitType of ConfigManager.getUnitTypesByCategory(ConfigManager.getLatestConfigVersion(), Types.UnitCategory.All)) {
                 for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                     if (!mapping.has(playerIndex)) {
                         mapping.set(playerIndex, []);

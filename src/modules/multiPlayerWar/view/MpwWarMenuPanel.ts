@@ -780,7 +780,7 @@ namespace TwnsMpwWarMenuPanel {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const coId  = player.getCoId();
-            const cfg   = coId == null ? null : ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
+            const cfg   = coId == null ? null : ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
             return {
                 titleText   : `CO`,
                 infoText    : !cfg ? `(${Lang.getText(LangTextType.B0001)})` : `${cfg.name}`,

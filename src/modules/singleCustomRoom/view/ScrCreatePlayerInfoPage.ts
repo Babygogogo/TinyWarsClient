@@ -135,7 +135,7 @@ namespace TwnsScrCreatePlayerInfoPage {
             const currentCoId   = ScrCreateModel.getCoId(playerIndex);
             TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
                 currentCoId,
-                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(ScrCreateModel.getWarRule(), playerIndex, ConfigManager.getLatestFormalVersion()),
+                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(ScrCreateModel.getWarRule(), playerIndex, ConfigManager.getLatestConfigVersion()),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
                         ScrCreateModel.setCoId(playerIndex, newCoId);

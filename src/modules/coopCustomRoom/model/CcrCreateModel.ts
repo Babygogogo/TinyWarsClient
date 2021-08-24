@@ -41,7 +41,7 @@ namespace CcrCreateModel {
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(ConfigManager.getLatestFormalVersion());
+        setConfigVersion(ConfigManager.getLatestConfigVersion());
         setWarName("");
         setWarPassword("");
         setWarComment("");

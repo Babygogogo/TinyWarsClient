@@ -179,7 +179,7 @@ namespace TwnsWarMapUnitView {
         private _getUnitTemplateCfg(): Types.UnitTemplateCfg {
             const data = this._unitData;
             return data
-                ? ConfigManager.getUnitTemplateCfg(ConfigManager.getLatestFormalVersion(), data.unitType)
+                ? ConfigManager.getUnitTemplateCfg(ConfigManager.getLatestConfigVersion(), data.unitType)
                 : null;
         }
         private _getSkinId(): number {

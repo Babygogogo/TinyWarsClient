@@ -326,7 +326,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
             this._callbackForTouchLabelValue    = () => {
-                const configVersion = ConfigManager.getLatestFormalVersion();
+                const configVersion = ConfigManager.getLatestConfigVersion();
                 const selfCoId      = ScrCreateModel.getCoId(playerIndex);
                 TwnsCommonBanCoPanel.CommonBanCoPanel.show({
                     playerIndex,

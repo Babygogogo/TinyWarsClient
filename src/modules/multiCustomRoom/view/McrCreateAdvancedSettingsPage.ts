@@ -322,7 +322,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
 
             const labelValue                    = this._labelValue;
             const currValue                     = (McrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
-            const configVersion                 = ConfigManager.getLatestFormalVersion();
+            const configVersion                 = ConfigManager.getLatestConfigVersion();
             const selfCoId                      = playerIndex === McrCreateModel.getSelfPlayerIndex() ? McrCreateModel.getSelfCoId() : undefined;
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;

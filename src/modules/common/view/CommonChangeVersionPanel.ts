@@ -24,13 +24,13 @@ namespace TwnsCommonChangeVersionPanel {
 
         private static _instance: CommonChangeVersionPanel;
 
-        private readonly _group         : eui.Group;
-        private readonly _imgMask       : TwnsUiImage.UiImage;
-        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        private readonly _btnBack       : TwnsUiButton.UiButton;
-        private readonly _btnConfirm    : TwnsUiButton.UiButton;
-        private readonly _listVersion   : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
-        private readonly _labelTips     : TwnsUiLabel.UiLabel;
+        private readonly _group!        : eui.Group;
+        private readonly _imgMask!      : TwnsUiImage.UiImage;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnBack!      : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
+        private readonly _listVersion!  : TwnsUiScrollList.UiScrollList<DataForVersionRenderer>;
+        private readonly _labelTips!    : TwnsUiLabel.UiLabel;
 
         public static show(): void {
             if (!CommonChangeVersionPanel._instance) {
@@ -64,9 +64,7 @@ namespace TwnsCommonChangeVersionPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
-            this._listVersion.setItemRenderer(MapNameRenderer);
-            this._btnBack.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
-            this._btnConfirm.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
+            this._listVersion.setItemRenderer(VersionRenderer);
 
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
@@ -129,7 +127,7 @@ namespace TwnsCommonChangeVersionPanel {
             listVersion.setSelectedIndex(dataArray.findIndex(v => v.gameVersion === CommonConstants.GameVersion));
         }
 
-        private _createDataForListVersion(): DataForMapNameRenderer[] {
+        private _createDataForListVersion(): DataForVersionRenderer[] {
             return [
                 {
                     gameVersion : GameVersion.Legacy,
@@ -172,13 +170,13 @@ namespace TwnsCommonChangeVersionPanel {
         }
     }
 
-    type DataForMapNameRenderer = {
+    type DataForVersionRenderer = {
         gameVersion : GameVersion;
     };
-    class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _labelDesc      : TwnsUiLabel.UiLabel;
-        private _labelCurrent   : TwnsUiLabel.UiLabel;
+    class VersionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForVersionRenderer> {
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelDesc!    : TwnsUiLabel.UiLabel;
+        private readonly _labelCurrent! : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -199,7 +197,11 @@ namespace TwnsCommonChangeVersionPanel {
                 return;
             }
 
-            const data              = this.data;
+            const data = this.data;
+            if (data == null) {
+                throw new Error(`CommonChangeVersionPanel.VersionRenderer._updateView() empty data.`);
+            }
+
             const gameVersion       = data.gameVersion;
             this._labelName.text    = Lang.getGameVersionName(gameVersion) || CommonConstants.ErrorTextForUndefined;
             this._labelDesc.text    = Lang.getGameVersionDesc(gameVersion) || CommonConstants.ErrorTextForUndefined;

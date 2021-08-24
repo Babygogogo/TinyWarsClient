@@ -390,7 +390,7 @@ namespace TwnsWarMapView {
             const view     = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
-            const configVersion = ConfigManager.getLatestFormalVersion();
+            const configVersion = ConfigManager.getLatestConfigVersion();
             if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Air)) {
                 this._airLayer.addChild(view);
             } else if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Ground)) {

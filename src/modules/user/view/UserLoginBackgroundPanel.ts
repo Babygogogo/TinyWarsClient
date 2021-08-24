@@ -82,7 +82,7 @@ namespace TwnsUserLoginBackgroundPanel {
             this._updateComponentsForLanguage();
             this._initListLanguage();
 
-            if (ConfigManager.getLatestFormalVersion()) {
+            if (ConfigManager.getLatestConfigVersion()) {
                 // this._initGroupUnits();
             }
         }

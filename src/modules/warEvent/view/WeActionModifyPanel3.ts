@@ -257,7 +257,7 @@ namespace TwnsWeActionModifyPanel3 {
                 if (dataForAside) {
                     delete dataForDialogue.dataForAside;
                     dataForDialogue.dataForCoDialogue = {
-                        coId        : ConfigManager.getCoIdArrayForDialogue(ConfigManager.getLatestFormalVersion())[0],
+                        coId        : ConfigManager.getCoIdArrayForDialogue(ConfigManager.getLatestConfigVersion())[0],
                         side        : Types.WarEventActionDialogueSide.Left,
                         textArray   : dataForAside.textArray,
                     };
@@ -330,7 +330,7 @@ namespace TwnsWeActionModifyPanel3 {
             if (dataForCoDialogue) {
                 const currentCoId = dataForCoDialogue.coId;
                 TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
-                    availableCoIdArray  : ConfigManager.getCoIdArrayForDialogue(ConfigManager.getLatestFormalVersion()),
+                    availableCoIdArray  : ConfigManager.getCoIdArrayForDialogue(ConfigManager.getLatestConfigVersion()),
                     currentCoId,
                     callbackOnConfirm   : coId => {
                         if (coId !== currentCoId) {
@@ -520,7 +520,7 @@ namespace TwnsWeActionModifyPanel3 {
             } else {
                 groupCoDialogue.visible     = true;
                 this._imgLeftSide.visible   = dataForCoDialogue.side === Types.WarEventActionDialogueSide.Left;
-                this._labelCo.text          = ConfigManager.getCoNameAndTierText(ConfigManager.getLatestFormalVersion(), dataForCoDialogue.coId);
+                this._labelCo.text          = ConfigManager.getCoNameAndTierText(ConfigManager.getLatestConfigVersion(), dataForCoDialogue.coId);
             }
 
             {

@@ -301,7 +301,7 @@ namespace TwnsUserPanel {
             const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestFormalVersion(), score)})`;
+            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
             this._labelStdRankScore.text    = `${score} ${rankName}`;
 
             const rank                          = data ? data.currentRank : null;
@@ -312,7 +312,7 @@ namespace TwnsUserPanel {
             const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestFormalVersion(), score)})`;
+            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
             this._labelFogRankScore.text    = `${score} ${rankName}`;
 
             const rank                          = data ? data.currentRank : null;

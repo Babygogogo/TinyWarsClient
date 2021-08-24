@@ -13,7 +13,12 @@ namespace SpmSrwRankModel {
     }
 
     export function updateOnMsgSpmGetSrwRankInfo(data: ProtoTypes.NetMessage.MsgSpmGetSrwRankInfo.IS): void {
-        _rankInfoDict.set(data.mapId, data.infoArray || []);
+        const mapId = data.mapId;
+        if (mapId == null) {
+            throw new Error(`Empty mapId.`);
+        }
+
+        _rankInfoDict.set(mapId, data.infoArray || []);
     }
 }
 

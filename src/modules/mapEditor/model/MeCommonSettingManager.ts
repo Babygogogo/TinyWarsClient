@@ -22,7 +22,7 @@ namespace TwnsMeCommonSettingManager {
             }
 
             const configVersion = settings.configVersion;
-            if (configVersion !== ConfigManager.getLatestFormalVersion()) {
+            if (configVersion !== ConfigManager.getLatestConfigVersion()) {
                 return ClientErrorCode.MeCommonSettingManagerInit01;
             }
 

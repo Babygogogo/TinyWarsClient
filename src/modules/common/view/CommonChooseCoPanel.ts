@@ -148,7 +148,7 @@ namespace TwnsCommonChooseCoPanel {
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
-            const configVersion = ConfigManager.getLatestFormalVersion();
+            const configVersion = ConfigManager.getLatestConfigVersion();
             const dataArray     : DataForCoRenderer[] = [];
             let index           = 0;
             for (const coId of this._getOpenData().availableCoIdArray) {
@@ -170,7 +170,7 @@ namespace TwnsCommonChooseCoPanel {
             }
 
             this._uiCoInfo.setCoData({
-                configVersion   : ConfigManager.getLatestFormalVersion(),
+                configVersion   : ConfigManager.getLatestConfigVersion(),
                 coId,
             });
         }

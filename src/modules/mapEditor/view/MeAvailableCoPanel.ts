@@ -121,8 +121,8 @@ namespace TwnsMeAvailableCoPanel {
                 const renderer      = e.currentTarget as RendererForCoTier;
                 const bannedCoIdSet = this._bannedCoIdSet;
                 const coIdList      = renderer.getIsCustomSwitch()
-                    ? ConfigManager.getEnabledCustomCoIdList(ConfigManager.getLatestFormalVersion())
-                    : ConfigManager.getEnabledCoIdListInTier(ConfigManager.getLatestFormalVersion(), renderer.getCoTier());
+                    ? ConfigManager.getEnabledCustomCoIdList(ConfigManager.getLatestConfigVersion())
+                    : ConfigManager.getEnabledCoIdListInTier(ConfigManager.getLatestConfigVersion(), renderer.getCoTier());
 
                 if (renderer.getState() === CoTierState.Unavailable) {
                     for (const coId of coIdList) {
@@ -170,7 +170,7 @@ namespace TwnsMeAvailableCoPanel {
         }
 
         private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
+            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestConfigVersion())) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -196,7 +196,7 @@ namespace TwnsMeAvailableCoPanel {
 
         private _updateGroupCoTiers(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
-            const configVersion = ConfigManager.getLatestFormalVersion();
+            const configVersion = ConfigManager.getLatestConfigVersion();
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
                     ? ConfigManager.getEnabledCustomCoIdList(configVersion)
@@ -213,7 +213,7 @@ namespace TwnsMeAvailableCoPanel {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestConfigVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -308,7 +308,7 @@ namespace TwnsMeAvailableCoPanel {
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
+            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
             this._labelName.text    = `${cfg.name} (T${cfg.tier})`;
         }
         public getCoId(): number {

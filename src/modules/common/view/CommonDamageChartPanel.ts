@@ -31,31 +31,31 @@ namespace TwnsCommonDamageChartPanel {
 
         private static _instance: CommonDamageChartPanel;
 
-        private _groupList          : eui.Group;
-        private _labelTitle         : TwnsUiLabel.UiLabel;
-        private _listUnit           : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
-        private _btnBack            : TwnsUiButton.UiButton;
+        private readonly _groupList!            : eui.Group;
+        private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _listUnit!             : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
 
-        private _groupInfo          : eui.Group;
-        private _conUnitView        : eui.Group;
-        private _labelName          : TwnsUiLabel.UiLabel;
+        private readonly _groupInfo!            : eui.Group;
+        private readonly _conUnitView!          : eui.Group;
+        private readonly _labelName!            : TwnsUiLabel.UiLabel;
 
-        private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
-        private _listDamageChart    : TwnsUiScrollList.UiScrollList<DataForDamageRenderer>;
-        private _labelDamageChart   : TwnsUiLabel.UiLabel;
-        private _labelOffenseMain1  : TwnsUiLabel.UiLabel;
-        private _labelOffenseSub1   : TwnsUiLabel.UiLabel;
-        private _labelDefenseMain1  : TwnsUiLabel.UiLabel;
-        private _labelDefenseSub1   : TwnsUiLabel.UiLabel;
-        private _labelOffenseMain2  : TwnsUiLabel.UiLabel;
-        private _labelOffenseSub2   : TwnsUiLabel.UiLabel;
-        private _labelDefenseMain2  : TwnsUiLabel.UiLabel;
-        private _labelDefenseSub2   : TwnsUiLabel.UiLabel;
+        private readonly _listInfo!             : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private readonly _listDamageChart!      : TwnsUiScrollList.UiScrollList<DataForDamageRenderer>;
+        private readonly _labelDamageChart!     : TwnsUiLabel.UiLabel;
+        private readonly _labelOffenseMain1!    : TwnsUiLabel.UiLabel;
+        private readonly _labelOffenseSub1!     : TwnsUiLabel.UiLabel;
+        private readonly _labelDefenseMain1!    : TwnsUiLabel.UiLabel;
+        private readonly _labelDefenseSub1!     : TwnsUiLabel.UiLabel;
+        private readonly _labelOffenseMain2!    : TwnsUiLabel.UiLabel;
+        private readonly _labelOffenseSub2!     : TwnsUiLabel.UiLabel;
+        private readonly _labelDefenseMain2!    : TwnsUiLabel.UiLabel;
+        private readonly _labelDefenseSub2!     : TwnsUiLabel.UiLabel;
 
-        private _selectedIndex          : number;
-        private _dataForListUnit        : DataForUnitRenderer[];
-        private _dataForListDamageChart : DataForDamageRenderer[];
-        private _unitView               = new WarMapUnitView();
+        private _selectedIndex?             : number;
+        private _dataForListUnit?           : DataForUnitRenderer[];
+        private _dataForListDamageChart?    : DataForDamageRenderer[];
+        private _unitView                   = new WarMapUnitView();
 
         public static show(): void {
             if (!CommonDamageChartPanel._instance) {
@@ -107,9 +107,9 @@ namespace TwnsCommonDamageChartPanel {
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
 
-            this._selectedIndex             = null;
-            this._dataForListUnit           = null;
-            this._dataForListDamageChart    = null;
+            this._selectedIndex             = undefined;
+            this._dataForListUnit           = undefined;
+            this._dataForListDamageChart    = undefined;
         }
 
         public setSelectedIndexAndUpdateView(newIndex: number): void {
@@ -122,7 +122,7 @@ namespace TwnsCommonDamageChartPanel {
                 this._updateListDamageChart();
             }
         }
-        public getSelectedIndex(): number {
+        public getSelectedIndex(): number | undefined {
             return this._selectedIndex;
         }
 
@@ -377,7 +377,7 @@ namespace TwnsCommonDamageChartPanel {
 
         private _createDataForListUnit(): DataForUnitRenderer[] {
             const data          : DataForUnitRenderer[] = [];
-            const configVersion = ConfigManager.getLatestFormalVersion();
+            const configVersion = ConfigManager.getLatestConfigVersion();
             const unitTypes     = ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All);
             for (let index = 0; index < unitTypes.length; ++index) {
                 data.push({

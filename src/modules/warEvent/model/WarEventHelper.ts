@@ -472,7 +472,7 @@ namespace WarEventHelper {
             return false;
         }
 
-        const configVersion = ConfigManager.getLatestFormalVersion();
+        const configVersion = ConfigManager.getLatestConfigVersion();
         if (configVersion == null) {
             return false;
         }
@@ -600,7 +600,7 @@ namespace WarEventHelper {
         return true;
     }
     function checkIsValidDataForCoDialogue(data: ProtoTypes.WarEvent.WeaDialogue.IDataForCoDialogue): boolean {
-        const configVersion = ConfigManager.getLatestFormalVersion();
+        const configVersion = ConfigManager.getLatestConfigVersion();
         if (configVersion == null) {
             return false;
         }
@@ -983,7 +983,7 @@ namespace WarEventHelper {
             }
 
             const coNameArray   : string[] = [];
-            const configVersion = ConfigManager.getLatestFormalVersion();
+            const configVersion = ConfigManager.getLatestConfigVersion();
             for (const coId of coIdSet) {
                 const coName = ConfigManager.getCoNameAndTierText(configVersion, coId);
                 (coName != null) && (coNameArray.push(coName));
@@ -1292,7 +1292,7 @@ namespace WarEventHelper {
         return undefined;
     }
     export function getErrorTipForWeaDialogueData(dialogueData: WarEvent.WeaDialogue.IDataForDialogue): string | undefined {
-        const configVersion = ConfigManager.getLatestFormalVersion();
+        const configVersion = ConfigManager.getLatestConfigVersion();
         if (Object.keys(dialogueData).length !== 1) {
             return Lang.getText(LangTextType.A0230);
         }
@@ -2168,7 +2168,7 @@ namespace WarEventHelper {
     export function getDefaultCoDialogueData(): ProtoTypes.WarEvent.WeaDialogue.IDataForDialogue {
         return {
             dataForCoDialogue: {
-                coId        : ConfigManager.getCoIdArrayForDialogue(ConfigManager.getLatestFormalVersion())[0],
+                coId        : ConfigManager.getCoIdArrayForDialogue(ConfigManager.getLatestConfigVersion())[0],
                 side        : Types.WarEventActionDialogueSide.Left,
                 textArray   : [
                     { languageType: Lang.getCurrentLanguageType(), text: `...` },

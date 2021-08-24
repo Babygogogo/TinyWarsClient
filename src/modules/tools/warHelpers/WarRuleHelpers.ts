@@ -620,7 +620,7 @@ namespace WarRuleHelpers {
         return true;
     }
     export function checkIsValidRuleForPlayers(ruleForPlayers: WarRule.IRuleForPlayers): boolean | undefined {
-        const configVersion = ConfigManager.getLatestFormalVersion();
+        const configVersion = ConfigManager.getLatestConfigVersion();
         if (configVersion == null) {
             Logger.error(`BwWarRuleHelper.checkIsValidRuleForPlayers() empty configVersion.`);
             return undefined;
@@ -698,7 +698,7 @@ namespace WarRuleHelpers {
             && (teamIndexSet.size > 1);
     }
     function checkIsValidRuleForGlobalParams(rule: WarRule.IRuleForGlobalParams): boolean | undefined {
-        const configVersion = ConfigManager.getLatestFormalVersion();
+        const configVersion = ConfigManager.getLatestConfigVersion();
         if (configVersion == null) {
             Logger.error(`BwWarRuleHelper.checkIsValidRuleForGlobalParams() empty configVersion.`);
             return undefined;

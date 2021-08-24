@@ -147,7 +147,7 @@ namespace MeUtility {
 
         return {
             settingsForCommon   : {
-                configVersion   : ConfigManager.getLatestFormalVersion(),
+                configVersion   : ConfigManager.getLatestConfigVersion(),
                 presetWarRuleId : warRule.ruleId,
                 warRule,
             },
@@ -622,7 +622,7 @@ namespace MeUtility {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function getErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-        const configVersion = ConfigManager.getLatestFormalVersion();
+        const configVersion = ConfigManager.getLatestConfigVersion();
         if (configVersion == null) {
             return ClientErrorCode.MapRawDataValidation00;
         }

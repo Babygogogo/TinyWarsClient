@@ -101,7 +101,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
         }
 
         private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
+            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestConfigVersion())) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -125,7 +125,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
 
         private _updateGroupCoTiers(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
-            const configVersion = ConfigManager.getLatestFormalVersion();
+            const configVersion = ConfigManager.getLatestConfigVersion();
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
                     ? ConfigManager.getEnabledCustomCoIdList(configVersion)
@@ -142,7 +142,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestConfigVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -236,7 +236,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            this._labelName.text = `${ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId).name}`;
+            this._labelName.text = `${ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId).name}`;
         }
         public getCoId(): number {
             return this._coId;

@@ -342,7 +342,7 @@ namespace TwnsMrrPreviewMapListPanel {
             }
 
             return {
-                configVersion   : ConfigManager.getLatestFormalVersion(),
+                configVersion   : ConfigManager.getLatestConfigVersion(),
                 warRule         : warRuleArray[0],
                 warType         : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };

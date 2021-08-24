@@ -35,7 +35,7 @@ namespace ScrCreateModel {
             slotComment     : null,
         },
         settingsForCommon   : {
-            configVersion   : ConfigManager.getLatestFormalVersion(),
+            configVersion   : ConfigManager.getLatestConfigVersion(),
             presetWarRuleId : null,
             warRule         : null,
         },
@@ -69,7 +69,7 @@ namespace ScrCreateModel {
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(ConfigManager.getLatestFormalVersion());
+        setConfigVersion(ConfigManager.getLatestConfigVersion());
         setSaveSlotIndex(SpmModel.getAvailableIndex());
         setSlotComment(null);
         setPlayerInfoList([]);

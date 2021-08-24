@@ -22,28 +22,17 @@ namespace TwnsUserSetPasswordPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        // @ts-ignore
-        private readonly _imgMask                   : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _group                     : eui.Group;
-        // @ts-ignore
-        private readonly _labelTitle                : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelOldPasswordTitle     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _inputOldPassword          : TwnsUiTextInput.UiTextInput;
-        // @ts-ignore
-        private readonly _labelNewPasswordTitle0    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _inputNewPassword0         : TwnsUiTextInput.UiTextInput;
-        // @ts-ignore
-        private readonly _labelNewPasswordTitle1    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _inputNewPassword1         : TwnsUiTextInput.UiTextInput;
-        // @ts-ignore
-        private readonly _btnConfirm                : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnCancel                 : TwnsUiButton.UiButton;
+        private readonly _imgMask!                  : TwnsUiImage.UiImage;
+        private readonly _group!                    : eui.Group;
+        private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
+        private readonly _labelOldPasswordTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _inputOldPassword!         : TwnsUiTextInput.UiTextInput;
+        private readonly _labelNewPasswordTitle0!   : TwnsUiLabel.UiLabel;
+        private readonly _inputNewPassword0!        : TwnsUiTextInput.UiTextInput;
+        private readonly _labelNewPasswordTitle1!   : TwnsUiLabel.UiLabel;
+        private readonly _inputNewPassword1!        : TwnsUiTextInput.UiTextInput;
+        private readonly _btnConfirm!               : TwnsUiButton.UiButton;
+        private readonly _btnCancel!                : TwnsUiButton.UiButton;
 
         private static _instance: UserSetPasswordPanel;
 

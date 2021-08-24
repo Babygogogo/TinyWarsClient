@@ -10,8 +10,8 @@ namespace TwnsUiComponent {
         private _isSkinLoaded       = false;
         private _isOpening          = false;
 
-        private _notifyListenerArray: Notify.Listener[];
-        private _uiListenerArray    : UiListener[];
+        private _notifyListenerArray?   : Notify.Listener[];
+        private _uiListenerArray?       : UiListener[];
 
         protected constructor() {
             super();
@@ -35,14 +35,14 @@ namespace TwnsUiComponent {
             }
         }
 
-        private _onAddedToStage(e: egret.Event): void {
+        private _onAddedToStage(): void {
             this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
             this._doOpen();
         }
 
-        private _onRemovedFromStage(e: egret.Event): void {
+        private _onRemovedFromStage(): void {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
@@ -91,13 +91,13 @@ namespace TwnsUiComponent {
             this._isOpening = opening;
         }
 
-        protected _setNotifyListenerArray(array: Notify.Listener[]): void {
+        protected _setNotifyListenerArray(array: Notify.Listener[] | undefined): void {
             this._notifyListenerArray = array;
         }
         protected _getNotifyListenerArray(): Notify.Listener[] | undefined {
             return this._notifyListenerArray;
         }
-        protected _setUiListenerArray(array: UiListener[]): void {
+        protected _setUiListenerArray(array: UiListener[] | undefined): void {
             this._uiListenerArray = array;
         }
         protected _getUiListenerArray(): UiListener[] | undefined {

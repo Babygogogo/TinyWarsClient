@@ -16,11 +16,11 @@ namespace TwnsUiScrollList {
         private _isChildrenCreated  = false;
         private _isOpening          = false;
 
-        private _notifyListenerArray: Notify.Listener[] | undefined;
-        private _uiListenerArray    : UiListener[] | undefined;
-        private _shortSfxCode       = ShortSfxCode.ButtonNeutral01;
+        private _notifyListenerArray        : Notify.Listener[] | undefined;
+        private _uiListenerArray            : UiListener[] | undefined;
+        private _shortSfxCodeForTouchList   = ShortSfxCode.None;
 
-        private _list                   : eui.List;
+        private _list!                      : eui.List;
 
         private _cachedItemRenderer         : (new () => TwnsUiListItemRenderer.UiListItemRenderer<DataForRenderer>) | undefined;
         private _cachedListDataArray        : DataForRenderer[] | undefined;
@@ -191,6 +191,7 @@ namespace TwnsUiScrollList {
             const data = e as eui.ItemTapEvent;
             const item = this._list.getElementAt(data.itemIndex);
             if (item instanceof TwnsUiListItemRenderer.UiListItemRenderer) {
+                SoundManager.playShortSfx(item.getShortSfxCode());
                 item.onItemTapEvent(data);
             }
 
@@ -198,7 +199,7 @@ namespace TwnsUiScrollList {
             this._cachedScrollVerPercentage = undefined;
         }
         private _onTouchBeginList(): void {
-            SoundManager.playShortSfx(this.getShortSfxCode());
+            SoundManager.playShortSfx(this.getShortSfxCodeForTouchList());
         }
         private _onNotifyMouseWheel(e: egret.Event): void {
             if (!this.getIsOpening()) {
@@ -332,11 +333,11 @@ namespace TwnsUiScrollList {
             this.scrollPolicyH = policy;
         }
 
-        public setShortSfxCode(code: ShortSfxCode): void {
-            this._shortSfxCode = code;
+        public setShortSfxCodeForTouchList(code: ShortSfxCode): void {
+            this._shortSfxCodeForTouchList = code;
         }
-        public getShortSfxCode(): ShortSfxCode {
-            return this._shortSfxCode;
+        public getShortSfxCodeForTouchList(): ShortSfxCode {
+            return this._shortSfxCodeForTouchList;
         }
 
         private _getDataProvider(): eui.ArrayCollection | null {

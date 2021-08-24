@@ -198,7 +198,7 @@ namespace TwnsTwWar {
         const seedRandomState = new Math.seedrandom("" + Math.random(), { state: true }).state();
         return {
             settingsForCommon       : {
-                configVersion       : ConfigManager.getLatestFormalVersion(),
+                configVersion       : ConfigManager.getLatestConfigVersion(),
                 warRule,
                 presetWarRuleId     : warRule.ruleId,
             },
@@ -228,7 +228,7 @@ namespace TwnsTwWar {
     }
 
     async function _createInitialPlayerManagerDataForTw(mapRawData: IMapRawData): Promise<WarSerialization.ISerialPlayerManager | undefined> {
-        const configVersion = ConfigManager.getLatestFormalVersion();
+        const configVersion = ConfigManager.getLatestConfigVersion();
         if (configVersion == null) {
             Logger.error(`TwWar._createInitialPlayerManagerDataForTw() empty configVersion.`);
             return undefined;

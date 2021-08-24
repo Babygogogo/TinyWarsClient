@@ -1042,7 +1042,7 @@ namespace TwnsMeWarRulePanel {
         }
         private _createDataAiControlInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const coId          = playerRule.fixedCoIdInCcw;
-            const configVersion = ConfigManager.getLatestFormalVersion();
+            const configVersion = ConfigManager.getLatestConfigVersion();
             return {
                 titleText               : Lang.getText(LangTextType.B0644),
                 infoText                : coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId),

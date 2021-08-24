@@ -3,9 +3,19 @@ import Logger           from "../helpers/Logger";
 import SoundManager     from "../helpers/SoundManager";
 import StageManager     from "../helpers/StageManager";
 import Types            from "../helpers/Types";
+import TwnsUiButton     from "./UiButton";
 import TwnsUiComponent  from "./UiComponent";
 
 namespace TwnsUiPanel {
+    const NAMES_FOR_BUTTON_CONFIRM = [
+        `_btnConfirm`,
+    ];
+    const NAMES_FOR_BUTTON_CLOSE = [
+        `_btnClose`,
+        `_btnCancel`,
+        `_btnBack`,
+    ];
+
     export abstract class UiPanel<OpenData> extends TwnsUiComponent.UiComponent {
         protected abstract readonly _LAYER_TYPE  : Types.LayerType;
         protected abstract readonly _IS_EXCLUSIVE: boolean;
@@ -15,10 +25,10 @@ namespace TwnsUiPanel {
 
         private _isTouchMaskEnabled     = false;
         private _isCloseOnTouchedMask   = false;
-        private _callbackOnTouchedMask  : () => void;
-        private _touchMask              : eui.Group;
+        private _callbackOnTouchedMask? : () => void;
+        private _touchMask?             : eui.Group;
 
-        private _openData               : OpenData;
+        private _openData?              : OpenData;
 
         protected constructor() {
             super();
@@ -44,6 +54,10 @@ namespace TwnsUiPanel {
             this._setOpenData(openData);
 
             const layer = StageManager.getLayer(this._LAYER_TYPE);
+            if (layer == null) {
+                throw new Error(`UiPanel.open() empty layer.`);
+            }
+
             (this._IS_EXCLUSIVE) && (layer.closeAllPanels(this));
             (!this.parent) && (layer.addChild(this));
 
@@ -56,8 +70,9 @@ namespace TwnsUiPanel {
             }
 
             if (!this.getIsOpening()) {
-                this._setIsOpening(true);
                 Logger.warn("Panel opened: " + this.skinName);
+                this._setIsOpening(true);
+                this._resetSoundForCommonButtons();
 
                 const stage = StageManager.getStage();
                 this._onOpened();
@@ -67,10 +82,10 @@ namespace TwnsUiPanel {
             }
         }
 
-        private _setOpenData(data: OpenData): void {
+        private _setOpenData(data: OpenData | undefined): void {
             this._openData = data;
         }
-        protected _getOpenData(): OpenData {
+        protected _getOpenData(): OpenData | undefined {
             return this._openData;
         }
 
@@ -197,6 +212,24 @@ namespace TwnsUiPanel {
             if (this._getIsCloseOnTouchedMask()) {
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonCancel01);
                 this.close();
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Utils.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _resetSoundForCommonButtons(): void {
+            for (const name of NAMES_FOR_BUTTON_CLOSE) {
+                const btn = (this as any)[name];
+                if (btn instanceof TwnsUiButton.UiButton) {
+                    btn.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
+                }
+            }
+            for (const name of NAMES_FOR_BUTTON_CONFIRM) {
+                const btn = (this as any)[name];
+                if (btn instanceof TwnsUiButton.UiButton) {
+                    btn.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
+                }
             }
         }
     }

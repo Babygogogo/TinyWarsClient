@@ -337,7 +337,7 @@ namespace FlowManager {
         return (!_hasOnceWentToLobby)
             && (UserModel.getIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
-            && (!!ConfigManager.getCachedConfig(ConfigManager.getLatestFormalVersion()));
+            && (!!ConfigManager.getCachedConfig(ConfigManager.getLatestConfigVersion()));
     }
 
     function _removeLoadingDom(): void {
