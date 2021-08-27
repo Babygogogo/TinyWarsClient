@@ -549,7 +549,7 @@ namespace WarCoSkillHelpers {
                 const maxBuildMaterial      = unit.getMaxBuildMaterial();
                 const maxProduceMaterial    = unit.getMaxProduceMaterial();
                 if ((maxBuildMaterial == null) && (maxProduceMaterial == null)) {
-                    return;
+                    continue;
                 }
 
                 const unitType = unit.getUnitType();
@@ -644,7 +644,7 @@ namespace WarCoSkillHelpers {
                 const maxBuildMaterial      = unit.getMaxBuildMaterial();
                 const maxProduceMaterial    = unit.getMaxProduceMaterial();
                 if ((maxBuildMaterial == null) && (maxProduceMaterial == null)) {
-                    return;
+                    continue;
                 }
 
                 const unitType = unit.getUnitType();
@@ -738,7 +738,7 @@ namespace WarCoSkillHelpers {
             for (const unit of unitMap.getAllUnits()) {
                 const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                 if (maxAmmo == null) {
-                    return;
+                    continue;
                 }
 
                 const unitType = unit.getUnitType();
@@ -810,7 +810,7 @@ namespace WarCoSkillHelpers {
             for (const unit of unitMap.getAllUnits()) {
                 const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                 if (maxAmmo == null) {
-                    return;
+                    continue;
                 }
 
                 const unitType = unit.getUnitType();
