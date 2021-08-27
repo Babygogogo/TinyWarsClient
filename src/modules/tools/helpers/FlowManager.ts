@@ -286,19 +286,13 @@ namespace FlowManager {
     }
 
     function _onMsgCommonServerDisconnect(): void {
-        _hasOnceWentToLobby = false;
-        UserModel.clearLoginInfo();
-        gotoLogin();
+        // _hasOnceWentToLobby = false;
+        // UserModel.clearLoginInfo();
+        // gotoLogin();
 
-        const title     = Lang.getText(LangTextType.B0025);
-        const content   = Lang.getText(LangTextType.A0020);
-        if ((title == null) || (content == null)) {
-            Logger.error(`FlowManager._onMsgCommonServerDisconnect() empty title/content.`);
-            return;
-        }
         TwnsCommonAlertPanel.CommonAlertPanel.show({
-            title,
-            content,
+            title   : Lang.getText(LangTextType.B0025),
+            content : Lang.getText(LangTextType.A0020),
         });
     }
 
@@ -334,10 +328,12 @@ namespace FlowManager {
     // Other private functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _checkCanFirstGoToLobby(): boolean {
+        const configVersion = ConfigManager.getLatestConfigVersion();
         return (!_hasOnceWentToLobby)
             && (UserModel.getIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
-            && (!!ConfigManager.getCachedConfig(ConfigManager.getLatestConfigVersion()));
+            && (configVersion != null)
+            && (!!ConfigManager.getCachedConfig(configVersion));
     }
 
     function _removeLoadingDom(): void {
