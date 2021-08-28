@@ -20,7 +20,7 @@ namespace TwnsUiScrollList {
         private _uiListenerArray            : UiListener[] | undefined;
         private _shortSfxCodeForTouchList   = ShortSfxCode.None;
 
-        private _list!                      : eui.List;
+        private _list?                      : eui.List;
 
         private _cachedItemRenderer         : (new () => TwnsUiListItemRenderer.UiListItemRenderer<DataForRenderer>) | undefined;
         private _cachedListDataArray        : DataForRenderer[] | undefined;
