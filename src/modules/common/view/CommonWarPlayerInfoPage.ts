@@ -225,11 +225,20 @@ namespace TwnsCommonWarPlayerInfoPage {
             this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerInfo.teamIndex);
             this._imgSkin.source        = getSourceForImgSkin(playerInfo.unitAndTileSkinId);
 
-            const coId                  = playerInfo.coId;
-            const coCfg                 = ConfigManager.getCoBasicCfg(data.configVersion, coId);
-            this._labelCo.text          = coCfg ? coCfg.name : `??`;
-            this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
-            this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
+            const coId              = playerInfo.coId;
+            const labelCo           = this._labelCo;
+            const imgCoHead         = this._imgCoHead;
+            const imgCoInfo         = this._imgCoInfo;
+            if (coId == null) {
+                labelCo.text        = `??`;
+                imgCoHead.source    = ``;
+                imgCoInfo.visible   = false;
+            } else {
+                const coCfg         = ConfigManager.getCoBasicCfg(data.configVersion, coId);
+                labelCo.text        = coCfg.name;
+                imgCoHead.source    = ConfigManager.getCoHeadImageSource(coId);
+                imgCoInfo.visible   = (coId !== CommonConstants.CoEmptyId);
+            }
 
             const userId        = playerInfo.userId;
             const userInfo      = userId == null ? null : await UserModel.getUserPublicInfo(userId);
