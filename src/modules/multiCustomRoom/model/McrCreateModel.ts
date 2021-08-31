@@ -1,18 +1,18 @@
 
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Logger                       from "../../tools/helpers/Logger";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import Types                        from "../../tools/helpers/Types";
-import WarMapModel                  from "../../warMap/model/WarMapModel";
-import WarRuleHelpers              from "../../tools/warHelpers/WarRuleHelpers";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import ConfigManager    from "../../tools/helpers/ConfigManager";
+import Helpers          from "../../tools/helpers/Helpers";
+import Logger           from "../../tools/helpers/Logger";
+import Types            from "../../tools/helpers/Types";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
+import WarMapModel      from "../../warMap/model/WarMapModel";
 
 namespace McrCreateModel {
-    import NotifyType                       = TwnsNotifyType.NotifyType;
-    import BootTimerType                    = Types.BootTimerType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import BootTimerType    = Types.BootTimerType;
 
     const REGULAR_TIME_LIMITS = [
         60 * 60 * 24 * 1,   // 1 day
@@ -28,43 +28,54 @@ namespace McrCreateModel {
         settingsForCommon       : {},
         settingsForMcw          : {},
 
-        selfCoId                : null,
-        selfPlayerIndex         : null,
+        selfCoId                : CommonConstants.CoEmptyId,
+        selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
         selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
     };
 
-    export function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
-        return WarMapModel.getRawData(getMapId());
+    export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
+        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
     }
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(ConfigManager.getLatestConfigVersion());
+        setConfigVersion(Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
         setWarName("");
         setWarPassword("");
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
-
-        const warRule = (await getMapRawData()).warRuleArray.find(v => v.ruleAvailability.canMcw);
-        await resetDataByWarRuleId(warRule ? warRule.ruleId : null);
+        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId));
     }
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
     }
+    export function getSettingsForCommon(): ProtoTypes.WarSettings.ISettingsForCommon {
+        return Helpers.getExisted(getData().settingsForCommon);
+    }
+    export function getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw {
+        return Helpers.getExisted(getData().settingsForMcw);
+    }
+
     export function getWarRule(): ProtoTypes.WarRule.IWarRule {
-        return getData().settingsForCommon.warRule;
+        return Helpers.getExisted(getSettingsForCommon().warRule);
+    }
+    function setWarRule(warRule: ProtoTypes.WarRule.IWarRule) {
+        getSettingsForCommon().warRule = warRule;
     }
 
     export function getMapId(): number {
-        return getData().settingsForMcw.mapId;
+        return Helpers.getExisted(getSettingsForMcw().mapId);
     }
     function setMapId(mapId: number): void {
-        getData().settingsForMcw.mapId = mapId;
+        getSettingsForMcw().mapId = mapId;
     }
 
+    export function getConfigVersion(): string {
+        return Helpers.getExisted(getSettingsForCommon().configVersion);
+    }
     function setConfigVersion(version: string): void {
-        getData().settingsForCommon.configVersion = version;
+        getSettingsForCommon().configVersion = version;
     }
 
     export async function resetDataByWarRuleId(ruleId: number | null): Promise<void> {
@@ -75,12 +86,15 @@ namespace McrCreateModel {
         }
     }
     async function resetDataByCustomWarRuleId(): Promise<void> {
-        const settingsForCommon     = getData().settingsForCommon;
-        const warRule               = WarRuleHelpers.createDefaultWarRule(null, (await getMapRawData()).playersCountUnneutral);
-        settingsForCommon.warRule   = warRule;
+        const warRule = WarRuleHelpers.createDefaultWarRule(null, Helpers.getExisted((await getMapRawData()).playersCountUnneutral));
+        setWarRule(warRule);
         setCustomWarRuleId();
 
-        const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer(warRule, getSelfPlayerIndex(), settingsForCommon.configVersion);
+        const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+            warRule,
+            playerIndex     : getSelfPlayerIndex(),
+            configVersion   : getConfigVersion(),
+        });
         if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
             setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
         }
@@ -93,41 +107,37 @@ namespace McrCreateModel {
             return undefined;
         }
 
-        const warRule = (await getMapRawData()).warRuleArray.find(r => r.ruleId === ruleId);
-        if (warRule == null) {
-            Logger.error(`McwModel.resetDataByPresetWarRuleId() empty warRule.`);
-            return undefined;
-        }
-
-        const settingsForCommon     = getData().settingsForCommon;
-        settingsForCommon.warRule   = Helpers.deepClone(warRule);
+        const warRule = Helpers.getExisted((await getMapRawData()).warRuleArray?.find(r => r.ruleId === ruleId));
+        setWarRule(Helpers.deepClone(warRule));
         setPresetWarRuleId(ruleId);
 
-        const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer(warRule, getSelfPlayerIndex(), settingsForCommon.configVersion);
+        const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+            warRule,
+            playerIndex     : getSelfPlayerIndex(),
+            configVersion   : getConfigVersion(),
+        });
         if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
             setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
         }
 
         Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
     }
-    function setPresetWarRuleId(ruleId: number | null | undefined): void {
-        const settingsForCommon             = getData().settingsForCommon;
-        settingsForCommon.warRule.ruleId    = ruleId;
-        settingsForCommon.presetWarRuleId   = ruleId;
+    function setPresetWarRuleId(ruleId: number | null): void {
+        getWarRule().ruleId                     = ruleId;
+        getSettingsForCommon().presetWarRuleId  = ruleId;
         Notify.dispatch(NotifyType.McrCreatePresetWarRuleIdChanged);
     }
     export function setCustomWarRuleId(): void {
         setPresetWarRuleId(null);
     }
-    export function getPresetWarRuleId(): number | undefined {
-        return getData().settingsForCommon.presetWarRuleId;
+    export function getPresetWarRuleId(): number | null {
+        return Helpers.getDefined(getSettingsForCommon().presetWarRuleId);
     }
     export async function tickPresetWarRuleId(): Promise<void> {
         const currWarRuleId = getPresetWarRuleId();
-        const warRuleArray  = (await getMapRawData()).warRuleArray;
+        const warRuleArray  = Helpers.getExisted((await getMapRawData()).warRuleArray);
         if (currWarRuleId == null) {
-            const warRule = warRuleArray.find(v => v.ruleAvailability.canMcw);
-            await resetDataByWarRuleId(warRule ? warRule.ruleId : null);
+            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canMcw)?.ruleId));
         } else {
             const warRuleIdList: number[] = [];
             for (let ruleId = currWarRuleId + 1; ruleId < warRuleArray.length; ++ruleId) {
@@ -137,7 +147,7 @@ namespace McrCreateModel {
                 warRuleIdList.push(ruleId);
             }
             for (const ruleId of warRuleIdList) {
-                if (warRuleArray.find(v => v.ruleId === ruleId).ruleAvailability.canMcw) {
+                if (warRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canMcw) {
                     await resetDataByWarRuleId(ruleId);
                     return;
                 }
@@ -145,25 +155,25 @@ namespace McrCreateModel {
         }
     }
 
-    export function setWarName(name: string): void {
-        getData().settingsForMcw.warName = name;
+    export function setWarName(name: string | null): void {
+        getSettingsForMcw().warName = name;
     }
-    export function getWarName(): string {
-        return getData().settingsForMcw.warName;
-    }
-
-    export function setWarPassword(password: string): void {
-        getData().settingsForMcw.warPassword = password;
-    }
-    export function getWarPassword(): string {
-        return getData().settingsForMcw.warPassword;
+    export function getWarName(): string | null {
+        return getSettingsForMcw().warName ?? null;
     }
 
-    export function setWarComment(comment: string): void {
-        getData().settingsForMcw.warComment = comment;
+    export function setWarPassword(password: string | null): void {
+        getSettingsForMcw().warPassword = password;
     }
-    export function getWarComment(): string {
-        return getData().settingsForMcw.warComment;
+    export function getWarPassword(): string | null {
+        return getSettingsForMcw().warPassword ?? null;
+    }
+
+    export function setWarComment(comment: string | null): void {
+        getSettingsForMcw().warComment = comment;
+    }
+    export function getWarComment(): string | null {
+        return getSettingsForMcw().warComment ?? null;
     }
 
     export function setSelfPlayerIndex(playerIndex: number): void {
@@ -176,7 +186,7 @@ namespace McrCreateModel {
     //     setSelfPlayerIndex(getSelfPlayerIndex() % BwWarRuleHelper.getPlayersCount(getWarRule()) + 1);
     // }
     export function getSelfPlayerIndex(): number {
-        return getData().selfPlayerIndex;
+        return Helpers.getExisted(getData().selfPlayerIndex);
     }
 
     export function setSelfCoId(coId: number): void {
@@ -185,8 +195,8 @@ namespace McrCreateModel {
             Notify.dispatch(NotifyType.McrCreateSelfCoIdChanged);
         }
     }
-    export function getSelfCoId(): number | null {
-        return getData().selfCoId;
+    export function getSelfCoId(): number {
+        return Helpers.getExisted(getData().selfCoId);
     }
 
     export function setSelfUnitAndTileSkinId(skinId: number): void {
@@ -199,21 +209,21 @@ namespace McrCreateModel {
         setSelfUnitAndTileSkinId(getSelfUnitAndTileSkinId() % CommonConstants.UnitAndTileMaxSkinId + 1);
     }
     export function getSelfUnitAndTileSkinId(): number {
-        return getData().selfUnitAndTileSkinId;
+        return Helpers.getExisted(getData().selfUnitAndTileSkinId);
     }
 
     export function setHasFog(hasFog: boolean): void {
-        getWarRule().ruleForGlobalParams.hasFogByDefault = hasFog;
+        Helpers.getExisted(getWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
     }
     export function getHasFog(): boolean {
-        return getWarRule().ruleForGlobalParams.hasFogByDefault;
+        return Helpers.getExisted(getWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
 
     export function setBootTimerParams(params: number[]): void {
-        getData().settingsForMcw.bootTimerParams = params;
+        getSettingsForMcw().bootTimerParams = params;
     }
     export function getBootTimerParams(): number[] {
-        return getData().settingsForMcw.bootTimerParams;
+        return Helpers.getExisted(getSettingsForMcw().bootTimerParams);
     }
     export function tickBootTimerType(): void {
         const params = getBootTimerParams();
@@ -280,7 +290,7 @@ namespace McrCreateModel {
         return WarRuleHelpers.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
     }
 
-    export function getBannedCoIdArray(playerIndex: number): number[] {
+    export function getBannedCoIdArray(playerIndex: number): number[] | null {
         return WarRuleHelpers.getBannedCoIdArray(getWarRule(), playerIndex);
     }
     export function addBannedCoId(playerIndex: number, coId: number): void {

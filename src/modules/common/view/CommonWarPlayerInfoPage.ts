@@ -30,24 +30,24 @@ namespace TwnsCommonWarPlayerInfoPage {
         playerIndex         : number;
         teamIndex           : number;
         isAi                : boolean;
-        userId              : number | undefined;
-        coId                : number | undefined;
-        unitAndTileSkinId   : number | undefined;
-        isReady             : boolean | undefined;
-        isInTurn            : boolean | undefined;
-        isDefeat            : boolean | undefined;
+        userId              : number | null;
+        coId                : number | null;
+        unitAndTileSkinId   : number | null;
+        isReady             : boolean | null;
+        isInTurn            : boolean | null;
+        isDefeat            : boolean | null;
     };
     export type OpenDataForCommonWarPlayerInfoPage = {
         configVersion           : string;
         playersCountUnneutral   : number;
-        roomOwnerPlayerIndex    : number | undefined;
-        callbackOnExitRoom      : (() => void) | undefined;
-        callbackOnDeletePlayer  : ((playerIndex: number) => void) | undefined;
+        roomOwnerPlayerIndex    : number | null;
+        callbackOnExitRoom      : (() => void) | null;
+        callbackOnDeletePlayer  : ((playerIndex: number) => void) | null;
         playerInfoArray         : PlayerInfo[];
-    };
+    } | null;
     export class CommonWarPlayerInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonWarPlayerInfoPage> {
-        private readonly _groupInfo     : eui.Group;
-        private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _groupInfo!    : eui.Group;
+        private readonly _listPlayer!   : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -107,30 +107,30 @@ namespace TwnsCommonWarPlayerInfoPage {
     type DataForPlayerRenderer = {
         configVersion           : string;
         isRoomOwnedBySelf       : boolean;
-        callbackOnExitRoom      : (() => void) | undefined;
-        callbackOnDeletePlayer  : ((playerIndex: number) => void) | undefined;
+        callbackOnExitRoom      : (() => void) | null;
+        callbackOnDeletePlayer  : ((playerIndex: number) => void) | null;
         playerInfo              : PlayerInfo;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private readonly _groupCo           : eui.Group;
-        private readonly _imgSkin           : TwnsUiImage.UiImage;
-        private readonly _imgCoHead         : TwnsUiImage.UiImage;
-        private readonly _imgCoInfo         : TwnsUiImage.UiImage;
-        private readonly _labelNickname     : TwnsUiLabel.UiLabel;
-        private readonly _labelCo           : TwnsUiLabel.UiLabel;
-        private readonly _labelStatus       : TwnsUiLabel.UiLabel;
+        private readonly _groupCo!              : eui.Group;
+        private readonly _imgSkin!              : TwnsUiImage.UiImage;
+        private readonly _imgCoHead!            : TwnsUiImage.UiImage;
+        private readonly _imgCoInfo!            : TwnsUiImage.UiImage;
+        private readonly _labelNickname!        : TwnsUiLabel.UiLabel;
+        private readonly _labelCo!              : TwnsUiLabel.UiLabel;
+        private readonly _labelStatus!          : TwnsUiLabel.UiLabel;
 
-        private readonly _labelPlayerIndex  : TwnsUiLabel.UiLabel;
-        private readonly _labelTeamIndex    : TwnsUiLabel.UiLabel;
-        private readonly _labelRankStdTitle : TwnsUiLabel.UiLabel;
-        private readonly _labelRankStd      : TwnsUiLabel.UiLabel;
-        private readonly _labelRankFogTitle : TwnsUiLabel.UiLabel;
-        private readonly _labelRankFog      : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerIndex!     : TwnsUiLabel.UiLabel;
+        private readonly _labelTeamIndex!       : TwnsUiLabel.UiLabel;
+        private readonly _labelRankStdTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelRankStd!         : TwnsUiLabel.UiLabel;
+        private readonly _labelRankFogTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelRankFog!         : TwnsUiLabel.UiLabel;
 
-        private readonly _groupButton       : eui.Group;
-        private readonly _btnChat           : TwnsUiButton.UiButton;
-        private readonly _btnInfo           : TwnsUiButton.UiButton;
-        private readonly _btnDelete         : TwnsUiButton.UiButton;
+        private readonly _groupButton!          : eui.Group;
+        private readonly _btnChat!              : TwnsUiButton.UiButton;
+        private readonly _btnInfo!              : TwnsUiButton.UiButton;
+        private readonly _btnDelete!            : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -147,7 +147,7 @@ namespace TwnsCommonWarPlayerInfoPage {
         }
 
         private _onTouchedGroupCo(): void {
-            const data  = this.data;
+            const data  = this._getData();
             const coId  = data.playerInfo.coId;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
                 CommonCoInfoPanel.show({
@@ -158,21 +158,21 @@ namespace TwnsCommonWarPlayerInfoPage {
         }
 
         private _onTouchedBtnChat(): void {
-            const userId = this.data.playerInfo.userId;
+            const userId = this._getData().playerInfo.userId;
             if (userId != null) {
                 TwnsChatPanel.ChatPanel.show({ toUserId: userId });
             }
         }
 
         private _onTouchedBtnInfo(): void {
-            const userId = this.data.playerInfo.userId;
+            const userId = this._getData().playerInfo.userId;
             if (userId != null) {
                 UserPanel.show({ userId });
             }
         }
 
         private async _onTouchedBtnDelete(): Promise<void> {
-            const data          = this.data;
+            const data          = this._getData();
             const playerInfo    = data.playerInfo;
             const userId        = playerInfo.userId;
             if (userId == null) {
@@ -218,11 +218,11 @@ namespace TwnsCommonWarPlayerInfoPage {
             this._updateLabelStatus();
             this._updateComponentsForRankInfo();
 
-            const data                  = this.data;
+            const data                  = this._getData();
             const playerInfo            = data.playerInfo;
             const playerIndex           = playerInfo.playerIndex;
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerInfo.teamIndex);
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerInfo.teamIndex) || CommonConstants.ErrorTextForUndefined;
             this._imgSkin.source        = getSourceForImgSkin(playerInfo.unitAndTileSkinId);
 
             const coId              = playerInfo.coId;
@@ -268,7 +268,7 @@ namespace TwnsCommonWarPlayerInfoPage {
         }
 
         private _updateLabelStatus(): void {
-            const playerInfo    = this.data.playerInfo;
+            const playerInfo    = this._getData().playerInfo;
             const label         = this._labelStatus;
             if (playerInfo.isReady) {
                 label.text = Lang.getText(LangTextType.B0402);
@@ -283,7 +283,7 @@ namespace TwnsCommonWarPlayerInfoPage {
         }
 
         private async _updateComponentsForRankInfo(): Promise<void> {
-            const userId                = this.data.playerInfo.userId;
+            const userId                = this._getData().playerInfo.userId;
             const userInfo              = userId == null ? null : await UserModel.getUserPublicInfo(userId);
             const rankScoreArray        = userInfo?.userMrwRankInfoArray;
             const stdRankInfo           = rankScoreArray?.find(v => v.warType === Types.WarType.MrwStd);
@@ -301,7 +301,7 @@ namespace TwnsCommonWarPlayerInfoPage {
         }
     }
 
-    function getSourceForImgSkin(skinId: number): string {
+    function getSourceForImgSkin(skinId: Types.Undefinable<number>): string {
         switch (skinId) {
             case 1  : return `commonRectangle0002`;
             case 2  : return `commonRectangle0003`;

@@ -1,6 +1,5 @@
 
 import TwnsLangTextType from "../../tools/lang/LangTextType";
-import Logger           from "../../tools/helpers/Logger";
 import Notify           from "../../tools/notify/Notify";
 import TwnsNotifyType   from "../../tools/notify/NotifyType";
 import NotifyData       from "../../tools/notify/NotifyData";
@@ -40,55 +39,56 @@ namespace ScrCreateModel {
             warRule         : null,
         },
         settingsForScw: {
-            mapId           : undefined,
+            mapId           : 0,
         },
 
         playerInfoList  : [],
     };
 
-    export function getMapId(): number | null | undefined {
-        return getData().settingsForScw.mapId;
+    export function getMapId(): number {
+        return Helpers.getExisted(getData().settingsForScw?.mapId);
     }
     function setMapId(mapId: number): void {
-        getData().settingsForScw.mapId = mapId;
+        Helpers.getExisted(getData().settingsForScw).mapId = mapId;
     }
 
-    export function getMapBriefData(): Promise<ProtoTypes.Map.IMapBriefData> {
-        return WarMapModel.getBriefData(getMapId());
+    export async function getMapBriefData(): Promise<ProtoTypes.Map.IMapBriefData> {
+        return Helpers.getExisted(await WarMapModel.getBriefData(getMapId()));
     }
-    export function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
-        return WarMapModel.getRawData(getMapId());
+    export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
+        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
     }
 
     export function getPlayerRule(playerIndex: number): IDataForPlayerRule {
         return WarRuleHelpers.getPlayerRule(getWarRule(), playerIndex);
     }
     export function getPlayerInfo(playerIndex: number): IDataForPlayerInRoom {
-        return getData().playerInfoList.find(v => v.playerIndex === playerIndex);
+        return Helpers.getExisted(getData().playerInfoList?.find(v => v.playerIndex === playerIndex));
     }
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(ConfigManager.getLatestConfigVersion());
+        setConfigVersion(Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
         setSaveSlotIndex(SpmModel.getAvailableIndex());
         setSlotComment(null);
         setPlayerInfoList([]);
-
-        const warRule = (await getMapRawData()).warRuleArray.find(v => v.ruleAvailability.canScw);
-        await resetDataByWarRuleId(warRule ? warRule.ruleId : null);
+        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleAvailability?.canScw)?.ruleId));
     }
     export function getData(): DataForCreateWar {
         return _dataForCreateWar;
     }
+    export function getSettingsForCommon(): ProtoTypes.WarSettings.ISettingsForCommon {
+        return Helpers.getExisted(getData().settingsForCommon);
+    }
     export function getWarRule(): ProtoTypes.WarRule.IWarRule {
-        return getData().settingsForCommon.warRule;
+        return Helpers.getExisted(getSettingsForCommon().warRule);
     }
 
     function setConfigVersion(version: string): void {
-        getData().settingsForCommon.configVersion = version;
+        getSettingsForCommon().configVersion = version;
     }
     export function getConfigVersion(): string {
-        return getData().settingsForCommon.configVersion;
+        return Helpers.getExisted(getSettingsForCommon().configVersion);
     }
 
     export async function resetDataByWarRuleId(ruleId: number | null): Promise<void> {
@@ -99,44 +99,31 @@ namespace ScrCreateModel {
         }
     }
     async function resetDataByCustomWarRuleId(): Promise<void> {
-        getData().settingsForCommon.warRule = WarRuleHelpers.createDefaultWarRule(null, (await getMapRawData()).playersCountUnneutral);
+        getSettingsForCommon().warRule = WarRuleHelpers.createDefaultWarRule(null, Helpers.getExisted((await getMapRawData()).playersCountUnneutral));
         setCustomWarRuleId();
         await resetPlayerInfoList();
     }
     async function resetDataByPresetWarRuleId(ruleId: number): Promise<void> {
-        if (ruleId == null) {
-            Logger.error(`ScrModel.Create.resetDataByPresetWarRuleId() empty ruleId.`);
-            return undefined;
-        }
-
-        const warRule = (await getMapRawData()).warRuleArray.find(v => v.ruleId === ruleId);
-        if (warRule == null) {
-            Logger.error(`ScrModel.Create.resetDataByPresetWarRuleId() empty warRule.`);
-            return undefined;
-        }
-
-        getData().settingsForCommon.warRule = Helpers.deepClone(warRule);
+        getSettingsForCommon().warRule = Helpers.deepClone(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleId === ruleId)));
         setPresetWarRuleId(ruleId);
         await resetPlayerInfoList();
     }
-    function setPresetWarRuleId(ruleId: number | null | undefined): void {
-        const settingsForCommon             = getData().settingsForCommon;
-        settingsForCommon.warRule.ruleId    = ruleId;
-        settingsForCommon.presetWarRuleId   = ruleId;
+    function setPresetWarRuleId(ruleId: number | null): void {
+        getWarRule().ruleId                     = ruleId;
+        getSettingsForCommon().presetWarRuleId  = ruleId;
         Notify.dispatch(NotifyType.ScrCreatePresetWarRuleIdChanged);
     }
     export function setCustomWarRuleId(): void {
         setPresetWarRuleId(null);
     }
-    export function getPresetWarRuleId(): number | undefined {
-        return getData().settingsForCommon.presetWarRuleId;
+    export function getPresetWarRuleId(): number | null {
+        return getSettingsForCommon().presetWarRuleId ?? null;
     }
     export async function tickPresetWarRuleId(): Promise<void> {
         const currWarRuleId = getPresetWarRuleId();
-        const warRuleArray  = (await getMapRawData()).warRuleArray;
+        const warRuleArray  = Helpers.getExisted((await getMapRawData()).warRuleArray);
         if (currWarRuleId == null) {
-            const warRule = warRuleArray.find(v => v.ruleAvailability.canScw);
-            await resetDataByWarRuleId(warRule ? warRule.ruleId : null);
+            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canScw)?.ruleId));
         } else {
             const warRuleIdList: number[] = [];
             for (let ruleId = currWarRuleId + 1; ruleId < warRuleArray.length; ++ruleId) {
@@ -146,7 +133,7 @@ namespace ScrCreateModel {
                 warRuleIdList.push(ruleId);
             }
             for (const ruleId of warRuleIdList) {
-                if (warRuleArray.find(v => v.ruleId === ruleId).ruleAvailability.canScw) {
+                if (warRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canScw) {
                     await resetDataByWarRuleId(ruleId);
                     return;
                 }
@@ -157,18 +144,18 @@ namespace ScrCreateModel {
     async function resetPlayerInfoList(): Promise<void> {
         const data              = getData();
         const oldPlayerInfoList = getPlayerInfoList();
-        const settingsForCommon = data.settingsForCommon;
-        const warRule           = settingsForCommon.warRule;
-        const configVersion     = settingsForCommon.configVersion;
-        const playersCount      = (await getMapRawData()).playersCountUnneutral;
+        const settingsForCommon = Helpers.getExisted(data.settingsForCommon);
+        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
+        const configVersion     = Helpers.getExisted(settingsForCommon.configVersion);
+        const playersCount      = Helpers.getExisted((await getMapRawData()).playersCountUnneutral);
         const newPlayerInfoList : IDataForPlayerInRoom[] = [];
 
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
             const oldInfo               = oldPlayerInfoList.find(v => v.playerIndex === playerIndex);
-            const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer(warRule, playerIndex, configVersion);
+            const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, configVersion });
             const newCoId               = WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
             if (oldInfo) {
-                const coId = oldInfo.coId;
+                const coId = Helpers.getExisted(oldInfo.coId);
                 newPlayerInfoList.push({
                     playerIndex,
                     isReady             : true,
@@ -189,7 +176,7 @@ namespace ScrCreateModel {
         setPlayerInfoList(newPlayerInfoList);
     }
     export function getPlayerInfoList(): IDataForPlayerInRoom[] {
-        return getData().playerInfoList;
+        return Helpers.getExisted(getData().playerInfoList);
     }
     function setPlayerInfoList(list: IDataForPlayerInRoom[]): void {
         getData().playerInfoList = list;
@@ -203,14 +190,14 @@ namespace ScrCreateModel {
         }
     }
     export function getSaveSlotIndex(): number {
-        return getData().slotIndex;
+        return Helpers.getExisted(getData().slotIndex);
     }
 
-    export function setSlotComment(comment: string | null | undefined): void {
-        getData().slotExtraData.slotComment = comment;
+    export function setSlotComment(comment: string | null): void {
+        Helpers.getExisted(getData().slotExtraData).slotComment = comment;
     }
-    export function getSlotComment(): string | null | undefined {
-        return getData().slotExtraData.slotComment;
+    export function getSlotComment(): string | null {
+        return getData().slotExtraData?.slotComment ?? null;
     }
 
     export function tickUserId(playerIndex: number): void {
@@ -221,8 +208,8 @@ namespace ScrCreateModel {
 
     export function tickUnitAndTileSkinId(playerIndex: number): void {
         const playerInfoList        = getPlayerInfoList();
-        const targetPlayerData      = playerInfoList.find(v => v.playerIndex === playerIndex);
-        const oldSkinId             = targetPlayerData.unitAndTileSkinId;
+        const targetPlayerData      = Helpers.getExisted(playerInfoList.find(v => v.playerIndex === playerIndex));
+        const oldSkinId             = Helpers.getExisted(targetPlayerData.unitAndTileSkinId);
         const newSkinId             = oldSkinId % CommonConstants.UnitAndTileMaxSkinId + 1;
         const existingPlayerData    = playerInfoList.find(v => v.unitAndTileSkinId === newSkinId);
         if (existingPlayerData) {
@@ -238,18 +225,18 @@ namespace ScrCreateModel {
     }
 
     export function getTeamIndex(playerIndex: number): number {
-        return getPlayerRule(playerIndex).teamIndex;
+        return Helpers.getExisted(getPlayerRule(playerIndex).teamIndex);
     }
     export function tickTeamIndex(playerIndex: number): void {
         setPresetWarRuleId(null);
 
         const playerRule        = getPlayerRule(playerIndex);
-        playerRule.teamIndex    = playerRule.teamIndex % (WarRuleHelpers.getPlayersCount(getWarRule())) + 1;
+        playerRule.teamIndex    = Helpers.getExisted(playerRule.teamIndex) % (WarRuleHelpers.getPlayersCountUnneutral(getWarRule())) + 1;
 
         Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as NotifyData.ScrCreatePlayerInfoChanged);
     }
 
-    export function getBannedCoIdArray(playerIndex: number): number[] {
+    export function getBannedCoIdArray(playerIndex: number): number[] | null {
         return WarRuleHelpers.getBannedCoIdArray(getWarRule(), playerIndex);
     }
     export function addBannedCoId(playerIndex: number, coId: number): void {
@@ -262,8 +249,8 @@ namespace ScrCreateModel {
         WarRuleHelpers.setBannedCoIdArray(getWarRule(), playerIndex, coIdSet);
     }
 
-    export function getCoId(playerIndex: number): number | undefined {
-        return getPlayerInfo(playerIndex).coId;
+    export function getCoId(playerIndex: number): number {
+        return Helpers.getExisted(getPlayerInfo(playerIndex).coId);
     }
     export function setCoId(playerIndex: number, coId: number): void {
         getPlayerInfo(playerIndex).coId = coId;
@@ -271,12 +258,12 @@ namespace ScrCreateModel {
     }
 
     export function getHasFog(): boolean {
-        return getWarRule().ruleForGlobalParams.hasFogByDefault;
+        return Helpers.getExisted(getWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
     export function setHasFog(hasFog: boolean): void {
         setPresetWarRuleId(null);
 
-        getWarRule().ruleForGlobalParams.hasFogByDefault = hasFog;
+        Helpers.getExisted(getWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
     }
     export function setPrevHasFog(): void {
         setHasFog(!getHasFog());
@@ -291,7 +278,7 @@ namespace ScrCreateModel {
         getPlayerRule(playerIndex).initialFund = initialFund;
     }
     export function getInitialFund(playerIndex: number): number {
-        return getPlayerRule(playerIndex).initialFund;
+        return Helpers.getExisted(getPlayerRule(playerIndex).initialFund);
     }
 
     export function setIncomeMultiplier(playerIndex: number, multiplier: number): void {
@@ -300,7 +287,7 @@ namespace ScrCreateModel {
         getPlayerRule(playerIndex).incomeMultiplier = multiplier;
     }
     export function getIncomeMultiplier(playerIndex: number): number {
-        return getPlayerRule(playerIndex).incomeMultiplier;
+        return Helpers.getExisted(getPlayerRule(playerIndex).incomeMultiplier);
     }
 
     export function setEnergyAddPctOnLoadCo(playerIndex: number, percentage: number): void {
@@ -309,7 +296,7 @@ namespace ScrCreateModel {
         getPlayerRule(playerIndex).energyAddPctOnLoadCo = percentage;
     }
     export function getEnergyAddPctOnLoadCo(playerIndex: number): number {
-        return getPlayerRule(playerIndex).energyAddPctOnLoadCo;
+        return Helpers.getExisted(getPlayerRule(playerIndex).energyAddPctOnLoadCo);
     }
 
     export function setEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {
@@ -318,7 +305,7 @@ namespace ScrCreateModel {
         getPlayerRule(playerIndex).energyGrowthMultiplier = multiplier;
     }
     export function getEnergyGrowthMultiplier(playerIndex: number): number {
-        return getPlayerRule(playerIndex).energyGrowthMultiplier;
+        return Helpers.getExisted(getPlayerRule(playerIndex).energyGrowthMultiplier);
     }
 
     export function setMoveRangeModifier(playerIndex: number, modifier: number): void {
@@ -327,7 +314,7 @@ namespace ScrCreateModel {
         getPlayerRule(playerIndex).moveRangeModifier = modifier;
     }
     export function getMoveRangeModifier(playerIndex: number): number {
-        return getPlayerRule(playerIndex).moveRangeModifier;
+        return Helpers.getExisted(getPlayerRule(playerIndex).moveRangeModifier);
     }
 
     export function setAttackPowerModifier(playerIndex: number, modifier: number): void {
@@ -336,7 +323,7 @@ namespace ScrCreateModel {
         getPlayerRule(playerIndex).attackPowerModifier = modifier;
     }
     export function getAttackPowerModifier(playerIndex: number): number {
-        return getPlayerRule(playerIndex).attackPowerModifier;
+        return Helpers.getExisted(getPlayerRule(playerIndex).attackPowerModifier);
     }
 
     export function setVisionRangeModifier(playerIndex: number, modifier: number): void {
@@ -345,7 +332,7 @@ namespace ScrCreateModel {
         getPlayerRule(playerIndex).visionRangeModifier = modifier;
     }
     export function getVisionRangeModifier(playerIndex: number): number {
-        return getPlayerRule(playerIndex).visionRangeModifier;
+        return Helpers.getExisted(getPlayerRule(playerIndex).visionRangeModifier);
     }
 
     export function setLuckLowerLimit(playerIndex: number, limit: number): void {
@@ -354,7 +341,7 @@ namespace ScrCreateModel {
         getPlayerRule(playerIndex).luckLowerLimit = limit;
     }
     export function getLuckLowerLimit(playerIndex: number): number {
-        return getPlayerRule(playerIndex).luckLowerLimit;
+        return Helpers.getExisted(getPlayerRule(playerIndex).luckLowerLimit);
     }
 
     export function setLuckUpperLimit(playerIndex: number, limit: number): void {
@@ -363,13 +350,13 @@ namespace ScrCreateModel {
         getPlayerRule(playerIndex).luckUpperLimit = limit;
     }
     export function getLuckUpperLimit(playerIndex: number): number {
-        return getPlayerRule(playerIndex).luckUpperLimit;
+        return Helpers.getExisted(getPlayerRule(playerIndex).luckUpperLimit);
     }
 
     export function getInvalidParamTips(): string | null{
         const teamSet = new Set<number>();
-        for (const playerRule of getWarRule().ruleForPlayers.playerRuleDataArray) {
-            teamSet.add(playerRule.teamIndex);
+        for (const playerRule of Helpers.getExisted(getWarRule().ruleForPlayers?.playerRuleDataArray)) {
+            teamSet.add(Helpers.getExisted(playerRule.teamIndex));
         }
         if (teamSet.size <= 1) {
             return Lang.getText(LangTextType.A0069);

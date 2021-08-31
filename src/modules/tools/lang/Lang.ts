@@ -461,18 +461,22 @@ namespace Lang {
         }
     }
     export function getLanguageText({ textArray, languageType = getCurrentLanguageType(), useAlternate = true }: {
-        textArray       : ProtoTypes.Structure.ILanguageText[];
+        textArray       : Types.Undefinable<ProtoTypes.Structure.ILanguageText[]>;
         languageType?   : LanguageType;
         useAlternate?   : boolean;
     }): string | undefined | null {
-        const data = (textArray || []).find(v => v.languageType === languageType);
+        if ((textArray == null) || (!textArray.length)) {
+            return null;
+        }
+
+        const data = textArray.find(v => v.languageType === languageType);
         if (data) {
             return data.text;
         } else {
             return useAlternate
                 ? getLanguageText({ textArray, languageType: LanguageType.English, useAlternate: false })
                     || getLanguageText({ textArray, languageType: LanguageType.Chinese, useAlternate: false })
-                : undefined;
+                : null;
         }
     }
     export function concatLanguageTextList(textList: ProtoTypes.Structure.ILanguageText[]): string {

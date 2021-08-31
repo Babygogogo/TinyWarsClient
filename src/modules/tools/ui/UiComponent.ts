@@ -10,8 +10,8 @@ namespace TwnsUiComponent {
         private _isSkinLoaded       = false;
         private _isOpening          = false;
 
-        private _notifyListenerArray?   : Notify.Listener[];
-        private _uiListenerArray?       : UiListener[];
+        private _notifyListenerArray    : Notify.Listener[] | null = null;
+        private _uiListenerArray        : UiListener[] | null = null;
 
         protected constructor() {
             super();
@@ -66,8 +66,8 @@ namespace TwnsUiComponent {
                 this._setIsOpening(false);
 
                 this._unregisterListeners();
-                this._setUiListenerArray(undefined);
-                this._setNotifyListenerArray(undefined);
+                this._setUiListenerArray(null);
+                this._setNotifyListenerArray(null);
                 await this._onClosed();
             }
         }
@@ -91,16 +91,16 @@ namespace TwnsUiComponent {
             this._isOpening = opening;
         }
 
-        protected _setNotifyListenerArray(array: Notify.Listener[] | undefined): void {
+        protected _setNotifyListenerArray(array: Notify.Listener[] | null): void {
             this._notifyListenerArray = array;
         }
-        protected _getNotifyListenerArray(): Notify.Listener[] | undefined {
+        protected _getNotifyListenerArray(): Notify.Listener[] | null {
             return this._notifyListenerArray;
         }
-        protected _setUiListenerArray(array: UiListener[] | undefined): void {
+        protected _setUiListenerArray(array: UiListener[] | null): void {
             this._uiListenerArray = array;
         }
-        protected _getUiListenerArray(): UiListener[] | undefined {
+        protected _getUiListenerArray(): UiListener[] | null {
             return this._uiListenerArray;
         }
 

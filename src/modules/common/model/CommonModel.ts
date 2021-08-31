@@ -14,8 +14,8 @@ namespace CommonModel {
     import IDataForPlayerRank   = ProtoTypes.Structure.IDataForPlayerRank;
 
     type FrameCfg = {
-        source  : string;
-        tick    : number;
+        source  : string | null;
+        tick    : number | null;
     };
 
     let _unitAndTileTexturePrefix       = `v01_`;
@@ -24,7 +24,7 @@ namespace CommonModel {
     const _tileDecoratorImageSourceDict = new Map<TextureVersion, Map<number, Map<TileDecoratorType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
     const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<number, Map<TileObjectType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
 
-    let _rankList: IDataForPlayerRank[];
+    let _rankList: IDataForPlayerRank[] | null = null;
 
     export function init(): void {
         updateOnUnitAndTileTextureVersionChanged();
@@ -63,39 +63,39 @@ namespace CommonModel {
             isMoving    : boolean;
             tickCount   : number;
         },
-    ): string | undefined {
+    ): string {
         const { version, skinId, unitType, isDark, isMoving, tickCount } = params;
-
         if (!_unitImageSourceDict.has(version)) {
             _unitImageSourceDict.set(version, new Map());
         }
-        const dict1 = _unitImageSourceDict.get(version);
 
+        const dict1 = Helpers.getExisted(_unitImageSourceDict.get(version));
         if (!dict1.has(isDark)) {
             dict1.set(isDark, new Map());
         }
-        const dict2 = dict1.get(isDark);
 
+        const dict2 = Helpers.getExisted(dict1.get(isDark));
         if (!dict2.has(isMoving)) {
             dict2.set(isMoving, new Map());
         }
-        const dict3 = dict2.get(isMoving);
 
+        const dict3 = Helpers.getExisted(dict2.get(isMoving));
         if (!dict3.has(skinId)) {
             dict3.set(skinId, new Map());
         }
-        const dict4 = dict3.get(skinId);
 
+        const dict4 = Helpers.getExisted(dict3.get(skinId));
         if (!dict4.has(unitType)) {
-            dict4.set(unitType, { source: undefined, tick: undefined });
+            dict4.set(unitType, { source: null, tick: null });
         }
-        const cfg = dict4.get(unitType);
 
+        const cfg = Helpers.getExisted(dict4.get(unitType));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
             cfg.source  = ConfigManager.getUnitImageSource(params);
         }
-        return cfg.source;
+
+        return Helpers.getExisted(cfg.source);
     }
 
     export function getCachedTileBaseImageSource(
@@ -107,99 +107,100 @@ namespace CommonModel {
             shapeId     : number;
             tickCount   : number;
         },
-    ): string | undefined {
+    ): string {
         const { version, skinId, baseType, isDark, shapeId, tickCount } = params;
-
         if (!_tileBaseImageSourceDict.has(version)) {
             _tileBaseImageSourceDict.set(version, new Map());
         }
-        const dict1 = _tileBaseImageSourceDict.get(version);
 
+        const dict1 = Helpers.getExisted(_tileBaseImageSourceDict.get(version));
         if (!dict1.has(skinId)) {
             dict1.set(skinId, new Map());
         }
-        const dict2 = dict1.get(skinId);
 
+        const dict2 = Helpers.getExisted(dict1.get(skinId));
         if (!dict2.has(baseType)) {
             dict2.set(baseType, new Map());
         }
-        const dict3 = dict2.get(baseType);
 
+        const dict3 = Helpers.getExisted(dict2.get(baseType));
         if (!dict3.has(isDark)) {
             dict3.set(isDark, new Map());
         }
-        const dict4 = dict3.get(isDark);
 
+        const dict4 = Helpers.getExisted(dict3.get(isDark));
         if (!dict4.has(shapeId)) {
             dict4.set(shapeId, new Map());
         }
-        const dict5 = dict4.get(shapeId);
 
+        const dict5 = Helpers.getExisted(dict4.get(shapeId));
         if (!dict5.has(tickCount)) {
-            dict5.set(tickCount, { source: undefined, tick: undefined });
+            dict5.set(tickCount, { source: null, tick: null });
         }
-        const cfg = dict5.get(tickCount);
 
+        const cfg = Helpers.getExisted(dict5.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
             cfg.source  = ConfigManager.getTileBaseImageSource(params);
         }
-        return cfg.source;
+
+        return Helpers.getExisted(cfg.source);
     }
 
     export function getCachedTileDecoratorImageSource(
         params: {
             version         : TextureVersion;
             skinId          : number;
-            decoratorType   : TileDecoratorType;
+            decoratorType   : TileDecoratorType | null;
             isDark          : boolean;
-            shapeId         : number;
+            shapeId         : number | null;
             tickCount       : number;
         },
-    ): string | undefined {
+    ): string {
         const { version, skinId, decoratorType, isDark, shapeId, tickCount } = params;
         if ((decoratorType == null)                     ||
             (decoratorType === TileDecoratorType.Empty) ||
             (shapeId == null)
         ) {
-            return undefined;
+            return "";
         }
 
         if (!_tileDecoratorImageSourceDict.has(version)) {
             _tileDecoratorImageSourceDict.set(version, new Map());
         }
-        const dict1 = _tileDecoratorImageSourceDict.get(version);
 
+        const dict1 = Helpers.getExisted(_tileDecoratorImageSourceDict.get(version));
         if (!dict1.has(skinId)) {
             dict1.set(skinId, new Map());
         }
-        const dict2 = dict1.get(skinId);
 
+        const dict2 = Helpers.getExisted(dict1.get(skinId));
         if (!dict2.has(decoratorType)) {
             dict2.set(decoratorType, new Map());
         }
-        const dict3 = dict2.get(decoratorType);
 
+        const dict3 = Helpers.getExisted(dict2.get(decoratorType));
         if (!dict3.has(isDark)) {
             dict3.set(isDark, new Map());
         }
-        const dict4 = dict3.get(isDark);
 
+        const dict4 = Helpers.getExisted(dict3.get(isDark));
         if (!dict4.has(shapeId)) {
             dict4.set(shapeId, new Map());
         }
-        const dict5 = dict4.get(shapeId);
 
+        const dict5 = Helpers.getExisted(dict4.get(shapeId));
         if (!dict5.has(tickCount)) {
-            dict5.set(tickCount, { source: undefined, tick: undefined });
+            dict5.set(tickCount, { source: null, tick: null });
         }
-        const cfg = dict5.get(tickCount);
 
+        const cfg = Helpers.getExisted(dict5.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
             cfg.source  = ConfigManager.getTileDecoratorImageSource(params);
         }
-        return cfg.source;
+
+        return Helpers.getExisted(cfg.source);
     }
 
     export function getCachedTileObjectImageSource(
@@ -211,50 +212,50 @@ namespace CommonModel {
             shapeId     : number;
             tickCount   : number;
         },
-    ): string | undefined {
+    ): string {
         const { version, skinId, objectType, isDark, shapeId, tickCount } = params;
-
         if (!_tileObjectImageSourceDict.has(version)) {
             _tileObjectImageSourceDict.set(version, new Map());
         }
-        const dict1 = _tileObjectImageSourceDict.get(version);
 
+        const dict1 = Helpers.getExisted(_tileObjectImageSourceDict.get(version));
         if (!dict1.has(skinId)) {
             dict1.set(skinId, new Map());
         }
-        const dict2 = dict1.get(skinId);
 
+        const dict2 = Helpers.getExisted(dict1.get(skinId));
         if (!dict2.has(objectType)) {
             dict2.set(objectType, new Map());
         }
-        const dict3 = dict2.get(objectType);
 
+        const dict3 = Helpers.getExisted(dict2.get(objectType));
         if (!dict3.has(isDark)) {
             dict3.set(isDark, new Map());
         }
-        const dict4 = dict3.get(isDark);
 
+        const dict4 = Helpers.getExisted(dict3.get(isDark));
         if (!dict4.has(shapeId)) {
             dict4.set(shapeId, new Map());
         }
-        const dict5 = dict4.get(shapeId);
 
+        const dict5 = Helpers.getExisted(dict4.get(shapeId));
         if (!dict5.has(tickCount)) {
-            dict5.set(tickCount, { source: undefined, tick: undefined });
+            dict5.set(tickCount, { source: null, tick: null });
         }
-        const cfg = dict5.get(tickCount);
 
+        const cfg = Helpers.getExisted(dict5.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
             cfg.source  = ConfigManager.getTileObjectImageSource(params);
         }
-        return cfg.source;
+
+        return Helpers.getExisted(cfg.source);
     }
 
-    export function setRankList(rankList: IDataForPlayerRank[] | null | undefined): void {
+    export function setRankList(rankList: IDataForPlayerRank[]): void {
         _rankList = rankList;
     }
-    export function getRankList(): IDataForPlayerRank[] | null | undefined {
+    export function getRankList(): IDataForPlayerRank[] | null {
         return _rankList;
     }
 }

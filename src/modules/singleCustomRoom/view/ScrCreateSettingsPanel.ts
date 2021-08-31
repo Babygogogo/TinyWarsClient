@@ -41,26 +41,26 @@ namespace TwnsScrCreateSettingsPanel {
 
         private static _instance: ScrCreateSettingsPanel;
 
-        private readonly _groupNavigator        : eui.Group;
-        private readonly _labelSinglePlayer     : TwnsUiLabel.UiLabel;
-        private readonly _labelCustomMode       : TwnsUiLabel.UiLabel;
-        private readonly _labelChooseMap        : TwnsUiLabel.UiLabel;
-        private readonly _labelGameSettings     : TwnsUiLabel.UiLabel;
+        private readonly _groupNavigator!       : eui.Group;
+        private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
+        private readonly _labelCustomMode!      : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseMap!       : TwnsUiLabel.UiLabel;
+        private readonly _labelGameSettings!    : TwnsUiLabel.UiLabel;
 
-        private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _groupTab!             : eui.Group;
+        private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage>;
 
-        private readonly _btnBack               : TwnsUiButton.UiButton;
-        private readonly _btnConfirm            : TwnsUiButton.UiButton;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!           : TwnsUiButton.UiButton;
 
-        private _timeoutIdForBtnConfirm : number;
+        private _timeoutIdForBtnConfirm : number | null = null;
         private _isTabInitialized       = false;
 
         public static show(): void {
             if (!ScrCreateSettingsPanel._instance) {
                 ScrCreateSettingsPanel._instance = new ScrCreateSettingsPanel();
             }
-            ScrCreateSettingsPanel._instance.open(undefined);
+            ScrCreateSettingsPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (ScrCreateSettingsPanel._instance) {
@@ -96,6 +96,7 @@ namespace TwnsScrCreateSettingsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : ScrCreateAdvancedSettingsPage,
+                    pageData    : null,
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
@@ -105,6 +106,7 @@ namespace TwnsScrCreateSettingsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : ScrCreatePlayerInfoPage,
+                    pageData    : null,
                 },
             ]);
             this._isTabInitialized = true;
@@ -135,7 +137,7 @@ namespace TwnsScrCreateSettingsPanel {
                 this._resetTimeoutForBtnConfirm();
             };
 
-            if (SpmModel.checkIsEmpty(data.slotIndex)) {
+            if (SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
                 callback();
             } else {
                 CommonConfirmPanel.show({
@@ -151,9 +153,9 @@ namespace TwnsScrCreateSettingsPanel {
         private _onNotifyMsgSpmCreateScw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateScw.IS;
             FlowManager.gotoSinglePlayerWar({
-                warData         : data.warData,
-                slotExtraData   : data.extraData,
-                slotIndex       : data.slotIndex,
+                warData         : Helpers.getExisted(data.warData),
+                slotExtraData   : Helpers.getExisted(data.extraData),
+                slotIndex       : Helpers.getExisted(data.slotIndex),
             });
         }
         private _onNotifyScrCreateWarSaveSlotChanged(): void {
@@ -164,14 +166,14 @@ namespace TwnsScrCreateSettingsPanel {
             this._clearTimeoutForBtnConfirm();
             this._timeoutIdForBtnConfirm = egret.setTimeout(() => {
                 this._btnConfirm.enabled     = true;
-                this._timeoutIdForBtnConfirm = undefined;
+                this._timeoutIdForBtnConfirm = null;
             }, this, CONFIRM_INTERVAL_MS);
         }
 
         private _clearTimeoutForBtnConfirm(): void {
             if (this._timeoutIdForBtnConfirm != null) {
                 egret.clearTimeout(this._timeoutIdForBtnConfirm);
-                this._timeoutIdForBtnConfirm = undefined;
+                this._timeoutIdForBtnConfirm = null;
             }
         }
 
@@ -208,11 +210,11 @@ namespace TwnsScrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.MapName,
                         currentValue    : await WarMapModel.getMapNameInCurrentLanguage(ScrCreateModel.getMapId()),
                         warRule,
-                        callbackOnModify: undefined,
+                        callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
-                        currentValue    : undefined,
+                        currentValue    : null,
                         warRule,
                         callbackOnModify: async () => {
                             await ScrCreateModel.tickPresetWarRuleId();
@@ -221,7 +223,7 @@ namespace TwnsScrCreateSettingsPanel {
                     },
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
-                        currentValue    : undefined,
+                        currentValue    : null,
                         warRule,
                         callbackOnModify: () => {
                             ScrCreateModel.setHasFog(!ScrCreateModel.getHasFog());
@@ -241,8 +243,11 @@ namespace TwnsScrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
                         currentValue    : ScrCreateModel.getSlotComment(),
                         warRule,
-                        callbackOnModify: (newValue: string) => {
-                            ScrCreateModel.setSlotComment(newValue || undefined);
+                        callbackOnModify: (newValue: string | number | null) => {
+                            if (typeof newValue === "number") {
+                                throw new Error(`Invalid newValue: ${newValue}`);
+                            }
+                            ScrCreateModel.setSlotComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
@@ -308,10 +313,10 @@ namespace TwnsScrCreateSettingsPanel {
         name: string;
     };
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 }

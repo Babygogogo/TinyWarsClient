@@ -5,7 +5,6 @@ import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPla
 import CcrProxy                             from "../../coopCustomRoom/model/CcrProxy";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import Helpers                              from "../../tools/helpers/Helpers";
-import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
 import Notify                               from "../../tools/notify/Notify";
 import TwnsNotifyType                       from "../../tools/notify/NotifyType";
@@ -26,8 +25,8 @@ namespace CcrModel {
     export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgCcrCreateRoom.IC;
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgCcrJoinRoom.IC;
 
-    const _roomInfoDict         = new Map<number, ICcrRoomInfo>();
-    const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgCcrGetRoomInfo.IS | undefined | null) => void)[]>();
+    const _roomInfoDict         = new Map<number, ICcrRoomInfo | null>();
+    const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgCcrGetRoomInfo.IS) => void)[]>();
 
     const _unjoinedRoomIdSet    = new Set<number>();
     const _joinedRoomIdSet      = new Set<number>();
@@ -35,17 +34,17 @@ namespace CcrModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for rooms.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function getRoomInfo(roomId: number): Promise<ICcrRoomInfo | undefined | null> {
+    export function getRoomInfo(roomId: number): Promise<ICcrRoomInfo | null> {
         if (roomId == null) {
             return new Promise((resolve) => resolve(null));
         }
         if (_roomInfoDict.has(roomId)) {
-            return new Promise(resolve => resolve(_roomInfoDict.get(roomId)));
+            return new Promise(resolve => resolve(Helpers.getDefined(_roomInfoDict.get(roomId))));
         }
 
         if (_roomInfoRequests.has(roomId)) {
             return new Promise((resolve) => {
-                _roomInfoRequests.get(roomId).push(info => resolve(info.roomInfo));
+                Helpers.getExisted(_roomInfoRequests.get(roomId)).push(info => resolve(info.roomInfo || null));
             });
         }
 
@@ -56,7 +55,7 @@ namespace CcrModel {
                     Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfo,         callbackOnSucceed);
                     Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfoFailed,   callbackOnFailed);
 
-                    for (const cb of _roomInfoRequests.get(roomId)) {
+                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
                         cb(data);
                     }
                     _roomInfoRequests.delete(roomId);
@@ -70,7 +69,7 @@ namespace CcrModel {
                     Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfo,         callbackOnSucceed);
                     Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfoFailed,   callbackOnFailed);
 
-                    for (const cb of _roomInfoRequests.get(roomId)) {
+                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
                         cb(data);
                     }
                     _roomInfoRequests.delete(roomId);
@@ -86,17 +85,17 @@ namespace CcrModel {
         });
 
         return new Promise((resolve) => {
-            _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo)]);
+            _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo || null)]);
         });
     }
-    function setRoomInfo(roomId: number, info: ICcrRoomInfo | undefined): void {
+    function setRoomInfo(roomId: number, info: ICcrRoomInfo | null): void {
         _roomInfoDict.set(roomId, info);
     }
 
     export function setJoinableRoomInfoList(infoList: ICcrRoomInfo[]): void {
         _unjoinedRoomIdSet.clear();
-        for (const roomInfo of infoList || []) {
-            const roomId = roomInfo.roomId;
+        for (const roomInfo of infoList) {
+            const roomId = Helpers.getExisted(roomInfo.roomId);
             _unjoinedRoomIdSet.add(roomId);
             setRoomInfo(roomId, roomInfo);
         }
@@ -107,8 +106,8 @@ namespace CcrModel {
 
     export function setJoinedRoomInfoList(infoList: ICcrRoomInfo[]): void {
         _joinedRoomIdSet.clear();
-        for (const roomInfo of infoList || []) {
-            const roomId = roomInfo.roomId;
+        for (const roomInfo of infoList) {
+            const roomId = Helpers.getExisted(roomInfo.roomId);
             _joinedRoomIdSet.add(roomId);
             setRoomInfo(roomId, roomInfo);
         }
@@ -118,8 +117,8 @@ namespace CcrModel {
     }
 
     export function updateOnMsgCcrGetRoomInfo(data: ProtoTypes.NetMessage.MsgCcrGetRoomInfo.IS): void {
-        const roomInfo  = data.roomInfo;
-        const roomId    = data.roomId;
+        const roomInfo  = data.roomInfo || null;
+        const roomId    = Helpers.getExisted(data.roomId);
         setRoomInfo(roomId, roomInfo);
 
         if (roomInfo == null) {
@@ -128,10 +127,10 @@ namespace CcrModel {
         }
     }
     export async function updateOnMsgCcrDeletePlayer(data: ProtoTypes.NetMessage.MsgCcrDeletePlayer.IS): Promise<void> {
-        const roomId    = data.roomId;
+        const roomId    = Helpers.getExisted(data.roomId);
         const roomInfo  = await getRoomInfo(roomId);
         if (roomInfo) {
-            const playerDataList    = roomInfo.playerDataList;
+            const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const playerData        = playerDataList.find(v => v.playerIndex === data.targetPlayerIndex);
             Helpers.deleteElementFromArray(playerDataList, playerData);
 
@@ -142,18 +141,17 @@ namespace CcrModel {
         }
     }
     export async function updateOnMsgCcrSetReady(data: ProtoTypes.NetMessage.MsgCcrSetReady.IS): Promise<void> {
-        const roomInfo      = await getRoomInfo(data.roomId);
-        const playerData    = roomInfo ? roomInfo.playerDataList.find(v => v.playerIndex === data.playerIndex) : null;
-        if (playerData) {
-            playerData.isReady = data.isReady;
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
+        if (roomInfo) {
+            Helpers.getExisted(roomInfo.playerDataList?.find(v => v.playerIndex === data.playerIndex)).isReady = data.isReady;
         }
     }
     export async function updateOnMsgCcrSetSelfSettings(data: ProtoTypes.NetMessage.MsgCcrSetSelfSettings.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(data.roomId);
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             const oldPlayerIndex            = data.oldPlayerIndex;
             const newPlayerIndex            = data.newPlayerIndex;
-            const playerData                = roomInfo.playerDataList.find(v => v.playerIndex === oldPlayerIndex);
+            const playerData                = Helpers.getExisted(roomInfo.playerDataList?.find(v => v.playerIndex === oldPlayerIndex));
             playerData.coId                 = data.coId;
             playerData.unitAndTileSkinId    = data.unitAndTileSkinId;
             playerData.playerIndex          = newPlayerIndex;
@@ -163,13 +161,13 @@ namespace CcrModel {
         }
     }
     export async function updateOnMsgCcrGetOwnerPlayerIndex(data: ProtoTypes.NetMessage.MsgCcrGetOwnerPlayerIndex.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(data.roomId);
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             roomInfo.ownerPlayerIndex = data.ownerPlayerIndex;
         }
     }
     export async function updateOnMsgCcrJoinRoom(data: ProtoTypes.NetMessage.MsgCcrJoinRoom.IS): Promise<void> {
-        const roomInfo      = await getRoomInfo(data.roomId);
+        const roomInfo      = Helpers.getExisted(await getRoomInfo(Helpers.getExisted(data.roomId)));
         const playerIndex   = data.playerIndex;
         if (!roomInfo.playerDataList) {
             roomInfo.playerDataList = [{
@@ -192,10 +190,10 @@ namespace CcrModel {
         }
     }
     export async function updateOnMsgCcrExitRoom(data: ProtoTypes.NetMessage.MsgCcrExitRoom.IS): Promise<void> {
-        const roomId    = data.roomId;
+        const roomId    = Helpers.getExisted(data.roomId);
         const roomInfo  = await getRoomInfo(roomId);
         if (roomInfo) {
-            const playerDataList    = roomInfo.playerDataList;
+            const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const playerData        = playerDataList.find(v => v.playerIndex === data.playerIndex);
             Helpers.deleteElementFromArray(playerDataList, playerData);
 
@@ -206,8 +204,8 @@ namespace CcrModel {
         }
     }
     export function updateOnMsgCcrDeleteRoomByServer(data: ProtoTypes.NetMessage.MsgCcrDeleteRoomByServer.IS): void {
-        const roomId = data.roomId;
-        setRoomInfo(roomId, undefined);
+        const roomId = Helpers.getExisted(data.roomId);
+        setRoomInfo(roomId, null);
         _unjoinedRoomIdSet.delete(roomId);
         _joinedRoomIdSet.delete(roomId);
     }
@@ -230,9 +228,9 @@ namespace CcrModel {
                 return true;
             }
 
-            if ((playerDataList.length === WarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))     &&
-                (playerDataList.every(v => v.isReady))                                                              &&
-                (selfPlayerData)                                                                                    &&
+            if ((playerDataList.length === WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomInfo.settingsForCommon?.warRule)))    &&
+                (playerDataList.every(v => v.isReady))                                                                                          &&
+                (selfPlayerData)                                                                                                                &&
                 (roomInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
             ) {
                 return true;
@@ -251,44 +249,44 @@ namespace CcrModel {
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         return (selfPlayerData != null)
             && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
-            && (playerDataList.length == WarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))
+            && (playerDataList.length == WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomInfo.settingsForCommon?.warRule)))
             && (playerDataList.every(v => v.isReady));
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function createDataForCommonWarPlayerInfoPage(roomId: number): Promise<OpenDataForCommonWarPlayerInfoPage | undefined> {
+    export async function createDataForCommonWarPlayerInfoPage(roomId: number): Promise<OpenDataForCommonWarPlayerInfoPage> {
         const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
-            return undefined;
+            return null;
         }
 
-        const settingsForCommon     = roomInfo.settingsForCommon;
-        const warRule               = settingsForCommon.warRule;
-        const playersCountUnneutral = WarRuleHelpers.getPlayersCount(warRule);
+        const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForCommon);
+        const warRule               = Helpers.getExisted(settingsForCommon.warRule);
+        const playersCountUnneutral = WarRuleHelpers.getPlayersCountUnneutral(warRule);
         const playerDataList        = roomInfo.playerDataList || [];
         const playerInfoArray       : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const playerData    = playerDataList.find(v => v.playerIndex === playerIndex);
-            const userId        = playerData?.userId;
-            const isReady       = playerData?.isReady;
+            const userId        = playerData?.userId ?? null;
+            const isReady       = playerData?.isReady ?? null;
 
             playerInfoArray.push({
                 playerIndex,
                 teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
                 isAi                : (userId == null) && (!!isReady),
                 userId,
-                coId                : playerData?.coId,
-                unitAndTileSkinId   : playerData?.unitAndTileSkinId,
+                coId                : playerData?.coId ?? null,
+                unitAndTileSkinId   : playerData?.unitAndTileSkinId ?? null,
                 isReady,
-                isInTurn            : undefined,
-                isDefeat            : undefined,
+                isInTurn            : null,
+                isDefeat            : null,
             });
         }
 
         return {
-            configVersion           : settingsForCommon.configVersion,
+            configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
             playersCountUnneutral,
-            roomOwnerPlayerIndex    : roomInfo.ownerPlayerIndex,
+            roomOwnerPlayerIndex    : Helpers.getExisted(roomInfo.ownerPlayerIndex),
             callbackOnExitRoom      : () => CcrProxy.reqCcrExitRoom(roomId),
             callbackOnDeletePlayer  : (playerIndex) => CcrProxy.reqCcrDeletePlayer(roomId, playerIndex),
             playerInfoArray,
@@ -301,54 +299,54 @@ namespace CcrModel {
             return { dataArrayForListSettings: [] };
         }
 
-        const warRule           = roomInfo.settingsForCommon.warRule;
-        const settingsForCcw    = roomInfo.settingsForCcw;
-        const bootTimerParams   = settingsForCcw.bootTimerParams;
+        const warRule           = Helpers.getExisted(roomInfo.settingsForCommon?.warRule);
+        const settingsForCcw    = Helpers.getExisted(roomInfo.settingsForCcw);
+        const bootTimerParams   = Helpers.getExisted(settingsForCcw.bootTimerParams);
         const warPassword       = settingsForCcw.warPassword;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(settingsForCcw.mapId),
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)),
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarName,
-                    currentValue    : settingsForCcw.warName,
+                    currentValue    : settingsForCcw.warName ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarPassword,
-                    currentValue    : warPassword == null ? undefined : (showPassword ? warPassword : `****`),
+                    currentValue    : warPassword == null ? null : (showPassword ? warPassword : `****`),
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
-                    currentValue    : settingsForCcw.warComment,
+                    currentValue    : settingsForCcw.warComment ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             ],
         };
@@ -357,7 +355,7 @@ namespace CcrModel {
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
                 warRule,
-                callbackOnModify: undefined,
+                callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
@@ -365,34 +363,34 @@ namespace CcrModel {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             );
         } else {
-            Logger.error(`CcrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            throw new Error(`CcrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
         }
 
         return openData;
     }
 
-    export async function createDataForCommonWarAdvancedSettingsPage(roomId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage | undefined> {
+    export async function createDataForCommonWarAdvancedSettingsPage(roomId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
         const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
-            return undefined;
+            return null;
         }
 
-        const settingsForCommon = roomInfo.settingsForCommon;
-        const warRule           = settingsForCommon.warRule;
+        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
+        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         return {
-            configVersion   : settingsForCommon.configVersion,
+            configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
             warRule,
-            warType         : warRule.ruleForGlobalParams.hasFogByDefault ? Types.WarType.CcwFog : Types.WarType.CcwStd,
+            warType         : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.CcwFog : Types.WarType.CcwStd,
         };
     }
 }

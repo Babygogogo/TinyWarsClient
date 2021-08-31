@@ -51,37 +51,37 @@ namespace TwnsCcrRoomInfoPanel {
 
         private static _instance: CcrRoomInfoPanel;
 
-        private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
+        private readonly _groupTab!                 : eui.Group;
+        private readonly _tabSettings!              : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
-        private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
-        private readonly _labelMyRoom           : TwnsUiLabel.UiLabel;
-        private readonly _labelRoomInfo         : TwnsUiLabel.UiLabel;
+        private readonly _groupNavigator!           : eui.Group;
+        private readonly _labelMultiPlayer!         : TwnsUiLabel.UiLabel;
+        private readonly _labelMyRoom!              : TwnsUiLabel.UiLabel;
+        private readonly _labelRoomInfo!            : TwnsUiLabel.UiLabel;
 
-        private readonly _groupSettings         : eui.Group;
-        private readonly _groupChooseCo         : eui.Group;
-        private readonly _labelChooseCo         : TwnsUiLabel.UiLabel;
-        private readonly _btnChooseCo           : TwnsUiButton.UiButton;
+        private readonly _groupSettings!            : eui.Group;
+        private readonly _groupChooseCo!            : eui.Group;
+        private readonly _labelChooseCo!            : TwnsUiLabel.UiLabel;
+        private readonly _btnChooseCo!              : TwnsUiButton.UiButton;
 
-        private readonly _groupChoosePlayerIndex: eui.Group;
-        private readonly _labelChoosePlayerIndex: TwnsUiLabel.UiLabel;
-        private readonly _sclPlayerIndex        : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
+        private readonly _groupChoosePlayerIndex!   : eui.Group;
+        private readonly _labelChoosePlayerIndex!   : TwnsUiLabel.UiLabel;
+        private readonly _sclPlayerIndex!           : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
 
-        private readonly _groupChooseSkinId     : eui.Group;
-        private readonly _labelChooseSkinId     : TwnsUiLabel.UiLabel;
-        private readonly _sclSkinId             : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
+        private readonly _groupChooseSkinId!        : eui.Group;
+        private readonly _labelChooseSkinId!        : TwnsUiLabel.UiLabel;
+        private readonly _sclSkinId!                : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
 
-        private readonly _groupChooseReady      : eui.Group;
-        private readonly _labelChooseReady      : TwnsUiLabel.UiLabel;
-        private readonly _sclReady              : TwnsUiScrollList.UiScrollList<DataForReadyRenderer>;
+        private readonly _groupChooseReady!         : eui.Group;
+        private readonly _labelChooseReady!         : TwnsUiLabel.UiLabel;
+        private readonly _sclReady!                 : TwnsUiScrollList.UiScrollList<DataForReadyRenderer>;
 
-        private readonly _groupButton           : eui.Group;
-        private readonly _btnStartGame          : TwnsUiButton.UiButton;
-        private readonly _btnDeleteRoom         : TwnsUiButton.UiButton;
-        private readonly _btnChat               : TwnsUiButton.UiButton;
+        private readonly _groupButton!              : eui.Group;
+        private readonly _btnStartGame!             : TwnsUiButton.UiButton;
+        private readonly _btnDeleteRoom!            : TwnsUiButton.UiButton;
+        private readonly _btnChat!                  : TwnsUiButton.UiButton;
 
-        private readonly _btnBack               : TwnsUiButton.UiButton;
+        private readonly _btnBack!                  : TwnsUiButton.UiButton;
 
         private _isTabInitialized = false;
 
@@ -176,20 +176,28 @@ namespace TwnsCcrRoomInfoPanel {
         }
 
         private async _onTouchedBtnChooseCo(): Promise<void> {
-            const roomId            = this._getOpenData().roomId;
-            const roomInfo          = await CcrModel.getRoomInfo(roomId);
+            const roomId    = this._getOpenData().roomId;
+            const roomInfo  = await CcrModel.getRoomInfo(roomId);
+            if (roomInfo == null) {
+                return;
+            }
+
             const selfUserId        = UserModel.getSelfUserId();
-            const selfPlayerData    = roomInfo ? roomInfo.playerDataList.find(v => v.userId === selfUserId) : null;
+            const selfPlayerData    = roomInfo.playerDataList?.find(v => v.userId === selfUserId);
             if (selfPlayerData != null) {
                 if (selfPlayerData.isReady) {
                     FloatText.show(Lang.getText(LangTextType.A0128));
                 } else {
-                    const playerIndex       = selfPlayerData.playerIndex;
+                    const playerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
                     const currentCoId       = selfPlayerData.coId;
-                    const settingsForCommon = roomInfo.settingsForCommon;
+                    const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
                     TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
                         currentCoId,
-                        availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(settingsForCommon.warRule, playerIndex, settingsForCommon.configVersion),
+                        availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                            warRule         : Helpers.getExisted(settingsForCommon.warRule),
+                            playerIndex,
+                            configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                        }),
                         callbackOnConfirm   : (newCoId) => {
                             if (newCoId !== currentCoId) {
                                 CcrProxy.reqCcrSetSelfSettings({
@@ -276,7 +284,7 @@ namespace TwnsCcrRoomInfoPanel {
             const roomId = (e.data as NetMessage.MsgCcrExitRoom.IS).roomId;
             if (roomId === this._getOpenData().roomId) {
                 const selfUserId = UserModel.getSelfUserId();
-                if ((await CcrModel.getRoomInfo(roomId))?.playerDataList.find(v => v.userId === selfUserId)) {
+                if ((await CcrModel.getRoomInfo(roomId))?.playerDataList?.find(v => v.userId === selfUserId)) {
                     this._updateGroupButton();
                     this._updateCommonWarPlayerInfoPage();
                 } else {
@@ -338,8 +346,7 @@ namespace TwnsCcrRoomInfoPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private async _initSclPlayerIndex(): Promise<void> {
             const roomId                = this._getOpenData().roomId;
-            const roomInfo              = await CcrModel.getRoomInfo(roomId);
-            const playersCountUnneutral = roomInfo ? (await WarMapModel.getRawData(roomInfo.settingsForCcw.mapId)).playersCountUnneutral : null;
+            const playersCountUnneutral = Helpers.getExisted((await WarMapModel.getRawData(Helpers.getExisted((await CcrModel.getRoomInfo(roomId))?.settingsForCcw?.mapId)))?.playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
@@ -391,19 +398,20 @@ namespace TwnsCcrRoomInfoPanel {
         }
 
         private async _updateBtnChooseCo(): Promise<void> {
-            const roomInfo          = await CcrModel.getRoomInfo(this._getOpenData().roomId);
-            const userId            = UserModel.getSelfUserId();
-            const selfPlayerData    = roomInfo ? roomInfo.playerDataList.find(v => v.userId === userId) : null;
-            if (selfPlayerData) {
-                this._btnChooseCo.label = ConfigManager.getCoBasicCfg(roomInfo.settingsForCommon.configVersion, selfPlayerData.coId).name;
+            const roomInfo = await CcrModel.getRoomInfo(this._getOpenData().roomId);
+            if (roomInfo) {
+                const userId            = UserModel.getSelfUserId();
+                const selfPlayerData    = roomInfo.playerDataList?.find(v => v.userId === userId);
+                if (selfPlayerData) {
+                    this._btnChooseCo.label = ConfigManager.getCoBasicCfg(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion),  Helpers.getExisted(selfPlayerData.coId)).name;
+                }
             }
         }
 
         private async _updateGroupButton(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
-            const roomInfo          = await CcrModel.getRoomInfo(roomId);
-            const playerDataList    = roomInfo.playerDataList;
-            const ownerInfo         = playerDataList.find(v => v.playerIndex === roomInfo.ownerPlayerIndex);
+            const roomInfo          = Helpers.getExisted(await CcrModel.getRoomInfo(roomId));
+            const ownerInfo         = roomInfo.playerDataList?.find(v => v.playerIndex === roomInfo.ownerPlayerIndex);
             const isSelfOwner       = (!!ownerInfo) && (ownerInfo.userId === UserModel.getSelfUserId());
             const btnStartGame      = this._btnStartGame;
             btnStartGame.setRedVisible(await CcrModel.checkCanStartGame(roomId));
@@ -524,10 +532,10 @@ namespace TwnsCcrRoomInfoPanel {
         name: string;
     };
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 
@@ -536,7 +544,7 @@ namespace TwnsCcrRoomInfoPanel {
         playerIndex : number;
     };
     class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerIndexRenderer> {
-        private readonly _labelName : TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -552,12 +560,16 @@ namespace TwnsCcrRoomInfoPanel {
         }
 
         public async onItemTapEvent(): Promise<void> {
-            const data              = this.data;
-            const roomId            = data.roomId;
-            const roomInfo          = data ? await CcrModel.getRoomInfo(roomId) : null;
+            const data      = this._getData();
+            const roomId    = data.roomId;
+            const roomInfo  = await CcrModel.getRoomInfo(roomId);
+            if (roomInfo == null) {
+                return;
+            }
+
             const selfUserId        = UserModel.getSelfUserId();
-            const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
-            const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
+            const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
+            const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if (selfPlayerData == null) {
                 return;
             }
@@ -574,9 +586,13 @@ namespace TwnsCcrRoomInfoPanel {
                     FloatText.show(Lang.getText(LangTextType.A0202));
                 }
             } else {
-                const settingsForCommon     = roomInfo.settingsForCommon;
-                const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer(settingsForCommon.warRule, newPlayerIndex, settingsForCommon.configVersion);
-                const currCoId              = selfPlayerData.coId;
+                const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForCommon);
+                const currCoId              = Helpers.getExisted(selfPlayerData.coId);
+                const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                    warRule         : Helpers.getExisted(settingsForCommon.warRule),
+                    playerIndex     : newPlayerIndex,
+                    configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                });
                 CcrProxy.reqCcrSetSelfSettings({
                     roomId,
                     playerIndex         : newPlayerIndex,
@@ -590,29 +606,28 @@ namespace TwnsCcrRoomInfoPanel {
         }
         private _onNotifyMsgCcrGetRoomInfo(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomInfo.IS;
-            if (data.roomId === this.data.roomId) {
+            if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateState();
             }
         }
         private _onNotifyMsgCcrSetSelfSettings(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgCcrSetSelfSettings.IS;
-            if (data.roomId === this.data.roomId) {
+            if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateState();
             }
         }
 
         private async _updateLabelName(): Promise<void> {
-            const data = this.data;
-            if (data) {
-                const playerIndex       = data.playerIndex;
-                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex((await CcrModel.getRoomInfo(data.roomId)).settingsForCommon.warRule, playerIndex))})`;
-            }
+            const data              = this._getData();
+            const playerIndex       = data.playerIndex;
+            const teamIndex         = WarRuleHelpers.getTeamIndex(Helpers.getExisted((await CcrModel.getRoomInfo(data.roomId))?.settingsForCommon?.warRule), playerIndex);
+            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(teamIndex) || CommonConstants.ErrorTextForUndefined})`;
         }
         private async _updateState(): Promise<void> {
-            const data              = this.data;
-            const roomInfo          = data ? await CcrModel.getRoomInfo(data.roomId) : null;
+            const data              = this._getData();
+            const roomInfo          = await CcrModel.getRoomInfo(data.roomId);
             const selfUserId        = UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
@@ -625,7 +640,7 @@ namespace TwnsCcrRoomInfoPanel {
         skinId  : number;
     };
     class SkinIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkinIdRenderer> {
-        private readonly _imgColor  : TwnsUiImage.UiImage;
+        private readonly _imgColor! : TwnsUiImage.UiImage;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -639,12 +654,16 @@ namespace TwnsCcrRoomInfoPanel {
         }
 
         public async onItemTapEvent(): Promise<void> {
-            const data              = this.data;
-            const roomId            = data.roomId;
-            const roomInfo          = data ? await CcrModel.getRoomInfo(roomId) : null;
+            const data      = this._getData();
+            const roomId    = data.roomId;
+            const roomInfo  = await CcrModel.getRoomInfo(roomId);
+            if (roomInfo == null) {
+                return;
+            }
+
             const selfUserId        = UserModel.getSelfUserId();
-            const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
-            const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
+            const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
+            const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if (selfPlayerData == null) {
                 return;
             }
@@ -671,13 +690,13 @@ namespace TwnsCcrRoomInfoPanel {
         }
         private _onNotifyMsgCcrGetRoomInfo(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomInfo.IS;
-            if (data.roomId === this.data.roomId) {
+            if (data.roomId === this._getData().roomId) {
                 this._updateImgColor();
             }
         }
         private _onNotifyMsgCcrSetSelfSettings(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgCcrSetSelfSettings.IS;
-            if (data.roomId === this.data.roomId) {
+            if (data.roomId === this._getData().roomId) {
                 this._updateImgColor();
             }
         }
@@ -700,8 +719,8 @@ namespace TwnsCcrRoomInfoPanel {
         isReady     : boolean;
     };
     class ReadyRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForReadyRenderer> {
-        private readonly _labelName : TwnsUiLabel.UiLabel;
-        private readonly _imgRed    : TwnsUiImage.UiImage;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _imgRed!       : TwnsUiImage.UiImage;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -717,7 +736,7 @@ namespace TwnsCcrRoomInfoPanel {
         }
 
         public async onItemTapEvent(): Promise<void> {
-            const data              = this.data;
+            const data              = this._getData();
             const isReady           = data.isReady;
             const roomId            = data.roomId;
             const roomInfo          = await CcrModel.getRoomInfo(roomId);
@@ -733,14 +752,14 @@ namespace TwnsCcrRoomInfoPanel {
         }
         private _onNotifyMsgCcrGetRoomInfo(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomInfo.IS;
-            if (data.roomId === this.data.roomId) {
+            if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateStateAndImgRed();
             }
         }
         private _onNotifyMsgCcrSetReady(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgCcrSetReady.IS;
-            if (data.roomId === this.data.roomId) {
+            if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateStateAndImgRed();
             }
@@ -753,7 +772,7 @@ namespace TwnsCcrRoomInfoPanel {
             }
         }
         private async _updateStateAndImgRed(): Promise<void> {
-            const data              = this.data;
+            const data              = this._getData();
             const roomInfo          = await CcrModel.getRoomInfo(data.roomId);
             const isReady           = data.isReady;
             const selfUserId        = UserModel.getSelfUserId();

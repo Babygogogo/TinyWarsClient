@@ -4,6 +4,7 @@ import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
+import Helpers                      from "../../tools/helpers/Helpers";
 import Logger                       from "../../tools/helpers/Logger";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
@@ -219,7 +220,7 @@ namespace TwnsWwMakeRequestWarsPanel {
                 labelWarComment.text    = settingsForMfw.warComment || "----";
                 listPlayer.bindData(playersCount != null ? this._createDataForListPlayer(warInfo, playersCount - 1) : []);
                 if (warData) {
-                    zoomMap.showMapByWarData(warData);
+                    zoomMap.showMapByWarData(warData, null);
                 } else {
                     zoomMap.clearMap();
                 }
@@ -307,25 +308,25 @@ namespace TwnsWwMakeRequestWarsPanel {
         }
 
         protected _onDataChanged(): void {
-            const data          = this.data;
+            const data          = this._getData();
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._updateLabelName();
         }
 
         private _onTouchTapBtnChoose(): void {
-            const data = this.data;
+            const data = this._getData();
             data.panel.setSelectedIndex(data.index);
         }
 
         private async _onTouchTapBtnNext(): Promise<void> {
-            McrWatchMakeRequestDetailPanel.show({ watchInfo: this.data.info });
+            McrWatchMakeRequestDetailPanel.show({ watchInfo: this._getData().info });
         }
 
         private async _updateLabelName(): Promise<void> {
             const labelName = this._labelName;
             labelName.text  = ``;
 
-            const warInfo = this.data.info.warInfo;
+            const warInfo = this._getData().info.warInfo;
             if (warInfo != null) {
                 const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warInfo;
                 if (settingsForMfw) {
@@ -367,7 +368,7 @@ namespace TwnsWwMakeRequestWarsPanel {
         private readonly _labelTeam!    : TwnsUiLabel.UiLabel;
 
         protected async _onDataChanged(): Promise<void> {
-            const data              = this.data;
+            const data              = this._getData();
             const playerInfo        = data.playerInfo;
             const playerIndex       = playerInfo.playerIndex;
             const teamIndex         = playerInfo.teamIndex;
@@ -376,7 +377,7 @@ namespace TwnsWwMakeRequestWarsPanel {
 
             const userId    = playerInfo.userId;
             const labelName = this._labelName;
-            const coName    = ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
+            const coName    = ConfigManager.getCoNameAndTierText(data.configVersion, Helpers.getExisted(playerInfo.coId));
             if (userId == null) {
                 labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
             } else {

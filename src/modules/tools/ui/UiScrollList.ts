@@ -1,32 +1,33 @@
 
+import Helpers                  from "../helpers/Helpers";
+import Logger                   from "../helpers/Logger";
+import SoundManager             from "../helpers/SoundManager";
+import StageManager             from "../helpers/StageManager";
 import Types                    from "../helpers/Types";
 import Notify                   from "../notify/Notify";
 import TwnsNotifyType           from "../notify/NotifyType";
-import Logger                   from "../helpers/Logger";
-import StageManager             from "../helpers/StageManager";
-import SoundManager             from "../helpers/SoundManager";
 import TwnsUiListItemRenderer   from "./UiListItemRenderer";
 
 namespace TwnsUiScrollList {
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import UiListener               = Types.UiListener;
-    import ShortSfxCode             = Types.ShortSfxCode;
+    import NotifyType       = TwnsNotifyType.NotifyType;
+    import UiListener       = Types.UiListener;
+    import ShortSfxCode     = Types.ShortSfxCode;
 
     export class UiScrollList<DataForRenderer> extends eui.Scroller {
-        private _isChildrenCreated  = false;
-        private _isOpening          = false;
+        private _isChildrenCreated          = false;
+        private _isOpening                  = false;
 
-        private _notifyListenerArray        : Notify.Listener[] | undefined;
-        private _uiListenerArray            : UiListener[] | undefined;
+        private _notifyListenerArray        : Notify.Listener[] | null = null;
+        private _uiListenerArray            : UiListener[] | null = null;
         private _shortSfxCodeForTouchList   = ShortSfxCode.None;
 
         private _list?                      : eui.List;
 
-        private _cachedItemRenderer         : (new () => TwnsUiListItemRenderer.UiListItemRenderer<DataForRenderer>) | undefined;
-        private _cachedListDataArray        : DataForRenderer[] | undefined;
-        private _cachedSelectedIndex        : number | undefined;
-        private _cachedScrollVerPercentage  : number | undefined;
-        private _cachedScrollHorPercentage  : number | undefined;
+        private _cachedItemRenderer         : (new () => TwnsUiListItemRenderer.UiListItemRenderer<DataForRenderer>) | null = null;
+        private _cachedListDataArray        : DataForRenderer[] | null = null;
+        private _cachedSelectedIndex        : number | null = null;
+        private _cachedScrollVerPercentage  : number | null = null;
+        private _cachedScrollHorPercentage  : number | null = null;
 
         private readonly _mousePoint    = new egret.Point();
 
@@ -74,8 +75,8 @@ namespace TwnsUiScrollList {
                 this._setIsOpening(false);
 
                 this._unregisterListeners();
-                this._setUiListenerArray(undefined);
-                this._setNotifyListenerArray(undefined);
+                this._setUiListenerArray(null);
+                this._setNotifyListenerArray(null);
                 this._onClosed();
             }
         }
@@ -106,17 +107,17 @@ namespace TwnsUiScrollList {
 
             if (this._cachedItemRenderer) {
                 list.itemRenderer           = this._cachedItemRenderer;
-                this._cachedItemRenderer    = undefined;
+                this._cachedItemRenderer    = null;
             }
 
             if (this._cachedListDataArray) {
                 this.bindData(this._cachedListDataArray);
-                this._cachedListDataArray = undefined;
+                this._cachedListDataArray = null;
             }
 
             if (this._cachedSelectedIndex != null) {
                 this.setSelectedIndex(this._cachedSelectedIndex);
-                this._cachedSelectedIndex = undefined;
+                this._cachedSelectedIndex = null;
             }
         }
         private _onClosed(): void {
@@ -134,16 +135,20 @@ namespace TwnsUiScrollList {
             this._isOpening = opening;
         }
 
-        private _setNotifyListenerArray(array: Notify.Listener[] | undefined): void {
+        private _getList(): eui.List {
+            return Helpers.getExisted(this._list);
+        }
+
+        private _setNotifyListenerArray(array: Notify.Listener[] | null): void {
             this._notifyListenerArray = array;
         }
-        private _getNotifyListenerArray(): Notify.Listener[] | undefined {
+        private _getNotifyListenerArray(): Notify.Listener[] | null {
             return this._notifyListenerArray;
         }
-        private _setUiListenerArray(array: UiListener[] | undefined): void {
+        private _setUiListenerArray(array: UiListener[] | null): void {
             this._uiListenerArray = array;
         }
-        private _getUiListenerArray(): UiListener[] | undefined {
+        private _getUiListenerArray(): UiListener[] | null {
             return this._uiListenerArray;
         }
 
@@ -189,14 +194,14 @@ namespace TwnsUiScrollList {
             }
 
             const data = e as eui.ItemTapEvent;
-            const item = this._list.getElementAt(data.itemIndex);
+            const item = this._getList().getElementAt(data.itemIndex);
             if (item instanceof TwnsUiListItemRenderer.UiListItemRenderer) {
                 SoundManager.playShortSfx(item.getShortSfxCode());
                 item.onItemTapEvent(data);
             }
 
-            this._cachedScrollHorPercentage = undefined;
-            this._cachedScrollVerPercentage = undefined;
+            this._cachedScrollHorPercentage = null;
+            this._cachedScrollVerPercentage = null;
         }
         private _onTouchBeginList(): void {
             SoundManager.playShortSfx(this.getShortSfxCodeForTouchList());
@@ -211,7 +216,7 @@ namespace TwnsUiScrollList {
                 this.stopAnimation();
 
                 const value     = - e.data / 2;
-                const list      = this._list;
+                const list      = this._getList();
                 list.scrollV    = Math.max(0, Math.min(list.scrollV + value, list.contentHeight - list.height));
                 list.scrollH    = Math.max(0, Math.min(list.scrollH + value, list.contentWidth - list.width));
             }
@@ -219,7 +224,7 @@ namespace TwnsUiScrollList {
 
         public setItemRenderer(itemRenderer: new () => TwnsUiListItemRenderer.UiListItemRenderer<DataForRenderer>): void {
             if (this.getIsOpening()) {
-                this._list.itemRenderer = itemRenderer;
+                this._getList().itemRenderer = itemRenderer;
             } else {
                 this._cachedItemRenderer = itemRenderer;
             }
@@ -241,7 +246,7 @@ namespace TwnsUiScrollList {
 
             // 修正从多子项切换到少子项时，且曾经拖动到比较远的的情况下，切换后可能没有显示子项的问题
             this.validateNow();
-            const list      = this._list;
+            const list      = this._getList();
             list.scrollV    = Math.max(0, Math.min(list.scrollV, list.contentHeight - list.height));
             list.scrollH    = Math.max(0, Math.min(list.scrollH, list.contentWidth - list.width));
         }
@@ -281,11 +286,11 @@ namespace TwnsUiScrollList {
         }
 
         public clear() : void {
-            this._cachedItemRenderer        = undefined;
-            this._cachedListDataArray       = undefined;
-            this._cachedSelectedIndex       = undefined;
-            this._cachedScrollHorPercentage = undefined;
-            this._cachedScrollVerPercentage = undefined;
+            this._cachedItemRenderer        = null;
+            this._cachedListDataArray       = null;
+            this._cachedSelectedIndex       = null;
+            this._cachedScrollHorPercentage = null;
+            this._cachedScrollVerPercentage = null;
 
             if (this.getIsOpening()) {
                 const dataProvider = this._getDataProvider();
@@ -300,29 +305,29 @@ namespace TwnsUiScrollList {
 
         public setSelectedIndex(index: number): void {
             if (this.getIsOpening()) {
-                this._list.selectedIndex = index;
+                this._getList().selectedIndex = index;
             } else {
                 this._cachedSelectedIndex = index;
             }
         }
         public getSelectedIndex(): number | undefined {
-            return this.getIsOpening() ? this._list.selectedIndex : undefined;
+            return this.getIsOpening() ? this._getList().selectedIndex : undefined;
         }
         public getSelectedData(): DataForRenderer | undefined {
-            return this.getIsOpening() ? this._list.selectedItem : undefined;
+            return this.getIsOpening() ? this._getList().selectedItem : undefined;
         }
 
         public scrollVerticalTo(percentage: number) : void {
             this._cachedScrollVerPercentage = percentage;
             if (this.getIsOpening()) {
-                const list      = this._list;
+                const list      = this._getList();
                 list.scrollV    = percentage / 100 * Math.max(0, list.contentHeight - list.height);
             }
         }
         public scrollHorizontalTo(percentage : number) : void {
             this._cachedScrollHorPercentage = percentage;
             if (this.getIsOpening()) {
-                const list      = this._list;
+                const list      = this._getList();
                 list.scrollH    = percentage / 100 * Math.max(0, list.contentWidth - list.width);
             }
         }
@@ -342,7 +347,7 @@ namespace TwnsUiScrollList {
 
         private _getDataProvider(): eui.ArrayCollection | null {
             if (this.getIsOpening()) {
-                return this._list.dataProvider as eui.ArrayCollection;
+                return this._getList().dataProvider as eui.ArrayCollection;
             } else {
                 return null;
             }

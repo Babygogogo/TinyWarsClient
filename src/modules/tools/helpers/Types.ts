@@ -176,7 +176,7 @@ namespace Types {
     }
 
     export interface WarMapTileViewData extends ProtoTypes.WarSerialization.ISerialTile {
-        skinId? : number;
+        skinId  : number | null;
     }
 
     export type MovableArea = {
@@ -193,6 +193,8 @@ namespace Types {
         extraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
         warData     : ProtoTypes.WarSerialization.ISerialWar;
     };
+
+    export type Undefinable<T> = T | null | undefined;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.

@@ -1,4 +1,5 @@
 
+import Helpers          from "../helpers/Helpers";
 import Logger           from "../helpers/Logger";
 import SoundManager     from "../helpers/SoundManager";
 import StageManager     from "../helpers/StageManager";
@@ -21,14 +22,14 @@ namespace TwnsUiPanel {
         protected abstract readonly _IS_EXCLUSIVE: boolean;
 
         private _isRunningClose         = false;
-        private _cachedOpenFunc         : (() => void) | undefined;
+        private _cachedOpenFunc         : (() => void) | null = null;
 
         private _isTouchMaskEnabled     = false;
         private _isCloseOnTouchedMask   = false;
-        private _callbackOnTouchedMask? : () => void;
+        private _callbackOnTouchedMask  : (() => void) | null = null;
         private _touchMask?             : eui.Group;
 
-        private _openData?              : OpenData;
+        private _openData               : OpenData | null = null;
 
         protected constructor() {
             super();
@@ -54,10 +55,6 @@ namespace TwnsUiPanel {
             this._setOpenData(openData);
 
             const layer = StageManager.getLayer(this._LAYER_TYPE);
-            if (layer == null) {
-                throw new Error(`UiPanel.open() empty layer.`);
-            }
-
             (this._IS_EXCLUSIVE) && (layer.closeAllPanels(this));
             (!this.parent) && (layer.addChild(this));
 
@@ -82,17 +79,17 @@ namespace TwnsUiPanel {
             }
         }
 
-        private _setOpenData(data: OpenData | undefined): void {
+        private _setOpenData(data: OpenData | null): void {
             this._openData = data;
         }
-        protected _getOpenData(): OpenData | undefined {
-            return this._openData;
+        protected _getOpenData(): OpenData {
+            return Helpers.getExisted(this._openData);
         }
 
-        private _setCachedOpenFunc(func: (() => void) | undefined): void {
+        private _setCachedOpenFunc(func: (() => void) | null): void {
             this._cachedOpenFunc = func;
         }
-        private _getCachedOpenFunc(): (() => void) | undefined {
+        private _getCachedOpenFunc(): (() => void) | null {
             return this._cachedOpenFunc;
         }
 
@@ -104,7 +101,7 @@ namespace TwnsUiPanel {
                 return;
             }
 
-            this._setCachedOpenFunc(undefined);
+            this._setCachedOpenFunc(null);
 
             if (this._getIsRunningClose()) {
                 return;
@@ -113,13 +110,13 @@ namespace TwnsUiPanel {
 
             await this._doClose();
             (this.parent) && (this.parent.removeChild(this));
-            this._setOpenData(undefined);
+            this._setOpenData(null);
 
             this._setIsRunningClose(false);
 
             const func = this._getCachedOpenFunc();
             if (func) {
-                this._setCachedOpenFunc(undefined);
+                this._setCachedOpenFunc(null);
 
                 Logger.warn(`%cUiPanel.close() calling cached open func: ${this.skinName}`, `background:#FFDDDD;`);
                 func();
@@ -131,9 +128,9 @@ namespace TwnsUiPanel {
                 this._setIsOpening(false);
 
                 this._unregisterListeners();
-                this._setUiListenerArray(undefined);
-                this._setNotifyListenerArray(undefined);
-                this._setCallbackOnTouchedMask(undefined);
+                this._setUiListenerArray(null);
+                this._setNotifyListenerArray(null);
+                this._setCallbackOnTouchedMask(null);
                 await this._onClosed();
             }
         }
@@ -197,10 +194,10 @@ namespace TwnsUiPanel {
         protected _getIsCloseOnTouchedMask(): boolean {
             return this._isCloseOnTouchedMask;
         }
-        protected _setCallbackOnTouchedMask(callback: (() => void) | undefined): void {
+        protected _setCallbackOnTouchedMask(callback: (() => void) | null): void {
             this._callbackOnTouchedMask = callback;
         }
-        protected _getCallbackOnTouchedMask(): (() => void) | undefined {
+        protected _getCallbackOnTouchedMask(): (() => void) | null {
             return this._callbackOnTouchedMask;
         }
         private _onTouchedTouchMask(): void {

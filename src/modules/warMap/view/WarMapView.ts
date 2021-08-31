@@ -2,6 +2,7 @@
 import CommonModel          from "../../common/model/CommonModel";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import Timer                from "../../tools/helpers/Timer";
 import Types                from "../../tools/helpers/Types";
@@ -37,25 +38,25 @@ namespace TwnsWarMapView {
         }
 
         public showMapByMapData(mapRawData: IMapRawData): void {
-            this.width  = GRID_WIDTH  * mapRawData.mapWidth;
-            this.height = GRID_HEIGHT * mapRawData.mapHeight;
-            this._tileMapView.showTileMap(mapRawData.tileDataArray);
+            this.width  = GRID_WIDTH  * Helpers.getExisted(mapRawData.mapWidth);
+            this.height = GRID_HEIGHT * Helpers.getExisted(mapRawData.mapHeight);
+            this._tileMapView.showTileMap(Helpers.getExisted(mapRawData.tileDataArray));
             this._unitMapView.showUnitMap({
-                unitDataArray   : mapRawData.unitDataArray,
+                unitDataArray   : mapRawData.unitDataArray || [],
                 players         : null,
             });
         }
-        public showMapByWarData(warData: ISerialWar, players?: ISerialPlayer[]): void {
-            const field     = warData.field;
-            const tileMap   = field.tileMap;
+        public showMapByWarData(warData: ISerialWar, players?: Types.Undefinable<ISerialPlayer[]>): void {
+            const field     = Helpers.getExisted(warData.field);
+            const tileMap   = Helpers.getExisted(field.tileMap);
             const mapSize   = WarCommonHelpers.getMapSize(tileMap);
             this.width      = GRID_WIDTH * mapSize.width;
             this.height     = GRID_HEIGHT * mapSize.height;
 
-            players = players || warData.playerManager.players;
-            this._tileMapView.showTileMap(tileMap.tiles, players);
+            players = players || Helpers.getExisted(warData.playerManager?.players);
+            this._tileMapView.showTileMap(Helpers.getExisted(tileMap.tiles), players);
             this._unitMapView.showUnitMap({
-                unitDataArray   : field.unitMap.units,
+                unitDataArray   : field.unitMap?.units || [],
                 players,
             });
         }
@@ -184,13 +185,12 @@ namespace TwnsWarMapView {
 
                 const column    = map[x];
                 column.length   = height;
-                column.fill(undefined);
             }
 
             for (const rawTileData of tileDataArray) {
                 const tileData                  = Helpers.deepClone(rawTileData) as Types.WarMapTileViewData;
-                const gridIndex                 = tileData.gridIndex;
-                tileData.skinId                 = players ? players.find(v => v.playerIndex === tileData.playerIndex).unitAndTileSkinId : null;
+                const gridIndex                 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+                tileData.skinId                 = players ? (players.find(v => v.playerIndex === tileData.playerIndex)?.unitAndTileSkinId ?? null) : null;
                 map[gridIndex.x][gridIndex.y]   = tileData;
             }
         }
@@ -236,13 +236,13 @@ namespace TwnsWarMapView {
     class TileBaseLayer extends TileLayerBase {
         protected _getImageSource(tileData: ISerialTile, tickCount: number): string {
             return tileData == null
-                ? undefined
+                ? ``
                 : CommonModel.getCachedTileBaseImageSource({
-                    version : UserModel.getSelfSettingsTextureVersion(),
-                    baseType: tileData.baseType,
-                    shapeId : tileData.baseShapeId || 0,
-                    isDark  : false,
-                    skinId  : CommonConstants.UnitAndTileNeutralSkinId,
+                    version     : UserModel.getSelfSettingsTextureVersion(),
+                    baseType    : Helpers.getExisted(tileData.baseType),
+                    shapeId     : tileData.baseShapeId || 0,
+                    isDark      : false,
+                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                     tickCount,
                 });
         }
@@ -255,11 +255,11 @@ namespace TwnsWarMapView {
     class TileDecoratorLayer extends TileLayerBase {
         protected _getImageSource(tileData: ISerialTile, tickCount: number): string {
             return tileData == null
-                ? undefined
+                ? ``
                 : CommonModel.getCachedTileDecoratorImageSource({
                     version         : UserModel.getSelfSettingsTextureVersion(),
-                    decoratorType   : tileData.decoratorType,
-                    shapeId         : tileData.decoratorShapeId,
+                    decoratorType   : tileData.decoratorType ?? null,
+                    shapeId         : tileData.decoratorShapeId ?? null,
                     isDark          : false,
                     skinId          : CommonConstants.UnitAndTileNeutralSkinId,
                     tickCount,
@@ -274,13 +274,13 @@ namespace TwnsWarMapView {
     class TileObjectLayer extends TileLayerBase {
         protected _getImageSource(tileData: Types.WarMapTileViewData, tickCount: number): string {
             return tileData == null
-                ? undefined
+                ? ``
                 : CommonModel.getCachedTileObjectImageSource({
                     version     : UserModel.getSelfSettingsTextureVersion(),
-                    objectType  : tileData.objectType,
+                    objectType  : tileData.objectType || Types.TileObjectType.Empty,
                     shapeId     : tileData.objectShapeId || 0,
                     isDark      : false,
-                    skinId      : tileData.skinId || tileData.playerIndex,
+                    skinId      : Helpers.getExisted(tileData.skinId || tileData.playerIndex),
                     tickCount,
                 });
         }
@@ -294,7 +294,7 @@ namespace TwnsWarMapView {
         let width   = 0;
         let height  = 0;
         for (const tile of tileDataArray) {
-            const gridIndex = tile.gridIndex;
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tile.gridIndex));
             width           = Math.max(gridIndex.x + 1, width);
             height          = Math.max(gridIndex.y + 1, height);
         }
@@ -373,8 +373,8 @@ namespace TwnsWarMapView {
                 unitViews.push(layer.getChildAt(i) as WarMapUnitView);
             }
             unitViews.sort((v1, v2): number => {
-                const g1 = v1.getData().gridIndex;
-                const g2 = v2.getData().gridIndex;
+                const g1 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(v1.getData().gridIndex));
+                const g2 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(v2.getData().gridIndex));
                 const y1 = g1.y;
                 const y2 = g2.y;
                 return y1 !== y2 ? y1 - y2 : g1.x - g2.x;
@@ -386,11 +386,11 @@ namespace TwnsWarMapView {
         }
 
         private _addUnit(data: Types.WarMapUnitViewData, tickCount: number): void {
-            const unitType = data.unitType;
+            const unitType = Helpers.getExisted(data.unitType);
             const view     = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
-            const configVersion = ConfigManager.getLatestConfigVersion();
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
             if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Air)) {
                 this._airLayer.addChild(view);
             } else if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Ground)) {
@@ -418,14 +418,14 @@ namespace TwnsWarMapView {
             }
 
             for (const unitData of dataArray) {
-                if (loaderUnitIdSet.has(unitData.unitId)) {
+                if (loaderUnitIdSet.has(Helpers.getExisted(unitData.unitId))) {
                     unitData.hasLoadedUnit = true;
                 }
 
                 const playerData = players ? players.find(v => v.playerIndex === unitData.playerIndex) : null;
                 if (playerData) {
-                    unitData.coUsingSkillType   = playerData.coUsingSkillType;
-                    unitData.skinId             = playerData.unitAndTileSkinId;
+                    unitData.coUsingSkillType   = Helpers.getExisted(playerData.coUsingSkillType);
+                    unitData.skinId             = Helpers.getExisted(playerData.unitAndTileSkinId);
                 }
             }
         }

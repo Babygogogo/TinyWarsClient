@@ -2,6 +2,7 @@
 import CommonConstants  from "../../tools/helpers/CommonConstants";
 import Helpers          from "../../tools/helpers/Helpers";
 import LocalStorage     from "../../tools/helpers/LocalStorage";
+import SoundManager     from "../../tools/helpers/SoundManager";
 import StageManager     from "../../tools/helpers/StageManager";
 import Types            from "../../tools/helpers/Types";
 import Lang             from "../../tools/lang/Lang";
@@ -24,30 +25,19 @@ namespace TwnsUserSetStageScalePanel {
 
         private static _instance: UserSetStageScalePanel;
 
-        // @ts-ignore
-        private readonly _imgMask           : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _group             : eui.Group;
-        // @ts-ignore
-        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
+        private readonly _imgMask!          : TwnsUiImage.UiImage;
+        private readonly _group!            : eui.Group;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
-        private readonly _labelScaleTitle   : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _groupScale        : eui.Group;
-        // @ts-ignore
-        private readonly _imgScaleBar       : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _imgScalePoint     : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _labelScale        : TwnsUiLabel.UiLabel;
+        private readonly _labelScaleTitle!  : TwnsUiLabel.UiLabel;
+        private readonly _groupScale!       : eui.Group;
+        private readonly _imgScaleBar!      : TwnsUiImage.UiImage;
+        private readonly _imgScalePoint!    : TwnsUiImage.UiImage;
+        private readonly _labelScale!       : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
-        private readonly _btnCancel         : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnDefault        : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnConfirm        : TwnsUiButton.UiButton;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
+        private readonly _btnDefault!       : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!       : TwnsUiButton.UiButton;
 
         private _prevScale                  : number | undefined;
         private _selectedScale              : number | undefined;
@@ -147,6 +137,7 @@ namespace TwnsUserSetStageScalePanel {
         }
         private _onTouchedPanelMask(): void {
             StageManager.setStageScale(this._prevScale || CommonConstants.StageMinScale);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonCancel01);
 
             this.close();
         }

@@ -3,6 +3,7 @@ import TwnsCommonChooseCoPanel      from "../../common/view/CommonChooseCoPanel"
 import TwnsCommonCoInfoPanel        from "../../common/view/CommonCoInfoPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import NotifyData                   from "../../tools/notify/NotifyData";
@@ -14,7 +15,6 @@ import TwnsUiLabel                  from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
 import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage                from "../../tools/ui/UiTabPage";
-import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import WarRuleHelpers               from "../../tools/warHelpers/WarRuleHelpers";
 import ScrCreateModel               from "../model/ScrCreateModel";
 
@@ -24,8 +24,8 @@ namespace TwnsScrCreatePlayerInfoPage {
     import NotifyType               = TwnsNotifyType.NotifyType;
 
     export class ScrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
-        private readonly _groupInfo     : eui.Group;
-        private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _groupInfo!    : eui.Group;
+        private readonly _listPlayer!   : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -60,7 +60,7 @@ namespace TwnsScrCreatePlayerInfoPage {
             const mapRawData    = await ScrCreateModel.getMapRawData();
             const listPlayer    = this._listPlayer;
             if (mapRawData) {
-                listPlayer.bindData(this._createDataForListPlayer(mapRawData.playersCountUnneutral));
+                listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted(mapRawData.playersCountUnneutral)));
             } else {
                 listPlayer.clear();
             }
@@ -82,19 +82,19 @@ namespace TwnsScrCreatePlayerInfoPage {
         playerIndex     : number;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private readonly _groupCo               : eui.Group;
-        private readonly _imgSkin               : TwnsUiImage.UiImage;
-        private readonly _imgCoInfo             : TwnsUiImage.UiImage;
-        private readonly _imgCoHead             : TwnsUiImage.UiImage;
-        private readonly _labelCo               : TwnsUiLabel.UiLabel;
-        private readonly _labelPlayerType       : TwnsUiLabel.UiLabel;
+        private readonly _groupCo!              : eui.Group;
+        private readonly _imgSkin!              : TwnsUiImage.UiImage;
+        private readonly _imgCoInfo!            : TwnsUiImage.UiImage;
+        private readonly _imgCoHead!            : TwnsUiImage.UiImage;
+        private readonly _labelCo!              : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerType!      : TwnsUiLabel.UiLabel;
 
-        private readonly _labelPlayerIndex      : TwnsUiLabel.UiLabel;
-        private readonly _labelTeamIndex        : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerIndex!     : TwnsUiLabel.UiLabel;
+        private readonly _labelTeamIndex!       : TwnsUiLabel.UiLabel;
 
-        private readonly _btnChangeCo           : TwnsUiButton.UiButton;
-        private readonly _btnChangeController   : TwnsUiButton.UiButton;
-        private readonly _btnChangeSkinId       : TwnsUiButton.UiButton;
+        private readonly _btnChangeCo!          : TwnsUiButton.UiButton;
+        private readonly _btnChangeController!  : TwnsUiButton.UiButton;
+        private readonly _btnChangeSkinId!      : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -123,19 +123,23 @@ namespace TwnsScrCreatePlayerInfoPage {
         }
 
         private async _onTouchedBtnChangeController(): Promise<void> {
-            ScrCreateModel.tickUserId(this.data.playerIndex);
+            ScrCreateModel.tickUserId(this._getData().playerIndex);
         }
 
         private async _onTouchedBtnChangeSkinId(): Promise<void> {
-            ScrCreateModel.tickUnitAndTileSkinId(this.data.playerIndex);
+            ScrCreateModel.tickUnitAndTileSkinId(this._getData().playerIndex);
         }
 
         private async _onTouchedBtnChangeCo(): Promise<void> {
-            const playerIndex   = this.data.playerIndex;
+            const playerIndex   = this._getData().playerIndex;
             const currentCoId   = ScrCreateModel.getCoId(playerIndex);
             TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
                 currentCoId,
-                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer(ScrCreateModel.getWarRule(), playerIndex, ConfigManager.getLatestConfigVersion()),
+                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                    warRule         : ScrCreateModel.getWarRule(),
+                    playerIndex,
+                    configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
+                }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
                         ScrCreateModel.setCoId(playerIndex, newCoId);
@@ -150,7 +154,7 @@ namespace TwnsScrCreatePlayerInfoPage {
 
         private _onNotifyScrCreatePlayerInfoChanged(e: egret.Event): void {
             const eventData = e.data as NotifyData.ScrCreatePlayerInfoChanged;
-            if (eventData.playerIndex === this.data.playerIndex) {
+            if (eventData.playerIndex === this._getData().playerIndex) {
                 this._updateComponentsForSettings();
             }
         }
@@ -171,26 +175,26 @@ namespace TwnsScrCreatePlayerInfoPage {
                 return;
             }
 
-            const playerIndex           = this.data.playerIndex;
-            const settingsForCommon     = roomInfo.settingsForCommon;
+            const playerIndex           = this._getData().playerIndex;
+            const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForCommon);
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarCommonHelpers.getTeamIndexByRuleForPlayers(settingsForCommon.warRule.ruleForPlayers, playerIndex));
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.warRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
 
             const playerData            = this._getPlayerData();
-            this._imgSkin.source        = getSourceForImgSkin(playerData ? playerData.unitAndTileSkinId : null);
+            this._imgSkin.source        = getSourceForImgSkin(Helpers.getExisted(playerData.unitAndTileSkinId));
             this._labelPlayerType.text  = playerData.userId == null
                 ? Lang.getText(LangTextType.B0607)
                 : Lang.getText(LangTextType.B0031);
 
-            const coId                  = playerData ? playerData.coId : null;
-            const coCfg                 = ConfigManager.getCoBasicCfg(settingsForCommon.configVersion, coId);
+            const coId                  = Helpers.getExisted(playerData.coId);
+            const coCfg                 = ConfigManager.getCoBasicCfg(Helpers.getExisted(settingsForCommon.configVersion), coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
         }
 
         private _getPlayerData(): ProtoTypes.Structure.IDataForPlayerInRoom {
-            return ScrCreateModel.getPlayerInfo(this.data.playerIndex);
+            return ScrCreateModel.getPlayerInfo(this._getData().playerIndex);
         }
     }
 

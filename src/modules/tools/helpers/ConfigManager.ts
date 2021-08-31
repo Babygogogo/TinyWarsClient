@@ -543,12 +543,12 @@ namespace ConfigManager {
     export function getTileDecoratorImageSource({version, skinId, decoratorType, isDark, shapeId, tickCount}: {
         version         : Types.UnitAndTileTextureVersion;
         skinId          : number;
-        decoratorType   : TileDecoratorType;
+        decoratorType   : TileDecoratorType | null;
         isDark          : boolean;
-        shapeId         : number;
+        shapeId         : number | null;
         tickCount       : number;
     }): string {
-        if (decoratorType === TileDecoratorType.Empty) {
+        if ((decoratorType == null) || (decoratorType === TileDecoratorType.Empty)) {
             return ``;
         }
 

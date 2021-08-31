@@ -38,21 +38,21 @@ namespace TwnsMfrMyRoomListPanel {
 
         private static _instance: MfrMyRoomListPanel;
 
-        private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _groupTab!             : eui.Group;
+        private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
-        private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
-        private readonly _labelFreeMode         : TwnsUiLabel.UiLabel;
-        private readonly _labelMyRoom           : TwnsUiLabel.UiLabel;
+        private readonly _groupNavigator!       : eui.Group;
+        private readonly _labelMultiPlayer!     : TwnsUiLabel.UiLabel;
+        private readonly _labelFreeMode!        : TwnsUiLabel.UiLabel;
+        private readonly _labelMyRoom!          : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack               : TwnsUiButton.UiButton;
-        private readonly _btnNextStep           : TwnsUiButton.UiButton;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnNextStep!          : TwnsUiButton.UiButton;
 
-        private readonly _groupRoomList         : eui.Group;
-        private readonly _listRoom              : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
-        private readonly _labelNoRoom           : TwnsUiLabel.UiLabel;
-        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
+        private readonly _groupRoomList!        : eui.Group;
+        private readonly _listRoom!             : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
+        private readonly _labelNoRoom!          : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
         private _isTabInitialized   = false;
@@ -325,10 +325,10 @@ namespace TwnsMfrMyRoomListPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const warData = (await MfrModel.getRoomInfo(MfrJoinModel.getJoinedPreviewingRoomId()))?.settingsForMfw.initialWarData;
+            const warData = (await MfrModel.getRoomInfo(MfrJoinModel.getJoinedPreviewingRoomId()))?.settingsForMfw?.initialWarData;
             return warData == null
                 ? {}
-                : { warInfo: { warData } };
+                : { warInfo: { warData, players: null } };
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
@@ -406,10 +406,10 @@ namespace TwnsMfrMyRoomListPanel {
         name: string;
     };
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 
@@ -417,10 +417,10 @@ namespace TwnsMfrMyRoomListPanel {
         roomId: number;
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
-        private readonly _btnChoose     : TwnsUiButton.UiButton;
-        private readonly _btnNext       : TwnsUiButton.UiButton;
-        private readonly _labelName     : TwnsUiLabel.UiLabel;
-        private readonly _imgRed        : TwnsUiLabel.UiLabel;
+        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _btnNext!      : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -435,10 +435,10 @@ namespace TwnsMfrMyRoomListPanel {
         protected async _onDataChanged(): Promise<void> {
             this._updateState();
 
-            const roomId            = this.data.roomId;
+            const roomId            = this._getData().roomId;
             const roomInfo          = await MfrModel.getRoomInfo(roomId);
             this._imgRed.visible    = await MfrModel.checkIsRedForRoom(roomId);
-            this._labelName.text    = roomInfo ? roomInfo.settingsForMfw.warName || `--` : `--`;
+            this._labelName.text    = roomInfo ? roomInfo.settingsForMfw?.warName || `--` : `--`;
         }
 
         private _onNotifyMfrJoinedPreviewingRoomIdChanged(): void {
@@ -446,18 +446,18 @@ namespace TwnsMfrMyRoomListPanel {
         }
 
         private _onTouchTapBtnChoose(): void {
-            MfrJoinModel.setJoinedPreviewingRoomId(this.data.roomId);
+            MfrJoinModel.setJoinedPreviewingRoomId(this._getData().roomId);
         }
 
         private _onTouchTapBtnNext(): void {
             MfrMyRoomListPanel.hide();
             TwnsMfrRoomInfoPanel.MfrRoomInfoPanel.show({
-                roomId  : this.data.roomId,
+                roomId  : this._getData().roomId,
             });
         }
 
         private _updateState(): void {
-            this.currentState = this.data.roomId === MfrJoinModel.getJoinedPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
+            this.currentState = this._getData().roomId === MfrJoinModel.getJoinedPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }

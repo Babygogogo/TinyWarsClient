@@ -36,4 +36,18 @@
             "}",
         ],
     },
+    "Helpers.getExisted()": {
+        "scope": "typescript",
+        "prefix": "hge",
+        "body": [
+            "Helpers.getExisted(",
+        ],
+    },
+    "Throw Error": {
+        "scope": "typescript",
+        "prefix": "te",
+        "body": [
+            "throw new Error(`$1`);",
+        ],
+    },
 }

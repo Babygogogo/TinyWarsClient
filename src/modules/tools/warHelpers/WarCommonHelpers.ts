@@ -362,7 +362,13 @@ namespace WarCommonHelpers {
     export function findNearestCapturableTile(tileMap: TwnsBwTileMap.BwTileMap, unitMap: BwUnitMap, unit: BwUnit): BwTile | null {
         const area          : MovableArea = [];
         const availableGrids: AvailableMovableGrid[] = [];
-        _updateAvailableGrids({ grids: availableGrids, index: 0, gridIndex: unit.getGridIndex(), prev: undefined, totalMoveCost: 0 });
+        _updateAvailableGrids({
+            grids           : availableGrids,
+            index           : 0,
+            gridIndex       : unit.getGridIndex(),
+            prev            : undefined,
+            totalMoveCost   : 0,
+        });
 
         const teamIndex = unit.getTeamIndex();
         const mapSize   = tileMap.getMapSize();
@@ -886,7 +892,7 @@ namespace WarCommonHelpers {
         );
     }
 
-    export function getImageSourceForSkinId(skinId: number, isSelected: boolean): string | undefined {
+    export function getImageSourceForSkinId(skinId: number, isSelected: boolean): string {
         if (skinId === 1) {
             return isSelected ? `commonCircle0000` : `commonCircle0001`;
         } else if (skinId === 2) {
@@ -896,7 +902,7 @@ namespace WarCommonHelpers {
         } else if (skinId === 4) {
             return isSelected ? `commonCircle0006` : `commonCircle0007`;
         } else {
-            return undefined;
+            return ``;
         }
     }
 

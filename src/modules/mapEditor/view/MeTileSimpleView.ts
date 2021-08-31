@@ -1,10 +1,10 @@
 
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Logger           from "../../tools/helpers/Logger";
-import Types            from "../../tools/helpers/Types";
 import CommonModel      from "../../common/model/CommonModel";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Helpers          from "../../tools/helpers/Helpers";
 import Timer            from "../../tools/helpers/Timer";
+import Types            from "../../tools/helpers/Types";
+import TwnsUiImage      from "../../tools/ui/UiImage";
 import UserModel        from "../../user/model/UserModel";
 
 namespace TwnsMeTileSimpleView {
@@ -15,17 +15,17 @@ namespace TwnsMeTileSimpleView {
     const { height: GRID_HEIGHT }   = CommonConstants.GridSize;
 
     export class MeTileSimpleView {
-        private _imgBase        = new TwnsUiImage.UiImage();
-        private _imgDecorator   = new TwnsUiImage.UiImage();
-        private _imgObject      = new TwnsUiImage.UiImage();
+        private readonly _imgBase       = new TwnsUiImage.UiImage();
+        private readonly _imgDecorator  = new TwnsUiImage.UiImage();
+        private readonly _imgObject     = new TwnsUiImage.UiImage();
 
-        private _baseType           : TileBaseType;
-        private _baseShapeId        : number;
-        private _decoratorType      : TileDecoratorType;
-        private _decoratorShapeId   : number;
-        private _objectType         : TileObjectType;
-        private _objectShapeId      : number;
-        private _playerIndex        : number;
+        private _baseType           : TileBaseType | null = null;
+        private _baseShapeId        : number | null = null;
+        private _decoratorType      : TileDecoratorType | null = null;
+        private _decoratorShapeId   : number | null = null;
+        private _objectType         : TileObjectType | null = null;
+        private _objectShapeId      : number | null = null;
+        private _playerIndex        : number | null = null;
 
         public constructor() {
             this.getImgBase().anchorOffsetY         = GRID_HEIGHT;
@@ -34,19 +34,14 @@ namespace TwnsMeTileSimpleView {
         }
 
         public init({ tileBaseType, tileBaseShapeId, tileDecoratorType, tileDecoratorShapeId, tileObjectType, tileObjectShapeId, playerIndex }: {
-            tileBaseType        : TileBaseType;
-            tileBaseShapeId     : number;
-            tileDecoratorType   : TileDecoratorType;
-            tileDecoratorShapeId: number;
+            tileBaseType        : TileBaseType | null;
+            tileBaseShapeId     : number | null;
+            tileDecoratorType   : TileDecoratorType | null;
+            tileDecoratorShapeId: number | null;
             tileObjectType      : TileObjectType;
             tileObjectShapeId   : number;
             playerIndex         : number;
         }): MeTileSimpleView {
-            if (playerIndex == null) {
-                Logger.error(`MeTileSimpleView.init() empty playerIndex.`);
-                return undefined;
-            }
-
             this._baseType          = tileBaseType;
             this._baseShapeId       = tileBaseShapeId;
             this._decoratorType     = tileDecoratorType;
@@ -63,10 +58,6 @@ namespace TwnsMeTileSimpleView {
         }
 
         public updateView(): void {
-            this._updateImages();
-        }
-
-        public setHasFog(hasFog: boolean): void {
             this._updateImages();
         }
 
@@ -87,7 +78,6 @@ namespace TwnsMeTileSimpleView {
         protected _updateImages(): void {
             const version   = UserModel.getSelfSettingsTextureVersion();
             const tickCount = Timer.getTileAnimationTickCount();
-            const skinId    = this._playerIndex;
 
             {
                 const objectType    = this._objectType;
@@ -98,10 +88,10 @@ namespace TwnsMeTileSimpleView {
                     imgObject.visible = true;
                     imgObject.source  = CommonModel.getCachedTileObjectImageSource({
                         version,
-                        skinId,
+                        skinId      : Helpers.getExisted(this._playerIndex),
                         objectType,
                         isDark      : false,
-                        shapeId     : this._objectShapeId,
+                        shapeId     : Helpers.getExisted(this._objectShapeId),
                         tickCount,
                     });
                 }
@@ -119,7 +109,7 @@ namespace TwnsMeTileSimpleView {
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                         baseType,
                         isDark      : false,
-                        shapeId     : this._baseShapeId,
+                        shapeId     : Helpers.getExisted(this._baseShapeId),
                         tickCount,
                     });
                 }
@@ -137,7 +127,7 @@ namespace TwnsMeTileSimpleView {
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                         decoratorType,
                         isDark      : false,
-                        shapeId     : this._decoratorShapeId,
+                        shapeId     : Helpers.getExisted(this._decoratorShapeId),
                         tickCount,
                     });
                 }

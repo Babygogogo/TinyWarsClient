@@ -1,10 +1,11 @@
 
-import Types            from "./Types";
 import Notify           from "../notify/Notify";
 import TwnsNotifyType   from "../notify/NotifyType";
-import Logger           from "./Logger";
-import CommonConstants  from "./CommonConstants";
 import TwnsUiPanel      from "../ui/UiPanel";
+import CommonConstants  from "./CommonConstants";
+import Helpers          from "./Helpers";
+import Logger           from "./Logger";
+import Types            from "./Types";
 
 namespace StageManager {
     import LayerType            = Types.LayerType;
@@ -28,11 +29,11 @@ namespace StageManager {
         if (!egret.Capabilities.isMobile) {
             mouse.enable(_stage);
             mouse.setMouseMoveEnabled(true);
-            _stage.addEventListener(mouse.MouseEvent.MOUSE_MOVE,  _onMouseMove,  undefined);
-            _stage.addEventListener(mouse.MouseEvent.MOUSE_WHEEL, _onMouseWheel, undefined);
+            _stage.addEventListener(mouse.MouseEvent.MOUSE_MOVE,  _onMouseMove,  null);
+            _stage.addEventListener(mouse.MouseEvent.MOUSE_WHEEL, _onMouseWheel, null);
         }
-        stg.addEventListener(egret.TouchEvent.TOUCH_BEGIN,  _onTouchBegin,  undefined);
-        stg.addEventListener(egret.TouchEvent.TOUCH_MOVE,   _onTouchMove,   undefined);
+        stg.addEventListener(egret.TouchEvent.TOUCH_BEGIN,  _onTouchBegin,  null);
+        stg.addEventListener(egret.TouchEvent.TOUCH_MOVE,   _onTouchMove,   null);
 
         if (!egret.Capabilities.isMobile) {
             stg.orientation = egret.OrientationMode.AUTO;
@@ -76,8 +77,8 @@ namespace StageManager {
         return _mouseY;
     }
 
-    export function getLayer(layer: LayerType): UiLayer | undefined {
-        return _LAYERS.get(layer);
+    export function getLayer(layer: LayerType): UiLayer {
+        return Helpers.getExisted(_LAYERS.get(layer));
     }
 
     export function setStageScale(scale: number): void {

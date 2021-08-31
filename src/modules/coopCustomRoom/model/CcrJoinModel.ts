@@ -1,9 +1,9 @@
 
 import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Helpers          from "../../tools/helpers/Helpers";
 import Notify           from "../../tools/notify/Notify";
 import TwnsNotifyType   from "../../tools/notify/NotifyType";
 import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import CcrModel         from "./CcrModel";
 import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
 
 namespace CcrJoinModel {
@@ -12,8 +12,8 @@ namespace CcrJoinModel {
 
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgCcrJoinRoom.IC;
 
-    let _targetRoomId           : number;
-    let _joinedPreviewingRoomId : number;
+    let _targetRoomId           : number | null = null;
+    let _joinedPreviewingRoomId : number | null = null;
 
     export function getFastJoinData(roomInfo: ICcrRoomInfo): DataForJoinRoom | null {
         const playerIndex       = generateAvailablePlayerIndexList(roomInfo)[0];
@@ -24,7 +24,7 @@ namespace CcrJoinModel {
             return {
                 roomId          : roomInfo.roomId,
                 isReady         : false,
-                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
+                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(Helpers.getExisted(roomInfo.settingsForCommon), playerIndex),
                 playerIndex,
                 unitAndTileSkinId,
             };
@@ -40,12 +40,8 @@ namespace CcrJoinModel {
             Notify.dispatch(NotifyType.CcrJoinTargetRoomIdChanged);
         }
     }
-    export async function getTargetRoomInfo(): Promise<ICcrRoomInfo | null> {
-        const roomId = getTargetRoomId();
-        return roomId == null ? null : await CcrModel.getRoomInfo(roomId);
-    }
 
-    export function getJoinedPreviewingRoomId(): number {
+    export function getJoinedPreviewingRoomId(): number | null {
         return _joinedPreviewingRoomId;
     }
     export function setJoinedPreviewingRoomId(roomId: number | null): void {
@@ -56,8 +52,8 @@ namespace CcrJoinModel {
     }
 
     function generateAvailablePlayerIndexList(info: ICcrRoomInfo): number[] {
-        const playersCount      = WarRuleHelpers.getPlayersCount(info.settingsForCommon.warRule);
-        const playerInfoList    = info.playerDataList;
+        const playersCount      = WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(info.settingsForCommon?.warRule));
+        const playerInfoList    = Helpers.getExisted(info.playerDataList);
         const indexes           : number[] = [];
         for (let i = 1; i <= playersCount; ++i) {
             if (playerInfoList.every(v => v.playerIndex !== i)) {
@@ -68,9 +64,10 @@ namespace CcrJoinModel {
     }
 
     function generateAvailableSkinIdList(roomInfo: ICcrRoomInfo): number[] {
-        const idList: number[] = [];
+        const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
+        const idList            : number[] = [];
         for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
-            if (roomInfo.playerDataList.every(v => v.unitAndTileSkinId !== skinId)) {
+            if (playerDataList.every(v => v.unitAndTileSkinId !== skinId)) {
                 idList.push(skinId);
             }
         }

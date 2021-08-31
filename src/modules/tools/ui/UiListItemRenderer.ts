@@ -1,6 +1,7 @@
 
-import Notify      from "../notify/Notify";
-import Types       from "../helpers/Types";
+import Notify       from "../notify/Notify";
+import Types        from "../helpers/Types";
+import Helpers      from "../helpers/Helpers";
 
 namespace TwnsUiListItemRenderer {
     import UiListener       = Types.UiListener;
@@ -15,7 +16,7 @@ namespace TwnsUiListItemRenderer {
         private _notifyListenerArray        : Notify.Listener[] | undefined;
         private _uiListenerArray            : UiListener[] | undefined;
 
-        public data                         : DataForRenderer | null | undefined;
+        public data                         : Types.Undefinable<DataForRenderer>;
         private _isDataChangedBeforeOpen    = false;
 
         public constructor() {
@@ -121,6 +122,10 @@ namespace TwnsUiListItemRenderer {
         }
         private _setIsDataChangedBeforeOpen(isChanged: boolean): void {
             this._isDataChangedBeforeOpen = isChanged;
+        }
+
+        protected _getData(): DataForRenderer {
+            return Helpers.getExisted(this.data);
         }
 
         protected _setShortSfxCode(code: ShortSfxCode): void {

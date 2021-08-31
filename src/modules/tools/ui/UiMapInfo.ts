@@ -7,7 +7,8 @@ import WarMapModel              from "../../warMap/model/WarMapModel";
 import CommonConstants          from "../helpers/CommonConstants";
 import ConfigManager            from "../helpers/ConfigManager";
 import FloatText                from "../helpers/FloatText";
-import SoundManager from "../helpers/SoundManager";
+import Helpers                  from "../helpers/Helpers";
+import SoundManager             from "../helpers/SoundManager";
 import Types                    from "../helpers/Types";
 import Lang                     from "../lang/Lang";
 import TwnsLangTextType         from "../lang/LangTextType";
@@ -33,27 +34,27 @@ namespace TwnsUiMapInfo {
     };
 
     export class UiMapInfo extends TwnsUiComponent.UiComponent {
-        private readonly _groupTile             : eui.Group;
-        private readonly _listTile              : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
+        private readonly _groupTile!                : eui.Group;
+        private readonly _listTile!                 : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
 
-        private readonly _groupMapInfo          : eui.Group;
-        private readonly _labelMapName          : TwnsUiLabel.UiLabel;
-        private readonly _labelDesignerTitle    : TwnsUiLabel.UiLabel;
-        private readonly _labelDesigner         : TwnsUiLabel.UiLabel;
-        private readonly _labelRatingTitle      : TwnsUiLabel.UiLabel;
-        private readonly _labelRating           : TwnsUiLabel.UiLabel;
-        private readonly _groupMyRating         : eui.Group;
-        private readonly _labelMyRatingTitle    : TwnsUiLabel.UiLabel;
-        private readonly _labelMyRating         : TwnsUiLabel.UiLabel;
-        private readonly _imgSetMyRating        : TwnsUiImage.UiImage;
-        private readonly _labelPlayedTimesTitle : TwnsUiLabel.UiLabel;
-        private readonly _labelPlayedTimes      : TwnsUiLabel.UiLabel;
-        private readonly _labelPlayersCountTitle: TwnsUiLabel.UiLabel;
-        private readonly _labelPlayersCount     : TwnsUiLabel.UiLabel;
-        private readonly _labelMapSizeTitle     : TwnsUiLabel.UiLabel;
-        private readonly _labelMapSize          : TwnsUiLabel.UiLabel;
+        private readonly _groupMapInfo!             : eui.Group;
+        private readonly _labelMapName!             : TwnsUiLabel.UiLabel;
+        private readonly _labelDesignerTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelDesigner!            : TwnsUiLabel.UiLabel;
+        private readonly _labelRatingTitle!         : TwnsUiLabel.UiLabel;
+        private readonly _labelRating!              : TwnsUiLabel.UiLabel;
+        private readonly _groupMyRating!            : eui.Group;
+        private readonly _labelMyRatingTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelMyRating!            : TwnsUiLabel.UiLabel;
+        private readonly _imgSetMyRating!           : TwnsUiImage.UiImage;
+        private readonly _labelPlayedTimesTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayedTimes!         : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayersCountTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayersCount!        : TwnsUiLabel.UiLabel;
+        private readonly _labelMapSizeTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelMapSize!             : TwnsUiLabel.UiLabel;
 
-        private _data: DataForUiMapInfo | null;
+        private _data: DataForUiMapInfo | null = null;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -153,34 +154,34 @@ namespace TwnsUiMapInfo {
             const mapInfo = data.mapInfo;
             if (mapInfo) {
                 const mapId             = mapInfo.mapId;
-                const mapRawData        = await WarMapModel.getRawData(mapId);
+                const mapRawData        = Helpers.getExisted(await WarMapModel.getRawData(mapId));
                 const rating            = await WarMapModel.getAverageRating(mapId);
                 const myRating          = UserModel.getMapRating(mapId);
-                labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId);
-                labelDesigner.text      = mapRawData.designerName;
+                labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
+                labelDesigner.text      = mapRawData.designerName || CommonConstants.ErrorTextForUndefined;
                 labelPlayersCount.text  = `${mapRawData.playersCountUnneutral}`;
                 labelRating.text        = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
                 labelMyRating.text      = myRating != null ? `${myRating}` : Lang.getText(LangTextType.B0001);
                 labelPlayedTimes.text   = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)}`;
                 labelMapSize.text       = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
                 btnSetMyRating.visible  = true;
-                this._listTile.bindData(generateDataForListTile(mapRawData.tileDataArray));
+                this._listTile.bindData(generateDataForListTile(Helpers.getExisted(mapRawData.tileDataArray)));
 
                 return;
             }
 
             const warData = data.warData;
             if (warData) {
-                const tileMapData       = warData.field.tileMap;
+                const tileMapData       = Helpers.getExisted(warData.field?.tileMap);
                 const mapSize           = WarCommonHelpers.getMapSize(tileMapData);
                 labelMapName.text       = `--`;
                 labelDesigner.text      = `--`;
-                labelPlayersCount.text  = `${warData.playerManager.players.length - 1}`;
+                labelPlayersCount.text  = `${Helpers.getExisted(warData.playerManager?.players).length - 1}`;
                 labelRating.text        = `--`;
                 labelPlayedTimes.text   = `--`;
                 labelMapSize.text       = `${mapSize.width} x ${mapSize.height}`;
                 btnSetMyRating.visible  = false;
-                this._listTile.bindData(generateDataForListTile(tileMapData.tiles));
+                this._listTile.bindData(generateDataForListTile(Helpers.getExisted(tileMapData.tiles)));
 
                 return;
             }
@@ -190,7 +191,7 @@ namespace TwnsUiMapInfo {
     function generateDataForListTile(tileDataArray: ProtoTypes.WarSerialization.ISerialTile[]): DataForTileRenderer[] {
         const tileCountDict = new Map<TileType, number>();
         for (const tile of tileDataArray || []) {
-            const tileType = ConfigManager.getTileType(tile.baseType, tile.objectType);
+            const tileType = ConfigManager.getTileType(Helpers.getExisted(tile.baseType), Helpers.getExisted(tile.objectType));
             if (tileType != null) {
                 tileCountDict.set(tileType, (tileCountDict.get(tileType) || 0) + 1);
             }
@@ -221,9 +222,9 @@ namespace TwnsUiMapInfo {
         num             : number;
     };
     class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
-        private _group          : eui.Group;
-        private _conTileView    : eui.Group;
-        private _labelNum       : TwnsUiLabel.UiLabel;
+        private readonly _group!        : eui.Group;
+        private readonly _conTileView!  : eui.Group;
+        private readonly _labelNum!     : TwnsUiLabel.UiLabel;
 
         private _tileView       = new TwnsMeTileSimpleView.MeTileSimpleView();
 
@@ -231,6 +232,7 @@ namespace TwnsUiMapInfo {
             this._setNotifyListenerArray([
                 { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
 
             const tileView      = this._tileView;
             const conTileView   = this._conTileView;
@@ -245,7 +247,7 @@ namespace TwnsUiMapInfo {
         }
 
         protected _onDataChanged(): void {
-            const data          = this.data;
+            const data          = this._getData();
             this._labelNum.text = `x${data.num}`;
 
             const tileObjectType = ConfigManager.getTileObjectTypeByTileType(data.tileType);

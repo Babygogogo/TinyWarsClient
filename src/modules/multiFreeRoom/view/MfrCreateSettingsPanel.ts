@@ -8,7 +8,6 @@ import CommonConstants                      from "../../tools/helpers/CommonCons
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
-import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
 import TwnsLangTextType                     from "../../tools/lang/LangTextType";
@@ -46,35 +45,35 @@ namespace TwnsMfrCreateSettingsPanel {
 
         private static _instance: MfrCreateSettingsPanel;
 
-        private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
-        private readonly _labelFreeMode         : TwnsUiLabel.UiLabel;
-        private readonly _labelCreateRoom       : TwnsUiLabel.UiLabel;
-        private readonly _labelRoomSettings     : TwnsUiLabel.UiLabel;
+        private readonly _groupNavigator!           : eui.Group;
+        private readonly _labelMultiPlayer!         : TwnsUiLabel.UiLabel;
+        private readonly _labelFreeMode!            : TwnsUiLabel.UiLabel;
+        private readonly _labelCreateRoom!          : TwnsUiLabel.UiLabel;
+        private readonly _labelRoomSettings!        : TwnsUiLabel.UiLabel;
 
-        private readonly _groupSettings         : eui.Group;
-        private readonly _groupChoosePlayerIndex: eui.Group;
-        private readonly _labelChoosePlayerIndex: TwnsUiLabel.UiLabel;
-        private readonly _sclPlayerIndex        : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
+        private readonly _groupSettings!            : eui.Group;
+        private readonly _groupChoosePlayerIndex!   : eui.Group;
+        private readonly _labelChoosePlayerIndex!   : TwnsUiLabel.UiLabel;
+        private readonly _sclPlayerIndex!           : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
 
-        private readonly _groupChooseSkinId     : eui.Group;
-        private readonly _labelChooseSkinId     : TwnsUiLabel.UiLabel;
-        private readonly _sclSkinId             : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
+        private readonly _groupChooseSkinId!        : eui.Group;
+        private readonly _labelChooseSkinId!        : TwnsUiLabel.UiLabel;
+        private readonly _sclSkinId!                : TwnsUiScrollList.UiScrollList<DataForSkinIdRenderer>;
 
-        private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _groupTab!                 : eui.Group;
+        private readonly _tabSettings!              : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage>;
 
-        private readonly _btnBack               : TwnsUiButton.UiButton;
-        private readonly _btnConfirm            : TwnsUiButton.UiButton;
+        private readonly _btnBack!                  : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!               : TwnsUiButton.UiButton;
 
-        private _timeoutIdForBtnConfirm : number;
+        private _timeoutIdForBtnConfirm : number | null = null;
         private _isTabInitialized       = false;
 
         public static show(): void {
             if (!MfrCreateSettingsPanel._instance) {
                 MfrCreateSettingsPanel._instance = new MfrCreateSettingsPanel();
             }
-            MfrCreateSettingsPanel._instance.open(undefined);
+            MfrCreateSettingsPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MfrCreateSettingsPanel._instance) {
@@ -111,10 +110,12 @@ namespace TwnsMfrCreateSettingsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : MfrCreateAdvancedSettingsPage,
+                    pageData    : null,
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : MfrCreatePlayerInfoPage,
+                    pageData    : null,
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
@@ -166,14 +167,14 @@ namespace TwnsMfrCreateSettingsPanel {
             this._clearTimeoutForBtnConfirm();
             this._timeoutIdForBtnConfirm = egret.setTimeout(() => {
                 this._btnConfirm.enabled     = true;
-                this._timeoutIdForBtnConfirm = undefined;
+                this._timeoutIdForBtnConfirm = null;
             }, this, CONFIRM_INTERVAL_MS);
         }
 
         private _clearTimeoutForBtnConfirm(): void {
             if (this._timeoutIdForBtnConfirm != null) {
                 egret.clearTimeout(this._timeoutIdForBtnConfirm);
-                this._timeoutIdForBtnConfirm = undefined;
+                this._timeoutIdForBtnConfirm = null;
             }
         }
 
@@ -192,7 +193,7 @@ namespace TwnsMfrCreateSettingsPanel {
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
-            const playersCountUnneutral = MfrCreateModel.getInitialWarData().playerManager.players.length - 1;
+            const playersCountUnneutral = Helpers.getExisted(MfrCreateModel.getInitialWarData().playerManager?.players).length - 1;
             const dataArray             : DataForPlayerIndexRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
@@ -216,7 +217,7 @@ namespace TwnsMfrCreateSettingsPanel {
             const warData = MfrCreateModel.getInitialWarData();
             return warData == null
                 ? {}
-                : { warInfo: { warData } };
+                : { warInfo: { warData, players: null } };
         }
 
         private _updateCommonWarBasicSettingsPage(): void {
@@ -235,7 +236,10 @@ namespace TwnsMfrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.WarName,
                         currentValue    : MfrCreateModel.getWarName(),
                         warRule,
-                        callbackOnModify: (newValue: string) => {
+                        callbackOnModify: (newValue: string | number | null) => {
+                            if (typeof newValue === "number") {
+                                throw new Error(`Invalid newValue: ${newValue}`);
+                            }
                             MfrCreateModel.setWarName(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
@@ -244,7 +248,10 @@ namespace TwnsMfrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.WarPassword,
                         currentValue    : MfrCreateModel.getWarPassword(),
                         warRule,
-                        callbackOnModify: (newValue: string) => {
+                        callbackOnModify: (newValue: string | number | null) => {
+                            if (typeof newValue === "number") {
+                                throw new Error(`Invalid newValue: ${newValue}`);
+                            }
                             MfrCreateModel.setWarPassword(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
@@ -253,22 +260,25 @@ namespace TwnsMfrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.WarComment,
                         currentValue    : MfrCreateModel.getWarComment(),
                         warRule,
-                        callbackOnModify: (newValue: string) => {
+                        callbackOnModify: (newValue: string | number | null) => {
+                            if (typeof newValue === "number") {
+                                throw new Error(`Invalid newValue: ${newValue}`);
+                            }
                             MfrCreateModel.setWarComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
-                        currentValue    : undefined,
+                        currentValue    : null,
                         warRule,
-                        callbackOnModify: undefined,
+                        callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
-                        currentValue    : undefined,
+                        currentValue    : null,
                         warRule,
-                        callbackOnModify: undefined,
+                        callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.TimerType,
@@ -297,7 +307,10 @@ namespace TwnsMfrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                         currentValue    : bootTimerParams[1],
                         warRule,
-                        callbackOnModify: (newValue: number) => {
+                        callbackOnModify: (newValue: number | string | null) => {
+                            if (typeof newValue !== "number") {
+                                throw new Error(`Invalid newValue: ${newValue}`);
+                            }
                             MfrCreateModel.setTimerIncrementalInitialTime(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
@@ -306,14 +319,17 @@ namespace TwnsMfrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                         currentValue    : bootTimerParams[2],
                         warRule,
-                        callbackOnModify: (newValue: number) => {
+                        callbackOnModify: (newValue: number | string | null) => {
+                            if (typeof newValue !== "number") {
+                                throw new Error(`Invalid newValue: ${newValue}`);
+                            }
                             MfrCreateModel.setTimerIncrementalIncrementalValue(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                 );
             } else {
-                Logger.error(`MfrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+                throw new Error(`MfrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
             }
 
             return openData;
@@ -385,10 +401,10 @@ namespace TwnsMfrCreateSettingsPanel {
         name: string;
     };
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 
@@ -396,7 +412,7 @@ namespace TwnsMfrCreateSettingsPanel {
         playerIndex: number;
     };
     class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerIndexRenderer> {
-        private readonly _labelName : TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -416,7 +432,7 @@ namespace TwnsMfrCreateSettingsPanel {
             if (data) {
                 const creator       = MfrCreateModel;
                 const playerIndex   = data.playerIndex;
-                const playerData    = creator.getInitialWarData().playerManager.players.find(v => v.playerIndex === playerIndex);
+                const playerData    = creator.getInitialWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex);
                 if ((playerData == null)                                    ||
                     (playerData.aliveState === Types.PlayerAliveState.Dead) ||
                     (playerData.userId == null)
@@ -454,7 +470,7 @@ namespace TwnsMfrCreateSettingsPanel {
         skinId: number;
     };
     class SkinIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkinIdRenderer> {
-        private readonly _imgColor  : TwnsUiImage.UiImage;
+        private readonly _imgColor! : TwnsUiImage.UiImage;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

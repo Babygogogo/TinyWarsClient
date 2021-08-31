@@ -4,7 +4,6 @@ import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBas
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
-import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
 import TwnsLangTextType                     from "../../tools/lang/LangTextType";
@@ -38,26 +37,26 @@ namespace TwnsCcrCreateSettingsPanel {
 
         private static _instance: CcrCreateSettingsPanel;
 
-        private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
-        private readonly _labelCreateRoom       : TwnsUiLabel.UiLabel;
-        private readonly _labelChooseMap        : TwnsUiLabel.UiLabel;
-        private readonly _labelRoomSettings     : TwnsUiLabel.UiLabel;
+        private readonly _groupNavigator!       : eui.Group;
+        private readonly _labelMultiPlayer!     : TwnsUiLabel.UiLabel;
+        private readonly _labelCreateRoom!      : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseMap!       : TwnsUiLabel.UiLabel;
+        private readonly _labelRoomSettings!    : TwnsUiLabel.UiLabel;
 
-        private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _groupTab!             : eui.Group;
+        private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage>;
 
-        private readonly _btnBack               : TwnsUiButton.UiButton;
-        private readonly _btnConfirm            : TwnsUiButton.UiButton;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!           : TwnsUiButton.UiButton;
 
-        private _timeoutIdForBtnConfirm : number;
+        private _timeoutIdForBtnConfirm : number | null = null;
         private _isTabInitialized       = false;
 
         public static show(): void {
             if (!CcrCreateSettingsPanel._instance) {
                 CcrCreateSettingsPanel._instance = new CcrCreateSettingsPanel();
             }
-            CcrCreateSettingsPanel._instance.open(undefined);
+            CcrCreateSettingsPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (CcrCreateSettingsPanel._instance) {
@@ -92,10 +91,12 @@ namespace TwnsCcrCreateSettingsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : CcrCreateAdvancedSettingsPage,
+                    pageData    : null,
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : CcrCreatePlayerInfoPage,
+                    pageData    : null,
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
@@ -143,14 +144,14 @@ namespace TwnsCcrCreateSettingsPanel {
             this._clearTimeoutForBtnConfirm();
             this._timeoutIdForBtnConfirm = egret.setTimeout(() => {
                 this._btnConfirm.enabled     = true;
-                this._timeoutIdForBtnConfirm = undefined;
+                this._timeoutIdForBtnConfirm = null;
             }, this, CONFIRM_INTERVAL_MS);
         }
 
         private _clearTimeoutForBtnConfirm(): void {
             if (this._timeoutIdForBtnConfirm != null) {
                 egret.clearTimeout(this._timeoutIdForBtnConfirm);
-                this._timeoutIdForBtnConfirm = undefined;
+                this._timeoutIdForBtnConfirm = null;
             }
         }
 
@@ -182,13 +183,16 @@ namespace TwnsCcrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.MapName,
                         currentValue    : await WarMapModel.getMapNameInCurrentLanguage(CcrCreateModel.getMapId()),
                         warRule,
-                        callbackOnModify: undefined,
+                        callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarName,
                         currentValue    : CcrCreateModel.getWarName(),
                         warRule,
-                        callbackOnModify: (newValue: string) => {
+                        callbackOnModify: (newValue: string | number | null) => {
+                            if (typeof newValue === "number") {
+                                throw new Error(`Invalid newValue: ${newValue}`);
+                            }
                             CcrCreateModel.setWarName(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
@@ -197,7 +201,10 @@ namespace TwnsCcrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.WarPassword,
                         currentValue    : CcrCreateModel.getWarPassword(),
                         warRule,
-                        callbackOnModify: (newValue: string) => {
+                        callbackOnModify: (newValue: string | number | null) => {
+                            if (typeof newValue === "number") {
+                                throw new Error(`Invalid newValue: ${newValue}`);
+                            }
                             CcrCreateModel.setWarPassword(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
@@ -206,14 +213,17 @@ namespace TwnsCcrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.WarComment,
                         currentValue    : CcrCreateModel.getWarComment(),
                         warRule,
-                        callbackOnModify: (newValue: string) => {
+                        callbackOnModify: (newValue: string | number | null) => {
+                            if (typeof newValue === "number") {
+                                throw new Error(`Invalid newValue: ${newValue}`);
+                            }
                             CcrCreateModel.setWarComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
-                        currentValue    : undefined,
+                        currentValue    : null,
                         warRule,
                         callbackOnModify: async () => {
                             await CcrCreateModel.tickPresetWarRuleId();
@@ -222,7 +232,7 @@ namespace TwnsCcrCreateSettingsPanel {
                     },
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
-                        currentValue    : undefined,
+                        currentValue    : null,
                         warRule,
                         callbackOnModify: () => {
                             CcrCreateModel.setHasFog(!CcrCreateModel.getHasFog());
@@ -257,7 +267,10 @@ namespace TwnsCcrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                         currentValue    : bootTimerParams[1],
                         warRule,
-                        callbackOnModify: (newValue: number) => {
+                        callbackOnModify: (newValue: number | string | null) => {
+                            if (typeof newValue !== "number") {
+                                throw new Error(`Invalid newValue: ${newValue}`);
+                            }
                             CcrCreateModel.setTimerIncrementalInitialTime(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
@@ -266,14 +279,17 @@ namespace TwnsCcrCreateSettingsPanel {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                         currentValue    : bootTimerParams[2],
                         warRule,
-                        callbackOnModify: (newValue: number) => {
+                        callbackOnModify: (newValue: number | string | null) => {
+                            if (typeof newValue !== "number") {
+                                throw new Error(`Invalid newValue: ${newValue}`);
+                            }
                             CcrCreateModel.setTimerIncrementalIncrementalValue(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                 );
             } else {
-                Logger.error(`CcrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+                throw new Error(`CcrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
             }
 
             return openData;
@@ -342,10 +358,10 @@ namespace TwnsCcrCreateSettingsPanel {
         name: string;
     };
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 }

@@ -219,7 +219,7 @@ namespace Helpers {
         return (length >= minLength) && (length <= maxLength);
     }
     export function checkIsValidLanguageTextArray({ list, minTextLength, maxTextLength, minTextCount }: {
-        list            : ILanguageText[];
+        list            : Types.Undefinable<ILanguageText[]>;
         minTextLength   : number;
         maxTextLength   : number;
         minTextCount    : number;
@@ -471,6 +471,21 @@ namespace Helpers {
         if (callback) {
             tween.call(callback);
         }
+    }
+
+    export function getDefined<T>(value: T | undefined): T {
+        if (value === undefined) {
+            throw new Error(`Undefined value.`);
+        }
+
+        return value;
+    }
+    export function getExisted<T>(value: T | null | undefined): T {
+        if (value == null) {
+            throw new Error(`Empty value`);
+        }
+
+        return value;
     }
 }
 

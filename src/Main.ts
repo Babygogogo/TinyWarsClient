@@ -39,7 +39,7 @@ class Main extends egret.DisplayObjectContainer {
         this.once(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
     }
 
-    private _onAddedToStage(event: egret.Event): void {
+    private _onAddedToStage(): void {
         egret.lifecycle.addLifecycleListener((context) => {
             // custom lifecycle plugin
             context.onUpdate = () => {

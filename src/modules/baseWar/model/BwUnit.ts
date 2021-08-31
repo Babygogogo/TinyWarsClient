@@ -1357,24 +1357,25 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for grid position.
         ////////////////////////////////////////////////////////////////////////////////
-        public getGridX(): number | undefined {
-            return this._gridX;
+        public getGridX(): number {
+            return Helpers.getExisted(this._gridX);
         }
         public setGridX(x: number): void {
             this._gridX = x;
         }
 
-        public getGridY(): number | undefined {
-            return this._gridY;
+        public getGridY(): number {
+            return Helpers.getExisted(this._gridY);
         }
         public setGridY(y: number): void {
             this._gridY = y;
         }
 
-        public getGridIndex(): GridIndex | undefined {
-            const x = this.getGridX();
-            const y = this.getGridY();
-            return ((x != null) && (y != null)) ? { x, y } : undefined;
+        public getGridIndex(): GridIndex {
+            return {
+                x   : this.getGridX(),
+                y   : this.getGridY(),
+            };
         }
         public setGridIndex(gridIndex: GridIndex): void {
             this.setGridX(gridIndex.x);

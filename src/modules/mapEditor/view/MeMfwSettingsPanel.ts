@@ -7,6 +7,7 @@ import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreate
 import TwnsTwWar                        from "../../testWar/model/TwWar";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
+import Helpers                          from "../../tools/helpers/Helpers";
 import StageManager                     from "../../tools/helpers/StageManager";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
@@ -38,10 +39,10 @@ namespace TwnsMeMfwSettingsPanel {
 
         private static _instance: MeMfwSettingsPanel;
 
-        private _tabSettings    : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
-        private _labelMenuTitle : TwnsUiLabel.UiLabel;
-        private _btnBack        : TwnsUiButton.UiButton;
-        private _btnConfirm     : TwnsUiButton.UiButton;
+        private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
+        private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnBack!          : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!       : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MeMfwSettingsPanel._instance) {
@@ -74,12 +75,14 @@ namespace TwnsMeMfwSettingsPanel {
 
             this._tabSettings.bindData([
                 {
-                    tabItemData: { name: Lang.getText(LangTextType.B0002) },
-                    pageClass  : MeMfwBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : MeMfwBasicSettingsPage,
+                    pageData    : void 0,
                 },
                 {
-                    tabItemData: { name: Lang.getText(LangTextType.B0003) },
-                    pageClass  : MeMfwAdvancedSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0003) },
+                    pageClass   : MeMfwAdvancedSettingsPage,
+                    pageData    : void 0,
                 },
             ]);
 
@@ -118,9 +121,9 @@ namespace TwnsMeMfwSettingsPanel {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : data.slotIndex,
-                        slotExtraData   : data.extraData,
-                        warData         : data.warData,
+                        slotIndex       : Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Helpers.getExisted(data.extraData),
+                        warData         : Helpers.getExisted(data.warData),
                     });
                 },
             });
@@ -142,10 +145,10 @@ namespace TwnsMeMfwSettingsPanel {
     };
 
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 }
