@@ -832,19 +832,19 @@ namespace WarCommonHelpers {
         return needSerialize ? data : undefined;
     }
 
-    export function getMapId(warData: ISerialWar): number | undefined | null {
+    export function getMapId(warData: ISerialWar): number | null {
         if (warData.settingsForMcw) {
-            return warData.settingsForMcw.mapId;
+            return Helpers.getExisted(warData.settingsForMcw.mapId);
         } else if (warData.settingsForMrw) {
-            return warData.settingsForMrw.mapId;
+            return Helpers.getExisted(warData.settingsForMrw.mapId);
         } else if (warData.settingsForScw) {
-            return warData.settingsForScw.mapId;
+            return Helpers.getExisted(warData.settingsForScw.mapId);
         } else if (warData.settingsForCcw) {
-            return warData.settingsForCcw.mapId;
+            return Helpers.getExisted(warData.settingsForCcw.mapId);
         } else if (warData.settingsForSrw) {
-            return warData.settingsForSrw.mapId;
+            return Helpers.getExisted(warData.settingsForSrw.mapId);
         } else {
-            return undefined;
+            return null;
         }
     }
     export function getWarType(warData: ISerialWar): WarType {

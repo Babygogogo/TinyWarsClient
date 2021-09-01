@@ -14,8 +14,8 @@ namespace TwnsCommonBlockPanel {
 
         private static _instance: CommonBlockPanel;
 
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _labelContent   : TwnsUiLabel.UiLabel;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelContent! : TwnsUiLabel.UiLabel;
 
         public static show(openData: OpenDataForCommonBlockPanel): void {
             if (!CommonBlockPanel._instance) {

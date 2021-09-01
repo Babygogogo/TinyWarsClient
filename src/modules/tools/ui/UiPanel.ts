@@ -29,7 +29,7 @@ namespace TwnsUiPanel {
         private _callbackOnTouchedMask  : (() => void) | null = null;
         private _touchMask?             : eui.Group;
 
-        private _openData               : OpenData | null = null;
+        private _openData?              : OpenData;
 
         protected constructor() {
             super();
@@ -79,11 +79,14 @@ namespace TwnsUiPanel {
             }
         }
 
-        private _setOpenData(data: OpenData | null): void {
+        private _setOpenData(data: OpenData): void {
             this._openData = data;
         }
+        private _deleteOpenData(): void {
+            delete this._openData;
+        }
         protected _getOpenData(): OpenData {
-            return Helpers.getExisted(this._openData);
+            return Helpers.getDefined(this._openData);
         }
 
         private _setCachedOpenFunc(func: (() => void) | null): void {
@@ -110,7 +113,7 @@ namespace TwnsUiPanel {
 
             await this._doClose();
             (this.parent) && (this.parent.removeChild(this));
-            this._setOpenData(null);
+            this._deleteOpenData();
 
             this._setIsRunningClose(false);
 

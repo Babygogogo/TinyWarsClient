@@ -127,7 +127,7 @@ namespace TwnsScrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsScrCreateMapListPanel.ScrCreateMapListPanel.show();
+            TwnsScrCreateMapListPanel.ScrCreateMapListPanel.show(null);
         }
         private _onTouchedBtnConfirm(): void {
             const data      = ScrCreateModel.getData();

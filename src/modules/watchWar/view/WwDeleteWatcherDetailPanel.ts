@@ -159,7 +159,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
         private readonly _imgKeep!                  : TwnsUiImage.UiImage;
 
         protected _onDataChanged(): void {
-            const data                          = this.data;
+            const data                          = this._getData();
             this._labelIsOpponent.text          = data.isOpponent ? Lang.getText(LangTextType.B0012) : "";
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(LangTextType.B0012) : "";
             this._imgDelete.visible             = data.isDelete;
@@ -169,7 +169,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
             if ((this._imgDelete.visible) || (this._imgKeep.visible)) {
-                const data = this.data;
+                const data = this._getData();
                 data.panel.setRequesterSelected(e.itemIndex, !data.isDelete);
             }
         }

@@ -97,7 +97,7 @@ namespace TwnsSpmMainMenuPanel {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            ScrCreateMapListPanel.show();
+            ScrCreateMapListPanel.show(null);
         }
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
             this.close();

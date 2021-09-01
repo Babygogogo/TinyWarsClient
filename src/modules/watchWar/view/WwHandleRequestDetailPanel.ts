@@ -160,7 +160,7 @@ namespace TwnsWwHandleRequestDetailPanel {
         private readonly _imgDecline!               : TwnsUiImage.UiImage;
 
         protected _onDataChanged(): void {
-            const data                          = this.data;
+            const data                          = this._getData();
             this._labelIsOpponent.text          = data.isOpponent ? Lang.getText(LangTextType.B0012) : "";
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(LangTextType.B0012) : "";
             this._imgAccept.visible             = data.isAccept;
@@ -170,7 +170,7 @@ namespace TwnsWwHandleRequestDetailPanel {
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
             if ((this._imgAccept.visible) || (this._imgDecline.visible)) {
-                const data = this.data;
+                const data = this._getData();
                 data.panel.setRequesterSelected(e.itemIndex, !data.isAccept);
             }
         }
