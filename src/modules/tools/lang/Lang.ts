@@ -464,14 +464,14 @@ namespace Lang {
         textArray       : Types.Undefinable<ProtoTypes.Structure.ILanguageText[]>;
         languageType?   : LanguageType;
         useAlternate?   : boolean;
-    }): string | undefined | null {
+    }): string | null {
         if ((textArray == null) || (!textArray.length)) {
             return null;
         }
 
         const data = textArray.find(v => v.languageType === languageType);
         if (data) {
-            return data.text;
+            return data.text ?? null;
         } else {
             return useAlternate
                 ? getLanguageText({ textArray, languageType: LanguageType.English, useAlternate: false })

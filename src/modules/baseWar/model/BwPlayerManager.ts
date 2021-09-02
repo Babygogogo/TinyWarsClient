@@ -1,6 +1,7 @@
 
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
@@ -17,7 +18,7 @@ namespace TwnsBwPlayerManager {
 
     export abstract class BwPlayerManager {
         private _players        = new Map<number, TwnsBwPlayer.BwPlayer>();
-        private _war            : BwWar | undefined;
+        private _war?           : BwWar;
 
         public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
 
@@ -151,15 +152,15 @@ namespace TwnsBwPlayerManager {
         private _setWar(war: BwWar): void {
             this._war = war;
         }
-        protected _getWar(): BwWar | undefined {
-            return this._war;
+        protected _getWar(): BwWar {
+            return Helpers.getDefined(this._war);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer | undefined {
-            return this._players.get(playerIndex);
+        public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer {
+            return Helpers.getExisted(this._players.get(playerIndex));
         }
         public getAllPlayersDict(): Map<number, TwnsBwPlayer.BwPlayer> {
             return this._players;
@@ -181,21 +182,12 @@ namespace TwnsBwPlayerManager {
             return undefined;
         }
 
-        public getPlayerInTurn(): TwnsBwPlayer.BwPlayer | undefined {
-            const war = this._getWar();
-            if (war == null) {
-                return undefined;
-            }
-
-            const playerIndex = war.getPlayerIndexInTurn();
-            return playerIndex == null
-                ? undefined
-                : this.getPlayer(playerIndex);
+        public getPlayerInTurn(): TwnsBwPlayer.BwPlayer {
+            return this.getPlayer(this._getWar().getPlayerIndexInTurn());
         }
 
-        public getTeamIndex(playerIndex: number): number | undefined {
-            const player = this.getPlayer(playerIndex);
-            return player ? player.getTeamIndex() : undefined;
+        public getTeamIndex(playerIndex: number): number {
+            return this.getPlayer(playerIndex).getTeamIndex();
         }
 
         public getPlayerIndexesInTeam(teamIndex: number): number[] {

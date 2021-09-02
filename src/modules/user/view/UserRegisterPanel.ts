@@ -24,18 +24,18 @@ namespace TwnsUserRegisterPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private _imgMask            : TwnsUiImage.UiImage;
-        private _group              : eui.Group;
-        private _labelTitle         : TwnsUiLabel.UiLabel;
-        private _labelAccount       : TwnsUiLabel.UiLabel;
-        private _inputAccount       : TwnsUiTextInput.UiTextInput;
-        private _labelPassword      : TwnsUiLabel.UiLabel;
-        private _inputPassword      : TwnsUiTextInput.UiTextInput;
-        private _labelNickname      : TwnsUiLabel.UiLabel;
-        private _inputNickname      : TwnsUiTextInput.UiTextInput;
-        private _btnRegister        : TwnsUiButton.UiButton;
-        private _btnClose           : TwnsUiButton.UiButton;
-        private _labelTips          : TwnsUiLabel.UiLabel;
+        private readonly _imgMask!          : TwnsUiImage.UiImage;
+        private readonly _group!            : eui.Group;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelAccount!     : TwnsUiLabel.UiLabel;
+        private readonly _inputAccount!     : TwnsUiTextInput.UiTextInput;
+        private readonly _labelPassword!    : TwnsUiLabel.UiLabel;
+        private readonly _inputPassword!    : TwnsUiTextInput.UiTextInput;
+        private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
+        private readonly _inputNickname!    : TwnsUiTextInput.UiTextInput;
+        private readonly _btnRegister!      : TwnsUiButton.UiButton;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
+        private readonly _labelTips!        : TwnsUiLabel.UiLabel;
 
         private static _instance: UserRegisterPanel;
 

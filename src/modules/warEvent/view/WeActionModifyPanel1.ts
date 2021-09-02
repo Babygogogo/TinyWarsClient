@@ -46,13 +46,13 @@ namespace TwnsWeActionModifyPanel1 {
 
         private static _instance: WeActionModifyPanel1;
 
-        private _btnBack        : TwnsUiButton.UiButton;
-        private _btnType        : TwnsUiButton.UiButton;
-        private _btnAddUnit     : TwnsUiButton.UiButton;
-        private _btnClear       : TwnsUiButton.UiButton;
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _labelUnitsCount: TwnsUiLabel.UiLabel;
-        private _listUnit       : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private readonly _btnBack!          : TwnsUiButton.UiButton;
+        private readonly _btnType!          : TwnsUiButton.UiButton;
+        private readonly _btnAddUnit!       : TwnsUiButton.UiButton;
+        private readonly _btnClear!         : TwnsUiButton.UiButton;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelUnitsCount!  : TwnsUiLabel.UiLabel;
+        private readonly _listUnit!         : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
 
         public static show(openData: OpenDataForWeActionModifyPanel1): void {
             if (!WeActionModifyPanel1._instance) {
@@ -91,16 +91,16 @@ namespace TwnsWeActionModifyPanel1 {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyWarEventFullDataChanged(e: egret.Event): void {
+        private _onNotifyWarEventFullDataChanged(): void {
             this._updateComponentsForUnits();
         }
 
-        private _onTouchedBtnAddUnit(e: egret.TouchEvent): void {
-            const unitArray = this._getOpenData().action.WeaAddUnit.unitArray;
+        private _onTouchedBtnAddUnit(): void {
+            const unitArray = Helpers.getExisted(this._getOpenData().action.WeaAddUnit?.unitArray);
             if (unitArray.length > CommonConstants.WarEventActionAddUnitMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0189));
             } else {
@@ -109,18 +109,17 @@ namespace TwnsWeActionModifyPanel1 {
             }
         }
 
-        private _onTouchedBtnClear(e: egret.TouchEvent): void {
-            const openData = this._getOpenData();
+        private _onTouchedBtnClear(): void {
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0190),
                 callback: () => {
-                    openData.action.WeaAddUnit.unitArray.length = 0;
+                    Helpers.getExisted(this._getOpenData().action.WeaAddUnit?.unitArray).length = 0;
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             });
         }
 
-        private _onTouchedBtnType(e: egret.TouchEvent): void {
+        private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
             WeActionTypeListPanel.show({
                 war         : openData.war,
@@ -139,7 +138,7 @@ namespace TwnsWeActionModifyPanel1 {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text   = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData.actionId}`;
+            this._labelTitle.text   = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData?.actionId}`;
             this._btnType.label     = Lang.getText(LangTextType.B0516);
             this._btnAddUnit.label  = Lang.getText(LangTextType.B0535);
             this._btnClear.label    = Lang.getText(LangTextType.B0391);
@@ -151,7 +150,7 @@ namespace TwnsWeActionModifyPanel1 {
             const action    = openData.action;
             const war       = openData.war;
             const dataArray : DataForUnitRenderer[] = [];
-            for (const dataForAddUnit of action.WeaAddUnit.unitArray || []) {
+            for (const dataForAddUnit of action.WeaAddUnit?.unitArray || []) {
                 dataArray.push({
                     war,
                     action,
@@ -175,62 +174,62 @@ namespace TwnsWeActionModifyPanel1 {
         dataForAddUnit  : ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
-        private _btnDelete              : TwnsUiButton.UiButton;
-        private _labelError             : TwnsUiLabel.UiLabel;
+        private readonly _btnDelete!                : TwnsUiButton.UiButton;
+        private readonly _labelError!               : TwnsUiLabel.UiLabel;
 
-        private _groupCanBeBlockedByUnit: eui.Group;
-        private _labelCanBeBlockedByUnit: TwnsUiLabel.UiLabel;
-        private _imgCanBeBlockedByUnit  : TwnsUiImage.UiImage;
+        private readonly _groupCanBeBlockedByUnit!  : eui.Group;
+        private readonly _labelCanBeBlockedByUnit!  : TwnsUiLabel.UiLabel;
+        private readonly _imgCanBeBlockedByUnit!    : TwnsUiImage.UiImage;
 
-        private _groupNeedMovableTile   : eui.Group;
-        private _labelNeedMovableTile   : TwnsUiLabel.UiLabel;
-        private _imgNeedMovableTile     : TwnsUiImage.UiImage;
+        private readonly _groupNeedMovableTile!     : eui.Group;
+        private readonly _labelNeedMovableTile!     : TwnsUiLabel.UiLabel;
+        private readonly _imgNeedMovableTile!       : TwnsUiImage.UiImage;
 
-        private _labelGridIndex         : TwnsUiLabel.UiLabel;
-        private _inputGridX             : TwnsUiTextInput.UiTextInput;
-        private _inputGridY             : TwnsUiTextInput.UiTextInput;
+        private readonly _labelGridIndex!           : TwnsUiLabel.UiLabel;
+        private readonly _inputGridX!               : TwnsUiTextInput.UiTextInput;
+        private readonly _inputGridY!               : TwnsUiTextInput.UiTextInput;
 
-        private _labelPlayerIndex       : TwnsUiLabel.UiLabel;
-        private _inputPlayerIndex       : TwnsUiTextInput.UiTextInput;
+        private readonly _labelPlayerIndex!         : TwnsUiLabel.UiLabel;
+        private readonly _inputPlayerIndex!         : TwnsUiTextInput.UiTextInput;
 
-        private _btnUnitType            : TwnsUiButton.UiButton;
-        private _labelUnitType          : TwnsUiLabel.UiLabel;
+        private readonly _btnUnitType!              : TwnsUiButton.UiButton;
+        private readonly _labelUnitType!            : TwnsUiLabel.UiLabel;
 
-        private _btnActionState         : TwnsUiButton.UiButton;
-        private _labelActionState       : TwnsUiLabel.UiLabel;
+        private readonly _btnActionState!           : TwnsUiButton.UiButton;
+        private readonly _labelActionState!         : TwnsUiLabel.UiLabel;
 
-        private _labelHp                : TwnsUiLabel.UiLabel;
-        private _inputHp                : TwnsUiTextInput.UiTextInput;
+        private readonly _labelHp!                  : TwnsUiLabel.UiLabel;
+        private readonly _inputHp!                  : TwnsUiTextInput.UiTextInput;
 
-        private _labelFuel              : TwnsUiLabel.UiLabel;
-        private _inputFuel              : TwnsUiTextInput.UiTextInput;
+        private readonly _labelFuel!                : TwnsUiLabel.UiLabel;
+        private readonly _inputFuel!                : TwnsUiTextInput.UiTextInput;
 
-        private _labelPromotion         : TwnsUiLabel.UiLabel;
-        private _inputPromotion         : TwnsUiTextInput.UiTextInput;
+        private readonly _labelPromotion!           : TwnsUiLabel.UiLabel;
+        private readonly _inputPromotion!           : TwnsUiTextInput.UiTextInput;
 
-        private _groupHasLoadedCo       : eui.Group;
-        private _labelHasLoadedCo       : TwnsUiLabel.UiLabel;
-        private _imgHasLoadedCo         : TwnsUiImage.UiImage;
+        private readonly _groupHasLoadedCo!         : eui.Group;
+        private readonly _labelHasLoadedCo!         : TwnsUiLabel.UiLabel;
+        private readonly _imgHasLoadedCo!           : TwnsUiImage.UiImage;
 
-        private _groupPrimaryAmmo       : eui.Group;
-        private _labelPrimaryAmmo       : TwnsUiLabel.UiLabel;
-        private _inputPrimaryAmmo       : TwnsUiTextInput.UiTextInput;
+        private readonly _groupPrimaryAmmo!         : eui.Group;
+        private readonly _labelPrimaryAmmo!         : TwnsUiLabel.UiLabel;
+        private readonly _inputPrimaryAmmo!         : TwnsUiTextInput.UiTextInput;
 
-        private _groupFlareAmmo         : eui.Group;
-        private _labelFlareAmmo         : TwnsUiLabel.UiLabel;
-        private _inputFlareAmmo         : TwnsUiTextInput.UiTextInput;
+        private readonly _groupFlareAmmo!           : eui.Group;
+        private readonly _labelFlareAmmo!           : TwnsUiLabel.UiLabel;
+        private readonly _inputFlareAmmo!           : TwnsUiTextInput.UiTextInput;
 
-        private _groupIsDiving          : eui.Group;
-        private _labelIsDiving          : TwnsUiLabel.UiLabel;
-        private _imgIsDiving            : TwnsUiImage.UiImage;
+        private readonly _groupIsDiving!            : eui.Group;
+        private readonly _labelIsDiving!            : TwnsUiLabel.UiLabel;
+        private readonly _imgIsDiving!              : TwnsUiImage.UiImage;
 
-        private _groupBuildMaterial     : eui.Group;
-        private _labelBuildMaterial     : TwnsUiLabel.UiLabel;
-        private _inputBuildMaterial     : TwnsUiTextInput.UiTextInput;
+        private readonly _groupBuildMaterial!       : eui.Group;
+        private readonly _labelBuildMaterial!       : TwnsUiLabel.UiLabel;
+        private readonly _inputBuildMaterial!       : TwnsUiTextInput.UiTextInput;
 
-        private _groupProduceMaterial   : eui.Group;
-        private _labelProduceMaterial   : TwnsUiLabel.UiLabel;
-        private _inputProduceMaterial   : TwnsUiTextInput.UiTextInput;
+        private readonly _groupProduceMaterial!     : eui.Group;
+        private readonly _labelProduceMaterial!     : TwnsUiLabel.UiLabel;
+        private readonly _inputProduceMaterial!     : TwnsUiTextInput.UiTextInput;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -258,100 +257,76 @@ namespace TwnsWeActionModifyPanel1 {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnDelete(e: egret.TouchEvent): void {
-            const data = this.data;
-            if (data) {
-                CommonConfirmPanel.show({
-                    content : Lang.getText(LangTextType.A0029),
-                    callback: () => {
-                        Helpers.deleteElementFromArray(data.action.WeaAddUnit.unitArray, data.dataForAddUnit);
-                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                    },
-                });
-            }
+        private _onTouchedBtnDelete(): void {
+            const data = this._getData();
+            CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0029),
+                callback: () => {
+                    Helpers.deleteElementFromArray(Helpers.getExisted(data.action.WeaAddUnit?.unitArray), data.dataForAddUnit);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
         }
-        private _onTouchedGroupCanBeBlockedByUnit(e: egret.TouchEvent): void {
-            const data = this.data;
-            if (data) {
-                data.dataForAddUnit.canBeBlockedByUnit = !data.dataForAddUnit.canBeBlockedByUnit;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
-            }
+        private _onTouchedGroupCanBeBlockedByUnit(): void {
+            const data = this._getData();
+            data.dataForAddUnit.canBeBlockedByUnit = !data.dataForAddUnit.canBeBlockedByUnit;
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onTouchedGroupNeedMovableTile(e: egret.TouchEvent): void {
-            const data = this.data;
-            if (data) {
-                data.dataForAddUnit.needMovableTile = !data.dataForAddUnit.needMovableTile;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
-            }
+        private _onTouchedGroupNeedMovableTile(): void {
+            const data                          = this._getData();
+            data.dataForAddUnit.needMovableTile = !data.dataForAddUnit.needMovableTile;
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onTouchedGroupIsDiving(e: egret.TouchEvent): void {
-            const data = this.data;
-            if (data) {
-                const unitData      = data.dataForAddUnit.unitData;
-                unitData.isDiving   = unitData.isDiving ? undefined : true;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
-            }
+        private _onTouchedGroupIsDiving(): void {
+            const data          = this._getData();
+            const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
+            unitData.isDiving   = unitData.isDiving ? undefined : true;
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onTouchedGroupHasLoadedCo(e: egret.TouchEvent): void {
-            const data = this.data;
-            if (data) {
-                const unitData          = data.dataForAddUnit.unitData;
-                unitData.hasLoadedCo    = unitData.hasLoadedCo ? undefined : true;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
-            }
+        private _onTouchedGroupHasLoadedCo(): void {
+            const data              = this._getData();
+            const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
+            unitData.hasLoadedCo    = unitData.hasLoadedCo ? undefined : true;
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onTouchedBtnActionState(e: egret.TouchEvent): void {
-            const data = this.data;
-            if (data) {
-                const unitData = data.dataForAddUnit.unitData;
-                if (unitData.actionState === Types.UnitActionState.Acted) {
-                    unitData.actionState = undefined;
-                } else {
-                    unitData.actionState = Types.UnitActionState.Acted;
-                }
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        private _onTouchedBtnActionState(): void {
+            const data      = this._getData();
+            const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
+            if (unitData.actionState === Types.UnitActionState.Acted) {
+                unitData.actionState = undefined;
+            } else {
+                unitData.actionState = Types.UnitActionState.Acted;
             }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onTouchedBtnUnitType(e: egret.TouchEvent): void {
-            const data = this.data;
+        private _onTouchedBtnUnitType(): void {
+            const data = this._getData();
             WeActionAddUnitListPanel.show({
                 configVersion   : data.war.getConfigVersion(),
                 dataForAddUnit  : data.dataForAddUnit,
             });
         }
-        private _onFocusOutInputGridX(e: FocusEvent): void {
-            const data = this.data;
-            if (!data) {
-                return;
-            }
-
-            const gridIndex = data.dataForAddUnit.unitData.gridIndex;
+        private _onFocusOutInputGridX(): void {
+            const data      = this._getData();
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.dataForAddUnit.unitData?.gridIndex));
             const newGridX  = Math.max(0, Math.min(parseInt(this._inputGridX.text) || 0, data.war.getTileMap().getMapSize().width - 1));
             if (newGridX !== gridIndex.x) {
                 gridIndex.x = newGridX;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
-        private _onFocusOutInputGridY(e: FocusEvent): void {
-            const data = this.data;
-            if (!data) {
-                return;
-            }
-
-            const gridIndex = data.dataForAddUnit.unitData.gridIndex;
+        private _onFocusOutInputGridY(): void {
+            const data      = this._getData();
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.dataForAddUnit.unitData?.gridIndex));
             const newGridY  = Math.max(0, Math.min(parseInt(this._inputGridY.text) || 0, data.war.getTileMap().getMapSize().height - 1));
             if (newGridY !== gridIndex.y) {
                 gridIndex.y = newGridY;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
-        private _onFocusOutInputPlayerIndex(e: FocusEvent): void {
-            const data = this.data;
-            if (!data) {
-                return;
-            }
-
-            const unitData          = data.dataForAddUnit.unitData;
+        private _onFocusOutInputPlayerIndex(): void {
+            const data              = this._getData();
+            const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
             const newPlayerIndex    = Math.max(
                 CommonConstants.WarFirstPlayerIndex,
                 Math.min(parseInt(this._inputPlayerIndex.text) || 0, CommonConstants.WarMaxPlayerIndex)
@@ -361,14 +336,10 @@ namespace TwnsWeActionModifyPanel1 {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
-        private _onFocusOutInputHp(e: FocusEvent): void {
-            const data = this.data;
-            if (!data) {
-                return;
-            }
-
-            const unitData  = data.dataForAddUnit.unitData;
-            const maxHp     = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).maxHp;
+        private _onFocusOutInputHp(): void {
+            const data      = this._getData();
+            const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const maxHp     = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxHp;
             const currentHp = unitData.currentHp == null ? maxHp : unitData.currentHp;
             const newHp     = Math.max(0, Math.min(parseInt(this._inputHp.text) || 0, maxHp));
             if (newHp !== currentHp) {
@@ -376,14 +347,10 @@ namespace TwnsWeActionModifyPanel1 {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
-        private _onFocusOutInputFuel(e: FocusEvent): void {
-            const data = this.data;
-            if (!data) {
-                return;
-            }
-
-            const unitData      = data.dataForAddUnit.unitData;
-            const maxFuel       = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).maxFuel;
+        private _onFocusOutInputFuel(): void {
+            const data          = this._getData();
+            const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const maxFuel       = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxFuel;
             const currentFuel   = unitData.currentFuel == null ? maxFuel : unitData.currentFuel;
             const newFuel       = Math.max(0, Math.min(parseInt(this._inputFuel.text) || 0, maxFuel));
             if (newFuel !== currentFuel) {
@@ -391,13 +358,9 @@ namespace TwnsWeActionModifyPanel1 {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
-        private _onFocusOutInputPromotion(e: FocusEvent): void {
-            const data = this.data;
-            if (!data) {
-                return;
-            }
-
-            const unitData          = data.dataForAddUnit.unitData;
+        private _onFocusOutInputPromotion(): void {
+            const data              = this._getData();
+            const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
             const maxPromotion      = ConfigManager.getUnitMaxPromotion(data.war.getConfigVersion());
             const currentPromotion  = unitData.currentPromotion || 0;
             const newPromotion      = Math.max(0, Math.min(parseInt(this._inputPromotion.text) || 0, maxPromotion));
@@ -406,14 +369,10 @@ namespace TwnsWeActionModifyPanel1 {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
-        private _onFocusOutInputPrimaryAmmo(e: FocusEvent): void {
-            const data = this.data;
-            if (!data) {
-                return;
-            }
-
-            const unitData      = data.dataForAddUnit.unitData;
-            const maxAmmo       = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).primaryWeaponMaxAmmo;
+        private _onFocusOutInputPrimaryAmmo(): void {
+            const data          = this._getData();
+            const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const maxAmmo       = Helpers.getExisted(ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).primaryWeaponMaxAmmo);
             const currentAmmo   = unitData.primaryWeaponCurrentAmmo == null ? maxAmmo : unitData.primaryWeaponCurrentAmmo;
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputPrimaryAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
@@ -421,14 +380,10 @@ namespace TwnsWeActionModifyPanel1 {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
-        private _onFocusOutInputFlareAmmo(e: FocusEvent): void {
-            const data = this.data;
-            if (!data) {
-                return;
-            }
-
-            const unitData      = data.dataForAddUnit.unitData;
-            const maxAmmo       = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).flareMaxAmmo;
+        private _onFocusOutInputFlareAmmo(): void {
+            const data          = this._getData();
+            const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const maxAmmo       = Helpers.getExisted(ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).flareMaxAmmo);
             const currentAmmo   = unitData.flareCurrentAmmo == null ? maxAmmo : unitData.flareCurrentAmmo;
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputFlareAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
@@ -436,14 +391,10 @@ namespace TwnsWeActionModifyPanel1 {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
-        private _onFocusOutInputBuildMaterial(e: FocusEvent): void {
-            const data = this.data;
-            if (!data) {
-                return;
-            }
-
-            const unitData          = data.dataForAddUnit.unitData;
-            const maxMaterial       = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).maxBuildMaterial;
+        private _onFocusOutInputBuildMaterial(): void {
+            const data              = this._getData();
+            const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const maxMaterial       = Helpers.getExisted(ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxBuildMaterial);
             const currentMaterial   = unitData.currentBuildMaterial == null ? maxMaterial : unitData.currentBuildMaterial;
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputBuildMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
@@ -451,14 +402,10 @@ namespace TwnsWeActionModifyPanel1 {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
-        private _onFocusOutInputProduceMaterial(e: FocusEvent): void {
-            const data = this.data;
-            if (!data) {
-                return;
-            }
-
-            const unitData          = data.dataForAddUnit.unitData;
-            const maxMaterial       = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).maxProduceMaterial;
+        private _onFocusOutInputProduceMaterial(): void {
+            const data              = this._getData();
+            const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const maxMaterial       = Helpers.getExisted(ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxProduceMaterial);
             const currentMaterial   = unitData.currentProduceMaterial == null ? maxMaterial : unitData.currentProduceMaterial;
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputProduceMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
@@ -467,7 +414,7 @@ namespace TwnsWeActionModifyPanel1 {
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
 
             this._updateComponentsForData();
@@ -514,191 +461,141 @@ namespace TwnsWeActionModifyPanel1 {
             this._updateComponentsForProduceMaterial();
         }
         private _updateLabelError(): void {
-            const data  = this.data;
-            const label = this._labelError;
-            if (data == null) {
-                label.text = undefined;
-                return;
-            }
-
+            const data              = this._getData();
+            const label             = this._labelError;
             const dataForAddUnit    = data.dataForAddUnit;
             const errorTips         = getErrorTipsForAddUnit({
                 dataForAddUnit,
                 war             : data.war,
             });
-            label.text      = `${data.action.WeaAddUnit.unitArray.indexOf(dataForAddUnit) + 1}. ${errorTips || Lang.getText(LangTextType.B0493)}`;
+            label.text      = `${Helpers.getExisted(data.action.WeaAddUnit?.unitArray?.indexOf(dataForAddUnit)) + 1}. ${errorTips || Lang.getText(LangTextType.B0493)}`;
             label.textColor = errorTips ? ColorValue.Red : ColorValue.Green;
         }
         private _updateComponentsForCanBeBlockedByUnit(): void {
-            const data                          = this.data;
-            this._imgCanBeBlockedByUnit.visible = (!!data) && (!!data.dataForAddUnit.canBeBlockedByUnit);
+            const data                          = this._getData();
+            this._imgCanBeBlockedByUnit.visible = (!!data.dataForAddUnit.canBeBlockedByUnit);
         }
         private _updateComponentsForNeedMovableTile(): void {
-            const data                          = this.data;
-            this._imgNeedMovableTile.visible    = (!!data) && (!!data.dataForAddUnit.needMovableTile);
+            const data                          = this._getData();
+            this._imgNeedMovableTile.visible    = (!!data.dataForAddUnit.needMovableTile);
         }
         private _updateComponentsForIsDiving(): void {
-            const data  = this.data;
-            const group = this._groupIsDiving;
-            if (!data) {
+            const data      = this._getData();
+            const group     = this._groupIsDiving;
+            const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const unitCfg   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType));
+            if ((!unitCfg) || (!unitCfg.diveCfgs)) {
                 group.visible = false;
             } else {
-                const unitData  = data.dataForAddUnit.unitData;
-                const unitCfg   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType);
-                if ((!unitCfg) || (!unitCfg.diveCfgs)) {
-                    group.visible = false;
-                } else {
-                    group.visible               = true;
-                    this._imgIsDiving.visible   = !!unitData.isDiving;
-                }
+                group.visible               = true;
+                this._imgIsDiving.visible   = !!unitData.isDiving;
             }
         }
         private _updateComponentsForHasLoadedCo(): void {
-            const data                      = this.data;
-            this._imgHasLoadedCo.visible    = (!!data) && (!!data.dataForAddUnit.unitData.hasLoadedCo);
+            const data                      = this._getData();
+            this._imgHasLoadedCo.visible    = !!data.dataForAddUnit.unitData?.hasLoadedCo;
         }
         private _updateComponentsForActionState(): void {
-            const data  = this.data;
+            const data  = this._getData();
             const label = this._labelActionState;
-            if (!data) {
-                label.text = undefined;
-            } else {
-                const state = data.dataForAddUnit.unitData.actionState;
-                label.text  = state == null
-                    ? Lang.getUnitActionStateText(Types.UnitActionState.Idle)
-                    : Lang.getUnitActionStateText(state);
-            }
+            const state = data.dataForAddUnit.unitData?.actionState;
+            label.text  = state == null
+                ? (Lang.getUnitActionStateText(Types.UnitActionState.Idle) ?? CommonConstants.ErrorTextForUndefined)
+                : (Lang.getUnitActionStateText(state) ?? CommonConstants.ErrorTextForUndefined);
         }
         private _updateComponentsForGridIndex(): void {
-            const data      = this.data;
+            const data      = this._getData();
             const inputX    = this._inputGridX;
             const inputY    = this._inputGridY;
-            if (!data) {
-                inputX.text = undefined;
-                inputY.text = undefined;
-            } else {
-                const gridIndex = data.dataForAddUnit.unitData.gridIndex;
-                inputX.text = `${gridIndex.x}`;
-                inputY.text = `${gridIndex.y}`;
-            }
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.dataForAddUnit.unitData?.gridIndex));
+            inputX.text     = `${gridIndex.x}`;
+            inputY.text     = `${gridIndex.y}`;
         }
         private _updateComponentsForPlayerIndex(): void {
-            const data                  = this.data;
-            this._inputPlayerIndex.text = data
-                ? `${data.dataForAddUnit.unitData.playerIndex}`
-                : undefined;
+            const data                  = this._getData();
+            this._inputPlayerIndex.text = `${data.dataForAddUnit.unitData?.playerIndex}`;
         }
         private _updateComponentsForUnitType(): void {
-            const data                  = this.data;
-            this._labelUnitType.text    = data
-                ? Lang.getUnitName(data.dataForAddUnit.unitData.unitType)
-                : undefined;
+            const data                  = this._getData();
+            this._labelUnitType.text    = Lang.getUnitName(Helpers.getExisted(data.dataForAddUnit.unitData?.unitType)) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateComponentsForHp(): void {
-            const data  = this.data;
-            const input = this._inputHp;
-            if (!data) {
-                input.text = undefined;
-            } else {
-                const unitData  = data.dataForAddUnit.unitData;
-                const currentHp = unitData.currentHp;
-                input.text      = currentHp == null
-                    ? `${ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).maxHp}`
-                    : `${currentHp}`;
-            }
+            const data      = this._getData();
+            const input     = this._inputHp;
+            const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const currentHp = unitData.currentHp;
+            input.text      = currentHp == null
+                ? `${ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxHp}`
+                : `${currentHp}`;
         }
         private _updateComponentsForFuel(): void {
-            const data  = this.data;
-            const input = this._inputFuel;
-            if (!data) {
-                input.text = undefined;
-            } else {
-                const unitData      = data.dataForAddUnit.unitData;
-                const currentFuel   = unitData.currentFuel;
-                input.text          = currentFuel == null
-                    ? `${ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).maxFuel}`
-                    : `${currentFuel}`;
-            }
+            const data          = this._getData();
+            const input         = this._inputFuel;
+            const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const currentFuel   = unitData.currentFuel;
+            input.text          = currentFuel == null
+                ? `${ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxFuel}`
+                : `${currentFuel}`;
         }
         private _updateComponentsForPromotion(): void {
-            const data  = this.data;
+            const data  = this._getData();
             const input = this._inputPromotion;
-            if (!data) {
-                input.text = undefined;
-            } else {
-                input.text = `${data.dataForAddUnit.unitData.currentPromotion || 0}`;
-            }
+            input.text = `${data.dataForAddUnit.unitData?.currentPromotion || 0}`;
         }
         private _updateComponentsForPrimaryAmmo(): void {
-            const data  = this.data;
-            const group = this._groupPrimaryAmmo;
-            if (!data) {
+            const data      = this._getData();
+            const group     = this._groupPrimaryAmmo;
+            const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const maxAmmo   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).primaryWeaponMaxAmmo;
+            if (!maxAmmo) {
                 group.visible = false;
             } else {
-                const unitData  = data.dataForAddUnit.unitData;
-                const maxAmmo   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).primaryWeaponMaxAmmo;
-                if (!maxAmmo) {
-                    group.visible = false;
-                } else {
-                    group.visible = true;
+                group.visible = true;
 
-                    const currentAmmo           = unitData.primaryWeaponCurrentAmmo;
-                    this._inputPrimaryAmmo.text = `${currentAmmo == null ? maxAmmo : currentAmmo}`;
-                }
+                const currentAmmo           = unitData.primaryWeaponCurrentAmmo;
+                this._inputPrimaryAmmo.text = `${currentAmmo == null ? maxAmmo : currentAmmo}`;
             }
         }
         private _updateComponentsForFlareAmmo(): void {
-            const data  = this.data;
-            const group = this._groupFlareAmmo;
-            if (!data) {
+            const data      = this._getData();
+            const group     = this._groupFlareAmmo;
+            const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const maxAmmo   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).flareMaxAmmo;
+            if (!maxAmmo) {
                 group.visible = false;
             } else {
-                const unitData  = data.dataForAddUnit.unitData;
-                const maxAmmo   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).flareMaxAmmo;
-                if (!maxAmmo) {
-                    group.visible = false;
-                } else {
-                    group.visible = true;
+                group.visible = true;
 
-                    const currentAmmo           = unitData.flareCurrentAmmo;
-                    this._inputFlareAmmo.text   = `${currentAmmo == null ? maxAmmo : currentAmmo}`;
-                }
+                const currentAmmo           = unitData.flareCurrentAmmo;
+                this._inputFlareAmmo.text   = `${currentAmmo == null ? maxAmmo : currentAmmo}`;
             }
         }
         private _updateComponentsForBuildMaterial(): void {
-            const data  = this.data;
-            const group = this._groupBuildMaterial;
-            if (!data) {
+            const data          = this._getData();
+            const group         = this._groupBuildMaterial;
+            const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const maxMaterial   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxBuildMaterial;
+            if (!maxMaterial) {
                 group.visible = false;
             } else {
-                const unitData      = data.dataForAddUnit.unitData;
-                const maxMaterial   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).maxBuildMaterial;
-                if (!maxMaterial) {
-                    group.visible = false;
-                } else {
-                    group.visible = true;
+                group.visible = true;
 
-                    const currentMaterial           = unitData.currentBuildMaterial;
-                    this._inputBuildMaterial.text   = `${currentMaterial == null ? maxMaterial : currentMaterial}`;
-                }
+                const currentMaterial           = unitData.currentBuildMaterial;
+                this._inputBuildMaterial.text   = `${currentMaterial == null ? maxMaterial : currentMaterial}`;
             }
         }
         private _updateComponentsForProduceMaterial(): void {
-            const data  = this.data;
-            const group = this._groupProduceMaterial;
-            if (!data) {
+            const data          = this._getData();
+            const group         = this._groupProduceMaterial;
+            const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
+            const maxMaterial   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxProduceMaterial;
+            if (!maxMaterial) {
                 group.visible = false;
             } else {
-                const unitData      = data.dataForAddUnit.unitData;
-                const maxMaterial   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), unitData.unitType).maxProduceMaterial;
-                if (!maxMaterial) {
-                    group.visible = false;
-                } else {
-                    group.visible = true;
+                group.visible = true;
 
-                    const currentMaterial           = unitData.currentProduceMaterial;
-                    this._inputProduceMaterial.text = `${currentMaterial == null ? maxMaterial : currentMaterial}`;
-                }
+                const currentMaterial           = unitData.currentProduceMaterial;
+                this._inputProduceMaterial.text = `${currentMaterial == null ? maxMaterial : currentMaterial}`;
             }
         }
     }
@@ -716,92 +613,124 @@ namespace TwnsWeActionModifyPanel1 {
         }
 
         const configVersion = war.getConfigVersion();
-        const unitData      = dataForAddUnit.unitData;
-        const unitCfg       = ConfigManager.getUnitTemplateCfg(configVersion, unitData.unitType);
+        const unitData      = Helpers.getExisted(dataForAddUnit.unitData);
+        const unitCfg       = ConfigManager.getUnitTemplateCfg(configVersion, Helpers.getExisted(unitData.unitType));
         if (unitCfg == null) {
             return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0525));
         }
 
-        if (!GridIndexHelpers.checkIsInsideMap(unitData.gridIndex, war.getTileMap().getMapSize())) {
+        if (!GridIndexHelpers.checkIsInsideMap(Helpers.getExisted(unitData.gridIndex), war.getTileMap().getMapSize())) {
             return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0531));
         }
 
-        const playerIndex = unitData.playerIndex;
-        if ((playerIndex == null)                               ||
-            (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
-            (playerIndex < CommonConstants.WarFirstPlayerIndex)
-        ) {
-            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0521));
-        }
-
-        const actionState = unitData.actionState;
-        if ((actionState != null)                           &&
-            (actionState !== Types.UnitActionState.Acted)   &&
-            (actionState !== Types.UnitActionState.Idle)
-        ) {
-            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0526));
-        }
-
-        const currentFuel = unitData.currentFuel;
-        if ((currentFuel < 0) || (currentFuel > unitCfg.maxFuel)) {
-            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0342));
-        }
-
-        const currentHp = unitData.currentHp;
-        if ((currentHp < 0) || (currentHp > unitCfg.maxHp)) {
-            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0339));
-        }
-
-        const currentBuildMaterial  = unitData.currentBuildMaterial;
-        const maxBuildMaterial      = unitCfg.maxBuildMaterial;
-        if (maxBuildMaterial == null) {
-            if (currentBuildMaterial != null) {
-                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0347));
-            }
-        } else {
-            if ((currentBuildMaterial < 0) || (currentBuildMaterial > maxBuildMaterial)) {
-                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0347));
+        {
+            const playerIndex = unitData.playerIndex;
+            if ((playerIndex == null)                               ||
+                (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
+                (playerIndex < CommonConstants.WarFirstPlayerIndex)
+            ) {
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0521));
             }
         }
 
-        const currentProduceMaterial  = unitData.currentProduceMaterial;
-        const maxProduceMaterial      = unitCfg.maxProduceMaterial;
-        if (maxProduceMaterial == null) {
-            if (currentProduceMaterial != null) {
-                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0348));
-            }
-        } else {
-            if ((currentProduceMaterial < 0) || (currentProduceMaterial > maxProduceMaterial)) {
-                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0348));
+        {
+            const actionState = unitData.actionState;
+            if ((actionState != null)                           &&
+                (actionState !== Types.UnitActionState.Acted)   &&
+                (actionState !== Types.UnitActionState.Idle)
+            ) {
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0526));
             }
         }
 
-        const currentPromotion = unitData.currentPromotion;
-        if ((currentPromotion < 0) || (currentPromotion > ConfigManager.getUnitMaxPromotion(configVersion))) {
-            return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0370));
-        }
-
-        const flareCurrentAmmo  = unitData.flareCurrentAmmo;
-        const flareMaxAmmo      = unitCfg.flareMaxAmmo;
-        if (flareMaxAmmo == null) {
-            if (flareCurrentAmmo != null) {
-                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0349));
-            }
-        } else {
-            if ((flareCurrentAmmo < 0) || (flareCurrentAmmo > flareMaxAmmo)) {
-                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0349));
+        {
+            const currentFuel = unitData.currentFuel;
+            if ((currentFuel != null)                                   &&
+                ((currentFuel < 0) || (currentFuel > unitCfg.maxFuel))
+            ) {
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0342));
             }
         }
 
-        const primaryCurrentAmmo  = unitData.primaryWeaponCurrentAmmo;
-        const primaryMaxAmmo      = unitCfg.primaryWeaponMaxAmmo;
-        if (primaryMaxAmmo == null) {
-            if (primaryCurrentAmmo != null) {
-                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0350));
+        {
+            const currentHp = unitData.currentHp;
+            if ((currentHp != null)                             &&
+                ((currentHp < 0) || (currentHp > unitCfg.maxHp))
+            ) {
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0339));
             }
-        } else {
-            if ((primaryCurrentAmmo < 0) || (primaryCurrentAmmo > primaryMaxAmmo)) {
-                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0350));
+        }
+
+        {
+            const currentBuildMaterial  = unitData.currentBuildMaterial;
+            const maxBuildMaterial      = unitCfg.maxBuildMaterial;
+            if (maxBuildMaterial == null) {
+                if (currentBuildMaterial != null) {
+                    return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0347));
+                }
+            } else {
+                if ((currentBuildMaterial != null)                                          &&
+                    ((currentBuildMaterial < 0) || (currentBuildMaterial > maxBuildMaterial))
+                ) {
+                    return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0347));
+                }
+            }
+        }
+
+        {
+            const currentProduceMaterial  = unitData.currentProduceMaterial;
+            const maxProduceMaterial      = unitCfg.maxProduceMaterial;
+            if (maxProduceMaterial == null) {
+                if (currentProduceMaterial != null) {
+                    return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0348));
+                }
+            } else {
+                if ((currentProduceMaterial != null)                                                &&
+                    ((currentProduceMaterial < 0) || (currentProduceMaterial > maxProduceMaterial))
+                ) {
+                    return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0348));
+                }
+            }
+        }
+
+        {
+            const currentPromotion = unitData.currentPromotion;
+            if ((currentPromotion != null) &&
+                ((currentPromotion < 0) || (currentPromotion > ConfigManager.getUnitMaxPromotion(configVersion)))
+            ) {
+                return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0370));
+            }
+        }
+
+        {
+            const flareCurrentAmmo  = unitData.flareCurrentAmmo;
+            const flareMaxAmmo      = unitCfg.flareMaxAmmo;
+            if (flareMaxAmmo == null) {
+                if (flareCurrentAmmo != null) {
+                    return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0349));
+                }
+            } else {
+                if ((flareCurrentAmmo != null)                                  &&
+                    ((flareCurrentAmmo < 0) || (flareCurrentAmmo > flareMaxAmmo))
+                ) {
+                    return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0349));
+                }
+            }
+        }
+
+        {
+            const primaryCurrentAmmo  = unitData.primaryWeaponCurrentAmmo;
+            const primaryMaxAmmo      = unitCfg.primaryWeaponMaxAmmo;
+            if (primaryMaxAmmo == null) {
+                if (primaryCurrentAmmo != null) {
+                    return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0350));
+                }
+            } else {
+                if ((primaryCurrentAmmo != null)                                    &&
+                    ((primaryCurrentAmmo < 0) || (primaryCurrentAmmo > primaryMaxAmmo))
+                ) {
+                    return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0350));
+                }
             }
         }
 

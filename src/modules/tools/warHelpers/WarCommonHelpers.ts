@@ -654,10 +654,10 @@ namespace WarCommonHelpers {
     export function updateTilesAndUnitsBeforeExecutingAction(
         war         : BwWar,
         extraData   : {
-            actingTiles?    : ISerialTile[],
-            actingUnits?    : ISerialUnit[],
-            discoveredTiles?: ISerialTile[],
-            discoveredUnits?: ISerialUnit[],
+            actingTiles?        : ISerialTile[] | null;
+            actingUnits?        : ISerialUnit[] | null;
+            discoveredTiles?    : ISerialTile[] | null;
+            discoveredUnits?    : ISerialUnit[] | null;
         } | undefined | null,
     ): void {
         if (extraData) {

@@ -1332,8 +1332,8 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        public getPlayerIndexInTurn(): number | undefined {
-            return this._playerIndexInTurn;
+        public getPlayerIndexInTurn(): number {
+            return Helpers.getDefined(this._playerIndexInTurn);
         }
         private _setPlayerIndexInTurn(index: number): void {
             if (this._playerIndexInTurn !== index) {

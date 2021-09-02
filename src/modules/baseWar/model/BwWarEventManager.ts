@@ -26,8 +26,8 @@ namespace TwnsBwWarEventManager {
 
     export class BwWarEventManager {
         private _war?               : BwWar;
-        private _warEventFullData?  : IWarEventFullData | null | undefined;
-        private _calledCountList?   : IDataForWarEventCalledCount[] | null | undefined;
+        private _warEventFullData?  : IWarEventFullData | null;
+        private _calledCountList?   : IDataForWarEventCalledCount[] | null;
 
         public init(data: ISerialWarEventManager | null | undefined): ClientErrorCode {
             if (!data) {
@@ -35,12 +35,10 @@ namespace TwnsBwWarEventManager {
                 this._setCalledCountList(null);
             } else {
                 // TODO: validate the data.
-                const warEventFullData = data.warEventFullData;
+                const warEventFullData = data.warEventFullData ?? null;
 
-
-
-                this._setWarEventFullData(data.warEventFullData);
-                this._setCalledCountList(data.calledCountList);
+                this._setWarEventFullData(warEventFullData);
+                this._setCalledCountList(data.calledCountList ?? null);
             }
 
             return ClientErrorCode.NoError;
@@ -49,19 +47,19 @@ namespace TwnsBwWarEventManager {
             return this.init(data);
         }
 
-        public serialize(): ISerialWarEventManager | undefined {
+        public serialize(): ISerialWarEventManager {
             return {
                 warEventFullData    : this.getWarEventFullData(),
                 calledCountList     : this._getCalledCountList(),
             };
         }
-        public serializeForCreateSfw(): ISerialWarEventManager | undefined {
+        public serializeForCreateSfw(): ISerialWarEventManager {
             return Helpers.deepClone({
                 warEventFullData    : this.getWarEventFullData(),
                 calledCountList     : this._getCalledCountList(),
             });
         }
-        public serializeForCreateMfr(): ISerialWarEventManager | undefined {
+        public serializeForCreateMfr(): ISerialWarEventManager {
             return this.serializeForCreateSfw();
         }
 
@@ -72,29 +70,28 @@ namespace TwnsBwWarEventManager {
         private _setWar(war: BwWar): void {
             this._war = war;
         }
-        private _getWar(): BwWar | undefined {
-            return this._war;
+        private _getWar(): BwWar {
+            return Helpers.getDefined(this._war);
         }
 
-        protected _setWarEventFullData(data: IWarEventFullData): void {
+        protected _setWarEventFullData(data: IWarEventFullData | null): void {
             this._warEventFullData = data;
         }
-        public getWarEventFullData(): IWarEventFullData | undefined | null {
-            return this._warEventFullData;
+        public getWarEventFullData(): IWarEventFullData | null {
+            return Helpers.getDefined(this._warEventFullData);
         }
 
-        protected _setCalledCountList(list: IDataForWarEventCalledCount[] | null | undefined): void {
+        protected _setCalledCountList(list: IDataForWarEventCalledCount[] | null): void {
             this._calledCountList = list;
         }
-        private _getCalledCountList(): IDataForWarEventCalledCount[] | null | undefined {
-            return this._calledCountList;
+        private _getCalledCountList(): IDataForWarEventCalledCount[] | null {
+            return Helpers.getDefined(this._calledCountList);
         }
 
-        public async callWarEvent(warEventId: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent[] | undefined> { // DONE
+        public async callWarEvent(warEventId: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent[]> { // DONE
             const event = this.getWarEvent(warEventId);
             if (event == null) {
-                Logger.error(`BwWarEventManager.callWarEvent() empty event.`);
-                return undefined;
+                throw new Error(`Empty event.`);
             }
 
             const extraDataList : IExtraDataForSystemCallWarEvent[] = [];
@@ -108,133 +105,56 @@ namespace TwnsBwWarEventManager {
 
             return extraDataList;
         }
-        private async _callWarAction(warEventActionId: number, indexForActionIdList: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | undefined> {
+        private async _callWarAction(warEventActionId: number, indexForActionIdList: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | null> {
             const action = this.getWarEventAction(warEventActionId);
-            if (action == null) {
-                Logger.error(`BwWarEventManager._callWarAction() empty action.`);
-                return undefined;
-            }
-
             if (action.WeaAddUnit) {
                 return await this._callActionAddUnit(indexForActionIdList, action.WeaAddUnit, isFastExecute);
             } else if (action.WeaSetPlayerAliveState) {
                 return await this._callActionSetPlayerAliveState(action.WeaSetPlayerAliveState);
             } else if (action.WeaDialogue) {
                 return await this._callActionDialogue(action.WeaDialogue, isFastExecute);
+            } else {
+                throw new Error(`Invalid action.`);
             }
 
             // TODO add more actions.
         }
         private async _callActionAddUnit(indexForActionIdList: number, action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | undefined> {
             const unitArray = action.unitArray;
-            if (unitArray == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty unitArray.`);
-                return undefined;
+            if ((unitArray == null) || (!unitArray.length)) {
+                throw new Error(`Empty unitArray.`);
             }
 
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty war.`);
-                return undefined;
-            }
-
-            const unitMap = war.getUnitMap();
-            if (unitMap == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty unitMap.`);
-                return undefined;
-            }
-
-            const tileMap = war.getTileMap();
-            if (tileMap == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty tileMap.`);
-                return undefined;
-            }
-
-            const playerManager = war.getPlayerManager();
-            if (playerManager == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty playerManager.`);
-                return undefined;
-            }
-
-            const configVersion = war.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty configVersion.`);
-                return undefined;
-            }
-
-            const mapSize = unitMap.getMapSize();
-            if (mapSize == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty mapSize.`);
-                return undefined;
-            }
-
-            const resultingUnitList: ProtoTypes.WarSerialization.ISerialUnit[] = [];
+            const war               = this._getWar();
+            const unitMap           = war.getUnitMap();
+            const tileMap           = war.getTileMap();
+            const playerManager     = war.getPlayerManager();
+            const configVersion     = war.getConfigVersion();
+            const mapSize           = unitMap.getMapSize();
+            const resultingUnitList : ProtoTypes.WarSerialization.ISerialUnit[] = [];
             for (const data of unitArray) {
-                const { canBeBlockedByUnit, needMovableTile, unitData } = data;
-                if (canBeBlockedByUnit == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty canBeBlockedByUnit.`);
-                    continue;
-                }
-                if (needMovableTile == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty needMovableTile.`);
-                    continue;
-                }
-                if (unitData == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty unitData.`);
-                    continue;
-                }
-
+                const unitData = Helpers.getExisted(data.unitData);
                 if (unitData.loaderUnitId != null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() invalid unitData.loaderUnitId.`);
-                    continue;
+                    throw new Error(`unitData.loaderUnitId != null: ${unitData.loaderUnitId}`);
                 }
 
-                const unitId = unitMap.getNextUnitId();
-                if (unitId == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty unitId.`);
-                    continue;
-                }
-
-                const unitType = unitData.unitType;
-                if (unitType == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty unitType.`);
-                    continue;
-                }
-
-                const unitCfg = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
-                if (unitCfg == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty unitCfg.`);
-                    continue;
-                }
-
-                const moveType = unitCfg.moveType;
-                if (moveType == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty moveType.`);
-                    continue;
-                }
-
-                const rawGridIndex = GridIndexHelpers.convertGridIndex(unitData.gridIndex);
-                if (rawGridIndex == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty rawGridIndex.`);
-                    continue;
-                }
-
-                const playerIndex = unitData.playerIndex;
-                if (playerIndex == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty playerIndex.`);
-                    continue;
-                }
-
+                const canBeBlockedByUnit    = Helpers.getExisted(data.canBeBlockedByUnit);
+                const needMovableTile       = Helpers.getExisted(data.needMovableTile);
+                const unitId                = unitMap.getNextUnitId();
+                const unitType              = Helpers.getExisted(unitData.unitType);
+                const unitCfg               = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+                const moveType              = unitCfg.moveType;
+                const rawGridIndex          = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
                 if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     configVersion,
                     playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
                 })) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() invalid unitData.`);
-                    continue;
+                    throw new Error(`Invalid unitData: ${JSON.stringify(unitData)}`);
                 }
 
+                const playerIndex = Helpers.getExisted(unitData.playerIndex);
                 const player = playerManager.getPlayer(playerIndex);
                 if (player == null) {
                     continue;
@@ -897,20 +817,8 @@ namespace TwnsBwWarEventManager {
 
             return arr.find(v => v.WecCommonData.conditionId === conditionId);
         }
-        public getWarEventAction(actionId: number): WarEvent.IWarEventAction | undefined {          // DONE
-            const warEventData = this.getWarEventFullData();
-            if (warEventData == null) {
-                Logger.error(`BwWarEventManager._getAction() empty warEventData.`);
-                return undefined;
-            }
-
-            const arr = warEventData.actionArray;
-            if (arr == null) {
-                Logger.error(`BwWarEventManager._getAction() empty arr.`);
-                return undefined;
-            }
-
-            return arr.find(v => v.WeaCommonData.actionId === actionId);
+        public getWarEventAction(actionId: number): WarEvent.IWarEventAction {          // DONE
+            return Helpers.getExisted(this.getWarEventFullData()?.actionArray?.find(v => v.WeaCommonData?.actionId === actionId));
         }
     }
 

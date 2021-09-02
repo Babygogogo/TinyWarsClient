@@ -1,13 +1,14 @@
 
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import Types                from "../../tools/helpers/Types";
-import Helpers              from "../../tools/helpers/Helpers";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
-import Timer                from "../../tools/helpers/Timer";
-import CommonModel          from "../../common/model/CommonModel";
-import UserModel            from "../../user/model/UserModel";
+import CommonModel      from "../../common/model/CommonModel";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import ConfigManager    from "../../tools/helpers/ConfigManager";
+import GridIndexHelpers from "../../tools/helpers/GridIndexHelpers";
+import Helpers          from "../../tools/helpers/Helpers";
+import Timer            from "../../tools/helpers/Timer";
+import Types            from "../../tools/helpers/Types";
+import TwnsUiImage      from "../../tools/ui/UiImage";
+import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
+import UserModel        from "../../user/model/UserModel";
 
 namespace TwnsWarMapUnitView {
     const { width: GRID_WIDTH, height: GRID_HEIGHT }    = CommonConstants.GridSize;
@@ -20,7 +21,7 @@ namespace TwnsWarMapUnitView {
         private readonly _imgState                  = new TwnsUiImage.UiImage();
         private readonly _framesForStateAnimation   : string[] = [];
 
-        private _unitData                           : Types.WarMapUnitViewData;
+        private _unitData?                          : Types.WarMapUnitViewData;
         private _isDark                             = false;
 
         public constructor(data?: Types.WarMapUnitViewData, tickCount?: number) {
@@ -44,8 +45,9 @@ namespace TwnsWarMapUnitView {
         }
 
         public update(data: Types.WarMapUnitViewData, tickCount?: number): void {
-            const gridIndex = data.gridIndex;
-            this._unitData  = data;
+            this._setUnitData(data);
+
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex));
             this._isDark    = data.actionState === Types.UnitActionState.Acted;
             this.x          = gridIndex.x * GRID_WIDTH - GRID_WIDTH / 4;
             this.y          = gridIndex.y * GRID_HEIGHT - GRID_HEIGHT / 2;
@@ -55,29 +57,28 @@ namespace TwnsWarMapUnitView {
             this._resetStateAnimationFrames();
         }
 
-        public getData(): Types.WarMapUnitViewData {
-            return this._unitData;
+        public getUnitData(): Types.WarMapUnitViewData {
+            return Helpers.getDefined(this._unitData);
+        }
+        private _setUnitData(data: Types.WarMapUnitViewData): void {
+            this._unitData = data;
         }
 
         public updateOnAnimationTick(tickCount: number): void {
-            const data = this._unitData;
-            if (data) {
-                this._tickStateAnimationFrame();
-                this._imgUnit.source = CommonModel.getCachedUnitImageSource({
-                    version     : UserModel.getSelfSettingsTextureVersion(),
-                    skinId      : data.skinId || ConfigManager.getUnitAndTileDefaultSkinId(data.playerIndex),
-                    unitType    : data.unitType,
-                    isMoving    : false,
-                    isDark      : this._isDark,
-                    tickCount,
-                });
-            }
+            const data = this.getUnitData();
+            this._tickStateAnimationFrame();
+            this._imgUnit.source = CommonModel.getCachedUnitImageSource({
+                version     : UserModel.getSelfSettingsTextureVersion(),
+                skinId      : data.skinId || ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data.playerIndex)),
+                unitType    : Helpers.getExisted(data.unitType),
+                isMoving    : false,
+                isDark      : this._isDark,
+                tickCount,
+            });
         }
 
         private _updateImageHp(): void {
-            const data          = this._unitData;
-            const hp            = data ? data.currentHp : null;
-            const normalizedHp  = hp == null ? null : WarCommonHelpers.getNormalizedHp(hp);
+            const normalizedHp  = WarCommonHelpers.getNormalizedHp(Helpers.getExisted(this.getUnitData().currentHp));
             const imgHp         = this._imgHp;
             if ((normalizedHp == null)                                                      ||
                 (normalizedHp <= 0)                                                         ||
@@ -108,12 +109,12 @@ namespace TwnsWarMapUnitView {
             const frames            = this._framesForStateAnimation;
             const framesCount       = frames.length;
             this._imgState.source   = framesCount <= 0
-                ? undefined
+                ? ``
                 : frames[Math.floor(Timer.getUnitAnimationTickCount() / 6) % framesCount];
         }
 
         private _addFrameForCoSkill(): void {
-            const skillType     = this._unitData.coUsingSkillType;
+            const skillType     = this.getUnitData().coUsingSkillType;
             const strForSkinId  = Helpers.getNumText(this._getSkinId());
             if (skillType === Types.CoSkillType.Power) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s08_f${strForSkinId}`);
@@ -122,69 +123,70 @@ namespace TwnsWarMapUnitView {
             }
         }
         private _addFrameForPromotion(): void {
-            const unit = this._unitData;
-            if (unit.hasLoadedCo) {
+            const unitData = this.getUnitData();
+            if (unitData.hasLoadedCo) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s05_f99`);
             } else {
-                const promotion = unit.currentPromotion;
+                const promotion = Helpers.getExisted(unitData.currentPromotion);
                 if (promotion > 0) {
                     this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s05_f${Helpers.getNumText(promotion)}`);
                 }
             }
         }
         private _addFrameForFuel(): void {
-            if (this._unitData.currentFuel <= this._getUnitTemplateCfg().maxFuel * 0.4) {
+            if (Helpers.getExisted(this.getUnitData().currentFuel) <= this._getUnitTemplateCfg().maxFuel * 0.4) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s02_f01`);
             }
         }
         private _addFrameForAmmo(): void {
-            const unitData  = this._unitData;
-            const cfg       = this._getUnitTemplateCfg();
-            if ((unitData.primaryWeaponCurrentAmmo <= cfg.primaryWeaponMaxAmmo * 0.4) ||
-                (unitData.flareCurrentAmmo <= cfg.flareMaxAmmo * 0.4)
+            const unitData              = this.getUnitData();
+            const cfg                   = this._getUnitTemplateCfg();
+            const primaryWeaponMaxAmmo  = cfg.primaryWeaponMaxAmmo;
+            const flareMaxAmmo          = cfg.flareMaxAmmo;
+            if (((primaryWeaponMaxAmmo != null) && (Helpers.getExisted(unitData.primaryWeaponCurrentAmmo) <= primaryWeaponMaxAmmo * 0.4)) ||
+                ((flareMaxAmmo != null) && (Helpers.getExisted(unitData.flareCurrentAmmo) <= flareMaxAmmo * 0.4))
             ) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s02_f02`);
             }
         }
         private _addFrameForDive(): void {
-            if (this._unitData.isDiving) {
+            if (this.getUnitData().isDiving) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s03_f${Helpers.getNumText(this._getSkinId())}`);
             }
         }
         private _addFrameForCapture(): void {
-            if (this._unitData.isCapturingTile) {
+            if (this.getUnitData().isCapturingTile) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(this._getSkinId())}`);
             }
         }
         private _addFrameForBuild(): void {
-            if (this._unitData.isBuildingTile) {
+            if (this.getUnitData().isBuildingTile) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(this._getSkinId())}`);
             }
         }
         private _addFrameForLoader(): void {
-            if (this._unitData.hasLoadedUnit) {
+            if (this.getUnitData().hasLoadedUnit) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(this._getSkinId())}`);
             }
         }
         private _addFrameForMaterial(): void {
-            const unitData  = this._unitData;
-            const cfg       = this._getUnitTemplateCfg();
-            if ((unitData.currentBuildMaterial <= cfg.maxBuildMaterial * 0.4) ||
-                (unitData.currentProduceMaterial <= cfg.maxProduceMaterial * 0.4)
+            const unitData              = this.getUnitData();
+            const cfg                   = this._getUnitTemplateCfg();
+            const maxBuildMaterial      = cfg.maxBuildMaterial;
+            const maxProduceMaterial    = cfg.maxProduceMaterial;
+            if (((maxBuildMaterial != null) && (Helpers.getExisted(unitData.currentBuildMaterial) <= maxBuildMaterial * 0.4)) ||
+                ((maxProduceMaterial != null) && (Helpers.getExisted(unitData.currentProduceMaterial) <= maxProduceMaterial * 0.4))
             ) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s02_f04`);
             }
         }
 
         private _getUnitTemplateCfg(): Types.UnitTemplateCfg {
-            const data = this._unitData;
-            return data
-                ? ConfigManager.getUnitTemplateCfg(ConfigManager.getLatestConfigVersion(), data.unitType)
-                : null;
+            return ConfigManager.getUnitTemplateCfg(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Helpers.getExisted(this.getUnitData().unitType));
         }
         private _getSkinId(): number {
-            const data = this._unitData;
-            return data.skinId || ConfigManager.getUnitAndTileDefaultSkinId(data.playerIndex);
+            const data = this.getUnitData();
+            return data.skinId ?? ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data.playerIndex));
         }
     }
 

@@ -1,6 +1,6 @@
 
 import FloatText                from "../../tools/helpers/FloatText";
-import Logger                   from "../../tools/helpers/Logger";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -22,7 +22,7 @@ namespace TwnsWeNodeReplacePanel {
     type OpenDataForWeNodeReplacePanel = {
         eventId         : number;
         parentNodeId?   : number;
-        nodeId          : number | null | undefined;
+        nodeId          : number | null;
         fullData        : IWarEventFullData;
     };
     export class WeNodeReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeNodeReplacePanel> {
@@ -31,10 +31,10 @@ namespace TwnsWeNodeReplacePanel {
 
         private static _instance: WeNodeReplacePanel;
 
-        private _listNode       : TwnsUiScrollList.UiScrollList<DataForNodeRenderer>;
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _labelNoNode    : TwnsUiLabel.UiLabel;
-        private _btnClose       : TwnsUiButton.UiButton;
+        private readonly _listNode!     : TwnsUiScrollList.UiScrollList<DataForNodeRenderer>;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelNoNode!  : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!     : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForWeNodeReplacePanel): void {
             if (!WeNodeReplacePanel._instance) {
@@ -69,7 +69,7 @@ namespace TwnsWeNodeReplacePanel {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -88,7 +88,7 @@ namespace TwnsWeNodeReplacePanel {
             const openData      = this._getOpenData();
             const eventId       = openData.eventId;
             const parentNodeId  = openData.parentNodeId;
-            const srcNodeId     = openData.nodeId;
+            const srcNodeId     = openData.nodeId ?? null;
             const fullData      = openData.fullData;
 
             const dataArray: DataForNodeRenderer[] = [];
@@ -97,7 +97,7 @@ namespace TwnsWeNodeReplacePanel {
                     eventId,
                     parentNodeId,
                     srcNodeId,
-                    candidateNodeId : node.nodeId,
+                    candidateNodeId : Helpers.getExisted(node.nodeId),
                     fullData,
                 });
             }
@@ -110,16 +110,16 @@ namespace TwnsWeNodeReplacePanel {
     type DataForNodeRenderer = {
         eventId         : number;
         parentNodeId?   : number;
-        srcNodeId       : number;
+        srcNodeId       : number | null;
         candidateNodeId : number;
         fullData        : IWarEventFullData;
     };
     class NodeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForNodeRenderer> {
-        private _labelNodeId        : TwnsUiLabel.UiLabel;
-        private _labelSubNode       : TwnsUiLabel.UiLabel;
-        private _labelSubCondition  : TwnsUiLabel.UiLabel;
-        private _btnCopy            : TwnsUiButton.UiButton;
-        private _btnSelect          : TwnsUiButton.UiButton;
+        private readonly _labelNodeId!          : TwnsUiLabel.UiLabel;
+        private readonly _labelSubNode!         : TwnsUiLabel.UiLabel;
+        private readonly _labelSubCondition!    : TwnsUiLabel.UiLabel;
+        private readonly _btnCopy!              : TwnsUiButton.UiButton;
+        private readonly _btnSelect!            : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -139,7 +139,7 @@ namespace TwnsWeNodeReplacePanel {
             this._updateLabelSubCondition();
         }
 
-        private _onTouchedBtnCopy(e: egret.TouchEvent): void {          // DONE
+        private _onTouchedBtnCopy(): void {          // DONE
             const data = this.data;
             if (data == null) {
                 return;
@@ -150,12 +150,10 @@ namespace TwnsWeNodeReplacePanel {
             const candidateNodeId   = data.candidateNodeId;
             const candidateNode     = (fullData.conditionNodeArray || []).find(v => v.nodeId === candidateNodeId);
             if (candidateNode == null) {
-                Logger.error(`MeWeNodeReplacePanel.NodeRenderer._onTouchedBtnCopy() empty candidateNode.`);
-                FloatText.show(`MeWeNodeReplacePanel.NodeRenderer._onTouchedBtnCopy() empty candidateNode.`);
-                return;
+                throw new Error(`Empty candidateNode.`);
             }
 
-            const isAnd             = candidateNode.isAnd;
+            const isAnd             = Helpers.getExisted(candidateNode.isAnd);
             const conditionIdArray  = (candidateNode.conditionIdArray || []).concat();
             const subNodeIdArray    = (candidateNode.subNodeIdArray || []).concat();
             if (parentNodeId == null) {
@@ -184,7 +182,7 @@ namespace TwnsWeNodeReplacePanel {
                 }
             }
         }
-        private _onTouchedBtnSelect(e: egret.TouchEvent): void {        // DONE
+        private _onTouchedBtnSelect(): void {        // DONE
             const data = this.data;
             if (data == null) {
                 return;
@@ -217,7 +215,7 @@ namespace TwnsWeNodeReplacePanel {
                 }
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {        // DONE
+        private _onNotifyLanguageChanged(): void {        // DONE
             this._updateComponentsForLanguage();
         }
 
@@ -264,7 +262,7 @@ namespace TwnsWeNodeReplacePanel {
             const node  = (data.fullData.conditionNodeArray || []).find(v => v.nodeId === data.candidateNodeId);
             const label = this._labelSubCondition;
             if (node == null) {
-                label.text = undefined;
+                label.text = ``;
             } else {
                 const textArray: string[] = [];
                 for (const conditionId of (node.conditionIdArray || []).sort((v1, v2) => v1 - v2)) {

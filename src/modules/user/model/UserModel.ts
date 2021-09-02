@@ -1,7 +1,7 @@
 
 import CommonModel      from "../../common/model/CommonModel";
 import FloatText        from "../../tools/helpers/FloatText";
-import Logger           from "../../tools/helpers/Logger";
+import Helpers          from "../../tools/helpers/Helpers";
 import Types            from "../../tools/helpers/Types";
 import Lang             from "../../tools/lang/Lang";
 import TwnsLangTextType from "../../tools/lang/LangTextType";
@@ -20,23 +20,23 @@ namespace UserModel {
     import IUserPrivilege       = ProtoTypes.User.IUserPrivilege;
 
     let _isLoggedIn                 = false;
-    let _selfInfo                   : IUserSelfInfo;
+    let _selfInfo                   : IUserSelfInfo | null = null;
     let _selfAccount                : string;
-    let _selfPassword               : string;
-    const _userPublicInfoDict       = new Map<number, IUserPublicInfo>();
-    const _userPublicInfoRequests   = new Map<number, ((info: NetMessage.MsgUserGetPublicInfo.IS | undefined | null) => void)[]>();
+    let _selfPassword               : string | null = null;
+    const _userPublicInfoDict       = new Map<number, IUserPublicInfo | null>();
+    const _userPublicInfoRequests   = new Map<number, ((info: NetMessage.MsgUserGetPublicInfo.IS) => void)[]>();
 
     export function init(): void {
         Notify.addEventListeners([
             { type: NotifyType.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, },
             { type: NotifyType.MsgUserLogout,          callback: _onNotifyMsgUserLogout, },
-        ], undefined);
+        ], null);
     }
 
     export function clearLoginInfo(): void {
         setIsLoggedIn(false);
-        setSelfInfo(undefined);
-        setSelfPassword(undefined);
+        setSelfInfo(null);
+        setSelfPassword(null);
     }
 
     function setIsLoggedIn(isLoggedIn: boolean): void {
@@ -46,7 +46,7 @@ namespace UserModel {
         return _isLoggedIn;
     }
 
-    function setSelfInfo(selfInfo: IUserSelfInfo): void {
+    function setSelfInfo(selfInfo: IUserSelfInfo | null): void {
         _selfInfo = selfInfo;
     }
     export function getSelfInfo(): IUserSelfInfo | null {
@@ -54,12 +54,12 @@ namespace UserModel {
     }
     function getSelfUserComplexInfo(): ProtoTypes.User.IUserComplexInfo | null {
         const selfInfo = getSelfInfo();
-        return selfInfo ? selfInfo.userComplexInfo : null;
+        return selfInfo ? selfInfo.userComplexInfo ?? null : null;
     }
 
-    export function getSelfUserId(): number | undefined {
+    export function getSelfUserId(): number | null {
         const selfInfo = getSelfInfo();
-        return selfInfo ? selfInfo.userId : null;
+        return selfInfo ? selfInfo.userId ?? null : null;
     }
 
     export function setSelfAccount(account: string): void {
@@ -69,16 +69,16 @@ namespace UserModel {
         return _selfAccount;
     }
 
-    export function setSelfPassword(password: string): void {
+    export function setSelfPassword(password: string | null): void {
         _selfPassword = password;
     }
-    export function getSelfPassword(): string {
+    export function getSelfPassword(): string | null {
         return _selfPassword;
     }
 
     function getSelfUserPrivilege(): IUserPrivilege | null {
         const userComplexInfo = getSelfUserComplexInfo();
-        return userComplexInfo ? userComplexInfo.userPrivilege : null;
+        return userComplexInfo ? userComplexInfo.userPrivilege ?? null : null;
     }
     function setSelfUserPrivilege(userPrivilege: IUserPrivilege): void {
         const userComplexInfo = getSelfUserComplexInfo();
@@ -95,28 +95,28 @@ namespace UserModel {
     export function checkCanSelfEditChangeLog(): boolean {
         const privilege = getSelfUserPrivilege();
         return (!!privilege)
-            && ((privilege.isAdmin) || (privilege.isChangeLogEditor));
+            && ((!!privilege.isAdmin) || (!!privilege.isChangeLogEditor));
     }
 
     export function getSelfNickname(): string | null {
         const info = getSelfInfo();
-        return info ? info.nickname : null;
+        return info ? info.nickname ?? null : null;
     }
     function setSelfNickname(nickname: string): void {
         const info = getSelfInfo();
         (info) && (info.nickname = nickname);
     }
 
-    export function getSelfDiscordId(): string {
+    export function getSelfDiscordId(): string | null {
         const info = getSelfInfo();
-        return info ? info.discordId : null;
+        return info ? info.discordId ?? null : null;
     }
-    function setSelfDiscordId(discordId: string): void {
+    function setSelfDiscordId(discordId: string | null): void {
         const info = getSelfInfo();
         (info) && (info.discordId = discordId);
     }
 
-    export function getUserPublicInfo(userId: number): Promise<IUserPublicInfo | undefined | null> {
+    export function getUserPublicInfo(userId: number): Promise<IUserPublicInfo | null> {
         if (userId == null) {
             return new Promise((resolve) => resolve(null));
         }
@@ -128,7 +128,7 @@ namespace UserModel {
 
         if (_userPublicInfoRequests.has(userId)) {
             return new Promise((resolve) => {
-                _userPublicInfoRequests.get(userId).push(info => resolve(info.userPublicInfo));
+                Helpers.getExisted(_userPublicInfoRequests.get(userId)).push(info => resolve(info.userPublicInfo ?? null));
             });
         }
 
@@ -139,7 +139,7 @@ namespace UserModel {
                     Notify.removeEventListener(NotifyType.MsgUserGetPublicInfo,        callbackOnSucceed);
                     Notify.removeEventListener(NotifyType.MsgUserGetPublicInfoFailed,  callbackOnFailed);
 
-                    for (const cb of _userPublicInfoRequests.get(userId)) {
+                    for (const cb of Helpers.getExisted(_userPublicInfoRequests.get(userId))) {
                         cb(data);
                     }
                     _userPublicInfoRequests.delete(userId);
@@ -153,7 +153,7 @@ namespace UserModel {
                     Notify.removeEventListener(NotifyType.MsgUserGetPublicInfo,        callbackOnSucceed);
                     Notify.removeEventListener(NotifyType.MsgUserGetPublicInfoFailed,  callbackOnFailed);
 
-                    for (const cb of _userPublicInfoRequests.get(userId)) {
+                    for (const cb of Helpers.getExisted(_userPublicInfoRequests.get(userId))) {
                         cb(data);
                     }
                     _userPublicInfoRequests.delete(userId);
@@ -169,32 +169,29 @@ namespace UserModel {
         });
 
         return new Promise((resolve) => {
-            _userPublicInfoRequests.set(userId, [info => resolve(info.userPublicInfo)]);
+            _userPublicInfoRequests.set(userId, [info => resolve(info.userPublicInfo ?? null)]);
         });
     }
     export function setUserPublicInfo(info: IUserPublicInfo): void {
-        _userPublicInfoDict.set(info.userId, info);
+        _userPublicInfoDict.set(Helpers.getExisted(info.userId), info);
     }
 
-    export async function getUserNickname(userId: number): Promise<string> {
+    export async function getUserNickname(userId: number): Promise<string | null> {
         const info = await getUserPublicInfo(userId);
-        return info ? info.nickname : undefined;
+        return info ? info.nickname ?? null : null;
     }
-    export async function getUserMrwRankScoreInfo(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserRankInfo.IUserMrwRankInfo> {
-        const info = await getUserPublicInfo(userId);
-        return (info ? info.userMrwRankInfoArray || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
+    export async function getUserMrwRankScoreInfo(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserRankInfo.IUserMrwRankInfo | null> {
+        return (await getUserPublicInfo(userId))?.userMrwRankInfoArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
-    export async function getUserMpwStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserWarStatistics.IUserMpwStatistics> {
-        const info = await getUserPublicInfo(userId);
-        return (info ? info.userMpwStatisticsArray || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
+    export async function getUserMpwStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserWarStatistics.IUserMpwStatistics | null> {
+        return (await getUserPublicInfo(userId))?.userMpwStatisticsArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
-    export function getMapRating(mapId: number): number | undefined {
-        return getSelfUserComplexInfo()?.userMapRatingArray?.find(v => v.mapId === mapId)?.rating;
+    export function getMapRating(mapId: number): number | null {
+        return getSelfUserComplexInfo()?.userMapRatingArray?.find(v => v.mapId === mapId)?.rating ?? null;
     }
 
     function getSelfSettings(): IUserSettings | null {
-        const userComplexInfo = getSelfUserComplexInfo();
-        return userComplexInfo ? userComplexInfo.userSettings : null;
+        return getSelfUserComplexInfo()?.userSettings ?? null;
     }
     export function getSelfSettingsTextureVersion(): Types.UnitAndTileTextureVersion {
         const selfSettings = getSelfSettings();
@@ -222,21 +219,21 @@ namespace UserModel {
         (userSelfInfo) && (setSelfInfo(userSelfInfo));
     }
     export async function updateOnMsgUserGetOnlineState(data: NetMessage.MsgUserGetOnlineState.IS): Promise<void> {
-        const userPublicInfo = await getUserPublicInfo(data.userId);
+        const userPublicInfo = await getUserPublicInfo(Helpers.getExisted(data.userId));
         if (userPublicInfo) {
             userPublicInfo.isOnline         = data.isOnline;
             userPublicInfo.lastActivityTime = data.lastActivityTime;
         }
     }
     export function updateOnMsgUserSetNickname(data: NetMessage.MsgUserSetNickname.IS): void {
-        setSelfNickname(data.nickname);
+        setSelfNickname(Helpers.getExisted(data.nickname));
     }
     export function updateOnMsgUserSetDiscordId(data: NetMessage.MsgUserSetDiscordId.IS): void {
-        setSelfDiscordId(data.discordId);
+        setSelfDiscordId(data.discordId ?? null);
     }
     export function updateOnMsgUserSetPrivilege(data: NetMessage.MsgUserSetPrivilege.IS): void {
         if (data.userId === getSelfUserId()) {
-            setSelfUserPrivilege(data.userPrivilege);
+            setSelfUserPrivilege(Helpers.getExisted(data.userPrivilege));
         }
     }
     export function updateOnMsgUserSetSettings(data: NetMessage.MsgUserSetSettings.IS): void {
@@ -261,12 +258,7 @@ namespace UserModel {
         }
     }
     export function updateOnMsgUserSetMapRating(data: NetMessage.MsgUserSetMapRating.IS): void {
-        const complexInfo = getSelfUserComplexInfo();
-        if (complexInfo == null) {
-            Logger.error(`UserModel.updateOnMsgUserSetMapRating() empty complexInfo.`);
-            return;
-        }
-
+        const complexInfo       = Helpers.getExisted(getSelfUserComplexInfo());
         const { mapId, rating } = data;
         if (complexInfo.userMapRatingArray == null) {
             complexInfo.userMapRatingArray = [{

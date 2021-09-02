@@ -326,7 +326,7 @@ namespace WarActionReviser {
         }
 
         const skillType = rawAction.skillType;
-        if (!playerInTurn.checkCanUseCoSkill(skillType)) {
+        if ((skillType == null) || (!playerInTurn.checkCanUseCoSkill(skillType))) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerUseCoSkill_02 };
         }
 

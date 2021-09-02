@@ -1,4 +1,6 @@
 
+import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import Helpers                          from "../../tools/helpers/Helpers";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -31,18 +33,18 @@ namespace TwnsWeConditionModifyPanel12 {
 
         private static _instance: WeConditionModifyPanel12;
 
-        private _labelTitle         : TwnsUiLabel.UiLabel;
-        private _btnClose           : TwnsUiButton.UiButton;
-        private _btnType            : TwnsUiButton.UiButton;
-        private _labelDesc          : TwnsUiLabel.UiLabel;
-        private _labelError         : TwnsUiLabel.UiLabel;
-        private _groupIsNot         : eui.Group;
-        private _labelIsNot         : TwnsUiLabel.UiLabel;
-        private _imgIsNot           : TwnsUiImage.UiImage;
-        private _labelAliveState    : TwnsUiLabel.UiLabel;
-        private _btnAliveState      : TwnsUiButton.UiButton;
-        private _labelPlayerIndex   : TwnsUiLabel.UiLabel;
-        private _inputPlayerIndex   : TwnsUiTextInput.UiTextInput;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
+        private readonly _btnType!          : TwnsUiButton.UiButton;
+        private readonly _labelDesc!        : TwnsUiLabel.UiLabel;
+        private readonly _labelError!       : TwnsUiLabel.UiLabel;
+        private readonly _groupIsNot!       : eui.Group;
+        private readonly _labelIsNot!       : TwnsUiLabel.UiLabel;
+        private readonly _imgIsNot!         : TwnsUiImage.UiImage;
+        private readonly _labelAliveState!  : TwnsUiLabel.UiLabel;
+        private readonly _btnAliveState!    : TwnsUiButton.UiButton;
+        private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
+        private readonly _inputPlayerIndex! : TwnsUiTextInput.UiTextInput;
 
         public static show(openData: OpenDataForWeConditionModifyPanel12): void {
             if (!WeConditionModifyPanel12._instance) {
@@ -81,25 +83,25 @@ namespace TwnsWeConditionModifyPanel12 {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onTouchedBtnType(e: egret.TouchEvent): void {
+        private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
             WeConditionTypeListPanel.show({
                 fullData    : openData.fullData,
                 condition   : openData.condition,
             });
         }
-        private _onTouchedGroupIsNot(e: egret.TouchEvent): void {
-            const data  = this._getCondition().WecPlayerAliveStateEqualTo;
+        private _onTouchedGroupIsNot(): void {
+            const data  = Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo);
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDesc();
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onTouchedBtnAliveState(e: egret.TouchEvent): void {
-            const data              = this._getCondition().WecPlayerAliveStateEqualTo;
+        private _onTouchedBtnAliveState(): void {
+            const data              = Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo);
             const currAliveState    = data.aliveStateEqualTo;
             if (currAliveState === Types.PlayerAliveState.Alive) {
                 data.aliveStateEqualTo = Types.PlayerAliveState.Dying;
@@ -112,13 +114,12 @@ namespace TwnsWeConditionModifyPanel12 {
             this._updateLabelAliveState();
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onFocusOutInputPlayerIndex(e: egret.FocusEvent): void {
+        private _onFocusOutInputPlayerIndex(): void {
             const value = parseInt(this._inputPlayerIndex.text);
-            const data  = this._getCondition().WecPlayerAliveStateEqualTo;
             if (isNaN(value)) {
                 this._updateInputPlayerIndex();
             } else {
-                data.playerIndexEqualTo = value;
+                Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo).playerIndexEqualTo = value;
                 this._updateLabelDesc();
                 this._updateInputPlayerIndex();
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -135,7 +136,7 @@ namespace TwnsWeConditionModifyPanel12 {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = `${Lang.getText(LangTextType.B0501)} C${this._getCondition().WecCommonData.conditionId}`;
+            this._labelTitle.text       = `${Lang.getText(LangTextType.B0501)} C${this._getCondition().WecCommonData?.conditionId}`;
             this._btnClose.label        = Lang.getText(LangTextType.B0146);
             this._btnType.label         = Lang.getText(LangTextType.B0516);
             this._labelIsNot.text       = Lang.getText(LangTextType.B0517);
@@ -154,16 +155,16 @@ namespace TwnsWeConditionModifyPanel12 {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition);
+            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
-            this._imgIsNot.visible = !!this._getCondition().WecPlayerAliveStateEqualTo.isNot;
+            this._imgIsNot.visible = !!this._getCondition().WecPlayerAliveStateEqualTo?.isNot;
         }
         private _updateLabelAliveState(): void {
-            this._labelAliveState.text = Lang.getPlayerAliveStateName(this._getCondition().WecPlayerAliveStateEqualTo.aliveStateEqualTo);
+            this._labelAliveState.text = Lang.getPlayerAliveStateName(Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo?.aliveStateEqualTo)) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputPlayerIndex(): void {
-            this._inputPlayerIndex.text = `${this._getCondition().WecPlayerAliveStateEqualTo.playerIndexEqualTo}`;
+            this._inputPlayerIndex.text = `${this._getCondition().WecPlayerAliveStateEqualTo?.playerIndexEqualTo}`;
         }
 
         private _getCondition(): IWarEventCondition {

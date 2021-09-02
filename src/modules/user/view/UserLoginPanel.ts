@@ -25,25 +25,25 @@ namespace TwnsUserLoginPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private _imgTitle                   : TwnsUiImage.UiImage;
+        private readonly _imgTitle!                 : TwnsUiImage.UiImage;
 
-        private _groupAccount               : eui.Group;
-        private _labelAccount               : TwnsUiLabel.UiLabel;
-        private _inputAccount               : TwnsUiTextInput.UiTextInput;
+        private readonly _groupAccount!             : eui.Group;
+        private readonly _labelAccount!             : TwnsUiLabel.UiLabel;
+        private readonly _inputAccount!             : TwnsUiTextInput.UiTextInput;
 
-        private _groupPassword              : eui.Group;
-        private _labelPassword              : TwnsUiLabel.UiLabel;
-        private _inputPassword              : TwnsUiTextInput.UiTextInput;
+        private readonly _groupPassword!            : eui.Group;
+        private readonly _labelPassword!            : TwnsUiLabel.UiLabel;
+        private readonly _inputPassword!            : TwnsUiTextInput.UiTextInput;
 
-        private _groupPasswordCommand       : eui.Group;
-        private _groupRememberPassword      : eui.Group;
-        private _labelRememberPassword      : TwnsUiLabel.UiLabel;
-        private _imgRememberPasswordCheck   : TwnsUiImage.UiImage;
-        private _btnForgetPassword          : TwnsUiButton.UiButton;
+        private readonly _groupPasswordCommand!     : eui.Group;
+        private readonly _groupRememberPassword!    : eui.Group;
+        private readonly _labelRememberPassword!    : TwnsUiLabel.UiLabel;
+        private readonly _imgRememberPasswordCheck! : TwnsUiImage.UiImage;
+        private readonly _btnForgetPassword!        : TwnsUiButton.UiButton;
 
-        private _groupButton                : eui.Group;
-        private _btnRegister                : TwnsUiButton.UiButton;
-        private _btnLogin                   : TwnsUiButton.UiButton;
+        private readonly _groupButton!              : eui.Group;
+        private readonly _btnRegister!              : TwnsUiButton.UiButton;
+        private readonly _btnLogin!                 : TwnsUiButton.UiButton;
 
         private static _instance: UserLoginPanel;
 

@@ -25,7 +25,7 @@ namespace TwnsBwUnitMap {
     export class BwUnitMap {
         private _war            : BwWar | undefined;
         private _nextUnitId     : number | undefined;
-        private _map            : (BwUnit | undefined)[][] | undefined;
+        private _map?           : (BwUnit | null)[][];
         private _mapSize        : Types.MapSize | undefined;
         private _loadedUnits    : Map<number, BwUnit> | undefined;
 
@@ -247,8 +247,8 @@ namespace TwnsBwUnitMap {
         private _setMap(map: (BwUnit | undefined)[][]): void {
             this._map = map;
         }
-        private _getMap(): (BwUnit | undefined)[][] | undefined {
-            return this._map;
+        private _getMap(): (BwUnit | null)[][] {
+            return Helpers.getDefined(this._map);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,7 +279,7 @@ namespace TwnsBwUnitMap {
             this._nextUnitId = id;
         }
 
-        public getUnit(gridIndex: Types.GridIndex, unitId: number | undefined | null): BwUnit | undefined {
+        public getUnit(gridIndex: GridIndex, unitId: Types.Undefinable<number>): BwUnit | null {
             if (unitId == null) {
                 return this.getUnitOnMap(gridIndex);
             } else {
@@ -312,8 +312,8 @@ namespace TwnsBwUnitMap {
             }
         }
 
-        public getUnitOnMap(gridIndex: Types.GridIndex): BwUnit | undefined {
-            return this._map[gridIndex.x][gridIndex.y];
+        public getUnitOnMap(gridIndex: GridIndex): BwUnit | null {
+            return this._getMap()[gridIndex.x][gridIndex.y] ?? null;
         }
         public getVisibleUnitOnMap(gridIndex: GridIndex): BwUnit | undefined | null {
             const unit = this.getUnitOnMap(gridIndex);

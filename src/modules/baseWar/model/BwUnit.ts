@@ -221,8 +221,8 @@ namespace TwnsBwUnit {
         private _setWar(war: BwWar | undefined): void {
             this._war = war;
         }
-        public getWar(): BwWar | undefined {
-            return this._war;
+        public getWar(): BwWar {
+            return Helpers.getDefined(this._war);
         }
 
         private _setTemplateCfg(cfg: UnitTemplateCfg): void {
@@ -285,20 +285,8 @@ namespace TwnsBwUnit {
             return ConfigManager.getVisionBonusCfg(configVersion, unitType);
         }
 
-        public getPlayer(): TwnsBwPlayer.BwPlayer | undefined {
-            const war = this.getWar();
-            if (war == null) {
-                Logger.error(`BwUnit.getPlayer() empty war.`);
-                return undefined;
-            }
-
-            const playerIndex = this.getPlayerIndex();
-            if (playerIndex == null) {
-                Logger.error(`BwUnit.getPlayer() empty playerIndex.`);
-                return undefined;
-            }
-
-            return war.getPlayer(playerIndex);
+        public getPlayer(): TwnsBwPlayer.BwPlayer {
+            return this.getWar().getPlayer(this.getPlayerIndex());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -322,8 +310,8 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for unit id.
         ////////////////////////////////////////////////////////////////////////////////
-        public getUnitId(): number | undefined {
-            return this._unitId;
+        public getUnitId(): number {
+            return Helpers.getDefined(this._unitId);
         }
         public setUnitId(id: number): void {
             this._unitId = id;
@@ -355,18 +343,12 @@ namespace TwnsBwUnit {
         private _setPlayerIndex(index: number): void {
             this._playerIndex = index;
         }
-        public getPlayerIndex(): number | undefined {
-            return this._playerIndex;
+        public getPlayerIndex(): number {
+            return Helpers.getDefined(this._playerIndex);
         }
 
-        public getTeamIndex(): number | undefined {
-            const player = this.getPlayer();
-            if (player == null) {
-                Logger.error(`BwUnit.getTeamIndex() empty player.`);
-                return undefined;
-            }
-
-            return player.getTeamIndex();
+        public getTeamIndex(): number {
+            return this.getPlayer().getTeamIndex();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -388,8 +370,8 @@ namespace TwnsBwUnit {
                 ? undefined
                 : WarCommonHelpers.getNormalizedHp(currentHp);
         }
-        public getCurrentHp(): number | undefined {
-            return this._currentHp;
+        public getCurrentHp(): number {
+            return Helpers.getDefined(this._currentHp);
         }
         public setCurrentHp(hp: number): void {
             const maxHp = this.getMaxHp();

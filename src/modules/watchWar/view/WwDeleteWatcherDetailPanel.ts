@@ -1,4 +1,5 @@
 
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -164,7 +165,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(LangTextType.B0012) : "";
             this._imgDelete.visible             = data.isDelete;
             this._imgKeep.visible               = !data.isDelete;
-            UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name);
+            UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name ?? CommonConstants.ErrorTextForUndefined);
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

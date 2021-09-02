@@ -30,95 +30,53 @@ namespace TwnsUserPanel {
 
         private static _instance: UserPanel;
 
-        // @ts-ignore
-        private readonly _imgMask           : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _group             : eui.Group;
-        // @ts-ignore
-        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _btnClose          : TwnsUiButton.UiButton;
+        private readonly _imgMask!                  : TwnsUiImage.UiImage;
+        private readonly _group!                    : eui.Group;
+        private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!                 : TwnsUiButton.UiButton;
 
-        // @ts-ignore
-        private readonly _groupButtons      : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnChat           : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _imgLogo           : TwnsUiImage.UiImage;
+        private readonly _groupButtons!             : TwnsUiButton.UiButton;
+        private readonly _btnChat!                  : TwnsUiButton.UiButton;
+        private readonly _imgLogo!                  : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private readonly _labelStdRankScoreTitle    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelStdRankScore         : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelStdRankRankTitle     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelStdRankRank          : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelStdRankRankSuffix    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelFogRankScoreTitle    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelFogRankScore         : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelFogRankRankTitle     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelFogRankRank          : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelFogRankRankSuffix    : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankScoreTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankScore!        : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankRankTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankRank!         : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankRankSuffix!   : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankScoreTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankScore!        : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankRankTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankRank!         : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankRankSuffix!   : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
-        private readonly _labelRegisterTimeTitle    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelRegisterTime1        : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelRegisterTime2        : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelLastLoginTimeTitle   : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelLastLoginTime1       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelLastLoginTime2       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelOnlineTimeTitle      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelOnlineTime           : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelLoginCountTitle      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelLoginCount           : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelUserId               : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelUserIdTitle          : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelDiscordId            : TwnsUiLabel.UiLabel;
+        private readonly _labelRegisterTimeTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelRegisterTime1!       : TwnsUiLabel.UiLabel;
+        private readonly _labelRegisterTime2!       : TwnsUiLabel.UiLabel;
+        private readonly _labelLastLoginTimeTitle!  : TwnsUiLabel.UiLabel;
+        private readonly _labelLastLoginTime1!      : TwnsUiLabel.UiLabel;
+        private readonly _labelLastLoginTime2!      : TwnsUiLabel.UiLabel;
+        private readonly _labelOnlineTimeTitle!     : TwnsUiLabel.UiLabel;
+        private readonly _labelOnlineTime!          : TwnsUiLabel.UiLabel;
+        private readonly _labelLoginCountTitle!     : TwnsUiLabel.UiLabel;
+        private readonly _labelLoginCount!          : TwnsUiLabel.UiLabel;
+        private readonly _labelUserId!              : TwnsUiLabel.UiLabel;
+        private readonly _labelUserIdTitle!         : TwnsUiLabel.UiLabel;
+        private readonly _labelDiscordId!           : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
-        private readonly _labelHistoryStd           : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelHistoryStdWin        : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelHistoryStdLose       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelHistoryStdDraw       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelHistoryStdRatio      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelHistoryFog           : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelHistoryFogWin        : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelHistoryFogLose       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelHistoryFogDraw       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelHistoryFogRatio      : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStd!          : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdWin!       : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdLose!      : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdDraw!      : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdRatio!     : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFog!          : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogWin!       : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogLose!      : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogDraw!      : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogRatio!     : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
-        private readonly _sclHistoryStd             : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
-        // @ts-ignore
-        private readonly _sclHistoryFog             : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
+        private readonly _sclHistoryStd!            : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
+        private readonly _sclHistoryFog!            : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
 
         public static show(openData: OpenDataForUserPanel): void {
             if (!UserPanel._instance) {
@@ -301,7 +259,7 @@ namespace TwnsUserPanel {
             const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+            const rankName                  = `(${ConfigManager.getRankName(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), score)})`;
             this._labelStdRankScore.text    = `${score} ${rankName}`;
 
             const rank                          = data ? data.currentRank : null;
@@ -312,7 +270,7 @@ namespace TwnsUserPanel {
             const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+            const rankName                  = `(${ConfigManager.getRankName(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), score)})`;
             this._labelFogRankScore.text    = `${score} ${rankName}`;
 
             const rank                          = data ? data.currentRank : null;
@@ -377,23 +335,16 @@ namespace TwnsUserPanel {
         showBottom? : boolean;
     };
     class HistoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForHistoryRenderer> {
-        // @ts-ignore
-        private readonly _imgBg         : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _labelType     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelWin      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelLose     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelDraw     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelRatio    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _imgBottom     : TwnsUiImage.UiImage;
+        private readonly _imgBg!        : TwnsUiImage.UiImage;
+        private readonly _labelType!    : TwnsUiLabel.UiLabel;
+        private readonly _labelWin!     : TwnsUiLabel.UiLabel;
+        private readonly _labelLose!    : TwnsUiLabel.UiLabel;
+        private readonly _labelDraw!    : TwnsUiLabel.UiLabel;
+        private readonly _labelRatio!   : TwnsUiLabel.UiLabel;
+        private readonly _imgBottom!    : TwnsUiImage.UiImage;
 
         protected async _onDataChanged(): Promise<void> {
-            const data              = this.data;
+            const data              = this._getData();
             this._imgBg.alpha       = data.index % 2 === 0 ? 0.2 : 0.5;
             this._imgBottom.visible = !!data.showBottom;
 

@@ -1,4 +1,6 @@
 
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -28,10 +30,10 @@ namespace TwnsWeActionReplacePanel {
 
         private static _instance: WeActionReplacePanel;
 
-        private _listAction     : TwnsUiScrollList.UiScrollList<DataForActionRenderer>;
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _labelNoAction  : TwnsUiLabel.UiLabel;
-        private _btnClose       : TwnsUiButton.UiButton;
+        private readonly _listAction!       : TwnsUiScrollList.UiScrollList<DataForActionRenderer>;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelNoAction!    : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForWeActionReplacePanel): void {
             if (!WeActionReplacePanel._instance) {
@@ -66,7 +68,7 @@ namespace TwnsWeActionReplacePanel {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -93,7 +95,7 @@ namespace TwnsWeActionReplacePanel {
                 dataArray.push({
                     eventId,
                     srcActionId,
-                    candidateActionId: action.WeaCommonData.actionId,
+                    candidateActionId: Helpers.getExisted(action.WeaCommonData?.actionId),
                     fullData,
                 });
             }
@@ -110,10 +112,10 @@ namespace TwnsWeActionReplacePanel {
         fullData            : IWarEventFullData;
     };
     class ActionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForActionRenderer> {
-        private _labelActionId  : TwnsUiLabel.UiLabel;
-        private _labelAction    : TwnsUiLabel.UiLabel;
-        private _btnCopy        : TwnsUiButton.UiButton;
-        private _btnSelect      : TwnsUiButton.UiButton;
+        private readonly _labelActionId!    : TwnsUiLabel.UiLabel;
+        private readonly _labelAction!      : TwnsUiLabel.UiLabel;
+        private readonly _btnCopy!          : TwnsUiButton.UiButton;
+        private readonly _btnSelect!        : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -133,12 +135,8 @@ namespace TwnsWeActionReplacePanel {
             this._updateBtnSelect();
         }
 
-        private _onTouchedBtnCopy(e: egret.TouchEvent): void {          // DONE
-            const data = this.data;
-            if (data == null) {
-                return;
-            }
-
+        private _onTouchedBtnCopy(): void {          // DONE
+            const data = this._getData();
             if (WarEventHelper.cloneAndReplaceActionInEvent({
                 fullData            : data.fullData,
                 eventId             : data.eventId,
@@ -149,12 +147,8 @@ namespace TwnsWeActionReplacePanel {
                 WeActionReplacePanel.hide();
             }
         }
-        private _onTouchedBtnSelect(e: egret.TouchEvent): void {        // DONE
-            const data = this.data;
-            if (data == null) {
-                return;
-            }
-
+        private _onTouchedBtnSelect(): void {        // DONE
+            const data = this._getData();
             if (WarEventHelper.replaceActionInEvent({
                 fullData    : data.fullData,
                 eventId     : data.eventId,
@@ -165,7 +159,7 @@ namespace TwnsWeActionReplacePanel {
                 WeActionReplacePanel.hide();
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {        // DONE
+        private _onNotifyLanguageChanged(): void {        // DONE
             this._updateComponentsForLanguage();
         }
 
@@ -178,30 +172,22 @@ namespace TwnsWeActionReplacePanel {
         }
 
         private _updateLabelActionId(): void {
-            const data = this.data;
-            if (data) {
-                this._labelActionId.text  = `${Lang.getText(LangTextType.B0616)}: A${data.candidateActionId}`;
-            }
+            const data = this._getData();
+            this._labelActionId.text  = `${Lang.getText(LangTextType.B0616)}: A${data.candidateActionId}`;
         }
         private _updateLabelAction(): void {
-            const data = this.data;
-            if (data == null) {
-                return;
-            }
-
-            const action    = (data.fullData.actionArray || []).find(v => v.WeaCommonData.actionId === data.candidateActionId);
+            const data      = this._getData();
+            const action    = (data.fullData.actionArray || []).find(v => v.WeaCommonData?.actionId === data.candidateActionId);
             const label     = this._labelAction;
             if (action == null) {
                 label.text = Lang.getText(LangTextType.A0168);
             } else {
-                label.text = WarEventHelper.getDescForAction(action);
+                label.text = WarEventHelper.getDescForAction(action) || CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateBtnSelect(): void {
-            const data = this.data;
-            if (data) {
-                this._btnSelect.visible = data.srcActionId !== data.candidateActionId;
-            }
+            const data              = this._getData();
+            this._btnSelect.visible = data.srcActionId !== data.candidateActionId;
         }
     }
 }

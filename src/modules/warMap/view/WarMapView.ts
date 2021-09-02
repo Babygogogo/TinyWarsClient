@@ -373,8 +373,8 @@ namespace TwnsWarMapView {
                 unitViews.push(layer.getChildAt(i) as WarMapUnitView);
             }
             unitViews.sort((v1, v2): number => {
-                const g1 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(v1.getData().gridIndex));
-                const g2 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(v2.getData().gridIndex));
+                const g1 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(v1.getUnitData().gridIndex));
+                const g2 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(v2.getUnitData().gridIndex));
                 const y1 = g1.y;
                 const y2 = g2.y;
                 return y1 !== y2 ? y1 - y2 : g1.x - g2.x;

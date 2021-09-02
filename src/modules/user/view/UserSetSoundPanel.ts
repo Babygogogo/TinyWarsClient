@@ -21,32 +21,32 @@ namespace TwnsUserSetSoundPanel {
 
         private static _instance: UserSetSoundPanel;
 
-        private readonly _imgMask           : TwnsUiImage.UiImage;
-        private readonly _group             : eui.Group;
-        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
+        private readonly _imgMask!              : TwnsUiImage.UiImage;
+        private readonly _group!                : eui.Group;
+        private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
 
-        private readonly _labelBgmTitle     : TwnsUiLabel.UiLabel;
-        private readonly _imgBgmMute        : TwnsUiImage.UiImage;
-        private readonly _groupBgmVolume    : eui.Group;
-        private readonly _imgBgmBar         : TwnsUiImage.UiImage;
-        private readonly _imgBgmPoint       : TwnsUiImage.UiImage;
-        private readonly _labelBgmVolume    : TwnsUiLabel.UiLabel;
+        private readonly _labelBgmTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _imgBgmMute!           : TwnsUiImage.UiImage;
+        private readonly _groupBgmVolume!       : eui.Group;
+        private readonly _imgBgmBar!            : TwnsUiImage.UiImage;
+        private readonly _imgBgmPoint!          : TwnsUiImage.UiImage;
+        private readonly _labelBgmVolume!       : TwnsUiLabel.UiLabel;
 
-        private readonly _labelEffectTitle  : TwnsUiLabel.UiLabel;
-        private readonly _imgEffectMute     : TwnsUiImage.UiImage;
-        private readonly _groupEffectVolume : eui.Group;
-        private readonly _imgEffectBar      : TwnsUiImage.UiImage;
-        private readonly _imgEffectPoint    : TwnsUiImage.UiImage;
-        private readonly _labelEffectVolume : TwnsUiLabel.UiLabel;
+        private readonly _labelEffectTitle!     : TwnsUiLabel.UiLabel;
+        private readonly _imgEffectMute!        : TwnsUiImage.UiImage;
+        private readonly _groupEffectVolume!    : eui.Group;
+        private readonly _imgEffectBar!         : TwnsUiImage.UiImage;
+        private readonly _imgEffectPoint!       : TwnsUiImage.UiImage;
+        private readonly _labelEffectVolume!    : TwnsUiLabel.UiLabel;
 
-        private readonly _labelSwitchBgm    : TwnsUiLabel.UiLabel;
-        private readonly _labelBgmName      : TwnsUiLabel.UiLabel;
-        private readonly _btnPrevBgm        : TwnsUiButton.UiButton;
-        private readonly _btnNextBgm        : TwnsUiButton.UiButton;
+        private readonly _labelSwitchBgm!       : TwnsUiLabel.UiLabel;
+        private readonly _labelBgmName!         : TwnsUiLabel.UiLabel;
+        private readonly _btnPrevBgm!           : TwnsUiButton.UiButton;
+        private readonly _btnNextBgm!           : TwnsUiButton.UiButton;
 
-        private readonly _btnCancel         : TwnsUiButton.UiButton;
-        private readonly _btnDefault        : TwnsUiButton.UiButton;
-        private readonly _btnConfirm        : TwnsUiButton.UiButton;
+        private readonly _btnCancel!            : TwnsUiButton.UiButton;
+        private readonly _btnDefault!           : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!           : TwnsUiButton.UiButton;
 
         private _prevBgmMute                : boolean | undefined;
         private _prevBgmVolume              : number | undefined;

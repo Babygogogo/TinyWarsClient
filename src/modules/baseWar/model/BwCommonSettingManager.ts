@@ -71,18 +71,12 @@ namespace TwnsBwCommonSettingManager {
         protected _setSettingsForCommon(settings: ISettingsForCommon): void {
             this._settingsForCommon = settings;
         }
-        public getSettingsForCommon(): ISettingsForCommon | undefined {
-            return this._settingsForCommon;
+        public getSettingsForCommon(): ISettingsForCommon {
+            return Helpers.getDefined(this._settingsForCommon);
         }
 
-        public getConfigVersion(): string | null | undefined {
-            const settings = this.getSettingsForCommon();
-            if (settings == null) {
-                Logger.error(`BwCommonSettingManager.getConfigVersion() empty settings.`);
-                return undefined;
-            }
-
-            return settings.configVersion;
+        public getConfigVersion(): string {
+            return Helpers.getExisted(this.getSettingsForCommon().configVersion);
         }
         public getSettingsHasFogByDefault(): boolean | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();

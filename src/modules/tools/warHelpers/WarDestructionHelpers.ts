@@ -1,9 +1,10 @@
 
 import TwnsBwWar            from "../../baseWar/model/BwWar";
-import CommonConstants      from "../helpers/CommonConstants";
-import Types                from "../helpers/Types";
-import Logger               from "../helpers/Logger";
 import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+import CommonConstants      from "../helpers/CommonConstants";
+import Helpers              from "../helpers/Helpers";
+import Logger               from "../helpers/Logger";
+import Types                from "../helpers/Types";
 
 namespace WarDestructionHelpers {
     import GridIndex        = Types.GridIndex;
@@ -113,7 +114,7 @@ namespace WarDestructionHelpers {
 
         war.getFogMap().resetAllMapsForPlayer(playerIndex);
 
-        const player = war.getPlayer(playerIndex)!;
+        const player = war.getPlayer(playerIndex);
         player.setAliveState(Types.PlayerAliveState.Dead);
         player.setCoIsDestroyedInTurn(true);
         player.setCoCurrentEnergy(0);
@@ -126,7 +127,7 @@ namespace WarDestructionHelpers {
         war.getTileMap().getTile(gridIndex).updateOnUnitLeave();
 
         const unitMap   = war.getUnitMap();
-        const unit      = unitMap.getUnitOnMap(gridIndex)!;
+        const unit      = Helpers.getExisted(unitMap.getUnitOnMap(gridIndex));
 
         unitMap.removeUnitOnMap(gridIndex, true);
         for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {

@@ -1,11 +1,12 @@
 
-import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import Notify               from "../../tools/notify/Notify";
-import UserModel            from "../../user/model/UserModel";
-import NetManager           from "../../tools/network/NetManager";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Helpers              from "../../tools/helpers/Helpers";
 import Sha1Generator        from "../../tools/helpers/Sha1Generator";
+import NetManager           from "../../tools/network/NetManager";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import UserModel            from "../../user/model/UserModel";
 
 namespace UserProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -87,7 +88,7 @@ namespace UserProxy {
         if (data.errorCode) {
             Notify.dispatch(NotifyType.MsgUserGetPublicInfoFailed, data);
         } else {
-            UserModel.setUserPublicInfo(data.userPublicInfo);
+            UserModel.setUserPublicInfo(Helpers.getExisted(data.userPublicInfo));
             Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
         }
     }

@@ -397,7 +397,7 @@ namespace TwnsBwWar {
             return this._warId;
         }
 
-        public getConfigVersion(): string | null | undefined {
+        public getConfigVersion(): string {
             return this.getCommonSettingManager().getConfigVersion();
         }
 
@@ -411,13 +411,13 @@ namespace TwnsBwWar {
             return settingsForCommon.warRule;
         }
 
-        public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer | undefined {
+        public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
-        public getPlayerInTurn(): TwnsBwPlayer.BwPlayer | undefined {
+        public getPlayerInTurn(): TwnsBwPlayer.BwPlayer {
             return this.getPlayerManager().getPlayerInTurn();
         }
-        public getPlayerIndexInTurn(): number | undefined {
+        public getPlayerIndexInTurn(): number {
             return this.getTurnManager().getPlayerIndexInTurn();
         }
         public checkIsHumanInTurn(): boolean {

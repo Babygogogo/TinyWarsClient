@@ -53,33 +53,33 @@ namespace TwnsUserSettingsPanel {
 
         private static _instance: UserSettingsPanel;
 
-        private readonly _imgMask               : TwnsUiImage.UiImage;
-        private readonly _labelTitle            : TwnsUiLabel.UiLabel;
-        private readonly _btnClose              : TwnsUiButton.UiButton;
-        private readonly _group                 : eui.Group;
-        private readonly _scroller              : eui.Scroller;
+        private readonly _imgMask!                  : TwnsUiImage.UiImage;
+        private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!                 : TwnsUiButton.UiButton;
+        private readonly _group!                    : eui.Group;
+        private readonly _scroller!                 : eui.Scroller;
 
-        private readonly _uiRadioLanguage       : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioTexture        : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioUnitAnimation  : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioTileAnimation  : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioShowGridBorder : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioLanguage!          : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioTexture!           : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioUnitAnimation!     : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioTileAnimation!     : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioShowGridBorder!    : TwnsUiRadioButton.UiRadioButton;
 
-        private readonly _groupButtons          : eui.Group;
-        private readonly _btnChangeNickname     : TwnsUiButton.UiButton;
-        private readonly _btnChangePassword     : TwnsUiButton.UiButton;
-        private readonly _btnChangeDiscordId    : TwnsUiButton.UiButton;
-        private readonly _btnChangeGameVersion  : TwnsUiButton.UiButton;
-        private readonly _btnRankList           : TwnsUiButton.UiButton;
-        private readonly _btnShowOnlineUsers    : TwnsUiButton.UiButton;
-        private readonly _btnSetSound           : TwnsUiButton.UiButton;
-        private readonly _btnSetStageScaler     : TwnsUiButton.UiButton;
-        private readonly _btnServerStatus       : TwnsUiButton.UiButton;
-        private readonly _btnComplaint          : TwnsUiButton.UiButton;
-        private readonly _btnUnitsInfo          : TwnsUiButton.UiButton;
-        private readonly _btnChangeLog          : TwnsUiButton.UiButton;
-        private readonly _btnSetPrivilege       : TwnsUiButton.UiButton;
-        private readonly _btnMapManagement      : TwnsUiButton.UiButton;
+        private readonly _groupButtons!             : eui.Group;
+        private readonly _btnChangeNickname!        : TwnsUiButton.UiButton;
+        private readonly _btnChangePassword!        : TwnsUiButton.UiButton;
+        private readonly _btnChangeDiscordId!       : TwnsUiButton.UiButton;
+        private readonly _btnChangeGameVersion!     : TwnsUiButton.UiButton;
+        private readonly _btnRankList!              : TwnsUiButton.UiButton;
+        private readonly _btnShowOnlineUsers!       : TwnsUiButton.UiButton;
+        private readonly _btnSetSound!              : TwnsUiButton.UiButton;
+        private readonly _btnSetStageScaler!        : TwnsUiButton.UiButton;
+        private readonly _btnServerStatus!          : TwnsUiButton.UiButton;
+        private readonly _btnComplaint!             : TwnsUiButton.UiButton;
+        private readonly _btnUnitsInfo!             : TwnsUiButton.UiButton;
+        private readonly _btnChangeLog!             : TwnsUiButton.UiButton;
+        private readonly _btnSetPrivilege!          : TwnsUiButton.UiButton;
+        private readonly _btnMapManagement!         : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!UserSettingsPanel._instance) {

@@ -1,4 +1,6 @@
 
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
@@ -31,18 +33,18 @@ namespace TwnsWeConditionModifyPanel9 {
 
         private static _instance: WeConditionModifyPanel9;
 
-        private _labelTitle         : TwnsUiLabel.UiLabel;
-        private _btnClose           : TwnsUiButton.UiButton;
-        private _btnType            : TwnsUiButton.UiButton;
-        private _labelDesc          : TwnsUiLabel.UiLabel;
-        private _labelError         : TwnsUiLabel.UiLabel;
-        private _groupIsNot         : eui.Group;
-        private _labelIsNot         : TwnsUiLabel.UiLabel;
-        private _imgIsNot           : TwnsUiImage.UiImage;
-        private _labelEvent         : TwnsUiLabel.UiLabel;
-        private _btnEvent           : TwnsUiButton.UiButton;
-        private _labelCalledCount   : TwnsUiLabel.UiLabel;
-        private _inputCalledCount   : TwnsUiTextInput.UiTextInput;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
+        private readonly _btnType!          : TwnsUiButton.UiButton;
+        private readonly _labelDesc!        : TwnsUiLabel.UiLabel;
+        private readonly _labelError!       : TwnsUiLabel.UiLabel;
+        private readonly _groupIsNot!       : eui.Group;
+        private readonly _labelIsNot!       : TwnsUiLabel.UiLabel;
+        private readonly _imgIsNot!         : TwnsUiImage.UiImage;
+        private readonly _labelEvent!       : TwnsUiLabel.UiLabel;
+        private readonly _btnEvent!         : TwnsUiButton.UiButton;
+        private readonly _labelCalledCount! : TwnsUiLabel.UiLabel;
+        private readonly _inputCalledCount! : TwnsUiTextInput.UiTextInput;
 
         public static show(openData: OpenDataForWeConditionModifyPanel9): void {
             if (!WeConditionModifyPanel9._instance) {
@@ -81,27 +83,27 @@ namespace TwnsWeConditionModifyPanel9 {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onTouchedBtnType(e: egret.TouchEvent): void {
+        private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
             WeConditionTypeListPanel.show({
                 fullData    : openData.fullData,
                 condition   : openData.condition,
             });
         }
-        private _onTouchedGroupIsNot(e: egret.TouchEvent): void {
-            const data  = this._getCondition().WecEventCalledCountTotalEqualTo;
+        private _onTouchedGroupIsNot(): void {
+            const data  = Helpers.getExisted(this._getCondition().WecEventCalledCountTotalEqualTo);
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onTouchedBtnTurnEvent(e: egret.TouchEvent): void {
+        private _onTouchedBtnTurnEvent(): void {
             const openData              = this._getOpenData();
-            const eventArray            = openData.fullData.eventArray;
-            const condition             = openData.condition.WecEventCalledCountTotalEqualTo;
+            const eventArray            = Helpers.getExisted(openData.fullData.eventArray);
+            const condition             = Helpers.getExisted(openData.condition.WecEventCalledCountTotalEqualTo);
             const newIndex              = (eventArray.findIndex(v => v.eventId === condition.eventIdEqualTo) + 1) % eventArray.length;
             condition.eventIdEqualTo    = eventArray[newIndex].eventId;
 
@@ -109,13 +111,12 @@ namespace TwnsWeConditionModifyPanel9 {
             this._updateLabelEvent();
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onFocusOutInputCalledCount(e: egret.FocusEvent): void {
+        private _onFocusOutInputCalledCount(): void {
             const value = parseInt(this._inputCalledCount.text);
-            const data  = this._getCondition().WecEventCalledCountTotalEqualTo;
             if (isNaN(value)) {
                 this._updateInputCalledCount();
             } else {
-                data.countEqualTo = value;
+                Helpers.getExisted(this._getCondition().WecEventCalledCountTotalEqualTo).countEqualTo = value;
                 this._updateLabelDescAndLabelError();
                 this._updateInputCalledCount();
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -132,7 +133,7 @@ namespace TwnsWeConditionModifyPanel9 {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = `${Lang.getText(LangTextType.B0501)} C${this._getCondition().WecCommonData.conditionId}`;
+            this._labelTitle.text       = `${Lang.getText(LangTextType.B0501)} C${this._getCondition().WecCommonData?.conditionId}`;
             this._btnClose.label        = Lang.getText(LangTextType.B0146);
             this._btnType.label         = Lang.getText(LangTextType.B0516);
             this._labelIsNot.text       = Lang.getText(LangTextType.B0517);
@@ -151,19 +152,19 @@ namespace TwnsWeConditionModifyPanel9 {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition);
+            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
-            this._imgIsNot.visible = !!this._getCondition().WecEventCalledCountTotalEqualTo.isNot;
+            this._imgIsNot.visible = !!this._getCondition().WecEventCalledCountTotalEqualTo?.isNot;
         }
         private _updateLabelEvent(): void {
             const openData          = this._getOpenData();
-            const eventId           = openData.condition.WecEventCalledCountTotalEqualTo.eventIdEqualTo;
+            const eventId           = Helpers.getExisted(openData.condition.WecEventCalledCountTotalEqualTo?.eventIdEqualTo);
             const event             = WarEventHelper.getEvent(openData.fullData, eventId);
             this._labelEvent.text   = `#${eventId} (${event ? Lang.getLanguageText({ textArray: event.eventNameArray }) : `---`})`;
         }
         private _updateInputCalledCount(): void {
-            this._inputCalledCount.text = `${this._getCondition().WecEventCalledCountTotalEqualTo.eventIdEqualTo}`;
+            this._inputCalledCount.text = `${this._getCondition().WecEventCalledCountTotalEqualTo?.eventIdEqualTo}`;
         }
 
         private _getCondition(): IWarEventCondition {

@@ -32,16 +32,16 @@ namespace TwnsUserLoginBackgroundPanel {
 
         private static _instance: UserLoginBackgroundPanel;
 
-        private readonly _imgBackground     : TwnsUiImage.UiImage;
+        private readonly _imgBackground!    : TwnsUiImage.UiImage;
 
-        private readonly _groupRightButton  : eui.Group;
-        private readonly _btnVersion        : TwnsUiButton.UiButton;
-        private readonly _btnSound          : TwnsUiButton.UiButton;
+        private readonly _groupRightButton! : eui.Group;
+        private readonly _btnVersion!       : TwnsUiButton.UiButton;
+        private readonly _btnSound!         : TwnsUiButton.UiButton;
 
-        private readonly _labelVersion      : TwnsUiLabel.UiLabel;
-        private readonly _listLanguage      : TwnsUiScrollList.UiScrollList<DataForLanguageRenderer>;
-        private readonly _groupCopyright    : eui.Group;
-        private readonly _groupUnits        : eui.Group;
+        private readonly _labelVersion!     : TwnsUiLabel.UiLabel;
+        private readonly _listLanguage!     : TwnsUiScrollList.UiScrollList<DataForLanguageRenderer>;
+        private readonly _groupCopyright!   : eui.Group;
+        private readonly _groupUnits!       : eui.Group;
 
         public static show(): void {
             if (!UserLoginBackgroundPanel._instance) {
@@ -223,7 +223,7 @@ namespace TwnsUserLoginBackgroundPanel {
         languageType: Types.LanguageType;
     };
     class LanguageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForLanguageRenderer> {
-        private readonly _labelLanguage : TwnsUiLabel.UiLabel;
+        private readonly _labelLanguage!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -234,7 +234,7 @@ namespace TwnsUserLoginBackgroundPanel {
             ]);
         }
         protected _onDataChanged(): void {
-            this._labelLanguage.text = Lang.getLanguageTypeName(this.data.languageType) || `??`;
+            this._labelLanguage.text = Lang.getLanguageTypeName(this._getData().languageType) || `??`;
 
             this._updateCurrentState();
         }
@@ -243,7 +243,7 @@ namespace TwnsUserLoginBackgroundPanel {
             this._updateCurrentState();
         }
         private _onTouchedSelf(): void {
-            const languageType = this.data.languageType;
+            const languageType = this._getData().languageType;
             if (Lang.getCurrentLanguageType() !== languageType) {
                 Lang.setLanguageType(languageType);
                 Notify.dispatch(NotifyType.LanguageChanged);

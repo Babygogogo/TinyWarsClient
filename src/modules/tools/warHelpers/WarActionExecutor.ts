@@ -3,7 +3,7 @@ import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
 import TwnsBwTile                   from "../../baseWar/model/BwTile";
 import TwnsBwUnit                   from "../../baseWar/model/BwUnit";
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
-import TwnsBwBeginTurnPanel from "../../baseWar/view/BwBeginTurnPanel";
+import TwnsBwBeginTurnPanel         from "../../baseWar/view/BwBeginTurnPanel";
 import TwnsBwCaptureProgressPanel   from "../../baseWar/view/BwCaptureProgressPanel";
 import UserModel                    from "../../user/model/UserModel";
 import TwnsClientErrorCode          from "../helpers/ClientErrorCode";
@@ -11,6 +11,7 @@ import CommonConstants              from "../helpers/CommonConstants";
 import ConfigManager                from "../helpers/ConfigManager";
 import FloatText                    from "../helpers/FloatText";
 import GridIndexHelpers             from "../helpers/GridIndexHelpers";
+import Helpers                      from "../helpers/Helpers";
 import Logger                       from "../helpers/Logger";
 import Types                        from "../helpers/Types";
 import ProtoTypes                   from "../proto/ProtoTypes";
@@ -251,12 +252,12 @@ namespace WarActionExecutor {
             unit.startRunningView();
             unitMap.setUnitOnMap(unit);
             unitMap.setNextUnitId(unitId + 1);
-            playerInTurn.setFund(playerInTurn.getFund() - extraData.cost);
+            playerInTurn.setFund(playerInTurn.getFund() - Helpers.getExisted(extraData.cost));
 
         } else {
             const gridIndex     = action.gridIndex as GridIndex;
-            const unitType      = action.unitType;
-            const unitHp        = action.unitHp;
+            const unitType      = Helpers.getExisted(action.unitType);
+            const unitHp        = Helpers.getExisted(action.unitHp);
             const configVersion = war.getConfigVersion();
             const unitMap       = war.getUnitMap();
             const unitId        = unitMap.getNextUnitId();
@@ -279,7 +280,7 @@ namespace WarActionExecutor {
                 unitType,
                 unitId,
                 actionState : ((skillCfg) && (skillCfg[6] === 1)) ? UnitActionState.Idle : UnitActionState.Acted,
-                currentHp   : unitHp != null ? unitHp : CommonConstants.UnitMaxHp,
+                currentHp   : unitHp,
             }, configVersion);
             unit.startRunning(war);
             unit.startRunningView();
@@ -3653,7 +3654,7 @@ namespace WarActionExecutor {
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);

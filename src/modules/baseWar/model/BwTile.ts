@@ -311,8 +311,8 @@ namespace TwnsBwTile {
         private _setWar(war: BwWar): void {
             this._war = war;
         }
-        public getWar(): BwWar | undefined {
-            return this._war;
+        public getWar(): BwWar {
+            return Helpers.getDefined(this._war);
         }
 
         public getConfigVersion(): string | undefined {
@@ -605,26 +605,22 @@ namespace TwnsBwTile {
         private _setGridX(x: number): void {
             this._gridX = x;
         }
-        public getGridX(): number | undefined {
-            return this._gridX;
+        public getGridX(): number {
+            return Helpers.getDefined(this._gridX);
         }
 
         private _setGridY(y: number): void {
             this._gridY = y;
         }
-        public getGridY(): number | undefined {
-            return this._gridY;
+        public getGridY(): number {
+            return Helpers.getDefined(this._gridY);
         }
 
-        public getGridIndex(): Types.GridIndex | undefined {
-            const x = this.getGridX();
-            const y = this.getGridY();
-            if ((x == null) || (y == null)) {
-                Logger.error(`BwTile.getGridIndex() empty gridX/gridY.`);
-                return undefined;
-            }
-
-            return { x, y };
+        public getGridIndex(): Types.GridIndex {
+            return {
+                x   : this.getGridX(),
+                y   : this.getGridY(),
+            };
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -790,8 +786,8 @@ namespace TwnsBwTile {
         private _setPlayerIndex(index: number): void {
             this._playerIndex = index;
         }
-        public getPlayerIndex(): number | undefined {
-            return this._playerIndex;
+        public getPlayerIndex(): number {
+            return Helpers.getDefined(this._playerIndex);
         }
 
         public getPlayer(): TwnsBwPlayer.BwPlayer | undefined {
@@ -810,26 +806,8 @@ namespace TwnsBwTile {
             return war.getPlayer(playerIndex);
         }
 
-        public getTeamIndex(): number | undefined {
-            const war = this.getWar();
-            if (war == null) {
-                Logger.error(`BwTile.getTeamIndex() war is empty.`);
-                return undefined;
-            }
-
-            const playerIndex = this.getPlayerIndex();
-            if (playerIndex == null) {
-                Logger.error(`BwTile.getTeamIndex() playerIndex is empty.`);
-                return undefined;
-            }
-
-            const player = war.getPlayer(playerIndex);
-            if (player == null) {
-                Logger.error(`BwTile.getTeamIndex() player is empty.`);
-                return undefined;
-            }
-
-            return player.getTeamIndex();
+        public getTeamIndex(): number {
+            return this.getWar().getPlayer(this.getPlayerIndex()).getTeamIndex();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

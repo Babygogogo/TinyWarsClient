@@ -106,52 +106,17 @@ namespace WarVisibilityHelpers {
 
     export function getAllUnitsOnMapVisibleToTeams(war: BwWar, teamIndexes: Set<number>): Set<BwUnit> | undefined {
         const fogMap                = war.getFogMap();
-        const visibilityFromPaths   = fogMap.getVisibilityMapFromPathsForTeams(teamIndexes);
-        if (visibilityFromPaths == null) {
-            Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty visibilityFromPaths.`);
-            return undefined;
-        }
-
-        const visibilityFromTiles = fogMap.getVisibilityMapFromTilesForTeams(teamIndexes);
-        if (visibilityFromTiles == null) {
-            Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty visibilityFromTiles.`);
-            return undefined;
-        }
-
-        const visibilityFromUnits = fogMap.getVisibilityMapFromUnitsForTeams(teamIndexes);
-        if (visibilityFromUnits == null) {
-            Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty visibilityFromUnits.`);
-            return undefined;
-        }
-
-        const unitMap   = war.getUnitMap();
-        const tileMap   = war.getTileMap();
-        const units     = new Set<BwUnit>();
+        const visibilityFromPaths   = Helpers.getExisted(fogMap.getVisibilityMapFromPathsForTeams(teamIndexes));
+        const visibilityFromTiles   = Helpers.getExisted(fogMap.getVisibilityMapFromTilesForTeams(teamIndexes));
+        const visibilityFromUnits   = Helpers.getExisted(fogMap.getVisibilityMapFromUnitsForTeams(teamIndexes));
+        const unitMap               = war.getUnitMap();
+        const tileMap               = war.getTileMap();
+        const units                 = new Set<BwUnit>();
         for (const unit of unitMap.getAllUnitsOnMap()) {
-            const gridIndex = unit.getGridIndex();
-            if (gridIndex == null) {
-                Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty gridIndex.`);
-                return undefined;
-            }
-
-            const tile = tileMap.getTile(gridIndex);
-            if (tile == null) {
-                Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty tile.`);
-                return undefined;
-            }
-
+            const gridIndex     = unit.getGridIndex();
+            const tile          = tileMap.getTile(gridIndex);
             const unitTeamIndex = unit.getTeamIndex();
-            if (unitTeamIndex == null) {
-                Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty unitTeamIndex.`);
-                return undefined;
-            }
-
             const tileTeamIndex = tile.getTeamIndex();
-            if (tileTeamIndex == null) {
-                Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty tileTeamIndex.`);
-                return undefined;
-            }
-
             if ((teamIndexes.has(unitTeamIndex))                                                ||
                 (_checkHasUnitWithTeamIndexesOnAdjacentGrids(unitMap, gridIndex, teamIndexes))  ||
                 (teamIndexes.has(tileTeamIndex))
@@ -467,7 +432,7 @@ namespace WarVisibilityHelpers {
     function _checkHasUnitWithTeamIndexesOnAdjacentGrids(unitMap: BwUnitMap, origin: GridIndex, teamIndexes: Set<number>): boolean {
         for (const adjacentGrid of GridIndexHelpers.getAdjacentGrids(origin, unitMap.getMapSize())) {
             const unit = unitMap.getUnitOnMap(adjacentGrid);
-            if ((unit) && (teamIndexes.has(unit.getTeamIndex()!))) {
+            if ((unit) && (teamIndexes.has(unit.getTeamIndex()))) {
                 return true;
             }
         }
@@ -476,7 +441,7 @@ namespace WarVisibilityHelpers {
 
     function _checkHasUnitWithTeamIndexesOnGrid(unitMap: BwUnitMap, gridIndex: GridIndex, teamIndexes: Set<number>): boolean {
         const unit = unitMap.getUnitOnMap(gridIndex);
-        return (unit != null) && (teamIndexes.has(unit.getTeamIndex()!));
+        return (unit != null) && (teamIndexes.has(unit.getTeamIndex()));
     }
 
     function _checkIsUnitHiddenByTileToTeam(war: BwWar, unit: BwUnit, teamIndex: number): boolean | undefined {
