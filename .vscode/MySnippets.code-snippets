@@ -19,10 +19,7 @@
         "scope": "typescript",
         "prefix": "ce",
         "body": [
-            "if ($1 == null) {",
-            "    Logger.error(`$2 empty $1.`);",
-            "    return undefined;",
-            "}",
+            ".catch(err => CompatibilityHelpers.handleError(err))",
         ],
     },
     "Show Close Animation": {

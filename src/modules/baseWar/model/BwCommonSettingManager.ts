@@ -228,20 +228,8 @@ namespace TwnsBwCommonSettingManager {
 
             return WarRuleHelpers.getLuckUpperLimit(warRule, playerIndex);
         }
-        public getTeamIndex(playerIndex: number): number | undefined | null {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
-                Logger.error(`BwCommonSettingManager.getTeamIndex() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            const warRule = settingsForCommon.warRule;
-            if (warRule == null) {
-                Logger.error(`BwCommonSettingManager.getTeamIndex() empty warRule.`);
-                return undefined;
-            }
-
-            return WarRuleHelpers.getTeamIndex(warRule, playerIndex);
+        public getTeamIndex(playerIndex: number): number {
+            return WarRuleHelpers.getTeamIndex(Helpers.getExisted(this.getSettingsForCommon().warRule), playerIndex);
         }
     }
 }

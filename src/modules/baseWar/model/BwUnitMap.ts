@@ -301,7 +301,7 @@ namespace TwnsBwUnitMap {
             if (unitLoaded) {
                 return unitLoaded;
             } else {
-                for (const column of this._map) {
+                for (const column of this._getMap()) {
                     for (const unit of column) {
                         if ((unit) && (unit.getUnitId() === unitId)) {
                             return unit;
@@ -556,23 +556,12 @@ namespace TwnsBwUnitMap {
             return map.some(v => v.some(u => (u != null) && (u.getPlayerIndex() === playerIndex) && (u.getHasLoadedCo())));
         }
 
-        public getCoGridIndexListOnMap(playerIndex: number): GridIndex[] | undefined {
-            const map = this._getMap();
-            if (map == null) {
-                Logger.error(`BwUnitMap.getCoGridIndexListOnMap() empty map.`);
-                return undefined;
-            }
-
+        public getCoGridIndexListOnMap(playerIndex: number): GridIndex[] {
             const list: GridIndex[] = [];
-            for (const column of map) {
+            for (const column of this._getMap()) {
                 for (const unit of column) {
                     if ((unit) && (unit.getHasLoadedCo()) && (unit.getPlayerIndex() === playerIndex)) {
-                        const gridIndex = unit.getGridIndex();
-                        if (gridIndex == null) {
-                            Logger.error(`BwUnitMap.getCoGridIndexListOnMap() empty gridIndex.`);
-                            return undefined;
-                        }
-                        list.push(gridIndex);
+                        list.push(unit.getGridIndex());
                     }
                 }
             }

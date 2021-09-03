@@ -10,7 +10,6 @@ import ChatProxy                    from "../../chat/model/ChatProxy";
 import CommonModel                  from "../../common/model/CommonModel";
 import CommonProxy                  from "../../common/model/CommonProxy";
 import TwnsCommonAlertPanel         from "../../common/view/CommonAlertPanel";
-import TwnsCommonErrorPanel         from "../../common/view/CommonErrorPanel";
 import CcrProxy                     from "../../coopCustomRoom/model/CcrProxy";
 import TwnsCcwMyWarListPanel        from "../../coopCustomWar/view/CcwMyWarListPanel";
 import TwnsLobbyBackgroundPanel     from "../../lobby/view/LobbyBackgroundPanel";
@@ -57,7 +56,6 @@ import ProtoManager                 from "../proto/ProtoManager";
 import ProtoTypes                   from "../proto/ProtoTypes";
 import ResManager                   from "../res/ResManager";
 import TwnsClientErrorCode          from "./ClientErrorCode";
-import CommonConstants              from "./CommonConstants";
 import CompatibilityHelpers         from "./CompatibilityHelpers";
 import ConfigManager                from "./ConfigManager";
 import LocalStorage                 from "./LocalStorage";
@@ -88,28 +86,15 @@ namespace FlowManager {
 
     let _hasOnceWentToLobby = false;
 
-    export async function startGame(stage: egret.Stage): Promise<void> {
-        try {
-            await doStartGame(stage);
-        } catch (e) {
-            const err       = e as Error;
-            const content   = `${err.message}\n\n${err.stack || "No available call stack."}`;
-            TwnsCommonErrorPanel.CommonErrorPanel.show({
-                content,
-            });
-            ChatProxy.reqChatAddMessage(
-                content.substr(0, CommonConstants.ChatContentMaxLength),
-                Types.ChatMessageToCategory.Private,
-                CommonConstants.AdminUserId,
-            );
-        }
+    export function startGame(stage: egret.Stage): void {
+        doStartGame(stage).catch((err) => CompatibilityHelpers.handleError(err));
     }
     async function doStartGame(stage: egret.Stage): Promise<void> {
         CompatibilityHelpers.init();
         NetManager.addListeners(_NET_EVENTS, undefined);
         Notify.addEventListeners(_NOTIFY_EVENTS, undefined);
         StageManager.init(stage);
-        await Promise.all([ResManager.init(), ProtoManager.init()]);
+        await Promise.all([ResManager.init(), ProtoManager.init()]).catch(err => CompatibilityHelpers.handleError(err));
         StageManager.setStageScale(LocalStorage.getStageScale());
 
         Lang.init();
@@ -145,7 +130,7 @@ namespace FlowManager {
         _removeLoadingDom();
         gotoLogin();
 
-        await ResManager.loadMainRes();
+        await ResManager.loadMainRes().catch(err => CompatibilityHelpers.handleError(err));
         (_checkCanFirstGoToLobby()) && (gotoLobby());
     }
 

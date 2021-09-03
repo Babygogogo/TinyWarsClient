@@ -1,7 +1,7 @@
 
 import CommonConstants          from "../helpers/CommonConstants";
 import ConfigManager            from "../helpers/ConfigManager";
-import Logger                   from "../helpers/Logger";
+import Helpers                  from "../helpers/Helpers";
 import Types                    from "../helpers/Types";
 import Lang                     from "../lang/Lang";
 import TwnsLangTextType         from "../lang/LangTextType";
@@ -22,29 +22,29 @@ namespace TwnsUiCoInfo {
         coId            : number;
     };
     export class UiCoInfo extends TwnsUiComponent.UiComponent {
-        private readonly _labelCoName                   : TwnsUiLabel.UiLabel;
-        private readonly _groupInfo                     : eui.Group;
-        private readonly _groupZoneInfo                 : eui.Group;
-        private readonly _labelDesignerTitle            : TwnsUiLabel.UiLabel;
-        private readonly _labelDesigner                 : TwnsUiLabel.UiLabel;
-        private readonly _imgCoPortrait                 : TwnsUiImage.UiImage;
-        private readonly _labelBoardCostPercentageTitle : TwnsUiLabel.UiLabel;
-        private readonly _labelBoardCostPercentage      : TwnsUiLabel.UiLabel;
-        private readonly _labelZoneRadiusTitle          : TwnsUiLabel.UiLabel;
-        private readonly _labelZoneRadius               : TwnsUiLabel.UiLabel;
-        private readonly _labelEnergyBarTitle           : TwnsUiLabel.UiLabel;
-        private readonly _labelEnergyBar                : TwnsUiLabel.UiLabel;
+        private readonly _labelCoName!                      : TwnsUiLabel.UiLabel;
+        private readonly _groupInfo!                        : eui.Group;
+        private readonly _groupZoneInfo!                    : eui.Group;
+        private readonly _labelDesignerTitle!               : TwnsUiLabel.UiLabel;
+        private readonly _labelDesigner!                    : TwnsUiLabel.UiLabel;
+        private readonly _imgCoPortrait!                    : TwnsUiImage.UiImage;
+        private readonly _labelBoardCostPercentageTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelBoardCostPercentage!         : TwnsUiLabel.UiLabel;
+        private readonly _labelZoneRadiusTitle!             : TwnsUiLabel.UiLabel;
+        private readonly _labelZoneRadius!                  : TwnsUiLabel.UiLabel;
+        private readonly _labelEnergyBarTitle!              : TwnsUiLabel.UiLabel;
+        private readonly _labelEnergyBar!                   : TwnsUiLabel.UiLabel;
 
-        private readonly _labelSkillType                : TwnsUiLabel.UiLabel;
-        private readonly _labelSkillName                : TwnsUiLabel.UiLabel;
-        private readonly _groupEnergyCost               : eui.Group;
-        private readonly _labelEnergyCostTitle          : TwnsUiLabel.UiLabel;
-        private readonly _labelEnergyCost               : TwnsUiLabel.UiLabel;
-        private readonly _listSkillDesc                 : TwnsUiScrollList.UiScrollList<DataForSkillDescRenderer>;
+        private readonly _labelSkillType!                   : TwnsUiLabel.UiLabel;
+        private readonly _labelSkillName!                   : TwnsUiLabel.UiLabel;
+        private readonly _groupEnergyCost!                  : eui.Group;
+        private readonly _labelEnergyCostTitle!             : TwnsUiLabel.UiLabel;
+        private readonly _labelEnergyCost!                  : TwnsUiLabel.UiLabel;
+        private readonly _listSkillDesc!                    : TwnsUiScrollList.UiScrollList<DataForSkillDescRenderer>;
 
-        private readonly _listSkillType                 : TwnsUiScrollList.UiScrollList<DataForSkillTypeRenderer>;
+        private readonly _listSkillType!                    : TwnsUiScrollList.UiScrollList<DataForSkillTypeRenderer>;
 
-        private _coData                 : CoData;
+        private _coData?                : CoData;
         private _selectedCoSkillType    = CoSkillType.Passive;
 
         protected _onOpened(): void {
@@ -75,7 +75,7 @@ namespace TwnsUiCoInfo {
             }
         }
         public getCoData(): CoData {
-            return this._coData;
+            return Helpers.getDefined(this._coData);
         }
 
         public setSelectedSkillType(skillType: CoSkillType): void {
@@ -132,7 +132,7 @@ namespace TwnsUiCoInfo {
             const cfg                   = ConfigManager.getCoBasicCfg(configVersion, coId);
             this._imgCoPortrait.source  = ConfigManager.getCoBustImageSource(coId);
             this._labelCoName.text      = cfg.name;
-            this._labelDesigner.text    = cfg.designer;
+            this._labelDesigner.text    = cfg.designer ?? ``;
 
             const coType        = ConfigManager.getCoType(configVersion, coId);
             const groupZoneInfo = this._groupZoneInfo;
@@ -148,7 +148,7 @@ namespace TwnsUiCoInfo {
                 // nothing to do
 
             } else {
-                Logger.error(`UiCoInfo._updateComponentsForCoInfo() invalid gameMode.`);
+                throw new Error(`Invalid coType: ${coType}`);
             }
 
             this._updateComponentsForSkill();
@@ -174,7 +174,7 @@ namespace TwnsUiCoInfo {
             const skillIdArray              = ConfigManager.getCoSkillArray(configVersion, coId, skillType) || [];
             const hasSkill                  = !!skillIdArray.length;
             this._labelSkillType.text       = `${Lang.getCoSkillTypeName(skillType)}:`;
-            this._labelSkillName.text       = hasSkill ? undefined : Lang.getText(LangTextType.B0001);
+            this._labelSkillName.text       = hasSkill ? `` : Lang.getText(LangTextType.B0001);
 
             const groupEnergyCost = this._groupEnergyCost;
             if (!hasSkill) {
@@ -213,22 +213,18 @@ namespace TwnsUiCoInfo {
         component   : TwnsUiCoInfo.UiCoInfo;
     };
     class SkillTypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkillTypeRenderer> {
-        private _labelType  : TwnsUiLabel.UiLabel;
+        private readonly _labelType!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            const data = this.data;
-            if (data) {
-                const skillType         = data.coSkillType;
-                this.currentState       = data.component.getSelectedSkillType() === skillType ? Types.UiState.Down : Types.UiState.Up;
-                this._labelType.text    = Lang.getCoSkillTypeName(skillType);
-            }
+            const data              = this._getData();
+            const skillType         = data.coSkillType;
+            this.currentState       = data.component.getSelectedSkillType() === skillType ? Types.UiState.Down : Types.UiState.Up;
+            this._labelType.text    = Lang.getCoSkillTypeName(skillType) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         public onItemTapEvent(): void {
-            const data = this.data;
-            if (data) {
-                data.component.setSelectedSkillType(data.coSkillType);
-            }
+            const data = this._getData();
+            data.component.setSelectedSkillType(data.coSkillType);
         }
     }
 
@@ -238,10 +234,10 @@ namespace TwnsUiCoInfo {
         desc            : string;
     };
     class SkillDescRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkillDescRenderer> {
-        private _labelDesc  : TwnsUiLabel.UiLabel;
+        private readonly _labelDesc!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            const data              = this.data;
+            const data              = this._getData();
             // this._labelDesc.text    = `- ${ConfigManager.getCoSkillCfg(data.configVersion, data.skillId).desc[Lang.getCurrentLanguageType()]}`;
             this._labelDesc.text = `- ${data.desc || CommonConstants.ErrorTextForUndefined}`;
         }

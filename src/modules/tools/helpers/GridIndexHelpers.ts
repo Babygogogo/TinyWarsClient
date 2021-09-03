@@ -65,11 +65,11 @@ namespace GridIndexHelpers {
     export function getDistance(g1: GridIndex, g2: GridIndex): number {
         return Math.abs(g1.x - g2.x) + Math.abs(g1.y - g2.y);
     }
-    export function getMinDistance(gridIndex: GridIndex, list: GridIndex[]): number | undefined {
-        let minDistance: number | undefined;
+    export function getMinDistance(gridIndex: GridIndex, list: GridIndex[]): number {
+        let minDistance = Number.MAX_VALUE;
         for (const g of list) {
             const distance = getDistance(gridIndex, g);
-            if ((minDistance == null) || (distance < minDistance)) {
+            if (distance < minDistance) {
                 minDistance = distance;
             }
         }

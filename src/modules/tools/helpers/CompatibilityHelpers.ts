@@ -18,6 +18,19 @@ namespace CompatibilityHelpers {
         preventBrowserBack();
     }
 
+    export function handleError(e: unknown): void {
+        const err       = e as Error;
+        const content   = `${err.message}\n\n${err.stack || "No available call stack."}`;
+        TwnsCommonErrorPanel.CommonErrorPanel.show({
+            content,
+        });
+        ChatProxy.reqChatAddMessage(
+            content.substr(0, CommonConstants.ChatContentMaxLength),
+            Types.ChatMessageToCategory.Private,
+            CommonConstants.AdminUserId,
+        );
+    }
+
     function initListenerForWindowOnError(): void {
         window.onerror = (message, filename, row, col, err) => {
             const content = `${message}\n\n${err ? err.stack : "No available call stack."}`;
@@ -42,7 +55,7 @@ namespace CompatibilityHelpers {
             window.addEventListener("pageshow", onGameShow, false);
         }
         window.addEventListener("qbrowserVisibilityChange", e => {
-            if (e && e["hidden"]) {
+            if ((e) && ((e as any)["hidden"])) {
                 onGameHide();
             } else {
                 onGameShow();
@@ -50,14 +63,14 @@ namespace CompatibilityHelpers {
         });
 
         const doc   = window.document;
-        let hidden  : string;
+        let hidden  = ``;
         if (doc.hidden != null) {
             hidden = "hidden";
-        } else if (doc["mozHidden"] != null) {
+        } else if ((doc as any)["mozHidden"] != null) {
             hidden = "mozHidden";
-        } else if (doc["msHidden"] != null) {
+        } else if ((doc as any)["msHidden"] != null) {
             hidden = "msHidden";
-        } else if (doc["webkitHidden"] != null) {
+        } else if ((doc as any)["webkitHidden"] != null) {
             hidden = "webkitHidden";
         }
 
@@ -71,7 +84,7 @@ namespace CompatibilityHelpers {
             ];
             for (const changeType of changeTypeList) {
                 window.document.addEventListener(changeType, event => {
-                    if (window.document[hidden] || event["hidden"]) {
+                    if (((window.document as any)[hidden]) || ((event as any)["hidden"])) {
                         onGameHide();
                     } else {
                         onGameShow();
@@ -94,7 +107,7 @@ namespace CompatibilityHelpers {
 
             const browser       = window.browser;
             browser.execWebFn   = browser.execWebFn || {};
-            browser.execWebFn.postX5GamePlayerMessage = (event) => {
+            browser.execWebFn.postX5GamePlayerMessage = (event: Event) => {
                 const eventType = event.type;
                 if (eventType == "app_enter_background") {
                     onGameHide();
@@ -118,7 +131,7 @@ namespace CompatibilityHelpers {
         }
 
         if (window.addEventListener) {
-            window.addEventListener("popstate", (e) => {
+            window.addEventListener("popstate", () => {
                 FloatText.show(Lang.getText(LangTextType.A0194));
             }, false);
         }

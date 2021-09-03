@@ -78,7 +78,8 @@ namespace TwnsWarMapUnitView {
         }
 
         private _updateImageHp(): void {
-            const normalizedHp  = WarCommonHelpers.getNormalizedHp(Helpers.getExisted(this.getUnitData().currentHp));
+            const hp            = this.getUnitData().currentHp;
+            const normalizedHp  = hp == null ? null : WarCommonHelpers.getNormalizedHp(hp);
             const imgHp         = this._imgHp;
             if ((normalizedHp == null)                                                      ||
                 (normalizedHp <= 0)                                                         ||
@@ -127,24 +128,27 @@ namespace TwnsWarMapUnitView {
             if (unitData.hasLoadedCo) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s05_f99`);
             } else {
-                const promotion = Helpers.getExisted(unitData.currentPromotion);
-                if (promotion > 0) {
+                const promotion = unitData.currentPromotion;
+                if ((promotion != null) && (promotion > 0)) {
                     this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s05_f${Helpers.getNumText(promotion)}`);
                 }
             }
         }
         private _addFrameForFuel(): void {
-            if (Helpers.getExisted(this.getUnitData().currentFuel) <= this._getUnitTemplateCfg().maxFuel * 0.4) {
+            const fuel = this.getUnitData().currentFuel;
+            if ((fuel != null) && (fuel <= this._getUnitTemplateCfg().maxFuel * 0.4)) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s02_f01`);
             }
         }
         private _addFrameForAmmo(): void {
-            const unitData              = this.getUnitData();
-            const cfg                   = this._getUnitTemplateCfg();
-            const primaryWeaponMaxAmmo  = cfg.primaryWeaponMaxAmmo;
-            const flareMaxAmmo          = cfg.flareMaxAmmo;
-            if (((primaryWeaponMaxAmmo != null) && (Helpers.getExisted(unitData.primaryWeaponCurrentAmmo) <= primaryWeaponMaxAmmo * 0.4)) ||
-                ((flareMaxAmmo != null) && (Helpers.getExisted(unitData.flareCurrentAmmo) <= flareMaxAmmo * 0.4))
+            const unitData                  = this.getUnitData();
+            const cfg                       = this._getUnitTemplateCfg();
+            const primaryWeaponMaxAmmo      = cfg.primaryWeaponMaxAmmo;
+            const flareMaxAmmo              = cfg.flareMaxAmmo;
+            const primaryWeaponCurrentAmmo  = unitData.primaryWeaponCurrentAmmo;
+            const flareCurrentAmmo          = unitData.flareCurrentAmmo;
+            if (((primaryWeaponMaxAmmo != null) && (primaryWeaponCurrentAmmo != null) && (primaryWeaponCurrentAmmo <= primaryWeaponMaxAmmo * 0.4)) ||
+                ((flareMaxAmmo != null) && (flareCurrentAmmo != null) && (flareCurrentAmmo <= flareMaxAmmo * 0.4))
             ) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s02_f02`);
             }

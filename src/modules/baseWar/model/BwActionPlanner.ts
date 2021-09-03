@@ -51,11 +51,11 @@ namespace TwnsBwActionPlanner {
     export abstract class BwActionPlanner {
         private readonly _view  = new TwnsBwActionPlannerView.BwActionPlannerView();
 
-        private _war        : BwWar;
-        private _mapSize    : Types.MapSize;
+        private _war?                       : BwWar;
+        private _mapSize                    : Types.MapSize;
 
-        private _state      = State.Idle;
-        private _prevState  : State;
+        private _state                      = State.Idle;
+        private _prevState                  : State;
 
         private _focusUnitOnMap             : BwUnit;
         private _focusUnitLoaded            : BwUnit | undefined;
@@ -106,8 +106,8 @@ namespace TwnsBwActionPlanner {
             this.getView().stopRunningView();
         }
 
-        protected _getWar(): BwWar | undefined {
-            return this._war;
+        protected _getWar(): BwWar {
+            return Helpers.getDefined(this._war);
         }
         protected _getUnitMap(): BwUnitMap {
             return this._getWar().getUnitMap();

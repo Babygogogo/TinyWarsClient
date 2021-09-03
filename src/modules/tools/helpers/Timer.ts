@@ -1,14 +1,15 @@
 
 import CommonModel      from "../../common/model/CommonModel";
 import CommonProxy      from "../../common/model/CommonProxy";
+import Lang             from "../lang/Lang";
+import TwnsLangTextType from "../lang/LangTextType";
+import NetManager       from "../network/NetManager";
 import Notify           from "../notify/Notify";
 import TwnsNotifyType   from "../notify/NotifyType";
-import TwnsLangTextType from "../lang/LangTextType";
-import Lang             from "../lang/Lang";
-import FloatText        from "./FloatText";
-import LocalStorage     from "./LocalStorage";
 import ProtoTypes       from "../proto/ProtoTypes";
-import NetManager       from "../network/NetManager";
+import FloatText        from "./FloatText";
+import Helpers          from "./Helpers";
+import LocalStorage     from "./LocalStorage";
 
 namespace Timer {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -24,9 +25,9 @@ namespace Timer {
     let _heartbeatIntervalId        : number;
     let _serverTimestamp            : number;
 
-    let _intervalIdForTileAnimation : number;
+    let _intervalIdForTileAnimation : number | null;
     let _tileAnimationTickCount     = 0;
-    let _intervalIdForUnitAnimation : number;
+    let _intervalIdForUnitAnimation : number | null;
     let _unitAnimationTickCount     = 0;
     let _gridAnimationTickCount     = 0;
 
@@ -126,7 +127,7 @@ namespace Timer {
             _isHeartbeatAnswered = true;
             ++_heartbeatCounter;
 
-            const timestamp = data.timestamp;
+            const timestamp = Helpers.getExisted(data.timestamp);
             if ((!_serverTimestamp) || (Math.abs(timestamp - _serverTimestamp) > 3)) {
                 _serverTimestamp = timestamp;
             }

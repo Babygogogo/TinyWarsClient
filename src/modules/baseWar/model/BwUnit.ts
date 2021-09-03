@@ -42,15 +42,15 @@ namespace TwnsBwUnit {
         private _currentHp?                 : number;
         private _currentFuel?               : number;
         private _currentPromotion?          : number;
-        private _currentBuildMaterial?      : number;
-        private _currentProduceMaterial?    : number;
-        private _flareCurrentAmmo?          : number;
+        private _currentBuildMaterial?      : number | null;
+        private _currentProduceMaterial?    : number | null;
+        private _flareCurrentAmmo?          : number | null;
         private _isBuildingTile?            : boolean;
         private _isCapturingTile?           : boolean;
         private _isDiving?                  : boolean;
         private _hasLoadedCo?               : boolean;
-        private _loaderUnitId?              : number;
-        private _primaryWeaponCurrentAmmo?  : number;
+        private _loaderUnitId?              : number | null;
+        private _primaryWeaponCurrentAmmo?  : number | null;
 
         private readonly _view              = new BwUnitView();
         private _war?                       : BwWar;
@@ -228,16 +228,15 @@ namespace TwnsBwUnit {
         private _setTemplateCfg(cfg: UnitTemplateCfg): void {
             this._templateCfg = cfg;
         }
-        private _getTemplateCfg(): UnitTemplateCfg | undefined {
-            return this._templateCfg;
+        private _getTemplateCfg(): UnitTemplateCfg {
+            return Helpers.getDefined(this._templateCfg);
         }
 
-        public getConfigVersion(): string | null | undefined {
-            const cfg = this._getTemplateCfg();
-            return cfg ? cfg.version : undefined;
+        public getConfigVersion(): string {
+            return this._getTemplateCfg().version;
         }
-        public getUnitType(): UnitType | undefined {
-            return this._getTemplateCfg()?.type;
+        public getUnitType(): UnitType {
+            return Helpers.getExisted(this._getTemplateCfg().type);
         }
         private _getDamageChartCfg(): { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } } | undefined {
             const configVersion = this.getConfigVersion();
@@ -354,21 +353,15 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for hp and armor.
         ////////////////////////////////////////////////////////////////////////////////
-        public getMaxHp(): number | undefined {
-            return this._getTemplateCfg()?.maxHp;
+        public getMaxHp(): number {
+            return this._getTemplateCfg().maxHp;
         }
-        public getNormalizedMaxHp(): number | undefined {
-            const maxHp = this.getMaxHp();
-            return maxHp == null
-                ? undefined
-                : WarCommonHelpers.getNormalizedHp(maxHp);
+        public getNormalizedMaxHp(): number {
+            return WarCommonHelpers.getNormalizedHp(this.getMaxHp());
         }
 
-        public getNormalizedCurrentHp(): number | undefined {
-            const currentHp = this.getCurrentHp();
-            return currentHp == null
-                ? undefined
-                : WarCommonHelpers.getNormalizedHp(currentHp);
+        public getNormalizedCurrentHp(): number {
+            return WarCommonHelpers.getNormalizedHp(this.getCurrentHp());
         }
         public getCurrentHp(): number {
             return Helpers.getDefined(this._currentHp);
@@ -442,12 +435,12 @@ namespace TwnsBwUnit {
             return this.getPrimaryWeaponMaxAmmo() != null;
         }
 
-        public getPrimaryWeaponMaxAmmo(): number | undefined | null {
-            return this._getTemplateCfg()?.primaryWeaponMaxAmmo;
+        public getPrimaryWeaponMaxAmmo(): number | null {
+            return this._getTemplateCfg().primaryWeaponMaxAmmo ?? null;
         }
 
-        public getPrimaryWeaponCurrentAmmo(): number | undefined{
-            return this._primaryWeaponCurrentAmmo;
+        public getPrimaryWeaponCurrentAmmo(): number | null {
+            return Helpers.getDefined(this._primaryWeaponCurrentAmmo);
         }
         public setPrimaryWeaponCurrentAmmo(ammo: number | undefined | null): void {
             const maxAmmo = this.getPrimaryWeaponMaxAmmo();
@@ -1030,54 +1023,33 @@ namespace TwnsBwUnit {
                 && (tile.getMaxCapturePoint() != null);
         }
 
-        public getCaptureAmount(selfGridIndex: GridIndex): number | undefined {
+        public getCaptureAmount(selfGridIndex: GridIndex): number | null {
             const cfgAmount = this._getCfgCaptureAmount();
             if (cfgAmount == null) {
-                return undefined;
+                return null;
             }
 
             const player = this.getPlayer();
-            if (player == null) {
-                Logger.error(`BwUnit.getCaptureAmount() no player.`);
-                return undefined;
-            }
-
             if (player.getCoId() === CommonConstants.CoEmptyId) {
                 return cfgAmount;
             }
 
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwUnit.getCaptureAmount() configVersion is empty.`);
-                return undefined;
-            }
-
-            const unitType = this.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwUnit.getCaptureAmount() unitType is empty.`);
-                return undefined;
-            }
-
-            const coZoneRadius = player.getCoZoneRadius();
-            if (coZoneRadius == null) {
-                Logger.error(`BwUnit.getCaptureAmount() empty coZoneRadius.`);
-                return undefined;
-            }
-
-            const hasLoadedCo               = this.getHasLoadedCo();
+            const configVersion             = this.getConfigVersion();
+            const unitType                  = this.getUnitType();
+            const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+            const hasLoadedCo               = this.getHasLoadedCo();
             let modifier                    = 100;
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
-                if (!skillCfg) {
-                    Logger.error(`BwUnit.getCaptureAmount() failed getCoSkillCfg()! configVersion: ${configVersion}, skillId: ${skillId}`);
-                    return undefined;
+                if (skillCfg == null) {
+                    throw new Error(`Empty skillCfg.`);
                 }
 
                 {
                     const cfg = skillCfg.selfCaptureAmount;
-                    if ((cfg)                                                                                                                       &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
+                    if ((cfg)                                                                       &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))  &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -1150,19 +1122,19 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for fuel.
         ////////////////////////////////////////////////////////////////////////////////
-        public getCurrentFuel(): number | undefined {
-            return this._currentFuel;
+        public getCurrentFuel(): number {
+            return Helpers.getDefined(this._currentFuel);
         }
         public setCurrentFuel(fuel: number): void {
-            const maxFuel = this.getMaxFuel();
-            if ((maxFuel == null) || (fuel < 0) || (fuel > maxFuel)) {
-                Logger.error(`BwUnit.setCurrentFuel() invalid fuel: ${fuel}, maxFuel: ${maxFuel}`);
+            if ((fuel < 0) || (fuel > this.getMaxFuel())) {
+                throw new Error(`Invalid fuel: ${fuel}`);
             }
+
             this._currentFuel = fuel;
         }
 
-        public getMaxFuel(): number | undefined {
-            return this._getTemplateCfg()?.maxFuel;
+        public getMaxFuel(): number {
+            return this._getTemplateCfg().maxFuel;
         }
 
         public getUsedFuel(): number | undefined {
@@ -1280,8 +1252,8 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for flare.
         ////////////////////////////////////////////////////////////////////////////////
-        public getFlareRadius(): number | undefined | null {
-            return this._getTemplateCfg()?.flareRadius;
+        public getFlareRadius(): number | null {
+            return this._getTemplateCfg().flareRadius ?? null;
         }
 
         public getFlareMaxRange(): number | undefined | null {
@@ -1292,8 +1264,8 @@ namespace TwnsBwUnit {
             return this._getTemplateCfg()?.flareMaxAmmo;
         }
 
-        public getFlareCurrentAmmo(): number | undefined {
-            return this._flareCurrentAmmo;
+        public getFlareCurrentAmmo(): number | null {
+            return Helpers.getDefined(this._flareCurrentAmmo);
         }
         public setFlareCurrentAmmo(ammo: number | undefined | null): void {
             const maxAmmo = this.getFlareMaxAmmo();
@@ -1371,49 +1343,14 @@ namespace TwnsBwUnit {
             return this._getTemplateCfg()?.produceUnitType;
         }
 
-        public getProduceUnitCost(): number | undefined {
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwUnit.getProduceUnitCost() configVersion is empty.`);
-                return undefined;
-            }
-
+        public getProduceUnitCost(): number {
             const produceUnitType = this.getProduceUnitType();
             if (produceUnitType == null) {
-                Logger.error(`BwUnit.getProduceUnitCost() produceUnitType is empty.`);
-                return undefined;
+                throw new Error(`Empty produceUnitType.`);
             }
 
-            const cfgCost = ConfigManager.getUnitTemplateCfg(configVersion, produceUnitType)?.productionCost;
-            if (cfgCost == null) {
-                Logger.error(`BwUnit.getProduceUnitCost() empty cfgCost.`);
-                return undefined;
-            }
-
-            const player = this.getPlayer();
-            if (player == null) {
-                Logger.error(`BwUnit.getProduceUnitCost() empty player.`);
-                return undefined;
-            }
-
-            const gridIndex = this.getGridIndex();
-            if (gridIndex == null) {
-                Logger.error(`BwUnit.getProduceUnitCost() empty gridIndex.`);
-                return undefined;
-            }
-
-            const hasLoadedCo = this.getHasLoadedCo();
-            if (hasLoadedCo == null) {
-                Logger.error(`BwUnit.getProduceUnitCost() empty hasLoadedCo.`);
-                return undefined;
-            }
-
-            const modifier = player.getUnitCostModifier(gridIndex, hasLoadedCo, produceUnitType);
-            if (modifier == null) {
-                Logger.error(`BwUnit.getProduceUnitCost() empty modifier.`);
-                return undefined;
-            }
-
+            const cfgCost   = ConfigManager.getUnitTemplateCfg(this.getConfigVersion(), produceUnitType).productionCost;
+            const modifier  = this.getPlayer().getUnitCostModifier(this.getGridIndex(), this.getHasLoadedCo(), produceUnitType);
             return Math.floor(cfgCost * modifier);
         }
 
@@ -1421,8 +1358,8 @@ namespace TwnsBwUnit {
             return this._getTemplateCfg()?.maxProduceMaterial;
         }
 
-        public getCurrentProduceMaterial(): number | undefined {
-            return this._currentProduceMaterial;
+        public getCurrentProduceMaterial(): number | null {
+            return Helpers.getDefined(this._currentProduceMaterial);
         }
         public setCurrentProduceMaterial(material: number | undefined | null): void {
             const maxMaterial = this.getMaxProduceMaterial();
@@ -1564,64 +1501,22 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce self.
         ////////////////////////////////////////////////////////////////////////////////
-        public getProductionCfgCost(): number | undefined {
-            return this._getTemplateCfg()?.productionCost;
+        public getProductionCfgCost(): number {
+            return this._getTemplateCfg().productionCost;
         }
-        public getProductionFinalCost(): number | undefined {
-            const cfgCost = this.getProductionCfgCost();
-            if (cfgCost == null) {
-                Logger.error(`BwUnit.getProductionFinalCost() empty cfgCost.`);
-                return undefined;
-            }
-
-            const player = this.getPlayer();
-            if (player == null) {
-                Logger.error(`BwUnit.getProductionFinalCost() empty player.`);
-                return undefined;
-            }
-
-            const gridIndex = this.getGridIndex();
-            if (gridIndex == null) {
-                Logger.error(`BwUnit.getProductionFinalCost() empty gridIndex.`);
-                return undefined;
-            }
-
-            const hasLoadedCo = this.getHasLoadedCo();
-            if (hasLoadedCo == null) {
-                Logger.error(`BwUnit.getProductionFinalCost() empty hasLoadedCo.`);
-                return undefined;
-            }
-
-            const unitType = this.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwUnit.getProductionFinalCost() empty unitType.`);
-                return undefined;
-            }
-
-            const modifier = player.getUnitCostModifier(gridIndex, hasLoadedCo, unitType);
-            if (modifier == null) {
-                Logger.error(`BwUnit.getProductionFinalCost() empty modifier.`);
-                return undefined;
-            }
-
-            return Math.floor(cfgCost * modifier);
+        public getProductionFinalCost(): number {
+            return Math.floor(this.getProductionCfgCost() * this.getPlayer().getUnitCostModifier(this.getGridIndex(), this.getHasLoadedCo(), this.getUnitType()));
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for promotion.
         ////////////////////////////////////////////////////////////////////////////////
-        public getMaxPromotion(): number | undefined {
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwUnit.getMaxPromotion() configVersion is empty.`);
-                return undefined;
-            }
-
-            return ConfigManager.getUnitMaxPromotion(configVersion);
+        public getMaxPromotion(): number {
+            return ConfigManager.getUnitMaxPromotion(this.getConfigVersion());
         }
 
-        public getCurrentPromotion(): number | undefined {
-            return this._currentPromotion;
+        public getCurrentPromotion(): number {
+            return Helpers.getDefined(this._currentPromotion);
         }
         public setCurrentPromotion(promotion: number): void {
             const maxPromotion = this.getMaxPromotion();
@@ -1720,16 +1615,16 @@ namespace TwnsBwUnit {
             return cfgs ? cfgs[objectType] : undefined;
         }
 
-        public getBuildAmount(): number | undefined {
-            return this.checkIsTileBuilder() ? this.getNormalizedCurrentHp() : undefined;
+        public getBuildAmount(): number | null {
+            return this.checkIsTileBuilder() ? this.getNormalizedCurrentHp() : null;
         }
 
         public getMaxBuildMaterial(): number | undefined | null {
             return this._getTemplateCfg()?.maxBuildMaterial;
         }
 
-        public getCurrentBuildMaterial(): number | undefined {
-            return this._currentBuildMaterial;
+        public getCurrentBuildMaterial(): number | null {
+            return Helpers.getDefined(this._currentBuildMaterial);
         }
         public setCurrentBuildMaterial(material: number | undefined | null): void {
             const maxMaterial = this.getMaxBuildMaterial();
@@ -1880,27 +1775,16 @@ namespace TwnsBwUnit {
         public setLoaderUnitId(loaderUnitId: number | null | undefined): void {
             this._loaderUnitId = loaderUnitId == null ? undefined : loaderUnitId;
         }
-        public getLoaderUnitId(): number | undefined {
-            return this._loaderUnitId;
+        public getLoaderUnitId(): number | null {
+            return Helpers.getDefined(this._loaderUnitId);
         }
-        public getLoaderUnit(): BwUnit | undefined {
+        public getLoaderUnit(): BwUnit | null {
             const unitId = this.getLoaderUnitId();
             if (unitId == null) {
-                return undefined;
+                return null;
             } else {
-                const unitMap = this.getWar()?.getUnitMap();
-                if (unitMap == null) {
-                    Logger.error(`BwUnit.getLoaderUnit() no war.`);
-                    return undefined;
-                }
-
-                const gridIndex = this.getGridIndex();
-                if (gridIndex == null) {
-                    Logger.error(`BwUnit.getLoaderUnit() no gridIndex.`);
-                    return undefined;
-                }
-
-                return (unitMap.getUnitLoadedById(unitId)) || (unitMap.getUnitOnMap(gridIndex));
+                const unitMap = this.getWar().getUnitMap();
+                return (unitMap.getUnitLoadedById(unitId)) || (unitMap.getUnitOnMap(this.getGridIndex()));
             }
         }
 
@@ -2218,23 +2102,19 @@ namespace TwnsBwUnit {
                 && (unit.getLoadedUnitsCount() === 0);
         }
 
-        public getJoinIncome(unit: BwUnit): number | undefined {
+        public getJoinIncome(unit: BwUnit): number {
             if (!this.checkCanJoinUnit(unit)) {
-                return undefined;
-            } else {
-                const maxHp         = this.getNormalizedMaxHp();
-                const normalizedHp1 = this.getNormalizedCurrentHp();
-                const normalizedHp2 = unit.getNormalizedCurrentHp();
-                const cost          = this.getProductionFinalCost();
-                if ((maxHp == null) || (normalizedHp1 == null) || (normalizedHp2 == null) || (cost == null)) {
-                    return undefined;
-                } else {
-                    const joinedHp  = normalizedHp1 + normalizedHp2;
-                    return joinedHp <= maxHp
-                        ? 0
-                        : Math.floor((joinedHp - maxHp) * cost / 10);
-                }
+                throw new Error(`Can not join.`);
             }
+
+            const maxHp         = this.getNormalizedMaxHp();
+            const normalizedHp1 = this.getNormalizedCurrentHp();
+            const normalizedHp2 = unit.getNormalizedCurrentHp();
+            const cost          = this.getProductionFinalCost();
+            const joinedHp      = normalizedHp1 + normalizedHp2;
+            return joinedHp <= maxHp
+                ? 0
+                : Math.floor((joinedHp - maxHp) * cost / 10);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -2243,14 +2123,8 @@ namespace TwnsBwUnit {
         public setHasLoadedCo(isCoOnBoard: boolean): void {
             this._hasLoadedCo = isCoOnBoard;
         }
-        public getHasLoadedCo(): boolean | undefined {
-            const hasLoadedCo = this._hasLoadedCo;
-            if (hasLoadedCo == null) {
-                Logger.error(`BwUnit.getHasLoadedCo() empty hasLoadedCo.`);
-                return undefined;
-            }
-
-            return hasLoadedCo;
+        public getHasLoadedCo(): boolean {
+            return Helpers.getDefined(this._hasLoadedCo);
         }
 
         public checkCanLoadCoAfterMovePath(movePath: GridIndex[]): boolean | undefined {
@@ -2366,35 +2240,8 @@ namespace TwnsBwUnit {
             }
         }
 
-        public getLoadCoCost(): number | undefined {
-            const player = this.getPlayer();
-            if (player == null) {
-                Logger.error(`BwUnit.getLoadCoCost() player is empty.`);
-                return undefined;
-            }
-
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwUnit.getLoadCoCost() configVersion is empty.`);
-                return undefined;
-            }
-
-            const coId = player.getCoId();
-            if (!coId) {
-                return undefined;
-            }
-
-            const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
-            if (cfg == null) {
-                Logger.error(`BwUnit.getLoadCoCost() cfg is empty.`);
-                return undefined;
-            }
-
-            const percentage    = cfg.boardCostPercentage;
-            const baseCost      = this.getProductionCfgCost();
-            return ((percentage == null) || (baseCost == null))
-                ? undefined
-                : Math.floor(percentage * baseCost / 100);
+        public getLoadCoCost(): number {
+            return Math.floor(ConfigManager.getCoBasicCfg(this.getConfigVersion(), this.getPlayer().getCoId()).boardCostPercentage * this.getProductionCfgCost() / 100);
         }
     }
 

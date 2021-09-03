@@ -36,12 +36,12 @@ namespace TwnsBwTile {
         private _decoratorType?         : TileDecoratorType | null;
         private _objectType?            : TileObjectType;
 
-        private _baseShapeId?           : number | null;
-        private _objectShapeId?         : number | null;
+        private _baseShapeId?           : number;
         private _decoratorShapeId?      : number | null;
-        private _currentHp?             : number;
-        private _currentBuildPoint?     : number;
-        private _currentCapturePoint?   : number;
+        private _objectShapeId?         : number;
+        private _currentHp?             : number | null;
+        private _currentBuildPoint?     : number | null;
+        private _currentCapturePoint?   : number | null;
 
         private readonly _view  = new BwTileView();
         private _hasFog         = false;
@@ -323,8 +323,8 @@ namespace TwnsBwTile {
         private _setTemplateCfg(cfg: TileTemplateCfg): void {
             this._templateCfg = cfg;
         }
-        private _getTemplateCfg(): TileTemplateCfg | undefined {
-            return this._templateCfg;
+        private _getTemplateCfg(): Types.TileTemplateCfg {
+            return Helpers.getDefined(this._templateCfg);
         }
 
         public updateOnUnitLeave(): void {
@@ -363,15 +363,15 @@ namespace TwnsBwTile {
         private _setBaseType(baseType: TileBaseType): void {
             this._baseType = baseType;
         }
-        public getBaseType(): TileBaseType | undefined {
-            return this._baseType;
+        public getBaseType(): TileBaseType {
+            return Helpers.getDefined(this._baseType);
         }
 
         private _setObjectType(objectType: TileObjectType): void {
             this._objectType = objectType;
         }
-        public getObjectType(): TileObjectType | undefined {
-            return this._objectType;
+        public getObjectType(): TileObjectType {
+            return Helpers.getDefined(this._objectType);
         }
 
         private _setDecoratorType(decoratorType: TileDecoratorType | null | undefined): void {
@@ -425,8 +425,8 @@ namespace TwnsBwTile {
             return cfg.maxHp;
         }
 
-        public getCurrentHp(): number | undefined {
-            return this._currentHp;
+        public getCurrentHp(): number | null {
+            return Helpers.getDefined(this._currentHp);
         }
         public setCurrentHp(hp: number | null | undefined): void {
             const maxHp = this.getMaxHp();
@@ -472,8 +472,8 @@ namespace TwnsBwTile {
             return cfg.maxBuildPoint;
         }
 
-        public getCurrentBuildPoint(): number | undefined {
-            return this._currentBuildPoint;
+        public getCurrentBuildPoint(): number | null {
+            return Helpers.getDefined(this._currentBuildPoint);
         }
         public setCurrentBuildPoint(point: number | null | undefined): void {
             const maxPoint = this.getMaxBuildPoint();
@@ -489,18 +489,12 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for capture.
         ////////////////////////////////////////////////////////////////////////////////
-        public getMaxCapturePoint(): number | null | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getMaxCapturePoint() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.maxCapturePoint;
+        public getMaxCapturePoint(): number | null {
+            return this._getTemplateCfg().maxCapturePoint ?? null;
         }
 
-        public getCurrentCapturePoint(): number | undefined {
-            return this._currentCapturePoint;
+        public getCurrentCapturePoint(): number | null {
+            return Helpers.getDefined(this._currentCapturePoint);
         }
         public setCurrentCapturePoint(point: number | null | undefined): void {
             const maxPoint = this.getMaxCapturePoint();
@@ -790,20 +784,8 @@ namespace TwnsBwTile {
             return Helpers.getDefined(this._playerIndex);
         }
 
-        public getPlayer(): TwnsBwPlayer.BwPlayer | undefined {
-            const war = this.getWar();
-            if (war == null) {
-                Logger.error(`BwTile.getPlayer() empty war.`);
-                return undefined;
-            }
-
-            const playerIndex = this.getPlayerIndex();
-            if (playerIndex == null) {
-                Logger.error(`BwTile.getPlayer() empty playerIndex.`);
-                return undefined;
-            }
-
-            return war.getPlayer(playerIndex);
+        public getPlayer(): TwnsBwPlayer.BwPlayer {
+            return this.getWar().getPlayer(this.getPlayerIndex());
         }
 
         public getTeamIndex(): number {

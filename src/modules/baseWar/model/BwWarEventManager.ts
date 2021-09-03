@@ -772,20 +772,8 @@ namespace TwnsBwWarEventManager {
                 : (isNot ? true : false);
         }
 
-        public getWarEvent(warEventId: number): WarEvent.IWarEvent | undefined {                    // DONE
-            const warEventData = this.getWarEventFullData();
-            if (warEventData == null) {
-                Logger.error(`BwWarEventManager._getWarEvent() empty warEventData.`);
-                return undefined;
-            }
-
-            const eventArray = warEventData.eventArray;
-            if (eventArray == null) {
-                Logger.error(`BwWarEventManager._getWarEvent() empty eventArray.`);
-                return undefined;
-            }
-
-            return eventArray.find(v => v.eventId === warEventId);
+        public getWarEvent(warEventId: number): WarEvent.IWarEvent {                    // DONE
+            return Helpers.getExisted(this.getWarEventFullData()?.eventArray?.find(v => v.eventId === warEventId));
         }
         private _getConditionNode(nodeId: number): WarEvent.IWarEventConditionNode | undefined {    // DONE
             const warEventData = this.getWarEventFullData();

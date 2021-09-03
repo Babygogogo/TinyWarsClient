@@ -450,7 +450,7 @@ namespace WarActionExecutor {
                 return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_03;
             }
 
-            const skillDataArray    = extraData.skillDataArray;
+            const skillDataArray    = Helpers.getExisted(extraData.skillDataArray);
             const skillIdList       = player.getCoCurrentSkills() || [];
             for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
                 const dataForUseCoSkill = skillDataArray.find(v => v.skillIndex === skillIndex);
@@ -482,7 +482,7 @@ namespace WarActionExecutor {
                 const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
                 if (indiscriminateCfg) {
                     for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(
-                        skillDataArray.find(v => v.skillIndex === i).indiscriminateAreaDamageCenter as GridIndex,
+                        skillDataArray.find(v => v.skillIndex === i)?.indiscriminateAreaDamageCenter as GridIndex,
                         0,
                         indiscriminateCfg[1],
                         mapSize)
@@ -622,7 +622,7 @@ namespace WarActionExecutor {
     }
     async function fastExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<ClientErrorCode> {
         const warEventManager   = war.getWarEventManager();
-        const warEventId        = action.warEventId;
+        const warEventId        = Helpers.getExisted(action.warEventId);
         warEventManager.updateWarEventCalledCountOnCall(warEventId);
         await warEventManager.callWarEvent(warEventId, true);
 
@@ -633,7 +633,7 @@ namespace WarActionExecutor {
         (desc) && (FloatText.show(desc));
 
         const warEventManager   = war.getWarEventManager();
-        const warEventId        = action.warEventId;
+        const warEventId        = Helpers.getExisted(action.warEventId);
         warEventManager.updateWarEventCalledCountOnCall(warEventId);
 
         const extraDataList = action.extraDataList;
@@ -642,24 +642,24 @@ namespace WarActionExecutor {
         } else {
             const unitMap       = war.getUnitMap();
             const configVersion = war.getConfigVersion();
-            const actionIdArray = warEventManager.getWarEvent(warEventId).actionIdArray;
+            const actionIdArray = Helpers.getExisted(warEventManager.getWarEvent(warEventId).actionIdArray);
             for (let index = 0; index < actionIdArray.length; ++index) {
                 const warEventAction = warEventManager.getWarEventAction(actionIdArray[index]);
                 if (warEventAction.WeaAddUnit) {
-                    for (const unitData of extraDataList.find(v => v.indexForActionIdList === index).ExtraDataForWeaAddUnit.unitList || []) {
+                    for (const unitData of extraDataList.find(v => v.indexForActionIdList === index)?.ExtraDataForWeaAddUnit?.unitList || []) {
                         const unit = new BwUnit();
                         unit.init(unitData, configVersion);
                         unit.startRunning(war);
                         unit.startRunningView();
                         unitMap.setUnitOnMap(unit);
-                        unitMap.setNextUnitId(Math.max(unitData.unitId + 1, unitMap.getNextUnitId()));
+                        unitMap.setNextUnitId(Math.max(Helpers.getExisted(unitData.unitId) + 1, unitMap.getNextUnitId()));
                     }
 
                 } else if (warEventAction.WeaSetPlayerAliveState) {
                     const actionData    = warEventAction.WeaSetPlayerAliveState;
-                    const player        = war.getPlayer(actionData.playerIndex);
+                    const player        = war.getPlayer(Helpers.getExisted(actionData.playerIndex));
                     if (player != null) {
-                        player.setAliveState(actionData.playerAliveState);
+                        player.setAliveState(Helpers.getExisted(actionData.playerAliveState));
                     }
 
                 } else {
@@ -679,7 +679,7 @@ namespace WarActionExecutor {
             : normalExeSystemDestroyPlayerForce(war, action);
     }
     async function fastExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<ClientErrorCode> {
-        WarDestructionHelpers.destroyPlayerForce(war, action.targetPlayerIndex, false);
+        WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), false);
 
         return ClientErrorCode.NoError;
     }
@@ -687,7 +687,7 @@ namespace WarActionExecutor {
         const desc = await war.getDescForExeSystemDestroyPlayerForce(action);
         (desc) && (FloatText.show(desc));
 
-        WarDestructionHelpers.destroyPlayerForce(war, action.targetPlayerIndex, true);
+        WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), true);
 
         war.updateTilesAndUnitsOnVisibilityChanged();
         return ClientErrorCode.NoError;
@@ -764,7 +764,7 @@ namespace WarActionExecutor {
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -782,7 +782,7 @@ namespace WarActionExecutor {
                 for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
                     const targetUnitId = battleDamageInfo.targetUnitId;
                     if (targetUnitId != null) {
-                        damagedUnitSet.add(unitMap.getUnitById(targetUnitId));
+                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
                         continue;
                     }
 
@@ -792,28 +792,25 @@ namespace WarActionExecutor {
                     }
 
                     const tile = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, tile.getCurrentHp() - battleDamageInfo.damage));
+                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
 
-                    const {
-                        errorCode       : errorCodeForTileDestruction,
-                        damagedTileSet  : damagedTiles,
-                        destroyedTileSet: destroyedTiles,
-                    } = handleDestructionForTile(war, tile);
+                    const result                        = handleDestructionForTile(war, tile);
+                    const errorCodeForTileDestruction   = result.errorCode;
                     if (errorCodeForTileDestruction) {
                         return errorCodeForTileDestruction;
                     }
 
-                    for (const t of damagedTiles) {
+                    for (const t of Helpers.getExisted(result.damagedTileSet)) {
                         damagedTileSet.add(t);
                     }
-                    for (const t of destroyedTiles) {
+                    for (const t of Helpers.getExisted(result.destroyedTileSet)) {
                         destroyedTileSet.add(t);
                     }
                 }
 
                 const configVersion = war.getConfigVersion();
                 for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = unitMap.getUnitById(affectedUnitData.unitId);
+                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
@@ -822,12 +819,12 @@ namespace WarActionExecutor {
                 }
 
                 for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(affectedPlayerData.playerIndex).init(affectedPlayerData, configVersion);
+                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
                 }
             }
 
         } else {
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1014,19 +1011,16 @@ namespace WarActionExecutor {
                             return errorCodeForHp;
                         }
 
-                        const {
-                            errorCode       : errorCodeForTileDestruction,
-                            damagedTileSet  : damagedTiles,
-                            destroyedTileSet: destroyedTiles,
-                        } = handleDestructionForTile(war, tile2);
+                        const result                        = handleDestructionForTile(war, tile2);
+                        const errorCodeForTileDestruction   = result.errorCode;
                         if (errorCodeForTileDestruction) {
                             return errorCodeForTileDestruction;
                         }
 
-                        for (const tile of damagedTiles) {
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of destroyedTiles) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
@@ -1066,7 +1060,7 @@ namespace WarActionExecutor {
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1104,7 +1098,7 @@ namespace WarActionExecutor {
                 for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
                     const targetUnitId = battleDamageInfo.targetUnitId;
                     if (targetUnitId != null) {
-                        damagedUnitSet.add(unitMap.getUnitById(targetUnitId));
+                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
                         continue;
                     }
 
@@ -1114,21 +1108,18 @@ namespace WarActionExecutor {
                     }
 
                     const tile = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, tile.getCurrentHp() - battleDamageInfo.damage));
+                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
 
-                    const {
-                        errorCode       : errorCodeForTileDestruction,
-                        damagedTileSet  : damagedTiles,
-                        destroyedTileSet: destroyedTiles,
-                    } = handleDestructionForTile(war, tile);
+                    const result = handleDestructionForTile(war, tile);
+                    const errorCodeForTileDestruction = result.errorCode;
                     if (errorCodeForTileDestruction) {
                         return errorCodeForTileDestruction;
                     }
 
-                    for (const t of damagedTiles) {
+                    for (const t of Helpers.getExisted(result.damagedTileSet)) {
                         damagedTileSet.add(t);
                     }
-                    for (const t of destroyedTiles) {
+                    for (const t of Helpers.getExisted(result.destroyedTileSet)) {
                         destroyedTileSet.add(t);
                     }
                 }
@@ -1136,7 +1127,7 @@ namespace WarActionExecutor {
                 const configVersion     = war.getConfigVersion();
                 const affectedUnitSet   = new Set<BwUnit>();
                 for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = unitMap.getUnitById(affectedUnitData.unitId);
+                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
@@ -1147,7 +1138,7 @@ namespace WarActionExecutor {
                 }
 
                 for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(affectedPlayerData.playerIndex).init(affectedPlayerData, configVersion);
+                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
                 }
 
                 const gridVisionEffect      = war.getGridVisionEffect();
@@ -1183,7 +1174,7 @@ namespace WarActionExecutor {
             }
 
         } else {
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1390,19 +1381,16 @@ namespace WarActionExecutor {
                             return errorCodeForHp;
                         }
 
-                        const {
-                            errorCode       : errorCodeForTileDestruction,
-                            damagedTileSet  : damagedTiles,
-                            destroyedTileSet: destroyedTiles,
-                        } = handleDestructionForTile(war, tile2);
+                        const result                        = handleDestructionForTile(war, tile2);
+                        const errorCodeForTileDestruction   = result.errorCode;
                         if (errorCodeForTileDestruction) {
                             return errorCodeForTileDestruction;
                         }
 
-                        for (const tile of damagedTiles) {
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of destroyedTiles) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
@@ -1478,7 +1466,7 @@ namespace WarActionExecutor {
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1496,7 +1484,7 @@ namespace WarActionExecutor {
                 for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
                     const targetUnitId = battleDamageInfo.targetUnitId;
                     if (targetUnitId != null) {
-                        damagedUnitSet.add(unitMap.getUnitById(targetUnitId));
+                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
                         continue;
                     }
 
@@ -1506,28 +1494,25 @@ namespace WarActionExecutor {
                     }
 
                     const tile = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, tile.getCurrentHp() - battleDamageInfo.damage));
+                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
 
-                    const {
-                        errorCode       : errorCodeForTileDestruction,
-                        damagedTileSet  : damagedTiles,
-                        destroyedTileSet: destroyedTiles,
-                    } = handleDestructionForTile(war, tile);
+                    const result                        = handleDestructionForTile(war, tile);
+                    const errorCodeForTileDestruction   = result.errorCode;
                     if (errorCodeForTileDestruction) {
                         return errorCodeForTileDestruction;
                     }
 
-                    for (const t of damagedTiles) {
+                    for (const t of Helpers.getExisted(result.damagedTileSet)) {
                         damagedTileSet.add(t);
                     }
-                    for (const t of destroyedTiles) {
+                    for (const t of Helpers.getExisted(result.destroyedTileSet)) {
                         destroyedTileSet.add(t);
                     }
                 }
 
                 const configVersion = war.getConfigVersion();
                 for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = unitMap.getUnitById(affectedUnitData.unitId);
+                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
@@ -1536,12 +1521,12 @@ namespace WarActionExecutor {
                 }
 
                 for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(affectedPlayerData.playerIndex).init(affectedPlayerData, configVersion);
+                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
                 }
             }
 
         } else {
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1728,19 +1713,16 @@ namespace WarActionExecutor {
                             return errorCodeForHp;
                         }
 
-                        const {
-                            errorCode       : errorCodeForTileDestruction,
-                            damagedTileSet  : damagedTiles,
-                            destroyedTileSet: destroyedTiles,
-                        } = handleDestructionForTile(war, tile2);
+                        const result                        = handleDestructionForTile(war, tile2);
+                        const errorCodeForTileDestruction   = result.errorCode;
                         if (errorCodeForTileDestruction) {
                             return errorCodeForTileDestruction;
                         }
 
-                        for (const tile of damagedTiles) {
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of destroyedTiles) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
@@ -1780,7 +1762,7 @@ namespace WarActionExecutor {
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1818,7 +1800,7 @@ namespace WarActionExecutor {
                 for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
                     const targetUnitId = battleDamageInfo.targetUnitId;
                     if (targetUnitId != null) {
-                        damagedUnitSet.add(unitMap.getUnitById(targetUnitId));
+                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
                         continue;
                     }
 
@@ -1828,21 +1810,18 @@ namespace WarActionExecutor {
                     }
 
                     const tile = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, tile.getCurrentHp() - battleDamageInfo.damage));
+                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
 
-                    const {
-                        errorCode       : errorCodeForTileDestruction,
-                        damagedTileSet  : damagedTiles,
-                        destroyedTileSet: destroyedTiles,
-                    } = handleDestructionForTile(war, tile);
+                    const tileDestructionsData          = handleDestructionForTile(war, tile);
+                    const errorCodeForTileDestruction   = tileDestructionsData.errorCode;
                     if (errorCodeForTileDestruction) {
                         return errorCodeForTileDestruction;
                     }
 
-                    for (const t of damagedTiles) {
+                    for (const t of Helpers.getExisted(tileDestructionsData.damagedTileSet)) {
                         damagedTileSet.add(t);
                     }
-                    for (const t of destroyedTiles) {
+                    for (const t of Helpers.getExisted(tileDestructionsData.destroyedTileSet)) {
                         destroyedTileSet.add(t);
                     }
                 }
@@ -1850,7 +1829,7 @@ namespace WarActionExecutor {
                 const configVersion     = war.getConfigVersion();
                 const affectedUnitSet   = new Set<BwUnit>();
                 for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = unitMap.getUnitById(affectedUnitData.unitId);
+                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
@@ -1861,7 +1840,7 @@ namespace WarActionExecutor {
                 }
 
                 for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(affectedPlayerData.playerIndex).init(affectedPlayerData, configVersion);
+                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
                 }
 
                 const gridVisionEffect      = war.getGridVisionEffect();
@@ -1897,7 +1876,7 @@ namespace WarActionExecutor {
             }
 
         } else {
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -2104,19 +2083,16 @@ namespace WarActionExecutor {
                             return errorCodeForHp;
                         }
 
-                        const {
-                            errorCode       : errorCodeForTileDestruction,
-                            damagedTileSet  : damagedTiles,
-                            destroyedTileSet: destroyedTiles,
-                        } = handleDestructionForTile(war, tile2);
+                        const result                        = handleDestructionForTile(war, tile2);
+                        const errorCodeForTileDestruction   = result.errorCode;
                         if (errorCodeForTileDestruction) {
                             return errorCodeForTileDestruction;
                         }
 
-                        for (const tile of damagedTiles) {
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of destroyedTiles) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
@@ -2187,13 +2163,13 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         focusUnit.setActionState(UnitActionState.Acted);
         if (path.isBlocked) {
             unitMap.setUnitOnMap(focusUnit);
         } else {
-            const loaderUnit = unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
+            const loaderUnit = Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
             unitMap.setUnitLoaded(focusUnit);
             focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
         }
@@ -2213,7 +2189,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2224,7 +2200,7 @@ namespace WarActionExecutor {
             focusUnit.updateView();
 
         } else {
-            const loaderUnit = unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
+            const loaderUnit = Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
             unitMap.setUnitLoaded(focusUnit);
             focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
 
@@ -2249,7 +2225,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2257,7 +2233,7 @@ namespace WarActionExecutor {
         if (!path.isBlocked) {
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
             const tile              = war.getTileMap().getTile(endingGridIndex);
-            const buildPoint        = tile.getCurrentBuildPoint() - focusUnit.getBuildAmount();
+            const buildPoint        = Helpers.getExisted(tile.getCurrentBuildPoint()) - Helpers.getExisted(focusUnit.getBuildAmount());
             // if (tile.getIsFogEnabled()) {
             //     tile.setFogDisabled();
             // }
@@ -2271,10 +2247,10 @@ namespace WarActionExecutor {
                 }
 
                 focusUnit.setIsBuildingTile(false);
-                focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
+                focusUnit.setCurrentBuildMaterial(Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
                 tile.resetByTypeAndPlayerIndex({
-                    baseType        : targetTileCfg.dstBaseType,
-                    objectType      : targetTileCfg.dstObjectType,
+                    baseType        : Helpers.getExisted(targetTileCfg.dstBaseType),
+                    objectType      : Helpers.getExisted(targetTileCfg.dstObjectType),
                     playerIndex     : focusUnit.getPlayerIndex(),
                 });
             }
@@ -2295,7 +2271,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2303,7 +2279,7 @@ namespace WarActionExecutor {
         if (!path.isBlocked) {
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
             const tile              = war.getTileMap().getTile(endingGridIndex);
-            const buildPoint        = tile.getCurrentBuildPoint() - focusUnit.getBuildAmount();
+            const buildPoint        = Helpers.getExisted(tile.getCurrentBuildPoint()) - Helpers.getExisted(focusUnit.getBuildAmount());
             // if (tile.getIsFogEnabled()) {
             //     tile.setFogDisabled();
             // }
@@ -2317,10 +2293,10 @@ namespace WarActionExecutor {
                 }
 
                 focusUnit.setIsBuildingTile(false);
-                focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
+                focusUnit.setCurrentBuildMaterial(Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
                 tile.resetByTypeAndPlayerIndex({
-                    baseType        : targetTileCfg.dstBaseType,
-                    objectType      : targetTileCfg.dstObjectType,
+                    baseType        : Helpers.getExisted(targetTileCfg.dstBaseType),
+                    objectType      : Helpers.getExisted(targetTileCfg.dstObjectType),
                     playerIndex     : focusUnit.getPlayerIndex(),
                 });
             }
@@ -2344,7 +2320,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2355,7 +2331,7 @@ namespace WarActionExecutor {
             // TODO: capture amount is incorrect if the co has zoned capture skill and is invisible!
             const destination       = pathNodes[pathNodes.length - 1];
             const tile              = war.getTileMap().getTile(destination);
-            const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount(destination);
+            const restCapturePoint  = Helpers.getExisted(tile.getCurrentCapturePoint()) - Helpers.getExisted(focusUnit.getCaptureAmount(destination));
             if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
                 tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
             }
@@ -2390,7 +2366,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2403,9 +2379,9 @@ namespace WarActionExecutor {
             // TODO: capture amount is incorrect if the co has zoned capture skill and is invisible!
             const destination           = pathNodes[pathNodes.length - 1];
             const tile                  = war.getTileMap().getTile(destination);
-            const maxCapturePoint       = tile.getMaxCapturePoint();
-            const currentCapturePoint   = tile.getCurrentCapturePoint();
-            const restCapturePoint      = currentCapturePoint - focusUnit.getCaptureAmount(destination);
+            const maxCapturePoint       = Helpers.getExisted(tile.getMaxCapturePoint());
+            const currentCapturePoint   = Helpers.getExisted(tile.getCurrentCapturePoint());
+            const restCapturePoint      = currentCapturePoint - Helpers.getExisted(focusUnit.getCaptureAmount(destination));
             if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
                 tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
             }
@@ -2454,7 +2430,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         const isSuccessful  = !path.isBlocked;
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
@@ -2476,7 +2452,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         const isSuccessful  = !path.isBlocked;
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
@@ -2515,7 +2491,7 @@ namespace WarActionExecutor {
         const pathNodes         = path.nodes;
         const unitMap           = war.getUnitMap();
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
-        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2524,7 +2500,7 @@ namespace WarActionExecutor {
         const fogMap                = war.getFogMap();
         const unitsForDrop          : BwUnit[] = [];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = unitMap.getUnitLoadedById(unitId);
+            const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
             unitMap.setUnitUnloaded(unitId, gridIndex);
             for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                 unit.setGridIndex(gridIndex);
@@ -2556,7 +2532,7 @@ namespace WarActionExecutor {
         const pathNodes         = path.nodes;
         const unitMap           = war.getUnitMap();
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
-        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2565,7 +2541,7 @@ namespace WarActionExecutor {
         const fogMap                = war.getFogMap();
         const unitsForDrop          : BwUnit[] = [];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = unitMap.getUnitLoadedById(unitId);
+            const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
             unitMap.setUnitUnloaded(unitId, gridIndex);
             for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                 unit.setGridIndex(gridIndex);
@@ -2616,7 +2592,7 @@ namespace WarActionExecutor {
         const pathNodes         = path.nodes;
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const unitMap           = war.getUnitMap();
-        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
 
         if (path.isBlocked) {
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2624,7 +2600,7 @@ namespace WarActionExecutor {
             focusUnit.setActionState(UnitActionState.Acted);
 
         } else {
-            const targetUnit    = unitMap.getUnitOnMap(endingGridIndex);
+            const targetUnit    = Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
             const player        = war.getPlayer(focusUnit.getPlayerIndex());
             unitMap.removeUnitOnMap(endingGridIndex, true);
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2635,8 +2611,8 @@ namespace WarActionExecutor {
 
             if (focusUnit.checkHasPrimaryWeapon()) {
                 focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
-                    focusUnit.getPrimaryWeaponMaxAmmo(),
-                    focusUnit.getPrimaryWeaponCurrentAmmo() + targetUnit.getPrimaryWeaponCurrentAmmo()
+                    Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
+                    Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo()),
                 ));
             }
 
@@ -2663,7 +2639,7 @@ namespace WarActionExecutor {
             if (maxBuildMaterial != null) {
                 focusUnit.setCurrentBuildMaterial(Math.min(
                     maxBuildMaterial,
-                    focusUnit.getCurrentBuildMaterial() + targetUnit.getCurrentBuildMaterial()
+                    Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Helpers.getExisted(targetUnit.getCurrentBuildMaterial()),
                 ));
             }
 
@@ -2671,7 +2647,7 @@ namespace WarActionExecutor {
             if (maxProduceMaterial != null) {
                 focusUnit.setCurrentProduceMaterial(Math.min(
                     maxProduceMaterial,
-                    focusUnit.getCurrentProduceMaterial() + targetUnit.getCurrentProduceMaterial()
+                    Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Helpers.getExisted(targetUnit.getCurrentProduceMaterial()),
                 ));
             }
 
@@ -2685,11 +2661,9 @@ namespace WarActionExecutor {
             {
                 const maxAmmo = focusUnit.getFlareMaxAmmo();
                 if (maxAmmo != null) {
-                    const focusUnitCurrentAmmo  = focusUnit.getFlareCurrentAmmo();
-                    const targetUnitCurrentAmmo = targetUnit.getFlareCurrentAmmo();
                     focusUnit.setFlareCurrentAmmo(Math.min(
                         maxAmmo,
-                        focusUnitCurrentAmmo + targetUnitCurrentAmmo
+                        Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Helpers.getExisted(targetUnit.getFlareCurrentAmmo()),
                     ));
                 }
             }
@@ -2711,7 +2685,7 @@ namespace WarActionExecutor {
         const pathNodes         = path.nodes;
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const unitMap           = war.getUnitMap();
-        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
 
         if (path.isBlocked) {
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2722,7 +2696,7 @@ namespace WarActionExecutor {
             focusUnit.updateView();
 
         } else {
-            const targetUnit    = unitMap.getUnitOnMap(endingGridIndex);
+            const targetUnit    = Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
             const player        = war.getPlayer(focusUnit.getPlayerIndex());
             unitMap.removeUnitOnMap(endingGridIndex, false);
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2733,8 +2707,8 @@ namespace WarActionExecutor {
 
             if (focusUnit.checkHasPrimaryWeapon()) {
                 focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
-                    focusUnit.getPrimaryWeaponMaxAmmo(),
-                    focusUnit.getPrimaryWeaponCurrentAmmo() + targetUnit.getPrimaryWeaponCurrentAmmo()
+                    Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
+                    Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo())
                 ));
             }
 
@@ -2761,7 +2735,7 @@ namespace WarActionExecutor {
             if (maxBuildMaterial != null) {
                 focusUnit.setCurrentBuildMaterial(Math.min(
                     maxBuildMaterial,
-                    focusUnit.getCurrentBuildMaterial() + targetUnit.getCurrentBuildMaterial()
+                    Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Helpers.getExisted(targetUnit.getCurrentBuildMaterial())
                 ));
             }
 
@@ -2769,7 +2743,7 @@ namespace WarActionExecutor {
             if (maxProduceMaterial != null) {
                 focusUnit.setCurrentProduceMaterial(Math.min(
                     maxProduceMaterial,
-                    focusUnit.getCurrentProduceMaterial() + targetUnit.getCurrentProduceMaterial()
+                    Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Helpers.getExisted(targetUnit.getCurrentProduceMaterial())
                 ));
             }
 
@@ -2783,11 +2757,9 @@ namespace WarActionExecutor {
             {
                 const maxAmmo = focusUnit.getFlareMaxAmmo();
                 if (maxAmmo != null) {
-                    const focusUnitCurrentAmmo  = focusUnit.getFlareCurrentAmmo();
-                    const targetUnitCurrentAmmo = targetUnit.getFlareCurrentAmmo();
                     focusUnit.setFlareCurrentAmmo(Math.min(
                         maxAmmo,
-                        focusUnitCurrentAmmo + targetUnitCurrentAmmo
+                        Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Helpers.getExisted(targetUnit.getFlareCurrentAmmo())
                     ));
                 }
             }
@@ -2812,16 +2784,16 @@ namespace WarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const launchUnitId  = action.launchUnitId;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
         const isFlareSucceeded  = !path.isBlocked;
         const targetGridIndex   = action.targetGridIndex as GridIndex;
-        const flareRadius       = focusUnit.getFlareRadius();
+        const flareRadius       = Helpers.getExisted(focusUnit.getFlareRadius());
         if (isFlareSucceeded) {
-            focusUnit.setFlareCurrentAmmo(focusUnit.getFlareCurrentAmmo() - 1);
+            focusUnit.setFlareCurrentAmmo(Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
             war.getFogMap().updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
         }
 
@@ -2840,16 +2812,16 @@ namespace WarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const launchUnitId  = action.launchUnitId;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
         const isFlareSucceeded  = !path.isBlocked;
         const targetGridIndex   = action.targetGridIndex as GridIndex;
-        const flareRadius       = focusUnit.getFlareRadius();
+        const flareRadius       = Helpers.getExisted(focusUnit.getFlareRadius());
         if (isFlareSucceeded) {
-            focusUnit.setFlareCurrentAmmo(focusUnit.getFlareCurrentAmmo() - 1);
+            focusUnit.setFlareCurrentAmmo(Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
             war.getFogMap().updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
         }
 
@@ -2878,7 +2850,7 @@ namespace WarActionExecutor {
         const pathNodes     = path.nodes;
         const launchUnitId  = action.launchUnitId;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2920,7 +2892,7 @@ namespace WarActionExecutor {
         const pathNodes     = path.nodes;
         const launchUnitId  = action.launchUnitId;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2976,7 +2948,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
 
@@ -3016,7 +2988,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
 
@@ -3059,7 +3031,7 @@ namespace WarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const launchUnitId  = action.launchUnitId;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -3084,7 +3056,7 @@ namespace WarActionExecutor {
             player.setFund(player.getFund() - focusUnit.getProduceUnitCost());
             unitMap.setNextUnitId(producedUnitId + 1);
             unitMap.setUnitLoaded(producedUnit);
-            focusUnit.setCurrentProduceMaterial(focusUnit.getCurrentProduceMaterial() - 1);
+            focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
         }
 
         return ClientErrorCode.NoError;
@@ -3098,10 +3070,10 @@ namespace WarActionExecutor {
         const unitMap       = war.getUnitMap();
         const launchUnitId  = action.launchUnitId;
         const extraData     = action.extraData;
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -3125,17 +3097,16 @@ namespace WarActionExecutor {
                 producedUnit.setActionState(UnitActionState.Acted);
 
                 const player = war.getPlayerInTurn();
-                player.setFund(player.getFund() - extraData.cost);
+                player.setFund(player.getFund() - Helpers.getExisted(extraData.cost));
                 unitMap.setNextUnitId(producedUnitId + 1);
                 unitMap.setUnitLoaded(producedUnit);
-                focusUnit.setCurrentProduceMaterial(focusUnit.getCurrentProduceMaterial() - 1);
+                focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
 
                 await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
                 focusUnit.updateView();
             }
 
         } else {
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -3162,7 +3133,7 @@ namespace WarActionExecutor {
                 player.setFund(player.getFund() - focusUnit.getProduceUnitCost());
                 unitMap.setNextUnitId(producedUnitId + 1);
                 unitMap.setUnitLoaded(producedUnit);
-                focusUnit.setCurrentProduceMaterial(focusUnit.getCurrentProduceMaterial() - 1);
+                focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
 
                 await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
                 focusUnit.updateView();
@@ -3184,7 +3155,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = revisedPath.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -3202,8 +3173,8 @@ namespace WarActionExecutor {
                     const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
                     unit.updateByRepairData({
                         deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
-                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo() : null,
-                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - unit.getPrimaryWeaponCurrentAmmo() : null,
+                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
+                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
                     });
                     suppliedUnits.push(unit);
                 }
@@ -3225,7 +3196,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = revisedPath.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -3245,8 +3216,8 @@ namespace WarActionExecutor {
                     const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
                     unit.updateByRepairData({
                         deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
-                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo() : null,
-                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - unit.getPrimaryWeaponCurrentAmmo() : null,
+                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
+                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
                     });
                     suppliedUnits.push(unit);
                 }
@@ -3277,7 +3248,7 @@ namespace WarActionExecutor {
         const revisedPath   = action.path as MovePath;
         const pathNodes     = revisedPath.nodes;
         const launchUnitId  = action.launchUnitId;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         const isSuccessful  = !revisedPath.isBlocked;
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
@@ -3299,7 +3270,7 @@ namespace WarActionExecutor {
         const revisedPath   = action.path as MovePath;
         const pathNodes     = revisedPath.nodes;
         const launchUnitId  = action.launchUnitId;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         const isSuccessful  = !revisedPath.isBlocked;
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
@@ -3431,7 +3402,7 @@ namespace WarActionExecutor {
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             const player        = focusUnit.getPlayer();
             const currentEnergy = player.getCoCurrentEnergy();
 
@@ -3469,7 +3440,7 @@ namespace WarActionExecutor {
                     return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_03;
                 }
 
-                const skillDataList = extraData.skillDataList;
+                const skillDataList = Helpers.getExisted(extraData.skillDataList);
                 const skillIdList   = player.getCoCurrentSkills() || [];
                 for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
                     const dataForUseCoSkill = skillDataList.find(v => v.skillIndex === skillIndex);
@@ -3504,7 +3475,7 @@ namespace WarActionExecutor {
                     const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
                     if (indiscriminateCfg) {
                         for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(
-                            skillDataList.find(v => v.skillIndex === i).indiscriminateAreaDamageCenter as GridIndex,
+                            Helpers.getExisted(GridIndexHelpers.convertGridIndex(skillDataList.find(v => v.skillIndex === i)?.indiscriminateAreaDamageCenter)),
                             0,
                             indiscriminateCfg[1],
                             mapSize)
@@ -3624,7 +3595,7 @@ namespace WarActionExecutor {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitWait(war: BwWar, action: IWarActionUnitWait, isFast): Promise<ClientErrorCode> {
+    async function exeUnitWait(war: BwWar, action: IWarActionUnitWait, isFast: boolean): Promise<ClientErrorCode> {
         return isFast
             ? await fastExeUnitWait(war, action)
             : await normalExeUnitWait(war, action);
@@ -3634,7 +3605,7 @@ namespace WarActionExecutor {
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);

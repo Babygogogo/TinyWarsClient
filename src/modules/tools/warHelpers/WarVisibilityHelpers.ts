@@ -104,11 +104,11 @@ namespace WarVisibilityHelpers {
         return false;
     }
 
-    export function getAllUnitsOnMapVisibleToTeams(war: BwWar, teamIndexes: Set<number>): Set<BwUnit> | undefined {
+    export function getAllUnitsOnMapVisibleToTeams(war: BwWar, teamIndexes: Set<number>): Set<BwUnit> {
         const fogMap                = war.getFogMap();
-        const visibilityFromPaths   = Helpers.getExisted(fogMap.getVisibilityMapFromPathsForTeams(teamIndexes));
-        const visibilityFromTiles   = Helpers.getExisted(fogMap.getVisibilityMapFromTilesForTeams(teamIndexes));
-        const visibilityFromUnits   = Helpers.getExisted(fogMap.getVisibilityMapFromUnitsForTeams(teamIndexes));
+        const visibilityFromPaths   = fogMap.getVisibilityMapFromPathsForTeams(teamIndexes);
+        const visibilityFromTiles   = fogMap.getVisibilityMapFromTilesForTeams(teamIndexes);
+        const visibilityFromUnits   = fogMap.getVisibilityMapFromUnitsForTeams(teamIndexes);
         const unitMap               = war.getUnitMap();
         const tileMap               = war.getTileMap();
         const units                 = new Set<BwUnit>();
@@ -116,19 +116,13 @@ namespace WarVisibilityHelpers {
             const gridIndex     = unit.getGridIndex();
             const tile          = tileMap.getTile(gridIndex);
             const unitTeamIndex = unit.getTeamIndex();
-            const tileTeamIndex = tile.getTeamIndex();
             if ((teamIndexes.has(unitTeamIndex))                                                ||
                 (_checkHasUnitWithTeamIndexesOnAdjacentGrids(unitMap, gridIndex, teamIndexes))  ||
-                (teamIndexes.has(tileTeamIndex))
+                (teamIndexes.has(tile.getTeamIndex()))
             ) {
                 units.add(unit);
             } else {
                 const unitType = unit.getUnitType();
-                if (unitType == null) {
-                    Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty unitType.`);
-                    return undefined;
-                }
-
                 if (unit.getIsDiving()) {
                     // Do nothing.
                 } else {
