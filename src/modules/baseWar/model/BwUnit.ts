@@ -62,8 +62,8 @@ namespace TwnsBwUnit {
             const validationError = WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                 unitData,
                 configVersion,
-                mapSize                 : undefined,
-                playersCountUnneutral   : undefined,
+                mapSize                 : null,
+                playersCountUnneutral   : null,
             });
             if (validationError) {
                 return validationError;
@@ -103,20 +103,19 @@ namespace TwnsBwUnit {
             this._setTemplateCfg(unitTemplateCfg);
             this._setPlayerIndex(playerIndex);
 
-            this._setWar(undefined);
-            this.setLoaderUnitId(unitData.loaderUnitId);
-            this.setHasLoadedCo(getRevisedHasLoadedCo(unitData.hasLoadedCo));
-            this.setIsCapturingTile(getRevisedIsCapturingTile(unitData.isCapturingTile));
-            this.setCurrentPromotion(getRevisedCurrentPromotion(unitData.currentPromotion));
-            this.setIsBuildingTile(getRevisedIsBuildingTile(unitData.isBuildingTile));
-            this.setActionState(getRevisedActionState(unitData.actionState));
+            this.setLoaderUnitId(unitData.loaderUnitId ?? null);
+            this.setHasLoadedCo(unitData.hasLoadedCo ?? false);
+            this.setIsCapturingTile(unitData.isCapturingTile ?? false);
+            this.setCurrentPromotion(unitData.currentPromotion ?? 0);
+            this.setIsBuildingTile(unitData.isBuildingTile ?? false);
+            this.setActionState(unitData.actionState ?? UnitActionState.Idle);
             this.setIsDiving(getRevisedIsDiving(unitData.isDiving, unitTemplateCfg));
-            this.setCurrentHp(getRevisedCurrentHp(unitData.currentHp, unitTemplateCfg));
-            this.setPrimaryWeaponCurrentAmmo(getRevisedPrimaryAmmo(unitData.primaryWeaponCurrentAmmo, unitTemplateCfg));
-            this.setCurrentFuel(getRevisedCurrentFuel(unitData.currentFuel, unitTemplateCfg));
-            this.setFlareCurrentAmmo(getRevisedFlareAmmo(unitData.flareCurrentAmmo, unitTemplateCfg));
-            this.setCurrentProduceMaterial(getRevisedProduceMaterial(unitData.currentProduceMaterial, unitTemplateCfg));
-            this.setCurrentBuildMaterial(getRevisedBuildMaterial(unitData.currentBuildMaterial, unitTemplateCfg));
+            this.setCurrentHp(unitData.currentHp ?? unitTemplateCfg.maxHp);
+            this.setPrimaryWeaponCurrentAmmo(unitData.primaryWeaponCurrentAmmo ?? (unitTemplateCfg.primaryWeaponMaxAmmo ?? null));
+            this.setCurrentFuel(unitData.currentFuel ?? unitTemplateCfg.maxFuel);
+            this.setFlareCurrentAmmo(unitData.flareCurrentAmmo ?? (unitTemplateCfg.flareMaxAmmo ?? null));
+            this.setCurrentProduceMaterial(unitData.currentProduceMaterial ?? (unitTemplateCfg.maxProduceMaterial ?? null));
+            this.setCurrentBuildMaterial(unitData.currentBuildMaterial ?? (unitTemplateCfg.maxBuildMaterial ?? null));
 
             this.getView().init(this);
 
@@ -138,36 +137,12 @@ namespace TwnsBwUnit {
             // nothing to do.
         }
 
-        public serialize(): ISerialUnit | undefined {
-            const gridIndex = this.getGridIndex();
-            if (gridIndex == null) {
-                Logger.error(`BwHelpers.serializeUnit() empty gridIndex.`);
-                return undefined;
-            }
-
-            const playerIndex = this.getPlayerIndex();
-            if (playerIndex == null) {
-                Logger.error(`BwHelpers.serializeUnit() empty playerIndex.`);
-                return undefined;
-            }
-
-            const unitType = this.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwHelpers.serializeUnit() empty unitType.`);
-                return undefined;
-            }
-
-            const unitId = this.getUnitId();
-            if (unitId == null) {
-                Logger.error(`BwHelpers.serializeUnit() unitId is empty.`);
-                return undefined;
-            }
-
+        public serialize(): ISerialUnit {
             const data: ISerialUnit = {
-                gridIndex,
-                playerIndex,
-                unitType,
-                unitId,
+                gridIndex   : this.getGridIndex(),
+                playerIndex : this.getPlayerIndex(),
+                unitType    : this.getUnitType(),
+                unitId      : this.getUnitId(),
             };
 
             const actionState = this.getActionState();
@@ -211,14 +186,14 @@ namespace TwnsBwUnit {
 
             return data;
         }
-        public serializeForCreateSfw(): ISerialUnit | undefined {
+        public serializeForCreateSfw(): ISerialUnit {
             return this.serialize();
         }
-        public serializeForCreateMfr(): ISerialUnit | undefined {
+        public serializeForCreateMfr(): ISerialUnit {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: BwWar | undefined): void {
+        private _setWar(war: BwWar): void {
             this._war = war;
         }
         public getWar(): BwWar {
@@ -238,49 +213,19 @@ namespace TwnsBwUnit {
         public getUnitType(): UnitType {
             return Helpers.getExisted(this._getTemplateCfg().type);
         }
-        private _getDamageChartCfg(): { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } } | undefined {
+        private _getDamageChartCfg(): { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } } {
             const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwUnit._getDamageChartCfg() empty configVersion.`);
-                return undefined;
-            }
-
-            const unitType = this.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwUnit._getDamageChartCfg() empty unitType.`);
-                return undefined;
-            }
-
+            const unitType      = this.getUnitType();
             return ConfigManager.getDamageChartCfgs(configVersion, unitType);
         }
-        private _getBuildableTileCfg(): { [srcBaseType: number]: { [srcObjectType: number]: Types.BuildableTileCfg } } | undefined {
+        private _getBuildableTileCfg(): { [srcBaseType: number]: { [srcObjectType: number]: Types.BuildableTileCfg } } | null {
             const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwUnit._getBuildableTileCfg() empty configVersion.`);
-                return undefined;
-            }
-
-            const unitType = this.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwUnit._getBuildableTileCfg() empty unitType.`);
-                return undefined;
-            }
-
+            const unitType      = this.getUnitType();
             return ConfigManager.getBuildableTileCfgs(configVersion, unitType);
         }
-        private _getVisionBonusCfg(): { [tileType: number]: Types.VisionBonusCfg } | undefined {
+        private _getVisionBonusCfg(): { [tileType: number]: Types.VisionBonusCfg } | null {
             const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwUnit._getVisionBonusCfg() empty configVersion.`);
-                return undefined;
-            }
-
-            const unitType = this.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwUnit._getVisionBonusCfg() empty unitType.`);
-                return undefined;
-            }
-
+            const unitType      = this.getUnitType();
             return ConfigManager.getVisionBonusCfg(configVersion, unitType);
         }
 
@@ -316,21 +261,16 @@ namespace TwnsBwUnit {
             this._unitId = id;
         }
 
-        public getSkinId(): number | undefined {
+        public getSkinId(): number {
             const player = this.getPlayer();
-            if (player == null) {
-                Logger.error(`BwUnit.getSkinId() empty player.`);
-                return undefined;
-            }
-
             return player.getUnitAndTileSkinId();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for state.
         ////////////////////////////////////////////////////////////////////////////////
-        public getActionState(): UnitActionState | undefined {
-            return this._actionState;
+        public getActionState(): UnitActionState {
+            return Helpers.getDefined(this._actionState);
         }
         public setActionState(state: UnitActionState): void {
             this._actionState = state;
@@ -381,8 +321,8 @@ namespace TwnsBwUnit {
             return (currentHp != null) && (currentHp == this.getMaxHp());
         }
 
-        public getArmorType(): ArmorType | undefined {
-            return this._getTemplateCfg()?.armorType;
+        public getArmorType(): ArmorType {
+            return Helpers.getExisted(this._getTemplateCfg()?.armorType);
         }
 
         public checkIsArmorAffectByLuck(): boolean {
@@ -442,15 +382,15 @@ namespace TwnsBwUnit {
         public getPrimaryWeaponCurrentAmmo(): number | null {
             return Helpers.getDefined(this._primaryWeaponCurrentAmmo);
         }
-        public setPrimaryWeaponCurrentAmmo(ammo: number | undefined | null): void {
+        public setPrimaryWeaponCurrentAmmo(ammo: number | null): void {
             const maxAmmo = this.getPrimaryWeaponMaxAmmo();
             if (((maxAmmo == null) && (ammo != null))                                   ||
                 ((maxAmmo != null) && ((ammo == null) || (ammo < 0) || (ammo > maxAmmo)))
             ){
-                Logger.error(`BwUnit.setPrimaryWeaponCurrentAmmo() error, maxAmmo: ${maxAmmo}, ammo: ${ammo}`);
+                throw new Error(`Invalid ammo: ${ammo}`);
             }
 
-            this._primaryWeaponCurrentAmmo = ammo == null ? undefined : ammo;
+            this._primaryWeaponCurrentAmmo = ammo;
         }
 
         public getPrimaryWeaponUsedAmmo(): number | undefined {
@@ -810,68 +750,37 @@ namespace TwnsBwUnit {
             return primaryDamage != null ? primaryDamage : this.getSecondaryWeaponBaseDamage(armorType);
         }
 
-        public getMinAttackRange(): number | undefined | null {
-            return this._getTemplateCfg()?.minAttackRange;
+        public getMinAttackRange(): number | null {
+            return this._getTemplateCfg().minAttackRange ?? null;
         }
         public getCfgMaxAttackRange(): number | undefined | null {
             return this._getTemplateCfg()?.maxAttackRange;
         }
-        public getFinalMaxAttackRange(): number | undefined {
+        public getFinalMaxAttackRange(): number | null {
             const cfgRange = this.getCfgMaxAttackRange();
             if (cfgRange == null) {
-                return undefined;
+                return null;
             }
 
-            const modifier = this._getMaxAttackRangeModifierByCo();
-            if (modifier == null) {
-                Logger.error(`BwUnit.getFinalMaxAttackRange() modifier is empty.`);
-                return undefined;
-            }
-
-            return cfgRange + modifier;
+            return cfgRange + this._getMaxAttackRangeModifierByCo();
         }
-        private _getMaxAttackRangeModifierByCo(): number | undefined {
+        private _getMaxAttackRangeModifierByCo(): number {
             const player = this.getPlayer();
-            if (player == null) {
-                Logger.error(`BwUnit._getMaxAttackRangeModifierByCo() no player.`);
-                return undefined;
-            }
-
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwUnit._getMaxAttackRangeModifierByCo() configVersion is empty.`);
-                return undefined;
-            }
-
-            const unitType = this.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwUnit._getMaxAttackRangeModifierByCo() unitType is empty.`);
-                return undefined;
-            }
-
-            const selfGridIndex = this.getGridIndex();
-            if (selfGridIndex == null) {
-                Logger.error(`BwUnit._getMaxAttackRangeModifierByCo() empty selfGridIndex.`);
-                return undefined;
-            }
-
-            if (!player.getCoId()) {
+            if (player.getCoId() === CommonConstants.CoEmptyId) {
                 return 0;
             }
 
-            const coZoneRadius = player.getCoZoneRadius();
-            if (coZoneRadius == null) {
-                Logger.error(`BwUnit._getMaxAttackRangeModifierByCo() empty coZoneRadius.`);
-                return undefined;
-            }
-
+            const configVersion             = this.getConfigVersion();
+            const unitType                  = this.getUnitType();
+            const selfGridIndex             = this.getGridIndex();
+            const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             const hasLoadedCo               = this.getHasLoadedCo();
             let modifier                    = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.maxAttackRangeBonus;
-                if ((cfg)                                                                                                                       &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).maxAttackRangeBonus;
+                if ((cfg)                                                                       &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))  &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -882,6 +791,7 @@ namespace TwnsBwUnit {
                     modifier += cfg[2];
                 }
             }
+
             return modifier;
         }
 
@@ -1256,8 +1166,8 @@ namespace TwnsBwUnit {
             return this._getTemplateCfg().flareRadius ?? null;
         }
 
-        public getFlareMaxRange(): number | undefined | null {
-            return this._getTemplateCfg()?.flareMaxRange;
+        public getFlareMaxRange(): number | null {
+            return this._getTemplateCfg().flareMaxRange ?? null;
         }
 
         public getFlareMaxAmmo(): number | undefined | null {
@@ -1267,15 +1177,15 @@ namespace TwnsBwUnit {
         public getFlareCurrentAmmo(): number | null {
             return Helpers.getDefined(this._flareCurrentAmmo);
         }
-        public setFlareCurrentAmmo(ammo: number | undefined | null): void {
+        public setFlareCurrentAmmo(ammo: number | null): void {
             const maxAmmo = this.getFlareMaxAmmo();
             if (((maxAmmo == null) && (ammo != null))                                   ||
                 ((maxAmmo != null) && ((ammo == null) || (ammo < 0) || (ammo > maxAmmo)))
             ) {
-                Logger.error(ammo == null, `BwUnit.setFlareCurrentAmmo() error, maxAmmo: ${maxAmmo} ammo: ${ammo}`);
+                throw new Error(`Invalid ammo: ${ammo}`);
             }
 
-            this._flareCurrentAmmo = ammo == null ? undefined : ammo;
+            this._flareCurrentAmmo = ammo;
         }
 
         public getFlareUsedAmmo(): number | undefined {
@@ -1361,15 +1271,15 @@ namespace TwnsBwUnit {
         public getCurrentProduceMaterial(): number | null {
             return Helpers.getDefined(this._currentProduceMaterial);
         }
-        public setCurrentProduceMaterial(material: number | undefined | null): void {
+        public setCurrentProduceMaterial(material: number | null): void {
             const maxMaterial = this.getMaxProduceMaterial();
             if (((maxMaterial == null) && (material != null))                                               ||
                 ((maxMaterial != null) && ((material == null) || (material < 0) || (material > maxMaterial)))
             ) {
-                Logger.error(`BwUnit.setCurrentProduceMaterial() error, maxMaterial: ${maxMaterial}, material: ${material}`);
+                throw new Error(`Invalid material: ${material}`);
             }
 
-            this._currentProduceMaterial = material == null ? undefined : material;
+            this._currentProduceMaterial = material;
         }
 
         public checkIsProduceMaterialInShort(): boolean {
@@ -1390,94 +1300,39 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for move.
         ////////////////////////////////////////////////////////////////////////////////
-        public getCfgMoveRange(): number | undefined {
-            return this._getTemplateCfg()?.moveRange;
+        public getCfgMoveRange(): number {
+            return this._getTemplateCfg().moveRange;
         }
-        public getFinalMoveRange(): number | undefined {
-            const war           = this.getWar();
-            const currentFuel   = this.getCurrentFuel();
-            const cfgMoveRange  = this.getCfgMoveRange();
-            if ((!war) || (currentFuel == null) || (cfgMoveRange == null)) {
-                Logger.error(`BwUnit.getFinalMoveRange() war/currentFuel/cfgMoveRange is empty.`);
-                return undefined;
-            }
-
-            const playerIndex = this.getPlayerIndex();
-            if (playerIndex == null) {
-                Logger.error(`BwUnit.getFinalMoveRange() empty playerIndex.`);
-                return undefined;
-            }
-
-            const modifierBySettings = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
-            if (modifierBySettings == null) {
-                Logger.error(`BwUnit.getFinalMoveRange() empty modifierBySettings.`);
-                return undefined;
-            }
-
+        public getFinalMoveRange(): number {
+            const currentFuel = this.getCurrentFuel();
             if (currentFuel <= 0) {
                 return 0;
             } else {
-                const modifierByCo = this._getMoveRangeModifierByCo();
-                if (modifierByCo == null) {
-                    Logger.error(`BwUnit.getFinalMoveRange() modifier is empty.`);
-                    return undefined;
-                }
-
                 return Math.max(
                     1,
                     Math.min(
                         currentFuel,
-                        cfgMoveRange + modifierBySettings + modifierByCo,
+                        this.getCfgMoveRange() + this.getWar().getCommonSettingManager().getSettingsMoveRangeModifier(this.getPlayerIndex()) + this._getMoveRangeModifierByCo(),
                     ),
                 );
             }
         }
-        private _getMoveRangeModifierByCo(): number | undefined {
+        private _getMoveRangeModifierByCo(): number {
             const player = this.getPlayer();
-            if (player == null) {
-                Logger.error(`BwUnit._getMoveRangeModifierByCo() no player.`);
-                return undefined;
-            }
-
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwUnit._getMoveRangeModifierByCo() configVersion is empty.`);
-                return undefined;
-            }
-
-            const unitType = this.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwUnit._getMoveRangeModifierByCo() unitType is empty.`);
-                return undefined;
-            }
-
-            if (!player.getCoId()) {
+            if (player.getCoId() === CommonConstants.CoEmptyId) {
                 return 0;
             }
 
-            const selfGridIndex = this.getGridIndex();
-            if (selfGridIndex == null) {
-                Logger.error(`BwUnit._getMoveRangeModifierByCo() empty selfGridIndex.`);
-                return undefined;
-            }
-
-            const coZoneRadius = player.getCoZoneRadius();
-            if (coZoneRadius == null) {
-                Logger.error(`BwUnit._getMoveRangeModifierByCo() empty coZoneRadius.`);
-                return undefined;
-            }
-
-            const tileType = this.getWar()?.getTileMap().getTile(selfGridIndex)?.getType();
-            if (tileType == null) {
-                Logger.error(`BwUnit._getMoveRangeModifierByCo() empty tileType.`);
-                return undefined;
-            }
-
+            const configVersion             = this.getConfigVersion();
+            const unitType                  = this.getUnitType();
+            const selfGridIndex             = this.getGridIndex();
+            const coZoneRadius              = player.getCoZoneRadius();
+            const tileType                  = this.getWar().getTileMap().getTile(selfGridIndex).getType();
             const hasLoadedCo               = this.getHasLoadedCo();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let modifier                    = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfMoveRangeBonus;
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfMoveRangeBonus;
                 if ((cfg)                                                                           &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
                     (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[2]))      &&
@@ -1491,11 +1346,12 @@ namespace TwnsBwUnit {
                     modifier += cfg[3];
                 }
             }
+
             return modifier;
         }
 
-        public getMoveType(): MoveType | undefined {
-            return this._getTemplateCfg()?.moveType;
+        public getMoveType(): MoveType {
+            return this._getTemplateCfg().moveType;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1626,15 +1482,15 @@ namespace TwnsBwUnit {
         public getCurrentBuildMaterial(): number | null {
             return Helpers.getDefined(this._currentBuildMaterial);
         }
-        public setCurrentBuildMaterial(material: number | undefined | null): void {
+        public setCurrentBuildMaterial(material: number | null): void {
             const maxMaterial = this.getMaxBuildMaterial();
             if (((maxMaterial == null) && (material != null))                                               ||
                 ((maxMaterial != null) && ((material == null) || (material < 0) || (material > maxMaterial)))
             ) {
-                Logger.error(`BwUnit.setCurrentBuildMaterial() error, maxMaterial: ${maxMaterial}, material: ${material}`);
+                throw new Error(`Invalid material: ${material}`);
             }
 
-            this._currentBuildMaterial = material == null ? undefined : material;
+            this._currentBuildMaterial = material;
         }
 
         public checkIsBuildMaterialInShort(): boolean {
@@ -1655,8 +1511,8 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for load unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getMaxLoadUnitsCount(): number | undefined | null {
-            return this._getTemplateCfg()?.maxLoadUnitsCount;
+        public getMaxLoadUnitsCount(): number | null {
+            return this._getTemplateCfg().maxLoadUnitsCount ?? null;
         }
         public getLoadedUnitsCount(): number {
             return this.getLoadedUnits().length;
@@ -1772,8 +1628,8 @@ namespace TwnsBwUnit {
             return this._getTemplateCfg()?.repairAmountForLoadedUnits;
         }
 
-        public setLoaderUnitId(loaderUnitId: number | null | undefined): void {
-            this._loaderUnitId = loaderUnitId == null ? undefined : loaderUnitId;
+        public setLoaderUnitId(loaderUnitId: number | null): void {
+            this._loaderUnitId = loaderUnitId;
         }
         public getLoaderUnitId(): number | null {
             return Helpers.getDefined(this._loaderUnitId);
@@ -2245,57 +2101,10 @@ namespace TwnsBwUnit {
         }
     }
 
-    function getRevisedHasLoadedCo(hasLoadedCo: boolean | null | undefined): boolean {
-        return hasLoadedCo || false;
-    }
-    function getRevisedIsCapturingTile(isCapturingTile: boolean | null | undefined): boolean {
-        return isCapturingTile || false;
-    }
-    function getRevisedCurrentPromotion(currentPromotion: number | null | undefined): number {
-        return currentPromotion || 0;
-    }
-    function getRevisedIsBuildingTile(isBuildingTile: boolean | null | undefined): boolean {
-        return isBuildingTile || false;
-    }
-    function getRevisedIsDiving(isDiving: boolean | null | undefined, unitTemplateCfg: UnitTemplateCfg): boolean {
+    function getRevisedIsDiving(isDiving: Types.Undefinable<boolean>, unitTemplateCfg: UnitTemplateCfg): boolean {
         return isDiving != null
             ? isDiving
             : ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(unitTemplateCfg);
-    }
-    function getRevisedActionState(actionState: UnitActionState | null | undefined): UnitActionState {
-        return actionState != null
-            ? actionState
-            : UnitActionState.Idle;
-    }
-    function getRevisedCurrentHp(currentHp: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number {
-        return currentHp != null
-            ? currentHp
-            : unitTemplateCfg.maxHp;
-    }
-    function getRevisedPrimaryAmmo(primaryAmmo: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number | null | undefined {
-        return primaryAmmo != null
-            ? primaryAmmo
-            : unitTemplateCfg.primaryWeaponMaxAmmo;
-    }
-    function getRevisedCurrentFuel(currentFuel: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number {
-        return currentFuel != null
-            ? currentFuel
-            : unitTemplateCfg.maxFuel;
-    }
-    function getRevisedFlareAmmo(flareAmmo: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number | null | undefined {
-        return flareAmmo != null
-            ? flareAmmo
-            : unitTemplateCfg.flareMaxAmmo;
-    }
-    function getRevisedProduceMaterial(produceMaterial: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number | null | undefined {
-        return produceMaterial != null
-            ? produceMaterial
-            : unitTemplateCfg.maxProduceMaterial;
-    }
-    function getRevisedBuildMaterial(buildMaterial: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number | null | undefined {
-        return buildMaterial != null
-            ? buildMaterial
-            : unitTemplateCfg.maxBuildMaterial;
     }
 }
 

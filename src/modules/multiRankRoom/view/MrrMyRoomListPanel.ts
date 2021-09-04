@@ -1,10 +1,11 @@
 
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
@@ -40,20 +41,20 @@ namespace TwnsMrrMyRoomListPanel {
 
         private static _instance: MrrMyRoomListPanel;
 
-        private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _groupTab!             : eui.Group;
+        private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
-        private readonly _groupNavigator        : eui.Group;
-        private readonly _labelRankMatch        : TwnsUiLabel.UiLabel;
-        private readonly _labelMyRoom           : TwnsUiLabel.UiLabel;
+        private readonly _groupNavigator!       : eui.Group;
+        private readonly _labelRankMatch!       : TwnsUiLabel.UiLabel;
+        private readonly _labelMyRoom!          : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack               : TwnsUiButton.UiButton;
-        private readonly _btnNextStep           : TwnsUiButton.UiButton;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnNextStep!          : TwnsUiButton.UiButton;
 
-        private readonly _groupRoomList         : eui.Group;
-        private readonly _listRoom              : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
-        private readonly _labelNoRoom           : TwnsUiLabel.UiLabel;
-        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
+        private readonly _groupRoomList!        : eui.Group;
+        private readonly _listRoom!             : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
+        private readonly _labelNoRoom!          : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
         private _isTabInitialized   = false;
@@ -218,14 +219,11 @@ namespace TwnsMrrMyRoomListPanel {
 
             } else {
                 const dataArray         = this._createDataForListRoom();
+                const roomId            = MrrModel.getPreviewingRoomId();
                 labelLoading.visible    = false;
                 labelNoRoom.visible     = !dataArray.length;
                 listRoom.bindData(dataArray);
-
-                const roomId = MrrModel.getPreviewingRoomId();
-                if (dataArray.every(v => v.roomId != roomId)) {
-                    MrrModel.setPreviewingRoomId(dataArray.length ? dataArray[0].roomId : null);
-                }
+                listRoom.setSelectedIndex(dataArray.findIndex(v => v.roomId === roomId));
             }
         }
 
@@ -283,9 +281,10 @@ namespace TwnsMrrMyRoomListPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const mapId = (await MrrModel.getRoomInfo(MrrModel.getPreviewingRoomId()))?.settingsForMrw?.mapId;
+            const roomId = MrrModel.getPreviewingRoomId();
+            const mapId = roomId == null ? null : (await MrrModel.getRoomInfo(roomId))?.settingsForMrw?.mapId;
             return mapId == null
-                ? {}
+                ? null
                 : { mapInfo: { mapId } };
         }
 
@@ -364,10 +363,10 @@ namespace TwnsMrrMyRoomListPanel {
         name: string;
     };
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 
@@ -375,41 +374,35 @@ namespace TwnsMrrMyRoomListPanel {
         roomId: number;
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
-        private readonly _btnChoose     : TwnsUiButton.UiButton;
-        private readonly _btnNext       : TwnsUiButton.UiButton;
-        private readonly _labelName     : TwnsUiLabel.UiLabel;
-        private readonly _imgRed        : TwnsUiLabel.UiLabel;
+        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _btnNext!      : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
-            this._setNotifyListenerArray([
-                { type: NotifyType.MrrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
-            ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {
-            this._updateState();
-
-            const roomId            = this.data.roomId;
+            const roomId            = this._getData().roomId;
             this._imgRed.visible    = await MrrModel.checkIsRedForRoom(roomId);
 
             const roomInfo          = await MrrModel.getRoomInfo(roomId);
-            this._labelName.text    = roomInfo ? await WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForMrw.mapId) : null;
-        }
-
-        private _onNotifyMrrJoinedPreviewingRoomIdChanged(): void {
-            this._updateState();
+            this._labelName.text    = roomInfo
+                ? (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(roomInfo.settingsForMrw?.mapId)) ?? CommonConstants.ErrorTextForUndefined)
+                : ``;
         }
 
         private _onTouchTapBtnChoose(): void {
-            MrrModel.setPreviewingRoomId(this.data.roomId);
+            MrrModel.setPreviewingRoomId(this._getData().roomId);
         }
 
         private async _onTouchTapBtnNext(): Promise<void> {
-            const roomId = this.data.roomId;
+            const roomId = this._getData().roomId;
             if (roomId != null) {
                 MrrMyRoomListPanel.hide();
                 await MrrSelfSettingsModel.resetData(roomId);
@@ -417,10 +410,6 @@ namespace TwnsMrrMyRoomListPanel {
                     roomId,
                 });
             }
-        }
-
-        private _updateState(): void {
-            this.currentState = this.data.roomId === MrrModel.getPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }

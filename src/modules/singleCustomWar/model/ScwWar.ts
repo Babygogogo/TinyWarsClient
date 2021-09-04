@@ -2,7 +2,7 @@
 import TwnsSpwWar           from "../../singlePlayerWar/model/SpwWar";
 import TwnsSpwWarMenuPanel  from "../../singlePlayerWar/view/SpwWarMenuPanel";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import Logger               from "../../tools/helpers/Logger";
+import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
@@ -14,7 +14,7 @@ namespace TwnsScwWar {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class ScwWar extends SpwWar {
-        private _settingsForScw : ISettingsForScw;
+        private _settingsForScw?    : ISettingsForScw;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
             const baseInitError = await this._baseInit(data);
@@ -35,79 +35,19 @@ namespace TwnsScwWar {
         }
 
         public serialize(): ISerialWar {
-            const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
-            if (settingsForCommon == null) {
-                Logger.error(`ScwWar.serialize() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            const settingsForScw = this._getSettingsForScw();
-            if (settingsForScw == null) {
-                Logger.error(`ScwWar.serialize() empty settingsForScw.`);
-                return undefined;
-            }
-
-            const playerManager = this.getPlayerManager();
-            if (playerManager == null) {
-                Logger.error(`ScwWar.serialize() empty playerManager.`);
-                return undefined;
-            }
-
-            const turnManager = this.getTurnManager();
-            if (turnManager == null) {
-                Logger.error(`ScwWar.serialize() empty turnManager.`);
-                return undefined;
-            }
-
-            const field = this.getField();
-            if (field == null) {
-                Logger.error(`ScwWar.serialize() empty field.`);
-                return undefined;
-            }
-
-            const warEventManager = this.getWarEventManager();
-            if (warEventManager == null) {
-                Logger.error(`ScwWar.serialize() empty warEventManager.`);
-                return undefined;
-            }
-
-            const serialPlayerManager = playerManager.serialize();
-            if (serialPlayerManager == null) {
-                Logger.error(`ScwWar.serialize() empty serialPlayerManager.`);
-                return undefined;
-            }
-
-            const serialTurnManager = turnManager.serialize();
-            if (serialTurnManager == null) {
-                Logger.error(`ScwWar.serialize() empty serialTurnManager.`);
-                return undefined;
-            }
-
-            const serialField = field.serialize();
-            if (serialField == null) {
-                Logger.error(`ScwWar.serialize() empty serialField.`);
-                return undefined;
-            }
-
-            const serialWarEventManager = warEventManager.serialize();
-            if (serialWarEventManager == null) {
-                Logger.error(`ScwWar.serialize() empty serialWarEventManager.`);
-                return undefined;
-            }
-
             return {
-                settingsForCommon,
-                settingsForScw,
+                settingsForCommon           : this.getCommonSettingManager().getSettingsForCommon(),
+                settingsForScw              : this._getSettingsForScw(),
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
                 executedActions             : [],
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
-                warEventManager             : serialWarEventManager,
-                playerManager               : serialPlayerManager,
-                turnManager                 : serialTurnManager,
-                field                       : serialField,
+                warEventManager             : this.getWarEventManager().serialize(),
+                playerManager               : this.getPlayerManager().serialize(),
+                turnManager                 : this.getTurnManager().serialize(),
+                field                       : this.getField().serialize(),
             };
         }
 
@@ -130,9 +70,8 @@ namespace TwnsScwWar {
                 : Types.WarType.ScwStd;
         }
 
-        public getMapId(): number | undefined {
-            const settingsForScw = this._getSettingsForScw();
-            return settingsForScw ? settingsForScw.mapId : undefined;
+        public getMapId(): number {
+            return Helpers.getExisted(this._getSettingsForScw().mapId);
         }
 
         public getCanCheat(): boolean {
@@ -146,8 +85,8 @@ namespace TwnsScwWar {
         private _setSettingsForScw(settings: ISettingsForScw): void {
             this._settingsForScw = settings;
         }
-        private _getSettingsForScw(): ISettingsForScw | null | undefined {
-            return this._settingsForScw;
+        private _getSettingsForScw(): ISettingsForScw {
+            return Helpers.getDefined(this._settingsForScw);
         }
     }
 }

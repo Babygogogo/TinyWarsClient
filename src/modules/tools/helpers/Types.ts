@@ -180,7 +180,7 @@ namespace Types {
     }
 
     export type MovableArea = {
-        prevGridIndex   : GridIndex | undefined;
+        prevGridIndex   : GridIndex | null;
         totalMoveCost   : number;
     }[][];
 
@@ -195,6 +195,11 @@ namespace Types {
     };
 
     export type Undefinable<T> = T | null | undefined;
+
+    export interface CustomError extends Error {
+        isShown?    : boolean;
+        errorCode?  : number;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.

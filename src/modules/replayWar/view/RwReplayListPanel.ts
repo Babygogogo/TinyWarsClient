@@ -182,7 +182,7 @@ namespace TwnsRwReplayListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
                     pageClass   : RwReplayWarInfoPage,
-                    pageData    : { replayId: null } as OpenDataForRwReplayWarInfoPage,
+                    pageData    : null,
                 },
             ]);
             this._isTabInitialized = true;

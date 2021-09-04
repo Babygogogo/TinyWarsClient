@@ -448,15 +448,10 @@ namespace TwnsMfrJoinRoomListPanel {
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
-            this._setNotifyListenerArray([
-                { type: NotifyType.MfrJoinTargetRoomIdChanged, callback: this._onNotifyMfrJoinTargetRoomIdChanged },
-            ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {
-            this._updateState();
-
             const roomInfo = await MfrModel.getRoomInfo(this._getData().roomId);
             if (roomInfo == null) {
                 return;
@@ -465,10 +460,6 @@ namespace TwnsMfrJoinRoomListPanel {
             const settingsForMfw        = Helpers.getExisted(roomInfo.settingsForMfw);
             this._imgPassword.visible   = !!settingsForMfw.warPassword;
             this._labelName.text        = settingsForMfw.warName || `--`;
-        }
-
-        private _onNotifyMfrJoinTargetRoomIdChanged(): void {
-            this._updateState();
         }
 
         private _onTouchTapBtnChoose(): void {
@@ -501,10 +492,6 @@ namespace TwnsMfrJoinRoomListPanel {
                     callbackOnSucceed   : callback,
                 });
             }
-        }
-
-        private _updateState(): void {
-            this.currentState = this._getData().roomId === MfrJoinModel.getTargetRoomId() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }

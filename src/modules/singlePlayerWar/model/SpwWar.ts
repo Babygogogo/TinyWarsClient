@@ -4,6 +4,7 @@ import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
@@ -27,8 +28,8 @@ namespace TwnsSpwWar {
         private readonly _commonSettingManager  = new BwCommonSettingManager();
         private readonly _warEventManager       = new BwWarEventManager();
 
-        private _saveSlotIndex      : number;
-        private _saveSlotExtraData  : ISpmWarSaveSlotExtraData;
+        private _saveSlotIndex?     : number;
+        private _saveSlotExtraData? : ISpmWarSaveSlotExtraData;
 
         public abstract serialize(): ProtoTypes.WarSerialization.ISerialWar;
 
@@ -85,7 +86,7 @@ namespace TwnsSpwWar {
             return `${Lang.getText(LangTextType.B0451)}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined> {
-            const playerIndex = action.targetPlayerIndex;
+            const playerIndex = Helpers.getExisted(action.targetPlayerIndex);
             return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(LangTextType.B0450)}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
@@ -167,14 +168,14 @@ namespace TwnsSpwWar {
             this._saveSlotIndex = slotIndex;
         }
         public getSaveSlotIndex(): number {
-            return this._saveSlotIndex;
+            return Helpers.getDefined(this._saveSlotIndex);
         }
 
         public setSaveSlotExtraData(extraData: ISpmWarSaveSlotExtraData): void {
             this._saveSlotExtraData = extraData;
         }
-        public getSaveSlotExtraData(): ISpmWarSaveSlotExtraData | null | undefined {
-            return this._saveSlotExtraData;
+        public getSaveSlotExtraData(): ISpmWarSaveSlotExtraData {
+            return Helpers.getDefined(this._saveSlotExtraData);
         }
 
         public getHumanPlayerIndexes(): number[] {

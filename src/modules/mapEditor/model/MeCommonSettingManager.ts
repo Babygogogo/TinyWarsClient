@@ -36,7 +36,7 @@ namespace TwnsMeCommonSettingManager {
             return ClientErrorCode.NoError;
         }
 
-        public serializeForCreateSfw(): ISettingsForCommon | undefined {
+        public serializeForCreateSfw(): ISettingsForCommon {
             const war       = this._getWar() as MeWar;
             const warRule   = war.getRevisedWarRuleArray(war.getField().getMaxPlayerIndex())[0];
             return {

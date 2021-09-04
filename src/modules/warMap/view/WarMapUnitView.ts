@@ -174,12 +174,14 @@ namespace TwnsWarMapUnitView {
             }
         }
         private _addFrameForMaterial(): void {
-            const unitData              = this.getUnitData();
-            const cfg                   = this._getUnitTemplateCfg();
-            const maxBuildMaterial      = cfg.maxBuildMaterial;
-            const maxProduceMaterial    = cfg.maxProduceMaterial;
-            if (((maxBuildMaterial != null) && (Helpers.getExisted(unitData.currentBuildMaterial) <= maxBuildMaterial * 0.4)) ||
-                ((maxProduceMaterial != null) && (Helpers.getExisted(unitData.currentProduceMaterial) <= maxProduceMaterial * 0.4))
+            const unitData                  = this.getUnitData();
+            const cfg                       = this._getUnitTemplateCfg();
+            const maxBuildMaterial          = cfg.maxBuildMaterial;
+            const maxProduceMaterial        = cfg.maxProduceMaterial;
+            const currentBuildMaterial      = unitData.currentBuildMaterial;
+            const currentProduceMaterial    = unitData.currentProduceMaterial;
+            if (((maxBuildMaterial != null) && (currentBuildMaterial != null) && (currentBuildMaterial <= maxBuildMaterial * 0.4))          ||
+                ((maxProduceMaterial != null) && (currentProduceMaterial != null) && (currentProduceMaterial <= maxProduceMaterial * 0.4))
             ) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s02_f04`);
             }

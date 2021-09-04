@@ -65,14 +65,8 @@ namespace TwnsUiCoInfo {
         }
 
         public setCoData(newData: CoData): void {
-            const currentData = this.getCoData();
-            if ((currentData == null)                               ||
-                (currentData.coId !== newData.coId)                 ||
-                (currentData.configVersion !== newData.configVersion)
-            ) {
-                this._coData = newData;
-                this._updateComponentsForCoInfo();
-            }
+            this._coData = newData;
+            this._updateComponentsForCoInfo();
         }
         public getCoData(): CoData {
             return Helpers.getDefined(this._coData);

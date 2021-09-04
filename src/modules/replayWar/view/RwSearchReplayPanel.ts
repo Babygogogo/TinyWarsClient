@@ -22,31 +22,31 @@ namespace TwnsRwSearchReplayPanel {
 
         private static _instance: RwSearchReplayPanel;
 
-        private readonly _imgMask                   : TwnsUiImage.UiImage;
+        private readonly _imgMask!                      : TwnsUiImage.UiImage;
 
-        private readonly _group                     : eui.Group;
-        private readonly _btnReset                  : TwnsUiButton.UiButton;
-        private readonly _btnSearch                 : TwnsUiButton.UiButton;
-        private readonly _labelName                 : TwnsUiLabel.UiLabel;
-        private readonly _labelDesc                 : TwnsUiLabel.UiLabel;
+        private readonly _group!                        : eui.Group;
+        private readonly _btnReset!                     : TwnsUiButton.UiButton;
+        private readonly _btnSearch!                    : TwnsUiButton.UiButton;
+        private readonly _labelName!                    : TwnsUiLabel.UiLabel;
+        private readonly _labelDesc!                    : TwnsUiLabel.UiLabel;
 
-        private readonly _labelReplayIdTitle        : TwnsUiLabel.UiLabel;
-        private readonly _inputReplayId             : TwnsUiTextInput.UiTextInput;
+        private readonly _labelReplayIdTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _inputReplayId!                : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelMapNameTitle         : TwnsUiLabel.UiLabel;
-        private readonly _inputMapName              : TwnsUiTextInput.UiTextInput;
+        private readonly _labelMapNameTitle!            : TwnsUiLabel.UiLabel;
+        private readonly _inputMapName!                 : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelUserNicknameTitle    : TwnsUiLabel.UiLabel;
-        private readonly _inputUserNickname         : TwnsUiTextInput.UiTextInput;
+        private readonly _labelUserNicknameTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _inputUserNickname!            : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelCoNameTitle          : TwnsUiLabel.UiLabel;
-        private readonly _inputCoName               : TwnsUiTextInput.UiTextInput;
+        private readonly _labelCoNameTitle!             : TwnsUiLabel.UiLabel;
+        private readonly _inputCoName!                  : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelMinGlobalRatingTitle : TwnsUiLabel.UiLabel;
-        private readonly _inputMinGlobalRating      : TwnsUiTextInput.UiTextInput;
+        private readonly _labelMinGlobalRatingTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _inputMinGlobalRating!         : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelMinMyRatingTitle     : TwnsUiLabel.UiLabel;
-        private readonly _inputMinMyRating          : TwnsUiTextInput.UiTextInput;
+        private readonly _labelMinMyRatingTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _inputMinMyRating!             : TwnsUiTextInput.UiTextInput;
 
         public static show(): void {
             if (!RwSearchReplayPanel._instance) {
@@ -87,12 +87,12 @@ namespace TwnsRwSearchReplayPanel {
             await this._showCloseAnimation();
         }
 
-        private _onTouchedBtnReset(e: egret.TouchEvent): void {
+        private _onTouchedBtnReset(): void {
             RwProxy.reqReplayInfos(null);
             this.close();
         }
 
-        private _onTouchedBtnSearch(e: egret.TouchEvent): void {
+        private _onTouchedBtnSearch(): void {
             RwProxy.reqReplayInfos({
                 replayId        : getNumber(this._inputReplayId.text),
                 mapName         : this._inputMapName.text || null,
@@ -104,7 +104,7 @@ namespace TwnsRwSearchReplayPanel {
             this.close();
         }
 
-        private _onFocusOutInputMinGlobalRating(e: egret.Event): void {
+        private _onFocusOutInputMinGlobalRating(): void {
             const input     = this._inputMinGlobalRating;
             const maxRating = CommonConstants.ReplayMaxRating;
             if (Number(input.text) > maxRating) {
@@ -112,7 +112,7 @@ namespace TwnsRwSearchReplayPanel {
             }
         }
 
-        private _onFocusOutInputMinMyRating(e: egret.Event): void {
+        private _onFocusOutInputMinMyRating(): void {
             const input     = this._inputMinMyRating;
             const maxRating = CommonConstants.ReplayMaxRating;
             if (Number(input.text) > maxRating) {
@@ -120,7 +120,7 @@ namespace TwnsRwSearchReplayPanel {
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -168,7 +168,7 @@ namespace TwnsRwSearchReplayPanel {
 
     function getNumber(text: string): number | null {
         const num = text ? Number(text) : null;
-        return isNaN(num) ? null : num;
+        return ((num == null) || (isNaN(num))) ? null : num;
     }
 }
 

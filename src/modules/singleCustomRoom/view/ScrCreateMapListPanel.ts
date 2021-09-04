@@ -29,11 +29,11 @@ namespace TwnsScrCreateMapListPanel {
     import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
 
     type FiltersForMapList = {
-        mapName?        : string;
-        mapDesigner?    : string;
-        playersCount?   : number;
-        minRating?      : number;
-        mapTag?         : IDataForMapTag;
+        mapName?        : string | null;
+        mapDesigner?    : string | null;
+        playersCount?   : number | null;
+        minRating?      : number | null;
+        mapTag?         : IDataForMapTag | null;
     };
     type OpenData = FiltersForMapList | null;
     export class ScrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {

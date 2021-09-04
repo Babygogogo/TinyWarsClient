@@ -146,10 +146,10 @@ namespace MpwModel {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function createDataForCommonWarBasicSettingsPage(warId: number): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const warInfo = getMyWarInfo(warId);
+    export async function createDataForCommonWarBasicSettingsPage(warId: number | null): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const warInfo = warId == null ? null : getMyWarInfo(warId);
         if (warInfo == null) {
-            return { dataArrayForListSettings: [] };
+            return null;
         }
 
         const warRule                                                               = Helpers.getExisted(warInfo.settingsForCommon?.warRule);
@@ -163,8 +163,7 @@ namespace MpwModel {
         } else if (settingsForMfw) {
             return await createDataForCommonWarBasicSettingsPageForMfw(warRule, settingsForMfw);
         } else {
-            Logger.error(`MpwModel.createDataForCommonWarBasicSettingsPage() invalid warInfo.`);
-            return { dataArrayForListSettings: [] };
+            throw new Error(`Invalid warInfo.`);
         }
     }
     async function createDataForCommonWarBasicSettingsPageForMcw(warRule: IWarRule, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
@@ -452,8 +451,8 @@ namespace MpwModel {
         return openData;
     }
 
-    export async function createDataForCommonWarAdvancedSettingsPage(warId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-        const warInfo = getMyWarInfo(warId);
+    export async function createDataForCommonWarAdvancedSettingsPage(warId: number | null): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+        const warInfo = warId == null ? null : getMyWarInfo(warId);
         if (warInfo == null) {
             return null;
         }
@@ -492,8 +491,8 @@ namespace MpwModel {
         }
     }
 
-    export async function createDataForCommonWarPlayerInfoPage(warId: number): Promise<OpenDataForCommonWarPlayerInfoPage> {
-        const warInfo = getMyWarInfo(warId);
+    export async function createDataForCommonWarPlayerInfoPage(warId: number | null): Promise<OpenDataForCommonWarPlayerInfoPage> {
+        const warInfo = warId == null ? null : getMyWarInfo(warId);
         if (warInfo == null) {
             return null;
         }

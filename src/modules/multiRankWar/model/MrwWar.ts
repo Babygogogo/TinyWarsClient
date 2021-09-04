@@ -2,6 +2,7 @@
 import TwnsMpwWar           from "../../multiPlayerWar/model/MpwWar";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
@@ -12,7 +13,7 @@ namespace TwnsMrwWar {
     import MpwWar           = TwnsMpwWar.MpwWar;
 
     export class MrwWar extends MpwWar {
-        private _settingsForMrw?: ISettingsForMrw;
+        private _settingsForMrw?    : ISettingsForMrw;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
             const baseInitError = await this._baseInit(data);
@@ -46,16 +47,15 @@ namespace TwnsMrwWar {
         public getIsNeedSeedRandom(): boolean {
             return false;
         }
-        public getMapId(): number | undefined {
-            const settingsForMrw = this.getSettingsForMrw();
-            return settingsForMrw ? settingsForMrw.mapId : undefined;
+        public getMapId(): number {
+            return Helpers.getExisted(this.getSettingsForMrw().mapId);
         }
 
         private _setSettingsForMrw(settings: ISettingsForMrw): void {
             this._settingsForMrw = settings;
         }
-        public getSettingsForMrw(): ISettingsForMrw | null | undefined {
-            return this._settingsForMrw;
+        public getSettingsForMrw(): ISettingsForMrw {
+            return Helpers.getDefined(this._settingsForMrw);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -145,8 +145,7 @@ namespace Helpers {
             if ((color === ColorType.Gray) || (color === ColorType.Dark)) {
                 obj.filters = [COLOR_MATRIX_FILTERS[color]];
             } else if (color === ColorType.Origin) {
-                // @ts-ignore
-                obj.filters = undefined;
+                (obj.filters as any) = undefined;
             } else {
                 obj.filters = [new egret.ColorMatrixFilter(getColorMatrix(color, value))];
             }
@@ -276,6 +275,9 @@ namespace Helpers {
     export function checkHasElement<T>(arr: T[], element: T): boolean {
         return arr.indexOf(element) >= 0;
     }
+    export function getNonNullElements<T>(arr: Types.Undefinable<T>[]): T[] {
+        return arr.filter(v => v != null) as T[];
+    }
 
     /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */
     export function getDigitsCount(num: number): number {
@@ -395,9 +397,9 @@ namespace Helpers {
             });
         }
     }
-    export function createLazyFunc<T>(func: () => T): () => T | undefined {
+    export function createLazyFunc<T>(func: () => T): () => T {
         let hasCalled   = false;
-        let result      : T | undefined;
+        let result      : T;
         return () => {
             if (!hasCalled) {
                 hasCalled   = true;

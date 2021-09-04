@@ -4,6 +4,7 @@ import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import Logger                       from "../../tools/helpers/Logger";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
+import Helpers                      from "../../tools/helpers/Helpers";
 
 namespace TwnsBwDrawVoteManager {
     import ISerialPlayerManager = ProtoTypes.WarSerialization.ISerialPlayerManager;
@@ -11,18 +12,18 @@ namespace TwnsBwDrawVoteManager {
     import BwWar                = TwnsBwWar.BwWar;
 
     export class BwDrawVoteManager {
-        private _remainingVotes : number | null | undefined;
-        private _war?           : BwWar;
+        private _remainingVotes?    : number | null;
+        private _war?               : BwWar;
 
         public init(playerManagerData: ISerialPlayerManager | null | undefined, remainingVotes: number | null | undefined): ClientErrorCode {
             if (remainingVotes == null) {
-                this.setRemainingVotes(remainingVotes);
+                this.setRemainingVotes(null);
             } else {
                 let maxVotes = 0;
                 for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {
                     if (WarCommonHelpers.checkCanVoteForDraw({
-                        playerIndex : playerData.playerIndex,
-                        aliveState  : playerData.aliveState,
+                        playerIndex : Helpers.getExisted(playerData.playerIndex),
+                        aliveState  : Helpers.getExisted(playerData.aliveState),
                     })) {
                         ++maxVotes;
                     }
@@ -39,11 +40,11 @@ namespace TwnsBwDrawVoteManager {
             this._setWar(war);
         }
 
-        public setRemainingVotes(votes: number | undefined | null): void {
+        public setRemainingVotes(votes: number | null): void {
             this._remainingVotes = votes;
         }
-        public getRemainingVotes(): number | undefined | null {
-            return this._remainingVotes;
+        public getRemainingVotes(): number | null {
+            return Helpers.getDefined(this._remainingVotes);
         }
 
         public getMaxVotes(): number | undefined {

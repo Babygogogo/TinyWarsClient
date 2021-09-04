@@ -45,11 +45,11 @@ namespace TwnsRwWar {
         private readonly _commonSettingManager  = new BwCommonSettingManager();
         private readonly _warEventManager       = new BwWarEventManager();
 
-        private _settingsForMcw: ProtoTypes.WarSettings.ISettingsForMcw;
-        private _settingsForScw: ProtoTypes.WarSettings.ISettingsForScw;
-        private _settingsForMrw: ProtoTypes.WarSettings.ISettingsForMrw;
+        private _settingsForMcw?                    : ProtoTypes.WarSettings.ISettingsForMcw | null;
+        private _settingsForScw?                    : ProtoTypes.WarSettings.ISettingsForScw | null;
+        private _settingsForMrw?                    : ProtoTypes.WarSettings.ISettingsForMrw | null;
 
-        private _replayId                           : number;
+        private _replayId?                          : number;
         private _isAutoReplay                       = false;
         private _nextActionId                       = 0;
         private _checkPointIdsForNextActionId       = new Map<number, number>();
@@ -61,9 +61,9 @@ namespace TwnsRwWar {
                 return baseInitError;
             }
 
-            this._setSettingsForMcw(warData.settingsForMcw);
-            this._setSettingsForScw(warData.settingsForScw);
-            this._setSettingsForMrw(warData.settingsForMrw);
+            this._setSettingsForMcw(warData.settingsForMcw ?? null);
+            this._setSettingsForScw(warData.settingsForScw ?? null);
+            this._setSettingsForMrw(warData.settingsForMrw ?? null);
             this.setNextActionId(0);
 
             this.setCheckPointId(0, 0);
@@ -114,7 +114,7 @@ namespace TwnsRwWar {
             return `${Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn())} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | undefined> {
-            return `${Lang.getText(LangTextType.B0095)} ${Lang.getUnitName(action.unitType)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0095)} ${Lang.getUnitName(Helpers.getExisted(action.unitType))} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined> {
             return `${await this.getPlayerInTurn().getNickname()} ${Lang.getText(action.deprecatedIsBoot ? LangTextType.B0396: LangTextType.B0055)} ${this._getDescSuffix()}`;
@@ -140,7 +140,7 @@ namespace TwnsRwWar {
             return `${Lang.getText(LangTextType.B0451)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined> {
-            const playerIndex = action.targetPlayerIndex;
+            const playerIndex = Helpers.getExisted(action.targetPlayerIndex);
             return `P${playerIndex} ${await this.getPlayer(playerIndex).getNickname()}${Lang.getText(LangTextType.B0450)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
@@ -205,67 +205,7 @@ namespace TwnsRwWar {
         }
 
         public serializeForCheckPoint(): CheckPointData {
-            const randomNumberManager       = this.getRandomNumberManager();
-            const seedRandomCurrentState    = randomNumberManager.getSeedRandomCurrentState();
-            if (seedRandomCurrentState == null) {
-                Logger.error(`ReplayWar.serializeForCheckPoint() empty seedRandomCurrentState.`);
-                return undefined;
-            }
-
-            const seedRandomInitialState = randomNumberManager.getSeedRandomInitialState();
-            if (seedRandomInitialState == null) {
-                Logger.error(`ReplayWar.serializeForCheckPoint() empty seedRandomInitialState.`);
-                return undefined;
-            }
-
-            const playerManager = this.getPlayerManager();
-            if (playerManager == null) {
-                Logger.error(`ReplayWar.serializeForCheckPoint() empty playerManager.`);
-                return undefined;
-            }
-
-            const turnManager = this.getTurnManager();
-            if (turnManager == null) {
-                Logger.error(`ReplayWar.serializeForCheckPoint() empty turnManager.`);
-                return undefined;
-            }
-
-            const warEventManager = this.getWarEventManager();
-            if (warEventManager == null) {
-                Logger.error(`RwWar.serializeForCheckPoint() empty warEventManager.`);
-                return undefined;
-            }
-
-            const field = this.getField();
-            if (field == null) {
-                Logger.error(`ReplayWar.serializeForCheckPoint() empty field.`);
-                return undefined;
-            }
-
-            const serialPlayerManager = playerManager.serialize();
-            if (serialPlayerManager == null) {
-                Logger.error(`ReplayWar.serializeForCheckPoint() empty serialPlayerManager.`);
-                return undefined;
-            }
-
-            const serialTurnManager = turnManager.serialize();
-            if (serialTurnManager == null) {
-                Logger.error(`ReplayWar.serializeForCheckPoint() empty serialTurnManager.`);
-                return undefined;
-            }
-
-            const serialField = field.serialize();
-            if (serialField == null) {
-                Logger.error(`ReplayWar.serializeForCheckPoint() empty serialField.`);
-                return undefined;
-            }
-
-            const serialWarEventManager = warEventManager.serialize();
-            if (serialWarEventManager == null) {
-                Logger.error(`RwWar.serializeForCheckPoint() empty serialWarEventManager.`);
-                return undefined;
-            }
-
+            const randomNumberManager = this.getRandomNumberManager();
             return {
                 nextActionId    : this.getNextActionId(),
                 warData         : {
@@ -274,14 +214,14 @@ namespace TwnsRwWar {
                     settingsForScw              : null,
 
                     warId                       : null,
-                    seedRandomInitialState,
-                    seedRandomCurrentState,
+                    seedRandomInitialState      : Helpers.getExisted(randomNumberManager.getSeedRandomInitialState()),
+                    seedRandomCurrentState      : randomNumberManager.getSeedRandomCurrentState(),
                     executedActions             : null,
                     remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
-                    warEventManager             : Helpers.deepClone(serialWarEventManager),
-                    playerManager               : serialPlayerManager,
-                    turnManager                 : serialTurnManager,
-                    field                       : serialField,
+                    warEventManager             : Helpers.deepClone(this.getWarEventManager().serialize()),
+                    playerManager               : this.getPlayerManager().serialize(),
+                    turnManager                 : this.getTurnManager().serialize(),
+                    field                       : this.getField().serialize(),
                 },
             };
         }
@@ -295,8 +235,7 @@ namespace TwnsRwWar {
             } else if (this._getSettingsForScw()) {
                 return hasFog ? WarType.ScwFog : WarType.ScwStd;
             } else {
-                Logger.error(`RwWar.getWarType() unknown warType.`);
-                return undefined;
+                throw new Error(`Invalid war data.`);
             }
         }
         public getIsNeedExecutedAction(): boolean {
@@ -305,23 +244,23 @@ namespace TwnsRwWar {
         public getIsNeedSeedRandom(): boolean {
             return true;
         }
-        public getMapId(): number | undefined {
+        public getMapId(): number {
             const settingsForMcw = this._getSettingsForMcw();
             if (settingsForMcw) {
-                return settingsForMcw.mapId;
+                return Helpers.getExisted(settingsForMcw.mapId);
             }
 
             const settingsForMrw = this._getSettingsForMrw();
             if (settingsForMrw) {
-                return settingsForMrw.mapId;
+                return Helpers.getExisted(settingsForMrw.mapId);
             }
 
             const settingsForScw = this._getSettingsForScw();
             if (settingsForScw) {
-                return settingsForScw.mapId;
+                return Helpers.getExisted(settingsForScw.mapId);
             }
 
-            return undefined;
+            throw new Error(`Invalid war data.`);
         }
         public getIsWarMenuPanelOpening(): boolean {
             return RwWarMenuPanel.getIsOpening();
@@ -335,22 +274,22 @@ namespace TwnsRwWar {
             return false;
         }
 
-        private _getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw {
-            return this._settingsForMcw;
+        private _getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw | null {
+            return Helpers.getDefined(this._settingsForMcw);
         }
-        private _setSettingsForMcw(value: ProtoTypes.WarSettings.ISettingsForMcw) {
+        private _setSettingsForMcw(value: ProtoTypes.WarSettings.ISettingsForMcw | null): void {
             this._settingsForMcw = value;
         }
-        private _getSettingsForScw(): ProtoTypes.WarSettings.ISettingsForScw {
-            return this._settingsForScw;
+        private _getSettingsForScw(): ProtoTypes.WarSettings.ISettingsForScw | null {
+            return Helpers.getDefined(this._settingsForScw);
         }
-        private _setSettingsForScw(value: ProtoTypes.WarSettings.ISettingsForScw) {
+        private _setSettingsForScw(value: ProtoTypes.WarSettings.ISettingsForScw | null): void {
             this._settingsForScw = value;
         }
-        private _getSettingsForMrw(): ProtoTypes.WarSettings.ISettingsForMrw {
-            return this._settingsForMrw;
+        private _getSettingsForMrw(): ProtoTypes.WarSettings.ISettingsForMrw | null {
+            return Helpers.getDefined(this._settingsForMrw);
         }
-        private _setSettingsForMrw(value: ProtoTypes.WarSettings.ISettingsForMrw) {
+        private _setSettingsForMrw(value: ProtoTypes.WarSettings.ISettingsForMrw | null): void {
             this._settingsForMrw = value;
         }
 
@@ -358,7 +297,7 @@ namespace TwnsRwWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getReplayId(): number {
-            return this._replayId;
+            return Helpers.getDefined(this._replayId);
         }
         public setReplayId(replayId: number): void {
             this._replayId = replayId;
@@ -386,15 +325,15 @@ namespace TwnsRwWar {
             }
         }
 
-        public getCheckPointId(nextActionId: number): number {
-            return this._checkPointIdsForNextActionId.get(nextActionId);
+        public getCheckPointId(nextActionId: number): number | null {
+            return this._checkPointIdsForNextActionId.get(nextActionId) ?? null;
         }
         public setCheckPointId(nextActionId: number, checkPointId: number): void {
             this._checkPointIdsForNextActionId.set(nextActionId, checkPointId);
         }
 
-        public getCheckPointData(checkPointId: number): CheckPointData {
-            return this._checkPointDataListForCheckPointId.get(checkPointId);
+        public getCheckPointData(checkPointId: number): CheckPointData | null {
+            return this._checkPointDataListForCheckPointId.get(checkPointId) ?? null;
         }
         public setCheckPointData(checkPointId: number, data: CheckPointData): void {
             this._checkPointDataListForCheckPointId.set(checkPointId, data);
@@ -412,7 +351,7 @@ namespace TwnsRwWar {
                 return;
             }
 
-            const checkPointId = this.getCheckPointId(this.getNextActionId()) + 1;
+            const checkPointId = Helpers.getExisted(this.getCheckPointId(this.getNextActionId())) + 1;
             this.setIsAutoReplay(false);
 
             while (!this.getCheckPointData(checkPointId)) {
@@ -432,7 +371,7 @@ namespace TwnsRwWar {
             }
 
             const nextActionId = this.getNextActionId();
-            const checkPointId = Math.min(this.getCheckPointId(nextActionId), this.getCheckPointId(nextActionId - 1));
+            const checkPointId = Math.min(Helpers.getExisted(this.getCheckPointId(nextActionId)), Helpers.getExisted(this.getCheckPointId(nextActionId - 1)));
             this.setIsAutoReplay(false);
 
             this.stopRunning();
@@ -443,21 +382,21 @@ namespace TwnsRwWar {
             FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {
-            const checkPointData        = this.getCheckPointData(checkPointId);
+            const checkPointData        = Helpers.getExisted(this.getCheckPointData(checkPointId));
             const warData               = checkPointData.warData;
             const configVersion         = this.getConfigVersion();
             const playersCountUnneutral = this.getPlayerManager().getTotalPlayersCount(false);
 
             this.setNextActionId(checkPointData.nextActionId);
-            this.getPlayerManager().fastInit(warData.playerManager, configVersion);
-            this.getTurnManager().fastInit(warData.turnManager, playersCountUnneutral);
-            this.getWarEventManager().fastInit(warData.warEventManager);
+            this.getPlayerManager().fastInit(Helpers.getExisted(warData.playerManager), configVersion);
+            this.getTurnManager().fastInit(Helpers.getExisted(warData.turnManager), playersCountUnneutral);
+            this.getWarEventManager().fastInit(Helpers.getExisted(warData.warEventManager));
             this.getField().fastInit({
-                data                    : warData.field,
+                data                    : Helpers.getExisted(warData.field),
                 configVersion,
                 playersCountUnneutral,
             });
-            this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw);
+            this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw ?? null);
             this.getRandomNumberManager().init({
                 isNeedSeedRandom    : this.getIsNeedSeedRandom(),
                 initialState        : warData.seedRandomInitialState,
@@ -503,8 +442,8 @@ namespace TwnsRwWar {
 
             const actionId          = this.getNextActionId();
             const turnManager       = this.getTurnManager();
-            const prevCheckPointId  = this.getCheckPointId(actionId - 1);
-            const prevTurnData      = this.getCheckPointData(prevCheckPointId).warData.turnManager;
+            const prevCheckPointId  = Helpers.getExisted(this.getCheckPointId(actionId - 1));
+            const prevTurnData      = Helpers.getExisted(Helpers.getExisted(this.getCheckPointData(prevCheckPointId)).warData.turnManager);
             const isNewCheckPoint   = (isInEnd) || (turnManager.getTurnIndex() !== prevTurnData.turnIndex) || (turnManager.getPlayerIndexInTurn() !== prevTurnData.playerIndex);
             const checkPointId      = isNewCheckPoint ? prevCheckPointId + 1 : prevCheckPointId;
             if (this.getCheckPointId(actionId) == null) {

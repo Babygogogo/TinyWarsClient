@@ -14,6 +14,7 @@ import CommonConstants                  from "../../tools/helpers/CommonConstant
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
+import Helpers                          from "../../tools/helpers/Helpers";
 import Logger                           from "../../tools/helpers/Logger";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
@@ -30,12 +31,10 @@ import UserModel                        from "../../user/model/UserModel";
 import UserProxy                        from "../../user/model/UserProxy";
 import TwnsUserSettingsPanel            from "../../user/view/UserSettingsPanel";
 import WarMapModel                      from "../../warMap/model/WarMapModel";
-import TwnsMpwActionPlanner             from "../model/MpwActionPlanner";
 import TwnsMpwWar                       from "../model/MpwWar";
 
 namespace TwnsMpwWarMenuPanel {
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import MpwActionPlanner             = TwnsMpwActionPlanner.MpwActionPlanner;
     import MpwWar                       = TwnsMpwWar.MpwWar;
     import BwBuildingListPanel          = TwnsBwBuildingListPanel.BwBuildingListPanel;
     import CommonDamageChartPanel       = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
@@ -59,25 +58,22 @@ namespace TwnsMpwWarMenuPanel {
 
         private static _instance: MpwWarMenuPanel;
 
-        private _group          : eui.Group;
-        private _listCommand    : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
-        private _labelNoCommand : TwnsUiLabel.UiLabel;
-        private _btnBack        : TwnsUiButton.UiButton;
-        private _btnHome        : TwnsUiButton.UiButton;
+        private readonly _group!                : eui.Group;
+        private readonly _listCommand!          : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
+        private readonly _labelNoCommand!       : TwnsUiLabel.UiLabel;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnHome!              : TwnsUiButton.UiButton;
 
-        private _groupInfo              : eui.Group;
-        private _labelMenuTitle         : TwnsUiLabel.UiLabel;
-        private _labelWarInfoTitle      : TwnsUiLabel.UiLabel;
-        private _labelPlayerInfoTitle   : TwnsUiLabel.UiLabel;
-        private _btnMapNameTitle        : TwnsUiButton.UiButton;
-        private _labelMapName           : TwnsUiLabel.UiLabel;
-        private _listWarInfo            : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
-        private _btnBuildings           : TwnsUiButton.UiButton;
-        private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _groupInfo!            : eui.Group;
+        private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelWarInfoTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerInfoTitle! : TwnsUiLabel.UiLabel;
+        private readonly _btnMapNameTitle!      : TwnsUiButton.UiButton;
+        private readonly _labelMapName!         : TwnsUiLabel.UiLabel;
+        private readonly _listWarInfo!          : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private readonly _btnBuildings!         : TwnsUiButton.UiButton;
+        private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
-        private _war            : MpwWar;
-        private _actionPlanner  : MpwActionPlanner;
-        private _dataForList    : DataForCommandRenderer[];
         private _menuType       = MenuType.Main;
 
         public static show(): void {
@@ -122,11 +118,7 @@ namespace TwnsMpwWarMenuPanel {
 
             this._showOpenAnimation();
 
-            const war           = MpwModel.getWar();
-            this._war           = war;
-            this._actionPlanner = war.getActionPlanner() as MpwActionPlanner;
-            this._menuType      = MenuType.Main;
-
+            this._menuType = MenuType.Main;
             this._updateView();
 
             Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
@@ -134,17 +126,18 @@ namespace TwnsMpwWarMenuPanel {
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
 
-            this._war           = null;
-            this._dataForList   = null;
-
             Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
+        }
+
+        private _getWar(): MpwWar {
+            return Helpers.getExisted(MpwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyBwPlannerStateChanged(): void {
-            const war = this._war;
+            const war = this._getWar();
             if (war.getPlayerInTurn() === war.getPlayerLoggedIn()) {
                 this.close();
             } else {
@@ -163,9 +156,9 @@ namespace TwnsMpwWarMenuPanel {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : data.slotIndex,
-                        slotExtraData   : data.extraData,
-                        warData         : data.warData,
+                        slotIndex       : Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Helpers.getExisted(data.extraData),
+                        warData         : Helpers.getExisted(data.warData),
                     });
                 },
             });
@@ -179,8 +172,7 @@ namespace TwnsMpwWarMenuPanel {
                 this._menuType = MenuType.Main;
                 this._updateListCommand();
             } else {
-                Logger.error(`MpwWarMenuPanel._onTouchedBtnBack() invalid this._menuType: ${type}`);
-                this.close();
+                throw new Error(`Invalid menuType: ${type}`);
             }
         }
 
@@ -193,7 +185,7 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _onTouchedBtnBuildings(): void {
-            BwBuildingListPanel.show({ war: this._war });
+            BwBuildingListPanel.show({ war: this._getWar() });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -237,13 +229,13 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _updateListCommand(): void {
-            this._dataForList = this._createDataForList();
-            if (!this._dataForList.length) {
+            const dataArray = this._createDataForList();
+            if (!dataArray.length) {
                 this._labelNoCommand.visible = true;
                 this._listCommand.clear();
             } else {
                 this._labelNoCommand.visible = false;
-                this._listCommand.bindData(this._dataForList);
+                this._listCommand.bindData(dataArray);
             }
         }
 
@@ -257,13 +249,18 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private async _updateGroupInfo(): Promise<void> {
-            const war                   = this._war;
-            const mapFileName           = war.getMapId();
-            this._labelMapName.text     = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(LangTextType.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
+            const war   = this._getWar();
+            const mapId = war.getMapId();
+            const label = this._labelMapName;
+            if (mapId == null) {
+                label.text = `----`;
+            } else {
+                label.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----"} (${Lang.getText(LangTextType.B0163)}: ${await WarMapModel.getDesignerName(mapId) || "----"})`;
+            }
         }
 
         private _updateListWarInfo(): void {
-            const war       = this._war;
+            const war       = this._getWar();
             const dataList  : DataForInfoRenderer[] = [
                 {
                     titleText   : Lang.getText(LangTextType.B0226),
@@ -280,7 +277,7 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _updateListPlayer(): void {
-            const war   = this._war;
+            const war   = this._getWar();
             const data  : DataForPlayerRenderer[] = [];
             war.getPlayerManager().forEachPlayer(false, (player) => {
                 data.push({
@@ -307,7 +304,7 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            return [
+            return Helpers.getNonNullElements([
                 this._createCommandOpenDamageChartPanel(),
                 this._createCommandPlayerUseCop(),
                 this._createCommandPlayerUseScop(),
@@ -316,11 +313,11 @@ namespace TwnsMpwWarMenuPanel {
                 this._createCommandSyncWar(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandGotoWarListPanel(),
-            ].filter(c => !!c);
+            ]);
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            return [
+            return Helpers.getNonNullElements([
                 this._createCommandPlayerDeleteUnit(),
                 this._createCommandPlayerRequestDraw(),
                 this._createCommandPlayerSurrender(),
@@ -328,7 +325,7 @@ namespace TwnsMpwWarMenuPanel {
                 this._createCommandCreateMfr(),
                 this._createCommandUserSettings(),
                 this._createCommandSetPathMode(),
-            ].filter(c => !!c);
+            ]);
         }
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
@@ -352,13 +349,14 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _createCommandPlayerUseCop(): DataForCommandRenderer | undefined {
-            const war           = this._war;
+            const war           = this._getWar();
             const skillType     = Types.CoSkillType.Power;
             const playerInTurn  = war.getPlayerInTurn();
+            const actionPlanner = war.getActionPlanner();
             if ((playerInTurn !== war.getPlayerLoggedIn())                          ||
                 (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (this._actionPlanner.checkIsStateRequesting())
+                (actionPlanner.checkIsStateRequesting())
             ) {
                 return undefined;
             } else {
@@ -368,7 +366,7 @@ namespace TwnsMpwWarMenuPanel {
                         CommonConfirmPanel.show({
                             title   : Lang.getText(LangTextType.B0142),
                             content : Lang.getText(LangTextType.A0054),
-                            callback: () => this._actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
+                            callback: () => actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
                         });
                     },
                 };
@@ -376,13 +374,14 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _createCommandPlayerUseScop(): DataForCommandRenderer | undefined {
-            const war           = this._war;
+            const war           = this._getWar();
             const skillType     = Types.CoSkillType.SuperPower;
             const playerInTurn  = war.getPlayerInTurn();
+            const actionPlanner = war.getActionPlanner();
             if ((playerInTurn !== war.getPlayerLoggedIn())                          ||
                 (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (this._actionPlanner.checkIsStateRequesting())
+                (actionPlanner.checkIsStateRequesting())
             ) {
                 return undefined;
             } else {
@@ -392,7 +391,7 @@ namespace TwnsMpwWarMenuPanel {
                         CommonConfirmPanel.show({
                             title   : Lang.getText(LangTextType.B0144),
                             content : Lang.getText(LangTextType.A0058),
-                            callback: () => this._actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
+                            callback: () => actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
                         });
                     },
                 };
@@ -403,7 +402,7 @@ namespace TwnsMpwWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0089),
                 callback: () => {
-                    const war = this._war;
+                    const war = this._getWar();
                     MpwProxy.reqMpwCommonSyncWar(
                         war,
                         war.getActionPlanner().checkIsStateRequesting()
@@ -423,7 +422,7 @@ namespace TwnsMpwWarMenuPanel {
                         title   : Lang.getText(LangTextType.B0652),
                         content : Lang.getText(LangTextType.A0225),
                         callback: () => {
-                            FlowManager.gotoMyWarListPanel(this._war.getWarType());
+                            FlowManager.gotoMyWarListPanel(this._getWar().getWarType());
                         },
                     });
                 },
@@ -441,12 +440,13 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _createCommandPlayerRequestDraw(): DataForCommandRenderer | undefined {
-            const war       = this._war;
-            const player    = war.getPlayerInTurn();
+            const war           = this._getWar();
+            const player        = war.getPlayerInTurn();
+            const actionPlanner = war.getActionPlanner();
             if ((player !== war.getPlayerLoggedIn())                                ||
                 (player.getHasVotedForDraw())                                       ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)  ||
+                (actionPlanner.getState() !== Types.ActionPlannerState.Idle)        ||
                 (war.getDrawVoteManager().getRemainingVotes() != null)
             ) {
                 return undefined;
@@ -456,7 +456,7 @@ namespace TwnsMpwWarMenuPanel {
                     callback: () => {
                         CommonConfirmPanel.show({
                             content : Lang.getText(LangTextType.A0031),
-                            callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(true),
+                            callback: () => actionPlanner.setStateRequestingPlayerVoteForDraw(true),
                         });
                     },
                 };
@@ -464,10 +464,11 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _createCommandPlayerSurrender(): DataForCommandRenderer | undefined {
-            const war = this._war;
+            const war           = this._getWar();
+            const actionPlanner = war.getActionPlanner();
             if ((war.getPlayerInTurn() !== war.getPlayerLoggedIn())                 ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (this._actionPlanner.checkIsStateRequesting())
+                (actionPlanner.checkIsStateRequesting())
             ) {
                 return undefined;
             } else {
@@ -477,7 +478,7 @@ namespace TwnsMpwWarMenuPanel {
                         CommonConfirmPanel.show({
                             title   : Lang.getText(LangTextType.B0055),
                             content : Lang.getText(LangTextType.A0026),
-                            callback: () => this._actionPlanner.setStateRequestingPlayerSurrender(),
+                            callback: () => actionPlanner.setStateRequestingPlayerSurrender(),
                         });
                     },
                 };
@@ -485,7 +486,7 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _createCommandSimulation(): DataForCommandRenderer | null {
-            const war = this._war;
+            const war = this._getWar();
             return {
                 name    : Lang.getText(LangTextType.B0325),
                 callback: () => {
@@ -499,7 +500,7 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _createCommandCreateMfr(): DataForCommandRenderer | null {
-            const war = this._war;
+            const war = this._getWar();
             return {
                 name    : Lang.getText(LangTextType.B0557),
                 callback: async () => {
@@ -533,12 +534,13 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _createCommandPlayerAgreeDraw(): DataForCommandRenderer | undefined {
-            const war       = this._war;
-            const player    = war.getPlayerInTurn();
+            const war           = this._getWar();
+            const player        = war.getPlayerInTurn();
+            const actionPlanner = war.getActionPlanner();
             if ((player !== war.getPlayerLoggedIn())                                ||
                 (player.getHasVotedForDraw())                                       ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)  ||
+                (actionPlanner.getState() !== Types.ActionPlannerState.Idle)        ||
                 (!war.getDrawVoteManager().getRemainingVotes())
             ) {
                 return undefined;
@@ -548,7 +550,7 @@ namespace TwnsMpwWarMenuPanel {
                     callback: () => {
                         CommonConfirmPanel.show({
                             content : Lang.getText(LangTextType.A0032),
-                            callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(true),
+                            callback: () => actionPlanner.setStateRequestingPlayerVoteForDraw(true),
                         });
                     },
                 };
@@ -556,12 +558,13 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _createCommandPlayerDeclineDraw(): DataForCommandRenderer | undefined {
-            const war       = this._war;
-            const player    = war.getPlayerInTurn();
+            const war           = this._getWar();
+            const player        = war.getPlayerInTurn();
+            const actionPlanner = war.getActionPlanner();
             if ((player !== war.getPlayerLoggedIn())                                ||
                 (player.getHasVotedForDraw())                                       ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)  ||
+                (actionPlanner.getState() !== Types.ActionPlannerState.Idle)        ||
                 (!war.getDrawVoteManager().getRemainingVotes())
             ) {
                 return undefined;
@@ -571,7 +574,7 @@ namespace TwnsMpwWarMenuPanel {
                     callback: () => {
                         CommonConfirmPanel.show({
                             content : Lang.getText(LangTextType.A0033),
-                            callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(false),
+                            callback: () => actionPlanner.setStateRequestingPlayerVoteForDraw(false),
                         });
                     },
                 };
@@ -579,10 +582,11 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _createCommandPlayerDeleteUnit(): DataForCommandRenderer | undefined {
-            const war = this._war;
+            const war           = this._getWar();
+            const actionPlanner = war.getActionPlanner();
             if ((war.getPlayerInTurn() !== war.getPlayerLoggedIn())                 ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)
+                (actionPlanner.getState() !== Types.ActionPlannerState.Idle)
             ) {
                 return undefined;
             } else {
@@ -602,7 +606,7 @@ namespace TwnsMpwWarMenuPanel {
                             CommonConfirmPanel.show({
                                 title   : Lang.getText(LangTextType.B0081),
                                 content : Lang.getText(LangTextType.A0029),
-                                callback: () => this._actionPlanner.setStateRequestingPlayerDeleteUnit(),
+                                callback: () => actionPlanner.setStateRequestingPlayerDeleteUnit(),
                             });
                         }
                     },
@@ -664,19 +668,19 @@ namespace TwnsMpwWarMenuPanel {
         callback: () => void;
     };
     class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
-        private _group      : eui.Group;
-        private _labelName  : TwnsUiLabel.UiLabel;
+        private readonly _group!        : eui.Group;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._updateView();
         }
 
         public onItemTapEvent(): void {
-            this.data.callback();
+            this._getData().callback();
         }
 
         private _updateView(): void {
-            const data = this.data;
+            const data              = this._getData();
             this._labelName.text    = data.name;
         }
     }
@@ -686,18 +690,18 @@ namespace TwnsMpwWarMenuPanel {
         player  : BwPlayer;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private _group          : eui.Group;
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _labelForce     : TwnsUiLabel.UiLabel;
-        private _labelLost      : TwnsUiLabel.UiLabel;
-        private _listInfo       : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private readonly _group!        : eui.Group;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelForce!   : TwnsUiLabel.UiLabel;
+        private readonly _labelLost!    : TwnsUiLabel.UiLabel;
+        private readonly _listInfo!     : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
         protected async _onDataChanged(): Promise<void> {
-            const data                  = this.data;
+            const data                  = this._getData();
             const war                   = data.war;
             const player                = data.player;
             this._labelName.text        = await player.getNickname();
@@ -717,7 +721,7 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data;
+            const data          = this._getData();
             const war           = data.war;
             const player        = data.player;
             const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()));
@@ -747,7 +751,7 @@ namespace TwnsMpwWarMenuPanel {
         ): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(LangTextType.B0397),
-                infoText    : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()),
+                infoText    : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()) || CommonConstants.ErrorTextForUndefined,
                 infoColor   : 0xFFFFFF,
             };
         }
@@ -780,7 +784,7 @@ namespace TwnsMpwWarMenuPanel {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const coId  = player.getCoId();
-            const cfg   = coId == null ? null : ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
+            const cfg   = coId == null ? null : ConfigManager.getCoBasicCfg(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId);
             return {
                 titleText   : `CO`,
                 infoText    : !cfg ? `(${Lang.getText(LangTextType.B0001)})` : `${cfg.name}`,
@@ -976,11 +980,11 @@ namespace TwnsMpwWarMenuPanel {
     };
 
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : TwnsUiButton.UiButton;
-        private _labelValue : TwnsUiLabel.UiLabel;
+        private readonly _btnTitle!     : TwnsUiButton.UiButton;
+        private readonly _labelValue!   : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             this._btnTitle.label        = data.titleText;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;

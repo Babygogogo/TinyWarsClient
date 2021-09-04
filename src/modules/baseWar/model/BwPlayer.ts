@@ -346,7 +346,7 @@ namespace TwnsBwPlayer {
             return Helpers.getDefined(this._coUsingSkillType);
         }
         public setCoUsingSkillType(skillType: Types.CoSkillType): void {
-            if (this.getCoUsingSkillType() !== skillType) {
+            if (this._coUsingSkillType !== skillType) {
                 this._coUsingSkillType = skillType;
                 Notify.dispatch(NotifyType.BwCoUsingSkillTypeChanged);
             }

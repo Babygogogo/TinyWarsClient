@@ -120,7 +120,7 @@ namespace WarDestructionHelpers {
         player.setCoCurrentEnergy(0);
         player.setCoUsingSkillType(Types.CoSkillType.Passive);
 
-        war.getDrawVoteManager().setRemainingVotes(undefined);
+        war.getDrawVoteManager().setRemainingVotes(null);
     }
 
     export function removeUnitOnMap(war: BwWar, gridIndex: GridIndex): void {

@@ -479,9 +479,6 @@ namespace TwnsClientErrorCode {
         BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_18,
         BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_19,
 
-        BwRandomNumberManager00,
-        BwRandomNumberManager01,
-
         MapRawDataValidation00,
         MapRawDataValidation01,
         MapRawDataValidation02,

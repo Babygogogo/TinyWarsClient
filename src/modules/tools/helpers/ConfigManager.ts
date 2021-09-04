@@ -468,22 +468,22 @@ namespace ConfigManager {
         return cfg;
     }
 
-    export function getBuildableTileCfgs(version: string, unitType: UnitType): { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } | undefined {
+    export function getBuildableTileCfgs(version: string, unitType: UnitType): { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } | null {
         const cfgDict = _ALL_CONFIGS.get(version)?.BuildableTile;
         if (cfgDict == null) {
             throw new Error(`Empty cfgDict.`);
         }
 
-        return cfgDict[unitType];
+        return cfgDict[unitType] ?? null;
     }
 
-    export function getVisionBonusCfg(version: string, unitType: UnitType): { [tileType: number]: VisionBonusCfg } | undefined {
+    export function getVisionBonusCfg(version: string, unitType: UnitType): { [tileType: number]: VisionBonusCfg } | null {
         const cfgDict = _ALL_CONFIGS.get(version)?.VisionBonus;
         if (cfgDict == null) {
             throw new Error(`Empty cfgDict.`);
         }
 
-        return cfgDict[unitType];
+        return cfgDict[unitType] ?? null;
     }
 
     export function getMoveCostCfg(version: string, baseType: TileBaseType, objectType: TileObjectType): { [moveType: number]: MoveCostCfg } {

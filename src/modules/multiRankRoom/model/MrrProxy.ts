@@ -1,8 +1,9 @@
 
+import Helpers              from "../../tools/helpers/Helpers";
+import NetManager           from "../../tools/network/NetManager";
 import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import NetManager           from "../../tools/network/NetManager";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import MrrModel             from "./MrrModel";
 
@@ -29,8 +30,8 @@ namespace MrrProxy {
     function _onMsgMrrGetMaxConcurrentCount(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrGetMaxConcurrentCount.IS;
         if (!data.errorCode) {
-            MrrModel.setMaxConcurrentCount(false, data.maxCountForStd);
-            MrrModel.setMaxConcurrentCount(true, data.maxCountForFog);
+            MrrModel.setMaxConcurrentCount(false, Helpers.getExisted(data.maxCountForStd));
+            MrrModel.setMaxConcurrentCount(true, Helpers.getExisted(data.maxCountForFog));
             Notify.dispatch(NotifyType.MsgMrrGetMaxConcurrentCount, data);
         }
     }
@@ -57,7 +58,7 @@ namespace MrrProxy {
     function _onMsgMrrGetMyRoomPublicInfoList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrGetMyRoomPublicInfoList.IS;
         if (!data.errorCode) {
-            MrrModel.updateWithMyRoomInfoList(data.roomInfoList);
+            MrrModel.updateWithMyRoomInfoList(data.roomInfoList || []);
             Notify.dispatch(NotifyType.MsgMrrGetMyRoomPublicInfoList, data);
         }
     }
@@ -85,8 +86,8 @@ namespace MrrProxy {
     function _onMsgMrrSetMaxConcurrentCount(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrSetMaxConcurrentCount.IS;
         if (!data.errorCode) {
-            MrrModel.setMaxConcurrentCount(false, data.maxCountForStd);
-            MrrModel.setMaxConcurrentCount(true, data.maxCountForFog);
+            MrrModel.setMaxConcurrentCount(false, Helpers.getExisted(data.maxCountForStd));
+            MrrModel.setMaxConcurrentCount(true, Helpers.getExisted(data.maxCountForFog));
             Notify.dispatch(NotifyType.MsgMrrSetMaxConcurrentCount, data);
         }
     }

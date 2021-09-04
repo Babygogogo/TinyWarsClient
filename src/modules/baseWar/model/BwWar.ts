@@ -126,19 +126,13 @@ namespace TwnsBwWar {
                 return warEventManagerError;
             }
 
-            const randomNumberManagerError  = this.getRandomNumberManager().init({
+            this.getRandomNumberManager().init({
                 isNeedSeedRandom: this.getIsNeedSeedRandom(),
                 initialState    : data.seedRandomInitialState,
                 currentState    : data.seedRandomCurrentState,
             });
-            if (randomNumberManagerError) {
-                return randomNumberManagerError;
-            }
 
-            const executedActionManagerError = this.getExecutedActionManager().init(this.getIsNeedExecutedAction(), data.executedActions || []);
-            if (executedActionManagerError) {
-                return executedActionManagerError;
-            }
+            this.getExecutedActionManager().init(this.getIsNeedExecutedAction(), data.executedActions || []);
 
             const playerManager         = this.getPlayerManager();
             const playerManagerError    = playerManager.init(data.playerManager, configVersion);
@@ -177,39 +171,9 @@ namespace TwnsBwWar {
             return this._view;
         }
 
-        public serializeForCreateSfw(): ISerialWar | undefined {
-            const settingsForCommon = this.getCommonSettingManager().serializeForCreateSfw();
-            if (settingsForCommon == null) {
-                Logger.error(`BwWar.serializeForCreateSfw() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            const serialWarEventManager = this.getWarEventManager().serializeForCreateSfw();
-            if (serialWarEventManager == null) {
-                Logger.error(`BwWar.serializeForCreateSfw() empty serialWarEventManager.`);
-                return undefined;
-            }
-
-            const serialPlayerManager = this.getPlayerManager().serializeForCreateSfw();
-            if (serialPlayerManager == null) {
-                Logger.error(`BwWar.serializeForCreateSfw() empty serialPlayerManager.`);
-                return undefined;
-            }
-
-            const serialTurnManager = this.getTurnManager().serializeForCreateSfw();
-            if (serialTurnManager == null) {
-                Logger.error(`BwWar.serializeForCreateSfw() empty serialTurnManager.`);
-                return undefined;
-            }
-
-            const serialField = this.getField().serializeForCreateSfw();
-            if (serialField == null) {
-                Logger.error(`BwWar.serializeForCreateSfw() empty serialField.`);
-                return undefined;
-            }
-
+        public serializeForCreateSfw(): ISerialWar {
             return {
-                settingsForCommon,
+                settingsForCommon           : this.getCommonSettingManager().serializeForCreateSfw(),
                 settingsForMcw              : null,
                 settingsForMrw              : null,
                 settingsForMfw              : null,
@@ -222,10 +186,10 @@ namespace TwnsBwWar {
                 seedRandomCurrentState      : null,
                 executedActions             : [],
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
-                warEventManager             : serialWarEventManager,
-                playerManager               : serialPlayerManager,
-                turnManager                 : serialTurnManager,
-                field                       : serialField,
+                warEventManager             : this.getWarEventManager().serializeForCreateSfw(),
+                playerManager               : this.getPlayerManager().serializeForCreateSfw(),
+                turnManager                 : this.getTurnManager().serializeForCreateSfw(),
+                field                       : this.getField().serializeForCreateSfw(),
             };
         }
         public serializeForCreateMfr(): ISerialWar | undefined {
@@ -401,14 +365,8 @@ namespace TwnsBwWar {
             return this.getCommonSettingManager().getConfigVersion();
         }
 
-        public getWarRule(): ProtoTypes.WarRule.IWarRule | null | undefined {
-            const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
-            if (settingsForCommon == null) {
-                Logger.error(`BwWar.getWarRule() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            return settingsForCommon.warRule;
+        public getWarRule(): ProtoTypes.WarRule.IWarRule {
+            return this.getCommonSettingManager().getWarRule();
         }
 
         public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer {
@@ -447,10 +405,10 @@ namespace TwnsBwWar {
             return this.getField().getCursor();
         }
 
-        public getEnterTurnTime(): number | undefined {
+        public getEnterTurnTime(): number {
             return this.getTurnManager().getEnterTurnTime();
         }
-        public getTurnPhaseCode(): Types.TurnPhaseCode | null | undefined {
+        public getTurnPhaseCode(): Types.TurnPhaseCode {
             return this.getTurnManager().getPhaseCode();
         }
 

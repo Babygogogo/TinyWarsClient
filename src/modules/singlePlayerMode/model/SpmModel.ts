@@ -1,10 +1,11 @@
 
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import Types                from "../../tools/helpers/Types";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import ProtoManager         from "../../tools/proto/ProtoManager";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Helpers          from "../../tools/helpers/Helpers";
+import Types            from "../../tools/helpers/Types";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoManager     from "../../tools/proto/ProtoManager";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
 namespace SpmModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -70,31 +71,31 @@ namespace SpmModel {
         getSlotDict().clear();
         for (const fullData of data.dataArray || []) {
             setSlotData({
-                slotIndex       : fullData.slotIndex,
-                slotExtraData   : ProtoManager.decodeAsSpmWarSaveSlotExtraData(fullData.encodedExtraData),
-                warData         : ProtoManager.decodeAsSerialWar(fullData.encodedWarData),
+                slotIndex       : Helpers.getExisted(fullData.slotIndex),
+                slotExtraData   : ProtoManager.decodeAsSpmWarSaveSlotExtraData(Helpers.getExisted(fullData.encodedExtraData)),
+                warData         : ProtoManager.decodeAsSerialWar(Helpers.getExisted(fullData.encodedWarData)),
             });
         }
     }
     export function updateOnMsgSpmCreateScw(data: NetMessage.MsgSpmCreateScw.IS): void {
         setSlotData({
-            slotIndex       : data.slotIndex,
-            slotExtraData   : data.extraData,
-            warData         : data.warData,
+            slotIndex       : Helpers.getExisted(data.slotIndex),
+            slotExtraData   : Helpers.getExisted(data.extraData),
+            warData         : Helpers.getExisted(data.warData),
         });
     }
     export function updateOnMsgSpmCreateSfw(data: NetMessage.MsgSpmCreateSfw.IS): void {
         setSlotData({
-            slotIndex       : data.slotIndex,
-            warData         : data.warData,
-            slotExtraData   : data.extraData,
+            slotIndex       : Helpers.getExisted(data.slotIndex),
+            warData         : Helpers.getExisted(data.warData),
+            slotExtraData   : Helpers.getExisted(data.extraData),
         });
     }
     export function updateOnMsgSpmCreateSrw(data: NetMessage.MsgSpmCreateSrw.IS): void {
         setSlotData({
-            slotIndex       : data.slotIndex,
-            warData         : data.warData,
-            slotExtraData   : data.extraData,
+            slotIndex       : Helpers.getExisted(data.slotIndex),
+            warData         : Helpers.getExisted(data.warData),
+            slotExtraData   : Helpers.getExisted(data.extraData),
         });
     }
     export function updateOnMsgSpmDeleteWarSaveSlot(slotIndex: number): void {
@@ -102,27 +103,27 @@ namespace SpmModel {
     }
     export function updateOnMsgSpmSaveScw(data: NetMessage.MsgSpmSaveScw.IS): void {
         setSlotData({
-            slotIndex       : data.slotIndex,
-            warData         : data.warData,
-            slotExtraData   : data.slotExtraData,
+            slotIndex       : Helpers.getExisted(data.slotIndex),
+            warData         : Helpers.getExisted(data.warData),
+            slotExtraData   : Helpers.getExisted(data.slotExtraData),
         });
     }
     export function updateOnMsgSpmSaveSfw(data: NetMessage.MsgSpmSaveSfw.IS): void {
         setSlotData({
-            slotIndex       : data.slotIndex,
-            warData         : data.warData,
-            slotExtraData   : data.slotExtraData,
+            slotIndex       : Helpers.getExisted(data.slotIndex),
+            warData         : Helpers.getExisted(data.warData),
+            slotExtraData   : Helpers.getExisted(data.slotExtraData),
         });
     }
     export function updateOnMsgSpmSaveSrw(data: NetMessage.MsgSpmSaveSrw.IS): void {
         setSlotData({
-            slotIndex       : data.slotIndex,
-            warData         : data.warData,
-            slotExtraData   : data.slotExtraData,
+            slotIndex       : Helpers.getExisted(data.slotIndex),
+            warData         : Helpers.getExisted(data.warData),
+            slotExtraData   : Helpers.getExisted(data.slotExtraData),
         });
     }
     export function updateOnMsgSpmValidateSrw(data: NetMessage.MsgSpmValidateSrw.IS): void {
-        getSlotDict().delete(data.slotIndex);
+        getSlotDict().delete(Helpers.getExisted(data.slotIndex));
     }
 }
 

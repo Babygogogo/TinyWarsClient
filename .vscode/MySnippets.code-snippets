@@ -19,7 +19,7 @@
         "scope": "typescript",
         "prefix": "ce",
         "body": [
-            ".catch(err => CompatibilityHelpers.handleError(err))",
+            ".catch(err => { CompatibilityHelpers.showError(err); throw err; })",
         ],
     },
     "Show Close Animation": {

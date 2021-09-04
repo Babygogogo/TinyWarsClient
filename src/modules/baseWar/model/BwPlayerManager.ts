@@ -106,30 +106,18 @@ namespace TwnsBwPlayerManager {
             }
         }
 
-        public serialize(): ISerialPlayerManager | undefined {
+        public serialize(): ISerialPlayerManager {
             const players: ISerialPlayer[] = [];
             for (const [, player] of this.getAllPlayersDict()) {
-                const serialPlayer = player.serialize();
-                if (serialPlayer == null) {
-                    Logger.error(`BwPlayerManager.serialize() empty serialPlayer.`);
-                    return undefined;
-                }
-
-                players.push(serialPlayer);
+                players.push(player.serialize());
             }
 
             return { players };
         }
-        public serializeForCreateSfw(): ISerialPlayerManager | undefined {
+        public serializeForCreateSfw(): ISerialPlayerManager {
             const players: ISerialPlayer[] = [];
             for (const [, player] of this.getAllPlayersDict()) {
-                const serialPlayer = player.serializeForCreateSfw();
-                if (serialPlayer == null) {
-                    Logger.error(`BwPlayerManager.serializeForCreateSfw() empty serialPlayer.`);
-                    return undefined;
-                }
-
-                players.push(serialPlayer);
+                players.push(player.serializeForCreateSfw());
             }
 
             return { players };

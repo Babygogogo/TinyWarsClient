@@ -178,9 +178,9 @@ namespace TwnsBwTile {
             this._setBaseShapeId(baseShapeId);
             this._setObjectShapeId(objectShapeId);
             this._setDecoratorShapeId(decoratorShapeId);
-            this.setCurrentHp(getRevisedCurrentHp(currentHp, templateCfg));
-            this.setCurrentBuildPoint(getRevisedCurrentBuildPoint(currentBuildPoint, templateCfg));
-            this.setCurrentCapturePoint(getRevisedCurrentCapturePoint(currentCapturePoint, templateCfg));
+            this.setCurrentHp(currentHp ?? (templateCfg.maxHp ?? null));
+            this.setCurrentBuildPoint(currentBuildPoint ?? (templateCfg.maxBuildPoint ?? null));
+            this.setCurrentCapturePoint(currentCapturePoint ?? (templateCfg.maxCapturePoint ?? null));
 
             return ClientErrorCode.NoError;
         }
@@ -315,9 +315,8 @@ namespace TwnsBwTile {
             return Helpers.getDefined(this._war);
         }
 
-        public getConfigVersion(): string | undefined {
-            const cfg = this._getTemplateCfg();
-            return cfg ? cfg.version : undefined;
+        public getConfigVersion(): string {
+            return this._getTemplateCfg().version;
         }
 
         private _setTemplateCfg(cfg: TileTemplateCfg): void {
@@ -415,28 +414,26 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for hp and armor.
         ////////////////////////////////////////////////////////////////////////////////
-        public getMaxHp(): number | null | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getMaxHp() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.maxHp;
+        public getMaxHp(): number | null {
+            return this._getTemplateCfg().maxHp ?? null;
         }
 
         public getCurrentHp(): number | null {
             return Helpers.getDefined(this._currentHp);
         }
-        public setCurrentHp(hp: number | null | undefined): void {
+        public setCurrentHp(hp: number | null): void {
             const maxHp = this.getMaxHp();
             if (maxHp == null) {
-                Logger.assert(hp == null, "TileModel.setCurrentHp() error, hp: ", hp);
+                if (hp != null) {
+                    throw new Error(`Non null hp: ${hp}.`);
+                }
             } else {
-                Logger.assert((hp != null) && (hp >= 0) && (hp <= maxHp), "TileModel.setCurrentHp() error, hp: ", hp);
+                if ((hp == null) || (hp < 0) || (hp > maxHp)) {
+                    throw new Error(`Invalid hp: ${hp}`);
+                }
             }
 
-            this._currentHp = hp == null ? undefined : hp;
+            this._currentHp = hp;
         }
 
         public getArmorType(): Types.ArmorType | null | undefined {
@@ -462,28 +459,26 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for build.
         ////////////////////////////////////////////////////////////////////////////////
-        public getMaxBuildPoint(): number | null | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getMaxBuildPoint() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.maxBuildPoint;
+        public getMaxBuildPoint(): number | null {
+            return this._getTemplateCfg().maxBuildPoint ?? null;
         }
 
         public getCurrentBuildPoint(): number | null {
             return Helpers.getDefined(this._currentBuildPoint);
         }
-        public setCurrentBuildPoint(point: number | null | undefined): void {
+        public setCurrentBuildPoint(point: number | null): void {
             const maxPoint = this.getMaxBuildPoint();
             if (maxPoint == null) {
-                Logger.assert(point == null, "BwTile.setCurrentBuildPoint() error, point: ", point);
+                if (point != null) {
+                    throw new Error(`Non null point: ${point}`);
+                }
             } else {
-                Logger.assert((point != null) && (point >= 0) && (point <= maxPoint), "BwTile.setCurrentBuildPoint() error, point: ", point);
+                if ((point == null) || (point < 0) || (point > maxPoint)) {
+                    throw new Error(`Invalid point: ${point}`);
+                }
             }
 
-            this._currentBuildPoint = point == null ? undefined : point;
+            this._currentBuildPoint = point;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -496,15 +491,19 @@ namespace TwnsBwTile {
         public getCurrentCapturePoint(): number | null {
             return Helpers.getDefined(this._currentCapturePoint);
         }
-        public setCurrentCapturePoint(point: number | null | undefined): void {
+        public setCurrentCapturePoint(point: number | null): void {
             const maxPoint = this.getMaxCapturePoint();
             if (maxPoint == null) {
-                Logger.assert(point == null, "BwTile.setCurrentCapturePoint() error, point: ", point);
+                if (point != null) {
+                    throw new Error(`Non null point: ${point}`);
+                }
             } else {
-                Logger.assert((point != null) && (point >= 0) && (point <= maxPoint), "BwTile.setCurrentCapturePoint() error, point: ", point);
+                if ((point == null) || (point < 0) || (point > maxPoint)) {
+                    throw new Error(`Invalid point: ${point}`);
+                }
             }
 
-            this._currentCapturePoint = point == null ? undefined : point;
+            this._currentCapturePoint = point;
         }
 
         public checkIsDefeatOnCapture(): boolean {
@@ -620,14 +619,8 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for type.
         ////////////////////////////////////////////////////////////////////////////////
-        public getType(): TileType | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getType() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.type;
+        public getType(): TileType {
+            return this._getTemplateCfg().type;
         }
 
         public resetByTypeAndPlayerIndex({ baseType, objectType, playerIndex }: {
@@ -692,74 +685,28 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for income.
         ////////////////////////////////////////////////////////////////////////////////
-        private _getCfgIncome(): number | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile._getCfgIncome() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.incomePerTurn || 0;
+        private _getCfgIncome(): number {
+            return this._getTemplateCfg().incomePerTurn ?? 0;
         }
-        public getIncomeForPlayer(playerIndex: number): number | undefined {
-            if ((this.getPlayerIndex() !== playerIndex) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+        public getIncomeForPlayer(playerIndex: number): number {
+            if ((this.getPlayerIndex() !== playerIndex)                 ||
+                (playerIndex === CommonConstants.WarNeutralPlayerIndex)
+            ) {
                 return 0;
             }
 
-            const cfgIncome = this._getCfgIncome();
-            if (cfgIncome == null) {
-                Logger.error(`BwTile.getIncomeForPlayer() empty cfgIncome.`);
-                return undefined;
-            }
-
-            const war = this.getWar();
-            if (war == null) {
-                Logger.error(`BwTile.getIncomeForPlayer() war is empty.`);
-                return undefined;
-            }
-
-            const multiplierForSettings = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
-            if (multiplierForSettings == null) {
-                Logger.error(`BwTile.getIncomeForPlayer() empty multiplierForSettings.`);
-                return undefined;
-            }
-
-            const configVersion = war.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwTile.getIncomeForPlayer() empty configVersion.`);
-                return undefined;
-            }
-
-            const player = this.getPlayer();
-            if (player == null) {
-                Logger.error(`BwTile.getIncomeForPlayer() empty player.`);
-                return undefined;
-            }
-
-            const tileType = this.getType();
-            if (tileType == null) {
-                Logger.error(`BwTile.getIncomeForPlayer() empty tileType.`);
-                return undefined;
-            }
-
-            const gridIndex = this.getGridIndex();
-            if (gridIndex == null) {
-                Logger.error(`BwTile.getIncomeForPlayer() empty gridIndex.`);
-                return undefined;
-            }
-
-            const coZoneRadius = player.getCoZoneRadius();
-            if (coZoneRadius == null) {
-                Logger.error(`BwTile.getIncomeForPlayer() empty coZoneRadius.`);
-                return undefined;
-            }
-
+            const war                       = this.getWar();
+            const configVersion             = war.getConfigVersion();
+            const player                    = this.getPlayer();
+            const tileType                  = this.getType();
+            const gridIndex                 = this.getGridIndex();
+            const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let modifierForSkill            = 1;
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfTileIncome;
-                if ((cfg)                                                                                                       &&
-                    (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[1]))                                  &&
+                if ((cfg)                                                                       &&
+                    (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[1]))  &&
                     (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
@@ -771,7 +718,12 @@ namespace TwnsBwTile {
                 }
             }
 
-            return Math.floor(cfgIncome * multiplierForSettings / 100 * modifierForSkill);
+            return Math.floor(
+                this._getCfgIncome()
+                * war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex)
+                / 100
+                * modifierForSkill
+            );
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -795,64 +747,22 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for move cost.
         ////////////////////////////////////////////////////////////////////////////////
-        private _getMoveCostCfg(): { [moveType: number]: ProtoTypes.Config.IMoveCostCfg } | undefined {
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwTile._getMoveCostCfg() empty configVersion.`);
-                return undefined;
-            }
-
-            const baseType = this.getBaseType();
-            if (baseType == null) {
-                Logger.error(`BwTile._getMoveCostCfg() empty baseType.`);
-                return undefined;
-            }
-
-            const objectType = this.getObjectType();
-            if (objectType == null) {
-                Logger.error(`BwTile._getMoveCostCfg() empty objectType.`);
-                return undefined;
-            }
-
-            return ConfigManager.getMoveCostCfg(configVersion, baseType, objectType);
+        private _getMoveCostCfg(): { [moveType: number]: Types.MoveCostCfg } {
+            return ConfigManager.getMoveCostCfg(this.getConfigVersion(), this.getBaseType(), this.getObjectType());
         }
 
-        public getMoveCostByMoveType(moveType: Types.MoveType): number | undefined | null {
-            const cfg = this._getMoveCostCfg();
-            if (!cfg) {
-                Logger.error(`BwTile.getMoveCostByMoveType() cfg is empty.`);
-                return undefined;
-            }
-
-            return cfg[moveType]?.cost;
+        public getMoveCostByMoveType(moveType: Types.MoveType): number | null {
+            return this._getMoveCostCfg()[moveType]?.cost ?? null;
         }
-        public getMoveCostByUnit(unit: BwUnit): number | undefined | null {
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwTile.getMoveCostByUnit() configVersion is empty.`);
-                return undefined;
-            }
-
-            const unitType = unit.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwTile.getMoveCostByUnit() unitType is empty.`);
-                return undefined;
-            }
-
-            const moveType = unit.getMoveType();
-            if (moveType == null) {
-                Logger.error(`BwTile.getMoveCostByUnit() moveType is empty.`);
-                return undefined;
-            }
-
+        public getMoveCostByUnit(unit: BwUnit): number | null {
             const tileType = this.getType();
-            if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))                        &&
-                (this.getTeamIndex() !== unit.getTeamIndex())                                                   &&
-                (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.LargeNaval))
+            if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))                                            &&
+                (this.getTeamIndex() !== unit.getTeamIndex())                                                                       &&
+                (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), Types.UnitCategory.LargeNaval))
             ) {
-                return undefined;
+                return null;
             } else {
-                return this.getMoveCostByMoveType(moveType);
+                return this.getMoveCostByMoveType(unit.getMoveType());
             }
         }
 
@@ -1275,22 +1185,6 @@ namespace TwnsBwTile {
         public getHasFog(): boolean {
             return this._hasFog;
         }
-    }
-
-    function getRevisedCurrentHp(currentHp: number | null | undefined, templateCfg: TileTemplateCfg): number | null | undefined {
-        return currentHp != null
-            ? currentHp
-            : templateCfg.maxHp;
-    }
-    function getRevisedCurrentBuildPoint(currentBuildPoint: number | null | undefined, templateCfg: TileTemplateCfg): number | null | undefined {
-        return currentBuildPoint != null
-            ? currentBuildPoint
-            : templateCfg.maxBuildPoint;
-    }
-    function getRevisedCurrentCapturePoint(currentCapturePoint: number | null | undefined, templateCfg: TileTemplateCfg): number | null | undefined {
-        return currentCapturePoint != null
-            ? currentCapturePoint
-            : templateCfg.maxCapturePoint;
     }
 }
 

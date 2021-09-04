@@ -1,4 +1,5 @@
 
+import Helpers          from "../helpers/Helpers";
 import Logger           from "../helpers/Logger";
 import TwnsUiComponent  from "./UiComponent";
 
@@ -23,11 +24,14 @@ namespace TwnsUiTabPage {
             this._doOpen();
         }
 
-        private _setOpenData(data: OpenData | undefined): void {
+        private _setOpenData(data: OpenData): void {
             this._openData = data;
         }
-        protected _getOpenData(): OpenData | undefined {
-            return this._openData;
+        protected _getOpenData(): OpenData {
+            return Helpers.getDefined(this._openData);
+        }
+        private _clearOpenData(): void {
+            delete this._openData;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -37,8 +41,7 @@ namespace TwnsUiTabPage {
             (this.parent) && (this.parent.removeChild(this));
 
             this._doClose();
-
-            this._setOpenData(undefined);
+            this._clearOpenData();
         }
     }
 }

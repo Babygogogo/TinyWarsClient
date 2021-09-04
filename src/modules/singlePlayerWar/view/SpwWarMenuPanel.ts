@@ -1,6 +1,5 @@
 
 import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
-import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
 import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
@@ -13,6 +12,7 @@ import CommonConstants                  from "../../tools/helpers/CommonConstant
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
+import Helpers                          from "../../tools/helpers/Helpers";
 import Logger                           from "../../tools/helpers/Logger";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
@@ -30,7 +30,6 @@ import UserModel                        from "../../user/model/UserModel";
 import UserProxy                        from "../../user/model/UserProxy";
 import TwnsUserSettingsPanel            from "../../user/view/UserSettingsPanel";
 import WarMapModel                      from "../../warMap/model/WarMapModel";
-import TwnsSpwActionPlanner             from "../model/SpwActionPlanner";
 import SpwModel                         from "../model/SpwModel";
 import TwnsSpwPlayerManager             from "../model/SpwPlayerManager";
 import TwnsSpwWar                       from "../model/SpwWar";
@@ -42,7 +41,6 @@ namespace TwnsSpwWarMenuPanel {
     import UserSettingsPanel            = TwnsUserSettingsPanel.UserSettingsPanel;
     import MfrCreateSettingsPanel       = TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel;
     import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
-    import SpwActionPlanner             = TwnsSpwActionPlanner.SpwActionPlanner;
     import SpwPlayerManager             = TwnsSpwPlayerManager.SpwPlayerManager;
     import SpwWar                       = TwnsSpwWar.SpwWar;
     import SpwLoadWarPanel              = TwnsSpwLoadWarPanel.SpwLoadWarPanel;
@@ -50,7 +48,6 @@ namespace TwnsSpwWarMenuPanel {
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import BwPlayer                     = TwnsBwPlayer.BwPlayer;
-    import BwUnitMap                    = TwnsBwUnitMap.BwUnitMap;
 
     // eslint-disable-next-line no-shadow
     enum MenuType {
@@ -64,25 +61,23 @@ namespace TwnsSpwWarMenuPanel {
 
         private static _instance: SpwWarMenuPanel;
 
-        private _group          : eui.Group;
-        private _listCommand    : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
-        private _labelNoCommand : TwnsUiLabel.UiLabel;
-        private _btnBack        : TwnsUiButton.UiButton;
+        private readonly _group!                : eui.Group;
+        private readonly _listCommand!          : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
+        private readonly _labelNoCommand!       : TwnsUiLabel.UiLabel;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
 
-        private _groupInfo              : eui.Group;
-        private _labelMenuTitle         : TwnsUiLabel.UiLabel;
-        private _labelWarInfoTitle      : TwnsUiLabel.UiLabel;
-        private _labelPlayerInfoTitle   : TwnsUiLabel.UiLabel;
-        private _btnMapNameTitle        : TwnsUiButton.UiButton;
-        private _labelMapName           : TwnsUiLabel.UiLabel;
-        private _listWarInfo            : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
-        private _btnBuildings           : TwnsUiButton.UiButton;
-        private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _groupInfo!            : eui.Group;
+        private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelWarInfoTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerInfoTitle! : TwnsUiLabel.UiLabel;
+        private readonly _btnMapNameTitle!      : TwnsUiButton.UiButton;
+        private readonly _labelMapName!         : TwnsUiLabel.UiLabel;
+        private readonly _listWarInfo!          : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private readonly _btnBuildings!         : TwnsUiButton.UiButton;
+        private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
-        private _war            : SpwWar;
-        private _unitMap        : BwUnitMap;
-        private _actionPlanner  : SpwActionPlanner;
-        private _dataForList    : DataForCommandRenderer[];
+        private _war?           : SpwWar;
+        private _dataForList?   : DataForCommandRenderer[] | null;
         private _menuType       = MenuType.Main;
 
         public static show(): void {
@@ -125,29 +120,33 @@ namespace TwnsSpwWarMenuPanel {
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._listWarInfo.setItemRenderer(InfoRenderer);
 
-            const war           = SpwModel.getWar();
-            this._war           = war;
-            this._unitMap       = war.getUnitMap();
-            this._actionPlanner = war.getActionPlanner() as SpwActionPlanner;
+            const war           = Helpers.getExisted(SpwModel.getWar());
             this._menuType      = MenuType.Main;
+            this._setWar(war);
 
             this._updateView();
 
             Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
-            this._war           = null;
-            this._unitMap       = null;
-            this._dataForList   = null;
+            delete this._war;
+            delete this._dataForList;
 
             Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
+        }
+
+        private _setWar(war: SpwWar): void {
+            this._war = war;
+        }
+        private _getWar(): SpwWar {
+            return Helpers.getDefined(this._war);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyBwPlannerStateChanged(): void {
-            const war = this._war;
+            const war = this._getWar();
             if (war.checkIsHumanInTurn()) {
                 this.close();
             } else {
@@ -177,9 +176,9 @@ namespace TwnsSpwWarMenuPanel {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : data.slotIndex,
-                        slotExtraData   : data.extraData,
-                        warData         : data.warData,
+                        slotIndex       : Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Helpers.getExisted(data.extraData),
+                        warData         : Helpers.getExisted(data.warData),
                     });
                 },
             });
@@ -201,8 +200,7 @@ namespace TwnsSpwWarMenuPanel {
                 this._menuType = MenuType.Main;
                 this._updateListCommand();
             } else {
-                Logger.error(`McwWarMenuPanel._onTouchedBtnBack() invalid this._menuType: ${type}`);
-                this.close();
+                throw new Error(`Invalid menuType: ${type}`);
             }
         }
 
@@ -237,9 +235,14 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private async _updateGroupInfo(): Promise<void> {
-            const war               = this._war;
-            const mapFileName       = war.getMapId();
-            this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(LangTextType.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
+            const war   = this._getWar();
+            const mapId = war.getMapId();
+            const label = this._labelMapName;
+            if (mapId == null) {
+                label.text = `----`;
+            } else {
+                label.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined} (${Lang.getText(LangTextType.B0163)}: ${await WarMapModel.getDesignerName(mapId) ?? CommonConstants.ErrorTextForUndefined})`;
+            }
         }
 
         private _updateListWarInfo(): void {
@@ -250,7 +253,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         public updateListPlayer(): void {
-            const war   = this._war;
+            const war   = this._getWar();
             const data  : DataForPlayerRenderer[] = [];
             war.getPlayerManager().forEachPlayer(false, (player: BwPlayer) => {
                 data.push({
@@ -266,7 +269,7 @@ namespace TwnsSpwWarMenuPanel {
         // War info data creators.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _createWarInfoTurnIndex(): DataForInfoRenderer {
-            const war                   = this._war;
+            const war                   = this._getWar();
             const turnIndex             = war.getTurnManager().getTurnIndex();
             const executedActionsCount  = war.getExecutedActionManager().getExecutedActionsCount();
             return {
@@ -293,7 +296,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            return [
+            return Helpers.getNonNullElements([
                 // this._createCommandOpenCoInfoMenu(),
                 this._createCommandPlayerUseCop(),
                 this._createCommandPlayerUseScop(),
@@ -304,18 +307,18 @@ namespace TwnsSpwWarMenuPanel {
                 // this._createCommandChat(),
                 this._createCommandGotoMyWarListPanel(),
                 this._createCommandGotoLobby(),
-            ].filter(v => !!v);
+            ]);
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            return [
+            return Helpers.getNonNullElements([
                 this._createCommandPlayerDeleteUnit(),
                 this._createCommandSimulation(),
                 this._createCommandCreateMfr(),
                 this._createCommandDeleteWar(),
                 this._createCommandUserSettings(),
                 this._createCommandSetPathMode(),
-            ].filter(v => !!v);
+            ]);
         }
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
@@ -342,7 +345,7 @@ namespace TwnsSpwWarMenuPanel {
         //     return {
         //         name    : Lang.getText(LangTextType.B0140),
         //         callback: () => {
-        //             const war = this._war;
+        //             const war = this._getWar();
         //             BwCoListPanel.show({
         //                 war,
         //                 selectedIndex: war.getPlayerIndexInTurn() - 1,
@@ -353,13 +356,14 @@ namespace TwnsSpwWarMenuPanel {
         // }
 
         private _createCommandPlayerUseCop(): DataForCommandRenderer | undefined {
-            const war           = this._war;
+            const war           = this._getWar();
             const skillType     = Types.CoSkillType.Power;
             const playerInTurn  = war.getPlayerInTurn();
+            const actionPlanner = war.getActionPlanner();
             if ((!war.checkIsHumanInTurn())                                         ||
                 (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (this._actionPlanner.checkIsStateRequesting())
+                (actionPlanner.checkIsStateRequesting())
             ) {
                 return undefined;
             } else {
@@ -369,7 +373,7 @@ namespace TwnsSpwWarMenuPanel {
                         CommonConfirmPanel.show({
                             title   : Lang.getText(LangTextType.B0142),
                             content : Lang.getText(LangTextType.A0054),
-                            callback: () => this._actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
+                            callback: () => actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
                         });
                     },
                 };
@@ -377,13 +381,14 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _createCommandPlayerUseScop(): DataForCommandRenderer | undefined {
-            const war           = this._war;
+            const war           = this._getWar();
             const skillType     = Types.CoSkillType.SuperPower;
             const playerInTurn  = war.getPlayerInTurn();
+            const actionPlanner = war.getActionPlanner();
             if ((!war.checkIsHumanInTurn())                                         ||
                 (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (this._actionPlanner.checkIsStateRequesting())
+                (actionPlanner.checkIsStateRequesting())
             ) {
                 return undefined;
             } else {
@@ -393,7 +398,7 @@ namespace TwnsSpwWarMenuPanel {
                         CommonConfirmPanel.show({
                             title   : Lang.getText(LangTextType.B0144),
                             content : Lang.getText(LangTextType.A0058),
-                            callback: () => this._actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
+                            callback: () => actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
                         });
                     },
                 };
@@ -401,7 +406,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _createCommandSaveScw(): DataForCommandRenderer | null {
-            const war = this._war;
+            const war = this._getWar();
             if ((!war)                                                              ||
                 (!war.checkIsHumanInTurn())                                         ||
                 (!war.getTurnManager().getPhaseCode())                              ||
@@ -429,7 +434,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _createCommandSaveSfw(): DataForCommandRenderer | null {
-            const war = this._war;
+            const war = this._getWar();
             if ((!war)                                                              ||
                 (!war.checkIsHumanInTurn())                                         ||
                 (!war.getTurnManager().getPhaseCode())                              ||
@@ -457,7 +462,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _createCommandLoadGame(): DataForCommandRenderer | null {
-            const war = this._war;
+            const war = this._getWar();
             if ((!war)                                                              ||
                 (!war.checkIsHumanInTurn())                                         ||
                 (!war.getTurnManager().getPhaseCode())                              ||
@@ -481,7 +486,7 @@ namespace TwnsSpwWarMenuPanel {
                     CommonConfirmPanel.show({
                         title   : Lang.getText(LangTextType.B0652),
                         content : Lang.getText(LangTextType.A0225),
-                        callback: () => FlowManager.gotoMyWarListPanel(this._war.getWarType()),
+                        callback: () => FlowManager.gotoMyWarListPanel(this._getWar().getWarType()),
                     });
                 },
             };
@@ -501,10 +506,11 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _createCommandPlayerDeleteUnit(): DataForCommandRenderer | undefined {
-            const war = this._war;
+            const war           = this._getWar();
+            const actionPlanner = war.getActionPlanner();
             if ((!war.checkIsHumanInTurn())                                         ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)
+                (actionPlanner.getState() !== Types.ActionPlannerState.Idle)
             ) {
                 return undefined;
             } else {
@@ -524,7 +530,7 @@ namespace TwnsSpwWarMenuPanel {
                             CommonConfirmPanel.show({
                                 title   : Lang.getText(LangTextType.B0081),
                                 content : Lang.getText(LangTextType.A0029),
-                                callback: () => this._actionPlanner.setStateRequestingPlayerDeleteUnit(),
+                                callback: () => actionPlanner.setStateRequestingPlayerDeleteUnit(),
                             });
                         }
                     },
@@ -533,7 +539,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _createCommandSimulation(): DataForCommandRenderer | null {
-            const war = this._war;
+            const war = this._getWar();
             return {
                 name    : Lang.getText(LangTextType.B0325),
                 callback: () => {
@@ -547,7 +553,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _createCommandCreateMfr(): DataForCommandRenderer | null {
-            const war = this._war;
+            const war = this._getWar();
             return {
                 name    : Lang.getText(LangTextType.B0557),
                 callback: async () => {
@@ -581,7 +587,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _createCommandDeleteWar(): DataForCommandRenderer | null {
-            const war           = this._war;
+            const war           = this._getWar();
             const saveSlotIndex = war ? war.getSaveSlotIndex() : null;
             return saveSlotIndex == null
                 ? null
@@ -652,19 +658,19 @@ namespace TwnsSpwWarMenuPanel {
         callback: () => void;
     };
     class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
-        private _group      : eui.Group;
-        private _labelName  : TwnsUiLabel.UiLabel;
+        private readonly _group!        : eui.Group;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._updateView();
         }
 
         public onItemTapEvent(): void {
-            this.data.callback();
+            this._getData().callback();
         }
 
         private _updateView(): void {
-            const data = this.data;
+            const data              = this._getData();
             this._labelName.text    = data.name;
         }
     }
@@ -675,11 +681,11 @@ namespace TwnsSpwWarMenuPanel {
         panel       : SpwWarMenuPanel;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private _group          : eui.Group;
-        private _btnName        : TwnsUiButton.UiButton;
-        private _labelForce     : TwnsUiLabel.UiLabel;
-        private _labelLost      : TwnsUiLabel.UiLabel;
-        private _listInfo       : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private readonly _group!        : eui.Group;
+        private readonly _btnName!      : TwnsUiButton.UiButton;
+        private readonly _labelForce!   : TwnsUiLabel.UiLabel;
+        private readonly _labelLost!    : TwnsUiLabel.UiLabel;
+        private readonly _listInfo!     : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -693,7 +699,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _onTouchedBtnName(): void {
-            const data  = this.data;
+            const data  = this._getData();
             const war   = data.war;
             if (war.getCanCheat()) {
                 const playerIndex   = data.playerIndex;
@@ -715,7 +721,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _updateView(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             const war                   = data.war;
             const playerIndex           = data.playerIndex;
             const player                = war.getPlayer(playerIndex);
@@ -738,7 +744,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data;
+            const data          = this._getData();
             const war           = data.war;
             const playerIndex   = data.playerIndex;
             const panel         = data.panel;
@@ -770,7 +776,7 @@ namespace TwnsSpwWarMenuPanel {
         ): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0397),
-                infoText                : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()),
+                infoText                : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
             };
@@ -1275,8 +1281,8 @@ namespace TwnsSpwWarMenuPanel {
         callbackOnTouchedTitle  : (() => void) | null;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : TwnsUiButton.UiButton;
-        private _labelValue : TwnsUiLabel.UiLabel;
+        private readonly _btnTitle!     : TwnsUiButton.UiButton;
+        private readonly _labelValue!   : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -1285,7 +1291,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         protected _onDataChanged(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;

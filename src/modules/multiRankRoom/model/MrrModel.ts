@@ -251,8 +251,8 @@ namespace MrrModel {
         }
     }
 
-    export async function createDataForCommonWarPlayerInfoPage(roomId: number): Promise<OpenDataForCommonWarPlayerInfoPage> {
-        const roomInfo = await getRoomInfo(roomId);
+    export async function createDataForCommonWarPlayerInfoPage(roomId: number | null): Promise<OpenDataForCommonWarPlayerInfoPage> {
+        const roomInfo = roomId == null ? null : await getRoomInfo(roomId);
         if (roomInfo == null) {
             return null;
         }
@@ -285,8 +285,8 @@ namespace MrrModel {
         };
     }
 
-    export async function createDataForCommonWarBasicSettingsPage(roomId: number): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const roomInfo = await getRoomInfo(roomId);
+    export async function createDataForCommonWarBasicSettingsPage(roomId: number | null): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const roomInfo = roomId == null ? null : await getRoomInfo(roomId);
         if (roomInfo == null) {
             return { dataArrayForListSettings: [] };
         }
@@ -352,8 +352,8 @@ namespace MrrModel {
         return openData;
     }
 
-    export async function createDataForCommonWarAdvancedSettingsPage(roomId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-        const roomInfo = await getRoomInfo(roomId);
+    export async function createDataForCommonWarAdvancedSettingsPage(roomId: number | null): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+        const roomInfo = roomId == null ? null : await getRoomInfo(roomId);
         if (roomInfo == null) {
             return null;
         }

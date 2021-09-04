@@ -170,7 +170,7 @@ namespace MfrProxy {
     function _onMsgMfrGetJoinableRoomInfoList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMfrGetJoinableRoomInfoList.IS;
         if (!data.errorCode) {
-            MfrModel.setJoinableRoomInfoList(data.roomInfoList);
+            MfrModel.setJoinableRoomInfoList(data.roomInfoList || []);
             Notify.dispatch(NotifyType.MsgMfrGetJoinableRoomInfoList, data);
         }
     }
@@ -184,7 +184,7 @@ namespace MfrProxy {
     function _onMsgMfrGetJoinedRoomInfoList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMfrGetJoinedRoomInfoList.IS;
         if (!data.errorCode) {
-            MfrModel.setJoinedRoomInfoList(data.roomInfoList);
+            MfrModel.setJoinedRoomInfoList(data.roomInfoList || []);
             Notify.dispatch(NotifyType.MsgMfrGetJoinedRoomInfoList, data);
         }
     }

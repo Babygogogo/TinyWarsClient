@@ -2,6 +2,7 @@
 import ScrCreateModel       from "../../singleCustomRoom/model/ScrCreateModel";
 import TwnsSpwWar           from "../../singlePlayerWar/model/SpwWar";
 import TwnsSrwWar           from "../../singleRankWar/model/SrwWar";
+import Helpers              from "../../tools/helpers/Helpers";
 import NetManager           from "../../tools/network/NetManager";
 import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import Notify               from "../../tools/notify/Notify";
@@ -152,7 +153,7 @@ namespace SpmProxy {
     function _onMsgSpmDeleteWarSaveSlot(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmDeleteWarSaveSlot.IS;
         if (!data.errorCode) {
-            SpmModel.updateOnMsgSpmDeleteWarSaveSlot(data.slotIndex);
+            SpmModel.updateOnMsgSpmDeleteWarSaveSlot(Helpers.getExisted(data.slotIndex));
             Notify.dispatch(NotifyType.MsgSpmDeleteWarSaveSlot, data);
         }
     }

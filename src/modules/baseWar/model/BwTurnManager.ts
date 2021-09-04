@@ -1356,8 +1356,8 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        public getPhaseCode(): TurnPhaseCode | undefined {
-            return this._phaseCode;
+        public getPhaseCode(): TurnPhaseCode {
+            return Helpers.getDefined(this._phaseCode);
         }
         private _setPhaseCode(code: TurnPhaseCode): void {
             if (this._phaseCode !== code) {
@@ -1366,8 +1366,8 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        public getEnterTurnTime(): number | undefined {
-            return this._enterTurnTime;
+        public getEnterTurnTime(): number {
+            return Helpers.getDefined(this._enterTurnTime);
         }
         private _setEnterTurnTime(time: number): void {
             this._enterTurnTime = time;

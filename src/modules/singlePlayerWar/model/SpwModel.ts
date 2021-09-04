@@ -31,7 +31,8 @@ namespace SpwModel {
     import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
     import BwWar                    = TwnsBwWar.BwWar;
 
-    let _war: SpwWar;
+    let _war: SpwWar | null = null;
+
     export function init(): void {
         // nothing to do.
     }
@@ -49,24 +50,10 @@ namespace SpwModel {
             unloadWar();
         }
 
-        const war = warData.settingsForScw
-            ? new ScwWar()
-            : (warData.settingsForSfw
-                ? new SfwWar()
-                : (warData.settingsForSrw
-                    ? new SrwWar()
-                    : null
-                )
-            );
-        if (war == null) {
-            Logger.error(`SpwModel.loadWar() empty war.`);
-            return undefined;
-        }
-
+        const war       = createWarByWarData(warData);
         const initError = await war.init(warData);
         if (initError) {
-            Logger.warn(`SpwModel.loadWar() initError: ${initError}`);
-            return undefined;
+            throw new Error(`InitError: ${initError}`);
         }
 
         war.startRunning().startRunningView();
@@ -85,10 +72,10 @@ namespace SpwModel {
         }
     }
 
-    export function getWar(): SpwWar | undefined | null {
+    export function getWar(): SpwWar | null {
         return _war;
     }
-    function setWar(war: SpwWar | null | undefined): void {
+    function setWar(war: SpwWar | null): void {
         _war = war;
     }
 
@@ -361,6 +348,18 @@ namespace SpwModel {
 
         war.getExecutedActionManager().addExecutedAction(revisedAction);
         return ClientErrorCode.NoError;
+    }
+
+    function createWarByWarData(warData: ProtoTypes.WarSerialization.ISerialWar): SpwWar {
+        if (warData.settingsForScw) {
+            return new ScwWar();
+        } else if (warData.settingsForSfw) {
+            return new SfwWar();
+        } else if (warData.settingsForSrw) {
+            return new SrwWar();
+        } else {
+            throw new Error(`Invalid warData.`);
+        }
     }
 }
 

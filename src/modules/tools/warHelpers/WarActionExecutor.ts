@@ -325,7 +325,7 @@ namespace WarActionExecutor {
 
         const drawVoteManager = war.getDrawVoteManager();
         if (!action.isAgree) {
-            drawVoteManager.setRemainingVotes(undefined);
+            drawVoteManager.setRemainingVotes(null);
         } else {
             drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
@@ -341,7 +341,7 @@ namespace WarActionExecutor {
 
         const drawVoteManager = war.getDrawVoteManager();
         if (!action.isAgree) {
-            drawVoteManager.setRemainingVotes(undefined);
+            drawVoteManager.setRemainingVotes(null);
         } else {
             drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
@@ -2506,7 +2506,7 @@ namespace WarActionExecutor {
                 unit.setGridIndex(gridIndex);
             }
 
-            unitForDrop.setLoaderUnitId(undefined);
+            unitForDrop.setLoaderUnitId(null);
             unitForDrop.setGridIndex(gridIndex);
             unitForDrop.setActionState(UnitActionState.Acted);
             unitsForDrop.push(unitForDrop);
@@ -2547,7 +2547,7 @@ namespace WarActionExecutor {
                 unit.setGridIndex(gridIndex);
             }
 
-            unitForDrop.setLoaderUnitId(undefined);
+            unitForDrop.setLoaderUnitId(null);
             unitForDrop.setGridIndex(gridIndex);
             unitForDrop.setActionState(UnitActionState.Acted);
             unitsForDrop.push(unitForDrop);

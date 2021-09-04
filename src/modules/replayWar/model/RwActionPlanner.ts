@@ -4,6 +4,7 @@ import TwnsBwProduceUnitPanel   from "../../baseWar/view/BwProduceUnitPanel";
 import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
 import FloatText                from "../../tools/helpers/FloatText";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -91,6 +92,18 @@ namespace TwnsRwActionPlanner {
             // nothing to do
         }
 
+        public setStateRequestingPlayerDeleteUnit(): void {
+            // nothing to do
+        }
+
+        public setStateRequestingPlayerVoteForDraw(): void {
+            // nothing to do
+        }
+
+        public setStateRequestingPlayerSurrender(): void {
+            // nothing to do
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for getting the next state when the player inputs.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +135,7 @@ namespace TwnsRwActionPlanner {
             }
         }
         protected _getNextStateOnTapWhenChoosingDropDestination(gridIndex: GridIndex): State {
-            if (this.getAvailableDropDestinations().every(g => !GridIndexHelpers.checkIsEqual(g, gridIndex))) {
+            if (Helpers.getExisted(this.getAvailableDropDestinations()).every(g => !GridIndexHelpers.checkIsEqual(g, gridIndex))) {
                 return State.ChoosingAction;
             } else {
                 const chosenUnits               = [this.getChoosingUnitForDrop()];
@@ -132,7 +145,7 @@ namespace TwnsRwActionPlanner {
                     chosenDropDestinations.push(data.destination);
                 }
 
-                const restLoadedUnits = this.getFocusUnit().getLoadedUnits().filter(unit => chosenUnits.every(u => u !== unit));
+                const restLoadedUnits = Helpers.getExisted(this.getFocusUnit()).getLoadedUnits().filter(unit => chosenUnits.every(u => u !== unit));
                 for (const unit of restLoadedUnits) {
                     if (this._calculateAvailableDropDestination(unit, chosenDropDestinations).length) {
                         return State.ChoosingAction;
@@ -143,7 +156,7 @@ namespace TwnsRwActionPlanner {
             }
         }
         protected _getNextStateOnTapWhenChoosingFlareDestination(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > this.getFocusUnit().getFlareMaxRange()) {
+            if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > Helpers.getExisted(Helpers.getExisted(this.getFocusUnit()).getFlareMaxRange())) {
                 return State.ChoosingAction;
             } else {
                 return State.ChoosingFlareDestination;
@@ -153,7 +166,8 @@ namespace TwnsRwActionPlanner {
             return State.ChoosingSiloDestination;
         }
         protected _getNextStateOnTapWhenChoosingProductionTarget(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.checkIsEqual(this.getCursor().getPreviousGridIndex(), gridIndex)) {
+            const previousGridIndex = this.getCursor().getPreviousGridIndex();
+            if ((previousGridIndex) && GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex)) {
                 return State.ChoosingProductionTarget;
             } else {
                 const turnManager       = this._getTurnManager();
@@ -242,7 +256,7 @@ namespace TwnsRwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _getActionUnitBeLoaded(): TwnsBwActionPlanner.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
-            const focusUnit     = this.getFocusUnit();
+            const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
@@ -256,7 +270,7 @@ namespace TwnsRwActionPlanner {
         }
         protected _getActionUnitJoin(): TwnsBwActionPlanner.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
-            const focusUnit     = this.getFocusUnit();
+            const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
@@ -272,7 +286,7 @@ namespace TwnsRwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return this.getFocusUnit().checkCanUseCoSkill(Types.CoSkillType.SuperPower)
+                return Helpers.getExisted(this.getFocusUnit()).checkCanUseCoSkill(Types.CoSkillType.SuperPower)
                     ? [{ actionType: UnitActionType.UseCoSuperPower, callback: () => {
                         // nothing to do
                     } }]
@@ -283,7 +297,7 @@ namespace TwnsRwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return this.getFocusUnit().checkCanUseCoSkill(Types.CoSkillType.Power)
+                return Helpers.getExisted(this.getFocusUnit()).checkCanUseCoSkill(Types.CoSkillType.Power)
                     ? [{ actionType: UnitActionType.UseCoPower, callback: () => {
                         // nothing to do
                     } }]
@@ -294,7 +308,7 @@ namespace TwnsRwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return this.getFocusUnit().checkCanLoadCoAfterMovePath(this.getMovePath())
+                return Helpers.getExisted(this.getFocusUnit()).checkCanLoadCoAfterMovePath(this.getMovePath())
                     ? [{ actionType: UnitActionType.LoadCo, callback: () => {
                         // nothing to do
                     } }]
@@ -305,7 +319,7 @@ namespace TwnsRwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
                     ? [{ actionType: UnitActionType.Capture, callback: () => {
                         // nothing to do
                     } }]
@@ -316,7 +330,7 @@ namespace TwnsRwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanDive())
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanDive())
                     ? [{ actionType: UnitActionType.Dive, callback: () => {
                         // nothing to do
                     } }]
@@ -327,7 +341,7 @@ namespace TwnsRwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanSurface())
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanSurface())
                     ? [{ actionType: UnitActionType.Surface, callback: () => {
                         // nothing to do
                     } }]
@@ -338,7 +352,7 @@ namespace TwnsRwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanBuildOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanBuildOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
                     ? [{ actionType: UnitActionType.BuildTile, callback: () => {
                         // nothing to do
                     } }]
@@ -349,11 +363,11 @@ namespace TwnsRwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                const focusUnit     = this.getFocusUnit();
+                const focusUnit     = Helpers.getExisted(this.getFocusUnit());
                 const playerIndex   = focusUnit.getPlayerIndex();
                 const unitMap       = this._getUnitMap();
                 if (focusUnit.checkIsAdjacentUnitSupplier()) {
-                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this._getMapSize())) {
+                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this.getMapSize())) {
                         const unit = unitMap.getUnitOnMap(gridIndex);
                         if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                             return [{ actionType: UnitActionType.Supply, callback: () => {
@@ -369,20 +383,20 @@ namespace TwnsRwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                const focusUnit         = this.getFocusUnit();
+                const focusUnit         = Helpers.getExisted(this.getFocusUnit());
                 const produceUnitType   = focusUnit.getProduceUnitType();
                 if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
                     return [];
                 } else {
                     const costForProduceUnit = focusUnit.getProduceUnitCost();
-                    if (focusUnit.getCurrentProduceMaterial() < 1) {
+                    if (Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) < 1) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0051)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
-                    } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
+                    } else if (focusUnit.getLoadedUnitsCount() >= Helpers.getExisted(focusUnit.getMaxLoadUnitsCount())) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0052)),

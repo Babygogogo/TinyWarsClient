@@ -1,5 +1,5 @@
 
-import TwnsCommonHelpPanel  from "../../common/view/CommonHelpPanel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
 import Helpers              from "../../tools/helpers/Helpers";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
@@ -11,31 +11,30 @@ import WarMapModel          from "../../warMap/model/WarMapModel";
 import RwModel              from "../model/RwModel";
 
 namespace TwnsRwReplayWarInfoPage {
-    import CommonHelpPanel  = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenDataForRwReplayWarInfoPage = {
-        replayId: number | null;
-    };
+        replayId: number;
+    } | null;
     export class RwReplayWarInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForRwReplayWarInfoPage> {
-        private readonly _labelMapNameTitle             : TwnsUiLabel.UiLabel;
-        private readonly _labelMapName                  : TwnsUiLabel.UiLabel;
+        private readonly _labelMapNameTitle!            : TwnsUiLabel.UiLabel;
+        private readonly _labelMapName!                 : TwnsUiLabel.UiLabel;
 
-        private readonly _labelWarTypeTitle             : TwnsUiLabel.UiLabel;
-        private readonly _labelWarType                  : TwnsUiLabel.UiLabel;
+        private readonly _labelWarTypeTitle!            : TwnsUiLabel.UiLabel;
+        private readonly _labelWarType!                 : TwnsUiLabel.UiLabel;
 
-        private readonly _labelGlobalRatingTitle        : TwnsUiLabel.UiLabel;
-        private readonly _labelGlobalRating             : TwnsUiLabel.UiLabel;
+        private readonly _labelGlobalRatingTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelGlobalRating!            : TwnsUiLabel.UiLabel;
 
-        private readonly _labelMyRatingTitle            : TwnsUiLabel.UiLabel;
-        private readonly _labelMyRating                 : TwnsUiLabel.UiLabel;
+        private readonly _labelMyRatingTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _labelMyRating!                : TwnsUiLabel.UiLabel;
 
-        private readonly _labelTurnIndexTitle           : TwnsUiLabel.UiLabel;
-        private readonly _labelTurnIndex                : TwnsUiLabel.UiLabel;
+        private readonly _labelTurnIndexTitle!          : TwnsUiLabel.UiLabel;
+        private readonly _labelTurnIndex!               : TwnsUiLabel.UiLabel;
 
-        private readonly _labelEndTimeTitle             : TwnsUiLabel.UiLabel;
-        private readonly _labelEndTime                  : TwnsUiLabel.UiLabel;
+        private readonly _labelEndTimeTitle!            : TwnsUiLabel.UiLabel;
+        private readonly _labelEndTime!                 : TwnsUiLabel.UiLabel;
 
         public constructor() {
             super();
@@ -62,23 +61,16 @@ namespace TwnsRwReplayWarInfoPage {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
         private _onNotifyMsgReplayGetInfoList(e: egret.Event): void {
             const data      = e.data as ProtoTypes.NetMessage.MsgReplayGetInfoList.IS;
-            const replayId  = this._getOpenData().replayId;
-            if ((replayId != null) && ((data.infos || []).find(v => v.replayBriefInfo.replayId === replayId))) {
+            const replayId  = this._getOpenData()?.replayId;
+            if ((replayId != null) && ((data.infos || []).find(v => Helpers.getExisted(v.replayBriefInfo).replayId === replayId))) {
                 this._updateComponentsForReplayInfo();
             }
-        }
-
-        private _onTouchedBtnTimerTypeHelp(e: egret.TouchEvent): void {
-            CommonHelpPanel.show({
-                title  : Lang.getText(LangTextType.B0574),
-                content: Lang.getText(LangTextType.R0003),
-            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -104,14 +96,14 @@ namespace TwnsRwReplayWarInfoPage {
 
         private async _updateLabelWarType(): Promise<void> {
             const replayInfo        = this._getReplayInfo();
-            this._labelWarType.text = replayInfo ? Lang.getWarTypeName(replayInfo.replayBriefInfo.warType) : `??`;
+            this._labelWarType.text = replayInfo ? Lang.getWarTypeName(Helpers.getExisted(replayInfo.replayBriefInfo?.warType)) ?? CommonConstants.ErrorTextForUndefined : `??`;
         }
 
         private async _updateLabelGlobalRating(): Promise<void> {
             const replayInfo                = this._getReplayInfo();
             const replayBriefInfo           = replayInfo ? replayInfo.replayBriefInfo : null;
             const raters                    = replayBriefInfo ? replayBriefInfo.totalRaters : null;
-            this._labelGlobalRating.text    = raters ? (replayBriefInfo.totalRating / raters).toFixed(2) : Lang.getText(LangTextType.B0001);
+            this._labelGlobalRating.text    = raters ? (Helpers.getExisted(replayBriefInfo?.totalRating) / raters).toFixed(2) : Lang.getText(LangTextType.B0001);
         }
 
         private async _updateLabelMyRating(): Promise<void> {
@@ -122,7 +114,9 @@ namespace TwnsRwReplayWarInfoPage {
 
         private async _updateLabelMapName(): Promise<void> {
             const replayInfo        = this._getReplayInfo();
-            this._labelMapName.text = replayInfo ? await WarMapModel.getMapNameInCurrentLanguage(replayInfo.replayBriefInfo.mapId) : undefined;
+            this._labelMapName.text = replayInfo
+                ? (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(replayInfo.replayBriefInfo?.mapId)) ?? CommonConstants.ErrorTextForUndefined)
+                : CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateLabelTurnIndex(): Promise<void> {
@@ -137,12 +131,15 @@ namespace TwnsRwReplayWarInfoPage {
             const replayInfo        = this._getReplayInfo();
             const replayBriefInfo   = replayInfo ? replayInfo.replayBriefInfo : null;
             this._labelEndTime.text = replayBriefInfo
-                ? Helpers.getTimestampShortText(replayBriefInfo.warEndTime)
+                ? Helpers.getTimestampShortText(Helpers.getExisted(replayBriefInfo.warEndTime))
                 : `??`;
         }
 
-        private _getReplayInfo(): ProtoTypes.Replay.IReplayInfo {
-            return RwModel.getReplayInfo(this._getOpenData().replayId);
+        private _getReplayInfo(): ProtoTypes.Replay.IReplayInfo | null {
+            const replayId = this._getOpenData()?.replayId;
+            return replayId == null
+                ? null
+                : (RwModel.getReplayInfo(replayId) ?? null);
         }
     }
 }

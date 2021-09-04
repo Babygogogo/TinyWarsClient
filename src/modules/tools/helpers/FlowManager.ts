@@ -87,14 +87,14 @@ namespace FlowManager {
     let _hasOnceWentToLobby = false;
 
     export function startGame(stage: egret.Stage): void {
-        doStartGame(stage).catch((err) => CompatibilityHelpers.handleError(err));
+        doStartGame(stage).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
     async function doStartGame(stage: egret.Stage): Promise<void> {
         CompatibilityHelpers.init();
         NetManager.addListeners(_NET_EVENTS, undefined);
         Notify.addEventListeners(_NOTIFY_EVENTS, undefined);
         StageManager.init(stage);
-        await Promise.all([ResManager.init(), ProtoManager.init()]).catch(err => CompatibilityHelpers.handleError(err));
+        await Promise.all([ResManager.init(), ProtoManager.init()]).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         StageManager.setStageScale(LocalStorage.getStageScale());
 
         Lang.init();
@@ -130,7 +130,7 @@ namespace FlowManager {
         _removeLoadingDom();
         gotoLogin();
 
-        await ResManager.loadMainRes().catch(err => CompatibilityHelpers.handleError(err));
+        await ResManager.loadMainRes().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         (_checkCanFirstGoToLobby()) && (gotoLobby());
     }
 
@@ -167,7 +167,7 @@ namespace FlowManager {
         RwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        const { errorCode, war } = await MpwModel.loadWar(data);
+        const { errorCode, war } = await MpwModel.loadWar(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (errorCode) {
             return errorCode;
         } else if (war == null) {
@@ -190,7 +190,7 @@ namespace FlowManager {
         MpwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        const war = await RwModel.loadWar(warData, replayId);
+        const war = await RwModel.loadWar(warData, replayId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();
@@ -210,7 +210,7 @@ namespace FlowManager {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         MeModel.unloadWar();
-        const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData });
+        const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();
@@ -222,13 +222,13 @@ namespace FlowManager {
 
         SoundManager.playCoBgmWithWar(war, true);
 
-        await SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
+        await SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
     export async function gotoMapEditorWar(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): Promise<void> {
         MpwModel.unloadWar();
         SpwModel.unloadWar();
         RwModel.unloadWar();
-        const war = await MeModel.loadWar(mapRawData, slotIndex, isReview);
+        const war = await MeModel.loadWar(mapRawData, slotIndex, isReview).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();

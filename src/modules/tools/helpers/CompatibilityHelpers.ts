@@ -18,30 +18,17 @@ namespace CompatibilityHelpers {
         preventBrowserBack();
     }
 
-    export function handleError(e: unknown): void {
-        const err       = e as Error;
-        const content   = `${err.message}\n\n${err.stack || "No available call stack."}`;
-        TwnsCommonErrorPanel.CommonErrorPanel.show({
-            content,
-        });
-        ChatProxy.reqChatAddMessage(
-            content.substr(0, CommonConstants.ChatContentMaxLength),
-            Types.ChatMessageToCategory.Private,
-            CommonConstants.AdminUserId,
-        );
+    export function showError(e: unknown): void {
+        const err = e as Types.CustomError;
+        if (!err.isShown) {
+            err.isShown = true;
+            showErrorText(`${err.message}\n\n${err.stack || "No available call stack."}`);
+        }
     }
 
     function initListenerForWindowOnError(): void {
         window.onerror = (message, filename, row, col, err) => {
-            const content = `${message}\n\n${err ? err.stack : "No available call stack."}`;
-            TwnsCommonErrorPanel.CommonErrorPanel.show({
-                content,
-            });
-            ChatProxy.reqChatAddMessage(
-                content.substr(0, CommonConstants.ChatContentMaxLength),
-                Types.ChatMessageToCategory.Private,
-                CommonConstants.AdminUserId,
-            );
+            showErrorText(`${message}\n\n${err ? err.stack : "No available call stack."}`);
         };
     }
 
@@ -116,6 +103,17 @@ namespace CompatibilityHelpers {
                 }
             };
         }
+    }
+
+    function showErrorText(text: string): void {
+        TwnsCommonErrorPanel.CommonErrorPanel.show({
+            content: text,
+        });
+        ChatProxy.reqChatAddMessage(
+            text.substr(0, CommonConstants.ChatContentMaxLength),
+            Types.ChatMessageToCategory.Private,
+            CommonConstants.AdminUserId,
+        );
     }
 
     function preventBrowserBack(): void {

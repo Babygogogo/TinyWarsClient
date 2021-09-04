@@ -4,6 +4,7 @@ import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
 import Timer                        from "../../tools/helpers/Timer";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
@@ -111,7 +112,7 @@ namespace TwnsMpwWar {
             return `${Lang.getText(LangTextType.B0451)}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined> {
-            const playerIndex = action.targetPlayerIndex;
+            const playerIndex = Helpers.getExisted(action.targetPlayerIndex);
             return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(LangTextType.B0450)}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
@@ -188,10 +189,10 @@ namespace TwnsMpwWar {
             return true;
         }
 
-        public getPlayerIndexLoggedIn(): number | undefined {
+        public getPlayerIndexLoggedIn(): number | null {
             return this.getPlayerManager().getPlayerIndexLoggedIn();
         }
-        public getPlayerLoggedIn(): TwnsBwPlayer.BwPlayer {
+        public getPlayerLoggedIn(): TwnsBwPlayer.BwPlayer | null {
             return this.getPlayerManager().getPlayerLoggedIn();
         }
     }

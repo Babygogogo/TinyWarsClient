@@ -52,14 +52,14 @@ namespace TwnsBwActionPlanner {
         private readonly _view  = new TwnsBwActionPlannerView.BwActionPlannerView();
 
         private _war?                       : BwWar;
-        private _mapSize                    : Types.MapSize;
+        private _mapSize?                   : Types.MapSize;
 
         private _state                      = State.Idle;
         private _prevState                  : State;
 
         private _focusUnitOnMap             : BwUnit;
         private _focusUnitLoaded            : BwUnit | undefined;
-        private _choosingUnitForDrop        : BwUnit;
+        private _choosingUnitForDrop        : BwUnit | null = null;
         private _chosenUnitsForDrop         : ChosenUnitForDrop[] = [];
         private _availableDropDestinations  : GridIndex[];
         private _movableArea                : MovableArea;
@@ -118,12 +118,8 @@ namespace TwnsBwActionPlanner {
         protected _getTurnManager(): TwnsBwTurnManager.BwTurnManager {
             return this._getWar().getTurnManager();
         }
-        public getCursor(): TwnsBwCursor.BwCursor | undefined {
-            const war = this._getWar();
-            return war ? war.getCursor() : undefined;
-        }
-        protected _getMapSize(): Types.MapSize {
-            return this._mapSize;
+        public getCursor(): TwnsBwCursor.BwCursor {
+            return this._getWar().getCursor();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1095,6 +1091,9 @@ namespace TwnsBwActionPlanner {
         public abstract setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void;
         public abstract setStateRequestingPlayerEndTurn(): void;
         public abstract setStateRequestingPlayerUseCoSkill(skillType: Types.CoSkillType): void;
+        public abstract setStateRequestingPlayerDeleteUnit(): void;
+        public abstract setStateRequestingPlayerVoteForDraw(isAgree: boolean): void;
+        public abstract setStateRequestingPlayerSurrender(): void;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
@@ -1154,7 +1153,7 @@ namespace TwnsBwActionPlanner {
             this._availableDropDestinations = null;
         }
 
-        public getChoosingUnitForDrop(): BwUnit | undefined {
+        public getChoosingUnitForDrop(): BwUnit | null {
             return this._choosingUnitForDrop;
         }
         private _setChoosingUnitForDrop(unit: BwUnit): void {
@@ -1197,18 +1196,24 @@ namespace TwnsBwActionPlanner {
             return this._movableArea;
         }
 
-        protected _resetAttackableArea(): void {
-            const unit                  = this.getFocusUnit();
-            const canAttackAfterMove    = unit.checkCanAttackAfterMove();
-            const isLoaded              = unit.getLoaderUnitId() != null;
-            const beginningGridIndex    = unit.getGridIndex();
-            const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
+        private _resetAttackableArea(): void {
+            const focusUnit             = Helpers.getExisted(this.getFocusUnit());
+            const canAttackAfterMove    = focusUnit.checkCanAttackAfterMove();
+            const isLoaded              = focusUnit.getLoaderUnitId() != null;
+            const beginningGridIndex    = focusUnit.getGridIndex();
+            const hasAmmo               = (!!focusUnit.getPrimaryWeaponCurrentAmmo()) || (focusUnit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
-            this._setAttackableArea(WarCommonHelpers.createAttackableArea(
-                {
-                    movableArea: this.getMovableArea(), mapSize: this.getMapSize(), minAttackRange: unit.getMinAttackRange(), maxAttackRange: unit.getFinalMaxAttackRange(), checkCanAttack: (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
-                        const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
-                        if ((!hasAmmo) || ((existingUnit) && (existingUnit !== unit))) {
+            this._setAttackableArea(WarCommonHelpers.createAttackableArea({
+                movableArea     : this.getMovableArea(),
+                mapSize         : this.getMapSize(),
+                minAttackRange  : focusUnit.getMinAttackRange(),
+                maxAttackRange  : focusUnit.getFinalMaxAttackRange(),
+                checkCanAttack: (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
+                    if (!hasAmmo) {
+                        return false;
+                    } else {
+                        const existingUnit = unitMap.getVisibleUnitOnMap(moveGridIndex);
+                        if ((existingUnit) && (existingUnit !== focusUnit)) {
                             return false;
                         } else {
                             const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
@@ -1216,7 +1221,8 @@ namespace TwnsBwActionPlanner {
                                 && ((canAttackAfterMove) || (!hasMoved));
                         }
                     }
-                }            ));
+                }
+            }));
         }
         protected _setAttackableArea(area: AttackableArea): void {
             this._attackableArea = area;
@@ -1760,9 +1766,9 @@ namespace TwnsBwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: BwUnit): number | undefined {
+        protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: BwUnit): number | null {
             if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
-                return undefined;
+                return null;
             } else {
                 const existingUnit  = this._getUnitMap().getUnitOnMap(targetGridIndex);
                 const teamIndex     = movingUnit.getTeamIndex();
@@ -1777,7 +1783,7 @@ namespace TwnsBwActionPlanner {
                         observerTeamIndex   : teamIndex,
                     }))
                 ) {
-                    return undefined;
+                    return null;
                 } else {
                     return this._getTileMap().getTile(targetGridIndex).getMoveCostByUnit(movingUnit);
                 }

@@ -45,26 +45,24 @@ namespace TwnsMpwTopPanel {
 
         private static _instance: MpwTopPanel;
 
-        private _groupPlayer        : eui.Group;
-        private _labelPlayerState   : TwnsUiLabel.UiLabel;
-        private _labelPlayer        : TwnsUiLabel.UiLabel;
-        private _labelFund          : TwnsUiLabel.UiLabel;
-        private _groupTimer         : eui.Group;
-        private _labelTimerTitle    : TwnsUiLabel.UiLabel;
-        private _labelTimer         : TwnsUiLabel.UiLabel;
-        private _groupCo            : eui.Group;
-        private _labelCo            : TwnsUiLabel.UiLabel;
-        private _labelCurrEnergy    : TwnsUiLabel.UiLabel;
-        private _labelPowerEnergy   : TwnsUiLabel.UiLabel;
-        private _labelZoneEnergy    : TwnsUiLabel.UiLabel;
-        private _btnChat            : TwnsUiButton.UiButton;
-        private _btnUnitList        : TwnsUiButton.UiButton;
-        private _btnFindBuilding    : TwnsUiButton.UiButton;
-        private _btnEndTurn         : TwnsUiButton.UiButton;
-        private _btnCancel          : TwnsUiButton.UiButton;
-        private _btnMenu            : TwnsUiButton.UiButton;
-
-        private _war    : MpwWar;
+        private readonly _groupPlayer!      : eui.Group;
+        private readonly _labelPlayerState! : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayer!      : TwnsUiLabel.UiLabel;
+        private readonly _labelFund!        : TwnsUiLabel.UiLabel;
+        private readonly _groupTimer!       : eui.Group;
+        private readonly _labelTimerTitle!  : TwnsUiLabel.UiLabel;
+        private readonly _labelTimer!       : TwnsUiLabel.UiLabel;
+        private readonly _groupCo!          : eui.Group;
+        private readonly _labelCo!          : TwnsUiLabel.UiLabel;
+        private readonly _labelCurrEnergy!  : TwnsUiLabel.UiLabel;
+        private readonly _labelPowerEnergy! : TwnsUiLabel.UiLabel;
+        private readonly _labelZoneEnergy!  : TwnsUiLabel.UiLabel;
+        private readonly _btnChat!          : TwnsUiButton.UiButton;
+        private readonly _btnUnitList!      : TwnsUiButton.UiButton;
+        private readonly _btnFindBuilding!  : TwnsUiButton.UiButton;
+        private readonly _btnEndTurn!       : TwnsUiButton.UiButton;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
+        private readonly _btnMenu!          : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MpwTopPanel._instance) {
@@ -113,12 +111,11 @@ namespace TwnsMpwTopPanel {
             ]);
             this._btnCancel.setShortSfxCode(Types.ShortSfxCode.None);
 
-            this._war = MpwModel.getWar();
             this._updateView();
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._war = null;
+        private _getWar(): MpwWar {
+            return Helpers.getExisted(MpwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,13 +127,13 @@ namespace TwnsMpwTopPanel {
         private _onNotifyTimeTick(): void {
             this._updateGroupTimer();
 
-            const war = this._war;
+            const war = this._getWar();
             if (war == null) {
                 return;
             }
 
             if ((!war.getIsExecutingAction()) && (war.checkIsBoot())) {
-                MpwProxy.reqMpwCommonHandleBoot(war.getWarId());
+                MpwProxy.reqMpwCommonHandleBoot(Helpers.getExisted(war.getWarId()));
             }
 
             const userId = war.getPlayerInTurn().getUserId();
@@ -156,7 +153,7 @@ namespace TwnsMpwTopPanel {
             this._updateLabelFund();
         }
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
-            const war = this._war;
+            const war = this._getWar();
             this._updateView();
             SoundManager.playCoBgmWithWar(war, false);
 
@@ -170,7 +167,7 @@ namespace TwnsMpwTopPanel {
         }
         private _onNotifyBwCoUsingSkillChanged(): void {
             this._updateLabelCoAndEnergy();
-            SoundManager.playCoBgmWithWar(this._war, false);
+            SoundManager.playCoBgmWithWar(this._getWar(), false);
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
             this._updateBtnUnitList();
@@ -192,13 +189,13 @@ namespace TwnsMpwTopPanel {
         }
         private _onNotifyMsgUserGetOnlineState(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgUserGetOnlineState.IS;
-            if (data.userId === this._war.getPlayerInTurn().getUserId()) {
+            if (data.userId === this._getWar().getPlayerInTurn().getUserId()) {
                 this._updateLabelPlayerState();
             }
         }
 
         private _onTouchedGroupPlayer(): void {
-            const userId = this._war.getPlayerInTurn().getUserId();
+            const userId = this._getWar().getPlayerInTurn().getUserId();
             if (userId != null) {
                 UserPanel.show({ userId });
 
@@ -209,7 +206,7 @@ namespace TwnsMpwTopPanel {
         }
         private _onTouchedGroupCo(): void {
             CommonCoListPanel.show({
-                war             : this._war,
+                war             : this._getWar(),
             });
             MpwWarMenuPanel.hide();
         }
@@ -218,7 +215,7 @@ namespace TwnsMpwTopPanel {
             ChatPanel.show({});
         }
         private _onTouchedBtnUnitList(): void {
-            const war           = this._war;
+            const war           = this._getWar();
             const actionPlanner = war.getField().getActionPlanner();
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
@@ -226,7 +223,7 @@ namespace TwnsMpwTopPanel {
             }
         }
         private _onTouchedBtnFindBuilding(): void {
-            const war           = this._war;
+            const war           = this._getWar();
             const field         = war.getField();
             const actionPlanner = field.getActionPlanner();
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
@@ -244,22 +241,22 @@ namespace TwnsMpwTopPanel {
             }
         }
         private _onTouchedBtnEndTurn(): void {
-            const war = this._war;
+            const war = this._getWar();
             if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
                 FloatText.show(Lang.getText(LangTextType.A0034));
             } else {
                 CommonConfirmPanel.show({
                     title   : Lang.getText(LangTextType.B0036),
                     content : this._getHintForEndTurn(),
-                    callback: () => (this._war.getActionPlanner() as MpwActionPlanner).setStateRequestingPlayerEndTurn(),
+                    callback: () => (this._getWar().getActionPlanner() as MpwActionPlanner).setStateRequestingPlayerEndTurn(),
                 });
             }
         }
         private _onTouchedBtnCancel(): void {
-            this._war.getField().getActionPlanner().setStateIdle();
+            this._getWar().getField().getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnMenu(): void {
-            const actionPlanner = this._war.getActionPlanner();
+            const actionPlanner = this._getWar().getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
@@ -289,7 +286,7 @@ namespace TwnsMpwTopPanel {
         }
 
         private async _updateLabelPlayerState(): Promise<void> {
-            const userId    = this._war.getPlayerInTurn().getUserId();
+            const userId    = this._getWar().getPlayerInTurn().getUserId();
             const label     = this._labelPlayerState;
             if ((userId == null) || (userId === UserModel.getSelfUserId())) {
                 label.text      = Lang.getText(LangTextType.B0676);
@@ -301,20 +298,20 @@ namespace TwnsMpwTopPanel {
                     label.textColor = Types.ColorValue.Red;
                 } else {
                     label.text      = Lang.getText(LangTextType.B0676);
-                    label.textColor = (Timer.getServerTimestamp() - userPublicInfo.lastActivityTime > 60) ? Types.ColorValue.Yellow : Types.ColorValue.Green;
+                    label.textColor = (Timer.getServerTimestamp() - Helpers.getExisted(userPublicInfo.lastActivityTime) > 60) ? Types.ColorValue.Yellow : Types.ColorValue.Green;
                 }
             }
         }
 
         private async _updateLabelPlayer(): Promise<void> {
-            const war                   = this._war;
+            const war                   = this._getWar();
             const player                = war.getPlayerInTurn();
             this._labelPlayer.text      = `${await player.getNickname()} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`;
             this._labelPlayer.textColor = player === war.getPlayerLoggedIn() ? 0x00FF00 : 0xFFFFFF;
         }
 
         private _updateGroupTimer(): void {
-            const war       = this._war;
+            const war       = this._getWar();
             const group     = this._groupTimer;
             const restTime  = war ? war.getBootRestTime() : null;
             if (restTime == null) {
@@ -331,7 +328,7 @@ namespace TwnsMpwTopPanel {
         }
 
         private _updateLabelFund(): void {
-            const war               = this._war;
+            const war               = this._getWar();
             const playerInTurn      = war.getPlayerInTurn();
             if ((war.getFogMap().checkHasFogCurrently())                                                                        &&
                 (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
@@ -343,7 +340,7 @@ namespace TwnsMpwTopPanel {
         }
 
         private _updateLabelCoAndEnergy(): void {
-            const war = this._war;
+            const war = this._getWar();
             if ((war) && (war.getIsRunning())) {
                 const player        = war.getPlayerInTurn();
                 const coId          = player.getCoId();
@@ -369,7 +366,7 @@ namespace TwnsMpwTopPanel {
         }
 
         private _updateBtnEndTurn(): void {
-            const war                   = this._war;
+            const war                   = this._getWar();
             const turnManager           = war.getTurnManager();
             this._btnEndTurn.visible    = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
@@ -377,20 +374,20 @@ namespace TwnsMpwTopPanel {
         }
 
         private _updateBtnUnitList(): void {
-            const war                   = this._war;
+            const war                   = this._getWar();
             const actionPlanner         = war.getActionPlanner();
             this._btnUnitList.visible   = (!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction);
         }
 
         private _updateBtnFindBuilding(): void {
-            const war                       = this._war;
+            const war                       = this._getWar();
             const turnManager               = war.getTurnManager();
             this._btnFindBuilding.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
         }
 
         private _updateBtnCancel(): void {
-            const war               = this._war;
+            const war               = this._getWar();
             const turnManager       = war.getTurnManager();
             const actionPlanner     = war.getActionPlanner();
             const state             = actionPlanner.getState();
@@ -409,43 +406,45 @@ namespace TwnsMpwTopPanel {
         // Util functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _getHintForEndTurn(): string {
-            const war           = this._war;
+            const war           = this._getWar();
             const playerIndex   = war.getPlayerIndexLoggedIn();
             const unitMap       = war.getUnitMap();
             const hints         = new Array<string>();
 
-            {
-                let idleUnitsCount = 0;
-                for (const unit of unitMap.getAllUnitsOnMap()) {
-                    if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
-                        ++idleUnitsCount;
-                    }
-                }
-                (idleUnitsCount) && (hints.push(Lang.getFormattedText(LangTextType.F0006, idleUnitsCount)));
-            }
-
-            {
-                const idleBuildingsDict = new Map<Types.TileType, Types.GridIndex[]>();
-                for (const tile of war.getTileMap().getAllTiles()) {
-                    if ((tile.checkIsUnitProducerForPlayer(playerIndex)) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
-                        const tileType  = tile.getType();
-                        const gridIndex = tile.getGridIndex();
-                        if (!idleBuildingsDict.has(tileType)) {
-                            idleBuildingsDict.set(tileType, [gridIndex]);
-                        } else {
-                            idleBuildingsDict.get(tileType).push(gridIndex);
+            if (playerIndex != null) {
+                {
+                    let idleUnitsCount = 0;
+                    for (const unit of unitMap.getAllUnitsOnMap()) {
+                        if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
+                            ++idleUnitsCount;
                         }
                     }
+                    (idleUnitsCount) && (hints.push(Lang.getFormattedText(LangTextType.F0006, idleUnitsCount)));
                 }
-                const textArrayForBuildings: string[] = [];
-                for (const [tileType, gridIndexArray] of idleBuildingsDict) {
-                    textArrayForBuildings.push(Lang.getFormattedText(
-                        LangTextType.F0007, gridIndexArray.length,
-                        Lang.getTileName(tileType),
-                        gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
-                    );
+
+                {
+                    const idleBuildingsDict = new Map<Types.TileType, Types.GridIndex[]>();
+                    for (const tile of war.getTileMap().getAllTiles()) {
+                        if ((tile.checkIsUnitProducerForPlayer(playerIndex)) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
+                            const tileType  = tile.getType();
+                            const gridIndex = tile.getGridIndex();
+                            if (!idleBuildingsDict.has(tileType)) {
+                                idleBuildingsDict.set(tileType, [gridIndex]);
+                            } else {
+                                Helpers.getExisted(idleBuildingsDict.get(tileType)).push(gridIndex);
+                            }
+                        }
+                    }
+                    const textArrayForBuildings: string[] = [];
+                    for (const [tileType, gridIndexArray] of idleBuildingsDict) {
+                        textArrayForBuildings.push(Lang.getFormattedText(
+                            LangTextType.F0007, gridIndexArray.length,
+                            Lang.getTileName(tileType),
+                            gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
+                        );
+                    }
+                    (textArrayForBuildings.length) && (hints.push(textArrayForBuildings.join(`\n`)));
                 }
-                (textArrayForBuildings.length) && (hints.push(textArrayForBuildings.join(`\n`)));
             }
 
             hints.push(Lang.getText(LangTextType.A0024));

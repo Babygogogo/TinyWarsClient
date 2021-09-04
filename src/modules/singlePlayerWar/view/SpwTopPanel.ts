@@ -7,6 +7,7 @@ import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
 import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -38,23 +39,21 @@ namespace TwnsSpwTopPanel {
 
         private static _instance: SpwTopPanel;
 
-        private _groupPlayer        : eui.Group;
-        private _labelPlayer        : TwnsUiLabel.UiLabel;
-        private _labelSinglePlayer  : TwnsUiLabel.UiLabel;
-        private _labelFund          : TwnsUiLabel.UiLabel;
-        private _groupCo            : eui.Group;
-        private _labelCo            : TwnsUiLabel.UiLabel;
-        private _labelCurrEnergy    : TwnsUiLabel.UiLabel;
-        private _labelPowerEnergy   : TwnsUiLabel.UiLabel;
-        private _labelZoneEnergy    : TwnsUiLabel.UiLabel;
-        private _btnChat            : TwnsUiButton.UiButton;
-        private _btnUnitList        : TwnsUiButton.UiButton;
-        private _btnFindBuilding    : TwnsUiButton.UiButton;
-        private _btnEndTurn         : TwnsUiButton.UiButton;
-        private _btnCancel          : TwnsUiButton.UiButton;
-        private _btnMenu            : TwnsUiButton.UiButton;
-
-        private _war    : BwWar;
+        private readonly _groupPlayer!          : eui.Group;
+        private readonly _labelPlayer!          : TwnsUiLabel.UiLabel;
+        private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
+        private readonly _labelFund!            : TwnsUiLabel.UiLabel;
+        private readonly _groupCo!              : eui.Group;
+        private readonly _labelCo!              : TwnsUiLabel.UiLabel;
+        private readonly _labelCurrEnergy!      : TwnsUiLabel.UiLabel;
+        private readonly _labelPowerEnergy!     : TwnsUiLabel.UiLabel;
+        private readonly _labelZoneEnergy!      : TwnsUiLabel.UiLabel;
+        private readonly _btnChat!              : TwnsUiButton.UiButton;
+        private readonly _btnUnitList!          : TwnsUiButton.UiButton;
+        private readonly _btnFindBuilding!      : TwnsUiButton.UiButton;
+        private readonly _btnEndTurn!           : TwnsUiButton.UiButton;
+        private readonly _btnCancel!            : TwnsUiButton.UiButton;
+        private readonly _btnMenu!              : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!SpwTopPanel._instance) {
@@ -101,12 +100,7 @@ namespace TwnsSpwTopPanel {
             ]);
             this._btnCancel.setShortSfxCode(Types.ShortSfxCode.None);
 
-            this._war = this._getOpenData().war;
             this._updateView();
-        }
-
-        protected async _onClosed(): Promise<void> {
-            this._war = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,14 +120,14 @@ namespace TwnsSpwTopPanel {
         }
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
             this._updateView();
-            SoundManager.playCoBgmWithWar(this._war, false);
+            SoundManager.playCoBgmWithWar(this._getOpenData().war, false);
         }
         private _onNotifyBwCoEnergyChanged(): void {
             this._updateLabelCoAndEnergy();
         }
         private _onNotifyBwCoUsingSkillChanged(): void {
             this._updateLabelCoAndEnergy();
-            SoundManager.playCoBgmWithWar(this._war, false);
+            SoundManager.playCoBgmWithWar(this._getOpenData().war, false);
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
             this._updateBtnEndTurn();
@@ -153,11 +147,11 @@ namespace TwnsSpwTopPanel {
         }
 
         private _onTouchedGroupPlayer(): void {
-            const userId = this._war.getPlayerInTurn().getUserId();
+            const userId = this._getOpenData().war.getPlayerInTurn().getUserId();
             (userId) && (UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(): void {
-            const war = this._war;
+            const war = this._getOpenData().war;
             TwnsCommonCoListPanel.CommonCoListPanel.show({ war });
             SpwWarMenuPanel.hide();
         }
@@ -166,12 +160,12 @@ namespace TwnsSpwTopPanel {
             ChatPanel.show({});
         }
         private _onTouchedBtnUnitList(): void {
-            const war = this._war;
+            const war = this._getOpenData().war;
             war.getField().getActionPlanner().setStateIdle();
             BwUnitListPanel.show({ war });
         }
         private _onTouchedBtnFindBuilding(): void {
-            const war           = this._war;
+            const war           = this._getOpenData().war;
             const field         = war.getField();
             const actionPlanner = field.getActionPlanner();
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
@@ -189,22 +183,22 @@ namespace TwnsSpwTopPanel {
             }
         }
         private _onTouchedBtnEndTurn(): void {
-            const war = this._war;
+            const war = this._getOpenData().war;
             if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
                 FloatText.show(Lang.getText(LangTextType.A0034));
             } else {
                 CommonConfirmPanel.show({
                     title   : Lang.getText(LangTextType.B0036),
                     content : this._getHintForEndTurn(),
-                    callback: () => this._war.getActionPlanner().setStateRequestingPlayerEndTurn(),
+                    callback: () => war.getActionPlanner().setStateRequestingPlayerEndTurn(),
                 });
             }
         }
         private _onTouchedBtnCancel(): void {
-            this._war.getField().getActionPlanner().setStateIdle();
+            this._getOpenData().war.getField().getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnMenu(): void {
-            const actionPlanner = this._war.getActionPlanner();
+            const actionPlanner = this._getOpenData().war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
@@ -232,7 +226,7 @@ namespace TwnsSpwTopPanel {
         }
 
         private _updateLabelPlayer(): void {
-            const war                   = this._war;
+            const war                   = this._getOpenData().war;
             const player                = war.getPlayerInTurn();
             const name                  = player.getUserId() != null ? Lang.getText(LangTextType.B0031) : Lang.getText(LangTextType.B0256);
             this._labelPlayer.text      = `${name} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`;
@@ -240,7 +234,7 @@ namespace TwnsSpwTopPanel {
         }
 
         private _updateLabelFund(): void {
-            const war               = this._war;
+            const war               = this._getOpenData().war;
             const playerInTurn      = war.getPlayerInTurn();
             if ((war.getFogMap().checkHasFogCurrently())                                                        &&
                 (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
@@ -252,7 +246,7 @@ namespace TwnsSpwTopPanel {
         }
 
         private _updateLabelCoAndEnergy(): void {
-            const war = this._war;
+            const war = this._getOpenData().war;
             if ((war) && (war.getIsRunning())) {
                 const player        = war.getPlayerInTurn();
                 const coId          = player.getCoId();
@@ -278,7 +272,7 @@ namespace TwnsSpwTopPanel {
         }
 
         private _updateBtnEndTurn(): void {
-            const war                   = this._war;
+            const war                   = this._getOpenData().war;
             const turnManager           = war.getTurnManager();
             this._btnEndTurn.visible    = (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
@@ -286,21 +280,21 @@ namespace TwnsSpwTopPanel {
         }
 
         private _updateBtnFindUnit(): void {
-            const war                   = this._war;
+            const war                   = this._getOpenData().war;
             const turnManager           = war.getTurnManager();
             this._btnUnitList.visible   = (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
         }
 
         private _updateBtnFindBuilding(): void {
-            const war                       = this._war;
+            const war                       = this._getOpenData().war;
             const turnManager               = war.getTurnManager();
             this._btnFindBuilding.visible   = (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
         }
 
         private _updateBtnCancel(): void {
-            const war               = this._war;
+            const war               = this._getOpenData().war;
             const turnManager       = war.getTurnManager();
             const actionPlanner     = war.getActionPlanner();
             const state             = actionPlanner.getState();
@@ -319,7 +313,7 @@ namespace TwnsSpwTopPanel {
         // Util functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _getHintForEndTurn(): string {
-            const war           = this._war;
+            const war           = this._getOpenData().war;
             const playerIndex   = war.getPlayerIndexInTurn();
             const unitMap       = war.getUnitMap();
             const hints         = new Array<string>();
@@ -343,7 +337,7 @@ namespace TwnsSpwTopPanel {
                         if (!idleBuildingsDict.has(tileType)) {
                             idleBuildingsDict.set(tileType, [gridIndex]);
                         } else {
-                            idleBuildingsDict.get(tileType).push(gridIndex);
+                            Helpers.getExisted(idleBuildingsDict.get(tileType)).push(gridIndex);
                         }
                     }
                 }
