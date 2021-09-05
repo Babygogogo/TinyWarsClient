@@ -1,6 +1,7 @@
 
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
@@ -23,20 +24,20 @@ namespace TwnsMeClearPanel {
 
         private static _instance: MeClearPanel;
 
-        private _labelTitle         : TwnsUiLabel.UiLabel;
-        private _labelCurrSizeTitle : TwnsUiLabel.UiLabel;
-        private _labelCurrWidth     : TwnsUiLabel.UiLabel;
-        private _labelCurrHeight    : TwnsUiLabel.UiLabel;
-        private _labelNewSizeTitle  : TwnsUiLabel.UiLabel;
-        private _inputNewWidth      : TwnsUiTextInput.UiTextInput;
-        private _inputNewHeight     : TwnsUiTextInput.UiTextInput;
-        private _labelTips1         : TwnsUiLabel.UiLabel;
-        private _labelTips2         : TwnsUiLabel.UiLabel;
-        private _btnCancel          : TwnsUiButton.UiButton;
-        private _btnConfirm         : TwnsUiButton.UiButton;
+        private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _labelCurrSizeTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelCurrWidth!       : TwnsUiLabel.UiLabel;
+        private readonly _labelCurrHeight!      : TwnsUiLabel.UiLabel;
+        private readonly _labelNewSizeTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _inputNewWidth!        : TwnsUiTextInput.UiTextInput;
+        private readonly _inputNewHeight!       : TwnsUiTextInput.UiTextInput;
+        private readonly _labelTips1!           : TwnsUiLabel.UiLabel;
+        private readonly _labelTips2!           : TwnsUiLabel.UiLabel;
+        private readonly _btnCancel!            : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!           : TwnsUiButton.UiButton;
 
-        private _newWidth   : number;
-        private _newHeight  : number;
+        private _newWidth   : number | null = null;
+        private _newHeight  : number | null = null;
 
         public static show(): void {
             if (!MeClearPanel._instance) {
@@ -71,8 +72,7 @@ namespace TwnsMeClearPanel {
 
             this._updateComponentsForLanguage();
 
-            const war                   = MeModel.getWar();
-            const { width, height }     = war.getTileMap().getMapSize();
+            const { width, height }     = Helpers.getExisted(MeModel.getWar()).getTileMap().getMapSize();
             this._labelCurrHeight.text  = "" + height;
             this._labelCurrWidth.text   = "" + width;
             this._inputNewHeight.text   = "" + height;
@@ -81,18 +81,18 @@ namespace TwnsMeClearPanel {
             this._newHeight             = height;
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
-            const width         = this._newWidth;
-            const height        = this._newHeight;
+        private async _onTouchedBtnConfirm(): Promise<void> {
+            const width         = Helpers.getExisted(this._newWidth);
+            const height        = Helpers.getExisted(this._newHeight);
             const gridsCount    = width * height;
             if ((!gridsCount) || (gridsCount <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0087));
             } else {
-                const war = MeModel.getWar();
+                const war = Helpers.getExisted(MeModel.getWar());
                 war.stopRunning();
                 await war.initWithMapEditorData({
                     mapRawData  : MeUtility.clearMap(war.serializeForMap(), width, height),
@@ -107,27 +107,27 @@ namespace TwnsMeClearPanel {
             }
         }
 
-        private _onFocusOutInputNewWidth(e: egret.Event): void {
+        private _onFocusOutInputNewWidth(): void {
             const input = this._inputNewWidth;
             let width = Number(input.text);
             if ((isNaN(width)) || (width <= 0)) {
-                width = MeModel.getWar().getTileMap().getMapSize().width;
+                width = Helpers.getExisted(MeModel.getWar()).getTileMap().getMapSize().width;
             }
             this._newWidth  = width;
             input.text      = "" + width;
         }
 
-        private _onFocusOutInputNewHeight(e: egret.Event): void {
+        private _onFocusOutInputNewHeight(): void {
             const input = this._inputNewHeight;
             let width = Number(input.text);
             if ((isNaN(width)) || (width <= 0)) {
-                width = MeModel.getWar().getTileMap().getMapSize().height;
+                width = Helpers.getExisted(MeModel.getWar()).getTileMap().getMapSize().height;
             }
             this._newHeight = width;
             input.text      = "" + width;
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 

@@ -3,7 +3,10 @@ import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
 import TwnsLobbyBottomPanel     from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyPanel           from "../../lobby/view/LobbyPanel";
 import TwnsLobbyTopPanel        from "../../lobby/view/LobbyTopPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FlowManager              from "../../tools/helpers/FlowManager";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -29,15 +32,15 @@ namespace TwnsMeMapListPanel {
 
         private static _instance: MeMapListPanel;
 
-        private _zoomMap        : TwnsUiZoomableMap.UiZoomableMap;
-        private _labelNoData    : TwnsUiLabel.UiLabel;
-        private _labelMenuTitle : TwnsUiLabel.UiLabel;
-        private _labelLoading   : TwnsUiLabel.UiLabel;
-        private _listMap        : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
-        private _btnBack        : TwnsUiButton.UiButton;
+        private readonly _zoomMap!          : TwnsUiZoomableMap.UiZoomableMap;
+        private readonly _labelNoData!      : TwnsUiLabel.UiLabel;
+        private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading!     : TwnsUiLabel.UiLabel;
+        private readonly _listMap!          : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
+        private readonly _btnBack!          : TwnsUiButton.UiButton;
 
         private _dataForListMap     : DataForMapRenderer[] = [];
-        private _selectedWarIndex   : number;
+        private _selectedIndex      : number | null = null;
 
         public static show(): void {
             if (!MeMapListPanel._instance) {
@@ -47,7 +50,7 @@ namespace TwnsMeMapListPanel {
         }
         public static async hide(): Promise<void> {
             if (MeMapListPanel._instance) {
-                await MeMapListPanel._instance.close();
+                await MeMapListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -73,30 +76,30 @@ namespace TwnsMeMapListPanel {
             MeProxy.reqMeGetMapDataList();
         }
 
-        public async setSelectedIndex(newIndex: number): Promise<void> {
-            const oldIndex         = this._selectedWarIndex;
-            const dataList         = this._dataForListMap;
-            this._selectedWarIndex = dataList[newIndex] ? newIndex : undefined;
+        public async setAndReviseSelectedIndex(newIndex: number | null): Promise<void> {
+            const oldIndex      = this._selectedIndex;
+            const dataArray     = this._dataForListMap;
+            this._selectedIndex = ((newIndex != null) && (dataArray[newIndex])) ? newIndex : null;
 
-            if (dataList[oldIndex]) {
-                this._listMap.updateSingleData(oldIndex, dataList[oldIndex]);
+            if ((oldIndex != null) && (dataArray[oldIndex])) {
+                this._listMap.updateSingleData(oldIndex, dataArray[oldIndex]);
             }
 
-            if (dataList[newIndex]) {
-                this._listMap.updateSingleData(newIndex, dataList[newIndex]);
-                await this._showMap(newIndex);
+            if ((newIndex != null) && (dataArray[newIndex])) {
+                this._listMap.updateSingleData(newIndex, dataArray[newIndex]);
+                await this._showMap(newIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             } else {
                 this._zoomMap.clearMap();
             }
         }
-        public getSelectedIndex(): number {
-            return this._selectedWarIndex;
+        public getSelectedIndex(): number | null {
+            return this._selectedIndex;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifySMeGetDataList(e: egret.Event): void {
+        private _onNotifySMeGetDataList(): void {
             const newData               = this._createDataForListMap(MeModel.getDataDict());
             this._dataForListMap        = newData;
             this._labelLoading.visible  = false;
@@ -106,14 +109,14 @@ namespace TwnsMeMapListPanel {
             } else {
                 this._listMap.clear();
             }
-            this.setSelectedIndex(0);
+            this.setAndReviseSelectedIndex(0);
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onTouchTapBtnBack(): void {
             this.close();
             TwnsLobbyPanel.LobbyPanel.show();
             TwnsLobbyTopPanel.LobbyTopPanel.show();
@@ -134,7 +137,7 @@ namespace TwnsMeMapListPanel {
             const dataList: DataForMapRenderer[] = [];
 
             let index = 0;
-            for (const [slotIndex, info] of dict) {
+            for (const [, info] of dict) {
                 dataList.push({
                     index,
                     panel   : this,
@@ -165,10 +168,10 @@ namespace TwnsMeMapListPanel {
         panel   : MeMapListPanel;
     };
     class MapRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapRenderer> {
-        private _btnChoose      : TwnsUiButton.UiButton;
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _labelStatus    : TwnsUiLabel.UiLabel;
-        private _btnNext        : TwnsUiButton.UiButton;
+        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelStatus!  : TwnsUiLabel.UiLabel;
+        private readonly _btnNext!      : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -179,23 +182,23 @@ namespace TwnsMeMapListPanel {
         }
 
         protected _onDataChanged(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             const mapData               = data.mapData;
             const mapRawData            = mapData.mapRawData;
-            const status                = mapData.reviewStatus;
+            const status                = Helpers.getExisted(mapData.reviewStatus);
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelStatus.text      = Lang.getMapReviewStatusText(status);
+            this._labelStatus.text      = Lang.getMapReviewStatusText(status) ?? CommonConstants.ErrorTextForUndefined;
             this._labelStatus.textColor = getReviewStatusTextColor(status);
             this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData ? mapRawData.mapNameArray : [] }) || `(${Lang.getText(LangTextType.B0277)})`;
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data;
-            data.panel.setSelectedIndex(data.index);
+        private _onTouchTapBtnChoose(): void {
+            const data = this._getData();
+            data.panel.setAndReviseSelectedIndex(data.index);
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data          = this.data;
+        private _onTouchTapBtnNext(): void {
+            const data          = this._getData();
             const mapData       = data.mapData;
             const reviewStatus  = mapData.reviewStatus;
 
@@ -204,7 +207,7 @@ namespace TwnsMeMapListPanel {
                     title   : Lang.getText(LangTextType.B0305),
                     content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {
-                        FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
+                        FlowManager.gotoMapEditorWar(Helpers.getExisted(mapData.mapRawData), Helpers.getExisted(mapData.slotIndex), false);
                     },
                 });
             } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
@@ -212,11 +215,11 @@ namespace TwnsMeMapListPanel {
                     title   : Lang.getText(LangTextType.B0326),
                     content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {
-                        FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
+                        FlowManager.gotoMapEditorWar(Helpers.getExisted(mapData.mapRawData), Helpers.getExisted(mapData.slotIndex), false);
                     },
                 });
             } else {
-                FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
+                FlowManager.gotoMapEditorWar(mapData.mapRawData, Helpers.getExisted(mapData.slotIndex), false);
             }
         }
     }

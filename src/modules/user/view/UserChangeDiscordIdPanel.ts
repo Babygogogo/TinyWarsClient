@@ -15,7 +15,7 @@ import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
 import UserModel                from "../../user/model/UserModel";
 import UserProxy                from "../../user/model/UserProxy";
 
-export namespace TwnsUserChangeDiscordIdPanel {
+namespace TwnsUserChangeDiscordIdPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;

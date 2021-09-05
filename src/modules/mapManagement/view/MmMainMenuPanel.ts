@@ -1,4 +1,5 @@
 
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                    from "../../tools/helpers/FloatText";
 import FlowManager                  from "../../tools/helpers/FlowManager";
 import Types                        from "../../tools/helpers/Types";
@@ -27,9 +28,9 @@ namespace TwnsMmMainMenuPanel {
 
         private static _instance: MmMainMenuPanel;
 
-        private _labelMenuTitle : TwnsUiLabel.UiLabel;
-        private _btnBack        : TwnsUiButton.UiButton;
-        private _listCommand    : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
+        private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnBack!          : TwnsUiButton.UiButton;
+        private readonly _listCommand!      : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
 
         public static show(): void {
             if (!MmMainMenuPanel._instance) {
@@ -40,7 +41,7 @@ namespace TwnsMmMainMenuPanel {
 
         public static async hide(): Promise<void> {
             if (MmMainMenuPanel._instance) {
-                await MmMainMenuPanel._instance.close();
+                await MmMainMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -62,23 +63,23 @@ namespace TwnsMmMainMenuPanel {
             this._listCommand.setItemRenderer(CommandRenderer);
 
             this._updateView();
-            this._listCommand.bindData(await this._createDataForListCommand());
+            this._listCommand.bindData(await this._createDataForListCommand().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             this.close();
             FlowManager.gotoLobby();
         }
-        private _onMsgUserLogout(e: egret.Event): void {
+        private _onMsgUserLogout(): void {
             this.close();
         }
-        private _onMsgMmReloadAllMaps(e: egret.Event): void {
+        private _onMsgMmReloadAllMaps(): void {
             FloatText.show(Lang.getText(LangTextType.A0075));
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateView();
         }
 
@@ -88,7 +89,7 @@ namespace TwnsMmMainMenuPanel {
         private async _updateView(): Promise<void> {
             this._labelMenuTitle.text   = Lang.getText(LangTextType.B0192);
             this._btnBack.label         = Lang.getText(LangTextType.B0146);
-            this._listCommand.bindData(await this._createDataForListCommand());
+            this._listCommand.bindData(await this._createDataForListCommand().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
         }
 
         private async _createDataForListCommand(): Promise<DataForCommandRenderer[]> {
@@ -111,7 +112,7 @@ namespace TwnsMmMainMenuPanel {
                     name    : Lang.getText(LangTextType.B0444),
                     callback: (): void => {
                         this.close();
-                        MmTagListPanel.show();
+                        MmTagListPanel.show(null);
                     },
                 },
             ];
@@ -125,15 +126,15 @@ namespace TwnsMmMainMenuPanel {
         callback: () => void;
     };
     class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
-        private _labelCommand: TwnsUiLabel.UiLabel;
+        private readonly _labelCommand! : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            const data = this.data;
+            const data = this._getData();
             this._labelCommand.text = data.name;
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
-            this.data.callback();
+        public onItemTapEvent(): void {
+            this._getData().callback();
         }
     }
 }

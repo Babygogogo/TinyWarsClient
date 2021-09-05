@@ -1,13 +1,14 @@
 
 import TwnsCommonJoinRoomPasswordPanel      from "../../common/view/CommonJoinRoomPasswordPanel";
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import MfrModel                             from "../../multiFreeRoom/model/MfrModel";
 import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
+import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                            from "../../tools/helpers/FloatText";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";
@@ -68,7 +69,7 @@ namespace TwnsMfrJoinRoomListPanel {
         }
         public static async hide(): Promise<void> {
             if (MfrJoinRoomListPanel._instance) {
-                await MfrJoinRoomListPanel._instance.close();
+                await MfrJoinRoomListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -104,7 +105,7 @@ namespace TwnsMfrJoinRoomListPanel {
 
             this._hasReceivedData   = false;
             this._isTabInitialized  = false;
-            await this._initTabSettings();
+            await this._initTabSettings().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._updateComponentsForLanguage();
             this._updateGroupRoomList();
             this._updateComponentsForTargetRoomInfo();
@@ -113,7 +114,7 @@ namespace TwnsMfrJoinRoomListPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -207,7 +208,8 @@ namespace TwnsMfrJoinRoomListPanel {
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
-            const roomInfo = await MfrModel.getRoomInfo(MfrJoinModel.getTargetRoomId());
+            const roomId    = MfrJoinModel.getTargetRoomId();
+            const roomInfo  = roomId == null ? null : await MfrModel.getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (roomInfo) {
                 const settingsForMfw    = Helpers.getExisted(roomInfo.settingsForMfw);
                 const callback          = () => {
@@ -242,22 +244,22 @@ namespace TwnsMfrJoinRoomListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : await this._createDataForCommonWarMapInfoPage(),
+                    pageData    : await this._createDataForCommonWarMapInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
-                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
                     pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
-                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
-                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                 },
             ]);
             this._isTabInitialized = true;
@@ -312,25 +314,25 @@ namespace TwnsMfrJoinRoomListPanel {
 
         private async _updateCommonMapInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
             }
         }
 
         private async _updateCommonWarPlayerInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage());
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
             }
         }
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
             }
         }
 
         private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
+                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
             }
         }
 
@@ -346,22 +348,34 @@ namespace TwnsMfrJoinRoomListPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const warData = (await MfrModel.getRoomInfo(MfrJoinModel.getTargetRoomId()))?.settingsForMfw?.initialWarData;
+            const roomId    = MfrJoinModel.getTargetRoomId();
+            const warData   = roomId == null
+                ? null
+                : (await MfrModel.getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; }))?.settingsForMfw?.initialWarData;
             return warData == null
-                ? {}
+                ? null
                 : { warInfo: { warData, players: null } };
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
-            return await MfrModel.createDataForCommonWarPlayerInfoPage(MfrJoinModel.getTargetRoomId());
+            const roomId = MfrJoinModel.getTargetRoomId();
+            return roomId == null
+                ? null
+                : await MfrModel.createDataForCommonWarPlayerInfoPage(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            return await MfrModel.createDataForCommonWarBasicSettingsPage(MfrJoinModel.getTargetRoomId(), false);
+            const roomId = MfrJoinModel.getTargetRoomId();
+            return roomId == null
+                ? null
+                : await MfrModel.createDataForCommonWarBasicSettingsPage(roomId, false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-            return await MfrModel.createDataForCommonWarAdvancedSettingsPage(MfrJoinModel.getTargetRoomId());
+            const roomId = MfrJoinModel.getTargetRoomId();
+            return roomId == null
+                ? null
+                : await MfrModel.createDataForCommonWarAdvancedSettingsPage(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private _showOpenAnimation(): void {
@@ -452,7 +466,7 @@ namespace TwnsMfrJoinRoomListPanel {
         }
 
         protected async _onDataChanged(): Promise<void> {
-            const roomInfo = await MfrModel.getRoomInfo(this._getData().roomId);
+            const roomInfo = await MfrModel.getRoomInfo(this._getData().roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (roomInfo == null) {
                 return;
             }
@@ -467,7 +481,7 @@ namespace TwnsMfrJoinRoomListPanel {
         }
 
         private async _onTouchTapBtnNext(): Promise<void> {
-            const roomInfo = await MfrModel.getRoomInfo(this._getData().roomId);
+            const roomInfo = await MfrModel.getRoomInfo(this._getData().roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (roomInfo == null) {
                 return;
             }

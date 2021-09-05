@@ -2,6 +2,7 @@
 import TwnsBwWarEventManager    from "../../baseWar/model/BwWarEventManager";
 import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
 import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
 import ProtoTypes               from "../../tools/proto/ProtoTypes";
 
 namespace TwnsMeWarEventManager {
@@ -19,7 +20,7 @@ namespace TwnsMeWarEventManager {
         }
     }
 
-    function getRevisedWarEventFullData(rawData: IWarEventFullData): IWarEventFullData {
+    function getRevisedWarEventFullData(rawData: Types.Undefinable<IWarEventFullData>): IWarEventFullData {
         const data = rawData
             ? Helpers.deepClone(rawData)
             : {

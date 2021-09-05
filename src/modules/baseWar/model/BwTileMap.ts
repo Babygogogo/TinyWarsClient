@@ -121,30 +121,13 @@ namespace TwnsBwTileMap {
             this.getView().stopRunningView();
         }
 
-        public serialize(): ISerialTileMap | undefined {
-            const mapSize = this.getMapSize();
-            if (mapSize == null) {
-                Logger.error(`BwTileMap.serialize() empty mapSize.`);
-                return undefined;
-            }
-
-            const map = this._getMap();
-            if (map == null) {
-                Logger.error(`BwTileMap.serialize() empty map.`);
-                return undefined;
-            }
-
-            const { width, height } = mapSize;
+        public serialize(): ISerialTileMap {
+            const map               = this._getMap();
+            const { width, height } = this.getMapSize();
             const tilesData         : ISerialTile[] = [];
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
-                    const tileData = map[x][y].serialize();
-                    if (tileData == null) {
-                        Logger.error(`BwTileMap.serialize() empty tileData.`);
-                        return undefined;
-                    }
-
-                    tilesData.push(tileData);
+                    tilesData.push(map[x][y].serialize());
                 }
             }
             return { tiles: tilesData };

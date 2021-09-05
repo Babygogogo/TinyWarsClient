@@ -1,16 +1,17 @@
 
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiComponent  from "../../tools/ui/UiComponent";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import ConfigManager    from "../../tools/helpers/ConfigManager";
-import Helpers          from "../../tools/helpers/Helpers";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import Types            from "../../tools/helpers/Types";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiComponent      from "../../tools/ui/UiComponent";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsMmWarRuleAvailableCoPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -27,10 +28,10 @@ namespace TwnsMmWarRuleAvailableCoPanel {
 
         private static _instance: MmWarRuleAvailableCoPanel;
 
-        private _labelAvailableCoTitle  : TwnsUiLabel.UiLabel;
-        private _groupCoTiers           : eui.Group;
-        private _groupCoNames           : eui.Group;
-        private _btnCancel              : TwnsUiButton.UiButton;
+        private readonly _labelAvailableCoTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _groupCoTiers!             : eui.Group;
+        private readonly _groupCoNames!             : eui.Group;
+        private readonly _btnCancel!                : TwnsUiButton.UiButton;
 
         private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
@@ -46,7 +47,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
 
         public static async hide(): Promise<void> {
             if (MmWarRuleAvailableCoPanel._instance) {
-                await MmWarRuleAvailableCoPanel._instance.close();
+                await MmWarRuleAvailableCoPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -88,7 +89,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
@@ -101,7 +102,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
         }
 
         private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestConfigVersion())) {
+            for (const tier of ConfigManager.getCoTiers(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -125,7 +126,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
 
         private _updateGroupCoTiers(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
-            const configVersion = ConfigManager.getLatestConfigVersion();
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
                     ? ConfigManager.getEnabledCustomCoIdList(configVersion)
@@ -142,7 +143,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestConfigVersion())) {
+            for (const cfg of ConfigManager.getEnabledCoArray(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -175,12 +176,12 @@ namespace TwnsMmWarRuleAvailableCoPanel {
     }
 
     class RendererForCoTier extends TwnsUiComponent.UiComponent {
-        private _imgSelected: TwnsUiImage.UiImage;
-        private _labelName  : TwnsUiLabel.UiLabel;
+        private readonly _imgSelected!  : TwnsUiImage.UiImage;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
-        private _tier           : number;
+        private _tier?          : number;
         private _isCustomSwitch = false;
-        private _state          : CoTierState;
+        private _state?         : CoTierState;
 
         public constructor() {
             super();
@@ -193,7 +194,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             this._labelName.text    = `Tier ${tier}`;
         }
         public getCoTier(): number {
-            return this._tier;
+            return Helpers.getDefined(this._tier);
         }
 
         public setIsCustomSwitch(isCustomSwitch: boolean): void {
@@ -216,16 +217,16 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
         }
         public getState(): CoTierState {
-            return this._state;
+            return Helpers.getDefined(this._state);
         }
     }
 
     class RendererForCoName extends TwnsUiComponent.UiComponent {
-        private _imgSelected: TwnsUiImage.UiImage;
-        private _labelName  : TwnsUiLabel.UiLabel;
+        private readonly _imgSelected!  : TwnsUiImage.UiImage;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
-        private _coId           : number;
-        private _isSelected     : boolean;
+        private _coId?          : number;
+        private _isSelected?    : boolean;
 
         public constructor() {
             super();
@@ -236,10 +237,10 @@ namespace TwnsMmWarRuleAvailableCoPanel {
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            this._labelName.text = `${ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId).name}`;
+            this._labelName.text = `${ConfigManager.getCoBasicCfg(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId).name}`;
         }
         public getCoId(): number {
-            return this._coId;
+            return Helpers.getDefined(this._coId);
         }
 
         public setIsSelected(isSelected: boolean): void {
@@ -248,7 +249,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             Helpers.changeColor(this._imgSelected, isSelected ? Types.ColorType.Origin : Types.ColorType.Gray);
         }
         public getIsSelected(): boolean {
-            return this._isSelected;
+            return Helpers.getDefined(this._isSelected);
         }
     }
 }

@@ -192,39 +192,9 @@ namespace TwnsBwWar {
                 field                       : this.getField().serializeForCreateSfw(),
             };
         }
-        public serializeForCreateMfr(): ISerialWar | undefined {
-            const settingsForCommon = this.getCommonSettingManager().serializeForCreateMfr();
-            if (settingsForCommon == null) {
-                Logger.error(`BwWar.serializeForCreateMfr() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            const serialWarEventManager = this.getWarEventManager().serializeForCreateMfr();
-            if (serialWarEventManager == null) {
-                Logger.error(`BwWar.serializeForCreateMfr() empty serialWarEventManager.`);
-                return undefined;
-            }
-
-            const serialPlayerManager = this.getPlayerManager().serializeForCreateMfr();
-            if (serialPlayerManager == null) {
-                Logger.error(`BwWar.serializeForCreateMfr() empty serialPlayerManager.`);
-                return undefined;
-            }
-
-            const serialTurnManager = this.getTurnManager().serializeForCreateMfr();
-            if (serialTurnManager == null) {
-                Logger.error(`BwWar.serializeForCreateMfr() empty serialTurnManager.`);
-                return undefined;
-            }
-
-            const serialField = this.getField().serializeForCreateMfr();
-            if (serialField == null) {
-                Logger.error(`BwWar.serializeForCreateMfr() empty serialField.`);
-                return undefined;
-            }
-
+        public serializeForCreateMfr(): ISerialWar {
             return {
-                settingsForCommon,
+                settingsForCommon           : this.getCommonSettingManager().serializeForCreateMfr(),
                 settingsForMcw              : null,
                 settingsForMrw              : null,
                 settingsForMfw              : null,
@@ -237,10 +207,10 @@ namespace TwnsBwWar {
                 seedRandomCurrentState      : null,
                 executedActions             : [],
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
-                warEventManager             : serialWarEventManager,
-                playerManager               : serialPlayerManager,
-                turnManager                 : serialTurnManager,
-                field                       : serialField,
+                warEventManager             : this.getWarEventManager().serializeForCreateMfr(),
+                playerManager               : this.getPlayerManager().serializeForCreateMfr(),
+                turnManager                 : this.getTurnManager().serializeForCreateMfr(),
+                field                       : this.getField().serializeForCreateMfr(),
             };
         }
 

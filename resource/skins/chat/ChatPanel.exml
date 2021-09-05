@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing" xmlns:TwnsUiTextInput="TwnsUiTextInput.*">
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing" xmlns:TwnsUiTextInput="TwnsUiTextInput.*">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
-                    scale9Grid="1,1,2,2" locked="true" />
+                         scale9Grid="1,1,2,2" locked="true" />
     <e:Group width="920" scaleX="1" scaleY="1" height="500" horizontalCenter="0" verticalCenter="0">
         <e:Group id="_groupChannel" width="160" top="0" bottom="0" left="0">
             <TwnsUiScrollList:UiScrollList id="_listChat" left="0" right="0" bottom="80" top="0">
@@ -10,16 +11,17 @@
                     <e:itemRendererSkinName>
                         <e:Skin width="160" height="50" currentState="up" states="down,up">
                             <e:Group left="0" right="0" top="0" bottom="0">
-                                <TwnsUiImage:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1" left="0" right="0"
-                                                top="0" bottom="0" x="0" y="0" visible.up="false" />
-                                <TwnsUiImage:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001" left="0" right="0"
-                                                top="0" bottom="0" x="0" y="0" visible.up="true" visible.down="false" />
+                                <TwnsUiImage:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1" left="0"
+                                                     right="0" top="0" bottom="0" x="0" y="0" visible.up="false" />
+                                <TwnsUiImage:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001" left="0"
+                                                     right="0" top="0" bottom="0" x="0" y="0" visible.up="true"
+                                                     visible.down="false" />
                                 <TwnsUiLabel:UiLabel id="_labelType" text="聊天类型" size="12" textColor="0xFFFFFF"
-                                                maxTextWidth="150" x="10" y="8" />
+                                                     maxTextWidth="150" x="10" y="8" />
                                 <TwnsUiLabel:UiLabel id="_labelName" text="聊天名称" size="18" textColor="0xffffff"
-                                                maxTextWidth="150" x="10" y="24" />
-                                <TwnsUiImage:UiImage id="_imgRed" width="20" height="20" source="c04_t01_s01_f01" right="2"
-                                                top="2" />
+                                                     maxTextWidth="150" x="10" y="24" />
+                                <TwnsUiImage:UiImage id="_imgRed" width="20" height="20" source="c04_t01_s01_f01"
+                                                     right="2" top="2" />
                             </e:Group>
                         </e:Skin>
                     </e:itemRendererSkinName>
@@ -28,24 +30,24 @@
                     </e:layout>
                 </e:List>
             </TwnsUiScrollList:UiScrollList>
-            <TwnsUiButton:UiButton id="_btnRefresh" label="Refresh" bottom="40" right="0" skinName="Skins.Component.Button.ButtonGrey001"
-                             left="0"></TwnsUiButton:UiButton>
-            <TwnsUiButton:UiButton id="_btnClose" label="Close" bottom="0" left="0" skinName="Skins.Component.Button.ButtonYellow001"
-                             right="0"></TwnsUiButton:UiButton>
+            <TwnsUiButton:UiButton id="_btnRefresh" label="Refresh" bottom="40" right="0"
+                                   skinName="Skins.Component.Button.ButtonGrey001" left="0"></TwnsUiButton:UiButton>
+            <TwnsUiButton:UiButton id="_btnClose" label="Close" bottom="0" left="0"
+                                   skinName="Skins.Component.Button.ButtonYellow001" right="0"></TwnsUiButton:UiButton>
         </e:Group>
         <e:Group id="_groupMessage" width="740" top="0" bottom="50" right="0">
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
-                            source="commonRectangle0001" scale9Grid="2,2,1,1" />
+                                 source="commonRectangle0001" scale9Grid="2,2,1,1" />
             <TwnsUiLabel:UiLabel id="_labelNoMessage" text="无信息" bold="true" size="30" textColor="0xFFFFFF"
-                            horizontalCenter="0" verticalCenter="0" locked="true" />
+                                 horizontalCenter="0" verticalCenter="0" locked="true" />
             <TwnsUiScrollList:UiScrollList id="_listMessage" left="0" right="0" bottom="6" top="6">
-                <e:List>
+                <e:List useVirtualLayout="false">
                     <e:itemRendererSkinName>
                         <e:Skin currentState="up" states="down,up">
                             <e:Group left="0" right="0" top="0" bottom="0">
                                 <TwnsUiLabel:UiLabel id="_labelName" text="" size="12" textColor="0xffffff" x="10" />
                                 <TwnsUiLabel:UiLabel id="_labelContent" text="" size="16" textColor="0xFFFFFF" y="16"
-                                                wordWrap="true" x="10" maxWidth="720" />
+                                                     wordWrap="true" x="10" maxWidth="720" cacheAsBitmap="true" />
                             </e:Group>
                         </e:Skin>
                     </e:itemRendererSkinName>
@@ -57,7 +59,7 @@
         </e:Group>
         <e:Group id="_groupInput" height="40" width="740" bottom="0" right="0">
             <TwnsUiImage:UiImage source="commonRectangle0001" scale9Grid="2,2,1,1" anchorOffsetX="0" anchorOffsetY="0"
-                            alpha="0.8" left="0" right="80" top="0" bottom="0" />
+                                 alpha="0.8" left="0" right="80" top="0" bottom="0" />
             <TwnsUiTextInput:UiTextInput id="_inputMessage" maxChars="200" left="10" right="90" bottom="4">
                 <TwnsUiButton:skinName>
                     <e:Skin width="100" height="30">
@@ -75,8 +77,8 @@
                             <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0000"
                                      scale9Grid="4,4,1,1" />
                             <TwnsUiLabel:UiLabel id="labelDisplay" size="16" textColor="0xffffff" text="asdf"
-                                            textAlign="center" verticalAlign="middle" left="10" top="8" bottom="8"
-                                            wordWrap="true" bold="true" />
+                                                 textAlign="center" verticalAlign="middle" left="10" top="8" bottom="8"
+                                                 wordWrap="true" bold="true" />
                         </e:Group>
                     </e:Skin>
                 </TwnsUiButton:skinName>

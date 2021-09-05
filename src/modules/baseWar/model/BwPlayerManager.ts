@@ -122,16 +122,10 @@ namespace TwnsBwPlayerManager {
 
             return { players };
         }
-        public serializeForCreateMfr(): ISerialPlayerManager | undefined {
+        public serializeForCreateMfr(): ISerialPlayerManager {
             const players: ISerialPlayer[] = [];
             for (const [, player] of this.getAllPlayersDict()) {
-                const serialPlayer = player.serializeForCreateMfr();
-                if (serialPlayer == null) {
-                    Logger.error(`BwPlayerManager.serializeForCreateMfr() empty serialPlayer.`);
-                    return undefined;
-                }
-
-                players.push(serialPlayer);
+                players.push(player.serializeForCreateMfr());
             }
 
             return { players };

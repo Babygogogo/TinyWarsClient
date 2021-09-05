@@ -2,6 +2,7 @@
 import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
@@ -29,12 +30,12 @@ namespace TwnsMcrCreateMapListPanel {
     import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
 
     type FiltersForMapList = {
-        mapName?        : string;
-        mapDesigner?    : string;
-        playersCount?   : number;
-        playedTimes?    : number;
-        minRating?      : number;
-        mapTag?         : IDataForMapTag;
+        mapName?        : string | null;
+        mapDesigner?    : string | null;
+        playersCount?   : number | null;
+        playedTimes?    : number | null;
+        minRating?      : number | null;
+        mapTag?         : IDataForMapTag | null;
     };
     export class McrCreateMapListPanel extends TwnsUiPanel.UiPanel<FiltersForMapList | null> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
@@ -74,7 +75,7 @@ namespace TwnsMcrCreateMapListPanel {
         }
         public static async hide(): Promise<void> {
             if (McrCreateMapListPanel._instance) {
-                await McrCreateMapListPanel._instance.close();
+                await McrCreateMapListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getInstance(): McrCreateMapListPanel {
@@ -105,7 +106,7 @@ namespace TwnsMcrCreateMapListPanel {
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         public async setAndReviseSelectedMapId(newMapId: number | null): Promise<void> {
@@ -121,7 +122,7 @@ namespace TwnsMcrCreateMapListPanel {
                 (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
 
                 this._listMap.setSelectedIndex(newIndex);
-                await this._showMap(dataList[newIndex].mapId);
+                await this._showMap(dataList[newIndex].mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public getSelectedMapId(): number | null {
@@ -130,7 +131,7 @@ namespace TwnsMcrCreateMapListPanel {
 
         public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
             this._mapFilters            = mapFilters;
-            const dataArray             = await this._createDataForListMap();
+            const dataArray             = await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._dataForList           = dataArray;
 
             const length                = dataArray.length;
@@ -164,7 +165,7 @@ namespace TwnsMcrCreateMapListPanel {
             const selectedMapId = this.getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
-                await McrCreateModel.resetDataByMapId(selectedMapId);
+                await McrCreateModel.resetDataByMapId(selectedMapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 McrCreateSettingsPanel.show();
             }
         }
@@ -196,17 +197,18 @@ namespace TwnsMcrCreateMapListPanel {
             const { playersCount, playedTimes, minRating }  = mapFilters;
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapExtraData  = Helpers.getExisted(mapBriefData.mapExtraData);
-                const mapTag        = mapBriefData.mapTag || {};
-                const realMapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                const rating        = await WarMapModel.getAverageRating(mapId);
+                const mapExtraData      = Helpers.getExisted(mapBriefData.mapExtraData);
+                const mapTag            = mapBriefData.mapTag || {};
+                const realMapName       = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                const rating            = await WarMapModel.getAverageRating(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 if ((!mapBriefData.ruleAvailability?.canMcw)                                                            ||
                     (!mapExtraData.isEnabled)                                                                           ||
                     (!mapExtraData.mapComplexInfo?.mapAvailability?.canMcw)                                             ||
                     ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
                     ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                ||
                     ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                           ||
-                    ((playedTimes != null) && (await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId) < playedTimes))  ||
+                    ((playedTimes != null) && (actualPlayedTimes < playedTimes))                                        ||
                     ((minRating != null) && ((rating == null) || (rating < minRating)))                                 ||
                     ((filterTag.fog != null) && ((!!mapTag.fog) !== filterTag.fog))
                 ) {
@@ -224,7 +226,7 @@ namespace TwnsMcrCreateMapListPanel {
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)));
+            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })));
             this._uiMapInfo.setData({
                 mapInfo: {
                     mapId,
@@ -342,7 +344,7 @@ namespace TwnsMcrCreateMapListPanel {
         private async _onTouchTapBtnNext(): Promise<void> {
             const data = this._getData();
             data.panel.close();
-            await McrCreateModel.resetDataByMapId(data.mapId);
+            await McrCreateModel.resetDataByMapId(data.mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             McrCreateSettingsPanel.show();
         }
     }

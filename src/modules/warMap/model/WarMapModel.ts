@@ -114,12 +114,8 @@ namespace WarMapModel {
     export async function getDesignerName(mapId: number): Promise<string | null> {
         return (await getRawData(mapId))?.designerName ?? null;
     }
-    export async function getMultiPlayerTotalPlayedTimes(mapId: number): Promise<number | null> {
-        const mapBriefData = await getBriefData(mapId);
-        if (!mapBriefData) {
-            return null;
-        }
-
+    export async function getMultiPlayerTotalPlayedTimes(mapId: number): Promise<number> {
+        const mapBriefData  = Helpers.getExisted(await getBriefData(mapId));
         const complexInfo   = mapBriefData.mapExtraData?.mapComplexInfo;
         let totalTimes      = 0;
         for (const info of complexInfo ? complexInfo.warStatisticsArray || [] : []) {

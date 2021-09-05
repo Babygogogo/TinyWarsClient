@@ -1,6 +1,8 @@
 
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -27,11 +29,11 @@ namespace TwnsMeChooseTileDecoratorPanel {
 
         private static _instance: MeChooseTileDecoratorPanel;
 
-        private readonly _listCategory      : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
-        private readonly _listRecent        : TwnsUiScrollList.UiScrollList<DataForTileDecoratorRenderer>;
-        private readonly _labelRecentTitle  : TwnsUiLabel.UiLabel;
-        private readonly _btnAutoFill       : TwnsUiButton.UiButton;
-        private readonly _btnCancel         : TwnsUiButton.UiButton;
+        private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileDecoratorRenderer>;
+        private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
+        private readonly _btnAutoFill!      : TwnsUiButton.UiButton;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
         private _dataListForRecent  : DataForTileDecoratorRenderer[] = [];
 
@@ -43,7 +45,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
         }
         public static async hide(): Promise<void> {
             if (MeChooseTileDecoratorPanel._instance) {
-                await MeChooseTileDecoratorPanel._instance.close();
+                await MeChooseTileDecoratorPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -105,7 +107,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
             TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0233),
                 callback: () => {
-                    MeModel.getWar().getDrawer().autoFillTileDecorators();
+                    Helpers.getExisted(MeModel.getWar()).getDrawer().autoFillTileDecorators();
                     this.close();
                 },
             });
@@ -127,7 +129,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
                     typeMap.set(decoratorType, []);
                 }
 
-                const list = typeMap.get(decoratorType);
+                const list = Helpers.getExisted(typeMap.get(decoratorType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
                     if ((decoratorType === Types.TileDecoratorType.Corner) && (shapeId === 0)) {
                         continue;
@@ -167,8 +169,8 @@ namespace TwnsMeChooseTileDecoratorPanel {
         panel                       : MeChooseTileDecoratorPanel;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
-        private _labelCategory      : TwnsUiLabel.UiLabel;
-        private _listTileDecorator  : TwnsUiScrollList.UiScrollList<DataForTileDecoratorRenderer>;
+        private readonly _labelCategory!        : TwnsUiLabel.UiLabel;
+        private readonly _listTileDecorator!    : TwnsUiScrollList.UiScrollList<DataForTileDecoratorRenderer>;
 
         protected _onOpened(): void {
             this._listTileDecorator.setItemRenderer(TileDecoratorRenderer);
@@ -176,9 +178,9 @@ namespace TwnsMeChooseTileDecoratorPanel {
         }
 
         protected _onDataChanged(): void {
-            const data                          = this.data;
+            const data                          = this._getData();
             const dataListForDrawTileDecorator  = data.dataListForDrawTileDecorator;
-            this._labelCategory.text            = Lang.getTileDecoratorName(dataListForDrawTileDecorator[0].decoratorType);
+            this._labelCategory.text            = Lang.getTileDecoratorName(dataListForDrawTileDecorator[0].decoratorType) ?? CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileDecorator  : DataForTileDecoratorRenderer[] = [];
             const panel                     = data.panel;
@@ -197,9 +199,9 @@ namespace TwnsMeChooseTileDecoratorPanel {
         panel               : MeChooseTileDecoratorPanel;
     };
     class TileDecoratorRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileDecoratorRenderer> {
-        private _group          : eui.Group;
-        private _conTileView    : eui.Group;
-        private _labelName      : TwnsUiLabel.UiLabel;
+        private readonly _group!        : eui.Group;
+        private readonly _conTileView!  : eui.Group;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
@@ -221,7 +223,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
         }
 
         protected _onDataChanged(): void {
-            const data                      = this.data;
+            const data                      = this._getData();
             const dataForDrawTileDecorator  = data.dataForDrawTileDecorator;
             const shapeId                   = dataForDrawTileDecorator.shapeId;
             this._labelName.text            = `${shapeId}`;
@@ -240,12 +242,12 @@ namespace TwnsMeChooseTileDecoratorPanel {
         }
 
         public onItemTapEvent(): void {
-            const data                      = this.data;
+            const data                      = this._getData();
             const panel                     = data.panel;
             const dataForDrawTileDecorator  = data.dataForDrawTileDecorator;
             panel.updateOnChooseTileDecorator(dataForDrawTileDecorator);
             panel.close();
-            MeModel.getWar().getDrawer().setModeDrawTileDecorator(dataForDrawTileDecorator);
+            Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawTileDecorator(dataForDrawTileDecorator);
         }
     }
 }

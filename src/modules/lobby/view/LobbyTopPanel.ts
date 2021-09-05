@@ -1,5 +1,7 @@
 
 import TwnsChatPanel            from "../../chat/view/ChatPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import TwnsUiButton             from "../../tools/ui/UiButton";
@@ -22,13 +24,13 @@ namespace TwnsLobbyTopPanel {
 
         private static _instance: LobbyTopPanel;
 
-        private _group          : eui.Group;
+        private readonly _group!            : eui.Group;
 
-        private _groupUserInfo  : eui.Group;
-        private _labelNickname  : TwnsUiLabel.UiLabel;
-        private _labelUserId    : TwnsUiLabel.UiLabel;
+        private readonly _groupUserInfo!    : eui.Group;
+        private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
+        private readonly _labelUserId!      : TwnsUiLabel.UiLabel;
 
-        private _btnSettings    : TwnsUiButton.UiButton;
+        private readonly _btnSettings!      : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!LobbyTopPanel._instance) {
@@ -69,29 +71,31 @@ namespace TwnsLobbyTopPanel {
             await this._showCloseAnimation();
         }
 
-        private _onMsgUserLogin(e: egret.Event): void {
+        private _onMsgUserLogin(): void {
             this._updateView();
         }
 
-        private _onMsgUserLogout(e: egret.Event): void {
+        private _onMsgUserLogout(): void {
             this.close();
         }
 
-        private _onMsgUserSetNickname(e: egret.Event): void {
+        private _onMsgUserSetNickname(): void {
             this._updateLabelNickname();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             // nothing to do
         }
 
-        private _onTouchedGroupUserInfo(e: egret.Event): void {
+        private _onTouchedGroupUserInfo(): void {
             UserOnlineUsersPanel.hide();
             TwnsChatPanel.ChatPanel.hide();
-            UserPanel.show({ userId: UserModel.getSelfUserId() });
+            UserPanel.show({
+                userId: Helpers.getExisted(UserModel.getSelfUserId()),
+            });
         }
 
-        private _onTouchedBtnSettings(e: egret.TouchEvent): void {
+        private _onTouchedBtnSettings(): void {
             UserSettingsPanel.show();
         }
 
@@ -103,7 +107,7 @@ namespace TwnsLobbyTopPanel {
                 .to({ alpha: 1, top: 0 }, 200);
         }
         private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve, reject) => {
+            return new Promise<void>((resolve) => {
                 const group = this._group;
                 egret.Tween.removeTweens(group);
                 egret.Tween.get(group)
@@ -119,7 +123,7 @@ namespace TwnsLobbyTopPanel {
         }
 
         private async _updateLabelNickname(): Promise<void> {
-            this._labelNickname.text = await UserModel.getSelfNickname();
+            this._labelNickname.text = UserModel.getSelfNickname() ?? CommonConstants.ErrorTextForUndefined;
         }
     }
 }

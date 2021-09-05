@@ -224,7 +224,7 @@ namespace FlowManager {
 
         await SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
-    export async function gotoMapEditorWar(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): Promise<void> {
+    export async function gotoMapEditorWar(mapRawData: Types.Undefinable<ProtoTypes.Map.IMapRawData>, slotIndex: number, isReview: boolean): Promise<void> {
         MpwModel.unloadWar();
         SpwModel.unloadWar();
         RwModel.unloadWar();

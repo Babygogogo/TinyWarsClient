@@ -1,14 +1,16 @@
 
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import MeModel          from "../model/MeModel";
-import TwnsMeWar        from "../model/MeWar";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import MeModel              from "../model/MeModel";
+import TwnsMeWar            from "../model/MeWar";
 
 namespace TwnsMeMapTagPanel {
     import MeWar        = TwnsMeWar.MeWar;
@@ -21,15 +23,13 @@ namespace TwnsMeMapTagPanel {
 
         private static _instance: MeMapTagPanel;
 
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _btnCancel      : TwnsUiButton.UiButton;
-        private _btnConfirm     : TwnsUiButton.UiButton;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnCancel!    : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
-        private _groupFog       : eui.Group;
-        private _labelFog       : TwnsUiLabel.UiLabel;
-        private _imgFog         : TwnsUiImage.UiImage;
-
-        private _war            : MeWar;
+        private readonly _groupFog!     : eui.Group;
+        private readonly _labelFog!     : TwnsUiLabel.UiLabel;
+        private readonly _imgFog!       : TwnsUiImage.UiImage;
 
         public static show(): void {
             if (!MeMapTagPanel._instance) {
@@ -40,7 +40,7 @@ namespace TwnsMeMapTagPanel {
 
         public static async hide(): Promise<void> {
             if (MeMapTagPanel._instance) {
-                await MeMapTagPanel._instance.close();
+                await MeMapTagPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -63,29 +63,30 @@ namespace TwnsMeMapTagPanel {
 
             this._updateComponentsForLanguage();
 
-            const war               = MeModel.getWar();
-            const mapTag            = war.getMapTag() || {};
-            this._war               = war;
-            this._imgFog.visible    = !!mapTag.fog;
+            this._imgFog.visible = !!(this._getWar().getMapTag() || {}).fog;
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _getWar(): MeWar {
+            return Helpers.getExisted(MeModel.getWar());
+        }
+
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            this._war.setMapTag({
+        private _onTouchedBtnConfirm(): void {
+            this._getWar().setMapTag({
                 fog     : this._imgFog.visible ? true : null,
             });
             this.close();
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private _onTouchedGroupMcw(e: egret.TouchEvent): void {
-            if (!this._war.getIsReviewingMap()) {
+        private _onTouchedGroupMcw(): void {
+            if (!this._getWar().getIsReviewingMap()) {
                 this._imgFog.visible = !this._imgFog.visible;
             }
         }

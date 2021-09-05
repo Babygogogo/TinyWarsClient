@@ -6,6 +6,7 @@ import TwnsCommonInputPanel         from "../../common/view/CommonInputPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
+import Helpers                      from "../../tools/helpers/Helpers";
 import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
@@ -43,24 +44,23 @@ namespace TwnsBwUnitDetailPanel {
 
         private static _instance: BwUnitDetailPanel;
 
-        private _group              : eui.Group;
-        private _conUnitView        : eui.Group;
-        private _labelName          : TwnsUiLabel.UiLabel;
-        private _btnUnitsInfo       : TwnsUiButton.UiButton;
+        private readonly _group!                : eui.Group;
+        private readonly _conUnitView!          : eui.Group;
+        private readonly _labelName!            : TwnsUiLabel.UiLabel;
+        private readonly _btnUnitsInfo!         : TwnsUiButton.UiButton;
 
-        private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
-        private _listDamageChart    : TwnsUiScrollList.UiScrollList<DataForDamageRenderer>;
-        private _labelDamageChart   : TwnsUiLabel.UiLabel;
-        private _labelOffenseMain1  : TwnsUiLabel.UiLabel;
-        private _labelOffenseSub1   : TwnsUiLabel.UiLabel;
-        private _labelDefenseMain1  : TwnsUiLabel.UiLabel;
-        private _labelDefenseSub1   : TwnsUiLabel.UiLabel;
-        private _labelOffenseMain2  : TwnsUiLabel.UiLabel;
-        private _labelOffenseSub2   : TwnsUiLabel.UiLabel;
-        private _labelDefenseMain2  : TwnsUiLabel.UiLabel;
-        private _labelDefenseSub2   : TwnsUiLabel.UiLabel;
+        private readonly _listInfo!             : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private readonly _listDamageChart!      : TwnsUiScrollList.UiScrollList<DataForDamageRenderer>;
+        private readonly _labelDamageChart!     : TwnsUiLabel.UiLabel;
+        private readonly _labelOffenseMain1!    : TwnsUiLabel.UiLabel;
+        private readonly _labelOffenseSub1!     : TwnsUiLabel.UiLabel;
+        private readonly _labelDefenseMain1!    : TwnsUiLabel.UiLabel;
+        private readonly _labelDefenseSub1!     : TwnsUiLabel.UiLabel;
+        private readonly _labelOffenseMain2!    : TwnsUiLabel.UiLabel;
+        private readonly _labelOffenseSub2!     : TwnsUiLabel.UiLabel;
+        private readonly _labelDefenseMain2!    : TwnsUiLabel.UiLabel;
+        private readonly _labelDefenseSub2!     : TwnsUiLabel.UiLabel;
 
-        private _dataForList: DataForDamageRenderer[];
         private _unitView   = new WarMapUnitView();
 
         public static show(openData: OpenDataForBwUnitDetailPanel): void {
@@ -102,9 +102,6 @@ namespace TwnsBwUnitDetailPanel {
             this._conUnitView.addChild(this._unitView);
 
             this._updateView();
-        }
-        protected async _onClosed(): Promise<void> {
-            this._dataForList = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,7 +148,7 @@ namespace TwnsBwUnitDetailPanel {
 
         private _updateUnitViewAndLabelName(): void {
             const unit              = this._getOpenData().unit;
-            this._labelName.text    = Lang.getUnitName(unit.getUnitType());
+            this._labelName.text    = Lang.getUnitName(unit.getUnitType()) ?? CommonConstants.ErrorTextForUndefined;
             this._unitView.update({
                 gridIndex       : { x: 0, y: 0},
                 skinId          : unit.getSkinId(),
@@ -167,8 +164,7 @@ namespace TwnsBwUnitDetailPanel {
             const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
             const war           = unit.getWar();
             const isCheating    = war.getCanCheat();
-
-            const dataList: DataForInfoRenderer[] = [
+            this._listInfo.bindData(Helpers.getNonNullElements([
                 this._createInfoHp(unit, cfg, isCheating),
                 {
                     // Production Cost
@@ -223,9 +219,7 @@ namespace TwnsBwUnitDetailPanel {
                 this._createInfoActionState(unit, cfg, isCheating),
                 this._createInfoDiving(unit, cfg, isCheating),
                 this._createInfoCo(unit, cfg, isCheating),
-            ].filter(v => !!v);
-
-            this._listInfo.bindData(dataList);
+            ]));
         }
 
         private _createInfoHp(unit: BwUnit, cfg: ProtoTypes.Config.IUnitTemplateCfg, isCheating: boolean): DataForInfoRenderer {
@@ -507,7 +501,7 @@ namespace TwnsBwUnitDetailPanel {
                 const state = unit.getActionState();
                 return {
                     titleText               : Lang.getText(LangTextType.B0367),
-                    valueText               : Lang.getUnitActionStateText(state),
+                    valueText               : Lang.getUnitActionStateText(state) ?? CommonConstants.ErrorTextForUndefined,
                     callbackOnTouchedTitle  : () => {
                         CommonConfirmPanel.show({
                             title       : Lang.getText(LangTextType.B0349),
@@ -574,8 +568,7 @@ namespace TwnsBwUnitDetailPanel {
         }
 
         private _updateListDamageChart(): void {
-            this._dataForList = this._createDataForListDamageChart();
-            this._listDamageChart.bindData(this._dataForList);
+            this._listDamageChart.bindData(this._createDataForListDamageChart());
         }
 
         private _createDataForListDamageChart(): DataForDamageRenderer[] {
@@ -616,8 +609,8 @@ namespace TwnsBwUnitDetailPanel {
     };
 
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : TwnsUiButton.UiButton;
-        private _labelValue : TwnsUiLabel.UiLabel;
+        private readonly _btnTitle!     : TwnsUiButton.UiButton;
+        private readonly _labelValue!   : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -626,7 +619,7 @@ namespace TwnsBwUnitDetailPanel {
         }
 
         protected _onDataChanged(): void {
-            const data              = this.data;
+            const data              = this._getData();
             this._labelValue.text   = data.valueText;
             this._btnTitle.label    = data.titleText;
             this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
@@ -648,28 +641,25 @@ namespace TwnsBwUnitDetailPanel {
     };
 
     class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {
-        private _group                  : eui.Group;
-        private _conView                : eui.Group;
-        private _unitView               : WarMapUnitView;
-        private _tileView               : TwnsUiImage.UiImage;
-        private _labelPrimaryAttack     : TwnsUiLabel.UiLabel;
-        private _labelSecondaryAttack   : TwnsUiLabel.UiLabel;
-        private _labelPrimaryDefend     : TwnsUiLabel.UiLabel;
-        private _labelSecondaryDefend   : TwnsUiLabel.UiLabel;
+        private readonly _group!                : eui.Group;
+        private readonly _conView!              : eui.Group;
+        private readonly _unitView              = new WarMapUnitView();
+        private readonly _tileView!             : TwnsUiImage.UiImage;
+        private readonly _labelPrimaryAttack!   : TwnsUiLabel.UiLabel;
+        private readonly _labelSecondaryAttack! : TwnsUiLabel.UiLabel;
+        private readonly _labelPrimaryDefend!   : TwnsUiLabel.UiLabel;
+        private readonly _labelSecondaryDefend! : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
 
-            this._unitView = new WarMapUnitView();
             this._conView.addChild(this._unitView);
         }
 
         private _onNotifyUnitAnimationTick(): void {
-            if (this.data) {
-                this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
-            }
+            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
         }
 
         protected _onDataChanged(): void {
@@ -680,7 +670,7 @@ namespace TwnsBwUnitDetailPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data              = this.data;
+            const data              = this._getData();
             const configVersion     = data.configVersion;
             const attackUnitType    = data.attackUnitType;
             const targetUnitType    = data.targetUnitType;
@@ -712,10 +702,10 @@ namespace TwnsBwUnitDetailPanel {
                 this._unitView.visible = false;
                 this._tileView.visible = true;
 
-                const targetTileType            = data.targetTileType;
+                const targetTileType            = Helpers.getExisted(data.targetTileType);
                 const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
                 const targetCfg                 = ConfigManager.getTileTemplateCfgByType(configVersion, targetTileType);
-                const targetArmorType           = targetCfg.armorType;
+                const targetArmorType           = Helpers.getExisted(targetCfg.armorType);
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
                 this._tileView.source           = CommonModel.getCachedTileObjectImageSource({

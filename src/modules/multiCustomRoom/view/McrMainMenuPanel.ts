@@ -11,16 +11,17 @@ import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
 import TwnsMrrMainMenuPanel         from "../../multiRankRoom/view/MrrMainMenuPanel";
 import TwnsRwReplayListPanel        from "../../replayWar/view/RwReplayListPanel";
 import TwnsSpmMainMenuPanel         from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";
 import TwnsUiButton                 from "../../tools/ui/UiButton";
 import TwnsUiPanel                  from "../../tools/ui/UiPanel";
 import WwModel                      from "../../watchWar/model/WwModel";
+import TwnsWwMainMenuPanel          from "../../watchWar/view/WwMainMenuPanel";
 import TwnsMcrCreateMapListPanel    from "./McrCreateMapListPanel";
 import TwnsMcrJoinRoomListPanel     from "./McrJoinRoomListPanel";
 import TwnsMcrMyRoomListPanel       from "./McrMyRoomListPanel";
-import TwnsWwMainMenuPanel    from "../../watchWar/view/WwMainMenuPanel";
 
 namespace TwnsMcrMainMenuPanel {
     import MfrMainMenuPanel         = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
@@ -41,20 +42,20 @@ namespace TwnsMcrMainMenuPanel {
 
         private static _instance: McrMainMenuPanel;
 
-        private readonly _group             : eui.Group;
-        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
-        private readonly _btnRanking        : TwnsUiButton.UiButton;
-        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
+        private readonly _group!            : eui.Group;
+        private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
+        private readonly _btnRanking!       : TwnsUiButton.UiButton;
+        private readonly _btnSinglePlayer!  : TwnsUiButton.UiButton;
 
-        private readonly _groupLeft         : eui.Group;
-        private readonly _btnCreateRoom     : TwnsUiButton.UiButton;
-        private readonly _btnJoinRoom       : TwnsUiButton.UiButton;
-        private readonly _btnMyRoom         : TwnsUiButton.UiButton;
-        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
-        private readonly _btnWatchWar       : TwnsUiButton.UiButton;
-        private readonly _btnReplayWar      : TwnsUiButton.UiButton;
-        private readonly _btnCoopMode       : TwnsUiButton.UiButton;
-        private readonly _btnFreeMode       : TwnsUiButton.UiButton;
+        private readonly _groupLeft!        : eui.Group;
+        private readonly _btnCreateRoom!    : TwnsUiButton.UiButton;
+        private readonly _btnJoinRoom!      : TwnsUiButton.UiButton;
+        private readonly _btnMyRoom!        : TwnsUiButton.UiButton;
+        private readonly _btnContinueWar!   : TwnsUiButton.UiButton;
+        private readonly _btnWatchWar!      : TwnsUiButton.UiButton;
+        private readonly _btnReplayWar!     : TwnsUiButton.UiButton;
+        private readonly _btnCoopMode!      : TwnsUiButton.UiButton;
+        private readonly _btnFreeMode!      : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!McrMainMenuPanel._instance) {
@@ -65,7 +66,7 @@ namespace TwnsMcrMainMenuPanel {
 
         public static async hide(): Promise<void> {
             if (McrMainMenuPanel._instance) {
-                await McrMainMenuPanel._instance.close();
+                await McrMainMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -98,7 +99,7 @@ namespace TwnsMcrMainMenuPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -257,11 +258,11 @@ namespace TwnsMcrMainMenuPanel {
 
         private async _updateView(): Promise<void> {
             const watchInfos = WwModel.getWatchRequestedWarInfos();
-            this._btnMyRoom.setRedVisible(await McrModel.checkIsRed());
+            this._btnMyRoom.setRedVisible(await McrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
             this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMcwWars());
             this._btnWatchWar.setRedVisible((!!watchInfos) && (watchInfos.length > 0));
-            this._btnCoopMode.setRedVisible(MpwModel.checkIsRedForMyCcwWars() || await CcrModel.checkIsRed());
-            this._btnFreeMode.setRedVisible(MpwModel.checkIsRedForMyMfwWars() || await MfrModel.checkIsRed());
+            this._btnCoopMode.setRedVisible(MpwModel.checkIsRedForMyCcwWars() || await CcrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            this._btnFreeMode.setRedVisible(MpwModel.checkIsRedForMyMfwWars() || await MfrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
         }
     }
 }

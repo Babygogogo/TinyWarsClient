@@ -38,8 +38,8 @@ namespace TwnsMeTileSimpleView {
             tileBaseShapeId     : number | null;
             tileDecoratorType   : TileDecoratorType | null;
             tileDecoratorShapeId: number | null;
-            tileObjectType      : TileObjectType;
-            tileObjectShapeId   : number;
+            tileObjectType      : TileObjectType | null;
+            tileObjectShapeId   : number | null;
             playerIndex         : number;
         }): MeTileSimpleView {
             this._baseType          = tileBaseType;

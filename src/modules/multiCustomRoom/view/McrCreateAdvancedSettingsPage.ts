@@ -3,14 +3,15 @@ import TwnsCommonBanCoPanel     from "../../common/view/CommonBanCoPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
 import Notify                   from "../../tools/notify/Notify";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
 import TwnsUiButton             from "../../tools/ui/UiButton";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -27,14 +28,13 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
     import PlayerRuleType       = Types.PlayerRuleType;
 
     export class McrCreateAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
-        private readonly _scroller      : eui.Scroller;
-        private readonly _btnReset      : TwnsUiButton.UiButton;
-        private readonly _btnCustomize  : TwnsUiButton.UiButton;
-        private readonly _listSetting   : TwnsUiScrollList.UiScrollList<DataForSettingRenderer>;
-        private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _scroller!     : eui.Scroller;
+        private readonly _btnReset!     : TwnsUiButton.UiButton;
+        private readonly _btnCustomize! : TwnsUiButton.UiButton;
+        private readonly _listSetting!  : TwnsUiScrollList.UiScrollList<DataForSettingRenderer>;
+        private readonly _listPlayer!   : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
-        private _initialWarRuleId   : number;
-        private _mapRawData         : ProtoTypes.Map.IMapRawData;
+        private _initialWarRuleId   : number | null = null;
 
         public constructor() {
             super();
@@ -60,7 +60,6 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this.bottom = 0;
 
             this._initialWarRuleId  = McrCreateModel.getPresetWarRuleId();
-            this._mapRawData        = await McrCreateModel.getMapRawData();
 
             this._updateComponentsForLanguage();
             this._initListSetting();
@@ -72,17 +71,17 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyMcrCreatePresetWarRuleIdChanged(e: egret.Event): void {
+        private _onNotifyMcrCreatePresetWarRuleIdChanged(): void {
             this._updateBtnReset();
             this._updateBtnCustomize();
         }
-        private _onTouchedBtnReset(e: egret.TouchEvent): void {
+        private _onTouchedBtnReset(): void {
             McrCreateModel.resetDataByWarRuleId(this._initialWarRuleId);
         }
-        private _onTouchedBtnCustomize(e: egret.TouchEvent): void {
+        private _onTouchedBtnCustomize(): void {
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
@@ -122,8 +121,8 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             ]);
         }
 
-        private _updateListPlayer(): void {
-            const playersCount  = this._mapRawData.playersCountUnneutral;
+        private async _updateListPlayer(): Promise<void> {
+            const playersCount  = Helpers.getExisted((await McrCreateModel.getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).playersCountUnneutral);
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -139,8 +138,8 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
         playerRuleType  : PlayerRuleType;
     };
     class SettingRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSettingRenderer> {
-        private readonly _labelName : TwnsUiLabel.UiLabel;
-        private readonly _btnHelp   : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _btnHelp!      : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -152,12 +151,12 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             const data = this.data;
             if (data) {
                 const playerRuleType    = data.playerRuleType;
-                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType);
+                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType) ?? CommonConstants.ErrorTextForUndefined;
                 this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoIdArray;
             }
         }
 
-        private _onTouchedBtnHelp(e: egret.Event): void {
+        private _onTouchedBtnHelp(): void {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
@@ -176,8 +175,8 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
         playerIndex : number;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private _labelPlayerIndex   : TwnsUiLabel.UiLabel;
-        private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
+        private readonly _listInfo!         : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -188,15 +187,13 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
         }
 
         private _updateView(): void {
-            const data = this.data;
-            if (data) {
-                this._labelPlayerIndex.text = `P${data.playerIndex}`;
-                this._listInfo.bindData(this._createDataForListInfo());
-            }
+            const data                  = this._getData();
+            this._labelPlayerIndex.text = `P${data.playerIndex}`;
+            this._listInfo.bindData(this._createDataForListInfo());
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const playerIndex = this.data.playerIndex;
+            const playerIndex = this._getData().playerIndex;
             return [
                 { playerIndex, playerRuleType: PlayerRuleType.TeamIndex },
                 { playerIndex, playerRuleType: PlayerRuleType.BannedCoIdArray },
@@ -224,12 +221,12 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
         callbackOnTouchedTitle? : (() => void) | null;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
-        private readonly _btnCustom     : TwnsUiButton.UiButton;
-        private readonly _inputValue    : TwnsUiTextInput.UiTextInput;
-        private readonly _labelValue    : TwnsUiLabel.UiLabel;
+        private readonly _btnCustom!    : TwnsUiButton.UiButton;
+        private readonly _inputValue!   : TwnsUiTextInput.UiTextInput;
+        private readonly _labelValue!   : TwnsUiLabel.UiLabel;
 
-        private _callbackForTouchLabelValue     : () => void;
-        private _callbackForFocusOutInputValue  : () => void;
+        private _callbackForTouchLabelValue     : (() => void) | null = null;
+        private _callbackForFocusOutInputValue  : (() => void) | null = null;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -253,7 +250,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this._updateComponentsForValue();
         }
 
-        private _onTouchedBtnCustom(e: egret.TouchEvent): void {
+        private _onTouchedBtnCustom(): void {
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
@@ -261,21 +258,21 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 },
             });
         }
-        private _onTouchedLabelValue(e: egret.TouchEvent): void {
+        private _onTouchedLabelValue(): void {
             const callback = this._callbackForTouchLabelValue;
             if (callback) {
                 callback();
                 this._updateComponentsForValue();
             }
         }
-        private _onFocusOutInputValue(e: egret.FocusEvent): void {
+        private _onFocusOutInputValue(): void {
             const callback = this._callbackForFocusOutInputValue;
             if (callback) {
                 callback();
                 this._updateComponentsForValue();
             }
         }
-        private _onNotifyMcrCreatePresetWarRuleIdChanged(e: egret.Event): void {
+        private _onNotifyMcrCreatePresetWarRuleIdChanged(): void {
             this._updateBtnCustom();
             this._updateComponentsForValue();
         }
@@ -312,7 +309,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
 
             const labelValue                    = this._labelValue;
             labelValue.visible                  = true;
-            labelValue.text                     = Lang.getPlayerTeamName(McrCreateModel.getTeamIndex(playerIndex));
+            labelValue.text                     = Lang.getPlayerTeamName(McrCreateModel.getTeamIndex(playerIndex)) || CommonConstants.ErrorTextForUndefined;
             labelValue.textColor                = 0xFFFFFF;
             this._callbackForTouchLabelValue    = () => McrCreateModel.tickTeamIndex(playerIndex);
         }
@@ -322,8 +319,8 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
 
             const labelValue                    = this._labelValue;
             const currValue                     = (McrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
-            const configVersion                 = ConfigManager.getLatestConfigVersion();
-            const selfCoId                      = playerIndex === McrCreateModel.getSelfPlayerIndex() ? McrCreateModel.getSelfCoId() : undefined;
+            const configVersion                 = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const selfCoId                      = playerIndex === McrCreateModel.getSelfPlayerIndex() ? McrCreateModel.getSelfCoId() : null;
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
@@ -340,7 +337,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                         Notify.dispatch(NotifyType.McrCreateBannedCoIdArrayChanged);
                         TwnsCommonBanCoPanel.CommonBanCoPanel.hide();
                     };
-                    if (!bannedCoIdSet.has(selfCoId)) {
+                    if ((selfCoId == null) || (!bannedCoIdSet.has(selfCoId))) {
                         callback();
                     } else {
                         CommonConfirmPanel.show({

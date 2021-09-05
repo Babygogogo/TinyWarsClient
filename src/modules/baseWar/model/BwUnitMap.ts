@@ -170,27 +170,15 @@ namespace TwnsBwUnitMap {
             this.getView().stopRunningView();
         }
 
-        public serialize(): ISerialUnitMap | undefined {
-            const nextUnitId = this.getNextUnitId();
-            if (nextUnitId == null) {
-                Logger.error(`BwUnitMap.serialize() empty nextUnitId.`);
-                return undefined;
-            }
-
+        public serialize(): ISerialUnitMap {
             const units: ISerialUnit[] = [];
             for (const unit of this.getAllUnits()) {
-                const serializedUnit = unit.serialize();
-                if (!serializedUnit) {
-                    Logger.error(`BwUnitMap.serialize() empty serializedUnit.`);
-                    return undefined;
-                }
-
-                units.push(serializedUnit);
+                units.push(unit.serialize());
             }
 
             return {
                 units,
-                nextUnitId,
+                nextUnitId  : this.getNextUnitId(),
             };
         }
         public serializeForCreateSfw(): ISerialUnitMap | undefined {

@@ -1,4 +1,6 @@
 
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -26,10 +28,10 @@ namespace TwnsMeAddWarEventToRulePanel {
 
         private static _instance: MeAddWarEventToRulePanel;
 
-        private _listWarEvent   : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _labelNoWarEvent: TwnsUiLabel.UiLabel;
-        private _btnClose       : TwnsUiButton.UiButton;
+        private readonly _listWarEvent!     : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelNoWarEvent!  : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForMeAddWarEventId): void {
             if (!MeAddWarEventToRulePanel._instance) {
@@ -64,7 +66,7 @@ namespace TwnsMeAddWarEventToRulePanel {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -81,9 +83,9 @@ namespace TwnsMeAddWarEventToRulePanel {
         private _updateListMessageAndLabelNoMessage(): void {
             const dataArray : DataForWarEventRenderer[] = [];
             const warRule   = this._getOpenData().warRule;
-            for (const warEvent of MeModel.getWar().getWarEventManager().getWarEventFullData().eventArray || []) {
+            for (const warEvent of Helpers.getExisted(MeModel.getWar()).getWarEventManager().getWarEventFullData()?.eventArray || []) {
                 dataArray.push({
-                    warEventId  : warEvent.eventId,
+                    warEventId  : Helpers.getExisted(warEvent.eventId),
                     warRule,
                 });
             }
@@ -98,10 +100,10 @@ namespace TwnsMeAddWarEventToRulePanel {
         warRule     : ProtoTypes.WarRule.IWarRule;
     };
     class WarEventRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventRenderer> {
-        private _labelId    : TwnsUiLabel.UiLabel;
-        private _btnDelete  : TwnsUiButton.UiButton;
-        private _labelName  : TwnsUiLabel.UiLabel;
-        private _btnAdd     : TwnsUiButton.UiButton;
+        private readonly _labelId!      : TwnsUiLabel.UiLabel;
+        private readonly _btnDelete!    : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _btnAdd!       : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -116,20 +118,20 @@ namespace TwnsMeAddWarEventToRulePanel {
             this._btnDelete.setTextColor(0xFF0000);
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyMeWarEventIdArrayChanged(e: egret.Event): void {
+        private _onNotifyMeWarEventIdArrayChanged(): void {
             this._updateBtnAddAndBtnDelete();
         }
-        private _onTouchedBtnAdd(e: egret.TouchEvent): void {
+        private _onTouchedBtnAdd(): void {
             const data = this.data;
             if (data) {
                 WarRuleHelpers.addWarEventId(data.warRule, data.warEventId);
                 Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
-        private _onTouchedBtnDelete(e: egret.TouchEvent): void {
+        private _onTouchedBtnDelete(): void {
             const data = this.data;
             if (data) {
                 WarRuleHelpers.deleteWarEventId(data.warRule, data.warEventId);
@@ -138,7 +140,7 @@ namespace TwnsMeAddWarEventToRulePanel {
         }
 
         protected async _onDataChanged(): Promise<void> {
-            const data          = this.data;
+            const data          = this._getData();
             this._labelId.text  = `#${data.warEventId}`;
             this._updateLabelName();
             this._updateBtnAddAndBtnDelete();
@@ -152,10 +154,8 @@ namespace TwnsMeAddWarEventToRulePanel {
         }
 
         private _updateLabelName(): void {
-            const data              = this.data;
-            this._labelName.text    = data
-                ? Lang.getLanguageText({ textArray: MeModel.getWar().getWarEventManager().getWarEvent(data.warEventId).eventNameArray })
-                : undefined;
+            const data              = this._getData();
+            this._labelName.text    = Lang.getLanguageText({ textArray: Helpers.getExisted(MeModel.getWar()).getWarEventManager().getWarEvent(data.warEventId).eventNameArray }) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateBtnAddAndBtnDelete(): void {

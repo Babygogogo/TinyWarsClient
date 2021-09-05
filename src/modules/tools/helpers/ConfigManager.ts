@@ -901,19 +901,22 @@ namespace ConfigManager {
     }): boolean {
         return getSymmetricalTileBaseShapeId(params.baseType, params.shapeId1, params.symmetryType) === (params.shapeId2 || 0);
     }
-    export function checkIsTileDecoratorSymmetrical(params: {
-        decoratorType   : TileDecoratorType;
+    export function checkIsTileDecoratorSymmetrical({ decoratorType, shapeId1, shapeId2, symmetryType }: {
+        decoratorType   : TileDecoratorType | null;
         shapeId1        : number | null | undefined;
         shapeId2        : number | null | undefined;
         symmetryType    : Types.SymmetryType;
     }): boolean {
-        const { shapeId1, shapeId2 } = params;
+        if (decoratorType == null) {
+            return (shapeId1 == null) && (shapeId2 == null);
+        }
+
         if (shapeId1 == null) {
             return shapeId2 == null;
         } else if (shapeId2 == null) {
             return shapeId1 == null;
         } else {
-            return getSymmetricalTileDecoratorShapeId(params.decoratorType, shapeId1, params.symmetryType) === shapeId2;
+            return getSymmetricalTileDecoratorShapeId(decoratorType, shapeId1, symmetryType) === shapeId2;
         }
     }
     export function checkIsTileObjectSymmetrical(params: {

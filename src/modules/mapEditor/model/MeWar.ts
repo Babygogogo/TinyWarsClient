@@ -38,15 +38,15 @@ namespace TwnsMeWar {
         private readonly _drawer                = new MeDrawer();
         private readonly _warEventManager       = new MeWarEventManager();
 
-        private _mapModifiedTime    : number;
-        private _mapSlotIndex       : number;
-        private _mapDesignerUserId  : number;
-        private _mapDesignerName    : string;
-        private _mapNameList        : ILanguageText[];
+        private _mapModifiedTime?   : number;
+        private _mapSlotIndex?      : number;
+        private _mapDesignerUserId? : number;
+        private _mapDesignerName?   : string;
+        private _mapNameList?       : ILanguageText[];
         private _isReviewingMap     = false;
         private _warRuleList        : IWarRule[] = [];
         private _isMapModified      = false;
-        private _mapTag             : IDataForMapTag;
+        private _mapTag?            : IDataForMapTag;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
             const baseInitError = await this._baseInit(data);
@@ -64,14 +64,14 @@ namespace TwnsMeWar {
             const warData = MeUtility.createISerialWar(data);
             await this.init(warData);
 
-            const mapRawData = data.mapRawData;
-            this.setMapSlotIndex(data.slotIndex);
-            this.setMapModifiedTime(mapRawData.modifiedTime);
-            this.setMapDesignerUserId(mapRawData.designerUserId);
-            this.setMapDesignerName(mapRawData.designerName);
-            this.setMapNameArray(mapRawData.mapNameArray);
-            this._setWarRuleArray(mapRawData.warRuleArray || [warData.settingsForCommon.warRule]);
-            this.setMapTag(mapRawData.mapTag);
+            const mapRawData = Helpers.getExisted(data.mapRawData);
+            this.setMapSlotIndex(Helpers.getExisted(data.slotIndex));
+            this.setMapModifiedTime(Helpers.getExisted(mapRawData.modifiedTime));
+            this.setMapDesignerUserId(Helpers.getExisted(mapRawData.designerUserId));
+            this.setMapDesignerName(Helpers.getExisted(mapRawData.designerName));
+            this.setMapNameArray(Helpers.getExisted(mapRawData.mapNameArray));
+            this._setWarRuleArray(Helpers.getExisted(mapRawData.warRuleArray || [Helpers.getExisted(warData.settingsForCommon?.warRule)]));
+            this.setMapTag(mapRawData.mapTag || {});
         }
 
         public startRunning(): BwWar {
@@ -245,32 +245,32 @@ namespace TwnsMeWar {
             this._mapModifiedTime = time;
         }
         public getMapModifiedTime(): number {
-            return this._mapModifiedTime;
+            return Helpers.getDefined(this._mapModifiedTime);
         }
 
         public getMapSlotIndex(): number {
-            return this._mapSlotIndex;
+            return Helpers.getDefined(this._mapSlotIndex);
         }
         public setMapSlotIndex(value: number): void {
             this._mapSlotIndex = value;
         }
 
         public getMapDesignerUserId(): number {
-            return this._mapDesignerUserId;
+            return Helpers.getDefined(this._mapDesignerUserId);
         }
         public setMapDesignerUserId(value: number): void {
             this._mapDesignerUserId = value;
         }
 
         public getMapDesignerName(): string {
-            return this._mapDesignerName;
+            return Helpers.getDefined(this._mapDesignerName);
         }
         public setMapDesignerName(value: string): void {
             this._mapDesignerName = value;
         }
 
         public getMapNameArray(): ILanguageText[] {
-            return this._mapNameList;
+            return Helpers.getDefined(this._mapNameList);
         }
         public setMapNameArray(value: ILanguageText[]): void {
             this._mapNameList = value;
@@ -297,18 +297,18 @@ namespace TwnsMeWar {
             this._warRuleList = value;
         }
         public getWarRuleByRuleId(ruleId: number): IWarRule {
-            return this.getWarRuleArray().find(v => v.ruleId === ruleId);
+            return Helpers.getExisted(this.getWarRuleArray().find(v => v.ruleId === ruleId));
         }
         public getRevisedWarRuleArray(playersCountUnneutral: number): IWarRule[] {
             const ruleArray: IWarRule[] = [];
             for (const rule of this.getWarRuleArray() || []) {
                 const revisedRule = Helpers.deepClone(rule);
-                const playerRules = revisedRule.ruleForPlayers;
-                playerRules.playerRuleDataArray = playerRules.playerRuleDataArray.filter(v => {
-                    const playerIndex = v.playerIndex;
+                const playerRules = Helpers.getExisted(revisedRule.ruleForPlayers);
+                playerRules.playerRuleDataArray = Helpers.getExisted(playerRules.playerRuleDataArray).filter(v => {
+                    const playerIndex = Helpers.getExisted(v.playerIndex);
                     return (playerIndex <= playersCountUnneutral)
                         && (playerIndex >= CommonConstants.WarFirstPlayerIndex);
-                }).sort((v1, v2) => v1.playerIndex - v2.playerIndex);
+                }).sort((v1, v2) => Helpers.getExisted(v1.playerIndex) - Helpers.getExisted(v2.playerIndex));
                 ruleArray.push(revisedRule);
             }
 
@@ -325,7 +325,8 @@ namespace TwnsMeWar {
             if (ruleIndex >= 0) {
                 ruleList.splice(ruleIndex, 1);
                 for (let index = ruleIndex; index < ruleList.length; ++index) {
-                    --ruleList[index].ruleId;
+                    const rule  = ruleList[index];
+                    rule.ruleId = Helpers.getExisted(rule.ruleId) - 1;
                 }
             }
         }
@@ -337,7 +338,7 @@ namespace TwnsMeWar {
         }
 
         public getMapTag(): IDataForMapTag {
-            return this._mapTag;
+            return Helpers.getDefined(this._mapTag);
         }
         public setMapTag(mapTag: IDataForMapTag): void {
             this._mapTag = mapTag;

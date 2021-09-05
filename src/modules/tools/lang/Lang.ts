@@ -479,7 +479,7 @@ namespace Lang {
                 : null;
         }
     }
-    export function concatLanguageTextList(textList: ProtoTypes.Structure.ILanguageText[]): string {
+    export function concatLanguageTextList(textList: Types.Undefinable<ProtoTypes.Structure.ILanguageText[]>): string {
         const strList: string[] = [];
         for (const data of textList || []) {
             strList.push(data.text || `??`);

@@ -27,7 +27,7 @@ namespace TwnsCommonBanCoPanel {
         bannedCoIdArray     : number[];
         fullCoIdArray       : number[];
         maxBanCount         : number | undefined;
-        selfCoId            : number | undefined;
+        selfCoId            : number | null;
         callbackOnConfirm   : ((bannedCoIdSet: Set<number>) => void) | undefined;
     };
     export class CommonBanCoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBanCoPanel> {

@@ -161,8 +161,8 @@ namespace TwnsBwTile {
                 return ClientErrorCode.BwTile_Deserialize_14;
             }
 
-            const decoratorType     = data.decoratorType;
-            const decoratorShapeId  = data.decoratorShapeId;
+            const decoratorType     = data.decoratorType ?? null;
+            const decoratorShapeId  = data.decoratorShapeId ?? null;
             if (!ConfigManager.checkIsValidTileDecoratorShapeId(decoratorType, decoratorShapeId)) {
                 return ClientErrorCode.BwTile_Deserialize_15;
             }
@@ -184,36 +184,12 @@ namespace TwnsBwTile {
 
             return ClientErrorCode.NoError;
         }
-        public serialize(): ISerialTile | undefined {
-            const gridIndex = this.getGridIndex();
-            if (gridIndex == null) {
-                Logger.error(`BwTile.serialize() empty gridIndex.`);
-                return undefined;
-            }
-
-            const baseType = this.getBaseType();
-            if (baseType == null) {
-                Logger.error(`BwTile.serialize() empty baseType.`);
-                return undefined;
-            }
-
-            const objectType = this.getObjectType();
-            if (objectType == null) {
-                Logger.error(`BwTile.serialize() empty objectType.`);
-                return undefined;
-            }
-
-            const playerIndex = this.getPlayerIndex();
-            if (playerIndex == null) {
-                Logger.error(`BwTile.serialize() empty playerIndex.`);
-                return undefined;
-            }
-
+        public serialize(): ISerialTile {
             const data: ISerialTile = {
-                gridIndex,
-                baseType,
-                objectType,
-                playerIndex,
+                gridIndex   : this.getGridIndex(),
+                baseType    : this.getBaseType(),
+                objectType  : this.getObjectType(),
+                playerIndex : this.getPlayerIndex(),
             };
 
             const currentHp = this.getCurrentHp();
@@ -373,11 +349,11 @@ namespace TwnsBwTile {
             return Helpers.getDefined(this._objectType);
         }
 
-        private _setDecoratorType(decoratorType: TileDecoratorType | null | undefined): void {
+        private _setDecoratorType(decoratorType: TileDecoratorType | null): void {
             this._decoratorType = decoratorType;
         }
-        public getDecoratorType(): TileDecoratorType | null | undefined {
-            return this._decoratorType;
+        public getDecoratorType(): TileDecoratorType | null {
+            return Helpers.getDefined(this._decoratorType);
         }
 
         private _setBaseShapeId(id: number | null | undefined): void {
@@ -394,11 +370,11 @@ namespace TwnsBwTile {
             return this._objectShapeId || 0;
         }
 
-        private _setDecoratorShapeId(id: number | null | undefined): void {
+        private _setDecoratorShapeId(id: number | null): void {
             this._decoratorShapeId = id;
         }
-        public getDecoratorShapeId(): number | null | undefined {
-            return this._decoratorShapeId;
+        public getDecoratorShapeId(): number | null {
+            return Helpers.getDefined(this._decoratorShapeId);
         }
 
         public getSkinId(): number | undefined {

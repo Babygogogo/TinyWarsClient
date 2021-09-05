@@ -1,6 +1,8 @@
 
 import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
 import TwnsCommonHelpPanel          from "../../common/view/CommonHelpPanel";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";
@@ -19,16 +21,16 @@ namespace TwnsMeMfwBasicSettingsPage {
     import LangTextType             = TwnsLangTextType.LangTextType;
 
     export class MeMfwBasicSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
-        private _btnMapNameTitle            : TwnsUiButton.UiButton;
-        private _labelMapName               : TwnsUiLabel.UiLabel;
-        private _btnBuildings               : TwnsUiButton.UiButton;
+        private readonly _btnMapNameTitle!      : TwnsUiButton.UiButton;
+        private readonly _labelMapName!         : TwnsUiLabel.UiLabel;
+        private readonly _btnBuildings!         : TwnsUiButton.UiButton;
 
-        private _btnModifyWarRule           : TwnsUiButton.UiButton;
-        private _labelWarRule               : TwnsUiLabel.UiLabel;
+        private readonly _btnModifyWarRule!     : TwnsUiButton.UiButton;
+        private readonly _labelWarRule!         : TwnsUiLabel.UiLabel;
 
-        private _btnModifyHasFog            : TwnsUiButton.UiButton;
-        private _imgHasFog                  : TwnsUiImage.UiImage;
-        private _btnHelpHasFog              : TwnsUiButton.UiButton;
+        private readonly _btnModifyHasFog!      : TwnsUiButton.UiButton;
+        private readonly _imgHasFog!            : TwnsUiImage.UiImage;
+        private readonly _btnHelpHasFog!        : TwnsUiButton.UiButton;
 
         public constructor() {
             super();
@@ -96,9 +98,9 @@ namespace TwnsMeMfwBasicSettingsPage {
         private async _onTouchedBtnBuildings(): Promise<void> {
             const mapRawData = MeMfwModel.getMapRawData();
             WarMapBuildingListPanel.show({
-                configVersion           : MeMfwModel.getWarData().settingsForCommon.configVersion,
-                tileDataArray           : mapRawData.tileDataArray,
-                playersCountUnneutral   : mapRawData.playersCountUnneutral,
+                configVersion           : Helpers.getExisted(MeMfwModel.getWarData().settingsForCommon?.configVersion),
+                tileDataArray           : Helpers.getExisted(mapRawData.tileDataArray),
+                playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
             });
         }
 
@@ -118,13 +120,13 @@ namespace TwnsMeMfwBasicSettingsPage {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getLanguageText({ textArray: MeMfwModel.getMapRawData().mapNameArray });
+            this._labelMapName.text = Lang.getLanguageText({ textArray: MeMfwModel.getMapRawData().mapNameArray }) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateLabelWarRule(): Promise<void> {
             const label             = this._labelWarRule;
-            const settingsForCommon = MeMfwModel.getWarData().settingsForCommon;
-            label.text              = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
+            const settingsForCommon = Helpers.getExisted(MeMfwModel.getWarData().settingsForCommon);
+            label.text              = Lang.getWarRuleNameInLanguage(Helpers.getExisted(settingsForCommon.warRule)) ?? CommonConstants.ErrorTextForUndefined;
             label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFF0000 : 0x00FF00;
         }
 

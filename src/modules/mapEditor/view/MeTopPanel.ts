@@ -2,6 +2,8 @@
 import TwnsBwUnit                       from "../../baseWar/model/BwUnit";
 import TwnsBwUnitView                   from "../../baseWar/view/BwUnitView";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers             from "../../tools/helpers/CompatibilityHelpers";
+import Helpers                          from "../../tools/helpers/Helpers";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -42,28 +44,25 @@ namespace TwnsMeTopPanel {
 
         private static _instance: MeTopPanel;
 
-        private readonly _groupMode                     : eui.Group;
-        private readonly _labelMode                     : TwnsUiLabel.UiLabel;
-        private readonly _conUnitView                   : eui.Group;
-        private readonly _conTileView                   : eui.Group;
+        private readonly _groupMode!                    : eui.Group;
+        private readonly _labelMode!                    : TwnsUiLabel.UiLabel;
+        private readonly _conUnitView!                  : eui.Group;
+        private readonly _conTileView!                  : eui.Group;
 
-        private readonly _btnModePreview                : TwnsUiButton.UiButton;
-        private readonly _btnModeDrawTileBase           : TwnsUiButton.UiButton;
-        private readonly _btnModeDrawTileDecorator      : TwnsUiButton.UiButton;
-        private readonly _btnModeDrawTileObject         : TwnsUiButton.UiButton;
-        private readonly _btnModeDrawUnit               : TwnsUiButton.UiButton;
-        private readonly _btnModeDeleteTileDecorator    : TwnsUiButton.UiButton;
-        private readonly _btnModeDeleteTileObject       : TwnsUiButton.UiButton;
-        private readonly _btnModeDeleteUnit             : TwnsUiButton.UiButton;
-        private readonly _btnVisibility                 : TwnsUiButton.UiButton;
-        private readonly _btnSymmetry                   : TwnsUiButton.UiButton;
-        private readonly _btnMenu                       : TwnsUiButton.UiButton;
+        private readonly _btnModePreview!               : TwnsUiButton.UiButton;
+        private readonly _btnModeDrawTileBase!          : TwnsUiButton.UiButton;
+        private readonly _btnModeDrawTileDecorator!     : TwnsUiButton.UiButton;
+        private readonly _btnModeDrawTileObject!        : TwnsUiButton.UiButton;
+        private readonly _btnModeDrawUnit!              : TwnsUiButton.UiButton;
+        private readonly _btnModeDeleteTileDecorator!   : TwnsUiButton.UiButton;
+        private readonly _btnModeDeleteTileObject!      : TwnsUiButton.UiButton;
+        private readonly _btnModeDeleteUnit!            : TwnsUiButton.UiButton;
+        private readonly _btnVisibility!                : TwnsUiButton.UiButton;
+        private readonly _btnSymmetry!                  : TwnsUiButton.UiButton;
+        private readonly _btnMenu!                      : TwnsUiButton.UiButton;
 
         private _unitView   = new BwUnitView();
         private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
-
-        private _war    : MeWar;
-        private _drawer : MeDrawer;
 
         public static show(): void {
             if (!MeTopPanel._instance) {
@@ -74,7 +73,7 @@ namespace TwnsMeTopPanel {
 
         public static async hide(): Promise<void> {
             if (MeTopPanel._instance) {
-                await MeTopPanel._instance.close();
+                await MeTopPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -118,17 +117,17 @@ namespace TwnsMeTopPanel {
             conTileView.addChild(tileView.getImgObject());
             this._conUnitView.addChild(this._unitView);
 
-            this._war       = MeModel.getWar();
-            this._drawer    = this._war.getDrawer();
             this._initTileView();
             this._initUnitView();
 
             this._updateView();
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._war       = null;
-            this._drawer    = null;
+        private _getWar(): MeWar {
+            return Helpers.getExisted(MeModel.getWar());
+        }
+        private _getDrawer(): MeDrawer {
+            return this._getWar().getDrawer();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,7 +170,7 @@ namespace TwnsMeTopPanel {
         }
 
         private _onTouchedBtnModePreview(): void {
-            this._drawer.setModePreview();
+            this._getDrawer().setModePreview();
         }
         private _onTouchedBtnModeDrawTileBase(): void {
             MeChooseTileBasePanel.show();
@@ -186,13 +185,13 @@ namespace TwnsMeTopPanel {
             MeChooseUnitPanel.show();
         }
         private _onTouchedBtnModeDeleteTileObject(): void {
-            this._drawer.setModeDeleteTileObject();
+            this._getDrawer().setModeDeleteTileObject();
         }
         private _onTouchedBtnModeDeleteTileDecorator(): void {
-            this._drawer.setModeDeleteTileDecorator();
+            this._getDrawer().setModeDeleteTileDecorator();
         }
         private _onTouchedBtnModeDeleteUnit(): void {
-            this._drawer.setModeDeleteUnit();
+            this._getDrawer().setModeDeleteUnit();
         }
         private _onTouchedBtnVisibility(): void {
             MeVisibilityPanel.show();
@@ -245,20 +244,20 @@ namespace TwnsMeTopPanel {
 
         private _updateLabelMode(): void {
             const label     = this._labelMode;
-            const mode      = this._drawer.getMode();
+            const mode      = this._getDrawer().getMode();
             label.text      = `${Lang.getText(LangTextType.B0280)}: ${Lang.getMapEditorDrawerModeText(mode)}`;
             label.textColor = getTextColorForDrawerMode(mode);
         }
 
         private _updateTileView(): void {
-            const drawer    = this._drawer;
+            const drawer    = this._getDrawer();
             const mode      = drawer.getMode();
             const con       = this._conTileView;
             const tileView  = this._tileView;
             if (mode === DrawerMode.DrawTileBase) {
                 con.visible = true;
 
-                const tileBaseData = drawer.getDrawTargetTileBaseData();
+                const tileBaseData = Helpers.getExisted(drawer.getDrawTargetTileBaseData());
                 tileView.init({
                     tileBaseShapeId     : tileBaseData.shapeId,
                     tileBaseType        : tileBaseData.baseType,
@@ -273,7 +272,7 @@ namespace TwnsMeTopPanel {
             } else if (mode === DrawerMode.DrawTileDecorator) {
                 con.visible = true;
 
-                const tileDecoratorData = drawer.getDrawTargetTileDecoratorData();
+                const tileDecoratorData = Helpers.getExisted(drawer.getDrawTargetTileDecoratorData());
                 tileView.init({
                     tileBaseShapeId     : null,
                     tileBaseType        : null,
@@ -288,7 +287,7 @@ namespace TwnsMeTopPanel {
             } else if (mode === DrawerMode.DrawTileObject) {
                 con.visible = true;
 
-                const tileObjectData    = drawer.getDrawTargetTileObjectData();
+                const tileObjectData = Helpers.getExisted(drawer.getDrawTargetTileObjectData());
                 tileView.init({
                     tileBaseShapeId     : null,
                     tileBaseType        : null,
@@ -306,12 +305,12 @@ namespace TwnsMeTopPanel {
         }
 
         private _updateUnitView(): void {
-            const drawer    = this._drawer;
+            const drawer    = this._getDrawer();
             const con       = this._conUnitView;
             const unitView  = this._unitView;
             if (drawer.getMode() === DrawerMode.DrawUnit) {
                 con.visible = true;
-                unitView.init(drawer.getDrawTargetUnit());
+                unitView.init(Helpers.getExisted(drawer.getDrawTargetUnit()));
                 unitView.tickStateAnimationFrame();
                 unitView.tickUnitAnimationFrame();
             } else {
@@ -320,35 +319,35 @@ namespace TwnsMeTopPanel {
         }
 
         private _updateBtnModeDrawUnit(): void {
-            this._btnModeDrawUnit.visible = !this._war.getIsReviewingMap();
+            this._btnModeDrawUnit.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnModeDrawTileDecorator(): void {
-            this._btnModeDrawTileDecorator.visible = !this._war.getIsReviewingMap();
+            this._btnModeDrawTileDecorator.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnModeDrawTileObject(): void {
-            this._btnModeDrawTileObject.visible = !this._war.getIsReviewingMap();
+            this._btnModeDrawTileObject.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnModePreview(): void {
-            this._btnModePreview.visible = !this._war.getIsReviewingMap();
+            this._btnModePreview.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnModeDrawTileBase(): void {
-            this._btnModeDrawTileBase.visible = !this._war.getIsReviewingMap();
+            this._btnModeDrawTileBase.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnDeleteUnit(): void {
-            this._btnModeDeleteUnit.visible = !this._war.getIsReviewingMap();
+            this._btnModeDeleteUnit.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnDeleteTileObject(): void {
-            this._btnModeDeleteTileObject.visible = !this._war.getIsReviewingMap();
+            this._btnModeDeleteTileObject.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnDeleteTileDecorator(): void {
-            this._btnModeDeleteTileDecorator.visible = !this._war.getIsReviewingMap();
+            this._btnModeDeleteTileDecorator.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnMenu(): void {
@@ -372,14 +371,14 @@ namespace TwnsMeTopPanel {
             tileView.startRunningView();
         }
         private _initUnitView(): void {
-            const war   = this._war;
+            const war   = this._getWar();
             const unit  = new TwnsBwUnit.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : Types.UnitType.Infantry,
                 playerIndex : CommonConstants.WarFirstPlayerIndex,
-            }, this._war.getConfigVersion());
+            }, this._getWar().getConfigVersion());
             unit.startRunning(war);
 
             this._unitView.init(unit);

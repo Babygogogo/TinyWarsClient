@@ -1,5 +1,6 @@
 
 import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Helpers          from "../../tools/helpers/Helpers";
 import Logger           from "../../tools/helpers/Logger";
 import Types            from "../../tools/helpers/Types";
 import ProtoTypes       from "../../tools/proto/ProtoTypes";
@@ -13,7 +14,7 @@ namespace MeModel {
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
 
     const MAP_DICT  = new Map<number, IMapEditorData>();
-    let _war        : MeWar;
+    let _war        : MeWar | null = null;
 
     export function init(): void {
         // nothing to do.
@@ -22,7 +23,7 @@ namespace MeModel {
     export async function resetDataList(rawDataList: IMapEditorData[]): Promise<void> {
         MAP_DICT.clear();
         for (const data of rawDataList || []) {
-            const slotIndex = data.slotIndex;
+            const slotIndex = Helpers.getExisted(data.slotIndex);
             MAP_DICT.set(slotIndex, {
                 slotIndex,
                 reviewStatus    : data.reviewStatus,
@@ -31,7 +32,7 @@ namespace MeModel {
             });
         }
 
-        const maxSlotsCount = await UserModel.getIsSelfMapCommittee()
+        const maxSlotsCount = UserModel.getIsSelfMapCommittee()
             ? CommonConstants.MapEditorSlotMaxCountForCommittee
             : CommonConstants.MapEditorSlotMaxCountForNormal;
         for (let i = 0; i < maxSlotsCount; ++i) {
@@ -50,8 +51,8 @@ namespace MeModel {
     export function getDataDict(): Map<number, IMapEditorData> {
         return MAP_DICT;
     }
-    export function getData(slotIndex: number): IMapEditorData {
-        return MAP_DICT.get(slotIndex);
+    export function getData(slotIndex: number): IMapEditorData | null {
+        return MAP_DICT.get(slotIndex) ?? null;
     }
 
     export function checkHasReviewingMap(): boolean {
@@ -66,7 +67,7 @@ namespace MeModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(mapRawData: ProtoTypes.Map.IMapRawData | null, slotIndex: number, isReview: boolean): Promise<MeWar> {
+    export async function loadWar(mapRawData: Types.Undefinable<ProtoTypes.Map.IMapRawData>, slotIndex: number, isReview: boolean): Promise<MeWar> {
         if (_war) {
             Logger.warn(`MeManager.loadWar() another war has been loaded already!`);
             unloadWar();
@@ -89,11 +90,11 @@ namespace MeModel {
     export function unloadWar(): void {
         if (_war) {
             _war.stopRunning();
-            _war = undefined;
+            _war = null;
         }
     }
 
-    export function getWar(): MeWar | undefined {
+    export function getWar(): MeWar | null {
         return _war;
     }
 

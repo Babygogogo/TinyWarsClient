@@ -25,7 +25,7 @@ namespace TwnsMePlayerManager {
             };
         }
 
-        public serializeForCreateMfr(): ISerialPlayerManager | undefined {
+        public serializeForCreateMfr(): ISerialPlayerManager {
             const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
             const players           : ISerialPlayer[] = [];
             for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
