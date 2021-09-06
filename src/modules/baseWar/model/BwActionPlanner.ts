@@ -55,22 +55,22 @@ namespace TwnsBwActionPlanner {
         private _mapSize?                   : Types.MapSize;
 
         private _state                      = State.Idle;
-        private _prevState                  : State;
+        private _prevState                  = State.Undefined;
 
-        private _focusUnitOnMap             : BwUnit;
-        private _focusUnitLoaded            : BwUnit | undefined;
+        private _focusUnitOnMap             : BwUnit | null = null;
+        private _focusUnitLoaded            : BwUnit | null = null;
         private _choosingUnitForDrop        : BwUnit | null = null;
         private _chosenUnitsForDrop         : ChosenUnitForDrop[] = [];
-        private _availableDropDestinations  : GridIndex[];
-        private _movableArea                : MovableArea;
-        private _attackableArea             : AttackableArea;
-        private _attackableGridsAfterMove   : GridIndex[];
+        private _availableDropDestinations  : GridIndex[] | null = null;
+        private _movableArea                : MovableArea | null = null;
+        private _attackableArea             : AttackableArea | null = null;
+        private _attackableGridsAfterMove   : GridIndex[] | null = null;
         private _movePath                   : MovePathNode[] = [];
 
         private _unitsForPreviewAttack  = new Map<number, BwUnit>();
         private _areaForPreviewAttack   : AttackableArea = [];
-        private _unitForPreviewMove     : BwUnit;
-        private _areaForPreviewMove     : MovableArea;
+        private _unitForPreviewMove     : BwUnit | null = null;
+        private _areaForPreviewMove     : MovableArea | null = null;
 
         private _notifyListeners: Notify.Listener[] = [
             { type: NotifyType.BwCursorTapped,    callback: this._onNotifyBwCursorTapped },
@@ -172,22 +172,22 @@ namespace TwnsBwActionPlanner {
                     this._setStateRequestingUnitAttackTile(gridIndex);
 
                 } else if (nextState === State.RequestingUnitBeLoaded) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 1, nextState: ${nextState}`);
+                    throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 1, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitBuildTile) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 2, nextState: ${nextState}`);
+                    throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 2, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitCaptureTile) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 3, nextState: ${nextState}`);
+                    throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 3, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitDive) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 4, nextState: ${nextState}`);
+                    throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 4, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitDrop) {
                     this._setStateRequestingUnitDropOnTap(gridIndex);
 
                 } else if (nextState === State.RequestingUnitJoin) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 5, nextState: ${nextState}`);
+                    throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 5, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitLaunchFlare) {
                     this._setStateRequestingUnitLaunchFlare(gridIndex);
@@ -196,19 +196,19 @@ namespace TwnsBwActionPlanner {
                     this._setStateRequestingUnitLaunchSilo(gridIndex);
 
                 } else if (nextState === State.RequestingUnitProduceUnit) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 6, nextState: ${nextState}`);
+                    throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 6, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitSupply) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 7, nextState: ${nextState}`);
+                    throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 7, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitSurface) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 8, nextState: ${nextState}`);
+                    throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 8, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitWait) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 9, nextState: ${nextState}`);
+                    throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 9, nextState: ${nextState}`);
 
                 } else {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 10, nextState: ${nextState}`);
+                    throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 10, nextState: ${nextState}`);
                 }
             }
         }
@@ -254,7 +254,7 @@ namespace TwnsBwActionPlanner {
                     this._setStatePreviewingMovableAreaOnDrag(gridIndex);
 
                 } else {
-                    Logger.error(`BwActionPlanner._onNotifyBwCursorTapped() invalid nextState!`, nextState);
+                    throw new Error(`BwActionPlanner._onNotifyBwCursorTapped() invalid nextState: ${nextState}`);
                 }
             }
         }
@@ -270,7 +270,7 @@ namespace TwnsBwActionPlanner {
                     this._setStateChoosingActionOnDragEnded(gridIndex);
 
                 } else {
-                    Logger.error(`McwActionPlanner._onNotifyBwCursorDragEnded() error 10, nextState: ${nextState}`);
+                    throw new Error(`McwActionPlanner._onNotifyBwCursorDragEnded() error 10, nextState: ${nextState}`);
                 }
             }
         }
@@ -281,7 +281,7 @@ namespace TwnsBwActionPlanner {
         public getState(): State {
             return this._state;
         }
-        public getPreviousState(): State | undefined {
+        public getPreviousState(): State {
             return this._prevState;
         }
         protected _setState(state: State): void {
@@ -329,17 +329,17 @@ namespace TwnsBwActionPlanner {
             const unitMap   = this._getUnitMap();
 
             if (currState === State.Idle) {
-                this._setFocusUnitOnMap(unitMap.getUnitOnMap(gridIndex));
+                this._setFocusUnitOnMap(Helpers.getExisted(unitMap.getUnitOnMap(gridIndex)));
                 this._resetMovableArea();
                 this._resetAttackableArea();
                 this._resetMovePathAsShortest(gridIndex);
                 SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 1, currState: ${currState}`);
+                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                if (Helpers.getExisted(this.getFocusUnit()).checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
                     SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                 } else {
                     const existingUnit = this._getUnitMap().getUnitOnMap(gridIndex);
@@ -364,12 +364,12 @@ namespace TwnsBwActionPlanner {
                                 this._resetMovePathAsShortest(gridIndex);
                                 SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                             } else {
-                                this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                                this._resetMovePathAsShortest(Helpers.getExisted(this.getAttackableArea())[gridIndex.x][gridIndex.y].movePathDestination);
                                 SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                             }
                         } else {
                             if (this._getTileMap().getTile(gridIndex).getMaxHp() != null) {
-                                this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                                this._resetMovePathAsShortest(Helpers.getExisted(this.getAttackableArea())[gridIndex.x][gridIndex.y].movePathDestination);
                                 SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                             } else {
                                 this._updateMovePathByDestination(gridIndex);
@@ -380,7 +380,7 @@ namespace TwnsBwActionPlanner {
                 }
 
             } else if (currState === State.ChoosingAction) {
-                if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                if (Helpers.getExisted(this.getFocusUnit()).checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
                     // Nothing to do.
                 } else {
                     const existingUnit = this._getUnitMap().getUnitOnMap(gridIndex);
@@ -395,11 +395,11 @@ namespace TwnsBwActionPlanner {
                                 this._resetAttackableArea();
                                 this._resetMovePathAsShortest(gridIndex);
                             } else {
-                                this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                                this._resetMovePathAsShortest(Helpers.getExisted(this.getAttackableArea())[gridIndex.x][gridIndex.y].movePathDestination);
                             }
                         } else {
                             if (this._getTileMap().getTile(gridIndex).getMaxHp() != null) {
-                                this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                                this._resetMovePathAsShortest(Helpers.getExisted(this.getAttackableArea())[gridIndex.x][gridIndex.y].movePathDestination);
                             } else {
                                 this._updateMovePathByDestination(gridIndex);
                             }
@@ -408,39 +408,39 @@ namespace TwnsBwActionPlanner {
                 }
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 2, currState: ${currState}`);
+                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 3, currState: ${currState}`);
+                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 4, currState: ${currState}`);
+                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 5, currState: ${currState}`);
+                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                this._setFocusUnitOnMap(this._getUnitMap().getUnitOnMap(gridIndex));
+                this._setFocusUnitOnMap(Helpers.getExisted(this._getUnitMap().getUnitOnMap(gridIndex)));
                 this._resetMovableArea();
                 this._resetAttackableArea();
                 this._resetMovePathAsShortest(gridIndex);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                this._setFocusUnitOnMap(this._getUnitMap().getUnitOnMap(gridIndex));
+                this._setFocusUnitOnMap(Helpers.getExisted(this._getUnitMap().getUnitOnMap(gridIndex)));
                 this._resetMovableArea();
                 this._resetAttackableArea();
                 this._resetMovePathAsShortest(gridIndex);
                 this._clearDataForPreviewingAttackableArea();
 
             } else if (currState === State.PreviewingMovableArea) {
-                this._setFocusUnitOnMap(this._getUnitMap().getUnitOnMap(gridIndex));
+                this._setFocusUnitOnMap(Helpers.getExisted(this._getUnitMap().getUnitOnMap(gridIndex)));
                 this._resetMovableArea();
                 this._resetAttackableArea();
                 this._resetMovePathAsShortest(gridIndex);
                 this._clearDataForPreviewingMovableArea();
 
             } else {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 6, currState: ${currState}`);
+                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 6, currState: ${currState}`);
             }
 
             this._setState(State.MakingMovePath);
@@ -450,21 +450,21 @@ namespace TwnsBwActionPlanner {
         private _setStateMakingMovePathOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 2, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                const focusUnit = this.getFocusUnit();
+                const focusUnit = Helpers.getExisted(this.getFocusUnit());
                 if (focusUnit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
                     // Do nothing.
                 } else {
-                    const movableArea = this.getMovableArea();
+                    const movableArea = Helpers.getExisted(this.getMovableArea());
                     if (WarCommonHelpers.checkAreaHasGrid(movableArea, gridIndex)) {
                         this._updateMovePathByDestination(gridIndex);
                     } else {
-                        const attackableArea = this.getAttackableArea();
+                        const attackableArea = Helpers.getExisted(this.getAttackableArea());
                         if (!WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
                             // Do nothing.
                         } else {
@@ -479,15 +479,15 @@ namespace TwnsBwActionPlanner {
                 }
 
             } else if (currState === State.ChoosingAction) {
-                const focusUnit = this.getFocusUnit();
+                const focusUnit = Helpers.getExisted(this.getFocusUnit());
                 if (focusUnit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
                     // Do nothing.
                 } else {
-                    const movableArea = this.getMovableArea();
+                    const movableArea = Helpers.getExisted(this.getMovableArea());
                     if (WarCommonHelpers.checkAreaHasGrid(movableArea, gridIndex)) {
                         this._updateMovePathByDestination(gridIndex);
                     } else {
-                        const attackableArea = this.getAttackableArea();
+                        const attackableArea = Helpers.getExisted(this.getAttackableArea());
                         if (!WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
                             // Do nothing.
                         } else {
@@ -502,28 +502,28 @@ namespace TwnsBwActionPlanner {
                 }
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 4, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 5, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 6, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 7, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 8, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 9, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 10, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 11, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.MakingMovePath);
@@ -532,10 +532,10 @@ namespace TwnsBwActionPlanner {
         private _setStateMakingMovePathOnChooseAction(unitForLaunch: BwUnit): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnChooseAction() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateMakingMovePathOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 if (this.getFocusUnitLoaded()) {
-                    Logger.error(`BwActionPlanner._setStateMakingMovePathOnChooseAction() error 2, currState: ${currState}`);
+                    throw new Error(`BwActionPlanner._setStateMakingMovePathOnChooseAction() error 2, currState: ${currState}`);
                 } else {
                     this._setFocusUnitLoaded(unitForLaunch);
                     this._resetMovableArea();
@@ -551,40 +551,40 @@ namespace TwnsBwActionPlanner {
         protected _setStateChoosingActionOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`BwActionPlanner._setStateChoosingActionOnTap() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingActionOnTap() error 2, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
                     SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                 } else {
                     if (!this.getFocusUnitLoaded()) {
-                        Logger.error(`BwActionPlanner._setStateChoosingActionOnTap() error 3, currState: ${currState}`);
+                        throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 3, currState: ${currState}`);
                     } else {
                         this._clearFocusUnitLoaded();
                         this._resetMovableArea();
                         this._resetAttackableArea();
-                        this._resetMovePathAsShortest(this.getFocusUnitOnMap().getGridIndex());
+                        this._resetMovePathAsShortest(Helpers.getExisted(this.getFocusUnitOnMap()).getGridIndex());
                         SoundManager.playShortSfx(ShortSfxCode.ButtonCancel01);
                     }
                 }
 
             } else if (currState === State.ChoosingAction) {
-                if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
                     SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                 } else {
-                    if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                    if (Helpers.getExisted(this.getFocusUnit()).checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
                         SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                     } else {
                         if (this.getFocusUnitLoaded()) {
                             this._clearFocusUnitLoaded();
                             this._resetMovableArea();
                             this._resetAttackableArea();
-                            this._resetMovePathAsShortest(this.getFocusUnitOnMap().getGridIndex());
+                            this._resetMovePathAsShortest(Helpers.getExisted(this.getFocusUnitOnMap()).getGridIndex());
                             SoundManager.playShortSfx(ShortSfxCode.ButtonCancel01);
                         } else {
                             SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
@@ -596,9 +596,9 @@ namespace TwnsBwActionPlanner {
                 SoundManager.playShortSfx(ShortSfxCode.ButtonCancel01);
 
             } else if (currState === State.ChoosingDropDestination) {
-                if (this.getAvailableDropDestinations().some(g => GridIndexHelpers.checkIsEqual(g, gridIndex))) {
+                if (this.getAvailableDropDestinations()?.some(g => GridIndexHelpers.checkIsEqual(g, gridIndex))) {
                     this._pushBackChosenUnitForDrop({
-                        unit        : this.getChoosingUnitForDrop(),
+                        unit        : Helpers.getExisted(this.getChoosingUnitForDrop()),
                         destination : gridIndex,
                     });
                 }
@@ -609,19 +609,19 @@ namespace TwnsBwActionPlanner {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingActionOnTap() error 5, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingActionOnTap() error 6, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingActionOnTap() error 7, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingActionOnTap() error 8, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 8, currState: ${currState}`);
 
             } else {
-                Logger.error(`BwActionPlanner._setStateChoosingActionOnTap() error 9, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 9, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingAction);
@@ -630,7 +630,7 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingActionOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingActionOnDrag() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingActionOnDrag() error 1, currState: ${currState}`);
             } else {
                 // Nothing to do.
             }
@@ -642,40 +642,40 @@ namespace TwnsBwActionPlanner {
         protected _setStateChoosingAttackTargetOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 2, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 3, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 4, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
                 SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 5, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 6, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 7, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 8, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 9, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 10, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 11, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingAttackTarget);
@@ -684,40 +684,40 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingAttackTargetOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 2, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 3, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 4, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 5, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 6, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 7, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 8, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 9, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 10, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 11, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingAttackTarget);
@@ -726,7 +726,7 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingAttackTargetOnChooseAction(): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingAttackTargetOnChooseAction() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 this._setAttackableGridsAfterMove(this._createAttackableGridsAfterMove());
             }
@@ -738,13 +738,13 @@ namespace TwnsBwActionPlanner {
         protected _setStateChoosingDropDestinationOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 2, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 3, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
                 const data = this._popBackChosenUnitForDrop();
@@ -752,28 +752,28 @@ namespace TwnsBwActionPlanner {
                 this._setAvailableDropDestinations(this._calculateAvailableDropDestination(data.unit, this._getChosenDropDestinations()));
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 4, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 5, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 6, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 7, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 8, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 9, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 10, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 11, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingDropDestination);
@@ -782,40 +782,40 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingDropDestinationOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 2, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 3, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 4, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 5, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 6, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 7, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 8, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 9, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 10, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 11, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingDropDestination);
@@ -824,7 +824,7 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingDropDestinationOnChooseAction(unitForDrop: BwUnit): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingDropDestinationOnChooseAction() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 this._setChoosingUnitForDrop(unitForDrop);
                 this._setAvailableDropDestinations(this._calculateAvailableDropDestination(unitForDrop, this._getChosenDropDestinations()));
@@ -837,40 +837,40 @@ namespace TwnsBwActionPlanner {
         protected _setStateChoosingFlareDestinationOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 2, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 3, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 4, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 5, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 6, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 7, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 8, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 9, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 10, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 11, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingFlareDestination);
@@ -879,40 +879,40 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingFlareDestinationOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 2, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 3, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 4, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 5, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 6, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 7, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 8, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 9, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 10, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 11, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingFlareDestination);
@@ -921,7 +921,7 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingFlareDestinationOnChooseAction(): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingFlareDestinationOnChooseAction() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 // Nothing to do.
             }
@@ -933,40 +933,40 @@ namespace TwnsBwActionPlanner {
         protected _setStateChoosingSiloDestinationOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 2, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 3, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 4, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 5, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 6, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 7, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 8, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 9, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 10, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 11, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingSiloDestination);
@@ -975,40 +975,40 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingSiloDestinationOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 2, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 3, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 4, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 5, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 6, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 7, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 8, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 9, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 10, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 11, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingSiloDestination);
@@ -1017,7 +1017,7 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingSiloDestinationOnChooseAction(): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingSiloDestinationOnChooseAction() error 1, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 // Nothing to do.
             }
@@ -1028,7 +1028,7 @@ namespace TwnsBwActionPlanner {
 
         protected abstract _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void;
         private _setStateChoosingProductionTargetOnDrag(gridIndex: GridIndex): void {
-            Logger.error(`BwActionPlanner._setStateChoosingProductionTargetOnDrag() error 1, currState: ${this.getState()}`);
+            throw new Error(`BwActionPlanner._setStateChoosingProductionTargetOnDrag() error 1, currState: ${this.getState()}`);
         }
 
         protected _setStatePreviewingAttackableAreaOnTap(gridIndex: GridIndex): void {
@@ -1037,7 +1037,7 @@ namespace TwnsBwActionPlanner {
             this._clearChoosingUnitForDrop();
             this._clearChosenUnitsForDrop();
             this._clearAvailableDropDestinations();
-            this._addUnitForPreviewAttackableArea(this._getUnitMap().getUnitOnMap(gridIndex));
+            this._addUnitForPreviewAttackableArea(Helpers.getExisted(this._getUnitMap().getUnitOnMap(gridIndex)));
             this._clearDataForPreviewingMovableArea();
 
             this._setState(State.PreviewingAttackableArea);
@@ -1055,7 +1055,7 @@ namespace TwnsBwActionPlanner {
             this._clearChosenUnitsForDrop();
             this._clearAvailableDropDestinations();
             this._clearDataForPreviewingAttackableArea();
-            this._setUnitForPreviewingMovableArea(this._getUnitMap().getUnitOnMap(gridIndex));
+            this._setUnitForPreviewingMovableArea(Helpers.getExisted(this._getUnitMap().getUnitOnMap(gridIndex)));
 
             this._setState(State.PreviewingMovableArea);
             this._updateView();
@@ -1068,14 +1068,14 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingActionOnDragEnded(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.MakingMovePath) {
-                if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
                 } else {
-                    Logger.error(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 1, currState: ${currState}`);
+                    throw new Error(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 1, currState: ${currState}`);
                 }
 
             } else {
-                Logger.error(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 2, currState: ${currState}`);
+                throw new Error(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 2, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingAction);
@@ -1109,17 +1109,17 @@ namespace TwnsBwActionPlanner {
             this._mapSize = size;
         }
         public getMapSize(): Types.MapSize {
-            return this._mapSize;
+            return Helpers.getExisted(this._mapSize);
         }
 
         public checkIsStateRequesting(): boolean {
             return WarCommonHelpers.checkIsStateRequesting(this.getState());
         }
 
-        public getFocusUnit(): BwUnit | undefined {
+        public getFocusUnit(): BwUnit | null {
             return this.getFocusUnitLoaded() || this.getFocusUnitOnMap();
         }
-        public getFocusUnitOnMap(): BwUnit | undefined {
+        public getFocusUnitOnMap(): BwUnit | null {
             return this._focusUnitOnMap;
         }
         private _setFocusUnitOnMap(unit: BwUnit): void {
@@ -1129,21 +1129,21 @@ namespace TwnsBwActionPlanner {
             this._focusUnitOnMap = null;
         }
 
-        public getFocusUnitLoaded(): BwUnit | undefined {
+        public getFocusUnitLoaded(): BwUnit | null {
             return this._focusUnitLoaded;
         }
-        private _setFocusUnitLoaded(unit: BwUnit | undefined): void {
+        private _setFocusUnitLoaded(unit: BwUnit): void {
             this._focusUnitLoaded = unit;
         }
         protected _clearFocusUnitLoaded(): void {
-            this._setFocusUnitLoaded(undefined);
+            this._focusUnitLoaded = null;
         }
-        protected _getUnitIdForFocusUnitLoaded(): number | null | undefined {
+        protected _getUnitIdForFocusUnitLoaded(): number | null {
             const unit = this.getFocusUnitLoaded();
-            return unit ? unit.getUnitId() : undefined;
+            return unit ? unit.getUnitId() : null;
         }
 
-        public getAvailableDropDestinations(): GridIndex[] | undefined {
+        public getAvailableDropDestinations(): GridIndex[] | null {
             return this._availableDropDestinations;
         }
         private _setAvailableDropDestinations(destinations: GridIndex[]): void {
@@ -1170,7 +1170,7 @@ namespace TwnsBwActionPlanner {
             this._chosenUnitsForDrop.push(data);
         }
         private _popBackChosenUnitForDrop(): ChosenUnitForDrop {
-            return this._chosenUnitsForDrop.pop();
+            return Helpers.getExisted(this.getChosenUnitsForDrop().pop());
         }
         protected _clearChosenUnitsForDrop(): void {
             this._chosenUnitsForDrop.length = 0;
@@ -1184,7 +1184,7 @@ namespace TwnsBwActionPlanner {
         }
 
         protected _resetMovableArea(): void {
-            const unit = this.getFocusUnit();
+            const unit = Helpers.getExisted(this.getFocusUnit());
             this._movableArea = WarCommonHelpers.createMovableArea({
                 origin          : unit.getGridIndex(),
                 maxMoveCost     : unit.getFinalMoveRange(),
@@ -1192,7 +1192,7 @@ namespace TwnsBwActionPlanner {
                 moveCostGetter  : gridIndex => this._getMoveCost(gridIndex, unit)
             });
         }
-        public getMovableArea(): MovableArea {
+        public getMovableArea(): MovableArea | null {
             return this._movableArea;
         }
 
@@ -1204,11 +1204,11 @@ namespace TwnsBwActionPlanner {
             const hasAmmo               = (!!focusUnit.getPrimaryWeaponCurrentAmmo()) || (focusUnit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
             this._setAttackableArea(WarCommonHelpers.createAttackableArea({
-                movableArea     : this.getMovableArea(),
+                movableArea     : Helpers.getExisted(this.getMovableArea()),
                 mapSize         : this.getMapSize(),
                 minAttackRange  : focusUnit.getMinAttackRange(),
                 maxAttackRange  : focusUnit.getFinalMaxAttackRange(),
-                checkCanAttack: (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
+                checkCanAttack: (moveGridIndex): boolean => {
                     if (!hasAmmo) {
                         return false;
                     } else {
@@ -1227,18 +1227,18 @@ namespace TwnsBwActionPlanner {
         protected _setAttackableArea(area: AttackableArea): void {
             this._attackableArea = area;
         }
-        public getAttackableArea(): AttackableArea {
+        public getAttackableArea(): AttackableArea | null {
             return this._attackableArea;
         }
 
         private _setAttackableGridsAfterMove(grids: GridIndex[]): void {
             this._attackableGridsAfterMove = grids;
         }
-        public getAttackableGridsAfterMove(): GridIndex[] {
+        public getAttackableGridsAfterMove(): GridIndex[] | null {
             return this._attackableGridsAfterMove;
         }
         public checkHasAttackableGridAfterMove(gridIndex: GridIndex): boolean {
-            for (const grid of this.getAttackableGridsAfterMove()) {
+            for (const grid of Helpers.getExisted(this.getAttackableGridsAfterMove())) {
                 if (GridIndexHelpers.checkIsEqual(grid, gridIndex)) {
                     return true;
                 }
@@ -1246,12 +1246,12 @@ namespace TwnsBwActionPlanner {
             return false;
         }
         private _createAttackableGridsAfterMove(): GridIndex[] {
-            const unit = this.getFocusUnit();
+            const unit = Helpers.getExisted(this.getFocusUnit());
             return GridIndexHelpers.getGridsWithinDistance(
                 this.getMovePathDestination(),
-                unit.getMinAttackRange(),
-                unit.getFinalMaxAttackRange(),
-                this._mapSize,
+                Helpers.getExisted(unit.getMinAttackRange()),
+                Helpers.getExisted(unit.getFinalMaxAttackRange()),
+                this.getMapSize(),
                 (gridIndex) => unit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)
             );
         }
@@ -1260,7 +1260,7 @@ namespace TwnsBwActionPlanner {
         // Functions for move path.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _resetMovePathAsShortest(destination: GridIndex): void {
-            this._setMovePath(WarCommonHelpers.createShortestMovePath(this.getMovableArea(), destination));
+            this._setMovePath(WarCommonHelpers.createShortestMovePath(Helpers.getExisted(this.getMovableArea()), destination));
         }
         private _setMovePath(movePath: MovePathNode[]): void {
             this._movePath = movePath;
@@ -1274,7 +1274,7 @@ namespace TwnsBwActionPlanner {
         }
         protected _updateMovePathByDestination(destination: GridIndex): void {
             const { x, y }      = destination;
-            const movableArea   = this.getMovableArea();
+            const movableArea   = Helpers.getExisted(this.getMovableArea());
             const currPath      = this.getMovePath();
             if ((movableArea[x]) && (movableArea[x][y]) && (!GridIndexHelpers.checkIsEqual(currPath[currPath.length - 1], destination))) {
                 if ((!this._checkAndTruncateMovePath(destination)) && (!this._checkAndExtendMovePath(destination))) {
@@ -1300,8 +1300,8 @@ namespace TwnsBwActionPlanner {
             if (!GridIndexHelpers.checkIsAdjacent(prevGrid, destination)) {
                 return false;
             } else {
-                const focusUnit     = this.getFocusUnit();
-                const totalMoveCost = this._getMoveCost(destination, focusUnit) + prevGrid.totalMoveCost;
+                const focusUnit     = Helpers.getExisted(this.getFocusUnit());
+                const totalMoveCost = Helpers.getExisted(this._getMoveCost(destination, focusUnit)) + prevGrid.totalMoveCost;
                 if (totalMoveCost > focusUnit.getFinalMoveRange()) {
                     return false;
                 } else {
@@ -1334,7 +1334,7 @@ namespace TwnsBwActionPlanner {
         protected _addUnitForPreviewAttackableArea(unit: BwUnit): void {
             const canAttackAfterMove    = unit.checkCanAttackAfterMove();
             const beginningGridIndex    = unit.getGridIndex();
-            const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
+            const hasAmmo               = (!!unit.getPrimaryWeaponCurrentAmmo()) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
             const unitMap               = this._getUnitMap();
             const newArea               = WarCommonHelpers.createAttackableArea({
@@ -1347,7 +1347,7 @@ namespace TwnsBwActionPlanner {
                 mapSize,
                 minAttackRange: unit.getMinAttackRange(),
                 maxAttackRange: unit.getFinalMaxAttackRange(),
-                checkCanAttack: (moveGridIndex, attackGridIndex) => {
+                checkCanAttack: (moveGridIndex) => {
                     const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
                     return ((!existingUnit) || (existingUnit === unit))
                         && (hasAmmo)
@@ -1377,10 +1377,10 @@ namespace TwnsBwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for previewing movable area.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getUnitForPreviewingMovableArea(): BwUnit | undefined {
+        public getUnitForPreviewingMovableArea(): BwUnit | null {
             return this._unitForPreviewMove;
         }
-        public getAreaForPreviewingMove(): MovableArea {
+        public getAreaForPreviewingMove(): MovableArea | null {
             return this._areaForPreviewMove;
         }
         protected _clearDataForPreviewingMovableArea(): void {
@@ -1417,7 +1417,7 @@ namespace TwnsBwActionPlanner {
                     case State.PreviewingAttackableArea     : return this._getNextStateOnTapWhenPreviewingAttackableArea(gridIndex);
                     case State.PreviewingMovableArea        : return this._getNextStateOnTapWhenPreviewingMovableArea(gridIndex);
                     default:
-                        Logger.error(`BwActionPlanner._getNextStateOnTap() invalid currState!`);
+                        throw new Error(`BwActionPlanner._getNextStateOnTap() invalid currState!`);
                         return State.Idle;
                 }
             }
@@ -1425,12 +1425,13 @@ namespace TwnsBwActionPlanner {
         protected abstract _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State;
         private _getNextStateOnTapWhenMakingMovePath(gridIndex: GridIndex): State {
             const existingUnit = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
-            if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+            if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                 if (!existingUnit) {
                     if (!UserModel.getSelfSettingsIsSetPathMode()) {
                         return State.ChoosingAction;
                     } else {
-                        if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+                        const previousGridIndex = this.getCursor().getPreviousGridIndex();
+                        if ((previousGridIndex) && (GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex))) {
                             return State.ChoosingAction;
                         } else {
                             return State.MakingMovePath;
@@ -1444,7 +1445,7 @@ namespace TwnsBwActionPlanner {
                             return State.PreviewingMovableArea;
                         }
                     } else {
-                        const focusUnit = this.getFocusUnit();
+                        const focusUnit = Helpers.getExisted(this.getFocusUnit());
                         if ((focusUnit === this.getFocusUnitLoaded()) && (GridIndexHelpers.checkIsEqual(gridIndex, focusUnit.getGridIndex()))) {
                             return State.MakingMovePath;
                         } else {
@@ -1466,10 +1467,11 @@ namespace TwnsBwActionPlanner {
                 }
             } else {
                 if (this._checkCanFocusUnitOnMapAttackTarget(gridIndex)) {
-                    if (!GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+                    const previousGridIndex = this.getCursor().getPreviousGridIndex();
+                    if ((previousGridIndex == null) || (!GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex))) {
                         return State.MakingMovePath;
                     } else {
-                        if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                        if (Helpers.getExisted(this.getFocusUnit()).checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
                             if (existingUnit) {
                                 return State.RequestingUnitAttackUnit;
                             } else {
@@ -1507,12 +1509,13 @@ namespace TwnsBwActionPlanner {
                 // return State.MakingMovePath;
                 const existingUnit      = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
                 const selfPlayerIndex   = this._getWar().getPlayerIndexInTurn();
-                if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                     if (!existingUnit) {
                         if (!UserModel.getSelfSettingsIsSetPathMode()) {
                             return State.ChoosingAction;
                         } else {
-                            if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+                            const previousGridIndex = this.getCursor().getPreviousGridIndex();
+                            if ((previousGridIndex) && (GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex))) {
                                 return State.ChoosingAction;
                             } else {
                                 return State.MakingMovePath;
@@ -1526,7 +1529,7 @@ namespace TwnsBwActionPlanner {
                                 return State.PreviewingMovableArea;
                             }
                         } else {
-                            const focusUnit = this.getFocusUnit();
+                            const focusUnit = Helpers.getExisted(this.getFocusUnit());
                             if ((focusUnit === this.getFocusUnitLoaded()) && (GridIndexHelpers.checkIsEqual(gridIndex, focusUnit.getGridIndex()))) {
                                 return State.MakingMovePath;
                             } else {
@@ -1546,12 +1549,13 @@ namespace TwnsBwActionPlanner {
                             }
                         }
                     }
-                    } else {
+                } else {
                     if (this._checkCanFocusUnitOnMapAttackTarget(gridIndex)) {
-                        if (!GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+                        const previousGridIndex = this.getCursor().getPreviousGridIndex();
+                        if ((previousGridIndex == null) || (!GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex))) {
                             return State.MakingMovePath;
                         } else {
-                            if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                            if (Helpers.getExisted(this.getFocusUnit()).checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
                                 if (existingUnit) {
                                     return State.RequestingUnitAttackUnit;
                                 } else {
@@ -1615,7 +1619,7 @@ namespace TwnsBwActionPlanner {
             }
         }
         private _getNextStateOnDragEndedWhenMakingMovePath(gridIndex: GridIndex): State {
-            if (WarCommonHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+            if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                 const existingUnit = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
                 if (!existingUnit) {
                     if (!UserModel.getSelfSettingsIsSetPathMode()) {
@@ -1627,7 +1631,7 @@ namespace TwnsBwActionPlanner {
                     if (!this._checkCanControlUnit(existingUnit)) {
                         return State.MakingMovePath;
                     } else {
-                        const focusUnit = this.getFocusUnit();
+                        const focusUnit = Helpers.getExisted(this.getFocusUnit());
                         if ((focusUnit === this.getFocusUnitLoaded()) && (GridIndexHelpers.checkIsEqual(gridIndex, focusUnit.getGridIndex()))) {
                             return State.MakingMovePath;
                         } else {
@@ -1710,7 +1714,7 @@ namespace TwnsBwActionPlanner {
         protected abstract _getActionUnitSupply(): DataForUnitAction[];
         private _getActionsUnitLaunchUnit(): DataForUnitAction[] {
             const dataList  : DataForUnitAction[] = [];
-            const focusUnit = this.getFocusUnit();
+            const focusUnit = Helpers.getExisted(this.getFocusUnit());
             if ((focusUnit !== this.getFocusUnitLoaded()) && (this.getMovePath().length === 1) && (focusUnit.checkCanLaunchLoadedUnit())) {
                 const tile = this._getTileMap().getTile(this.getMovePathDestination());
                 for (const unit of focusUnit.getLoadedUnits()) {
@@ -1726,7 +1730,7 @@ namespace TwnsBwActionPlanner {
             return dataList;
         }
         private _getActionsUnitDropUnit(): DataForUnitAction[] {
-            const focusUnit                 = this.getFocusUnit();
+            const focusUnit                 = Helpers.getExisted(this.getFocusUnit());
             const destination               = this.getMovePathDestination();
             const loadedUnits               = focusUnit.getLoadedUnits();
             const chosenUnits               = this.getChosenUnitsForDrop();
@@ -1746,9 +1750,9 @@ namespace TwnsBwActionPlanner {
             return actions;
         }
         private _getActionUnitLaunchFlare(): DataForUnitAction[] {
-            if ((!this._getWar().getFogMap().checkHasFogCurrently()) ||
-                (this.getMovePath().length !== 1)               ||
-                (!this.getFocusUnit().getFlareCurrentAmmo())
+            if ((!this._getWar().getFogMap().checkHasFogCurrently())            ||
+                (this.getMovePath().length !== 1)                               ||
+                (!Helpers.getExisted(this.getFocusUnit()).getFlareCurrentAmmo())
             ) {
                 return [];
             } else {
@@ -1756,7 +1760,7 @@ namespace TwnsBwActionPlanner {
             }
         }
         private _getActionUnitLaunchSilo(): DataForUnitAction[] {
-            return (this.getFocusUnit().checkCanLaunchSiloOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
+            return (Helpers.getExisted(this.getFocusUnit()).checkCanLaunchSiloOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
                 ? [{ actionType: UnitActionType.LaunchSilo, callback: () => this._setStateChoosingSiloDestinationOnChooseAction() }]
                 : [];
         }
@@ -1775,7 +1779,7 @@ namespace TwnsBwActionPlanner {
                 if ((existingUnit)                                      &&
                     (existingUnit.getTeamIndex() !== teamIndex)         &&
                     (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
-                        war                 : this._war,
+                        war                 : this._getWar(),
                         gridIndex           : targetGridIndex,
                         unitType            : existingUnit.getUnitType(),
                         isDiving            : existingUnit.getIsDiving(),
@@ -1791,16 +1795,16 @@ namespace TwnsBwActionPlanner {
         }
 
         protected _checkCanFocusUnitOnMapAttackTarget(gridIndex: GridIndex): boolean {
-            const attackableArea = this.getAttackableArea();
+            const attackableArea = Helpers.getExisted(this.getAttackableArea());
             if (!WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
                 return false;
             } else {
-                const focusUnit = this.getFocusUnit();
+                const focusUnit = Helpers.getExisted(this.getFocusUnit());
                 if (focusUnit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
                     return true;
                 } else {
                     return focusUnit.checkCanAttackTargetAfterMovePath(
-                        WarCommonHelpers.createShortestMovePath(this.getMovableArea(), attackableArea[gridIndex.x][gridIndex.y].movePathDestination),
+                        WarCommonHelpers.createShortestMovePath(Helpers.getExisted(this.getMovableArea()), attackableArea[gridIndex.x][gridIndex.y].movePathDestination),
                         gridIndex
                     );
                 }
@@ -1814,7 +1818,7 @@ namespace TwnsBwActionPlanner {
             const unitMap               = this._getUnitMap();
             const destinations          = new Array<GridIndex>();
             if (tileMap.getTile(loaderEndingGridIndex).getMoveCostByUnit(unitForDrop) != null) {
-                for (const gridIndex of GridIndexHelpers.getAdjacentGrids(loaderEndingGridIndex, this._mapSize)) {
+                for (const gridIndex of GridIndexHelpers.getAdjacentGrids(loaderEndingGridIndex, this.getMapSize())) {
                     const existingUnit = unitMap.getUnitOnMap(gridIndex);
                     if ((tileMap.getTile(gridIndex).getMoveCostByUnit(unitForDrop) != null)                 &&
                         (chosenDropDestinations.every(g => !GridIndexHelpers.checkIsEqual(g, gridIndex)))   &&

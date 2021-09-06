@@ -63,8 +63,6 @@ namespace TwnsMcrCreateMapListPanel {
         private readonly _uiMapInfo!            : TwnsUiMapInfo.UiMapInfo;
 
         private _mapFilters                     : FiltersForMapList = {};
-        private _dataForList                    : DataForMapNameRenderer[] = [];
-        private _selectedMapId                  : number | null = null;
 
         public static show(mapFilters: FiltersForMapList | null): void {
             if (!McrCreateMapListPanel._instance) {
@@ -109,42 +107,30 @@ namespace TwnsMcrCreateMapListPanel {
             await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
-        public async setAndReviseSelectedMapId(newMapId: number | null): Promise<void> {
-            const dataList = this._dataForList;
-            if (dataList.length <= 0) {
-                this._selectedMapId = null;
-            } else {
-                const index         = dataList.findIndex(data => data.mapId === newMapId);
-                const newIndex      = index >= 0 ? index : Math.floor(Math.random() * dataList.length);
-                const oldIndex      = dataList.findIndex(data => data.mapId === this._selectedMapId);
-                this._selectedMapId = dataList[newIndex].mapId;
-                (dataList[oldIndex])    && (this._listMap.updateSingleData(oldIndex, dataList[oldIndex]));
-                (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
+        public async setAndReviseSelectedMapId(newMapId: number, needScroll: boolean): Promise<void> {
+            const listMap   = this._listMap;
+            const index     = Helpers.getExisted(listMap.getRandomIndex(v => v.mapId === newMapId));
+            listMap.setSelectedIndex(index);
+            this._showMap(listMap.getSelectedData()?.mapId ?? null);
 
-                this._listMap.setSelectedIndex(newIndex);
-                await this._showMap(dataList[newIndex].mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            if (needScroll) {
+                listMap.scrollVerticalToIndex(index);
             }
         }
-        public getSelectedMapId(): number | null {
-            return this._selectedMapId;
+        private _getSelectedMapId(): number | null {
+            return this._listMap.getSelectedData()?.mapId ?? null;
         }
 
         public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
-            this._mapFilters            = mapFilters;
-            const dataArray             = await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            this._dataForList           = dataArray;
+            this._mapFilters = mapFilters;
 
+            const oldSelectedMapId      = this._getSelectedMapId();
+            const dataArray             = await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             const length                = dataArray.length;
             const listMap               = this._listMap;
             this._labelNoMap.visible    = length <= 0;
             listMap.bindData(dataArray);
-            this.setAndReviseSelectedMapId(this.getSelectedMapId());
-
-            if (length > 1) {
-                const selectedMapId = this.getSelectedMapId();
-                const index         = dataArray.findIndex(v => v.mapId === selectedMapId);
-                (index >= 0) && (listMap.scrollVerticalTo(index / (length - 1) * 100));
-            }
+            this.setAndReviseSelectedMapId(oldSelectedMapId ?? 0, true);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +148,7 @@ namespace TwnsMcrCreateMapListPanel {
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
-            const selectedMapId = this.getSelectedMapId();
+            const selectedMapId = this._getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
                 await McrCreateModel.resetDataByMapId(selectedMapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
@@ -225,13 +211,22 @@ namespace TwnsMcrCreateMapListPanel {
             return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
-        private async _showMap(mapId: number): Promise<void> {
-            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })));
-            this._uiMapInfo.setData({
-                mapInfo: {
-                    mapId,
-                },
-            });
+        private async _showMap(mapId: number | null): Promise<void> {
+            const zoomMap   = this._zoomMap;
+            const uiMapInfo = this._uiMapInfo;
+            if (mapId == null) {
+                zoomMap.visible     = false;
+                uiMapInfo.visible   = false;
+            } else {
+                zoomMap.visible     = true;
+                uiMapInfo.visible   = true;
+                zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })));
+                uiMapInfo.setData({
+                    mapInfo: {
+                        mapId,
+                    },
+                });
+            }
         }
 
         private _showOpenAnimation(): void {
@@ -318,7 +313,6 @@ namespace TwnsMcrCreateMapListPanel {
         mapName : string;
         panel   : McrCreateMapListPanel;
     };
-
     class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
         private readonly _btnNext!      : TwnsUiButton.UiButton;
@@ -332,13 +326,15 @@ namespace TwnsMcrCreateMapListPanel {
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
-        protected _onDataChanged(): void {
-            WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
+        protected async _onDataChanged(): Promise<void> {
+            const label = this._labelName;
+            label.text  = ``;
+            label.text  = await WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _onTouchTapBtnChoose(): void {
             const data = this._getData();
-            data.panel.setAndReviseSelectedMapId(data.mapId);
+            data.panel.setAndReviseSelectedMapId(data.mapId, false);
         }
 
         private async _onTouchTapBtnNext(): Promise<void> {

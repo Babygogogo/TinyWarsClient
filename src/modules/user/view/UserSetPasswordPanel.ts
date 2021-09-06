@@ -40,7 +40,7 @@ namespace TwnsUserSetPasswordPanel {
             if (!UserSetPasswordPanel._instance) {
                 UserSetPasswordPanel._instance = new UserSetPasswordPanel();
             }
-            UserSetPasswordPanel._instance.open(undefined);
+            UserSetPasswordPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

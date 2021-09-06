@@ -4,7 +4,6 @@ import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
-import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
@@ -20,7 +19,6 @@ namespace TwnsBwTile {
     import TileDecoratorType    = Types.TileDecoratorType;
     import TileBaseType         = Types.TileBaseType;
     import TileTemplateCfg      = Types.TileTemplateCfg;
-    import UnitCategory         = Types.UnitCategory;
     import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwUnit               = TwnsBwUnit.BwUnit;
@@ -175,9 +173,9 @@ namespace TwnsBwTile {
             this._setObjectType(objectType);
             this._setPlayerIndex(playerIndex);
 
-            this._setBaseShapeId(baseShapeId);
-            this._setObjectShapeId(objectShapeId);
-            this._setDecoratorShapeId(decoratorShapeId);
+            this._setBaseShapeId(baseShapeId ?? 0);
+            this._setDecoratorShapeId(decoratorShapeId ?? null);
+            this._setObjectShapeId(objectShapeId ?? 0);
             this.setCurrentHp(currentHp ?? (templateCfg.maxHp ?? null));
             this.setCurrentBuildPoint(currentBuildPoint ?? (templateCfg.maxBuildPoint ?? null));
             this.setCurrentCapturePoint(currentCapturePoint ?? (templateCfg.maxCapturePoint ?? null));
@@ -215,47 +213,17 @@ namespace TwnsBwTile {
 
             return data;
         }
-        public serializeForCreateSfw(): ISerialTile | undefined {
-            const war = this.getWar();
-            if (war == null) {
-                Logger.error(`BwTile.serializeForCreateSfw() empty war.`);
-                return undefined;
-            }
-
+        public serializeForCreateSfw(): ISerialTile {
+            const war       = this.getWar();
             const gridIndex = this.getGridIndex();
-            if (gridIndex == null) {
-                Logger.error(`BwTile.serializeForCreateSfw() empty gridIndex.`);
-                return undefined;
-            }
-
             if (WarVisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
-                const data = this.serialize();
-                if (data == null) {
-                    Logger.error(`BwTile.serializeForCreateSfw() empty data.`);
-                    return undefined;
-                }
-                return data;
+                return this.serialize();
 
             } else {
-                const baseType = this.getBaseType();
-                if (baseType == null) {
-                    Logger.error(`BwTile.serializeForCreateSfw() empty baseType.`);
-                    return undefined;
-                }
-
-                const objectType = this.getObjectType();
-                if (objectType == null) {
-                    Logger.error(`BwTile.serializeForCreateSfw() empty objectType.`);
-                    return undefined;
-                }
-
-                const playerIndex = this.getPlayerIndex();
-                if (playerIndex == null) {
-                    Logger.error(`BwTile.serializeForCreateSfw() empty playerIndex.`);
-                    return undefined;
-                }
-
-                const data: ISerialTile = {
+                const baseType      = this.getBaseType();
+                const objectType    = this.getObjectType();
+                const playerIndex   = this.getPlayerIndex();
+                const data          : ISerialTile = {
                     gridIndex,
                     baseType,
                     objectType,
@@ -280,7 +248,7 @@ namespace TwnsBwTile {
                 return data;
             }
         }
-        public serializeForCreateMfr(): ISerialTile | undefined {
+        public serializeForCreateMfr(): ISerialTile {
             return this.serializeForCreateSfw();
         }
 
@@ -314,23 +282,11 @@ namespace TwnsBwTile {
             return this._view;
         }
         public flushDataToView(): void {
-            const tileData = this.serialize();
-            if (tileData == null) {
-                Logger.error(`BwTile.flushDataToView() empty tileData.`);
-                return;
-            }
-
-            const skinId = this.getSkinId();
-            if (skinId == null) {
-                Logger.error(`BwTile.flushDataToView() empty skinId.`);
-                return;
-            }
-
             const view = this.getView();
             view.setData({
-                tileData,
+                tileData    : this.serialize(),
                 hasFog      : this.getHasFog(),
-                skinId,
+                skinId      : this.getSkinId(),
             });
             view.updateView();
         }
@@ -356,18 +312,18 @@ namespace TwnsBwTile {
             return Helpers.getDefined(this._decoratorType);
         }
 
-        private _setBaseShapeId(id: number | null | undefined): void {
+        private _setBaseShapeId(id: number): void {
             this._baseShapeId = id;
         }
         public getBaseShapeId(): number {
-            return this._baseShapeId || 0;
+            return Helpers.getDefined(this._baseShapeId);
         }
 
-        private _setObjectShapeId(id: number | null | undefined): void {
+        private _setObjectShapeId(id: number): void {
             this._objectShapeId = id;
         }
         public getObjectShapeId(): number {
-            return this._objectShapeId || 0;
+            return Helpers.getDefined(this._objectShapeId);
         }
 
         private _setDecoratorShapeId(id: number | null): void {
@@ -377,14 +333,8 @@ namespace TwnsBwTile {
             return Helpers.getDefined(this._decoratorShapeId);
         }
 
-        public getSkinId(): number | undefined {
-            const player = this.getPlayer();
-            if (player == null) {
-                Logger.error(`BwTile.getSkinId() empty player.`);
-                return undefined;
-            }
-
-            return player.getUnitAndTileSkinId();
+        public getSkinId(): number {
+            return this.getPlayer().getUnitAndTileSkinId();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -412,24 +362,12 @@ namespace TwnsBwTile {
             this._currentHp = hp;
         }
 
-        public getArmorType(): Types.ArmorType | null | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getArmorType() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.armorType;
+        public getArmorType(): Types.ArmorType | null {
+            return this._getTemplateCfg().armorType ?? null;
         }
 
         public checkIsArmorAffectByLuck(): boolean {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.checkIsArmorAffectByLuck() templateCfg is empty.`);
-                return false;
-            }
-
-            return cfg.isAffectedByLuck === 1;
+            return this._getTemplateCfg().isAffectedByLuck === 1;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -485,8 +423,7 @@ namespace TwnsBwTile {
         public checkIsDefeatOnCapture(): boolean {
             const cfg = this._getTemplateCfg();
             if (cfg == null) {
-                Logger.error(`BwTile.checkIsDefeatOnCapture() templateCfg is empty.`);
-                return false;
+                throw new Error(`BwTile.checkIsDefeatOnCapture() templateCfg is empty.`);
             }
 
             return cfg.isDefeatedOnCapture === 1;
@@ -495,77 +432,23 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for defense amount for units.
         ////////////////////////////////////////////////////////////////////////////////
-        public getNormalizedDefenseAmount(): number | undefined {
-            const amount = this.getDefenseAmount();
-            if (amount == null) {
-                Logger.error(`BwTile.getNormalizedDefenseAmount() the amount is empty.`);
-                return undefined;
-            }
-
-            return Math.floor(amount / 10);
+        public getNormalizedDefenseAmount(): number {
+            return Math.floor(this.getDefenseAmount() / 10);
         }
-        public getDefenseAmount(): number | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getDefenseAmount() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.defenseAmount;
+        public getDefenseAmount(): number {
+            return this._getTemplateCfg().defenseAmount;
         }
-        public getDefenseAmountForUnit(unit: BwUnit): number | undefined {
-            const defenseAmount = this.getDefenseAmount();
-            if (defenseAmount == null) {
-                Logger.error(`BwTile.getDefenseAmountForUnit() the defenseAmount is empty.`);
-                return undefined;
-            }
-
-            const normalizedCurrentHp = unit.getNormalizedCurrentHp();
-            if (normalizedCurrentHp == null) {
-                Logger.error(`BwTile.getDefenseAmountForUnit() the normalizedCurrentHp is empty.`);
-                return undefined;
-            }
-
-            const normalizedMaxHp = unit.getNormalizedMaxHp();
-            if (normalizedMaxHp == null) {
-                Logger.error(`BwTile.getDefenseAmountForUnit() the normalizedMaxHp is empty.`);
-                return undefined;
-            }
-
+        public getDefenseAmountForUnit(unit: BwUnit): number {
             return this.checkCanDefendUnit(unit)
-                ? defenseAmount * normalizedCurrentHp / normalizedMaxHp
+                ? this.getDefenseAmount() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp()
                 : 0;
         }
 
-        public getDefenseUnitCategory(): UnitCategory | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getDefenseUnitCategory() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.defenseUnitCategory;
+        public getDefenseUnitCategory(): Types.UnitCategory {
+            return this._getTemplateCfg().defenseUnitCategory;
         }
         public checkCanDefendUnit(unit: BwUnit): boolean {
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwTile.checkCanDefendUnit() configVersion is empty.`);
-                return false;
-            }
-
-            const unitType = unit.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwTile.checkCanDefendUnit() unitType is empty.`);
-                return false;
-            }
-
-            const unitCategory = this.getDefenseUnitCategory();
-            if (unitCategory == null) {
-                Logger.error(`BwTile.checkCanDefendUnit() unitCategory is empty.`);
-                return false;
-            }
-
-            return ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, unitCategory);
+            return ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), this.getDefenseUnitCategory());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -604,31 +487,12 @@ namespace TwnsBwTile {
             objectType      : TileObjectType;
             playerIndex     : number;
         }): void {
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwTile.resetByTypeAndPlayerIndex() configVersion is empty.`);
-                return;
-            }
-
-            const war = this.getWar();
-            if (war == null) {
-                Logger.error(`BwTile.resetByTypeAndPlayerIndex() war is empty.`);
-                return;
-            }
-
-            const gridIndex = this.getGridIndex();
-            if (gridIndex == null) {
-                Logger.error(`BwTile.resetByTypeAndPlayerIndex() empty gridIndex.`);
-                return undefined;
-            }
-
             if (!ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType)) {
-                Logger.error(`BwTile.resetByTypeAndPlayerIndex() invalid params`);
-                return undefined;
+                throw new Error(`Invalid playerIndex: ${playerIndex}, baseType: ${baseType}, objectType: ${objectType}`);
             }
 
             if (this.init({
-                gridIndex,
+                gridIndex       : this.getGridIndex(),
                 objectType,
                 baseType,
                 playerIndex,
@@ -636,26 +500,21 @@ namespace TwnsBwTile {
                 objectShapeId   : objectType === this.getObjectType() ? this.getObjectShapeId() : null,
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
-            }, configVersion)) {
-                Logger.error(`BwTile.resetByTypeAndPlayerIndex() failed to init!`);
-                return undefined;
+            }, this.getConfigVersion())) {
+                throw new Error(`BwTile.resetByTypeAndPlayerIndex() failed to init!`);
             }
-            this.startRunning(war);
+            this.startRunning(this.getWar());
         }
         public deleteTileDecorator(): void {
             this._setDecoratorType(null);
             this._setDecoratorShapeId(null);
         }
         public destroyTileObject(): void {
-            const tileBaseType = this.getBaseType();
-            if (tileBaseType == null) {
-                Logger.error(`BwTile.destroyTileObject() empty tileBaseType.`);
-                return undefined;
-            }
-
-            this.resetByTypeAndPlayerIndex(
-                { baseType: tileBaseType, objectType: TileObjectType.Empty, playerIndex: CommonConstants.WarNeutralPlayerIndex },
-            );
+            this.resetByTypeAndPlayerIndex({
+                baseType    : this.getBaseType(),
+                objectType  : TileObjectType.Empty,
+                playerIndex : CommonConstants.WarNeutralPlayerIndex
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -745,114 +604,44 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for repair/supply unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getRepairUnitCategory(): Types.UnitCategory | undefined | null {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getRepairUnitCategory() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.repairUnitCategory;
+        public getRepairUnitCategory(): Types.UnitCategory | null {
+            return this._getTemplateCfg().repairUnitCategory ?? null;
         }
 
-        public getCfgNormalizedRepairHp(): number | undefined | null {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getNormalizedRepairHp() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.repairAmount;
+        public getCfgNormalizedRepairHp(): number | null {
+            return this._getTemplateCfg().repairAmount ?? null;
         }
 
         public checkCanRepairUnit(unit: BwUnit): boolean {
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwTile.checkCanRepairUnit() configVersion is empty.`);
-                return false;
-            }
-
-            const unitType = unit.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwTile.checkCanRepairUnit() unitType is empty.`);
-                return false;
-            }
-
-            const currentHp = unit.getCurrentHp();
-            const maxHp     = unit.getMaxHp();
-            if ((currentHp == null) || (maxHp == null)) {
-                Logger.error(`BwTile.checkCanRepairUnit() unit maxHp/currentHp is empty.`);
-                return false;
-            }
-
             const category = this.getRepairUnitCategory();
             return (category != null)
-                && ((currentHp < maxHp) || (unit.checkCanBeSupplied()))
+                && ((unit.getCurrentHp() < unit.getMaxHp()) || (unit.checkCanBeSupplied()))
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category));
+                && (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
         }
         public checkCanSupplyUnit(unit: BwUnit): boolean {
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwTile.checkCanSupplyUnit() configVersion is empty.`);
-                return false;
-            }
-
-            const unitType = unit.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwTile.checkCanSupplyUnit() unitType is empty.`);
-                return false;
-            }
-
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && (unit.checkCanBeSupplied())
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category));
+                && (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
         }
 
-        public getRepairHpAndCostForUnit(unit: BwUnit): Types.RepairHpAndCost | undefined {
+        public getRepairHpAndCostForUnit(unit: BwUnit): Types.RepairHpAndCost | null {
             if (!this.checkCanRepairUnit(unit)) {
-                return undefined;
-            }
-
-            const war = this.getWar();
-            if (war == null) {
-                Logger.error(`BwTile.getRepairHpAndCostForUnit() war is empty.`);
-                return undefined;
-            }
-
-            const unitPlayer = unit.getPlayer();
-            if (unitPlayer == null) {
-                Logger.error(`BwTile.getRepairHpAndCostForUnit() unitPlayer is empty.`);
-                return undefined;
-            }
-
-            const fund = unitPlayer.getFund();
-            if (fund == null) {
-                Logger.error(`BwTile.getRepairHpAndCostForUnit() fund is empty.`);
-                return undefined;
-            }
-
-            const productionCost = unit.getProductionFinalCost();
-            if (productionCost == null) {
-                Logger.error(`BwTile.getRepairHpAndCostForUnit() productionCost is empty.`);
-                return undefined;
-            }
-
-            const currentHp             = unit.getCurrentHp();
-            const normalizedMaxHp       = unit.getNormalizedMaxHp();
-            if ((normalizedMaxHp == null) || (currentHp == null)) {
-                Logger.error(`BwTile.getRepairHpAndCostForUnit() normalizedMaxHp/currentHp is empty.`);
-                return undefined;
+                return null;
             }
 
             const cfgNormalizedRepairHp = this.getCfgNormalizedRepairHp();
             if (cfgNormalizedRepairHp == null) {
-                Logger.error(`BwTile.getRepairHpAndCostForUnit() cfgNormalizedRepairHp is empty.`);
-                return undefined;
+                throw new Error(`Empty cfgNormalizedRepairHp`);
             }
 
+            const unitPlayer            = unit.getPlayer();
+            const fund                  = unitPlayer.getFund();
+            const productionCost        = unit.getProductionFinalCost();
+            const currentHp             = unit.getCurrentHp();
+            const normalizedMaxHp       = unit.getNormalizedMaxHp();
             const normalizedCurrentHp   = WarCommonHelpers.getNormalizedHp(currentHp);
             const normalizedRepairHp    = Math.min(
                 normalizedMaxHp - normalizedCurrentHp,
@@ -870,12 +659,7 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         public checkCanHideUnit(unitType: Types.UnitType): boolean {
             const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwTile.checkCanHideUnit() configVersion is empty.`);
-                return false;
-            }
-
-            const category = this._getCfgHideUnitCategory();
+            const category      = this._getCfgHideUnitCategory();
             return category == null
                 ? false
                 : ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category);
@@ -886,29 +670,17 @@ namespace TwnsBwTile {
             return (category != null) && (category != Types.UnitCategory.None);
         }
 
-        private _getCfgHideUnitCategory(): Types.UnitCategory | null | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile._getCfgHideUnitCategory() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.hideUnitCategory;
+        private _getCfgHideUnitCategory(): Types.UnitCategory | null {
+            return this._getTemplateCfg().hideUnitCategory ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getCfgProduceUnitCategory(): Types.UnitCategory | undefined | null {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getCfgProduceUnitCategory() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.produceUnitCategory;
+        public getCfgProduceUnitCategory(): Types.UnitCategory | null {
+            return this._getTemplateCfg().produceUnitCategory ?? null;
         }
-        public getProduceUnitCategoryForPlayer(playerIndex: number): Types.UnitCategory | undefined | null {
+        public getProduceUnitCategoryForPlayer(playerIndex: number): Types.UnitCategory | null {
             if (this.getPlayerIndex() !== playerIndex) {
                 return null;
             } else {
@@ -917,66 +689,24 @@ namespace TwnsBwTile {
             }
         }
 
-        public getEffectiveSelfUnitProductionSkillCfg(playerIndex: number): number[] | undefined {
-            const war = this.getWar();
-            if (war == null) {
-                Logger.error(`BwTile.getEffectiveSelfUnitProductionSkillCfg() war is empty.`);
-                return undefined;
-            }
-
-            const playerManager = war.getPlayerManager();
-            if (playerManager == null) {
-                Logger.error(`BwTile.getEffectiveSelfUnitProductionSkillCfg() empty playerManager.`);
-                return undefined;
-            }
-
-            const player = playerManager.getPlayer(playerIndex);
-            if (player == null) {
-                Logger.error(`BwTile.getEffectiveSelfUnitProductionSkillCfg() player is empty.`);
-                return undefined;
-            }
-
-            const gridIndex = this.getGridIndex();
-            if (gridIndex == null) {
-                Logger.error(`BwTile.getEffectiveSelfUnitProductionSkillCfg() gridIndex is empty.`);
-                return undefined;
-            }
-
-            const configVersion = war.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwTile.getEffectiveSelfUnitProductionSkillCfg() configVersion is empty.`);
-                return undefined;
-            }
-
-            const tileType = this.getType();
-            if (tileType == null) {
-                Logger.error(`BwTile.getEffectiveSelfUnitProductionSkillCfg() tileType is empty.`);
-                return undefined;
-            }
-
-            const unitMap = war.getUnitMap();
-            if (unitMap == null) {
-                Logger.error(`BwTile.getEffectiveSelfUnitProductionSkillCfg() empty unitMap.`);
-                return undefined;
-            }
-
+        public getEffectiveSelfUnitProductionSkillCfg(playerIndex: number): number[] | null {
+            const war       = this.getWar();
+            const player    = war.getPlayerManager().getPlayer(playerIndex);
             if ((!player.getCoId()) || (this.getPlayerIndex() !== playerIndex)) {
-                return undefined;
+                return null;
             }
 
-            const coZoneRadius = player.getCoZoneRadius();
-            if (coZoneRadius == null) {
-                Logger.error(`BwTile.getEffectiveSelfUnitProductionSkillCfg() empty coZoneRadius.`);
-                return undefined;
-            }
-
-            const getCoGridIndexArrayOnMap = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+            const configVersion             = war.getConfigVersion();
+            const tileType                  = this.getType();
+            const coZoneRadius              = player.getCoZoneRadius();
+            const gridIndex                 = this.getGridIndex();
+            const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfUnitProduction;
                 if (skillCfg) {
                     const tileCategory = skillCfg[2];
-                    if ((tileCategory != null)                                                                                  &&
-                        (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, tileCategory))                        &&
+                    if ((tileCategory != null)                                                              &&
+                        (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, tileCategory))    &&
                         (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex,
                             coSkillAreaType         : skillCfg[0],
@@ -989,7 +719,7 @@ namespace TwnsBwTile {
                 }
             }
 
-            return undefined;
+            return null;
         }
 
         public checkIsCfgUnitProducer(): boolean {
@@ -1004,114 +734,41 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
-        public getCfgVisionRange(): number | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getCfgVisionRange() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.visionRange;
+        public getCfgVisionRange(): number {
+            return this._getTemplateCfg().visionRange;
         }
         public checkIsVisionEnabledForAllPlayers(): boolean {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.checkIsVisionEnabledForAllPlayers() templateCfg is empty.`);
-                return false;
-            }
-
-            return cfg.isVisionEnabledForAllPlayers === 1;
+            return this._getTemplateCfg().isVisionEnabledForAllPlayers === 1;
         }
 
-        public getVisionRangeForPlayer(playerIndex: number): number | undefined {
-            const war = this.getWar();
-            if (war == null) {
-                Logger.error(`BwTile.getVisionRangeForPlayer() war is empty.`);
-                return undefined;
-            }
-
-            const cfgVisionRange = this.getCfgVisionRange();
-            if (cfgVisionRange == null) {
-                Logger.error(`BwTile.getVisionRangeForPlayer() cfgVisionRange is empty.`);
-                return undefined;
-            }
-
+        public getVisionRangeForPlayer(playerIndex: number): number | null {
             if ((!this.checkIsVisionEnabledForAllPlayers()) && (this.getPlayerIndex() !== playerIndex)) {
-                return undefined;
+                return null;
             } else {
-                const modifierBySettings = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
-                if (modifierBySettings == null) {
-                    Logger.error(`BwTile.getVisionRangeForPlayer() empty modifierBySettings.`);
-                    return undefined;
-                }
-
-                return Math.max(0, cfgVisionRange + modifierBySettings);
+                return Math.max(
+                    0,
+                    this.getCfgVisionRange() + this.getWar().getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex),
+                );
             }
         }
-        public getVisionRangeForTeamIndexes(teamIndexes: Set<number>): number | null | undefined {
-            const war = this.getWar();
-            if (war == null) {
-                Logger.error(`BwTile.getVisionRangeForTeamIndexes() empty war.`);
-                return undefined;
-            }
-
-            const cfgVisionRange = this.getCfgVisionRange();
-            if (cfgVisionRange == null) {
-                Logger.error(`BwTile.getVisionRangeForTeamIndexes() empty cfgVisionRange.`);
-                return undefined;
-            }
-
+        public getVisionRangeForTeamIndexes(teamIndexes: Set<number>): number | null {
+            const war               = this.getWar();
+            const cfgVisionRange    = this.getCfgVisionRange();
             if (this.checkIsVisionEnabledForAllPlayers()) {
                 let maxModifier = Number.MIN_VALUE;
                 war.getPlayerManager().forEachPlayer(false, player => {
-                    const teamIndex = player.getTeamIndex();
-                    if (teamIndex == null) {
-                        Logger.error(`BwTile.getVisionRangeForTeamIndexes() empty player.teamIndex.`);
-                        return undefined;
-                    }
-
                     if ((player.getAliveState() !== Types.PlayerAliveState.Dead) &&
-                        (teamIndexes.has(teamIndex))
+                        (teamIndexes.has(player.getTeamIndex()))
                     ) {
-                        const playerIndex = player.getPlayerIndex();
-                        if (playerIndex == null) {
-                            Logger.error(`BwTile.getVisionRangeForTeamIndexes() empty player.playerIndex.`);
-                            return undefined;
-                        }
-
-                        const modifier = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
-                        if (modifier == null) {
-                            Logger.error(`BwTile.getVisionRangeForTeamIndexes() empty modifier.`);
-                            return undefined;
-                        }
-
-                        maxModifier = Math.max(maxModifier, modifier);
+                        maxModifier = Math.max(maxModifier, war.getCommonSettingManager().getSettingsVisionRangeModifier(player.getPlayerIndex()));
                     }
                 });
 
                 return Math.max(0, cfgVisionRange + maxModifier);
             }
 
-            const selfTeamIndex = this.getTeamIndex();
-            if (selfTeamIndex == null) {
-                Logger.error(`BwTile.getVisionRangeForTeamIndexes() empty selfTeamIndex.`);
-                return undefined;
-            }
-
-            if (teamIndexes.has(selfTeamIndex)) {
-                const selfPlayerIndex = this.getPlayerIndex();
-                if (selfPlayerIndex == null) {
-                    Logger.error(`BwTile.getVisionRangeForTeamIndexes() empty selfPlayerIndex.`);
-                    return undefined;
-                }
-
-                const selfModifier = war.getCommonSettingManager().getSettingsVisionRangeModifier(selfPlayerIndex);
-                if (selfModifier == null) {
-                    Logger.error(`BwTile.getVisionRangeForTeamIndexes() empty selfModifier.`);
-                    return undefined;
-                }
-
-                return Math.max(0, cfgVisionRange + selfModifier);
+            if (teamIndexes.has(this.getTeamIndex())) {
+                return Math.max(0, cfgVisionRange + war.getCommonSettingManager().getSettingsVisionRangeModifier(this.getPlayerIndex()));
             }
 
             return null;
@@ -1120,36 +777,18 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for global attack/defense bonus.
         ////////////////////////////////////////////////////////////////////////////////
-        public getGlobalAttackBonus(): number | null | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getGlobalAttackBonus() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.globalAttackBonus;
+        public getGlobalAttackBonus(): number | null {
+            return this._getTemplateCfg().globalAttackBonus ?? null;
         }
-        public getGlobalDefenseBonus(): number | null | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getGlobalDefenseBonus() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.globalDefenseBonus;
+        public getGlobalDefenseBonus(): number | null {
+            return this._getTemplateCfg().globalDefenseBonus ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for load co.
         ////////////////////////////////////////////////////////////////////////////////
-        public getLoadCoUnitCategory(): Types.UnitCategory | null | undefined {
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                Logger.error(`BwTile.getLoadCoUnitCategory() templateCfg is empty.`);
-                return undefined;
-            }
-
-            return cfg.loadCoUnitCategory;
+        public getLoadCoUnitCategory(): Types.UnitCategory | null {
+            return this._getTemplateCfg().loadCoUnitCategory ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

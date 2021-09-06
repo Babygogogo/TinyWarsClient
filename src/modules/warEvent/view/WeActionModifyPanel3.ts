@@ -8,7 +8,6 @@ import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
-import Logger                       from "../../tools/helpers/Logger";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
@@ -272,7 +271,7 @@ namespace TwnsWeActionModifyPanel3 {
                 }
             }
 
-            Logger.error(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnChangeType() invalid dataForDialogue.`);
+            throw new Error(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnChangeType() invalid dataForDialogue.`);
         }
 
         private _onTouchedBtnInsert(): void {
@@ -322,7 +321,7 @@ namespace TwnsWeActionModifyPanel3 {
         private _onTouchedBtnCo(): void {
             const dataForCoDialogue = this._getData().dataForDialogue.dataForCoDialogue;
             if (dataForCoDialogue) {
-                const currentCoId = dataForCoDialogue.coId;
+                const currentCoId = dataForCoDialogue.coId ?? null;
                 TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
                     availableCoIdArray  : ConfigManager.getCoIdArrayForDialogue(Helpers.getExisted(ConfigManager.getLatestConfigVersion())),
                     currentCoId,

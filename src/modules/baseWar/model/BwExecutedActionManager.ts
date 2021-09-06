@@ -36,7 +36,7 @@ namespace TwnsBwExecutedActionManager {
             return Helpers.getDefined(this._executedActions);
         }
 
-        public generateEmptyExecutedActions(): IWarActionContainer[] | undefined {
+        public generateEmptyExecutedActions(): IWarActionContainer[] {
             return (new Array<IWarActionContainer>(this.getExecutedActionsCount())).fill({});
         }
         public getExecutedAction(actionId: number): IWarActionContainer {

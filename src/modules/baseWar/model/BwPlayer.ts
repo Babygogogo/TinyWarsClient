@@ -351,7 +351,7 @@ namespace TwnsBwPlayer {
                 Notify.dispatch(NotifyType.BwCoUsingSkillTypeChanged);
             }
         }
-        public getCoCurrentSkills(): number[] | null {
+        public getCoCurrentSkills(): number[] {
             return this.getCoSkills(this.getCoUsingSkillType());
         }
         public getCoSkills(skillType: Types.CoSkillType): number[] {

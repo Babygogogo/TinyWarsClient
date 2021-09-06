@@ -13,7 +13,6 @@ import ConfigManager                    from "../../tools/helpers/ConfigManager"
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
 import Helpers                          from "../../tools/helpers/Helpers";
-import Logger                           from "../../tools/helpers/Logger";
 import StageManager                     from "../../tools/helpers/StageManager";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
@@ -84,7 +83,7 @@ namespace TwnsRwWarMenuPanel {
             if (!RwWarMenuPanel._instance) {
                 RwWarMenuPanel._instance = new RwWarMenuPanel();
             }
-            RwWarMenuPanel._instance.open(undefined);
+            RwWarMenuPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (RwWarMenuPanel._instance) {
@@ -239,8 +238,7 @@ namespace TwnsRwWarMenuPanel {
             } else if (type === MenuType.Advanced) {
                 return this._createDataForAdvancedMenu();
             } else {
-                Logger.error(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
-                return [];
+                throw new Error(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
             }
         }
 
@@ -263,7 +261,7 @@ namespace TwnsRwWarMenuPanel {
             ]);
         }
 
-        private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
+        private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0080),
                 callback: () => {
@@ -307,7 +305,7 @@ namespace TwnsRwWarMenuPanel {
             };
         }
 
-        private _createCommandGotoRwReplayListPanel(): DataForCommandRenderer | undefined {
+        private _createCommandGotoRwReplayListPanel(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0651),
                 callback: () => {
@@ -320,7 +318,7 @@ namespace TwnsRwWarMenuPanel {
             };
         }
 
-        private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
+        private _createCommandGotoLobby(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0054),
                 callback: () => {

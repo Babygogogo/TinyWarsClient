@@ -2,7 +2,6 @@
 import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
-import Logger                       from "../../tools/helpers/Logger";
 import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
@@ -48,14 +47,14 @@ namespace TwnsBwWar {
         private readonly _drawVoteManager       = new BwDrawVoteManager();
         private readonly _view                  = new BwWarView();
 
-        private _warId                  : number | null | undefined;
+        private _warId                  : number | null = null;
         private _isRunning              = false;
         private _isExecutingAction      = false;
         private _isEnded                = false;
 
         public abstract init(data: ISerialWar): Promise<ClientErrorCode>;
         public abstract getWarType(): Types.WarType;
-        public abstract getMapId(): number | null | undefined;
+        public abstract getMapId(): number | null;
         public abstract getIsNeedExecutedAction(): boolean;
         public abstract getIsNeedSeedRandom(): boolean;
         public abstract getIsWarMenuPanelOpening(): boolean;
@@ -64,36 +63,36 @@ namespace TwnsBwWar {
         public abstract getField(): BwField;
         public abstract getCommonSettingManager(): BwCommonSettingManager;
         public abstract getWarEventManager(): BwWarEventManager;
-        public abstract getSettingsBootTimerParams(): number[] | null | undefined;
+        public abstract getSettingsBootTimerParams(): number[];
         public abstract getIsRunTurnPhaseWithExtraData(): boolean;
         public abstract updateTilesAndUnitsOnVisibilityChanged(): void;
-        public abstract getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | undefined>;
-        public abstract getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | undefined>;
-        public abstract getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | undefined>;
-        public abstract getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined>;
-        public abstract getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined>;
-        public abstract getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | undefined>;
-        public abstract getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | undefined>;
-        public abstract getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined>;
-        public abstract getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined>;
-        public abstract getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | undefined>;
-        public abstract getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | undefined>;
-        public abstract getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined>;
-        public abstract getDescForExeUnitAttackUnit(action: WarAction.IWarActionUnitAttackUnit): Promise<string | undefined>;
-        public abstract getDescForExeUnitBeLoaded(action: WarAction.IWarActionUnitBeLoaded): Promise<string | undefined>;
-        public abstract getDescForExeUnitBuildTile(action: WarAction.IWarActionUnitBuildTile): Promise<string | undefined>;
-        public abstract getDescForExeUnitCaptureTile(action: WarAction.IWarActionUnitCaptureTile): Promise<string | undefined>;
-        public abstract getDescForExeUnitDive(action: WarAction.IWarActionUnitDive): Promise<string | undefined>;
-        public abstract getDescForExeUnitDropUnit(action: WarAction.IWarActionUnitDropUnit): Promise<string | undefined>;
-        public abstract getDescForExeUnitJoinUnit(action: WarAction.IWarActionUnitJoinUnit): Promise<string | undefined>;
-        public abstract getDescForExeUnitLaunchFlare(action: WarAction.IWarActionUnitLaunchFlare): Promise<string | undefined>;
-        public abstract getDescForExeUnitLaunchSilo(action: WarAction.IWarActionUnitLaunchSilo): Promise<string | undefined>;
-        public abstract getDescForExeUnitLoadCo(action: WarAction.IWarActionUnitLoadCo): Promise<string | undefined>;
-        public abstract getDescForExeUnitProduceUnit(action: WarAction.IWarActionUnitProduceUnit): Promise<string | undefined>;
-        public abstract getDescForExeUnitSupplyUnit(action: WarAction.IWarActionUnitSupplyUnit): Promise<string | undefined>;
-        public abstract getDescForExeUnitSurface(action: WarAction.IWarActionUnitSurface): Promise<string | undefined>;
-        public abstract getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | undefined>;
-        public abstract getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | undefined>;
+        public abstract getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | null>;
+        public abstract getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | null>;
+        public abstract getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | null>;
+        public abstract getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | null>;
+        public abstract getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | null>;
+        public abstract getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | null>;
+        public abstract getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | null>;
+        public abstract getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null>;
+        public abstract getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null>;
+        public abstract getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | null>;
+        public abstract getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | null>;
+        public abstract getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | null>;
+        public abstract getDescForExeUnitAttackUnit(action: WarAction.IWarActionUnitAttackUnit): Promise<string | null>;
+        public abstract getDescForExeUnitBeLoaded(action: WarAction.IWarActionUnitBeLoaded): Promise<string | null>;
+        public abstract getDescForExeUnitBuildTile(action: WarAction.IWarActionUnitBuildTile): Promise<string | null>;
+        public abstract getDescForExeUnitCaptureTile(action: WarAction.IWarActionUnitCaptureTile): Promise<string | null>;
+        public abstract getDescForExeUnitDive(action: WarAction.IWarActionUnitDive): Promise<string | null>;
+        public abstract getDescForExeUnitDropUnit(action: WarAction.IWarActionUnitDropUnit): Promise<string | null>;
+        public abstract getDescForExeUnitJoinUnit(action: WarAction.IWarActionUnitJoinUnit): Promise<string | null>;
+        public abstract getDescForExeUnitLaunchFlare(action: WarAction.IWarActionUnitLaunchFlare): Promise<string | null>;
+        public abstract getDescForExeUnitLaunchSilo(action: WarAction.IWarActionUnitLaunchSilo): Promise<string | null>;
+        public abstract getDescForExeUnitLoadCo(action: WarAction.IWarActionUnitLoadCo): Promise<string | null>;
+        public abstract getDescForExeUnitProduceUnit(action: WarAction.IWarActionUnitProduceUnit): Promise<string | null>;
+        public abstract getDescForExeUnitSupplyUnit(action: WarAction.IWarActionUnitSupplyUnit): Promise<string | null>;
+        public abstract getDescForExeUnitSurface(action: WarAction.IWarActionUnitSurface): Promise<string | null>;
+        public abstract getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | null>;
+        public abstract getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | null>;
 
         protected async _baseInit(data: ISerialWar): Promise<ClientErrorCode> {
             const settingsForCommon = data.settingsForCommon;
@@ -114,7 +113,7 @@ namespace TwnsBwWar {
             const dataForWarEventManager    = data.warEventManager;
             const commonSettingManagerError = await this.getCommonSettingManager().init({
                 settings                : data.settingsForCommon,
-                allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager ? dataForWarEventManager.warEventFullData : undefined),
+                allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager?.warEventFullData),
                 playersCountUnneutral   : WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
             });
             if (commonSettingManagerError) {
@@ -156,7 +155,7 @@ namespace TwnsBwWar {
                 return fieldError;
             }
 
-            this._setWarId(data.warId);
+            this._setWarId(data.warId ?? null);
 
             return ClientErrorCode.NoError;
         }
@@ -253,7 +252,7 @@ namespace TwnsBwWar {
             this._isExecutingAction = isExecuting;
         }
 
-        public checkCanEnd(): boolean | undefined {
+        public checkCanEnd(): boolean {
             if (this.getWarEventManager().getCallableWarEventId() != null) {
                 return false;
             }
@@ -265,13 +264,7 @@ namespace TwnsBwWar {
                     continue;
                 }
 
-                const teamIndex = player.getTeamIndex();
-                if (teamIndex == null) {
-                    Logger.error(`BwWar.checkCanEnd() empty teamIndex.`);
-                    return undefined;
-                }
-
-                aliveTeamIndexSet.add(teamIndex);
+                aliveTeamIndexSet.add(player.getTeamIndex());
                 if (player.getUserId() != null) {
                     hasAliveHumanPlayer = true;
                 }
@@ -288,35 +281,15 @@ namespace TwnsBwWar {
             return this._isEnded;
         }
 
-        public checkIsBoot(): boolean | undefined {
+        public checkIsBoot(): boolean {
             if (this.getIsEnded()) {
                 return false;
             }
 
-            const player = this.getPlayerInTurn();
-            if (player == null) {
-                Logger.error(`BwWar.checkIsBoot() empty player.`);
-                return undefined;
-            }
-
-            const restTimeToBoot = player.getRestTimeToBoot();
-            if (restTimeToBoot == null) {
-                Logger.error(`BwWar.checkIsBoot() empty restTimeToBoot.`);
-                return undefined;
-            }
-
-            const enterTurnTime = this.getEnterTurnTime();
-            if (enterTurnTime == null) {
-                Logger.error(`BwWar.checkIsBoot() empty enterTurnTime.`);
-                return undefined;
-            }
-
-            const bootTimeParams = this.getSettingsBootTimerParams();
-            if ((bootTimeParams == null) || (!bootTimeParams.length)) {
-                Logger.error(`BwWar.checkIsBoot() empty bootTimeParams.`);
-                return undefined;
-            }
-
+            const player            = this.getPlayerInTurn();
+            const restTimeToBoot    = player.getRestTimeToBoot();
+            const enterTurnTime     = this.getEnterTurnTime();
+            const bootTimeParams    = this.getSettingsBootTimerParams();
             return (bootTimeParams[0] !== Types.BootTimerType.NoBoot)
                 && (player.getUserId() != null)
                 && (player.getAliveState() === Types.PlayerAliveState.Alive)
@@ -324,10 +297,10 @@ namespace TwnsBwWar {
                 && (Timer.getServerTimestamp() > enterTurnTime + restTimeToBoot);
         }
 
-        private _setWarId(warId: number | null | undefined): void {
+        private _setWarId(warId: number | null): void {
             this._warId = warId;
         }
-        public getWarId(): number | null | undefined{
+        public getWarId(): number | null{
             return this._warId;
         }
 

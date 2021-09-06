@@ -37,7 +37,7 @@ namespace TwnsMeOffsetPanel {
             if (!MeOffsetPanel._instance) {
                 MeOffsetPanel._instance = new MeOffsetPanel();
             }
-            MeOffsetPanel._instance.open(undefined);
+            MeOffsetPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

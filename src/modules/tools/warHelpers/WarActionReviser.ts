@@ -1244,12 +1244,11 @@ namespace WarActionReviser {
     function reviseUnknownAction(): ErrorCodeAndAction {
         return {
             errorCode   : ClientErrorCode.BwWarActionReviser_ReviseUnknownAction_00,
-            action      : undefined,
         };
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function checkIsDropDestinationsValid(war: BwWar, action: WarAction.IWarActionUnitDropUnit): boolean | undefined {
+    function checkIsDropDestinationsValid(war: BwWar, action: WarAction.IWarActionUnitDropUnit): boolean {
         const destinations = action.dropDestinations;
         if (destinations == null) {
             return false;

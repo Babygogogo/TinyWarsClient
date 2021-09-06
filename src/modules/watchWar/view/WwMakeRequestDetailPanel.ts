@@ -36,7 +36,7 @@ namespace TwnsWwMakeRequestDetailPanel {
         private readonly _btnConfirm!       : TwnsUiButton.UiButton;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
-        private _dataForListPlayer  : DataForPlayerRenderer[] | undefined;
+        private _dataForListPlayer  : DataForPlayerRenderer[] | null = null;
 
         public static show(openData: OpenDataForMcrWatchMakeRequestDetailPanel): void {
             if (!WwMakeRequestDetailPanel._instance) {
@@ -73,7 +73,7 @@ namespace TwnsWwMakeRequestDetailPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._dataForListPlayer = undefined;
+            this._dataForListPlayer = null;
         }
 
         public setPlayerSelected(playerIndex: number, selected: boolean): void {

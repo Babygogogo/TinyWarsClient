@@ -70,15 +70,15 @@ namespace TwnsSfwWar {
                 : Types.WarType.SfwStd;
         }
 
-        public getMapId(): number | undefined {
-            return undefined;
+        public getMapId(): number | null {
+            return null;
         }
 
         public getCanCheat(): boolean {
             return true;
         }
 
-        public getSettingsBootTimerParams(): number[] | null | undefined {
+        public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }
 

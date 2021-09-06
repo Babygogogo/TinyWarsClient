@@ -15,7 +15,6 @@ import ConfigManager                    from "../../tools/helpers/ConfigManager"
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
 import Helpers                          from "../../tools/helpers/Helpers";
-import Logger                           from "../../tools/helpers/Logger";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -80,7 +79,7 @@ namespace TwnsMpwWarMenuPanel {
             if (!MpwWarMenuPanel._instance) {
                 MpwWarMenuPanel._instance = new MpwWarMenuPanel();
             }
-            MpwWarMenuPanel._instance.open(undefined);
+            MpwWarMenuPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MpwWarMenuPanel._instance) {
@@ -298,8 +297,7 @@ namespace TwnsMpwWarMenuPanel {
             } else if (type === MenuType.Advanced) {
                 return this._createDataForAdvancedMenu();
             } else {
-                Logger.error(`MpwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
-                return [];
+                throw new Error(`MpwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
             }
         }
 
@@ -328,7 +326,7 @@ namespace TwnsMpwWarMenuPanel {
             ]);
         }
 
-        private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
+        private _createCommandOpenAdvancedMenu(): DataForCommandRenderer {
             return {
                 name    : Lang.getText(LangTextType.B0080),
                 callback: () => {
@@ -338,7 +336,7 @@ namespace TwnsMpwWarMenuPanel {
             };
         }
 
-        private _createCommandOpenDamageChartPanel(): DataForCommandRenderer | undefined {
+        private _createCommandOpenDamageChartPanel(): DataForCommandRenderer {
             return {
                 name    : Lang.getText(LangTextType.B0440),
                 callback: () => {
@@ -348,7 +346,7 @@ namespace TwnsMpwWarMenuPanel {
             };
         }
 
-        private _createCommandPlayerUseCop(): DataForCommandRenderer | undefined {
+        private _createCommandPlayerUseCop(): DataForCommandRenderer | null {
             const war           = this._getWar();
             const skillType     = Types.CoSkillType.Power;
             const playerInTurn  = war.getPlayerInTurn();
@@ -358,7 +356,7 @@ namespace TwnsMpwWarMenuPanel {
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
                 (actionPlanner.checkIsStateRequesting())
             ) {
-                return undefined;
+                return null;
             } else {
                 return {
                     name    : Lang.getText(LangTextType.B0142),
@@ -373,7 +371,7 @@ namespace TwnsMpwWarMenuPanel {
             }
         }
 
-        private _createCommandPlayerUseScop(): DataForCommandRenderer | undefined {
+        private _createCommandPlayerUseScop(): DataForCommandRenderer | null {
             const war           = this._getWar();
             const skillType     = Types.CoSkillType.SuperPower;
             const playerInTurn  = war.getPlayerInTurn();
@@ -383,7 +381,7 @@ namespace TwnsMpwWarMenuPanel {
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
                 (actionPlanner.checkIsStateRequesting())
             ) {
-                return undefined;
+                return null;
             } else {
                 return {
                     name    : Lang.getText(LangTextType.B0144),
@@ -398,7 +396,7 @@ namespace TwnsMpwWarMenuPanel {
             }
         }
 
-        private _createCommandSyncWar(): DataForCommandRenderer | undefined {
+        private _createCommandSyncWar(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0089),
                 callback: () => {
@@ -414,7 +412,7 @@ namespace TwnsMpwWarMenuPanel {
             };
         }
 
-        private _createCommandGotoWarListPanel(): DataForCommandRenderer | undefined {
+        private _createCommandGotoWarListPanel(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0652),
                 callback: () => {
@@ -439,7 +437,7 @@ namespace TwnsMpwWarMenuPanel {
             };
         }
 
-        private _createCommandPlayerRequestDraw(): DataForCommandRenderer | undefined {
+        private _createCommandPlayerRequestDraw(): DataForCommandRenderer | null {
             const war           = this._getWar();
             const player        = war.getPlayerInTurn();
             const actionPlanner = war.getActionPlanner();
@@ -449,7 +447,7 @@ namespace TwnsMpwWarMenuPanel {
                 (actionPlanner.getState() !== Types.ActionPlannerState.Idle)        ||
                 (war.getDrawVoteManager().getRemainingVotes() != null)
             ) {
-                return undefined;
+                return null;
             } else {
                 return {
                     name    : Lang.getText(LangTextType.B0083),
@@ -463,14 +461,14 @@ namespace TwnsMpwWarMenuPanel {
             }
         }
 
-        private _createCommandPlayerSurrender(): DataForCommandRenderer | undefined {
+        private _createCommandPlayerSurrender(): DataForCommandRenderer | null {
             const war           = this._getWar();
             const actionPlanner = war.getActionPlanner();
             if ((war.getPlayerInTurn() !== war.getPlayerLoggedIn())                 ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
                 (actionPlanner.checkIsStateRequesting())
             ) {
-                return undefined;
+                return null;
             } else {
                 return {
                     name    : Lang.getText(LangTextType.B0055),
@@ -533,7 +531,7 @@ namespace TwnsMpwWarMenuPanel {
             };
         }
 
-        private _createCommandPlayerAgreeDraw(): DataForCommandRenderer | undefined {
+        private _createCommandPlayerAgreeDraw(): DataForCommandRenderer | null {
             const war           = this._getWar();
             const player        = war.getPlayerInTurn();
             const actionPlanner = war.getActionPlanner();
@@ -543,7 +541,7 @@ namespace TwnsMpwWarMenuPanel {
                 (actionPlanner.getState() !== Types.ActionPlannerState.Idle)        ||
                 (!war.getDrawVoteManager().getRemainingVotes())
             ) {
-                return undefined;
+                return null;
             } else {
                 return {
                     name    : Lang.getText(LangTextType.B0084),
@@ -557,7 +555,7 @@ namespace TwnsMpwWarMenuPanel {
             }
         }
 
-        private _createCommandPlayerDeclineDraw(): DataForCommandRenderer | undefined {
+        private _createCommandPlayerDeclineDraw(): DataForCommandRenderer | null {
             const war           = this._getWar();
             const player        = war.getPlayerInTurn();
             const actionPlanner = war.getActionPlanner();
@@ -567,7 +565,7 @@ namespace TwnsMpwWarMenuPanel {
                 (actionPlanner.getState() !== Types.ActionPlannerState.Idle)        ||
                 (!war.getDrawVoteManager().getRemainingVotes())
             ) {
-                return undefined;
+                return null;
             } else {
                 return {
                     name    : Lang.getText(LangTextType.B0085),
@@ -581,14 +579,14 @@ namespace TwnsMpwWarMenuPanel {
             }
         }
 
-        private _createCommandPlayerDeleteUnit(): DataForCommandRenderer | undefined {
+        private _createCommandPlayerDeleteUnit(): DataForCommandRenderer | null {
             const war           = this._getWar();
             const actionPlanner = war.getActionPlanner();
             if ((war.getPlayerInTurn() !== war.getPlayerLoggedIn())                 ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
                 (actionPlanner.getState() !== Types.ActionPlannerState.Idle)
             ) {
-                return undefined;
+                return null;
             } else {
                 return {
                     name    : Lang.getText(LangTextType.B0081),

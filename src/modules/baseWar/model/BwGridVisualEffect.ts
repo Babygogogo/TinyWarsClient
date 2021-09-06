@@ -16,8 +16,6 @@ namespace TwnsBwGridVisualEffect {
     export class BwGridVisualEffect {
         private readonly _view = new BwGridVisualEffectView();
 
-        private _war: BwWar;
-
         private _notifyListeners: Notify.Listener[] = [
             { type: NotifyType.BwUnitBeAttacked,   callback: this._onNotifyBwUnitBeAttacked },
             { type: NotifyType.BwUnitBeDestroyed,  callback: this._onNotifyBwUnitBeDestroyed },
@@ -40,9 +38,7 @@ namespace TwnsBwGridVisualEffect {
         }
 
         public startRunning(war: BwWar): void {
-            Notify.addEventListeners(this._notifyListeners, this, undefined, 1);
-
-            this._war = war;
+            Notify.addEventListeners(this._notifyListeners, this, false, 1);
         }
         public startRunningView(): void {
             this.getView().startRunningView();

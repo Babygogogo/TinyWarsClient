@@ -51,7 +51,7 @@ namespace TwnsUserLoginPanel {
             if (!UserLoginPanel._instance) {
                 UserLoginPanel._instance = new UserLoginPanel();
             }
-            UserLoginPanel._instance.open(undefined);
+            UserLoginPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

@@ -42,7 +42,7 @@ namespace TwnsMeSimSettingsPanel {
             if (!MeSimSettingsPanel._instance) {
                 MeSimSettingsPanel._instance = new MeSimSettingsPanel();
             }
-            MeSimSettingsPanel._instance.open(undefined);
+            MeSimSettingsPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeSimSettingsPanel._instance) {

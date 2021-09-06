@@ -34,7 +34,7 @@ namespace TwnsUiRadioButton {
         private readonly _imgRightOff!  : TwnsUiImage.UiImage;
         private readonly _labelRight!   : TwnsUiLabel.UiLabel;
 
-        private _data                   : DataForUiRadioButton | undefined;
+        private _data                   : DataForUiRadioButton | null = null;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -58,7 +58,7 @@ namespace TwnsUiRadioButton {
 
             this.updateView();
         }
-        private _getData(): DataForUiRadioButton | undefined {
+        private _getData(): DataForUiRadioButton | null {
             return this._data;
         }
         private _clearData(): void {
@@ -68,7 +68,7 @@ namespace TwnsUiRadioButton {
                 (notifyListenerArray) && (Notify.removeEventListeners(notifyListenerArray));
             }
 
-            this._data = undefined;
+            this._data = null;
         }
 
         public updateView(): void {

@@ -148,7 +148,7 @@ namespace TwnsMfrCreatePlayerInfoPage {
                 labelNickname.text = playerData.userId == null ? Lang.getText(LangTextType.B0607) : `??`;
             }
 
-            const rankScoreArray        = userInfo ? userInfo.userMrwRankInfoArray : undefined;
+            const rankScoreArray        = userInfo?.userMrwRankInfoArray;
             const stdRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwStd) : null;
             const fogRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwFog) : null;
             const stdScore              = stdRankInfo ? stdRankInfo.currentScore : null;

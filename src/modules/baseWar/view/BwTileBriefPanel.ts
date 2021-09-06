@@ -14,6 +14,7 @@ import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
 import TwnsBwTileDetailPanel    from "./BwTileDetailPanel";
 import TwnsBwTileView           from "./BwTileView";
 import TwnsBwUnitBriefPanel     from "./BwUnitBriefPanel";
+import CommonConstants from "../../tools/helpers/CommonConstants";
 
 namespace TwnsBwTileBriefPanel {
     import BwCoListPanel        = TwnsCommonCoListPanel.CommonCoListPanel;
@@ -41,15 +42,15 @@ namespace TwnsBwTileBriefPanel {
 
         private static _instance: BwTileBriefPanel;
 
-        private readonly _group             : eui.Group;
-        private readonly _conTileView       : eui.Group;
+        private readonly _group!            : eui.Group;
+        private readonly _conTileView!      : eui.Group;
         private readonly _tileView          = new BwTileView();
-        private readonly _labelName         : TwnsUiLabel.UiLabel;
-        private readonly _labelGridIndex    : TwnsUiLabel.UiLabel;
-        private readonly _labelState        : TwnsUiLabel.UiLabel;
-        private readonly _labelDefense      : TwnsUiLabel.UiLabel;
-        private readonly _imgDefense        : TwnsUiImage.UiImage;
-        private readonly _imgState          : TwnsUiImage.UiImage;
+        private readonly _labelName!        : TwnsUiLabel.UiLabel;
+        private readonly _labelGridIndex!   : TwnsUiLabel.UiLabel;
+        private readonly _labelState!       : TwnsUiLabel.UiLabel;
+        private readonly _labelDefense!     : TwnsUiLabel.UiLabel;
+        private readonly _imgDefense!       : TwnsUiImage.UiImage;
+        private readonly _imgState!         : TwnsUiImage.UiImage;
 
         public static show(openData: OpenData): void {
             if (!BwTileBriefPanel._instance) {
@@ -117,10 +118,10 @@ namespace TwnsBwTileBriefPanel {
         private _onNotifyGlobalTouchMove(e: egret.Event): void {
             this._adjustPositionOnTouch(e.data);
         }
-        private _onNotifyBwCursorGridIndexChanged(e: egret.Event): void {
+        private _onNotifyBwCursorGridIndexChanged(): void {
             this._updateView();
         }
-        private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwActionPlannerStateChanged(): void {
             const planner = this._getOpenData().war.getActionPlanner();
             if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
                 (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
@@ -128,22 +129,22 @@ namespace TwnsBwTileBriefPanel {
                 this._updateView();
             }
         }
-        private _onNotifyBwWarMenuPanelOpened(e: egret.Event): void {
+        private _onNotifyBwWarMenuPanelOpened(): void {
             this._updateView();
         }
-        private _onNotifyBwWarMenuPanelClosed(e: egret.Event): void {
+        private _onNotifyBwWarMenuPanelClosed(): void {
             this._updateView();
         }
-        private _onNotifyBwCoListPanelOpened(e: egret.Event): void {
+        private _onNotifyBwCoListPanelOpened(): void {
             this._updateView();
         }
-        private _onNotifyBwCoListPanelClosed(e: egret.Event): void {
+        private _onNotifyBwCoListPanelClosed(): void {
             this._updateView();
         }
-        private _onNotifyBwProduceUnitPanelOpened(e: egret.Event): void {
+        private _onNotifyBwProduceUnitPanelOpened(): void {
             this._updateView();
         }
-        private _onNotifyBwProduceUnitPanelClosed(e: egret.Event): void {
+        private _onNotifyBwProduceUnitPanelClosed(): void {
             this._updateView();
         }
         private _onNotifyMeTileChanged(e: egret.Event): void {
@@ -152,11 +153,11 @@ namespace TwnsBwTileBriefPanel {
                 this._updateView();
             }
         }
-        private _onNotifyTileAnimationTick(e: egret.Event): void {
+        private _onNotifyTileAnimationTick(): void {
             this._tileView.updateView();
         }
 
-        private _onTouchedThis(e: egret.TouchEvent): void {
+        private _onTouchedThis(): void {
             const war   = this._getOpenData().war;
             const tile  = war.getTileMap().getTile(war.getCursor().getGridIndex());
             (tile) && (BwTileDetailPanel.show({ tile }));
@@ -185,7 +186,7 @@ namespace TwnsBwTileBriefPanel {
                 });
                 tileView.updateView();
                 this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
-                this._labelName.text        = Lang.getTileName(tile.getType());
+                this._labelName.text        = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
                 this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
 
                 if (tile.getCurrentHp() != null) {

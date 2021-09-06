@@ -31,7 +31,7 @@ namespace TwnsBwTileMapView {
             { type: NotifyType.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
         ];
 
-        private _tileMap: BwTileMap;
+        private _tileMap?: BwTileMap;
 
         public constructor() {
             super();
@@ -141,7 +141,7 @@ namespace TwnsBwTileMapView {
         private _initCoZoneContainer(): void {
             const container                                 = this._coZoneContainer;
             const imageDict                                 = this._coZoneImageDict;
-            const tileMap                                   = this._tileMap;
+            const tileMap                                   = Helpers.getExisted(this._tileMap);
             const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
             const playerManager                             = tileMap.getWar().getPlayerManager();
             const playersCount                              = playerManager.getTotalPlayersCount(false);
@@ -152,7 +152,7 @@ namespace TwnsBwTileMapView {
                 }
 
                 const imgSource = `c08_t03_s${Helpers.getNumText(playerManager.getPlayer(playerIndex).getUnitAndTileSkinId())}_f01`;
-                const matrix    = imageDict.get(playerIndex);
+                const matrix    = Helpers.getExisted(imageDict.get(playerIndex));
                 for (let x = 0; x < mapWidth; ++x) {
                     if (matrix[x] == null) {
                         matrix[x] = [];
@@ -195,7 +195,7 @@ namespace TwnsBwTileMapView {
             }
         }
         public updateCoZone(): void {
-            const tileMap                                   = this._tileMap;
+            const tileMap                                   = Helpers.getExisted(this._tileMap);
             const war                                       = tileMap.getWar();
             const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
             const playerManager                             = war.getPlayerManager();
@@ -221,7 +221,7 @@ namespace TwnsBwTileMapView {
                             }));
                     });
 
-                const matrix = this._coZoneImageDict.get(playerIndex);
+                const matrix = Helpers.getExisted(this._coZoneImageDict.get(playerIndex));
                 for (let x = 0; x < mapWidth; ++x) {
                     for (let y = 0; y < mapHeight; ++y) {
                         matrix[x][y].visible = (gridIndexList.length > 0) && (radius >= GridIndexHelpers.getMinDistance({ x, y }, gridIndexList));

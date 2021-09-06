@@ -3,7 +3,6 @@ import CommonModel              from "../../common/model/CommonModel";
 import CommonProxy              from "../../common/model/CommonProxy";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -28,42 +27,28 @@ namespace TwnsCommonRankListPanel {
 
         private static _instance: CommonRankListPanel;
 
-        // @ts-ignore
-        private readonly _imgMask           : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _group             : eui.Group;
-        // @ts-ignore
-        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _btnClose          : TwnsUiButton.UiButton;
+        private readonly _imgMask!          : TwnsUiImage.UiImage;
+        private readonly _group!            : eui.Group;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
 
-        // @ts-ignore
-        private readonly _labelStdTitle     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelStdNoData    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelStdNickname  : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelStdScore     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _listStd           : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
+        private readonly _labelStdTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelStdNoData!   : TwnsUiLabel.UiLabel;
+        private readonly _labelStdNickname! : TwnsUiLabel.UiLabel;
+        private readonly _labelStdScore!    : TwnsUiLabel.UiLabel;
+        private readonly _listStd!          : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
 
-        // @ts-ignore
-        private readonly _labelFogTitle     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelFogNoData    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelFogNickname  : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelFogScore     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _listFog           : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
+        private readonly _labelFogTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelFogNoData!   : TwnsUiLabel.UiLabel;
+        private readonly _labelFogNickname! : TwnsUiLabel.UiLabel;
+        private readonly _labelFogScore!    : TwnsUiLabel.UiLabel;
+        private readonly _listFog!          : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
 
         public static show(): void {
             if (!CommonRankListPanel._instance) {
                 CommonRankListPanel._instance = new CommonRankListPanel();
             }
-            CommonRankListPanel._instance.open(undefined);
+            CommonRankListPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (CommonRankListPanel._instance) {
@@ -140,8 +125,7 @@ namespace TwnsCommonRankListPanel {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
-                        Logger.error(`CommonRankListPanel._updateComponentsForStd() empty userId.`);
-                        continue;
+                        throw new Error(`CommonRankListPanel._updateComponentsForStd() empty userId.`);
                     }
 
                     dataList.push({
@@ -165,8 +149,7 @@ namespace TwnsCommonRankListPanel {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
-                        Logger.error(`CommonRankListPanel._updateComponentsForFog() empty userId.`);
-                        continue;
+                        throw new Error(`CommonRankListPanel._updateComponentsForFog() empty userId.`);
                     }
 
                     dataList.push({
@@ -218,16 +201,11 @@ namespace TwnsCommonRankListPanel {
         warType     : Types.WarType;
     };
     class UserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUserRenderer> {
-        // @ts-ignore
-        private _group          : eui.Group;
-        // @ts-ignore
-        private _imgBg          : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private _labelIndex     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _labelNickname  : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _labelScore     : TwnsUiLabel.UiLabel;
+        private readonly _group!            : eui.Group;
+        private readonly _imgBg!            : TwnsUiImage.UiImage;
+        private readonly _labelIndex!       : TwnsUiLabel.UiLabel;
+        private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
+        private readonly _labelScore!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -266,8 +244,7 @@ namespace TwnsCommonRankListPanel {
 
             const userInfo = await UserModel.getUserPublicInfo(data.userId);
             if (userInfo == null) {
-                Logger.error(`UserRenderer._updateView() empty userInfo.`);
-                return;
+                throw new Error(`UserRenderer._updateView() empty userInfo.`);
             }
             labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
 
@@ -275,8 +252,7 @@ namespace TwnsCommonRankListPanel {
                 return (v.playersCountUnneutral === data.playersCount) && (v.warType === data.warType);
             });
             if (rankInfo == null) {
-                Logger.error(`UserRenderer._updateView() empty rankInfo.`);
-                labelScore.text = CommonConstants.ErrorTextForUndefined;
+                throw new Error(`UserRenderer._updateView() empty rankInfo.`);
             } else {
                 labelScore.text = `${rankInfo.currentScore}`;
             }

@@ -2,7 +2,6 @@
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -122,7 +121,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             } else if (settingsType === WarBasicSettingsType.SpmSaveSlotComment) {
                 this._modifyAsSpmSaveSlotComment();
             } else {
-                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._onTouchedBtnModify() invalid settingsType: ${settingsType}`);
+                throw new Error(`CommonWarBasicSettingsPage.SettingsRenderer._onTouchedBtnModify() invalid settingsType: ${settingsType}`);
             }
         }
         private _onTouchedBtnHelp(): void {
@@ -174,7 +173,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             } else if (settingsType === WarBasicSettingsType.SpmSaveSlotComment) {
                 this._updateViewAsSpmSaveSlotComment();
             } else {
-                Logger.error(`CommonWarBasicSettingsPage.SettingsRenderer._updateView() invalid settingsType: ${settingsType}.`);
+                throw new Error(`CommonWarBasicSettingsPage.SettingsRenderer._updateView() invalid settingsType: ${settingsType}.`);
             }
         }
         private _updateViewAsMapName(): void {

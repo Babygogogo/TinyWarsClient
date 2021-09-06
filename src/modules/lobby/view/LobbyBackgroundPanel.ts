@@ -13,7 +13,7 @@ namespace TwnsLobbyBackgroundPanel {
             if (!LobbyBackgroundPanel._instance) {
                 LobbyBackgroundPanel._instance = new LobbyBackgroundPanel();
             }
-            LobbyBackgroundPanel._instance.open(undefined);
+            LobbyBackgroundPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

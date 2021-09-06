@@ -39,14 +39,14 @@ namespace TwnsUserSetStageScalePanel {
         private readonly _btnDefault!       : TwnsUiButton.UiButton;
         private readonly _btnConfirm!       : TwnsUiButton.UiButton;
 
-        private _prevScale                  : number | undefined;
-        private _selectedScale              : number | undefined;
+        private _prevScale                  : number | null = null;
+        private _selectedScale              : number | null = null;
 
         public static show(): void {
             if (!UserSetStageScalePanel._instance) {
                 UserSetStageScalePanel._instance = new UserSetStageScalePanel();
             }
-            UserSetStageScalePanel._instance.open(undefined);
+            UserSetStageScalePanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

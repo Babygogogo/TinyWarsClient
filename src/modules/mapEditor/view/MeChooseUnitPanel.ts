@@ -41,7 +41,7 @@ namespace TwnsMeChooseUnitPanel {
             if (!MeChooseUnitPanel._instance) {
                 MeChooseUnitPanel._instance = new MeChooseUnitPanel();
             }
-            MeChooseUnitPanel._instance.open(undefined);
+            MeChooseUnitPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeChooseUnitPanel._instance) {

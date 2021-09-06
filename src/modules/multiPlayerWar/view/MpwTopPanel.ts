@@ -68,7 +68,7 @@ namespace TwnsMpwTopPanel {
             if (!MpwTopPanel._instance) {
                 MpwTopPanel._instance = new MpwTopPanel();
             }
-            MpwTopPanel._instance.open(undefined);
+            MpwTopPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

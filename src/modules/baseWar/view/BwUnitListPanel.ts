@@ -2,6 +2,7 @@
 import TwnsBwUnit               from "../../baseWar/model/BwUnit";
 import TwnsBwWar                from "../../baseWar/model/BwWar";
 import CommonModel              from "../../common/model/CommonModel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -14,14 +15,12 @@ import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 import UserModel                from "../../user/model/UserModel";
 import TwnsBwCursor             from "../model/BwCursor";
-import TwnsBwUnitMap            from "../model/BwUnitMap";
 import TwnsBwUnitView           from "./BwUnitView";
 
 namespace TwnsBwUnitListPanel {
     import BwUnitView       = TwnsBwUnitView.BwUnitView;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
     import BwWar            = TwnsBwWar.BwWar;
     import BwCursor         = TwnsBwCursor.BwCursor;
 
@@ -34,19 +33,16 @@ namespace TwnsBwUnitListPanel {
 
         private static _instance: BwUnitListPanel;
 
-        private readonly _group             : eui.Group;
-        private readonly _labelName         : TwnsUiLabel.UiLabel;
-        private readonly _labelCountName    : TwnsUiLabel.UiLabel;
-        private readonly _labelValueName    : TwnsUiLabel.UiLabel;
-        private readonly _listUnit          : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
-        private readonly _labelCount        : TwnsUiLabel.UiLabel;
-        private readonly _labelValue        : TwnsUiLabel.UiLabel;
-        private readonly _btnSwitch         : TwnsUiButton.UiButton;
+        private readonly _group!            : eui.Group;
+        private readonly _labelName!        : TwnsUiLabel.UiLabel;
+        private readonly _labelCountName!   : TwnsUiLabel.UiLabel;
+        private readonly _labelValueName!   : TwnsUiLabel.UiLabel;
+        private readonly _listUnit!         : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private readonly _labelCount!       : TwnsUiLabel.UiLabel;
+        private readonly _labelValue!       : TwnsUiLabel.UiLabel;
+        private readonly _btnSwitch!        : TwnsUiButton.UiButton;
 
-        private _cursor         : BwCursor;
-        private _unitMap        : BwUnitMap;
-        private _dataForList    : DataForUnitRenderer[];
-        private _playerIndex    : number;
+        private _playerIndex    : number | null = null;
 
         public static show(openData: OpenDataForBwUnitListPanel): void {
             if (!BwUnitListPanel._instance) {
@@ -78,15 +74,8 @@ namespace TwnsBwUnitListPanel {
             this._listUnit.setItemRenderer(UnitRenderer);
 
             const war           = this._getOpenData().war;
-            this._unitMap       = war.getUnitMap();
-            this._cursor        = war.getCursor();
             this._playerIndex   = war.getPlayerIndexInTurn();
             this._updateView();
-        }
-        protected async _onClosed(): Promise<void> {
-            this._unitMap       = null;
-            this._cursor        = null;
-            this._dataForList   = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,8 +95,11 @@ namespace TwnsBwUnitListPanel {
         }
 
         private _onTouchedBtnSwitch(): void {
-            this._playerIndex = this._getOpenData().war.getTurnManager().getNextPlayerIndex(this._playerIndex);
-            this._updateView();
+            const playerIndex = this._playerIndex;
+            if (playerIndex != null) {
+                this._playerIndex = this._getOpenData().war.getTurnManager().getNextPlayerIndex(playerIndex);
+                this._updateView();
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,12 +115,12 @@ namespace TwnsBwUnitListPanel {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            this._dataForList = this._createDataForList();
-            this._listUnit.bindData(this._dataForList);
-            this._labelCount.text = `${this._dataForList.length}`;
+            const dataArray = this._createDataForList();
+            this._listUnit.bindData(dataArray);
+            this._labelCount.text = `${dataArray.length}`;
 
             let value = 0;
-            for (const data of this._dataForList) {
+            for (const data of dataArray) {
                 const unit = data.unit;
                 value += unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp();
             }
@@ -136,12 +128,14 @@ namespace TwnsBwUnitListPanel {
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
+            const war           = this._getOpenData().war;
+            const cursor        = war.getCursor();
             const dataList      : DataForUnitRenderer[]= [];
             const playerIndex   = this._playerIndex;
-            for (const unit of this._unitMap.getAllUnits()) {
+            for (const unit of war.getUnitMap().getAllUnits()) {
                 if (unit.getPlayerIndex() === playerIndex) {
                     dataList.push({
-                        cursor  : this._cursor,
+                        cursor,
                         unit    : unit,
                     });
                 }
@@ -175,17 +169,17 @@ namespace TwnsBwUnitListPanel {
         cursor  : BwCursor;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
-        private _group          : eui.Group;
-        private _conUnitView    : eui.Group;
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _labelGridIndex : TwnsUiLabel.UiLabel;
-        private _labelHp        : TwnsUiLabel.UiLabel;
-        private _labelFuel      : TwnsUiLabel.UiLabel;
-        private _labelState     : TwnsUiLabel.UiLabel;
-        private _imgHp          : TwnsUiImage.UiImage;
-        private _imgFuel        : TwnsUiImage.UiImage;
-        private _imgState       : TwnsUiImage.UiImage;
-        private _unitView       : BwUnitView;
+        private readonly _group!            : eui.Group;
+        private readonly _conUnitView!      : eui.Group;
+        private readonly _labelName!        : TwnsUiLabel.UiLabel;
+        private readonly _labelGridIndex!   : TwnsUiLabel.UiLabel;
+        private readonly _labelHp!          : TwnsUiLabel.UiLabel;
+        private readonly _labelFuel!        : TwnsUiLabel.UiLabel;
+        private readonly _labelState!       : TwnsUiLabel.UiLabel;
+        private readonly _imgHp!            : TwnsUiImage.UiImage;
+        private readonly _imgFuel!          : TwnsUiImage.UiImage;
+        private readonly _imgState!         : TwnsUiImage.UiImage;
+        private readonly _unitView          = new BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -194,7 +188,6 @@ namespace TwnsBwUnitListPanel {
 
             this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
             this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
-            this._unitView          = new BwUnitView();
             this._conUnitView.addChild(this._unitView);
         }
 
@@ -210,7 +203,7 @@ namespace TwnsBwUnitListPanel {
         }
 
         public onItemTapEvent(): void {
-            const data      = this.data;
+            const data      = this._getData();
             const cursor    = data.cursor;
             const gridIndex = data.unit.getGridIndex();
             cursor.setGridIndex(gridIndex);
@@ -222,11 +215,11 @@ namespace TwnsBwUnitListPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const unit = this.data.unit;
+            const unit = this._getData().unit;
             this._unitView.init(unit).startRunningView();
             this._labelHp.text          = `${unit.getCurrentHp()}`;
             this._labelFuel.text        = `${unit.getCurrentFuel()}`;
-            this._labelName.text        = Lang.getUnitName(unit.getUnitType());
+            this._labelName.text        = Lang.getUnitName(unit.getUnitType()) ?? CommonConstants.ErrorTextForUndefined;
             this._labelGridIndex.text   = `x${unit.getGridX()} y${unit.getGridY()}`;
 
             if (unit.getCurrentBuildMaterial() != null) {

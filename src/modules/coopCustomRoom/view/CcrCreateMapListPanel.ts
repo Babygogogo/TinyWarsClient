@@ -1,7 +1,7 @@
 
 import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
+import CommonConstants              from "../../tools/helpers/CommonConstants";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
@@ -29,49 +29,50 @@ namespace TwnsCcrCreateMapListPanel {
     import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
 
     type FiltersForMapList = {
-        mapName?        : string;
-        mapDesigner?    : string;
-        playersCount?   : number;
-        playedTimes?    : number;
-        minRating?      : number;
-        mapTag?         : IDataForMapTag;
+        mapName?        : string | null;
+        mapDesigner?    : string | null;
+        playersCount?   : number | null;
+        playedTimes?    : number | null;
+        minRating?      : number | null;
+        mapTag?         : IDataForMapTag | null;
     };
-    export class CcrCreateMapListPanel extends TwnsUiPanel.UiPanel<FiltersForMapList> {
+    type OpenData = FiltersForMapList | null;
+    export class CcrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CcrCreateMapListPanel;
 
-        private readonly _groupMapView          : eui.Group;
-        private readonly _zoomMap               : TwnsUiZoomableMap.UiZoomableMap;
-        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
+        private readonly _groupMapView!         : eui.Group;
+        private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
+        private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
 
-        private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
-        private readonly _labelCreateRoom       : TwnsUiLabel.UiLabel;
-        private readonly _labelChooseMap        : TwnsUiLabel.UiLabel;
+        private readonly _groupNavigator!       : eui.Group;
+        private readonly _labelMultiPlayer!     : TwnsUiLabel.UiLabel;
+        private readonly _labelCreateRoom!      : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseMap!       : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack               : TwnsUiButton.UiButton;
-        private readonly _btnSearch             : TwnsUiButton.UiButton;
-        private readonly _btnMapInfo            : TwnsUiButton.UiButton;
-        private readonly _btnNextStep           : TwnsUiButton.UiButton;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnSearch!            : TwnsUiButton.UiButton;
+        private readonly _btnMapInfo!           : TwnsUiButton.UiButton;
+        private readonly _btnNextStep!          : TwnsUiButton.UiButton;
 
-        private readonly _groupMapList          : eui.Group;
-        private readonly _listMap               : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
-        private readonly _labelNoMap            : TwnsUiLabel.UiLabel;
+        private readonly _groupMapList!         : eui.Group;
+        private readonly _listMap!              : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
+        private readonly _labelNoMap!           : TwnsUiLabel.UiLabel;
 
-        private readonly _uiMapInfo             : TwnsUiMapInfo.UiMapInfo;
+        private readonly _uiMapInfo!            : TwnsUiMapInfo.UiMapInfo;
 
         private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
-        private _selectedMapId      : number;
+        private _selectedMapId      : number | null = null;
 
-        public static show(mapFilters?: FiltersForMapList): void {
+        public static show(openData: OpenData): void {
             if (!CcrCreateMapListPanel._instance) {
                 CcrCreateMapListPanel._instance = new CcrCreateMapListPanel();
             }
 
-            CcrCreateMapListPanel._instance.open(mapFilters);
+            CcrCreateMapListPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
             if (CcrCreateMapListPanel._instance) {
@@ -109,7 +110,7 @@ namespace TwnsCcrCreateMapListPanel {
             await this._showCloseAnimation();
         }
 
-        public async setSelectedMapId(newMapId: number): Promise<void> {
+        public async setAndReviseSelectedMapId(newMapId: number | null): Promise<void> {
             const dataList = this._dataForList;
             if (dataList.length <= 0) {
                 this._selectedMapId = null;
@@ -124,7 +125,7 @@ namespace TwnsCcrCreateMapListPanel {
                 await this._showMap(dataList[newIndex].mapId);
             }
         }
-        public getSelectedMapId(): number {
+        public getSelectedMapId(): number | null {
             return this._selectedMapId;
         }
 
@@ -137,7 +138,7 @@ namespace TwnsCcrCreateMapListPanel {
             const listMap               = this._listMap;
             this._labelNoMap.visible    = length <= 0;
             listMap.bindData(dataArray);
-            this.setSelectedMapId(this._selectedMapId);
+            this.setAndReviseSelectedMapId(this.getSelectedMapId());
 
             if (length > 1) {
                 const index = dataArray.findIndex(v => v.mapId === this._selectedMapId);
@@ -196,15 +197,15 @@ namespace TwnsCcrCreateMapListPanel {
             const { playersCount, playedTimes, minRating }  = mapFilters;
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapExtraData  = mapBriefData.mapExtraData;
+                const mapExtraData  = Helpers.getExisted(mapBriefData.mapExtraData);
                 const mapTag        = mapBriefData.mapTag || {};
-                const realMapName   = await WarMapModel.getMapNameInCurrentLanguage(mapId);
+                const realMapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
                 const rating        = await WarMapModel.getAverageRating(mapId);
-                if ((!mapBriefData.ruleAvailability.canCcw)                                                             ||
+                if ((!mapBriefData.ruleAvailability?.canCcw)                                                            ||
                     (!mapExtraData.isEnabled)                                                                           ||
-                    (!mapExtraData.mapComplexInfo.mapAvailability.canCcw)                                               ||
-                    ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
-                    ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))               ||
+                    (!mapExtraData.mapComplexInfo?.mapAvailability?.canCcw)                                             ||
+                    ((mapName) && (!realMapName.toLowerCase().includes(mapName)))                                       ||
+                    ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                ||
                     ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                           ||
                     ((playedTimes != null) && (await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId) < playedTimes))  ||
                     ((minRating != null) && ((rating == null) || (rating < minRating)))                                 ||
@@ -224,8 +225,7 @@ namespace TwnsCcrCreateMapListPanel {
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            const mapRawData = await WarMapModel.getRawData(mapId);
-            this._zoomMap.showMapByMapData(mapRawData);
+            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)));
             this._uiMapInfo.setData({
                 mapInfo: {
                     mapId,
@@ -328,9 +328,9 @@ namespace TwnsCcrCreateMapListPanel {
         panel   : CcrCreateMapListPanel;
     };
     class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
-        private _btnChoose: TwnsUiButton.UiButton;
-        private _btnNext  : TwnsUiButton.UiButton;
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _btnNext!      : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -340,18 +340,18 @@ namespace TwnsCcrCreateMapListPanel {
         }
 
         protected _onDataChanged(): void {
-            const data          = this.data;
+            const data          = this._getData();
             this.currentState   = data.mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
-            WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v);
+            WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
         }
 
         private _onTouchTapBtnChoose(): void {
-            const data = this.data;
-            data.panel.setSelectedMapId(data.mapId);
+            const data = this._getData();
+            data.panel.setAndReviseSelectedMapId(data.mapId);
         }
 
         private async _onTouchTapBtnNext(): Promise<void> {
-            const data = this.data;
+            const data = this._getData();
             data.panel.close();
             await CcrCreateModel.resetDataByMapId(data.mapId);
             CcrCreateSettingsPanel.show();

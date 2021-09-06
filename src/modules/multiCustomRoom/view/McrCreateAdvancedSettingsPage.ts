@@ -329,7 +329,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 configVersion,
                 fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                 bannedCoIdArray     : McrCreateModel.getBannedCoIdArray(playerIndex) || [],
-                maxBanCount         : undefined,
+                maxBanCount         : null,
                 selfCoId,
                 callbackOnConfirm   : (bannedCoIdSet) => {
                     const callback = () => {

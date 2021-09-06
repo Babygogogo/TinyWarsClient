@@ -1,7 +1,6 @@
 
 import TwnsBwFogMap     from "../../baseWar/model/BwFogMap";
 import TwnsBwWar        from "../../baseWar/model/BwWar";
-import Logger           from "../../tools/helpers/Logger";
 import ProtoTypes       from "../../tools/proto/ProtoTypes";
 import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsMeField      from "./MeField";
@@ -15,28 +14,11 @@ namespace TwnsMeFogMap {
     import BwWar                    = TwnsBwWar.BwWar;
 
     export class MeFogMap extends BwFogMap {
-        public serializeForCreateSfw(): ISerialFogMap | undefined {
-            const mapSize = this.getMapSize();
-            if (mapSize == null) {
-                Logger.error(`MeFogMap.serializeForCreateSfw() empty mapSize.`);
-                return undefined;
-            }
-
-            const allMapsFromPath = this._getAllMapsFromPath();
-            if (allMapsFromPath == null) {
-                Logger.error(`MeFogMap.serializeForCreateSfw() empty allMapsFromPath.`);
-                return undefined;
-            }
-
-            const forceFogCode = this.getForceFogCode();
-            if (forceFogCode == null) {
-                Logger.error(`MeFogMap.serializeForCreateSfw() empty forceFogCode.`);
-                return undefined;
-            }
-
+        public serializeForCreateSfw(): ISerialFogMap {
+            const mapSize           = this.getMapSize();
             const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
             const serialMapsFromPath: IDataForFogMapFromPath[] = [];
-            for (const [playerIndex, map] of allMapsFromPath) {
+            for (const [playerIndex, map] of this._getAllMapsFromPath()) {
                 if (playerIndex > maxPlayerIndex) {
                     continue;
                 }
@@ -51,7 +33,7 @@ namespace TwnsMeFogMap {
             }
 
             return {
-                forceFogCode,
+                forceFogCode            : this.getForceFogCode(),
                 forceExpirePlayerIndex  : this.getForceExpirePlayerIndex(),
                 forceExpireTurnIndex    : this.getForceExpireTurnIndex(),
                 mapsFromPath            : serialMapsFromPath,

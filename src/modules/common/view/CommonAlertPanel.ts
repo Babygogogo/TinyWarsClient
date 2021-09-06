@@ -25,12 +25,12 @@ namespace TwnsCommonAlertPanel {
 
         private static _instance: CommonAlertPanel;
 
-        private readonly _imgMask       : TwnsUiImage.UiImage;
-        private readonly _group         : eui.Group;
-        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        private readonly _scrContent    : eui.Scroller;
-        private readonly _labelContent  : TwnsUiLabel.UiLabel;
-        private readonly _btnConfirm    : TwnsUiButton.UiButton;
+        private readonly _imgMask!      : TwnsUiImage.UiImage;
+        private readonly _group!        : eui.Group;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _scrContent!   : eui.Scroller;
+        private readonly _labelContent! : TwnsUiLabel.UiLabel;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!CommonAlertPanel._instance) {
@@ -74,14 +74,14 @@ namespace TwnsCommonAlertPanel {
             await this._showCloseAnimation();
         }
 
-        private _onTouchedBtnClose(e: egret.TouchEvent): void {
+        private _onTouchedBtnClose(): void {
             const openData = this._getOpenData();
             (openData.callback) && (openData.callback());
 
             this.close();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 

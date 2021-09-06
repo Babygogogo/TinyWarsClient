@@ -1,12 +1,14 @@
 
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import Types                from "../../tools/helpers/Types";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import BroadcastModel       from "../model/BroadcastModel";
-import Lang                 from "../../tools/lang/Lang";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import StageManager         from "../../tools/helpers/StageManager";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Helpers          from "../../tools/helpers/Helpers";
+import StageManager     from "../../tools/helpers/StageManager";
+import Types            from "../../tools/helpers/Types";
+import Lang             from "../../tools/lang/Lang";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import TwnsUiLabel      from "../../tools/ui/UiLabel";
+import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import BroadcastModel   from "../model/BroadcastModel";
 
 namespace TwnsBroadcastPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -19,8 +21,8 @@ namespace TwnsBroadcastPanel {
 
         private static _instance: BroadcastPanel;
 
-        private _groupLamp              : eui.Group;
-        private _labelLamp              : TwnsUiLabel.UiLabel;
+        private readonly _groupLamp!    : eui.Group;
+        private readonly _labelLamp!    : TwnsUiLabel.UiLabel;
 
         private _ongoingMessageIdSet    = new Set<number>();
 
@@ -28,7 +30,7 @@ namespace TwnsBroadcastPanel {
             if (!BroadcastPanel._instance) {
                 BroadcastPanel._instance = new BroadcastPanel();
             }
-            BroadcastPanel._instance.open(undefined);
+            BroadcastPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -56,21 +58,21 @@ namespace TwnsBroadcastPanel {
             this._resetView();
         }
 
-        private _onNotifyTimeTick(e: egret.Event): void {
+        private _onNotifyTimeTick(): void {
             const messageList   = BroadcastModel.getOngoingMessageList();
             const ongoingSet    = this._ongoingMessageIdSet;
-            if ((messageList.length !== ongoingSet.size)            ||
-                (messageList.some(v => !ongoingSet.has(v.messageId)))
+            if ((messageList.length !== ongoingSet.size)                                ||
+                (messageList.some(v => !ongoingSet.has(Helpers.getExisted(v.messageId))))
             ) {
                 this._resetComponentsForLamp(messageList);
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._resetView();
         }
 
-        private _onMsgBroadcastGetMessageList(e: egret.Event): void {
+        private _onMsgBroadcastGetMessageList(): void {
             this._resetView();
         }
 
@@ -84,8 +86,8 @@ namespace TwnsBroadcastPanel {
 
             const textList: string[] = [];
             for (const message of messageList) {
-                ongoingSet.add(message.messageId);
-                textList.push(Lang.getLanguageText({ textArray: message.textList }));
+                ongoingSet.add(Helpers.getExisted(message.messageId));
+                textList.push(Lang.getLanguageText({ textArray: message.textList }) ?? CommonConstants.ErrorTextForUndefined);
             }
 
             const group = this._groupLamp;

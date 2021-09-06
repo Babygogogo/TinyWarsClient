@@ -91,8 +91,8 @@ namespace FlowManager {
     }
     async function doStartGame(stage: egret.Stage): Promise<void> {
         CompatibilityHelpers.init();
-        NetManager.addListeners(_NET_EVENTS, undefined);
-        Notify.addEventListeners(_NOTIFY_EVENTS, undefined);
+        NetManager.addListeners(_NET_EVENTS);
+        Notify.addEventListeners(_NOTIFY_EVENTS);
         StageManager.init(stage);
         await Promise.all([ResManager.init(), ProtoManager.init()]).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         StageManager.setStageScale(LocalStorage.getStageScale());
@@ -164,10 +164,10 @@ namespace FlowManager {
     }
 
     export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<ClientErrorCode> {
+        const { errorCode, war } = await MpwModel.loadWar(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         RwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        const { errorCode, war } = await MpwModel.loadWar(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (errorCode) {
             return errorCode;
         } else if (war == null) {
@@ -187,10 +187,10 @@ namespace FlowManager {
         return ClientErrorCode.NoError;
     }
     export async function gotoReplayWar(warData: Uint8Array, replayId: number): Promise<void> {
+        const war = await RwModel.loadWar(warData, replayId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         MpwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        const war = await RwModel.loadWar(warData, replayId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();
@@ -207,10 +207,10 @@ namespace FlowManager {
         slotExtraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
         warData         : ProtoTypes.WarSerialization.ISerialWar;
     }): Promise<void> {
+        const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         MpwModel.unloadWar();
         RwModel.unloadWar();
         MeModel.unloadWar();
-        const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();
@@ -225,10 +225,10 @@ namespace FlowManager {
         await SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
     export async function gotoMapEditorWar(mapRawData: Types.Undefinable<ProtoTypes.Map.IMapRawData>, slotIndex: number, isReview: boolean): Promise<void> {
+        const war = await MeModel.loadWar(mapRawData, slotIndex, isReview).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         MpwModel.unloadWar();
         SpwModel.unloadWar();
         RwModel.unloadWar();
-        const war = await MeModel.loadWar(mapRawData, slotIndex, isReview).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();
@@ -255,7 +255,7 @@ namespace FlowManager {
         } else if (warType === WarType.Me) {
             _gotoMeMapListPanel();
         } else {
-            Logger.error(`FlowManager.gotoMyWarListPanel() invalid warType: ${warType}.`);
+            throw new Error(`FlowManager.gotoMyWarListPanel() invalid warType: ${warType}.`);
         }
     }
     export function gotoRwReplayListPanel(): void {
@@ -320,8 +320,7 @@ namespace FlowManager {
         const data      = e.data as ProtoTypes.NetMessage.MsgMpwCommonContinueWar.IS;
         const warData   = data.war;
         if (warData == null) {
-            Logger.error(`FlowManager._onMsgMpwCommonContinueWar() empty warData.`);
-            return;
+            throw new Error(`FlowManager._onMsgMpwCommonContinueWar() empty warData.`);
         }
 
         gotoMultiPlayerWar(warData);

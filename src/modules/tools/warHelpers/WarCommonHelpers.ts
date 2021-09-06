@@ -9,7 +9,6 @@ import CommonConstants      from "../helpers/CommonConstants";
 import ConfigManager        from "../helpers/ConfigManager";
 import GridIndexHelpers     from "../helpers/GridIndexHelpers";
 import Helpers              from "../helpers/Helpers";
-import Logger               from "../helpers/Logger";
 import Types                from "../helpers/Types";
 import ProtoTypes           from "../proto/ProtoTypes";
 import WarRuleHelpers       from "./WarRuleHelpers";
@@ -139,7 +138,7 @@ namespace WarCommonHelpers {
     export function getRevisedPath({ war, rawPath, launchUnitId }: {
         war             : BwWar;
         rawPath         : Types.Undefinable<ProtoTypes.Structure.IMovePath>;
-        launchUnitId    : number | null | undefined;
+        launchUnitId    : Types.Undefinable<number>;
     }): { errorCode: ClientErrorCode, revisedPath?: Types.MovePath} {
         if (rawPath == null) {
             return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_00 };
@@ -272,58 +271,23 @@ namespace WarCommonHelpers {
         };
     }
 
-    export function checkIsPathDestinationOccupiedByOtherVisibleUnit(war: BwWar, rawPath: GridIndex[]): boolean | undefined {
+    export function checkIsPathDestinationOccupiedByOtherVisibleUnit(war: BwWar, rawPath: GridIndex[]): boolean {
         if (rawPath.length == 1) {
             return false;
         } else {
-            const unitMap = war.getUnitMap();
-            if (unitMap == null) {
-                Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitMap.`);
-                return undefined;
-            }
-
+            const unitMap       = war.getUnitMap();
             const destination   = rawPath[rawPath.length - 1];
             const unit          = unitMap.getUnitOnMap(destination);
             if (unit == null) {
                 return false;
             } else {
-                const unitType = unit.getUnitType();
-                if (unitType == null) {
-                    Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitType.`);
-                    return undefined;
-                }
-
-                const isDiving = unit.getIsDiving();
-                if (isDiving == null) {
-                    Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty isDiving.`);
-                    return undefined;
-                }
-
-                const unitPlayerIndex = unit.getPlayerIndex();
-                if (unitPlayerIndex == null) {
-                    Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitPlayerIndex.`);
-                    return undefined;
-                }
-
-                const focusUnit = unitMap.getUnitOnMap(rawPath[0]);
-                if (focusUnit == null) {
-                    Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty focusUnit.`);
-                    return undefined;
-                }
-
-                const observerTeamIndex = focusUnit.getTeamIndex();
-                if (observerTeamIndex == null) {
-                    Logger.error(`WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty observerTeamIndex.`);
-                    return undefined;
-                }
-
                 return WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex           : destination,
-                    unitType,
-                    isDiving,
-                    unitPlayerIndex,
-                    observerTeamIndex,
+                    unitType            : unit.getUnitType(),
+                    isDiving            : unit.getIsDiving(),
+                    unitPlayerIndex     : unit.getPlayerIndex(),
+                    observerTeamIndex   : Helpers.getExisted(unitMap.getUnitOnMap(rawPath[0])).getTeamIndex(),
                 });
             }
         }
@@ -648,8 +612,7 @@ namespace WarCommonHelpers {
             for (const unitData of unitsData) {
                 const unitId = unitData.unitId;
                 if (unitId == null) {
-                    Logger.error(`WarCommonHelpers.addUnitsBeforeExecutingAction() empty unitId.`);
-                    continue;
+                    throw new Error(`WarCommonHelpers.addUnitsBeforeExecutingAction() empty unitId.`);
                 }
 
                 if (!unitMap.getUnitById(unitId)) {
@@ -673,19 +636,9 @@ namespace WarCommonHelpers {
         if ((tilesData) && (tilesData.length)) {
             const tileMap   = war.getTileMap();
             for (const tileData of tilesData) {
-                const gridIndex = GridIndexHelpers.convertGridIndex(tileData.gridIndex);
-                if (gridIndex == null) {
-                    Logger.error(`WarCommonHelpers.updateTilesBeforeExecutingAction() empty gridIndex.`);
-                    return undefined;
-                }
-
+                const gridIndex     = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
                 const tile          = tileMap.getTile(gridIndex);
                 const configVersion = tile.getConfigVersion();
-                if (configVersion == null) {
-                    Logger.error(`WarCommonHelpers.updateTilesBeforeExecutingAction() empty configVersion.`);
-                    return undefined;
-                }
-
                 if (tile.getHasFog()) {
                     tile.setHasFog(false);
                     tile.deserialize(tileData, configVersion);
@@ -725,8 +678,7 @@ namespace WarCommonHelpers {
     export function getIdleBuildingGridIndex(war: BwWar): Types.GridIndex | null {
         const playerIndex = war.getPlayerIndexInTurn();
         if (playerIndex == null) {
-            Logger.error(`WarCommonHelpers.getIdleBuildingGridIndex() empty playerIndex.`);
-            return null;
+            throw new Error(`WarCommonHelpers.getIdleBuildingGridIndex() empty playerIndex.`);
         }
 
         const field                     = war.getField();
@@ -771,7 +723,7 @@ namespace WarCommonHelpers {
         return null;
     }
 
-    export function getVisibilityArrayWithMapFromPath(map: Visibility[][], mapSize: MapSize): Visibility[] | undefined {
+    export function getVisibilityArrayWithMapFromPath(map: Visibility[][], mapSize: MapSize): Visibility[] | null {
         const { width, height } = mapSize;
         const data              = new Array(width * height);
         let needSerialize       = false;
@@ -785,7 +737,7 @@ namespace WarCommonHelpers {
             }
         }
 
-        return needSerialize ? data : undefined;
+        return needSerialize ? data : null;
     }
 
     export function getMapId(warData: ISerialWar): number | null {
@@ -829,7 +781,7 @@ namespace WarCommonHelpers {
         }
     }
 
-    export function getPlayersCountUnneutral(playerManagerData: WarSerialization.ISerialPlayerManager | null | undefined): number {
+    export function getPlayersCountUnneutral(playerManagerData: Types.Undefinable<WarSerialization.ISerialPlayerManager>): number {
         const playerIndexSet = new Set<number>();
         for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {
             const playerIndex = playerData.playerIndex;
@@ -868,8 +820,8 @@ namespace WarCommonHelpers {
     export function getErrorCodeForUnitDataIgnoringUnitId({ unitData, mapSize, playersCountUnneutral, configVersion }: {
         unitData                : ProtoTypes.WarSerialization.ISerialUnit;
         configVersion           : string;
-        mapSize                 : Types.MapSize | null | undefined;
-        playersCountUnneutral   : number | null | undefined;
+        mapSize                 : Types.Undefinable<Types.MapSize>;
+        playersCountUnneutral   : Types.Undefinable<number>;
     }): ClientErrorCode {
         const gridIndex = GridIndexHelpers.convertGridIndex(unitData.gridIndex);
         if (gridIndex == null) {

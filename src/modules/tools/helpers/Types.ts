@@ -125,7 +125,7 @@ namespace Types {
     export type TouchPoints = Map<number, Point>;
 
     export type MoveCosts = {
-        [moveType: number]: number | undefined;
+        [moveType: number]: number | null;
     };
 
     export type MovePath = {
@@ -147,8 +147,8 @@ namespace Types {
 
     export type DamageInfo = {
         attackerUnitId      : number;
-        targetUnitId        : number | null | undefined;
-        targetTileGridIndex : GridIndex | null | undefined;
+        targetUnitId        : number | null;
+        targetTileGridIndex : GridIndex | null;
         damage              : number;
     };
 
@@ -439,6 +439,8 @@ namespace Types {
 
     // eslint-disable-next-line no-shadow
     export enum ActionPlannerState {
+        Undefined,
+
         Idle,
         ExecutingAction,
         MakingMovePath,

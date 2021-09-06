@@ -44,7 +44,7 @@ namespace TwnsMeResizePanel {
             if (!MeResizePanel._instance) {
                 MeResizePanel._instance = new MeResizePanel();
             }
-            MeResizePanel._instance.open(undefined);
+            MeResizePanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

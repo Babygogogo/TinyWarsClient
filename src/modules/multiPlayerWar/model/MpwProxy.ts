@@ -29,7 +29,7 @@ namespace MpwProxy {
             { msgCode: NetMessageCodes.MsgMpwCommonSyncWar,                   callback: _onMsgMpwCommonSyncWar },
 
             { msgCode: NetMessageCodes.MsgMpwExecuteWarAction,                callback: _onMsgMpwExecuteWarAction },
-        ], undefined);
+        ], null);
     }
 
     function _onMsgMpwCommonBroadcastGameStart(e: egret.Event): void {

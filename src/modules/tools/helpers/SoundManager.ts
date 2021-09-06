@@ -5,7 +5,6 @@ import TwnsLangTextType from "../lang/LangTextType";
 import FloatText        from "./FloatText";
 import Helpers          from "./Helpers";
 import LocalStorage     from "./LocalStorage";
-import Logger           from "./Logger";
 import Types            from "./Types";
 
 namespace SoundManager {
@@ -68,13 +67,13 @@ namespace SoundManager {
 
     const _bgmBufferCache       = new Map<BgmCode, AudioBuffer>();
     let _bgmGain                : GainNode;
-    let _bgmSourceNode          : AudioBufferSourceNode | undefined;
+    let _bgmSourceNode          : AudioBufferSourceNode | null = null;
 
     let _effectMute             = DEFAULT_MUTE;
     let _effectVolume           = DEFAULT_VOLUME;
 
     const _shortSfxBufferCache  = new Map<ShortSfxCode, AudioBuffer>();
-    // const _shortSfxDict         : { [shortSfxCode: number]: egret.SoundChannel | undefined } = {};
+    // const _shortSfxDict         : { [shortSfxCode: number]: egret.SoundChannel | null } = {};
     let _sfxGain                : GainNode;
 
     // const audio = new Audio(getResourcePath("war01.mp3", SoundType.Bgm));
@@ -119,7 +118,7 @@ namespace SoundManager {
         try {
             _audioContext.resume();
         } catch (e) {
-            // Logger.error(`SoundManager.resume() error.`);
+            // throw new Error(`SoundManager.resume() error.`);
         }
     }
     export function pause(): void {
@@ -128,7 +127,7 @@ namespace SoundManager {
         try {
             _audioContext.suspend();
         } catch (e) {
-            // Logger.error(`SoundManager.pause() error.`);
+            // throw new Error(`SoundManager.pause() error.`);
         }
         _stopAllShortSfx();
     }
@@ -159,8 +158,7 @@ namespace SoundManager {
     export function playCoBgmWithWar(war: TwnsBwWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
         if (player == null) {
-            Logger.error(`SoundManager.playCoBgmWithWar() empty player.`);
-            return;
+            throw new Error(`SoundManager.playCoBgmWithWar() empty player.`);
         }
 
         if ((player.checkIsNeutral()) && (!force)) {
@@ -249,8 +247,7 @@ namespace SoundManager {
     async function _playBgmForNormal(bgmCode: BgmCode): Promise<void> {
         const params = _BGM_PARAMS.get(bgmCode);
         if (params == null) {
-            Logger.error(`SoundManager._playBgmForNormal() empty params.`);
-            return;
+            throw new Error(`SoundManager._playBgmForNormal() empty params.`);
         }
 
         const cacheDict     = _bgmBufferCache;
@@ -260,14 +257,12 @@ namespace SoundManager {
         } else {
             const path = getResourcePath(params.name, SoundType.Bgm);
             if (path == null) {
-                Logger.error(`SoundManager._playBgmForNormal() empty path.`);
-                return;
+                throw new Error(`SoundManager._playBgmForNormal() empty path.`);
             }
 
             const audioBuffer = await loadAudioBuffer(path);
             if (audioBuffer == null) {
-                Logger.error(`SoundManager._playBgmForNormal() empty audioBuffer.`);
-                return;
+                throw new Error(`SoundManager._playBgmForNormal() empty audioBuffer.`);
             }
 
             cacheDict.set(bgmCode, audioBuffer);
@@ -295,13 +290,9 @@ namespace SoundManager {
     }
     function _stopBgmForNormal(): void {
         if (_bgmSourceNode) {
-            try {
-                _bgmSourceNode.stop();
-                _bgmSourceNode.disconnect();
-            } catch (e) {
-                Logger.error(`SoundManager._stopBgmForNormal() error.`);
-            }
-            _bgmSourceNode = undefined;
+            _bgmSourceNode.stop();
+            _bgmSourceNode.disconnect();
+            _bgmSourceNode = null;
         }
     }
 
@@ -366,8 +357,7 @@ namespace SoundManager {
 
         const params = _SHORT_SFX_PARAM.get(shortSfxCode);
         if (params == null) {
-            Logger.error(`SoundManager.playShortSfx() empty params.`);
-            return;
+            throw new Error(`SoundManager.playShortSfx() empty params.`);
         }
 
         const cacheDict     = _shortSfxBufferCache;
@@ -377,14 +367,12 @@ namespace SoundManager {
         } else {
             const path = getResourcePath(params.name, SoundType.Effect);
             if (path == null) {
-                Logger.error(`SoundManager._playEffectForNormal() empty path.`);
-                return;
+                throw new Error(`SoundManager._playEffectForNormal() empty path.`);
             }
 
             const audioBuffer = await loadAudioBuffer(path);
             if (audioBuffer == null) {
-                Logger.error(`SoundManager.playShortSfx() empty audioBuffer.`);
-                return;
+                throw new Error(`SoundManager.playShortSfx() empty audioBuffer.`);
             }
 
             cacheDict.set(shortSfxCode, audioBuffer);
@@ -411,9 +399,9 @@ namespace SoundManager {
     //         try {
     //             eff.stop();
     //         } catch (e) {
-    //             Logger.error(`SoundManager._stopShortSfx() error.`);
+    //             throw new Error(`SoundManager._stopShortSfx() error.`);
     //         }
-    //         effectDict[shortSfxCode] = undefined;
+    //         effectDict[shortSfxCode] = null;
     //     }
     // }
 
@@ -425,7 +413,7 @@ namespace SoundManager {
         //         try {
         //             eff.stop();
         //         } catch (e) {
-        //             Logger.error(`SoundManager._stopAllShortSfx() error.`);
+        //             throw new Error(`SoundManager._stopAllShortSfx() error.`);
         //         }
         //     }
         // }
@@ -450,17 +438,17 @@ namespace SoundManager {
         _stopAllShortSfx();
     }
 
-    function getResourcePath(musicName: string, soundType: SoundType): string | undefined {
+    function getResourcePath(musicName: string, soundType: SoundType): string | null {
         switch (soundType) {
             case SoundType.Bgm      : return _SOUND_PATH + "bgm/" + musicName;
             case SoundType.Effect   : return _SOUND_PATH + "effect/" + musicName;
-            default                 : return undefined;
+            default                 : return null;
         }
     }
 
-    async function loadAudioBuffer(fullName: string): Promise<AudioBuffer | undefined> {
+    async function loadAudioBuffer(fullName: string): Promise<AudioBuffer | null> {
         if (!_audioContext) {
-            return undefined;
+            return null;
         }
 
         const arrayBuffer = await RES.getResByUrl(
@@ -468,11 +456,11 @@ namespace SoundManager {
             () => {
                 // nothing to do.
             },
-            undefined,
+            null,
             RES.ResourceItem.TYPE_BIN
         );
         if (!arrayBuffer) {
-            return undefined;
+            return null;
         }
 
         return await _audioContext.decodeAudioData(arrayBuffer);

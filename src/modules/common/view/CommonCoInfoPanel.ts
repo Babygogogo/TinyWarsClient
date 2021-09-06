@@ -19,9 +19,9 @@ namespace TwnsCommonCoInfoPanel {
 
         private static _instance: CommonCoInfoPanel;
 
-        private readonly _imgMask       : TwnsUiImage.UiImage;
-        private readonly _group         : eui.Group;
-        private readonly _uiCoInfo      : TwnsUiCoInfo.UiCoInfo;
+        private readonly _imgMask!  : TwnsUiImage.UiImage;
+        private readonly _group!    : eui.Group;
+        private readonly _uiCoInfo! : TwnsUiCoInfo.UiCoInfo;
 
         public static show(openData: OpenDataForCommonCoInfoPanel): void {
             if (!CommonCoInfoPanel._instance) {
@@ -64,7 +64,7 @@ namespace TwnsCommonCoInfoPanel {
             await this._showCloseAnimation();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 

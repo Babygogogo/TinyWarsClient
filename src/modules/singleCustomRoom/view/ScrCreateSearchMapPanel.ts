@@ -39,7 +39,7 @@ namespace TwnsScrCreateSearchMapPanel {
             if (!ScrCreateSearchMapPanel._instance) {
                 ScrCreateSearchMapPanel._instance = new ScrCreateSearchMapPanel();
             }
-            ScrCreateSearchMapPanel._instance.open(undefined);
+            ScrCreateSearchMapPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (ScrCreateSearchMapPanel._instance) {

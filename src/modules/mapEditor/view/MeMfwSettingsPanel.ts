@@ -48,7 +48,7 @@ namespace TwnsMeMfwSettingsPanel {
             if (!MeMfwSettingsPanel._instance) {
                 MeMfwSettingsPanel._instance = new MeMfwSettingsPanel();
             }
-            MeMfwSettingsPanel._instance.open(undefined);
+            MeMfwSettingsPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeMfwSettingsPanel._instance) {

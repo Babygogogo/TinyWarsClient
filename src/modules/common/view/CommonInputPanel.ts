@@ -30,13 +30,13 @@ namespace TwnsCommonInputPanel {
 
         private static _instance: CommonInputPanel;
 
-        private readonly _imgMask       : TwnsUiImage.UiImage;
-        private readonly _group         : eui.Group;
-        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        private readonly _labelTips     : TwnsUiLabel.UiLabel;
-        private readonly _input         : TwnsUiTextInput.UiTextInput;
-        private readonly _btnCancel     : TwnsUiButton.UiButton;
-        private readonly _btnConfirm    : TwnsUiButton.UiButton;
+        private readonly _imgMask!      : TwnsUiImage.UiImage;
+        private readonly _group!        : eui.Group;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelTips!    : TwnsUiLabel.UiLabel;
+        private readonly _input!        : TwnsUiTextInput.UiTextInput;
+        private readonly _btnCancel!    : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!CommonInputPanel._instance) {
@@ -73,12 +73,12 @@ namespace TwnsCommonInputPanel {
 
             const openData          = this._getOpenData();
             this._labelTitle.text   = openData.title;
-            this._labelTips.text    = openData.tips;
+            this._labelTips.text    = openData.tips ?? ``;
 
             const input                 = this._input;
             input.text                  = openData.currentValue;
-            input.maxChars              = openData.maxChars;
-            input.restrict              = openData.charRestrict;
+            (input.maxChars as any)     = openData.maxChars;
+            (input.restrict as any)     = openData.charRestrict;
             input.textDisplay.multiline = !!openData.isMultiLine;
         }
         protected async _onClosed(): Promise<void> {

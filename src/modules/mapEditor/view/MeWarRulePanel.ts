@@ -96,7 +96,7 @@ namespace TwnsMeWarRulePanel {
             if (!MeWarRulePanel._instance) {
                 MeWarRulePanel._instance = new MeWarRulePanel();
             }
-            MeWarRulePanel._instance.open(undefined);
+            MeWarRulePanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeWarRulePanel._instance) {
@@ -477,7 +477,7 @@ namespace TwnsMeWarRulePanel {
 
             this._getWar().getWarEventManager().init({
                 warEventFullData: testData,
-                calledCountList : undefined,
+                calledCountList : null,
             });
             Helpers.getExisted(this._selectedRule).warEventIdArray = [1, 2];
             this._updateListWarEvent();
@@ -558,7 +558,7 @@ namespace TwnsMeWarRulePanel {
         }
 
         private _updateLabelRuleName(rule: IWarRule | null): void {
-            this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(LangTextType.B0001);
+            this._labelRuleName.text = Lang.concatLanguageTextList(rule?.ruleNameArray) || Lang.getText(LangTextType.B0001);
         }
         private _updateImgHasFog(rule: IWarRule | null): void {
             this._imgHasFog.visible = rule ? !!rule.ruleForGlobalParams?.hasFogByDefault : false;
@@ -1076,7 +1076,7 @@ namespace TwnsMeWarRulePanel {
                             coIdArray.push(cfg.coId);
                         }
                         CommonChooseCoPanel.show({
-                            currentCoId         : playerRule.fixedCoIdInCcw,
+                            currentCoId         : playerRule.fixedCoIdInCcw ?? null,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId: number) => {
                                 WarRuleHelpers.setFixedCoIdInCcw(warRule, Helpers.getExisted(playerRule.playerIndex), newCoId);

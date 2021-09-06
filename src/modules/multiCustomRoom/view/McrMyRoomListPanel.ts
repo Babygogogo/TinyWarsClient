@@ -62,7 +62,7 @@ namespace TwnsMcrMyRoomListPanel {
             if (!McrMyRoomListPanel._instance) {
                 McrMyRoomListPanel._instance = new McrMyRoomListPanel();
             }
-            McrMyRoomListPanel._instance.open(undefined);
+            McrMyRoomListPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (McrMyRoomListPanel._instance) {

@@ -43,7 +43,7 @@ namespace TwnsSpwLoadWarPanel {
                 SpwLoadWarPanel._instance = new SpwLoadWarPanel();
             }
 
-            SpwLoadWarPanel._instance.open(undefined);
+            SpwLoadWarPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (SpwLoadWarPanel._instance) {

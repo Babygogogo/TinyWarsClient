@@ -60,7 +60,7 @@ namespace TwnsMrwMyWarListPanel {
             if (!MrwMyWarListPanel._instance) {
                 MrwMyWarListPanel._instance = new MrwMyWarListPanel();
             }
-            MrwMyWarListPanel._instance.open(undefined);
+            MrwMyWarListPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MrwMyWarListPanel._instance) {

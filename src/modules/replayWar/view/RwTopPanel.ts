@@ -59,7 +59,7 @@ namespace TwnsRwTopPanel {
             if (!RwTopPanel._instance) {
                 RwTopPanel._instance = new RwTopPanel();
             }
-            RwTopPanel._instance.open(undefined);
+            RwTopPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

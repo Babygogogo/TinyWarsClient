@@ -6,7 +6,6 @@ import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FlowManager                  from "../../tools/helpers/FlowManager";
 import Helpers                      from "../../tools/helpers/Helpers";
-import Logger                       from "../../tools/helpers/Logger";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
@@ -51,13 +50,13 @@ namespace TwnsWwOngoingWarsPanel {
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
-        private _selectedWarIndex   : number | undefined;
+        private _selectedWarIndex   : number | null = null;
 
         public static show(): void {
             if (!McrWatchOngoingWarsPanel._instance) {
                 McrWatchOngoingWarsPanel._instance = new McrWatchOngoingWarsPanel();
             }
-            McrWatchOngoingWarsPanel._instance.open(undefined);
+            McrWatchOngoingWarsPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (McrWatchOngoingWarsPanel._instance) {
@@ -97,7 +96,7 @@ namespace TwnsWwOngoingWarsPanel {
         public async setSelectedIndex(newIndex: number): Promise<void> {
             const oldIndex         = this._selectedWarIndex;
             const dataList         = this._dataForListWar;
-            this._selectedWarIndex = dataList[newIndex] ? newIndex : undefined;
+            this._selectedWarIndex = dataList[newIndex] ? newIndex : null;
 
             if ((oldIndex != null) && (dataList[oldIndex])) {
                 this._listWar.updateSingleData(oldIndex, dataList[oldIndex]);
@@ -111,7 +110,7 @@ namespace TwnsWwOngoingWarsPanel {
                 this._groupInfo.visible = false;
             }
         }
-        public getSelectedIndex(): number | undefined {
+        public getSelectedIndex(): number | null {
             return this._selectedWarIndex;
         }
 
@@ -173,7 +172,7 @@ namespace TwnsWwOngoingWarsPanel {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, playersCountUnneutral: number | null | undefined): DataForPlayerRenderer[] {
+        private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, playersCountUnneutral: Types.Undefinable<number>): DataForPlayerRenderer[] {
             const configVersion = warInfo.settingsForCommon?.configVersion;
             if (configVersion == null) {
                 return [];
@@ -201,8 +200,7 @@ namespace TwnsWwOngoingWarsPanel {
         private async _showMap(index: number): Promise<void> {
             const warInfo = this._dataForListWar[index].info.warInfo;
             if (warInfo == null) {
-                Logger.error(`WwOngoingWarsPanel._showMap() empty warInfo.`);
-                return;
+                throw new Error(`WwOngoingWarsPanel._showMap() empty warInfo.`);
             }
 
             const hasFogByDefault   = warInfo?.settingsForCommon?.warRule?.ruleForGlobalParams?.hasFogByDefault;
@@ -342,7 +340,7 @@ namespace TwnsWwOngoingWarsPanel {
                         labelName.text = warName;
                     } else {
                         const mapId     = settingsForMcw.mapId;
-                        labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                     }
 
                 } else if (settingsForCcw) {
@@ -351,12 +349,12 @@ namespace TwnsWwOngoingWarsPanel {
                         labelName.text = warName;
                     } else {
                         const mapId     = settingsForCcw.mapId;
-                        labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                     }
 
                 } else if (settingsForMrw) {
                     const mapId     = settingsForMrw.mapId;
-                    labelName.text  = (mapId == null ? undefined : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                    labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                 }
             }
         }
@@ -378,7 +376,7 @@ namespace TwnsWwOngoingWarsPanel {
             const playerIndex       = playerInfo.playerIndex;
             const teamIndex         = playerInfo.teamIndex;
             this._labelIndex.text   = playerIndex == null ? CommonConstants.ErrorTextForUndefined : Lang.getPlayerForceName(playerIndex);
-            this._labelTeam.text    = (teamIndex == null ? undefined : Lang.getPlayerTeamName(teamIndex)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTeam.text    = (teamIndex == null ? null : Lang.getPlayerTeamName(teamIndex)) || CommonConstants.ErrorTextForUndefined;
 
             const userId    = playerInfo.userId;
             const labelName = this._labelName;

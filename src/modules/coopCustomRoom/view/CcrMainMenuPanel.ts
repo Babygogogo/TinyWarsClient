@@ -39,37 +39,25 @@ namespace TwnsCcrMainMenuPanel {
 
         private static _instance: CcrMainMenuPanel;
 
-        // @ts-ignore
-        private readonly _group             : eui.Group;
-        // @ts-ignore
-        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnRanking        : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
+        private readonly _group!            : eui.Group;
+        private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
+        private readonly _btnRanking!       : TwnsUiButton.UiButton;
+        private readonly _btnSinglePlayer!  : TwnsUiButton.UiButton;
 
-        // @ts-ignore
-        private readonly _groupLeft         : eui.Group;
-        // @ts-ignore
-        private readonly _btnCreateRoom     : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnJoinRoom       : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnMyRoom         : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnHelp           : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnNormalMode     : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnFreeMode       : TwnsUiButton.UiButton;
+        private readonly _groupLeft!        : eui.Group;
+        private readonly _btnCreateRoom!    : TwnsUiButton.UiButton;
+        private readonly _btnJoinRoom!      : TwnsUiButton.UiButton;
+        private readonly _btnMyRoom!        : TwnsUiButton.UiButton;
+        private readonly _btnContinueWar!   : TwnsUiButton.UiButton;
+        private readonly _btnHelp!          : TwnsUiButton.UiButton;
+        private readonly _btnNormalMode!    : TwnsUiButton.UiButton;
+        private readonly _btnFreeMode!      : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!CcrMainMenuPanel._instance) {
                 CcrMainMenuPanel._instance = new CcrMainMenuPanel();
             }
-            CcrMainMenuPanel._instance.open(undefined);
+            CcrMainMenuPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

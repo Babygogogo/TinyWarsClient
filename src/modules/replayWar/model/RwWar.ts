@@ -5,7 +5,6 @@ import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager"
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
-import Logger                       from "../../tools/helpers/Logger";
 import SoundManager                 from "../../tools/helpers/SoundManager";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
@@ -107,19 +106,19 @@ namespace TwnsRwWar {
             tileMap.getView().updateCoZone();
         }
 
-        public async getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | undefined> {
+        public async getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0081)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | undefined> {
+        public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | null> {
             return `${Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn())} ${this._getDescSuffix()}`;
         }
-        public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | undefined> {
+        public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0095)} ${Lang.getUnitName(Helpers.getExisted(action.unitType))} ${this._getDescSuffix()}`;
         }
-        public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined> {
+        public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | null> {
             return `${await this.getPlayerInTurn().getNickname()} ${Lang.getText(action.deprecatedIsBoot ? LangTextType.B0396: LangTextType.B0055)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined> {
+        public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | null> {
             const nickname      = await this.getPlayerInTurn().getNickname();
             const playerIndex   = this.getPlayerIndexInTurn();
             const suffix        = this._getDescSuffix();
@@ -133,71 +132,71 @@ namespace TwnsRwWar {
                 }
             }
         }
-        public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | undefined> {
+        public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | null> {
             return `P${this.getPlayerIndexInTurn()} ${await this.getPlayerInTurn().getNickname()} ${Lang.getText(LangTextType.B0094)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | undefined> {
+        public async getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0451)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined> {
+        public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null> {
             const playerIndex = Helpers.getExisted(action.targetPlayerIndex);
             return `P${playerIndex} ${await this.getPlayer(playerIndex).getNickname()}${Lang.getText(LangTextType.B0450)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
+        public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0087)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | undefined> {
+        public async getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | null> {
             return Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
         }
-        public async getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | undefined> {
+        public async getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | null> {
             return Lang.getFormattedText(LangTextType.F0028, await this.getPlayerInTurn().getNickname());
         }
-        public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined> {
+        public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0097)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitAttackUnit(action: WarAction.IWarActionUnitAttackUnit): Promise<string | undefined> {
+        public async getDescForExeUnitAttackUnit(action: WarAction.IWarActionUnitAttackUnit): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0097)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitBeLoaded(action: WarAction.IWarActionUnitBeLoaded): Promise<string | undefined> {
+        public async getDescForExeUnitBeLoaded(action: WarAction.IWarActionUnitBeLoaded): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0098)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitBuildTile(action: WarAction.IWarActionUnitBuildTile): Promise<string | undefined> {
+        public async getDescForExeUnitBuildTile(action: WarAction.IWarActionUnitBuildTile): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0099)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitCaptureTile(action: WarAction.IWarActionUnitCaptureTile): Promise<string | undefined> {
+        public async getDescForExeUnitCaptureTile(action: WarAction.IWarActionUnitCaptureTile): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0100)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitDive(action: WarAction.IWarActionUnitDive): Promise<string | undefined> {
+        public async getDescForExeUnitDive(action: WarAction.IWarActionUnitDive): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0101)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitDropUnit(action: WarAction.IWarActionUnitDropUnit): Promise<string | undefined> {
+        public async getDescForExeUnitDropUnit(action: WarAction.IWarActionUnitDropUnit): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0102)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitJoinUnit(action: WarAction.IWarActionUnitJoinUnit): Promise<string | undefined> {
+        public async getDescForExeUnitJoinUnit(action: WarAction.IWarActionUnitJoinUnit): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0103)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitLaunchFlare(action: WarAction.IWarActionUnitLaunchFlare): Promise<string | undefined> {
+        public async getDescForExeUnitLaunchFlare(action: WarAction.IWarActionUnitLaunchFlare): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0104)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitLaunchSilo(action: WarAction.IWarActionUnitLaunchSilo): Promise<string | undefined> {
+        public async getDescForExeUnitLaunchSilo(action: WarAction.IWarActionUnitLaunchSilo): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0105)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitLoadCo(action: WarAction.IWarActionUnitLoadCo): Promise<string | undefined> {
+        public async getDescForExeUnitLoadCo(action: WarAction.IWarActionUnitLoadCo): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0139)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitProduceUnit(action: WarAction.IWarActionUnitProduceUnit): Promise<string | undefined> {
+        public async getDescForExeUnitProduceUnit(action: WarAction.IWarActionUnitProduceUnit): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0106)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitSupplyUnit(action: WarAction.IWarActionUnitSupplyUnit): Promise<string | undefined> {
+        public async getDescForExeUnitSupplyUnit(action: WarAction.IWarActionUnitSupplyUnit): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0107)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitSurface(action: WarAction.IWarActionUnitSurface): Promise<string | undefined> {
+        public async getDescForExeUnitSurface(action: WarAction.IWarActionUnitSurface): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0108)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | undefined> {
+        public async getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0142)} ${this._getDescSuffix()}`;
         }
-        public async getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | undefined> {
+        public async getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0109)} ${this._getDescSuffix()}`;
         }
         private _getDescSuffix(): string {
@@ -266,7 +265,7 @@ namespace TwnsRwWar {
             return RwWarMenuPanel.getIsOpening();
         }
 
-        public getSettingsBootTimerParams(): number[] | null | undefined {
+        public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }
 
@@ -432,7 +431,7 @@ namespace TwnsRwWar {
             this.setNextActionId(this.getNextActionId() + 1);
             const errorCode = await WarActionExecutor.checkAndExecute(this, action, isFastExecute);
             if (errorCode) {
-                Logger.error(`RwWar._doExecuteAction() errorCode: ${errorCode}`);
+                throw new Error(`RwWar._doExecuteAction() errorCode: ${errorCode}`);
             }
 
             const isInEnd = this.checkIsInEnd();
@@ -458,7 +457,7 @@ namespace TwnsRwWar {
                     if ((!this.checkIsInEnd()) && (this.getIsAutoReplay()) && (!this.getIsExecutingAction()) && (this.getIsRunning())) {
                         this._doExecuteAction(this.getNextAction(), isFastExecute);
                     }
-                }, undefined, 1000);
+                }, null, 1000);
             }
         }
     }

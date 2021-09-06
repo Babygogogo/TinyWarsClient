@@ -28,17 +28,17 @@ namespace TwnsLobbyBottomPanel {
 
         private static _instance: LobbyBottomPanel;
 
-        private _groupBottom    : eui.Group;
-        private _btnMyInfo      : TwnsUiButton.UiButton;
-        private _btnChat        : TwnsUiButton.UiButton;
-        private _btnMapEditor   : TwnsUiButton.UiButton;
-        private _btnGameData    : TwnsUiButton.UiButton;
+        private readonly _groupBottom!  : eui.Group;
+        private readonly _btnMyInfo!    : TwnsUiButton.UiButton;
+        private readonly _btnChat!      : TwnsUiButton.UiButton;
+        private readonly _btnMapEditor! : TwnsUiButton.UiButton;
+        private readonly _btnGameData!  : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!LobbyBottomPanel._instance) {
                 LobbyBottomPanel._instance = new LobbyBottomPanel();
             }
-            LobbyBottomPanel._instance.open(undefined);
+            LobbyBottomPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -82,7 +82,9 @@ namespace TwnsLobbyBottomPanel {
         private _onTouchedBtnMyInfo(): void {
             UserOnlineUsersPanel.hide();
             TwnsChatPanel.ChatPanel.hide();
-            UserPanel.show({ userId: UserModel.getSelfUserId() });
+            UserPanel.show({
+                userId: Helpers.getExisted(UserModel.getSelfUserId()),
+            });
         }
 
         private _onTouchedBtnChat(): void {

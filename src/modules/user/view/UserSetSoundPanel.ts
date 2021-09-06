@@ -48,16 +48,16 @@ namespace TwnsUserSetSoundPanel {
         private readonly _btnDefault!           : TwnsUiButton.UiButton;
         private readonly _btnConfirm!           : TwnsUiButton.UiButton;
 
-        private _prevBgmMute                : boolean | undefined;
-        private _prevBgmVolume              : number | undefined;
-        private _prevEffectMute             : boolean | undefined;
-        private _prevEffectVolume           : number | undefined;
+        private _prevBgmMute                : boolean | null = null;
+        private _prevBgmVolume              : number | null = null;
+        private _prevEffectMute             : boolean | null = null;
+        private _prevEffectVolume           : number | null = null;
 
         public static show(): void {
             if (!UserSetSoundPanel._instance) {
                 UserSetSoundPanel._instance = new UserSetSoundPanel();
             }
-            UserSetSoundPanel._instance.open(undefined);
+            UserSetSoundPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

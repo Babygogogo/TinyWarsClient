@@ -45,7 +45,7 @@ namespace TwnsMrrMainMenuPanel {
             if (!MrrMainMenuPanel._instance) {
                 MrrMainMenuPanel._instance = new MrrMainMenuPanel();
             }
-            MrrMainMenuPanel._instance.open(undefined);
+            MrrMainMenuPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

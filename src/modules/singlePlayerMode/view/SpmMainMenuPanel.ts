@@ -41,7 +41,7 @@ namespace TwnsSpmMainMenuPanel {
             if (!SpmMainMenuPanel._instance) {
                 SpmMainMenuPanel._instance = new SpmMainMenuPanel();
             }
-            SpmMainMenuPanel._instance.open(undefined);
+            SpmMainMenuPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

@@ -329,7 +329,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                     configVersion,
                     bannedCoIdArray     : ScrCreateModel.getBannedCoIdArray(playerIndex) || [],
                     fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
-                    maxBanCount         : undefined,
+                    maxBanCount         : null,
                     selfCoId,
                     callbackOnConfirm   : (bannedCoIdSet) => {
                         const callback = () => {

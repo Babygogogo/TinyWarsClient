@@ -9,7 +9,6 @@ import TwnsMcrMainMenuPanel                 from "../../multiCustomRoom/view/Mcr
 import MpwModel                             from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                             from "../../multiPlayerWar/model/MpwProxy";
 import Helpers                              from "../../tools/helpers/Helpers";
-import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
 import TwnsLangTextType                     from "../../tools/lang/LangTextType";
@@ -60,7 +59,7 @@ namespace TwnsMcwMyWarListPanel {
             if (!McwMyWarListPanel._instance) {
                 McwMyWarListPanel._instance = new McwMyWarListPanel();
             }
-            McwMyWarListPanel._instance.open(undefined);
+            McwMyWarListPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (McwMyWarListPanel._instance) {
@@ -243,8 +242,7 @@ namespace TwnsMcwMyWarListPanel {
             for (const warInfo of MpwModel.getMyMcwWarInfoArray()) {
                 const warId = warInfo.warId;
                 if (warId == null) {
-                    Logger.error(`McwMyWarListPanel._createDataForListWar() empty warId.`);
-                    continue;
+                    throw new Error(`McwMyWarListPanel._createDataForListWar() empty warId.`);
                 }
                 dataArray.push({
                     warId,

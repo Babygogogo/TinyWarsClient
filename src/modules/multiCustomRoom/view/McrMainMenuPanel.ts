@@ -61,7 +61,7 @@ namespace TwnsMcrMainMenuPanel {
             if (!McrMainMenuPanel._instance) {
                 McrMainMenuPanel._instance = new McrMainMenuPanel();
             }
-            McrMainMenuPanel._instance.open(undefined);
+            McrMainMenuPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

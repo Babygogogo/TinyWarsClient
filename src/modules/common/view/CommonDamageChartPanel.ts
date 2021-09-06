@@ -2,6 +2,7 @@
 import CommonModel              from "../../common/model/CommonModel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers from "../../tools/helpers/Helpers";
 import Timer                    from "../../tools/helpers/Timer";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -52,7 +53,7 @@ namespace TwnsCommonDamageChartPanel {
         private readonly _labelDefenseMain2!    : TwnsUiLabel.UiLabel;
         private readonly _labelDefenseSub2!     : TwnsUiLabel.UiLabel;
 
-        private _selectedIndex?             : number;
+        private _selectedIndex              : number | null = null;
         private _dataForListUnit?           : DataForUnitRenderer[];
         private _dataForListDamageChart?    : DataForDamageRenderer[];
         private _unitView                   = new WarMapUnitView();
@@ -61,7 +62,7 @@ namespace TwnsCommonDamageChartPanel {
             if (!CommonDamageChartPanel._instance) {
                 CommonDamageChartPanel._instance = new CommonDamageChartPanel();
             }
-            CommonDamageChartPanel._instance.open(undefined);
+            CommonDamageChartPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (CommonDamageChartPanel._instance) {
@@ -107,9 +108,9 @@ namespace TwnsCommonDamageChartPanel {
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
 
-            this._selectedIndex             = undefined;
-            this._dataForListUnit           = undefined;
-            this._dataForListDamageChart    = undefined;
+            this._selectedIndex = null;
+            delete this._dataForListUnit;
+            delete this._dataForListDamageChart;
         }
 
         public setSelectedIndexAndUpdateView(newIndex: number): void {
@@ -122,7 +123,7 @@ namespace TwnsCommonDamageChartPanel {
                 this._updateListDamageChart();
             }
         }
-        public getSelectedIndex(): number | undefined {
+        public getSelectedIndex(): number | null {
             return this._selectedIndex;
         }
 
@@ -189,10 +190,14 @@ namespace TwnsCommonDamageChartPanel {
         }
 
         private _updateUnitViewAndLabelName(): void {
-            const data = this._dataForListUnit[this._selectedIndex];
+            const selectedIndex = this.getSelectedIndex();
+            const dataArray     = this._dataForListUnit;
+            const data          = (selectedIndex == null) || (dataArray == null)
+                ? null
+                : dataArray[selectedIndex];
             if (data) {
                 const unitType          = data.unitType;
-                this._labelName.text    = Lang.getUnitName(unitType);
+                this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
                 this._unitView.update({
                     gridIndex       : { x: 0, y: 0 },
                     playerIndex     : CommonConstants.WarFirstPlayerIndex,
@@ -203,13 +208,19 @@ namespace TwnsCommonDamageChartPanel {
         }
 
         private _updateListInfo(): void {
-            const dataList  : DataForInfoRenderer[] = [];
-            const data      = this._dataForListUnit[this._selectedIndex];
-            if (data) {
+            const selectedIndex = this.getSelectedIndex();
+            const dataArray     = this._dataForListUnit;
+            const data          = (selectedIndex == null) || (dataArray == null)
+                ? null
+                : dataArray[selectedIndex];
+            const listInfo      = this._listInfo;
+            if (data == null) {
+                listInfo.clear();
+            } else {
                 const configVersion = data.configVersion;
                 const unitType      = data.unitType;
                 const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
-                dataList.push(
+                this._listInfo.bindData(Helpers.getNonNullElements([
                     this._createInfoHp(cfg),
                     this._createInfoProductionCost(cfg),
                     this._createInfoMovement(cfg),
@@ -224,10 +235,9 @@ namespace TwnsCommonDamageChartPanel {
                     this._createInfoProduceMaterial(cfg),
                     this._createInfoFlareAmmo(cfg),
                     this._createInfoDive(cfg),
-                );
+                ]));
             }
 
-            this._listInfo.bindData(dataList.filter(v => !!v));
         }
 
         private _updateListDamageChart(): void {
@@ -254,7 +264,7 @@ namespace TwnsCommonDamageChartPanel {
         private _createInfoMovement(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(LangTextType.B0340),
-                valueText   : `${cfg.moveRange} (${Lang.getMoveTypeName(cfg.moveType)})`,
+                valueText   : `${cfg.moveRange} (${Lang.getMoveTypeName(Helpers.getExisted(cfg.moveType))})`,
             };
         }
         private _createInfoFuel(cfg: IUnitTemplateCfg): DataForInfoRenderer {
@@ -349,14 +359,16 @@ namespace TwnsCommonDamageChartPanel {
         }
 
         private _createDataForListDamageChart(): DataForDamageRenderer[] {
-            const data      = this._dataForListUnit[this._selectedIndex];
-            const dataList  : DataForDamageRenderer[] = [];
-            if (data) {
-                const configVersion     = data.configVersion;
-                const attackUnitType    = data.unitType;
+            const selectedIndex     = this.getSelectedIndex();
+            const dataArrayForUnit  = this._dataForListUnit;
+            const dataForUnit       = (selectedIndex == null) || (dataArrayForUnit == null) ? null : dataArrayForUnit[selectedIndex];
+            const dataArray         : DataForDamageRenderer[] = [];
+            if (dataForUnit) {
+                const configVersion     = dataForUnit.configVersion;
+                const attackUnitType    = dataForUnit.unitType;
                 const playerIndex       = CommonConstants.WarFirstPlayerIndex;
                 for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
-                    dataList.push({
+                    dataArray.push({
                         configVersion,
                         attackUnitType,
                         targetUnitType,
@@ -364,7 +376,7 @@ namespace TwnsCommonDamageChartPanel {
                     });
                 }
                 for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.Destroyable)) {
-                    dataList.push({
+                    dataArray.push({
                         configVersion,
                         attackUnitType,
                         targetTileType,
@@ -372,12 +384,12 @@ namespace TwnsCommonDamageChartPanel {
                 }
             }
 
-            return dataList.sort(sorterForDataForList);
+            return dataArray.sort(sorterForDataForList);
         }
 
         private _createDataForListUnit(): DataForUnitRenderer[] {
             const data          : DataForUnitRenderer[] = [];
-            const configVersion = ConfigManager.getLatestConfigVersion();
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
             const unitTypes     = ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All);
             for (let index = 0; index < unitTypes.length; ++index) {
                 data.push({
@@ -403,8 +415,8 @@ namespace TwnsCommonDamageChartPanel {
         panel           : CommonDamageChartPanel;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
-        private _imgChoose  : eui.Image;
-        private _labelName  : TwnsUiLabel.UiLabel;
+        private readonly _imgChoose!    : eui.Image;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -413,12 +425,12 @@ namespace TwnsCommonDamageChartPanel {
         }
 
         protected _onDataChanged(): void {
-            const data              = this.data;
-            this._labelName.text    = Lang.getUnitName(data.unitType);
+            const data              = this._getData();
+            this._labelName.text    = Lang.getUnitName(data.unitType) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _onTouchedImgChoose(): void {
-            const data = this.data;
+            const data = this._getData();
             data.panel.setSelectedIndexAndUpdateView(data.index);
         }
     }
@@ -428,11 +440,11 @@ namespace TwnsCommonDamageChartPanel {
         valueText   : string;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : TwnsUiButton.UiButton;
-        private _labelValue : TwnsUiLabel.UiLabel;
+        private readonly _btnTitle!     : TwnsUiButton.UiButton;
+        private readonly _labelValue!   : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            const data              = this.data;
+            const data              = this._getData();
             this._labelValue.text   = data.valueText;
             this._btnTitle.label    = data.titleText;
         }
@@ -446,21 +458,20 @@ namespace TwnsCommonDamageChartPanel {
         targetTileType? : TileType;
     };
     class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {
-        private _group                  : eui.Group;
-        private _conView                : eui.Group;
-        private _unitView               : WarMapUnitView;
-        private _tileView               : TwnsUiImage.UiImage;
-        private _labelPrimaryAttack     : TwnsUiLabel.UiLabel;
-        private _labelSecondaryAttack   : TwnsUiLabel.UiLabel;
-        private _labelPrimaryDefend     : TwnsUiLabel.UiLabel;
-        private _labelSecondaryDefend   : TwnsUiLabel.UiLabel;
+        private readonly _group!                : eui.Group;
+        private readonly _conView!              : eui.Group;
+        private readonly _unitView              = new WarMapUnitView();
+        private readonly _tileView!             : TwnsUiImage.UiImage;
+        private readonly _labelPrimaryAttack!   : TwnsUiLabel.UiLabel;
+        private readonly _labelSecondaryAttack! : TwnsUiLabel.UiLabel;
+        private readonly _labelPrimaryDefend!   : TwnsUiLabel.UiLabel;
+        private readonly _labelSecondaryDefend! : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
 
-            this._unitView = new WarMapUnitView();
             this._conView.addChild(this._unitView);
         }
 
@@ -478,7 +489,7 @@ namespace TwnsCommonDamageChartPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data              = this.data;
+            const data              = this._getData();
             const configVersion     = data.configVersion;
             const attackUnitType    = data.attackUnitType;
             const targetUnitType    = data.targetUnitType;
@@ -510,10 +521,10 @@ namespace TwnsCommonDamageChartPanel {
                 this._unitView.visible = false;
                 this._tileView.visible = true;
 
-                const targetTileType            = data.targetTileType;
+                const targetTileType            = Helpers.getExisted(data.targetTileType);
                 const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
                 const targetCfg                 = ConfigManager.getTileTemplateCfgByType(configVersion, targetTileType);
-                const targetArmorType           = targetCfg.armorType;
+                const targetArmorType           = Helpers.getExisted(targetCfg.armorType);
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
                 this._tileView.source           = CommonModel.getCachedTileObjectImageSource({

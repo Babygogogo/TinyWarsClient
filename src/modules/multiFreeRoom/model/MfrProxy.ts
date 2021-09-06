@@ -26,7 +26,7 @@ namespace MfrProxy {
             { msgCode: NetMessageCodes.MsgMfrGetJoinableRoomInfoList,    callback: _onMsgMfrGetJoinableRoomInfoList },
             { msgCode: NetMessageCodes.MsgMfrGetJoinedRoomInfoList,      callback: _onMsgMfrGetJoinedRoomInfoList },
             { msgCode: NetMessageCodes.MsgMfrStartWar,                   callback: _onMsgMfrStartWar },
-        ], undefined);
+        ], null);
     }
 
     export function reqCreateRoom(param: ProtoTypes.NetMessage.MsgMfrCreateRoom.IC): void {

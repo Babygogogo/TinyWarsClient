@@ -121,7 +121,7 @@ namespace MeUtility {
         return {
             gridIndex,
             baseType        : tileBaseType,
-            decoratorType   : undefined,
+            decoratorType   : null,
             objectType      : TileObjectType.Empty,
             playerIndex     : CommonConstants.WarNeutralPlayerIndex,
         };
@@ -488,12 +488,12 @@ namespace MeUtility {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | undefined, shapeId: number | undefined } {
+    export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | null, shapeId: number | null } {
         const tile = tileMap.getTile(gridIndex);
         if (tile == null) {
             return {
-                decoratorType   : undefined,
-                shapeId         : undefined,
+                decoratorType   : null,
+                shapeId         : null,
             };
         }
 
@@ -532,7 +532,7 @@ namespace MeUtility {
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        ? { decoratorType: null,                        shapeId: null }
                         : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
                 } else {
                     return isSea2
@@ -545,7 +545,7 @@ namespace MeUtility {
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        ? { decoratorType: null,                        shapeId: null }
                         : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
                 } else {
                     return isSea2
@@ -558,7 +558,7 @@ namespace MeUtility {
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        ? { decoratorType: null,                        shapeId: null }
                         : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
                 } else {
                     return isSea2
@@ -571,7 +571,7 @@ namespace MeUtility {
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        ? { decoratorType: null,                        shapeId: null }
                         : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
                 } else {
                     return isSea2
@@ -581,35 +581,35 @@ namespace MeUtility {
 
             } else if ((shapeId === 16) || (shapeId === 20) || (shapeId === 24) || (shapeId === 28)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 })))
-                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
 
             } else if ((shapeId === 17) || (shapeId === 21) || (shapeId === 25) || (shapeId === 29)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 })))
-                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
 
             } else if ((shapeId === 18) || (shapeId === 22) || (shapeId === 26) || (shapeId === 30)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 })))
-                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Corner,    shapeId: 8 };
 
             } else if ((shapeId === 19) || (shapeId === 23) || (shapeId === 27) || (shapeId === 31)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 })))
-                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
 
             } else {
                 return {
-                    decoratorType   : undefined,
-                    shapeId         : undefined,
+                    decoratorType   : null,
+                    shapeId         : null,
                 };
             }
         }
 
         return {
-            decoratorType   : undefined,
-            shapeId         : undefined,
+            decoratorType   : null,
+            shapeId         : null,
         };
     }
     function checkIsSeaOrEmpty(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
@@ -669,7 +669,7 @@ namespace MeUtility {
 
         return ClientErrorCode.NoError;
     }
-    function getErrorCodeForMapDesigner(mapDesigner: string | null | undefined): ClientErrorCode {
+    function getErrorCodeForMapDesigner(mapDesigner: Types.Undefinable<string>): ClientErrorCode {
         if ((mapDesigner == null)                                       ||
             (mapDesigner.length <= 0)                                   ||
             (mapDesigner.length > CommonConstants.MapMaxDesignerLength)
@@ -679,7 +679,7 @@ namespace MeUtility {
             return ClientErrorCode.NoError;
         }
     }
-    function getErrorCodeForMapNameArray(mapNameList: ProtoTypes.Structure.ILanguageText[] | null | undefined): ClientErrorCode {
+    function getErrorCodeForMapNameArray(mapNameList: Types.Undefinable<ProtoTypes.Structure.ILanguageText[]>): ClientErrorCode {
         if (!Helpers.checkIsValidLanguageTextArray({
             list            : mapNameList,
             maxTextLength   : CommonConstants.MapMaxNameLength,
@@ -691,7 +691,7 @@ namespace MeUtility {
 
         return ClientErrorCode.NoError;
     }
-    function getErrorCodeForUnitArray(unitArray: ProtoTypes.WarSerialization.ISerialUnit[] | null | undefined): ClientErrorCode {
+    function getErrorCodeForUnitArray(unitArray: Types.Undefinable<ProtoTypes.WarSerialization.ISerialUnit[]>): ClientErrorCode {
         if (!WarCommonHelpers.checkIsUnitIdCompact(unitArray)) {
             return ClientErrorCode.MapRawDataValidation03;
         }

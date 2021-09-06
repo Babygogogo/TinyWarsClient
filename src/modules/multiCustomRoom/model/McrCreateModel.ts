@@ -102,11 +102,6 @@ namespace McrCreateModel {
         Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
     }
     async function resetDataByPresetWarRuleId(ruleId: number): Promise<void> {
-        if (ruleId == null) {
-            Logger.error(`McwModel.resetDataByPresetWarRuleId() empty ruleId.`);
-            return undefined;
-        }
-
         const warRule = Helpers.getExisted((await getMapRawData()).warRuleArray?.find(r => r.ruleId === ruleId));
         setWarRule(Helpers.deepClone(warRule));
         setPresetWarRuleId(ruleId);

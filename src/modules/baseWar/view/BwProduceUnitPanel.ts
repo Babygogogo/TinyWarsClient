@@ -43,13 +43,13 @@ namespace TwnsBwProduceUnitPanel {
 
         private static _instance: BwProduceUnitPanel;
 
-        private _imgMask    : TwnsUiImage.UiImage;
-        private _group      : eui.Group;
-        private _listUnit   : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
-        private _btnCancel  : TwnsUiButton.UiButton;
-        private _btnDetail  : TwnsUiButton.UiButton;
+        private readonly _imgMask!      : TwnsUiImage.UiImage;
+        private readonly _group!        : eui.Group;
+        private readonly _listUnit!     : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private readonly _btnCancel!    : TwnsUiButton.UiButton;
+        private readonly _btnDetail!    : TwnsUiButton.UiButton;
 
-        private _dataForList: DataForUnitRenderer[];
+        private _dataForList: DataForUnitRenderer[] | null = null;
 
         public static show(openData: OpenDataForBwProduceUnitPanel): void {
             if (!BwProduceUnitPanel._instance) {
@@ -116,7 +116,8 @@ namespace TwnsBwProduceUnitPanel {
         }
         private _onTouchedBtnDetail(): void {
             const selectedIndex = this._listUnit.getSelectedIndex();
-            const data          = selectedIndex != null ? this._dataForList[selectedIndex] : null;
+            const dataArray     = this._dataForList;
+            const data          = (selectedIndex != null) && (dataArray) ? dataArray[selectedIndex] : null;
             if (data) {
                 BwUnitDetailPanel.show({
                     unit  : data.unit,
@@ -150,8 +151,8 @@ namespace TwnsBwProduceUnitPanel {
             const playerIndex       = player.getPlayerIndex();
             const configVersion     = war.getConfigVersion();
             const actionPlanner     = war.getActionPlanner();
-            const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
-            const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
+            const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex) ?? null;
+            const unitCategory      = Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
             const minNormalizedHp   = skillCfg ? WarCommonHelpers.getNormalizedHp(skillCfg[3]) : WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
@@ -232,13 +233,13 @@ namespace TwnsBwProduceUnitPanel {
         panel                   : BwProduceUnitPanel;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
-        private _group          : eui.Group;
-        private _imgBg          : TwnsUiImage.UiImage;
-        private _conUnitView    : eui.Group;
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _labelCost      : TwnsUiLabel.UiLabel;
-        private _labelProduce   : TwnsUiLabel.UiLabel;
-        private _unitView       : BwUnitView;
+        private readonly _group!        : eui.Group;
+        private readonly _imgBg!        : TwnsUiImage.UiImage;
+        private readonly _conUnitView!  : eui.Group;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelCost!    : TwnsUiLabel.UiLabel;
+        private readonly _labelProduce! : TwnsUiLabel.UiLabel;
+        private readonly _unitView      = new BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -248,8 +249,6 @@ namespace TwnsBwProduceUnitPanel {
 
             this._imgBg.touchEnabled = true;
             this._imgBg.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgBg, this);
-
-            this._unitView = new BwUnitView();
             this._conUnitView.addChild(this._unitView);
         }
 
@@ -269,7 +268,7 @@ namespace TwnsBwProduceUnitPanel {
         }
 
         private _onTouchedImgBg(): void {
-            const data = this.data;
+            const data = this._getData();
             if (data.currentFund < data.minCost) {
                 FloatText.show(Lang.getText(LangTextType.B0053));
                 return;
@@ -324,13 +323,12 @@ namespace TwnsBwProduceUnitPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data = this.data;
-
+            const data                      = this._getData();
             const unitType                  = data.unitType;
             const isFundEnough              = data.currentFund >= data.minCost;
             this._labelCost.text            = `${Lang.getText(LangTextType.B0079)}: ${data.minCost}`;
             this._labelCost.textColor       = isFundEnough ? 0x00FF00 : 0xFF0000;
-            this._labelName.text            = Lang.getUnitName(unitType);
+            this._labelName.text            = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
             this._labelProduce.textColor    = isFundEnough ? 0x00FF00 : 0xFF0000;
             this._labelProduce.text         = Lang.getText(LangTextType.B0095);
 

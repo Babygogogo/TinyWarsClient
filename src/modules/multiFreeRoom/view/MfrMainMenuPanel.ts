@@ -65,7 +65,7 @@ namespace TwnsMfrMainMenuPanel {
             if (!MfrMainMenuPanel._instance) {
                 MfrMainMenuPanel._instance = new MfrMainMenuPanel();
             }
-            MfrMainMenuPanel._instance.open(undefined);
+            MfrMainMenuPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

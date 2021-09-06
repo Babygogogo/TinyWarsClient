@@ -3,7 +3,6 @@ import TwnsChatPanel            from "../../chat/view/ChatPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -87,8 +86,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 const playerInfo = playerInfoArray.find(v => v.playerIndex === playerIndex);
                 if (playerInfo == null) {
-                    Logger.error(`CommonWarPlayerInfoPage._updateListPlayer() empty playerInfo.`);
-                    continue;
+                    throw new Error(`CommonWarPlayerInfoPage._updateListPlayer() empty playerInfo.`);
                 }
 
                 dataArray.push({

@@ -41,7 +41,7 @@ namespace ResManager {
     function _initTheme(): Promise<void> {
         return new Promise<void>((resolve): void => {
             new eui.Theme("resource/default.thm.json", StageManager.getStage())
-                .once(eui.UIEvent.COMPLETE, resolve, undefined);
+                .once(eui.UIEvent.COMPLETE, resolve, null);
         });
     }
 

@@ -28,17 +28,17 @@ namespace TwnsBwDialoguePanel {
 
         private static _instance: BwDialoguePanel;
 
-        private readonly _group         : eui.Group;
-        private readonly _imgBg         : TwnsUiImage.UiImage;
-        private readonly _imgCo1        : TwnsUiImage.UiImage;
-        private readonly _imgCo2        : TwnsUiImage.UiImage;
-        private readonly _groupName1    : eui.Group;
-        private readonly _labelName1    : TwnsUiLabel.UiLabel;
-        private readonly _groupName2    : eui.Group;
-        private readonly _labelName2    : TwnsUiLabel.UiLabel;
-        private readonly _imgTouchMask  : TwnsUiImage.UiImage;
-        private readonly _btnSkip       : TwnsUiButton.UiButton;
-        private readonly _labelContent  : TwnsUiLabel.UiLabel;
+        private readonly _group!        : eui.Group;
+        private readonly _imgBg!        : TwnsUiImage.UiImage;
+        private readonly _imgCo1!       : TwnsUiImage.UiImage;
+        private readonly _imgCo2!       : TwnsUiImage.UiImage;
+        private readonly _groupName1!   : eui.Group;
+        private readonly _labelName1!   : TwnsUiLabel.UiLabel;
+        private readonly _groupName2!   : eui.Group;
+        private readonly _labelName2!   : TwnsUiLabel.UiLabel;
+        private readonly _imgTouchMask! : TwnsUiImage.UiImage;
+        private readonly _btnSkip!      : TwnsUiButton.UiButton;
+        private readonly _labelContent! : TwnsUiLabel.UiLabel;
 
         private _dialogueIndex  = 0;
 
@@ -104,15 +104,9 @@ namespace TwnsBwDialoguePanel {
         }
 
         private _updateComponentsForDialogue(): void {
-            const index     = this._dialogueIndex;
-            const dataArray = this._getOpenData().actionData.dataArray;
-            const data      = dataArray[index];
-            if (data == null) {
-                Logger.error(`BwDialoguePanel._updateComponentsForDialogue() empty data.`);
-                return;
-            }
-
-            const { dataForCoDialogue, dataForAside }   = data;
+            const index                                 = this._dialogueIndex;
+            const dataArray                             = Helpers.getExisted(this._getOpenData().actionData.dataArray);
+            const { dataForCoDialogue, dataForAside }   = dataArray[index];
             const groupName1                            = this._groupName1;
             const groupName2                            = this._groupName2;
             const labelName1                            = this._labelName1;
@@ -132,7 +126,7 @@ namespace TwnsBwDialoguePanel {
                     if (nextData) {
                         const nextSide = nextData.side;
                         if (nextSide !== dataForCoDialogue.side) {
-                            const coImageSource = ConfigManager.getCoBustImageSource(nextData.coId);
+                            const coImageSource = ConfigManager.getCoBustImageSource(Helpers.getExisted(nextData.coId));
                             if (nextSide === Types.WarEventActionDialogueSide.Left) {
                                 imgCo1.source = coImageSource;
                             } else if (nextSide === Types.WarEventActionDialogueSide.Right) {
@@ -144,10 +138,11 @@ namespace TwnsBwDialoguePanel {
             }
 
             if (dataForCoDialogue) {
-                const { side, coId, nameArray } = dataForCoDialogue;
-                const coImageSource             = ConfigManager.getCoBustImageSource(coId);
-                const customName                = Lang.getLanguageText({ textArray: nameArray });
-                const coName                    = customName != null ? customName : ConfigManager.getCoNameAndTierText(ConfigManager.getLatestConfigVersion(), coId);
+                const { side, nameArray }   = dataForCoDialogue;
+                const coId                  = Helpers.getExisted(dataForCoDialogue.coId);
+                const coImageSource         = ConfigManager.getCoBustImageSource(coId);
+                const customName            = Lang.getLanguageText({ textArray: nameArray });
+                const coName                = customName != null ? customName : ConfigManager.getCoNameAndTierText(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId);
 
                 if (side === Types.WarEventActionDialogueSide.Left) {
                     groupName1.visible  = true;
@@ -164,12 +159,12 @@ namespace TwnsBwDialoguePanel {
                     Helpers.changeColor(imgCo1, Types.ColorType.Dark);
                     Helpers.changeColor(imgCo2, Types.ColorType.Origin);
                 } else {
-                    Logger.error(`BwDialoguePanel._updateComponentsForDialogue() invalid side.`);
+                    throw new Error(`BwDialoguePanel._updateComponentsForDialogue() invalid side.`);
                 }
 
-                labelContent.setRichText(Lang.getLanguageText({
+                labelContent.setRichText(Helpers.getExisted(Lang.getLanguageText({
                     textArray   : dataForCoDialogue.textArray,
-                }).replace(/\\n/g, "\n"));
+                })).replace(/\\n/g, "\n"));
 
             } else if (dataForAside) {
                 groupName1.visible  = false;
@@ -177,14 +172,14 @@ namespace TwnsBwDialoguePanel {
                 Helpers.changeColor(imgCo1, Types.ColorType.Dark);
                 Helpers.changeColor(imgCo2, Types.ColorType.Dark);
 
-                labelContent.setRichText(Lang.getLanguageText({
+                labelContent.setRichText(Helpers.getExisted(Lang.getLanguageText({
                     textArray   : dataForAside.textArray,
-                }).replace(/\\n/g, "\n"));
+                })).replace(/\\n/g, "\n"));
             }
         }
 
         private _checkAndShowNextDialogue(): void {
-            if (this._getOpenData().actionData.dataArray[this._dialogueIndex + 1]) {
+            if (Helpers.getExisted(this._getOpenData().actionData.dataArray)[this._dialogueIndex + 1]) {
                 ++this._dialogueIndex;
                 this._updateComponentsForDialogue();
             } else {

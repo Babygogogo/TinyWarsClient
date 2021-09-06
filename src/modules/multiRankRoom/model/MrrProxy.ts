@@ -21,7 +21,7 @@ namespace MrrProxy {
             { msgCode: NetMessageCodes.MsgMrrSetMaxConcurrentCount,      callback: _onMsgMrrSetMaxConcurrentCount },
             { msgCode: NetMessageCodes.MsgMrrSetSelfSettings,            callback: _onMsgMrrSetSelfSettings },
             { msgCode: NetMessageCodes.MsgMrrDeleteRoomByServer,         callback: _onMsgMrrDeleteRoomByServer },
-        ], undefined);
+        ]);
     }
 
     export function reqMrrGetMaxConcurrentCount(): void {

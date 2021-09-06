@@ -3,7 +3,6 @@ import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
-import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import TwnsBwUnitMapView    from "../view/BwUnitMapView";
@@ -23,16 +22,16 @@ namespace TwnsBwUnitMap {
     import BwWar            = TwnsBwWar.BwWar;
 
     export class BwUnitMap {
-        private _war            : BwWar | undefined;
-        private _nextUnitId     : number | undefined;
+        private _war?           : BwWar;
+        private _nextUnitId?    : number;
         private _map?           : (BwUnit | null)[][];
-        private _mapSize        : Types.MapSize | undefined;
-        private _loadedUnits    : Map<number, BwUnit> | undefined;
+        private _mapSize?       : Types.MapSize;
+        private _loadedUnits?   : Map<number, BwUnit>;
 
         private readonly _view  = new BwUnitMapView();
 
         public init({ data, configVersion, mapSize, playersCountUnneutral }: {
-            data                    : ISerialUnitMap | null | undefined;
+            data                    : Types.Undefinable<ISerialUnitMap>;
             configVersion           : string;
             mapSize                 : Types.MapSize;
             playersCountUnneutral   : number;
@@ -147,7 +146,7 @@ namespace TwnsBwUnitMap {
             return ClientErrorCode.NoError;
         }
         public fastInit({ data, configVersion, mapSize, playersCountUnneutral }: {
-            data                    : ISerialUnitMap | null | undefined;
+            data                    : Types.Undefinable<ISerialUnitMap>;
             configVersion           : string;
             mapSize                 : Types.MapSize;
             playersCountUnneutral   : number;
@@ -181,13 +180,8 @@ namespace TwnsBwUnitMap {
                 nextUnitId  : this.getNextUnitId(),
             };
         }
-        public serializeForCreateSfw(): ISerialUnitMap | undefined {
-            const nextUnitId = this.getNextUnitId();
-            if (nextUnitId == null) {
-                Logger.error(`BwUnitMap.serializeForCreateSfw() empty nextUnitId.`);
-                return undefined;
-            }
-
+        public serializeForCreateSfw(): ISerialUnitMap {
+            const nextUnitId    = this.getNextUnitId();
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
@@ -206,13 +200,8 @@ namespace TwnsBwUnitMap {
                 nextUnitId,
             };
         }
-        public serializeForCreateMfr(): ISerialUnitMap | undefined {
-            const nextUnitId = this.getNextUnitId();
-            if (nextUnitId == null) {
-                Logger.error(`BwUnitMap.serializeForCreateMfr() empty nextUnitId.`);
-                return undefined;
-            }
-
+        public serializeForCreateMfr(): ISerialUnitMap {
+            const nextUnitId    = this.getNextUnitId();
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
@@ -232,7 +221,7 @@ namespace TwnsBwUnitMap {
             };
         }
 
-        private _setMap(map: (BwUnit | undefined)[][]): void {
+        private _setMap(map: (BwUnit | null)[][]): void {
             this._map = map;
         }
         private _getMap(): (BwUnit | null)[][] {
@@ -250,18 +239,18 @@ namespace TwnsBwUnitMap {
             this._war = war;
         }
         public getWar(): BwWar {
-            return this._war;
+            return Helpers.getExisted(this._war);
         }
 
         private _setMapSize(width: number, height: number): void {
             this._mapSize = { width: width, height: height };
         }
         public getMapSize(): Types.MapSize {
-            return this._mapSize;
+            return Helpers.getExisted(this._mapSize);
         }
 
         public getNextUnitId(): number {
-            return this._nextUnitId;
+            return Helpers.getExisted(this._nextUnitId);
         }
         public setNextUnitId(id: number): void {
             this._nextUnitId = id;
@@ -303,68 +292,33 @@ namespace TwnsBwUnitMap {
         public getUnitOnMap(gridIndex: GridIndex): BwUnit | null {
             return this._getMap()[gridIndex.x][gridIndex.y] ?? null;
         }
-        public getVisibleUnitOnMap(gridIndex: GridIndex): BwUnit | undefined | null {
+        public getVisibleUnitOnMap(gridIndex: GridIndex): BwUnit | null {
             const unit = this.getUnitOnMap(gridIndex);
             if (unit == null) {
                 return null;
             }
 
-            const war = this._war;
-            if (war == null) {
-                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty war.`);
-                return undefined;
-            }
-
-            const unitType = unit.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty unitType.`);
-                return undefined;
-            }
-
-            const isDiving = unit.getIsDiving();
-            if (isDiving == null) {
-                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty isDiving.`);
-                return undefined;
-            }
-
-            const playerInTurn = war.getPlayerInTurn();
-            if (playerInTurn == null) {
-                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty playerInTurn.`);
-                return undefined;
-            }
-
-            const observerTeamIndex = playerInTurn.getTeamIndex();
-            if (observerTeamIndex == null) {
-                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty observerTeamIndex.`);
-                return undefined;
-            }
-
-            const unitPlayerIndex = unit.getPlayerIndex();
-            if (unitPlayerIndex == null) {
-                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty unitPlayerIndex.`);
-                return undefined;
-            }
-
+            const war = this.getWar();
             return (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                 war,
-                unitType,
-                isDiving,
-                observerTeamIndex,
+                unitType            : unit.getUnitType(),
+                isDiving            : unit.getIsDiving(),
+                observerTeamIndex   : war.getPlayerInTurn().getTeamIndex(),
                 gridIndex,
-                unitPlayerIndex,
+                unitPlayerIndex     : unit.getPlayerIndex(),
             }))
-            ? unit
-            : null;
+                ? unit
+                : null;
         }
 
-        public getUnitLoadedById(unitId: number): BwUnit | undefined {
-            return this._loadedUnits.get(unitId);
+        public getUnitLoadedById(unitId: number): BwUnit | null {
+            return this.getLoadedUnits().get(unitId) ?? null;
         }
         private _setLoadedUnits(units: Map<number, BwUnit>): void {
             this._loadedUnits = units;
         }
         public getLoadedUnits(): Map<number, BwUnit> {
-            return this._loadedUnits;
+            return Helpers.getDefined(this._loadedUnits);
         }
         public getUnitsLoadedByLoader(loader: BwUnit, isRecursive: boolean): BwUnit[] {
             const units: BwUnit[] = [];
@@ -393,57 +347,43 @@ namespace TwnsBwUnitMap {
             return units;
         }
 
-        public swapUnit(gridIndex1: Types.GridIndex, gridIndex2: Types.GridIndex): void {
-            if (!GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2)) {
-                const {x: x1, y: y1}    = gridIndex1;
-                const {x: x2, y: y2}    = gridIndex2;
-                const map               = this._map;
-                [map[x1][y1], map[x2][y2]] = [map[x2][y2], map[x1][y1]];
-            }
-        }
-
         public setUnitLoaded(unit: BwUnit): void {
             const loadedUnits = this.getLoadedUnits();
             if (loadedUnits == null) {
-                Logger.error(`BwUnitMap.setUnitLoaded() the map is not initialized.`);
-                return;
+                throw new Error(`BwUnitMap.setUnitLoaded() the map is not initialized.`);
             }
 
             const unitId = unit.getUnitId();
             if (unitId == null) {
-                Logger.error(`BwUnitMap.setUnitLoaded() the unit has no unitId.`);
-                return;
+                throw new Error(`BwUnitMap.setUnitLoaded() the unit has no unitId.`);
             }
 
             if (loadedUnits.has(unitId)) {
-                Logger.error(`BwUnitMap.setUnitLoaded() the unit is already loaded?!?.`);
-                return;
+                throw new Error(`BwUnitMap.setUnitLoaded() the unit is already loaded?!?.`);
             }
 
             loadedUnits.set(unitId, unit);
             this.getView().addUnit(unit.getView(), true);
         }
         public setUnitUnloaded(unitId: number, gridIndex: Types.GridIndex): void {
-            this._map[gridIndex.x][gridIndex.y] = this._loadedUnits.get(unitId);
-            this._loadedUnits.delete(unitId);
+            const loadedUnits = this.getLoadedUnits();
+            this._getMap()[gridIndex.x][gridIndex.y] = Helpers.getExisted(loadedUnits.get(unitId));
+            loadedUnits.delete(unitId);
         }
 
         public setUnitOnMap(unit: BwUnit): void {
             const mapSize   = this.getMapSize();
             const map       = this._getMap();
             if ((!mapSize) || (!map)) {
-                Logger.error(`BwUnitMap.setUnitOnMap() the map is not initialized.`);
-                return;
+                throw new Error(`BwUnitMap.setUnitOnMap() the map is not initialized.`);
             }
 
             const gridIndex = unit.getGridIndex();
             if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
-                Logger.error(`BwUnitMap.setUnitOnMap() the unit is outside map! gridIndex: ${JSON.stringify(gridIndex)}`);
-                return;
+                throw new Error(`BwUnitMap.setUnitOnMap() the unit is outside map! gridIndex: ${JSON.stringify(gridIndex)}`);
             }
             if (this.getUnitOnMap(gridIndex)) {
-                Logger.error(`BwUnitMap.setUnitOnMap() another unit exists in the same grid! gridIndex: ${JSON.stringify(gridIndex)}`);
-                return;
+                throw new Error(`BwUnitMap.setUnitOnMap() another unit exists in the same grid! gridIndex: ${JSON.stringify(gridIndex)}`);
             }
 
             map[gridIndex.x][gridIndex.y] = unit;
@@ -451,17 +391,18 @@ namespace TwnsBwUnitMap {
         }
         public removeUnitOnMap(gridIndex: Types.GridIndex, removeView: boolean): void {
             const unit = this.getUnitOnMap(gridIndex);
-            this._map[gridIndex.x][gridIndex.y] = undefined;
-            (removeView) && (this.getView().removeUnit(unit.getView()));
+            this._getMap()[gridIndex.x][gridIndex.y] = null;
+            (removeView) && (this.getView().removeUnit(Helpers.getExisted(unit).getView()));
         }
 
         public removeUnitLoaded(unitId: number): void {
-            const unit = this._loadedUnits.get(unitId);
-            this._loadedUnits.delete(unitId);
+            const loadedUnits   = this.getLoadedUnits();
+            const unit          = Helpers.getExisted(loadedUnits.get(unitId));
+            loadedUnits.delete(unitId);
             this.getView().removeUnit(unit.getView());
         }
         public removeUnitsLoadedForPlayer(playerIndex: number): void {
-            const units = this._loadedUnits;
+            const units = this.getLoadedUnits();
             for (const [unitId, unit] of units) {
                 if (unit.getPlayerIndex() === playerIndex) {
                     units.delete(unitId);
@@ -475,14 +416,14 @@ namespace TwnsBwUnitMap {
             this._forEachUnitLoaded(func);
         }
         private _forEachUnitOnMap(func: (unit: BwUnit) => any): void {
-            for (const column of this._map) {
+            for (const column of this._getMap()) {
                 for (const unit of column) {
                     (unit) && (func(unit));
                 }
             }
         }
         private _forEachUnitLoaded(func: (unit: BwUnit) => any): void {
-            for (const [, unit] of this._loadedUnits) {
+            for (const [, unit] of this.getLoadedUnits()) {
                 func(unit);
             }
         }
@@ -506,7 +447,7 @@ namespace TwnsBwUnitMap {
         }
 
         public checkHasUnit(playerIndex: number): boolean {
-            for (const column of this._map) {
+            for (const column of this._getMap()) {
                 for (const unit of column) {
                     if ((unit) && (unit.getPlayerIndex() === playerIndex)) {
                         return true;
@@ -516,32 +457,20 @@ namespace TwnsBwUnitMap {
             return false;
         }
 
-        public checkIsCoLoadedByAnyUnit(playerIndex: number): boolean | undefined {
+        public checkIsCoLoadedByAnyUnit(playerIndex: number): boolean {
             return (this.checkIsCoLoadedByAnyUnitOnMap(playerIndex))
                 || (this.checkIsCoLoadedByAnyUnitLoaded(playerIndex));
         }
-        public checkIsCoLoadedByAnyUnitLoaded(playerIndex: number): boolean | undefined {
-            const units = this.getLoadedUnits();
-            if (units == null) {
-                Logger.error(`BwUnitMap.checkIsCoLoadedByAnyUnitLoaded() empty units.`);
-                return undefined;
-            }
-
-            for (const [, unit] of units) {
+        public checkIsCoLoadedByAnyUnitLoaded(playerIndex: number): boolean {
+            for (const [, unit] of this.getLoadedUnits()) {
                 if ((unit.getPlayerIndex() === playerIndex) && (unit.getHasLoadedCo())) {
                     return true;
                 }
             }
             return false;
         }
-        public checkIsCoLoadedByAnyUnitOnMap(playerIndex: number): boolean | undefined {
-            const map = this._getMap();
-            if (map == null) {
-                Logger.error(`BwUnitMap.checkIsCoLoadedByAnyUnitOnMap() empty map.`);
-                return undefined;
-            }
-
-            return map.some(v => v.some(u => (u != null) && (u.getPlayerIndex() === playerIndex) && (u.getHasLoadedCo())));
+        public checkIsCoLoadedByAnyUnitOnMap(playerIndex: number): boolean {
+            return this._getMap().some(v => v.some(u => (u?.getPlayerIndex() === playerIndex) && (u.getHasLoadedCo())));
         }
 
         public getCoGridIndexListOnMap(playerIndex: number): GridIndex[] {
@@ -557,26 +486,14 @@ namespace TwnsBwUnitMap {
             return list;
         }
 
-        public getAllCoUnits(playerIndex: number): BwUnit[] | undefined {
-            const loadedUnits = this.getLoadedUnits();
-            if (loadedUnits == null) {
-                Logger.error(`BwUnitMap.getCoUnitsCount() empty loadedUnits.`);
-                return undefined;
-            }
-
-            const map = this._getMap();
-            if (map == null) {
-                Logger.error(`BwUnitMap.checkIsCoLoadedByAnyUnitOnMap() empty map.`);
-                return undefined;
-            }
-
+        public getAllCoUnits(playerIndex: number): BwUnit[] {
             const coUnits: BwUnit[] = [];
-            for (const [, unit] of loadedUnits) {
+            for (const [, unit] of this.getLoadedUnits()) {
                 if ((unit.getPlayerIndex() === playerIndex) && (unit.getHasLoadedCo())) {
                     coUnits.push(unit);
                 }
             }
-            for (const column of map) {
+            for (const column of this._getMap()) {
                 for (const unit of column) {
                     if ((unit) && (unit.getPlayerIndex() == playerIndex) && (unit.getHasLoadedCo())) {
                         coUnits.push(unit);

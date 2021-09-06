@@ -52,7 +52,7 @@ namespace TwnsMcrCreateSearchMapPanel {
             if (!McrCreateSearchMapPanel._instance) {
                 McrCreateSearchMapPanel._instance = new McrCreateSearchMapPanel();
             }
-            McrCreateSearchMapPanel._instance.open(undefined);
+            McrCreateSearchMapPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (McrCreateSearchMapPanel._instance) {

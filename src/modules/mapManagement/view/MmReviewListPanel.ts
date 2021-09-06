@@ -43,7 +43,7 @@ namespace TwnsMmReviewListPanel {
             if (!MmReviewListPanel._instance) {
                 MmReviewListPanel._instance = new MmReviewListPanel();
             }
-            MmReviewListPanel._instance.open(undefined);
+            MmReviewListPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MmReviewListPanel._instance) {

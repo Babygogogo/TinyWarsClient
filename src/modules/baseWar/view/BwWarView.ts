@@ -1,12 +1,13 @@
 
-import TwnsUiZoomableComponent      from "../../tools/ui/UiZoomableComponent";
-import TwnsBwWar                    from "../../baseWar/model/BwWar";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import NotifyData                   from "../../tools/notify/NotifyData";
-import StageManager                 from "../../tools/helpers/StageManager";
-import Types                        from "../../tools/helpers/Types";
+import TwnsBwWar                from "../../baseWar/model/BwWar";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
+import StageManager             from "../../tools/helpers/StageManager";
+import Types                    from "../../tools/helpers/Types";
+import Notify                   from "../../tools/notify/Notify";
+import NotifyData               from "../../tools/notify/NotifyData";
+import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiZoomableComponent  from "../../tools/ui/UiZoomableComponent";
 
 namespace TwnsBwWarView {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -18,11 +19,10 @@ namespace TwnsBwWarView {
 
     export class BwWarView extends eui.Group {
         private _fieldContainer     = new TwnsUiZoomableComponent.UiZoomableComponent();
-        private _war                : BwWar;
 
         private _isShowingVibration = false;
         private _vibrationMaxOffset = 4;
-        private _vibrationTimeoutId : number;
+        private _vibrationTimeoutId : number | null = null;
 
         private _notifyListeners: Notify.Listener[] = [
             { type: NotifyType.BwFieldZoomed,  callback: this._onNotifyBwFieldZoomed },
@@ -47,8 +47,6 @@ namespace TwnsBwWarView {
         }
 
         public init(war: BwWar): void {
-            this._war = war;
-
             const gridSize  = CommonConstants.GridSize;
             const mapSize   = war.getTileMap().getMapSize();
             this._fieldContainer.removeAllContents();
@@ -58,13 +56,13 @@ namespace TwnsBwWarView {
             this._fieldContainer.setContentScale(0, true);
         }
         public fastInit(war: BwWar): void {
-            this._war = war;
+            // nothing to do
         }
 
         public startRunningView(): void {
             Notify.addEventListeners(this._notifyListeners, this);
             for (const listener of this._uiListeners) {
-                listener.ui.addEventListener(listener.eventType, listener.callback, this);
+                listener.ui.addEventListener(Helpers.getExisted(listener.eventType), listener.callback, this);
             }
 
             this._fieldContainer.setMouseWheelListenerEnabled(true);
@@ -72,7 +70,7 @@ namespace TwnsBwWarView {
         public stopRunning(): void {
             Notify.removeEventListeners(this._notifyListeners, this);
             for (const listener of this._uiListeners) {
-                listener.ui.removeEventListener(listener.eventType, listener.callback, this);
+                listener.ui.removeEventListener(Helpers.getExisted(listener.eventType), listener.callback, this);
             }
 
             this._fieldContainer.setMouseWheelListenerEnabled(false);
@@ -165,7 +163,7 @@ namespace TwnsBwWarView {
             this._fieldContainer.setDragByTouches(data.current, data.previous);
         }
 
-        private _onEnterFrame(e: egret.Event): void {
+        private _onEnterFrame(): void {
             this._checkAndVibrate();
         }
     }

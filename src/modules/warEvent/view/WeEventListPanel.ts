@@ -178,7 +178,7 @@ namespace TwnsWeEventListPanel {
             dataArray.push(...generateNodeDataArrayForListWarEventDesc({
                 war,
                 eventId,
-                parentNodeId: undefined,
+                parentNodeId: null,
                 nodeId,
                 prefixArray : prefixArray.concat(`N${nodeId}`),
             }));
@@ -199,7 +199,7 @@ namespace TwnsWeEventListPanel {
     function generateNodeDataArrayForListWarEventDesc({ war, eventId, parentNodeId, nodeId, prefixArray }: {
         war         : MeWar;
         eventId     : number;
-        parentNodeId: number | undefined;
+        parentNodeId: number | null;
         nodeId      : number;
         prefixArray : string[];
     }): DataForWarEventDescRenderer[] {
@@ -208,7 +208,7 @@ namespace TwnsWeEventListPanel {
             descType        : WarEventDescType.ConditionNode,
             prefixArray,
             eventId,
-            parentNodeId,
+            parentNodeId    : parentNodeId ?? void 0,
             nodeId,
         }];
 

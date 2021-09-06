@@ -13,7 +13,6 @@ import ConfigManager                    from "../../tools/helpers/ConfigManager"
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
 import Helpers                          from "../../tools/helpers/Helpers";
-import Logger                           from "../../tools/helpers/Logger";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -84,7 +83,7 @@ namespace TwnsSpwWarMenuPanel {
             if (!SpwWarMenuPanel._instance) {
                 SpwWarMenuPanel._instance = new SpwWarMenuPanel();
             }
-            SpwWarMenuPanel._instance.open(undefined);
+            SpwWarMenuPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (SpwWarMenuPanel._instance) {
@@ -290,8 +289,7 @@ namespace TwnsSpwWarMenuPanel {
             } else if (type === MenuType.Advanced) {
                 return this._createDataForAdvancedMenu();
             } else {
-                Logger.error(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
-                return [];
+                throw new Error(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
             }
         }
 
@@ -321,7 +319,7 @@ namespace TwnsSpwWarMenuPanel {
             ]);
         }
 
-        private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
+        private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0080),
                 callback: () => {
@@ -341,7 +339,7 @@ namespace TwnsSpwWarMenuPanel {
         //     };
         // }
 
-        // private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
+        // private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | null {
         //     return {
         //         name    : Lang.getText(LangTextType.B0140),
         //         callback: () => {
@@ -355,7 +353,7 @@ namespace TwnsSpwWarMenuPanel {
         //     };
         // }
 
-        private _createCommandPlayerUseCop(): DataForCommandRenderer | undefined {
+        private _createCommandPlayerUseCop(): DataForCommandRenderer | null {
             const war           = this._getWar();
             const skillType     = Types.CoSkillType.Power;
             const playerInTurn  = war.getPlayerInTurn();
@@ -365,7 +363,7 @@ namespace TwnsSpwWarMenuPanel {
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
                 (actionPlanner.checkIsStateRequesting())
             ) {
-                return undefined;
+                return null;
             } else {
                 return {
                     name    : Lang.getText(LangTextType.B0142),
@@ -380,7 +378,7 @@ namespace TwnsSpwWarMenuPanel {
             }
         }
 
-        private _createCommandPlayerUseScop(): DataForCommandRenderer | undefined {
+        private _createCommandPlayerUseScop(): DataForCommandRenderer | null {
             const war           = this._getWar();
             const skillType     = Types.CoSkillType.SuperPower;
             const playerInTurn  = war.getPlayerInTurn();
@@ -390,7 +388,7 @@ namespace TwnsSpwWarMenuPanel {
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
                 (actionPlanner.checkIsStateRequesting())
             ) {
-                return undefined;
+                return null;
             } else {
                 return {
                     name    : Lang.getText(LangTextType.B0144),
@@ -479,7 +477,7 @@ namespace TwnsSpwWarMenuPanel {
             }
         }
 
-        private _createCommandGotoMyWarListPanel(): DataForCommandRenderer | undefined {
+        private _createCommandGotoMyWarListPanel(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0652),
                 callback: () => {
@@ -492,7 +490,7 @@ namespace TwnsSpwWarMenuPanel {
             };
         }
 
-        private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
+        private _createCommandGotoLobby(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0054),
                 callback: () => {
@@ -505,14 +503,14 @@ namespace TwnsSpwWarMenuPanel {
             };
         }
 
-        private _createCommandPlayerDeleteUnit(): DataForCommandRenderer | undefined {
+        private _createCommandPlayerDeleteUnit(): DataForCommandRenderer | null {
             const war           = this._getWar();
             const actionPlanner = war.getActionPlanner();
             if ((!war.checkIsHumanInTurn())                                         ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
                 (actionPlanner.getState() !== Types.ActionPlannerState.Idle)
             ) {
-                return undefined;
+                return null;
             } else {
                 return {
                     name    : Lang.getText(LangTextType.B0081),

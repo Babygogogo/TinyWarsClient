@@ -1,5 +1,6 @@
 
 import Helpers      from "../../tools/helpers/Helpers";
+import Types        from "../../tools/helpers/Types";
 import ProtoTypes   from "../../tools/proto/ProtoTypes";
 
 namespace TwnsBwRandomNumberManager {
@@ -12,8 +13,8 @@ namespace TwnsBwRandomNumberManager {
 
         public init({ isNeedSeedRandom, initialState, currentState }: {
             isNeedSeedRandom: boolean;
-            initialState    : ISeedRandomState | null | undefined;
-            currentState    : ISeedRandomState | null | undefined;
+            initialState    : Types.Undefinable<ISeedRandomState>;
+            currentState    : Types.Undefinable<ISeedRandomState>;
         }): void {
             this._setIsNeedReplay(isNeedSeedRandom);
 

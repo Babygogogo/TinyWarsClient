@@ -78,7 +78,7 @@ namespace TwnsScwWar {
             return true;
         }
 
-        public getSettingsBootTimerParams(): number[] | null | undefined {
+        public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }
 

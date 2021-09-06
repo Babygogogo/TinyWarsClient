@@ -4,7 +4,6 @@ import TwnsNotifyType   from "../notify/NotifyType";
 import TwnsUiPanel      from "../ui/UiPanel";
 import CommonConstants  from "./CommonConstants";
 import Helpers          from "./Helpers";
-import Logger           from "./Logger";
 import Types            from "./Types";
 
 namespace StageManager {
@@ -101,8 +100,7 @@ namespace StageManager {
 
     function _addLayer(layerType: LayerType): void {
         if (_LAYERS.has(layerType)) {
-            Logger.error(`StageManager._addLayer() duplicated layer: ${layerType}.`);
-            return;
+            throw new Error(`StageManager._addLayer() duplicated layer: ${layerType}.`);
         }
 
         const layer = new UiLayer();

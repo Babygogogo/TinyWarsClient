@@ -52,7 +52,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
             if (!MrrSetMaxConcurrentCountPanel._instance) {
                 MrrSetMaxConcurrentCountPanel._instance = new MrrSetMaxConcurrentCountPanel();
             }
-            MrrSetMaxConcurrentCountPanel._instance.open(undefined);
+            MrrSetMaxConcurrentCountPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

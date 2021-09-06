@@ -8,7 +8,6 @@ import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
 import FloatText                from "../../tools/helpers/FloatText";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -53,8 +52,7 @@ namespace TwnsMpwActionPlanner {
 
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateChoosingProductionTargetOnTap() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateChoosingProductionTargetOnTap() empty war.`);
             }
 
             BwProduceUnitPanel.show({
@@ -69,8 +67,7 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerProduceUnit() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner.setStateRequestingPlayerProduceUnit() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -89,8 +86,7 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerVoteForDraw(isAgree: boolean): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerVoteForDraw() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner.setStateRequestingPlayerVoteForDraw() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -107,8 +103,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitProduceUnit(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitProduceUnit() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitProduceUnit() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -128,8 +123,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitBeLoaded(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -149,8 +143,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitJoin(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -170,8 +163,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitUseCoSuperPower(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitUseCoSuperPower() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitUseCoSuperPower() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -192,8 +184,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitUseCoPower(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitUseCoPower() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitUseCoPower() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -214,8 +205,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitLoadCo(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitLoadCo() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitLoadCo() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -235,8 +225,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitWait(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitWait() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitWait() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -256,8 +245,7 @@ namespace TwnsMpwActionPlanner {
         protected _setStateRequestingUnitAttackUnit(targetGridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitAttackUnit() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitAttackUnit() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -279,8 +267,7 @@ namespace TwnsMpwActionPlanner {
         protected _setStateRequestingUnitAttackTile(targetGridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitAttackTile() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitAttackTile() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -302,8 +289,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitBuildTile(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitBuildTile() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitBuildTile() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -323,8 +309,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitCaptureTile(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitCaptureTile() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitCaptureTile() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -344,8 +329,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitDive(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitDive() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitDive() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -365,8 +349,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitSurface(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitSurface() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitSurface() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -386,8 +369,7 @@ namespace TwnsMpwActionPlanner {
         protected _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void {
             const unit = this.getChoosingUnitForDrop();
             if (unit == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty unit.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty unit.`);
             }
 
             this._pushBackChosenUnitForDrop({
@@ -402,8 +384,7 @@ namespace TwnsMpwActionPlanner {
 
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -428,8 +409,7 @@ namespace TwnsMpwActionPlanner {
 
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitDropOnChooseAction() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitDropOnChooseAction() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -450,8 +430,7 @@ namespace TwnsMpwActionPlanner {
         protected _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitLaunchFlare() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitLaunchFlare() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -472,8 +451,7 @@ namespace TwnsMpwActionPlanner {
         protected _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitLaunchSilo() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitLaunchSilo() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -494,8 +472,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitSupply(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitSupply() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner._setStateRequestingUnitSupply() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -515,8 +492,7 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerEndTurn(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerEndTurn() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner.setStateRequestingPlayerEndTurn() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -532,8 +508,7 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerSurrender(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerSurrender() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner.setStateRequestingPlayerSurrender() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -549,14 +524,12 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerDeleteUnit(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty war.`);
             }
 
             const gridIndex = war.getCursor().getGridIndex();
             if (gridIndex == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty gridIndex.`);
-                return;
+                throw new Error(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty gridIndex.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -573,8 +546,7 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerUseCoSkill(skillType: Types.CoSkillType): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerUseCoSkill() empty war.`);
-                return;
+                throw new Error(`MpwActionPlanner.setStateRequestingPlayerUseCoSkill() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -604,12 +576,7 @@ namespace TwnsMpwActionPlanner {
 
         protected _checkCanControlUnit(unit: TwnsBwUnit.BwUnit): boolean {
             const war           = this._getWar();
-            const playerInTurn  = war ? war.getPlayerInTurn() : undefined;
-            if (playerInTurn == null) {
-                Logger.error(`MpwActionPlanner._checkCanControlUnit() empty playerInTurn.`);
-                return false;
-            }
-
+            const playerInTurn  = war.getPlayerInTurn();
             return (playerInTurn.getUserId() === UserModel.getSelfUserId())
                 && (playerInTurn.getPlayerIndex() === unit.getPlayerIndex());
         }
@@ -620,8 +587,7 @@ namespace TwnsMpwActionPlanner {
         protected _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State {
             const selfPlayerIndex = this._getPlayerIndexLoggedIn();
             if (selfPlayerIndex == null) {
-                Logger.error(`MpwActionPlanner._getNextStateOnTapWhenIdle() empty selfPlayerIndex.`);
-                return State.Idle;
+                throw new Error(`MpwActionPlanner._getNextStateOnTapWhenIdle() empty selfPlayerIndex.`);
             }
 
             const turnManager       = this._getTurnManager();
@@ -653,8 +619,7 @@ namespace TwnsMpwActionPlanner {
                 const cursor                    = this.getCursor();
                 const cursorPreviousGridIndex   = cursor ? cursor.getPreviousGridIndex() : null;
                 if (cursorPreviousGridIndex == null) {
-                    Logger.error(`MpwActionPlanner._getNextStateOnTapWhenChoosingAttackTarget() empty cursorPreviousGridIndex.`);
-                    return State.Idle;
+                    throw new Error(`MpwActionPlanner._getNextStateOnTapWhenChoosingAttackTarget() empty cursorPreviousGridIndex.`);
                 }
 
                 if (GridIndexHelpers.checkIsEqual(cursorPreviousGridIndex, gridIndex)) {
@@ -681,8 +646,7 @@ namespace TwnsMpwActionPlanner {
 
                 const focusUnit = this.getFocusUnit();
                 if (focusUnit == null) {
-                    Logger.error(`MpwActionPlanner._getNextStateOnTapWhenChoosingDropDestination() empty focusUnit.`);
-                    return State.Idle;
+                    throw new Error(`MpwActionPlanner._getNextStateOnTapWhenChoosingDropDestination() empty focusUnit.`);
                 }
 
                 const restLoadedUnits = focusUnit.getLoadedUnits().filter(unit => chosenUnits.every(u => u !== unit));

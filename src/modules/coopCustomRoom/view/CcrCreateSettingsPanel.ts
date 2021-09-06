@@ -122,7 +122,7 @@ namespace TwnsCcrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsCcrCreateMapListPanel.CcrCreateMapListPanel.show();
+            TwnsCcrCreateMapListPanel.CcrCreateMapListPanel.show(null);
         }
         private _onTouchedBtnConfirm(): void {
             const data = CcrCreateModel.getData();

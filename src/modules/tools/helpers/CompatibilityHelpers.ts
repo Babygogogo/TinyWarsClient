@@ -1,7 +1,6 @@
 
 import TwnsCommonErrorPanel from "../../common/view/CommonErrorPanel";
 import TwnsLangTextType     from "../lang/LangTextType";
-import Logger               from "./Logger";
 import Types                from "./Types";
 import ChatProxy            from "../../chat/model/ChatProxy";
 import CommonConstants      from "./CommonConstants";
@@ -120,12 +119,8 @@ namespace CompatibilityHelpers {
         const state = {
             url: window.location.href,
         };
-        try {
-            if (window.history) {
-                window.history.pushState(state, "", window.location.href);
-            }
-        } catch (e) {
-            Logger.error(e);
+        if (window.history) {
+            window.history.pushState(state, "", window.location.href);
         }
 
         if (window.addEventListener) {

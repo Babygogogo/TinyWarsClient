@@ -1,11 +1,12 @@
 
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsBwUnitMap        from "../model/BwUnitMap";
 import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwUnitMap        from "../model/BwUnitMap";
 import TwnsBwUnitView       from "./BwUnitView";
 
 namespace TwnsBwUnitMapView {
@@ -26,7 +27,7 @@ namespace TwnsBwUnitMapView {
             { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
-        private _unitMap                    : BwUnitMap;
+        private _unitMap    : BwUnitMap | null = null;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers.
@@ -58,8 +59,8 @@ namespace TwnsBwUnitMapView {
             Notify.removeEventListeners(this._notifyListeners, this);
         }
 
-        protected _getUnitMap(): BwUnitMap {
-            return this._unitMap;
+        private _getUnitMap(): BwUnitMap {
+            return Helpers.getExisted(this._unitMap);
         }
         private _setUnitMap(unitMap: BwUnitMap): void {
             this._unitMap = unitMap;
@@ -69,7 +70,7 @@ namespace TwnsBwUnitMapView {
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public addUnit(view: BwUnitView, needResetZOrder: boolean): void {
-            const model = view.getUnit();
+            const model = Helpers.getExisted(view.getUnit());
 
             view.x = _GRID_WIDTH * model.getGridX();
             view.y = _GRID_HEIGHT * model.getGridY();
@@ -109,37 +110,37 @@ namespace TwnsBwUnitMapView {
 
             } else if (state === ActionPlannerState.MakingMovePath) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingAction) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingAttackTarget) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingDropDestination) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingFlareDestination) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingSiloDestination) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
@@ -154,7 +155,7 @@ namespace TwnsBwUnitMapView {
 
             } else if (state === ActionPlannerState.PreviewingMovableArea) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getUnitForPreviewingMovableArea().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea()).setViewVisible(false);
 
             } else {
                 // Nothing to do.
@@ -176,7 +177,7 @@ namespace TwnsBwUnitMapView {
             for (let i = 0; i < viewsCount; ++i) {
                 views[i] = layer.getChildAt(i) as any;
             }
-            views.sort((v1, v2) => v1.getUnit().getGridY() - v2.getUnit().getGridY());
+            views.sort((v1, v2) => Helpers.getExisted(v1.getUnit()).getGridY() - Helpers.getExisted(v2.getUnit()).getGridY());
             for (let i = 0; i < viewsCount; ++i) {
                 layer.setChildIndex(views[i], i);
             }
@@ -196,7 +197,7 @@ namespace TwnsBwUnitMapView {
             }
         }
 
-        private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer | undefined {
+        private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer {
             const version = this._getUnitMap().getWar().getConfigVersion();
             if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Air)) {
                 return this._layerForAir;
@@ -205,7 +206,7 @@ namespace TwnsBwUnitMapView {
             } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Naval)) {
                 return this._layerForNaval;
             } else {
-                return undefined;
+                throw new Error(`Invalid unitType: ${unitType}`);
             }
         }
 

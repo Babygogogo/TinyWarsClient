@@ -43,7 +43,7 @@ namespace TwnsMeClearPanel {
             if (!MeClearPanel._instance) {
                 MeClearPanel._instance = new MeClearPanel();
             }
-            MeClearPanel._instance.open(undefined);
+            MeClearPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

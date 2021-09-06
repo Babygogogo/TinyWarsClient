@@ -60,7 +60,7 @@ namespace TwnsUiZoomableComponent {
                 }
             } else {
                 if (this._maskForContents) {
-                    (this._contents.mask as any) = undefined;
+                    (this._contents.mask as any) = null;
                     this.removeChild(this._maskForContents);
                     this._maskForContents = null;
                 }

@@ -4,7 +4,6 @@ import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import Timer                    from "../../tools/helpers/Timer";
 import Types                    from "../../tools/helpers/Types";
 import Notify                   from "../../tools/notify/Notify";
@@ -29,15 +28,15 @@ namespace TwnsBwTurnManager {
     import BwWar                        = TwnsBwWar.BwWar;
 
     export class BwTurnManager {
-        private _turnIndex          : number | undefined;
-        private _playerIndexInTurn  : number | undefined;
-        private _phaseCode          : TurnPhaseCode | undefined;
-        private _enterTurnTime      : number | undefined;
+        private _turnIndex?          : number;
+        private _playerIndexInTurn?  : number;
+        private _phaseCode?          : TurnPhaseCode;
+        private _enterTurnTime?      : number;
 
-        private _war                    : BwWar | undefined;
+        private _war?                   : BwWar;
         private _hasUnitOnBeginningTurn = false;
 
-        public init(data: ISerialTurnManager | null | undefined, playersCountUnneutral: number): ClientErrorCode {
+        public init(data: Types.Undefinable<ISerialTurnManager>, playersCountUnneutral: number): ClientErrorCode {
             if (data == null) {
                 return ClientErrorCode.BwTurnManagerInit00;
             }
@@ -100,8 +99,8 @@ namespace TwnsBwTurnManager {
         private _setWar(war: BwWar): void {
             this._war = war;
         }
-        public getWar(): BwWar | undefined {
-            return this._war;
+        public getWar(): BwWar {
+            return Helpers.getExisted(this._war);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -523,7 +522,7 @@ namespace TwnsBwTurnManager {
                             return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_07;
                         }
 
-                        const deltaHp                   = repairData.hp > 0 ? repairData.hp : undefined;
+                        const deltaHp                   = repairData.hp > 0 ? repairData.hp : null;
                         const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
                         const deltaFlareAmmo            = unit.getFlareUsedAmmo();
                         unit.updateByRepairData({
@@ -673,7 +672,7 @@ namespace TwnsBwTurnManager {
                             return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_08;
                         }
 
-                        const deltaHp                   = repairData.hp > 0 ? repairData.hp : undefined;
+                        const deltaHp                   = repairData.hp > 0 ? repairData.hp : null;
                         const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
                         const deltaFlareAmmo            = unit.getFlareUsedAmmo();
                         unit.updateByRepairData({
@@ -729,7 +728,7 @@ namespace TwnsBwTurnManager {
 
                         for (const gridIndex of GridIndexHelpers.getAdjacentGrids(supplierGridIndex, mapSize)) {
                             const unit      = unitMap.getUnitOnMap(gridIndex);
-                            const unitId    = unit ? unit.getUnitId() : undefined;
+                            const unitId    = unit ? unit.getUnitId() : null;
                             if ((unitId != null) && (unit) && (!suppliedUnitIds.has(unitId)) && (supplier.checkCanSupplyAdjacentUnit(unit))) {
                                 const deltaFuel = unit.getUsedFuel();
                                 if (deltaFuel == null) {
@@ -1166,7 +1165,7 @@ namespace TwnsBwTurnManager {
 
             war.getPlayerInTurn().setRestTimeToBoot(restTime);
 
-            const { errorCode, info } = this._getNextTurnAndPlayerIndex();
+            const { errorCode, info } = this._getNextTurnAndPlayerIndex(null);
             if (errorCode) {
                 return errorCode;
             } else if (info == null) {
@@ -1192,7 +1191,7 @@ namespace TwnsBwTurnManager {
             }
 
             const currTime      = Timer.getServerTimestamp();
-            let restTimeToBoot  : number | null | undefined;
+            let restTimeToBoot  : number | null = null;
             if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
                 restTimeToBoot = 0;
             } else {
@@ -1253,7 +1252,7 @@ namespace TwnsBwTurnManager {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_09;
             }
 
-            const { errorCode, info } = this._getNextTurnAndPlayerIndex();
+            const { errorCode, info } = this._getNextTurnAndPlayerIndex(null);
             if (errorCode) {
                 return errorCode;
             } else if (info == null) {
@@ -1322,8 +1321,8 @@ namespace TwnsBwTurnManager {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getTurnIndex(): number | undefined {
-            return this._turnIndex;
+        public getTurnIndex(): number {
+            return Helpers.getExisted(this._turnIndex);
         }
         private _setTurnIndex(index: number): void {
             if (this._turnIndex !== index){
@@ -1341,10 +1340,10 @@ namespace TwnsBwTurnManager {
                 Notify.dispatch(NotifyType.BwPlayerIndexInTurnChanged);
             }
         }
-        public getNextPlayerIndex(playerIndex: number, includeNeutral = false): number | undefined {
-            const data = this._getNextTurnAndPlayerIndex(undefined, playerIndex).info;
+        public getNextPlayerIndex(playerIndex: number, includeNeutral = false): number | null {
+            const data = this._getNextTurnAndPlayerIndex(null, playerIndex).info;
             if (data == null) {
-                return undefined;
+                return null;
             }
 
             const playerIndex1 = data.playerIndex;
@@ -1352,7 +1351,7 @@ namespace TwnsBwTurnManager {
                 return playerIndex1;
             } else {
                 const nextData = this._getNextTurnAndPlayerIndex(data.turnIndex, playerIndex1).info;
-                return nextData ? nextData.playerIndex : undefined;
+                return nextData ? nextData.playerIndex : null;
             }
         }
 
@@ -1374,7 +1373,7 @@ namespace TwnsBwTurnManager {
         }
 
         private _getNextTurnAndPlayerIndex(
-            currTurnIndex   = this.getTurnIndex(),
+            currTurnIndex   : number | null,
             currPlayerIndex = this.getPlayerIndexInTurn(),
         ): { errorCode: ClientErrorCode, info?: TurnAndPlayerIndex } {
             const war = this.getWar();
@@ -1382,6 +1381,7 @@ namespace TwnsBwTurnManager {
                 return { errorCode: ClientErrorCode.BwTurnManager_GetNextTurnAndPlayerIndex_00 };
             }
 
+            currTurnIndex = currTurnIndex ?? this.getTurnIndex();
             if (currTurnIndex == null) {
                 return { errorCode: ClientErrorCode.BwTurnManager_GetNextTurnAndPlayerIndex_01 };
             }
@@ -1430,13 +1430,13 @@ namespace TwnsBwTurnManager {
     function sorterForRepairUnits(unit1: BwUnit, unit2: BwUnit): number {
         const cost1 = unit1.getProductionFinalCost();
         if (cost1 == null) {
-            Logger.error(`BwTurnManagerHelper.sorterForRepairUnit empty cost1.`);
+            throw new Error(`BwTurnManagerHelper.sorterForRepairUnit empty cost1.`);
             return 0;
         }
 
         const cost2 = unit2.getProductionFinalCost();
         if (cost2 == null) {
-            Logger.error(`BwTurnManagerHelper.sorterForRepairUnit empty cost2.`);
+            throw new Error(`BwTurnManagerHelper.sorterForRepairUnit empty cost2.`);
             return 0;
         }
 
@@ -1445,13 +1445,13 @@ namespace TwnsBwTurnManager {
         } else {
             const unitId1 = unit1.getUnitId();
             if (unitId1 == null) {
-                Logger.error(`BwTurnManagerHelper.sorterForRepairUnit empty unitId1.`);
+                throw new Error(`BwTurnManagerHelper.sorterForRepairUnit empty unitId1.`);
                 return 0;
             }
 
             const unitId2 = unit2.getUnitId();
             if (unitId2 == null) {
-                Logger.error(`BwTurnManagerHelper.sorterForRepairUnit empty unitId2.`);
+                throw new Error(`BwTurnManagerHelper.sorterForRepairUnit empty unitId2.`);
                 return 0;
             }
 

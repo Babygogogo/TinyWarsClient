@@ -21,7 +21,7 @@ namespace NetManager {
     const PROTOCOL  = window.location.protocol.indexOf("http:") === 0 ? "ws" : "wss";
     const HOST_NAME = window.location.hostname;
     const FULL_URL  = `${PROTOCOL}://${HOST_NAME}:${window.GAME_SERVER_PORT}`;
-    // const FULL_URL  = `wss://www.tinywars.online:${window.GAME_SERVER_PORT}`;
+    // const FULL_URL  = `wss://www.tinywars.online:${4002}`;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Type definitions.
@@ -36,15 +36,13 @@ namespace NetManager {
         public dispatchWithContainer(container: ProtoTypes.NetMessage.IMessageContainer): void {
             const messageName = Helpers.getMessageName(container);
             if (messageName == null) {
-                Logger.error(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageName.`);
-                return;
+                throw new Error(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageName.`);
             }
 
             const message       = container[messageName];
             const messageData   = message ? message.s : null;
             if (messageData == null) {
-                Logger.error(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageData.`);
-                return undefined;
+                throw new Error(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageData.`);
             }
 
             if (container.MsgMpwCommonHandleBoot) {
@@ -70,7 +68,7 @@ namespace NetManager {
     ////////////////////////////////////////////////////////////////////////////////
     // Local variables.
     ////////////////////////////////////////////////////////////////////////////////
-    let _socket             : egret.WebSocket | undefined;
+    let _socket             : egret.WebSocket | null = null;
     let _canAutoReconnect   = true;
 
     const dispatcher = new NetMessageDispatcher();
@@ -103,14 +101,12 @@ namespace NetManager {
         } else {
             const messageName = Helpers.getMessageName(container);
             if (messageName == null) {
-                Logger.error(`NetManager.send() empty name.`);
-                return;
+                throw new Error(`NetManager.send() empty name.`);
             }
 
             const encodedData = ProtoManager.encodeAsMessageContainer(container);
             if (encodedData == null) {
-                Logger.error(`NetManager.send() empty encodedData.`);
-                return;
+                throw new Error(`NetManager.send() empty encodedData.`);
             }
 
             Logger.log("%cNetManager send: ", "background:#97FF4F;", messageName, ", length: ", encodedData.byteLength, "\n", container[messageName]);
@@ -134,9 +130,9 @@ namespace NetManager {
         if (!_socket) {
             _socket         = new egret.WebSocket();
             _socket.type    = egret.WebSocket.TYPE_BINARY;
-            _socket.addEventListener(egret.Event.CONNECT,               onSocketConnect,    undefined);
-            _socket.addEventListener(egret.Event.CLOSE,                 onSocketClose,      undefined);
-            _socket.addEventListener(egret.ProgressEvent.SOCKET_DATA,   onSocketData,       undefined);
+            _socket.addEventListener(egret.Event.CONNECT,               onSocketConnect,    null);
+            _socket.addEventListener(egret.Event.CLOSE,                 onSocketClose,      null);
+            _socket.addEventListener(egret.ProgressEvent.SOCKET_DATA,   onSocketData,       null);
 
             setCanAutoReconnect(true);
             _socket.connectByUrl(FULL_URL);
@@ -144,12 +140,12 @@ namespace NetManager {
     }
     function destroySocket(): void {
         if (_socket) {
-            _socket.removeEventListener(egret.Event.CONNECT,                onSocketConnect,    undefined);
-            _socket.removeEventListener(egret.Event.CLOSE,                  onSocketClose,      undefined);
-            _socket.removeEventListener(egret.ProgressEvent.SOCKET_DATA,    onSocketData,       undefined);
+            _socket.removeEventListener(egret.Event.CONNECT,                onSocketConnect,    null);
+            _socket.removeEventListener(egret.Event.CLOSE,                  onSocketClose,      null);
+            _socket.removeEventListener(egret.ProgressEvent.SOCKET_DATA,    onSocketData,       null);
             _socket.close();
 
-            _socket = undefined;
+            _socket = null;
         }
     }
 
@@ -168,16 +164,14 @@ namespace NetManager {
             (tips) && (FloatText.show(tips));
 
             if (_socket == null) {
-                Logger.error(`NetManager.onSocketClose() empty _socket.`);
-                return;
+                throw new Error(`NetManager.onSocketClose() empty _socket.`);
             }
             _socket.connectByUrl(FULL_URL);
         }
     }
     function onSocketData(): void {
         if (_socket == null) {
-            Logger.error(`NetManager.onSocketData() empty _socket.`);
-            return;
+            throw new Error(`NetManager.onSocketData() empty _socket.`);
         }
 
         const data = new egret.ByteArray();
@@ -186,8 +180,7 @@ namespace NetManager {
         const container     = ProtoManager.decodeAsMessageContainer(data.rawBuffer);
         const messageName   = Helpers.getMessageName(container);
         if (messageName == null) {
-            Logger.error(`NetManager.onSocketData() empty messageName.`);
-            return;
+            throw new Error(`NetManager.onSocketData() empty messageName.`);
         }
 
         Logger.log("%cNetManager receive: ", "background:#FFD777", messageName, ", length: ", data.length, "\n", container[messageName]);

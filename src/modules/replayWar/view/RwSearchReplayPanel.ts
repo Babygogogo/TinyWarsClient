@@ -52,7 +52,7 @@ namespace TwnsRwSearchReplayPanel {
             if (!RwSearchReplayPanel._instance) {
                 RwSearchReplayPanel._instance = new RwSearchReplayPanel();
             }
-            RwSearchReplayPanel._instance.open(undefined);
+            RwSearchReplayPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (RwSearchReplayPanel._instance) {

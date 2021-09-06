@@ -11,7 +11,6 @@ import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpe
 import FloatText                    from "../../tools/helpers/FloatText";
 import FlowManager                  from "../../tools/helpers/FlowManager";
 import Helpers                      from "../../tools/helpers/Helpers";
-import Logger                       from "../../tools/helpers/Logger";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
@@ -108,7 +107,7 @@ namespace TwnsMeWarMenuPanel {
             if (!MeWarMenuPanel._instance) {
                 MeWarMenuPanel._instance = new MeWarMenuPanel();
             }
-            MeWarMenuPanel._instance.open(undefined);
+            MeWarMenuPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeWarMenuPanel._instance) {
@@ -216,8 +215,7 @@ namespace TwnsMeWarMenuPanel {
                 this._menuType = TwnsMeWarMenuType.Main;
                 this._updateListCommand();
             } else {
-                Logger.error(`McwWarMenuPanel._onTouchedBtnBack() invalid this._menuType: ${type}`);
-                this.close();
+                throw new Error(`McwWarMenuPanel._onTouchedBtnBack() invalid this._menuType: ${type}`);
             }
         }
 
@@ -444,7 +442,7 @@ namespace TwnsMeWarMenuPanel {
             ]);
         }
 
-        private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
+        private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0080),
                 callback: () => {
@@ -575,10 +573,10 @@ namespace TwnsMeWarMenuPanel {
             };
         }
 
-        private _createCommandGotoMapListPanel(): DataForCommandRenderer | undefined {
+        private _createCommandGotoMapListPanel(): DataForCommandRenderer | null {
             const war = this._getWar();
             if (war.getIsReviewingMap()) {
-                return undefined;
+                return null;
             } else {
                 return {
                     name    : Lang.getText(LangTextType.B0650),
@@ -593,7 +591,7 @@ namespace TwnsMeWarMenuPanel {
             }
         }
 
-        private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
+        private _createCommandGotoLobby(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0054),
                 callback: () => {
@@ -742,22 +740,17 @@ namespace TwnsMeWarMenuPanel {
                         CommonConfirmPanel.show({
                             content : Lang.getText(LangTextType.A0237),
                             callback: async () => {
-                                try {
-                                    const war = this._getWar();
-                                    war.stopRunning();
-                                    await war.initWithMapEditorData({
-                                        mapRawData  : JSON.parse(await navigator.clipboard.readText().catch(err => { CompatibilityHelpers.showError(err); throw err; })),
-                                        slotIndex   : war.getMapSlotIndex(),
-                                    }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-                                    war.setIsMapModified(true);
-                                    war.startRunning()
-                                        .startRunningView();
+                                const war = this._getWar();
+                                war.stopRunning();
+                                await war.initWithMapEditorData({
+                                    mapRawData  : JSON.parse(await navigator.clipboard.readText().catch(err => { CompatibilityHelpers.showError(err); throw err; })),
+                                    slotIndex   : war.getMapSlotIndex(),
+                                }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                                war.setIsMapModified(true);
+                                war.startRunning()
+                                    .startRunningView();
 
-                                    this.close();
-                                } catch (e) {
-                                    Logger.error(e);
-                                    FloatText.show(Lang.getText(LangTextType.A0236));
-                                }
+                                this.close();
                             },
                         });
                     },
@@ -768,13 +761,7 @@ namespace TwnsMeWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0680),
                 callback: () => {
-                    try {
-                        navigator.clipboard.writeText(JSON.stringify(this._getWar().serializeForMap()));
-                    } catch (e) {
-                        Logger.error(e);
-                        FloatText.show(Lang.getText(LangTextType.A0234));
-                        return;
-                    }
+                    navigator.clipboard.writeText(JSON.stringify(this._getWar().serializeForMap()));
 
                     FloatText.show(Lang.getText(LangTextType.A0235));
                 },

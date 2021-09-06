@@ -38,12 +38,11 @@ namespace ProtoManager {
         });
     }
 
-    export function encodeAsMessageContainer(action: IMessageContainer): Uint8Array | undefined {
+    export function encodeAsMessageContainer(action: IMessageContainer): Uint8Array {
         if (Helpers.getMessageName(action) != null) {
             return MessageContainerClass.encode(action).finish();
         } else {
-            Logger.assert(false, "ProtoManager.encodeAsMessageContainer() invalid message! ", JSON.stringify(action));
-            return undefined;
+            throw new Error(`ProtoManager.encodeAsMessageContainer() invalid message! ${JSON.stringify(action)}`);
         }
     }
     export function decodeAsMessageContainer(data: Uint8Array | ArrayBuffer): IMessageContainer {

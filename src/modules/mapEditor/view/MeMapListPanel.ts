@@ -46,7 +46,7 @@ namespace TwnsMeMapListPanel {
             if (!MeMapListPanel._instance) {
                 MeMapListPanel._instance = new MeMapListPanel();
             }
-            MeMapListPanel._instance.open(undefined);
+            MeMapListPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeMapListPanel._instance) {

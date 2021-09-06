@@ -39,7 +39,7 @@ namespace TwnsMeChooseTileObjectPanel {
             if (!MeChooseTileObjectPanel._instance) {
                 MeChooseTileObjectPanel._instance = new MeChooseTileObjectPanel();
             }
-            MeChooseTileObjectPanel._instance.open(undefined);
+            MeChooseTileObjectPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeChooseTileObjectPanel._instance) {

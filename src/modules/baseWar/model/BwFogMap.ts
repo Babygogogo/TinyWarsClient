@@ -5,7 +5,6 @@ import TwnsBwWar            from "./BwWar";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
-import Logger               from "../../tools/helpers/Logger";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import Types                from "../../tools/helpers/Types";
 import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
@@ -22,17 +21,17 @@ namespace TwnsBwFogMap {
     import BwWar                    = TwnsBwWar.BwWar;
 
     export abstract class BwFogMap {
-        private _forceFogCode           : ForceFogCode;
-        private _forceExpirePlayerIndex : number | null;
-        private _forceExpireTurnIndex   : number | null;
-        private _mapSize                : MapSize;
-        private _allMapsFromPath        : Map<number, Visibility[][]>;
-        private _war                    : BwWar;
+        private _forceFogCode?              : ForceFogCode;
+        private _forceExpirePlayerIndex?    : number | null;
+        private _forceExpireTurnIndex?      : number | null;
+        private _mapSize?                   : MapSize;
+        private _allMapsFromPath?           : Map<number, Visibility[][]>;
+        private _war?                       : BwWar;
 
         public abstract startRunning(war: BwWar): void;
 
         public init({ data, mapSize, playersCountUnneutral }: {
-            data                    : ISerialFogMap;
+            data                    : Types.Undefinable<ISerialFogMap>;
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
         }): ClientErrorCode {
@@ -83,7 +82,7 @@ namespace TwnsBwFogMap {
                     return ClientErrorCode.BwFogMapInit07;
                 }
 
-                const resetMapError = resetMapFromPath(mapFromPath, mapSize, d.visibilityArray);
+                const resetMapError = resetMapFromPath(mapFromPath, mapSize, d.visibilityArray ?? null);
                 if (resetMapError) {
                     return resetMapError;
                 }
@@ -92,13 +91,13 @@ namespace TwnsBwFogMap {
             this._setMapSize(Helpers.deepClone(mapSize));
             this._setAllMapsFromPath(allMapsFromPath);
             this.setForceFogCode(forceFogCode);
-            this.setForceExpirePlayerIndex(forceExpirePlayerIndex);
-            this.setForceExpireTurnIndex(forceExpireTurnIndex);
+            this.setForceExpirePlayerIndex(forceExpirePlayerIndex ?? null);
+            this.setForceExpireTurnIndex(forceExpireTurnIndex ?? null);
 
             return ClientErrorCode.NoError;
         }
         public fastInit({ data, mapSize, playersCountUnneutral }: {
-            data                    : ISerialFogMap;
+            data                    : Types.Undefinable<ISerialFogMap>;
             mapSize                 : Types.MapSize;
             playersCountUnneutral   : number;
         }): ClientErrorCode {
@@ -109,27 +108,10 @@ namespace TwnsBwFogMap {
             });
         }
 
-        public serialize(): ISerialFogMap | undefined {
-            const mapSize = this.getMapSize();
-            if (mapSize == null) {
-                Logger.error(`BwFogMap.serialize() empty mapSize.`);
-                return undefined;
-            }
-
-            const allMapsFromPath = this._getAllMapsFromPath();
-            if (allMapsFromPath == null) {
-                Logger.error(`BwFogMap.serialize() empty allMapsFromPath.`);
-                return undefined;
-            }
-
-            const forceFogCode = this.getForceFogCode();
-            if (forceFogCode == null) {
-                Logger.error(`BwFogMap.serialize() empty forceFogCode.`);
-                return undefined;
-            }
-
-            const serialMapsFromPath: IDataForFogMapFromPath[] = [];
-            for (const [playerIndex, map] of allMapsFromPath) {
+        public serialize(): ISerialFogMap {
+            const mapSize               = this.getMapSize();
+            const serialMapsFromPath    : IDataForFogMapFromPath[] = [];
+            for (const [playerIndex, map] of this._getAllMapsFromPath()) {
                 const visibilityArray = WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                 if (visibilityArray != null) {
                     serialMapsFromPath.push({
@@ -140,13 +122,13 @@ namespace TwnsBwFogMap {
             }
 
             return {
-                forceFogCode,
+                forceFogCode            : this.getForceFogCode(),
                 forceExpirePlayerIndex  : this.getForceExpirePlayerIndex(),
                 forceExpireTurnIndex    : this.getForceExpireTurnIndex(),
                 mapsFromPath            : serialMapsFromPath,
             };
         }
-        public serializeForCreateSfw(): ISerialFogMap | undefined {
+        public serializeForCreateSfw(): ISerialFogMap {
             const mapSize           = this.getMapSize();
             const war               = this._getWar();
             const targetTeamIndexes = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
@@ -174,7 +156,7 @@ namespace TwnsBwFogMap {
                 mapsFromPath,
             };
         }
-        public serializeForCreateMfr(): ISerialFogMap | undefined {
+        public serializeForCreateMfr(): ISerialFogMap {
             return this.serializeForCreateSfw();
         }
 
@@ -182,23 +164,17 @@ namespace TwnsBwFogMap {
             this._war = war;
         }
         protected _getWar(): BwWar {
-            return this._war;
+            return Helpers.getExisted(this._war);
         }
 
         private _setAllMapsFromPath(mapsFromPath: Map<number, Visibility[][]>): void {
             this._allMapsFromPath = mapsFromPath;
         }
         protected _getAllMapsFromPath(): Map<number, Visibility[][]> {
-            return this._allMapsFromPath;
+            return Helpers.getExisted(this._allMapsFromPath);
         }
-        private _getMapFromPath(playerIndex: number): Visibility[][] | undefined {
-            const maps = this._getAllMapsFromPath();
-            if (maps == null) {
-                Logger.error(`BwFogMap._getMapFromPath() empty maps.`);
-                return undefined;
-            }
-
-            return maps.get(playerIndex);
+        private _getMapFromPath(playerIndex: number): Visibility[][] {
+            return Helpers.getExisted(this._getAllMapsFromPath().get(playerIndex));
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,14 +184,14 @@ namespace TwnsBwFogMap {
             this._mapSize = mapSize;
         }
         public getMapSize(): MapSize {
-            return this._mapSize;
+            return Helpers.getExisted(this._mapSize);
         }
 
         public setForceFogCode(code: ForceFogCode): void {
             this._forceFogCode = code;
         }
         public getForceFogCode(): ForceFogCode {
-            return this._forceFogCode;
+            return Helpers.getExisted(this._forceFogCode);
         }
 
         public checkHasFogByDefault(): boolean {
@@ -227,18 +203,18 @@ namespace TwnsBwFogMap {
                 || ((this.checkHasFogByDefault()) && (fogCode !== ForceFogCode.Clear));
         }
 
-        public setForceExpireTurnIndex(index: number | undefined | null): void {
+        public setForceExpireTurnIndex(index: number | null): void {
             this._forceExpireTurnIndex = index;
         }
-        public getForceExpireTurnIndex(): number | undefined | null {
-            return this._forceExpireTurnIndex;
+        public getForceExpireTurnIndex(): number | null {
+            return Helpers.getDefined(this._forceExpireTurnIndex);
         }
 
-        public setForceExpirePlayerIndex(index: number | undefined | null): void {
+        public setForceExpirePlayerIndex(index: number | null): void {
             this._forceExpirePlayerIndex = index;
         }
-        public getForceExpirePlayerIndex(): number | undefined | null {
-            return this._forceExpirePlayerIndex;
+        public getForceExpirePlayerIndex(): number | null {
+            return Helpers.getDefined(this._forceExpirePlayerIndex);
         }
 
         public resetAllMapsForPlayer(playerIndex: number): void {
@@ -246,7 +222,7 @@ namespace TwnsBwFogMap {
         }
 
         public resetMapFromPathsForPlayer(playerIndex: number, encodedData?: string): void {
-            const map = this._getAllMapsFromPath().get(playerIndex)!;
+            const map = Helpers.getExisted(this._getAllMapsFromPath().get(playerIndex));
             if (encodedData == null) {
                 fillMap(map, 0);
             } else {
@@ -259,24 +235,9 @@ namespace TwnsBwFogMap {
             }
         }
         public updateMapFromPathsByUnitAndPath(unit: TwnsBwUnit.BwUnit, path: GridIndex[]): void {
-            const playerIndex = unit.getPlayerIndex();
-            if (playerIndex == null) {
-                Logger.error(`BwFogMap.updateMapFromPathsByUnitAndPath() empty playerIndex.`);
-                return undefined;
-            }
-
-            const mapSize = this.getMapSize();
-            if (mapSize == null) {
-                Logger.error(`BwFogMap.updateMapFromPathsByUnitAndPath() empty mapSize.`);
-                return undefined;
-            }
-
-            const mapFromPath = this._getMapFromPath(playerIndex);
-            if (mapFromPath == null) {
-                Logger.error(`BwFogMap.updateMapFromPathsByUnitAndPath() empty mapFromPath.`);
-                return undefined;
-            }
-
+            const playerIndex   = unit.getPlayerIndex();
+            const mapSize       = this.getMapSize();
+            const mapFromPath   = this._getMapFromPath(playerIndex);
             for (const pathNode of path) {
                 const visionRange = unit.getVisionRangeForPlayer(playerIndex, pathNode);
                 if (visionRange) {
@@ -296,7 +257,7 @@ namespace TwnsBwFogMap {
             }
         }
         public updateMapFromPathsByFlare(playerIndex: number, flareGridIndex: GridIndex, flareRadius: number): void {
-            const map = this._getAllMapsFromPath().get(playerIndex)!;
+            const map = this._getMapFromPath(playerIndex);
             for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(flareGridIndex, 0, flareRadius, this.getMapSize())) {
                 map[gridIndex.x][gridIndex.y] = 2;
             }
@@ -306,7 +267,7 @@ namespace TwnsBwFogMap {
             if (!this.checkHasFogCurrently()) {
                 return Visibility.TrueVision;
             } else {
-                return this._getAllMapsFromPath().get(playerIndex)![gridIndex.x][gridIndex.y];
+                return this._getMapFromPath(playerIndex)[gridIndex.x][gridIndex.y];
             }
         }
         public getVisibilityMapFromPathsForTeam(teamIndex: number): Visibility[][] {
@@ -325,7 +286,7 @@ namespace TwnsBwFogMap {
                         for (const playerIndex of playerIndexes) {
                             resultMap[x][y] = Math.max(
                                 resultMap[x][y],
-                                mapFromPaths.get(playerIndex)[x][y] || Visibility.OutsideVision
+                                Helpers.getExisted(mapFromPaths.get(playerIndex))[x][y] || Visibility.OutsideVision
                             );
                         }
                     }
@@ -395,29 +356,12 @@ namespace TwnsBwFogMap {
         //     return this.getVisibilityMapFromTilesForTeams(this._getWar().getWatcherTeamIndexes(userId));
         // }
 
-        public getVisibilityFromUnitsForPlayer(gridIndex: GridIndex, playerIndex: number): Visibility | undefined {
+        public getVisibilityFromUnitsForPlayer(gridIndex: GridIndex, playerIndex: number): Visibility {
             if (!this.checkHasFogCurrently()) {
                 return Visibility.TrueVision;
             } else {
-                const war = this._getWar();
-                if (war == null) {
-                    Logger.error(`BwFogMap.getVisibilityFromUnitsForPlayer() empty war.`);
-                    return undefined;
-                }
-
-                const unitMap = war.getUnitMap();
-                if (unitMap == null) {
-                    Logger.error(`BwFogMap.getVisibilityFromUnitsForPlayer() empty unitMap.`);
-                    return undefined;
-                }
-
-                const mapSize = unitMap.getMapSize();
-                if (mapSize == null) {
-                    Logger.error(`BwFogMap.getVisibilityFromUnitsForPlayer() empty mapSize.`);
-                    return undefined;
-                }
-
-                const { width, height } = mapSize;
+                const unitMap           = this._getWar().getUnitMap();
+                const { width, height } = unitMap.getMapSize();
                 let isInside            = false;
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
@@ -501,7 +445,7 @@ namespace TwnsBwFogMap {
         }
     }
 
-    function resetMapFromPath(mapFromPath: Visibility[][], mapSize: MapSize, visibilityList: Visibility[] | null | undefined): ClientErrorCode {
+    function resetMapFromPath(mapFromPath: Visibility[][], mapSize: MapSize, visibilityList: Visibility[] | null): ClientErrorCode {
         const { width, height } = mapSize;
         if (mapFromPath.length !== width) {
             return ClientErrorCode.BwFogMapResetMapFromPath00;

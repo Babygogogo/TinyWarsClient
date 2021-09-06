@@ -40,7 +40,7 @@ namespace TwnsMmAvailabilitySearchPanel {
             if (!MmAvailabilitySearchPanel._instance) {
                 MmAvailabilitySearchPanel._instance = new MmAvailabilitySearchPanel();
             }
-            MmAvailabilitySearchPanel._instance.open(undefined);
+            MmAvailabilitySearchPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MmAvailabilitySearchPanel._instance) {

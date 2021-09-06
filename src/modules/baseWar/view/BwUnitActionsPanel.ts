@@ -97,7 +97,7 @@ namespace TwnsBwUnitActionsPanel {
                         actionType          : data.actionType,
                         callback            : data.callback,
                         unit                : data.unitForDrop || data.unitForLaunch,
-                        costForProduceUnit  : data.costForProduceUnit,
+                        costForProduceUnit  : data.costForProduceUnit ?? null,
                     });
                 } else {
                     const configVersion = war.getConfigVersion();
@@ -119,7 +119,7 @@ namespace TwnsBwUnitActionsPanel {
                         actionType          : data.actionType,
                         callback            : data.callback,
                         unit                : unitForProduce,
-                        costForProduceUnit  : data.costForProduceUnit,
+                        costForProduceUnit  : data.costForProduceUnit ?? null,
                     });
                 }
             }
@@ -175,7 +175,7 @@ namespace TwnsBwUnitActionsPanel {
         actionType          : UnitActionType;
         callback            : () => void;
         unit?               : TwnsBwUnit.BwUnit;
-        costForProduceUnit  : number | null | undefined;
+        costForProduceUnit  : number | null;
     };
     class UnitActionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitActionRenderer> {
         private readonly _labelAction!  : TwnsUiLabel.UiLabel;

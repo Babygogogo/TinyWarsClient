@@ -189,7 +189,7 @@ namespace TwnsCcrRoomInfoPanel {
                     FloatText.show(Lang.getText(LangTextType.A0128));
                 } else {
                     const playerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
-                    const currentCoId       = selfPlayerData.coId;
+                    const currentCoId       = selfPlayerData.coId ?? null;
                     const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
                     TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
                         currentCoId,

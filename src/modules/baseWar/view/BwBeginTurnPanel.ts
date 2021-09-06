@@ -19,10 +19,10 @@ namespace TwnsBwBeginTurnPanel {
 
         private static _instance: BwBeginTurnPanel;
 
-        private readonly _group             : eui.Group;
-        private readonly _labelPlayerIndex  : TwnsUiLabel.UiLabel;
-        private readonly _labelNickname     : TwnsUiLabel.UiLabel;
-        private readonly _labelTurnStart    : TwnsUiLabel.UiLabel;
+        private readonly _group!            : eui.Group;
+        private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
+        private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
+        private readonly _labelTurnStart!   : TwnsUiLabel.UiLabel;
 
         public static show(openData: OpenDataForBwBeginTurnPanel): void {
             if (!BwBeginTurnPanel._instance) {

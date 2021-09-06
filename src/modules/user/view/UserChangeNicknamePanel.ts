@@ -46,7 +46,7 @@ namespace TwnsUserChangeNicknamePanel {
             if (!UserChangeNicknamePanel._instance) {
                 UserChangeNicknamePanel._instance = new UserChangeNicknamePanel();
             }
-            UserChangeNicknamePanel._instance.open(undefined);
+            UserChangeNicknamePanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

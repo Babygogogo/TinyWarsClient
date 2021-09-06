@@ -5,7 +5,6 @@ import TwnsNotifyType   from "../notify/NotifyType";
 import ProtoManager     from "../proto/ProtoManager";
 import CommonConstants  from "./CommonConstants";
 import Helpers          from "./Helpers";
-import Logger           from "./Logger";
 import Types            from "./Types";
 
 namespace ConfigManager {
@@ -185,7 +184,7 @@ namespace ConfigManager {
     const _CO_TIERS             = new Map<string, number[]>();
     const _CO_ID_LIST_IN_TIER   = new Map<string, Map<number, number[]>>();
     const _CUSTOM_CO_ID_LIST    = new Map<string, number[]>();
-    let _latestConfigVersion    : string | undefined;
+    let _latestConfigVersion    : string | null = null;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Exports.
@@ -194,7 +193,7 @@ namespace ConfigManager {
         // nothing to do.
     }
 
-    export function getLatestConfigVersion(): string | undefined {
+    export function getLatestConfigVersion(): string | null {
         return _latestConfigVersion;
     }
     export function setLatestFormalVersion(version: string): void {
@@ -204,33 +203,33 @@ namespace ConfigManager {
         return (await loadConfig(version)) != null;
     }
 
-    export async function loadConfig(version: string): Promise<ExtendedFullConfig | undefined> {
+    export async function loadConfig(version: string): Promise<ExtendedFullConfig | null> {
         const cachedConfig = getCachedConfig(version);
         if (cachedConfig) {
             return cachedConfig;
         }
 
         if (_INVALID_CONFIGS.has(version)) {
-            return undefined;
+            return null;
         }
 
         let configBin: any;
-        let rawConfig: Types.FullConfig | undefined;
+        let rawConfig: Types.FullConfig | null = null;
         try {
             configBin = await RES.getResByUrl(
                 `resource/config/FullConfig${version}.bin`,
-                undefined,
-                undefined,
+                void 0,
+                null,
                 RES.ResourceItem.TYPE_BIN
             );
-            rawConfig = configBin ? ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : undefined;
+            rawConfig = configBin ? ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : null;
         } catch (e) {
             // nothing to do for now
         }
 
         if (rawConfig == null) {
             _INVALID_CONFIGS.add(version);
-            return undefined;
+            return null;
         }
 
         const unitPromotionCfg  = _destructUnitPromotionCfg(rawConfig.UnitPromotion);
@@ -256,8 +255,8 @@ namespace ConfigManager {
 
         return fullCfg;
     }
-    export function getCachedConfig(version: string): ExtendedFullConfig | undefined {
-        return _ALL_CONFIGS.get(version);
+    export function getCachedConfig(version: string): ExtendedFullConfig | null {
+        return _ALL_CONFIGS.get(version) ?? null;
     }
     function setCachedConfig(version: string, config: ExtendedFullConfig) {
         _ALL_CONFIGS.set(version, config);
@@ -640,7 +639,7 @@ namespace ConfigManager {
         }
 
         let maxRank = -1;
-        let maxCfg  : PlayerRankCfg | undefined;
+        let maxCfg  : PlayerRankCfg | null = null;
         for (const i in cfgDict) {
             const currCfg   = cfgDict[i];
             const currRank  = currCfg.rank;
@@ -677,7 +676,7 @@ namespace ConfigManager {
         // return coConfig
         //     // ? `(${coConfig.name}(T${coConfig.tier}))`
         //     ? `${coConfig.name}`
-        //     : undefined;
+        //     : null;
 
         const name = getCoBasicCfg(version, coId).name;
         if (name == null) {
@@ -805,8 +804,7 @@ namespace ConfigManager {
 
         const cfgs = _CO_ID_LIST_IN_TIER.get(version);
         if (cfgs == null) {
-            Logger.error(`ConfigManager.getEnabledCoIdListInTier() empty cfgs.`);
-            return [];
+            throw new Error(`ConfigManager.getEnabledCoIdListInTier() empty cfgs.`);
         }
 
         const currentIdArray = cfgs.get(tier);
@@ -854,7 +852,7 @@ namespace ConfigManager {
         return (diveCfgs != null) && (!!diveCfgs[1]);
     }
 
-    export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: number | null | undefined): boolean {
+    export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: Types.Undefinable<number>): boolean {
         if (tileObjectType === TileObjectType.Empty) {
             return !shapeId;
         } else {
@@ -863,12 +861,12 @@ namespace ConfigManager {
                 && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
         }
     }
-    export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: number | null | undefined): boolean {
+    export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: Types.Undefinable<number>): boolean {
         const cfg = CommonConstants.TileBaseShapeConfigs.get(tileBaseType);
         return (!!cfg)
             && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
-    export function checkIsValidTileDecoratorShapeId(type: TileDecoratorType | null | undefined, shapeId: number | null | undefined): boolean {
+    export function checkIsValidTileDecoratorShapeId(type: Types.Undefinable<TileDecoratorType>, shapeId: Types.Undefinable<number>): boolean {
         if (type == null) {
             return shapeId == null;
         }
@@ -903,8 +901,8 @@ namespace ConfigManager {
     }
     export function checkIsTileDecoratorSymmetrical({ decoratorType, shapeId1, shapeId2, symmetryType }: {
         decoratorType   : TileDecoratorType | null;
-        shapeId1        : number | null | undefined;
-        shapeId2        : number | null | undefined;
+        shapeId1        : Types.Undefinable<number>;
+        shapeId2        : Types.Undefinable<number>;
         symmetryType    : Types.SymmetryType;
     }): boolean {
         if (decoratorType == null) {

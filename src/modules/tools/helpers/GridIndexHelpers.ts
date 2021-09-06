@@ -17,9 +17,9 @@ namespace GridIndexHelpers {
         { offset: { x:  0, y:  1 }, direction: Direction.Down,  clockwiseOffset: { x:  1, y: -1 }, },
     ];
 
-    export function convertGridIndex(raw: ProtoTypes.Structure.IGridIndex | undefined | null): GridIndex | undefined {
+    export function convertGridIndex(raw: Types.Undefinable<ProtoTypes.Structure.IGridIndex>): GridIndex | null {
         return ((!raw) || (raw.x == null) || (raw.y == null))
-            ? undefined
+            ? null
             : raw as GridIndex;
     }
 
@@ -106,7 +106,7 @@ namespace GridIndexHelpers {
     }
 
     /**
-     * If g1 is not adjacent to g2, undefined is returned.
+     * If g1 is not adjacent to g2, Direction.Undefined is returned.
      * Else, if index1 is at the right side of index2, then Direction.Right is returned, and so on.
     */
     export function getAdjacentDirection(g1: GridIndex, g2: GridIndex): Direction {

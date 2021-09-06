@@ -191,7 +191,7 @@ namespace TwnsMcrRoomInfoPanel {
                     const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
                     const playerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
                     TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
-                        currentCoId         : selfPlayerData.coId,
+                        currentCoId         : selfPlayerData.coId ?? null,
                         availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                             warRule         : Helpers.getExisted(settingsForCommon.warRule),
                             playerIndex,

@@ -21,7 +21,7 @@ namespace WwProxy {
             { msgCode: NetMessageCodes.MsgMpwWatchHandleRequest,              callback: _onMsgMpwWatchHandleRequest },
             { msgCode: NetMessageCodes.MsgMpwWatchDeleteWatcher,              callback: _onMsgMpwWatchDeleteWatcher },
             { msgCode: NetMessageCodes.MsgMpwWatchContinueWar,                callback: _onMsgMpwWatchContinueWar },
-        ], undefined);
+        ], null);
     }
 
     export function reqUnwatchedWarInfos(): void {

@@ -65,7 +65,7 @@ namespace TwnsMeSymmetryPanel {
             if (!MeSymmetryPanel._instance) {
                 MeSymmetryPanel._instance = new MeSymmetryPanel();
             }
-            MeSymmetryPanel._instance.open(undefined);
+            MeSymmetryPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

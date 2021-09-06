@@ -17,12 +17,12 @@ namespace TwnsCommonHelpPanel {
 
         private static _instance: CommonHelpPanel;
 
-        private readonly _imgMask       : TwnsUiImage.UiImage;
-        private readonly _group         : eui.Group;
-        private readonly _btnClose      : TwnsUiButton.UiButton;
-        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        private readonly _scrContent    : eui.Scroller;
-        private readonly _labelContent  : TwnsUiLabel.UiLabel;
+        private readonly _imgMask!      : TwnsUiImage.UiImage;
+        private readonly _group!        : eui.Group;
+        private readonly _btnClose!     : TwnsUiButton.UiButton;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _scrContent!   : eui.Scroller;
+        private readonly _labelContent! : TwnsUiLabel.UiLabel;
 
         public static show(openData: OpenData): void {
             if (!CommonHelpPanel._instance) {

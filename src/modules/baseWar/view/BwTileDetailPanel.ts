@@ -4,6 +4,7 @@ import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
+import Helpers from "../../tools/helpers/Helpers";
 import Timer                    from "../../tools/helpers/Timer";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -40,16 +41,14 @@ namespace TwnsBwTileDetailPanel {
 
         private static _instance: BwTileDetailPanel;
 
-        private _group              : eui.Group;
-        private _labelName          : TwnsUiLabel.UiLabel;
-        private _imgTileBase        : TwnsUiImage.UiImage;
-        private _imgTileDecorator   : TwnsUiImage.UiImage;
-        private _imgTileObject      : TwnsUiImage.UiImage;
-        private _listInfo           : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
-        private _labelMoveCost      : TwnsUiLabel.UiLabel;
-        private _listMoveCost       : TwnsUiScrollList.UiScrollList<DataForMoveRangeRenderer>;
-
-        private _dataForListMoveCost: DataForMoveRangeRenderer[];
+        private readonly _group!            : eui.Group;
+        private readonly _labelName!        : TwnsUiLabel.UiLabel;
+        private readonly _imgTileBase!      : TwnsUiImage.UiImage;
+        private readonly _imgTileDecorator! : TwnsUiImage.UiImage;
+        private readonly _imgTileObject!    : TwnsUiImage.UiImage;
+        private readonly _listInfo!         : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private readonly _labelMoveCost!    : TwnsUiLabel.UiLabel;
+        private readonly _listMoveCost!     : TwnsUiScrollList.UiScrollList<DataForMoveRangeRenderer>;
 
         public static show(openData: OpenDataForBwTileDetailPanel): void {
             if (!BwTileDetailPanel._instance) {
@@ -87,9 +86,6 @@ namespace TwnsBwTileDetailPanel {
 
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            this._dataForListMoveCost = null;
-        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
@@ -121,6 +117,7 @@ namespace TwnsBwTileDetailPanel {
             const version               = UserModel.getSelfSettingsTextureVersion();
             const tickCount             = Timer.getTileAnimationTickCount();
             const skinId                = tile.getSkinId();
+            this._labelName.text        = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
             this._imgTileBase.source    = CommonModel.getCachedTileBaseImageSource({
                 version,
                 skinId,
@@ -145,7 +142,6 @@ namespace TwnsBwTileDetailPanel {
                 shapeId     : tile.getObjectShapeId(),
                 tickCount,
             });
-            this._labelName.text        = Lang.getTileName(tile.getType());
         }
 
         private _updateListInfo(): void {
@@ -163,8 +159,7 @@ namespace TwnsBwTileDetailPanel {
             const repairAmount          = cfg.repairAmount;
             const war                   = tile.getWar();
             const isCheating            = war.getCanCheat();
-
-            const dataList: DataForInfoRenderer[] = [
+            this._listInfo.bindData(Helpers.getNonNullElements([
                 {
                     titleText               : Lang.getText(LangTextType.B0352),
                     valueText               : defenseBonus ? `${defenseBonus}(${Lang.getUnitCategoryName(cfg.defenseUnitCategory)})` : `--`,
@@ -195,7 +190,7 @@ namespace TwnsBwTileDetailPanel {
                 {
                     titleText               : Lang.getText(LangTextType.B0358),
                     valueText               : cfg.produceUnitCategory
-                        ? Lang.getUnitCategoryName(cfg.produceUnitCategory)
+                        ? Lang.getUnitCategoryName(cfg.produceUnitCategory) ?? CommonConstants.ErrorTextForUndefined
                         : Lang.getText(LangTextType.B0013),
                     callbackOnTouchedTitle  : null,
                 },
@@ -206,15 +201,13 @@ namespace TwnsBwTileDetailPanel {
                 },
                 {
                     titleText               : Lang.getText(LangTextType.B0360),
-                    valueText               : repairAmount != null ? `${repairAmount}(${Lang.getUnitCategoryName(cfg.repairUnitCategory)})` : `--`,
+                    valueText               : repairAmount != null ? `${repairAmount}(${Lang.getUnitCategoryName(Helpers.getExisted(cfg.repairUnitCategory))})` : `--`,
                     callbackOnTouchedTitle  : null,
                 },
                 this._createInfoHp(tile, isCheating),
                 this._createInfoCapturePoint(tile, isCheating),
                 this._createInfoBuildPoint(tile, isCheating),
-            ].filter(v => !!v);
-
-            this._listInfo.bindData(dataList);
+            ]));
         }
 
         private _createInfoHp(tile: BwTile, isCheating: boolean): DataForInfoRenderer | null {
@@ -326,8 +319,7 @@ namespace TwnsBwTileDetailPanel {
         }
 
         private _updateListMoveCost(): void {
-            this._dataForListMoveCost = this._createDataForListMoveCost();
-            this._listMoveCost.bindData(this._dataForListMoveCost);
+            this._listMoveCost.bindData(this._createDataForListMoveCost());
         }
 
         private _createDataForListMoveCost(): DataForMoveRangeRenderer[] {
@@ -361,8 +353,8 @@ namespace TwnsBwTileDetailPanel {
         callbackOnTouchedTitle  : (() => void) | null;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : TwnsUiButton.UiButton;
-        private _labelValue : TwnsUiLabel.UiLabel;
+        private readonly _btnTitle!     : TwnsUiButton.UiButton;
+        private readonly _labelValue!   : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -371,7 +363,7 @@ namespace TwnsBwTileDetailPanel {
         }
 
         protected _onDataChanged(): void {
-            const data              = this.data;
+            const data              = this._getData();
             this._btnTitle.label    = data.titleText;
             this._labelValue.text   = data.valueText;
             this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
@@ -391,17 +383,16 @@ namespace TwnsBwTileDetailPanel {
         playerIndex     : number;
     };
     class MoveCostRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMoveRangeRenderer> {
-        private _group          : eui.Group;
-        private _conView        : eui.Group;
-        private _unitView       : WarMapUnitView;
-        private _labelMoveCost  : TwnsUiLabel.UiLabel;
+        private readonly _group!            : eui.Group;
+        private readonly _conView!          : eui.Group;
+        private readonly _unitView          = new WarMapUnitView();
+        private readonly _labelMoveCost!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
 
-            this._unitView = new WarMapUnitView();
             this._conView.addChild(this._unitView);
         }
 
@@ -419,10 +410,10 @@ namespace TwnsBwTileDetailPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             const configVersion         = data.configVersion;
             const unitType              = data.unitType;
-            const moveCostCfg           = ConfigManager.getMoveCostCfgByTileType(configVersion, data.tileCfg.type);
+            const moveCostCfg           = ConfigManager.getMoveCostCfgByTileType(configVersion, Helpers.getExisted(data.tileCfg.type));
             const moveCost              = moveCostCfg[ConfigManager.getUnitTemplateCfg(configVersion, unitType).moveType].cost;
             this._labelMoveCost.text    = moveCost != null ? `${moveCost}` : `--`;
             this._unitView.update({

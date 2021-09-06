@@ -1,7 +1,8 @@
 
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+import Types                    from "../../tools/helpers/Types";
 import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsBwFieldView          from "../view/BwFieldView";
 import TwnsBwActionPlanner      from "./BwActionPlanner";
 import TwnsBwCursor             from "./BwCursor";
@@ -32,7 +33,7 @@ namespace TwnsBwField {
         public abstract getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner;
 
         public init({ data, configVersion, playersCountUnneutral }: {
-            data                    : ISerialField | null | undefined;
+            data                    : Types.Undefinable<ISerialField>;
             configVersion           : string;
             playersCountUnneutral   : number;
         }): ClientErrorCode {

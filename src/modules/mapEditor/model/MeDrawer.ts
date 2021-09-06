@@ -4,7 +4,6 @@ import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -229,7 +228,7 @@ namespace TwnsMeDrawer {
                 // nothing to do
 
             } else {
-                Logger.error(`MeDrawer._handleAction() invalid mode.`);
+                throw new Error(`MeDrawer._handleAction() invalid mode.`);
             }
 
             this._getWar().setIsMapModified(true);

@@ -1,4 +1,5 @@
 
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -19,7 +20,7 @@ namespace TwnsCommonChooseCoPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     type OpenData = {
-        currentCoId         : number | undefined | null;
+        currentCoId         : number | null;
         availableCoIdArray  : number[];
         callbackOnConfirm   : (coId: number) => void;
     };
@@ -29,17 +30,17 @@ namespace TwnsCommonChooseCoPanel {
 
         private static _instance: CommonChooseCoPanel;
 
-        private readonly _imgMask       : TwnsUiImage.UiImage;
-        private readonly _group         : eui.Group;
+        private readonly _imgMask!          : TwnsUiImage.UiImage;
+        private readonly _group!            : eui.Group;
 
-        private readonly _labelChooseCo : TwnsUiLabel.UiLabel;
-        private readonly _listCo        : TwnsUiScrollList.UiScrollList<DataForCoRenderer>;
-        private readonly _btnConfirm    : TwnsUiButton.UiButton;
-        private readonly _btnCancel     : TwnsUiButton.UiButton;
-        private readonly _uiCoInfo      : TwnsUiCoInfo.UiCoInfo;
+        private readonly _labelChooseCo!    : TwnsUiLabel.UiLabel;
+        private readonly _listCo!           : TwnsUiScrollList.UiScrollList<DataForCoRenderer>;
+        private readonly _btnConfirm!       : TwnsUiButton.UiButton;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
+        private readonly _uiCoInfo!         : TwnsUiCoInfo.UiCoInfo;
 
         private _dataForListCo          : DataForCoRenderer[] = [];
-        private _selectedIndex          : number;
+        private _selectedIndex          : number | null = null;
 
         public static show(openData: OpenData): void {
             if (!CommonChooseCoPanel._instance) {
@@ -81,27 +82,30 @@ namespace TwnsCommonChooseCoPanel {
             await this._showCloseAnimation();
         }
 
-        public setSelectedIndex(newIndex: number): void {
+        public setAndReviseSelectedIndex(newIndex: number): void {
             const dataList = this._dataForListCo;
             if (dataList.length <= 0) {
-                this._selectedIndex = undefined;
+                this._selectedIndex = null;
 
             } else if (dataList[newIndex]) {
                 const oldIndex      = this._selectedIndex;
                 this._selectedIndex = newIndex;
-                (dataList[oldIndex])    && (this._listCo.updateSingleData(oldIndex, dataList[oldIndex]));
+                if ((oldIndex != null) && (dataList[oldIndex])) {
+                    this._listCo.updateSingleData(oldIndex, dataList[oldIndex]);
+                }
                 (oldIndex !== newIndex) && (this._listCo.updateSingleData(newIndex, dataList[newIndex]));
             }
 
             this._updateComponentsForCoInfo();
         }
-        public getSelectedIndex(): number {
+        public getSelectedIndex(): number | null {
             return this._selectedIndex;
         }
 
         private _getSelectedCoId(): number | null {
-            const data = this._dataForListCo[this.getSelectedIndex()];
-            return data ? data.coBasicCfg.coId : null;
+            const selectedIndex = this.getSelectedIndex();
+            const data          = selectedIndex == null ? null : this._dataForListCo[selectedIndex];
+            return data ? data.coBasicCfg.coId ?? null : null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -141,14 +145,14 @@ namespace TwnsCommonChooseCoPanel {
             this._listCo.scrollVerticalTo(0);
 
             const coId = this._getOpenData().currentCoId;
-            this.setSelectedIndex(this._dataForListCo.findIndex(data => {
+            this.setAndReviseSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
                 return cfg ? cfg.coId === coId : coId == null;
             }));
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
-            const configVersion = ConfigManager.getLatestConfigVersion();
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
             const dataArray     : DataForCoRenderer[] = [];
             let index           = 0;
             for (const coId of this._getOpenData().availableCoIdArray) {
@@ -170,7 +174,7 @@ namespace TwnsCommonChooseCoPanel {
             }
 
             this._uiCoInfo.setCoData({
-                configVersion   : ConfigManager.getLatestConfigVersion(),
+                configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
                 coId,
             });
         }
@@ -211,17 +215,17 @@ namespace TwnsCommonChooseCoPanel {
         panel       : CommonChooseCoPanel;
     };
     class CoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCoRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            const data              = this.data;
+            const data              = this._getData();
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text    = data.coBasicCfg.name;
+            this._labelName.text    = data.coBasicCfg.name ?? CommonConstants.ErrorTextForUndefined;
         }
 
         public onItemTapEvent(): void {
-            const data = this.data;
-            data.panel.setSelectedIndex(data.index);
+            const data = this._getData();
+            data.panel.setAndReviseSelectedIndex(data.index);
         }
     }
 }

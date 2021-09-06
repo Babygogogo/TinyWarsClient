@@ -38,7 +38,7 @@ namespace TwnsMeVisibilityPanel {
             if (!MeVisibilityPanel._instance) {
                 MeVisibilityPanel._instance = new MeVisibilityPanel();
             }
-            MeVisibilityPanel._instance.open(undefined);
+            MeVisibilityPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

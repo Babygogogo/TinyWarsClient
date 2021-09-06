@@ -1,7 +1,6 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -37,7 +36,7 @@ namespace TwnsCommonChangeVersionPanel {
                 CommonChangeVersionPanel._instance = new CommonChangeVersionPanel();
             }
 
-            CommonChangeVersionPanel._instance.open(undefined);
+            CommonChangeVersionPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (CommonChangeVersionPanel._instance) {
@@ -74,9 +73,9 @@ namespace TwnsCommonChangeVersionPanel {
             await this._showCloseAnimation();
         }
 
-        public _getSelectedGameVersion(): GameVersion | undefined {
+        private _getSelectedGameVersion(): GameVersion | null {
             const selectedData = this._listVersion.getSelectedData();
-            return selectedData ? selectedData.gameVersion : undefined;
+            return selectedData ? selectedData.gameVersion : null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -95,13 +94,9 @@ namespace TwnsCommonChangeVersionPanel {
 
             const url = getUrlForGameVersion(selectedVersion);
             if (url == null) {
-                Logger.error(`CommonChangeVersionPanel._onTouchedBtnConfirm() empty url.`);
+                throw new Error(`CommonChangeVersionPanel._onTouchedBtnConfirm() empty url.`);
             } else {
-                try {
-                    window.open(url);
-                } catch (e) {
-                    Logger.error(`CommonChangeVersionPanel._onTouchedBtnConfirm() window.open() error: `, e);
-                }
+                window.open(url);
             }
             this.close();
         }
@@ -212,12 +207,12 @@ namespace TwnsCommonChangeVersionPanel {
         }
     }
 
-    function getUrlForGameVersion(version: GameVersion): string | undefined {
+    function getUrlForGameVersion(version: GameVersion): string | null {
         switch (version) {
             case GameVersion.Legacy : return `https://www.tinywars.online`;
             case GameVersion.Test   : return `https://www.tinywars.online/test`;
             case GameVersion.Awbw   : return `https://awbw.amarriner.com/`;
-            default                 : return undefined;
+            default                 : return null;
         }
     }
 }

@@ -1,7 +1,6 @@
 
 import Types        from "./Types";
 import StageManager from "./StageManager";
-import Logger       from "./Logger";
 import TwnsUiLabel  from "../ui/UiLabel";
 
 namespace FloatText {
@@ -12,7 +11,7 @@ namespace FloatText {
     const MAX_CACHE_COUNT   = 6;
 
     const _dataArray        : string[] = [];
-    let   _timeoutIdForLock : number | undefined;
+    let   _timeoutIdForLock : number | null = null;
 
     export function show(text: string): void {
         _dataArray.push(text);
@@ -26,12 +25,11 @@ namespace FloatText {
 
     function showFloatText(): void {
         if ((_dataArray.length > 0) && (_timeoutIdForLock == null)) {
-            _timeoutIdForLock = egret.setTimeout(onTimerComplete, undefined, LOCK_TIME_MS);
+            _timeoutIdForLock = egret.setTimeout(onTimerComplete, null, LOCK_TIME_MS);
 
             const layer = StageManager.getLayer(Types.LayerType.Notify2);
             if (layer == null) {
-                Logger.error(`FloatText.showFloatText() empty layer.`);
-                return;
+                throw new Error(`FloatText.showFloatText() empty layer.`);
             }
 
             const floatText = new UiFloatText(_dataArray.splice(0, 1)[0]);
@@ -52,7 +50,7 @@ namespace FloatText {
     }
 
     function onTimerComplete(): void {
-        _timeoutIdForLock = undefined;
+        _timeoutIdForLock = null;
         showFloatText();
     }
 

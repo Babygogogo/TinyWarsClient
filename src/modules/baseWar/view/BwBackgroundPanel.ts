@@ -13,7 +13,7 @@ namespace TwnsBwBackgroundPanel {
             if (!BwBackgroundPanel._instance) {
                 BwBackgroundPanel._instance = new BwBackgroundPanel();
             }
-            BwBackgroundPanel._instance.open(undefined);
+            BwBackgroundPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

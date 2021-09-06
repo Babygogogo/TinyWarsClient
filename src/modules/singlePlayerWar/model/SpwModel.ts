@@ -118,13 +118,9 @@ namespace SpwModel {
             action      : robotAction,
         } = await WarRobot.getNextAction(war);
         if (errorCodeForRobotAction) {
-            Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() errorCodeForRobotAction: ${errorCodeForRobotAction}`);
-            _warsWithRobotRunning.delete(war);
-            return;
+            throw new Error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() errorCodeForRobotAction: ${errorCodeForRobotAction}`);
         } else if (robotAction == null) {
-            Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() empty robotAction!`);
-            _warsWithRobotRunning.delete(war);
-            return;
+            throw new Error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() empty robotAction!`);
         }
 
         if (!war.getIsRunning()) {
@@ -140,8 +136,7 @@ namespace SpwModel {
 
     async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
         if (!checkCanExecuteAction(war)) {
-            Logger.error(`SpwModel.handlePlayerOrRobotAction() checkCanExecuteAction(war) is not true!`);
-            return ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_00;
+            throw new Error(`SpwModel.handlePlayerOrRobotAction() checkCanExecuteAction(war) is not true!`);
         }
 
         return await reviseAndExecute(war, action);
@@ -204,15 +199,13 @@ namespace SpwModel {
         // Handle the WaitBeginTurn phase.
         const turnPhaseCode = war.getTurnPhaseCode();
         if (turnPhaseCode == null) {
-            Logger.error(`SpwModel.checkAndHandleSystemActions() empty turnPhaseCode.`);
-            return false;
+            throw new Error(`SpwModel.checkAndHandleSystemActions() empty turnPhaseCode.`);
         }
 
         const playerManager = war.getPlayerManager();
         const playerInTurn  = playerManager.getPlayerInTurn();
         if (playerInTurn == null) {
-            Logger.error(`SpwModel.checkAndHandleSystemActions() empty playerInTurn.`);
-            return false;
+            throw new Error(`SpwModel.checkAndHandleSystemActions() empty playerInTurn.`);
         }
 
         if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
@@ -224,8 +217,7 @@ namespace SpwModel {
         // Handle the booted players (make them dying).
         if (war.checkIsBoot()) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                Logger.error(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`);
-                return false;
+                throw new Error(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`);
             }
 
             await handleSystemHandleBootPlayer(war);
@@ -238,8 +230,7 @@ namespace SpwModel {
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
             const player = playerManager.getPlayer(playerIndex);
             if (player == null) {
-                Logger.error(`SpwModel.checkAndHandleSystemActions() empty player.`);
-                return false;
+                throw new Error(`SpwModel.checkAndHandleSystemActions() empty player.`);
             }
 
             if (player.getAliveState() === Types.PlayerAliveState.Dying) {
@@ -252,8 +243,7 @@ namespace SpwModel {
         // Handle neutral player (end turn).
         if (playerInTurn.checkIsNeutral()) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                Logger.error(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`);
-                return false;
+                throw new Error(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`);
             }
 
             await handleSystemEndTurn(war);
@@ -264,8 +254,7 @@ namespace SpwModel {
         // Handle the dead player in turn (end turn).
         if (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                Logger.error(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`);
-                return false;
+                throw new Error(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`);
             }
 
             await handleSystemEndTurn(war);
@@ -333,17 +322,14 @@ namespace SpwModel {
             action      : revisedAction,
         } = WarActionReviser.revise(war, action);
         if (errorCodeForRevisedAction) {
-            Logger.error(`SpwModel.reviseAndExecute() errorCodeForRevisedAction: ${errorCodeForRevisedAction}.`);
-            return errorCodeForRevisedAction;
+            throw new Error(`SpwModel.reviseAndExecute() errorCodeForRevisedAction: ${errorCodeForRevisedAction}.`);
         } else if (revisedAction == null) {
-            Logger.error(`SpwModel.reviseAndExecute() empty revisedAction!.`);
-            return ClientErrorCode.SpwModel_ReviseAndExecute_00;
+            throw new Error(`SpwModel.reviseAndExecute() empty revisedAction!.`);
         }
 
         const errorCodeForExecute = await WarActionExecutor.checkAndExecute(war, revisedAction, false);
         if (errorCodeForExecute) {
-            Logger.error(`SpwModel.reviseAndExecute() errorCodeForExecute: ${errorCodeForExecute}.`);
-            return errorCodeForExecute;
+            throw new Error(`SpwModel.reviseAndExecute() errorCodeForExecute: ${errorCodeForExecute}.`);
         }
 
         war.getExecutedActionManager().addExecutedAction(revisedAction);

@@ -3,7 +3,6 @@ import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
-import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import TwnsBwTileMapView    from "../view/BwTileMapView";
@@ -22,14 +21,14 @@ namespace TwnsBwTileMap {
     import BwTile           = TwnsBwTile.BwTile;
 
     export class BwTileMap {
-        private _map        : BwTile[][];
-        private _mapSize    : MapSize;
-        private _war        : BwWar;
+        private _map?        : BwTile[][];
+        private _mapSize?    : MapSize;
+        private _war?        : BwWar;
 
         private readonly _view  = new BwTileMapView();
 
         public init({ data, configVersion, mapSize, playersCountUnneutral }: {
-            data                    : ISerialTileMap;
+            data                    : Types.Undefinable<ISerialTileMap>;
             configVersion           : string;
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
@@ -93,14 +92,14 @@ namespace TwnsBwTileMap {
             return ClientErrorCode.NoError;
         }
         public fastInit({ data, configVersion, mapSize, playersCountUnneutral }: {
-            data                    : ISerialTileMap | null | undefined;
+            data                    : Types.Undefinable<ISerialTileMap>;
             configVersion           : string;
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
         }): ClientErrorCode {
             const map = this._getMap();
             for (const tileData of data ? data.tiles || [] : []) {
-                const gridIndex = tileData.gridIndex;
+                const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
                 map[gridIndex.x][gridIndex.y].fastInit(tileData, configVersion);
             }
 
@@ -132,58 +131,24 @@ namespace TwnsBwTileMap {
             }
             return { tiles: tilesData };
         }
-        public serializeForCreateSfw(): ISerialTileMap | undefined {
-            const mapSize = this.getMapSize();
-            if (mapSize == null) {
-                Logger.error(`BwTileMap.serializeForCreateSfw() empty mapSize.`);
-                return undefined;
-            }
-
-            const map = this._getMap();
-            if (map == null) {
-                Logger.error(`BwTileMap.serializeForCreateSfw() empty map.`);
-                return undefined;
-            }
-
-            const { width, height } = mapSize;
+        public serializeForCreateSfw(): ISerialTileMap {
+            const map               = this._getMap();
+            const { width, height } = this.getMapSize();
             const tilesData         : ISerialTile[] = [];
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
-                    const tileData = map[x][y].serializeForCreateSfw();
-                    if (tileData == null) {
-                        Logger.error(`BwTileMap.serializeForCreateSfw() empty tileData.`);
-                        return undefined;
-                    }
-
-                    tilesData.push(tileData);
+                    tilesData.push(map[x][y].serializeForCreateSfw());
                 }
             }
             return { tiles: tilesData };
         }
-        public serializeForCreateMfr(): ISerialTileMap | undefined {
-            const mapSize = this.getMapSize();
-            if (mapSize == null) {
-                Logger.error(`BwTileMap.serializeForCreateMfr() empty mapSize.`);
-                return undefined;
-            }
-
-            const map = this._getMap();
-            if (map == null) {
-                Logger.error(`BwTileMap.serializeForCreateMfr() empty map.`);
-                return undefined;
-            }
-
-            const { width, height } = mapSize;
+        public serializeForCreateMfr(): ISerialTileMap {
+            const map               = this._getMap();
+            const { width, height } = this.getMapSize();
             const tilesData         : ISerialTile[] = [];
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
-                    const tileData = map[x][y].serializeForCreateMfr();
-                    if (tileData == null) {
-                        Logger.error(`BwTileMap.serializeForCreateMfr() empty tileData.`);
-                        return undefined;
-                    }
-
-                    tilesData.push(tileData);
+                    tilesData.push(map[x][y].serializeForCreateMfr());
                 }
             }
             return { tiles: tilesData };
@@ -193,14 +158,14 @@ namespace TwnsBwTileMap {
             this._war = war;
         }
         public getWar(): BwWar {
-            return this._war;
+            return Helpers.getExisted(this._war);
         }
 
         private _setMap(map: BwTile[][]): void {
             this._map = map;
         }
         protected _getMap(): BwTile[][] {
-            return this._map;
+            return Helpers.getExisted(this._map);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,7 +195,7 @@ namespace TwnsBwTileMap {
             this._mapSize = { width: width, height: height };
         }
         public getMapSize(): MapSize {
-            return this._mapSize;
+            return Helpers.getExisted(this._mapSize);
         }
 
         public getTilesCount(tileType: Types.TileType, playerIndex: number): number {
@@ -245,23 +210,11 @@ namespace TwnsBwTileMap {
             return count;
         }
 
-        public getTotalIncomeForPlayer(playerIndex: number): number | undefined {
-            const map = this._getMap();
-            if (map == null) {
-                Logger.error(`BwTileMap.getTotalIncomeForPlayer() empty map.`);
-                return undefined;
-            }
-
+        public getTotalIncomeForPlayer(playerIndex: number): number {
             let totalIncome = 0;
-            for (const column of map) {
+            for (const column of this._getMap()) {
                 for (const tile of column) {
-                    const income = tile.getIncomeForPlayer(playerIndex);
-                    if (income == null) {
-                        Logger.error(`BwTileMap.getTotalIncomeForPlayer() empty income.`);
-                        return undefined;
-                    }
-
-                    totalIncome += income;
+                    totalIncome += tile.getIncomeForPlayer(playerIndex);
                 }
             }
 

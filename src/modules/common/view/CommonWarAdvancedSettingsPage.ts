@@ -3,7 +3,6 @@ import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -235,7 +234,7 @@ namespace TwnsCommonWarAdvancedSettingsPage {
             } else if (playerRuleType === PlayerRuleType.AiCoIdInCcw) {
                 this._updateViewAsAiCoIdInCcw();
             } else {
-                Logger.error(`CommonWarAdvancedSettingsPage.InfoRenderer._updateView() invalid playerRuleType: ${playerRuleType}`);
+                throw new Error(`CommonWarAdvancedSettingsPage.InfoRenderer._updateView() invalid playerRuleType: ${playerRuleType}`);
             }
         }
         private _updateViewAsTeamIndex(): void {

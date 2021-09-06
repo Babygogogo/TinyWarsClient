@@ -35,7 +35,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
             if (!ScrCreateSaveSlotsPanel._instance) {
                 ScrCreateSaveSlotsPanel._instance = new ScrCreateSaveSlotsPanel();
             }
-            ScrCreateSaveSlotsPanel._instance.open(undefined);
+            ScrCreateSaveSlotsPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (ScrCreateSaveSlotsPanel._instance) {

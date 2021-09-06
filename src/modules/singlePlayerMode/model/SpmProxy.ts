@@ -29,7 +29,7 @@ namespace SpmProxy {
             { msgCode: NetMessageCodes.MsgSpmSaveSrw,                        callback: _onMsgSpmSaveSrw },
             { msgCode: NetMessageCodes.MsgSpmGetSrwRankInfo,                 callback: _onMsgSpmGetSrwRankInfo },
             { msgCode: NetMessageCodes.MsgSpmValidateSrw,                    callback: _onMsgSpmValidateSrw },
-        ], undefined);
+        ], null);
     }
 
     export function reqSpmGetWarSaveSlotFullDataArray(): void {

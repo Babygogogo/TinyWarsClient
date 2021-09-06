@@ -8,8 +8,8 @@ namespace SpmSrwRankModel {
 
     const _rankInfoDict = new Map<number, SrwRankInfo[]>();
 
-    export function getRankInfo(mapId: number): SrwRankInfo[] | undefined | null {
-        return _rankInfoDict.get(mapId);
+    export function getRankInfo(mapId: number): SrwRankInfo[] | null {
+        return _rankInfoDict.get(mapId) ?? null;
     }
 
     export function updateOnMsgSpmGetSrwRankInfo(data: ProtoTypes.NetMessage.MsgSpmGetSrwRankInfo.IS): void {

@@ -9,7 +9,6 @@ import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
 import LocalStorage                 from "../../tools/helpers/LocalStorage";
-import Logger                       from "../../tools/helpers/Logger";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import Types                        from "../../tools/helpers/Types";
@@ -43,7 +42,7 @@ namespace TwnsUserRegisterPanel {
             if (!UserRegisterPanel._instance) {
                 UserRegisterPanel._instance = new UserRegisterPanel();
             }
-            UserRegisterPanel._instance.open(undefined);
+            UserRegisterPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -86,8 +85,7 @@ namespace TwnsUserRegisterPanel {
 
             const account = data.account;
             if (account == null) {
-                Logger.error(`RegisterPanel._onMsgUserRegister() empty account!`);
-                return;
+                throw new Error(`RegisterPanel._onMsgUserRegister() empty account!`);
             }
 
             const password  = this._inputPassword.text;

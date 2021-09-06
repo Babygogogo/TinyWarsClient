@@ -36,7 +36,7 @@ namespace TwnsLobbyTopPanel {
             if (!LobbyTopPanel._instance) {
                 LobbyTopPanel._instance = new LobbyTopPanel();
             }
-            LobbyTopPanel._instance.open(undefined);
+            LobbyTopPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

@@ -17,7 +17,7 @@ namespace MeProxy {
             { msgCode: NetMessageCodes.MsgMeGetMapDataList,    callback: _onMsgMeGetMapDataList    },
             { msgCode: NetMessageCodes.MsgMeGetMapData,        callback: _onMsgMeGetMapData        },
             { msgCode: NetMessageCodes.MsgMeSubmitMap,         callback: _onMsgMeSubmitMap         },
-        ], undefined);
+        ], null);
     }
 
     export function reqMeGetMapDataList(): void {

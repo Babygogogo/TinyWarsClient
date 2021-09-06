@@ -3,7 +3,6 @@ import TwnsBwWar            from "../../baseWar/model/BwWar";
 import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
 import CommonConstants      from "../helpers/CommonConstants";
 import Helpers              from "../helpers/Helpers";
-import Logger               from "../helpers/Logger";
 import Types                from "../helpers/Types";
 
 namespace WarDestructionHelpers {
@@ -66,7 +65,7 @@ namespace WarDestructionHelpers {
     export function destroyPlayerForce(war: BwWar, playerIndex: number, showExplosionEffect: boolean): void {
         const unitMap           = war.getUnitMap();
         const tileMap           = war.getTileMap();
-        const gridVisionEffect  = showExplosionEffect ? war.getGridVisionEffect() : undefined;
+        const gridVisionEffect  = showExplosionEffect ? war.getGridVisionEffect() : null;
         let hasRemovedUnit      = false;
         for (const unit of unitMap.getAllUnitsOnMap()) {
             if (unit.getPlayerIndex() === playerIndex) {
@@ -86,18 +85,8 @@ namespace WarDestructionHelpers {
 
         for (const tile of tileMap.getAllTiles()) {
             if (tile.getPlayerIndex() === playerIndex) {
-                const baseType = tile.getBaseType();
-                if (baseType == null) {
-                    Logger.error(`DestructionHelpers.destroyPlayerForce() empty baseType.`);
-                    continue;
-                }
-
-                const objectType = tile.getObjectType();
-                if (objectType == null) {
-                    Logger.error(`DestructionHelpers.destroyPlayerForce() empty objectType.`);
-                    continue;
-                }
-
+                const baseType      = tile.getBaseType();
+                const objectType    = tile.getObjectType();
                 const hp            = tile.getCurrentHp();
                 const buildPoint    = tile.getCurrentBuildPoint();
                 const capturePoint  = tile.getCurrentCapturePoint();
@@ -139,11 +128,6 @@ namespace WarDestructionHelpers {
         if (war.getFogMap().checkHasFogCurrently()) {
             for (const [unitId, unit] of unitMap.getLoadedUnits()) {
                 const teamIndex = unit.getTeamIndex();
-                if (teamIndex == null) {
-                    Logger.error(`DestructionHelpers.removeInvisibleLoadedUnits() empty teamIndex.`);
-                    continue;
-                }
-
                 if (!watcherTeamIndexes.has(teamIndex)) {
                     unitMap.removeUnitLoaded(unitId);
                 }

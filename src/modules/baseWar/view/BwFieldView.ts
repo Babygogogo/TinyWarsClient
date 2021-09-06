@@ -1,4 +1,5 @@
 
+import Helpers                      from "../../tools/helpers/Helpers";
 import TwnsBwField                  from "../model/BwField";
 import TwnsBwActionPlannerView      from "./BwActionPlannerView";
 import TwnsBwCursorView             from "./BwCursorView";
@@ -14,12 +15,12 @@ namespace TwnsBwFieldView {
     import BwCursorView             = TwnsBwCursorView.BwCursorView;
 
     export class BwFieldView extends egret.DisplayObjectContainer {
-        private _field                  : BwField;
-        private _tileMapView            : BwTileMapView;
-        private _actionPlannerView      : TwnsBwActionPlannerView.BwActionPlannerView;
-        private _unitMapView            : BwUnitMapView;
-        private _cursorView             : BwCursorView;
-        private _gridVisionEffectView   : BwGridVisualEffectView;
+        private _field?                 : BwField;
+        private _tileMapView?           : BwTileMapView;
+        private _actionPlannerView?     : TwnsBwActionPlannerView.BwActionPlannerView;
+        private _unitMapView?           : BwUnitMapView;
+        private _cursorView?            : BwCursorView;
+        private _gridVisionEffectView?  : BwGridVisualEffectView;
 
         public init(field: BwField): void {
             if (!this._field) {
@@ -50,10 +51,10 @@ namespace TwnsBwFieldView {
         }
 
         private _getUnitMapView(): BwUnitMapView {
-            return this._unitMapView;
+            return Helpers.getDefined(this._unitMapView);
         }
         private _getTileMapView(): BwTileMapView {
-            return this._tileMapView;
+            return Helpers.getDefined(this._tileMapView);
         }
 
         public setUnitsVisible(visible: boolean): void {

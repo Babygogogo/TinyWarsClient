@@ -17,7 +17,7 @@ namespace BroadcastProxy {
             { msgCode: NetMessageCodes.MsgBroadcastDeleteMessage,      callback: _onMsgBroadcastDeleteMessage, },
             { msgCode: NetMessageCodes.MsgBroadcastDoBroadcast,        callback: _onMsgBroadcastDoBroadcast },
             { msgCode: NetMessageCodes.MsgBroadcastGetMessageList,     callback: _onMsgBroadcastGetMessageList, },
-        ], undefined);
+        ], null);
     }
 
     export function reqBroadcastAddMessage(textList: ILanguageText[], startTime: number, endTime: number): void {
@@ -70,7 +70,7 @@ namespace BroadcastProxy {
     function _onMsgBroadcastGetMessageList(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgBroadcastGetMessageList.IS;
         if (!data.errorCode) {
-            BroadcastModel.setAllMessageList(data.messageList);
+            BroadcastModel.setAllMessageList(data.messageList || []);
             Notify.dispatch(NotifyType.MsgBroadcastGetMessageList, data);
         }
     }

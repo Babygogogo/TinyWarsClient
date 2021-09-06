@@ -1,6 +1,5 @@
 
 import Types                from "../helpers/Types";
-import Logger               from "../helpers/Logger";
 import UserModel            from "../../user/model/UserModel";
 import WarMapModel          from "../../warMap/model/WarMapModel";
 import TwnsServerErrorCode  from "../helpers/ServerErrorCode";
@@ -37,11 +36,11 @@ namespace Lang {
     export function setLanguageType(language: LanguageType): void {
         _languageType = language;
     }
-    export function getLanguageTypeName(type: LanguageType): string | undefined {
+    export function getLanguageTypeName(type: LanguageType): string | null {
         switch (type) {
             case LanguageType.Chinese   : return getText(LangTextType.B0624, LanguageType.Chinese);
             case LanguageType.English   : return getText(LangTextType.B0625, LanguageType.English);
-            default                     : return undefined;
+            default                     : return null;
         }
     }
 
@@ -51,12 +50,11 @@ namespace Lang {
         if (text != null) {
             return text;
         } else {
-            Logger.error(`Lang.getText() empty text: ${t} ${languageType}`);
-            return CommonConstants.ErrorTextForLang;
+            throw new Error(`Lang.getText() empty text: ${t} ${languageType}`);
         }
     }
 
-    export function getFormattedText(t: LangTextType, ...params: (number | string | undefined | null)[]): string {
+    export function getFormattedText(t: LangTextType, ...params: (Types.Undefinable<number | string>)[]): string {
         const data = getText(t);
         return data === CommonConstants.ErrorTextForLang
             ? CommonConstants.ErrorTextForLang
@@ -65,7 +63,7 @@ namespace Lang {
 
     export function getErrorText(code: ServerErrorCode | ClientErrorCode): string {
         const textList  = LangErrorText[code];
-        const text      = textList ? textList[_languageType] : undefined;
+        const text      = textList ? textList[_languageType] : null;
         return `${getText(LangTextType.B0452)} ${code}: ${text || getText(LangTextType.A0153)}`;
     }
 
@@ -73,17 +71,17 @@ namespace Lang {
         return `P${playerIndex}`;
     }
 
-    export function getPlayerTeamName(teamIndex: number): string | undefined {
+    export function getPlayerTeamName(teamIndex: number): string | null {
         switch (teamIndex) {
             case 1  : return getText(LangTextType.B0008);
             case 2  : return getText(LangTextType.B0009);
             case 3  : return getText(LangTextType.B0010);
             case 4  : return getText(LangTextType.B0011);
-            default : return undefined;
+            default : return null;
         }
     }
 
-    export function getTileName(tileType: Types.TileType): string | undefined {
+    export function getTileName(tileType: Types.TileType): string | null {
         switch (tileType) {
             case Types.TileType.Plain           : return getText(LangTextType.B1000);
             case Types.TileType.River           : return getText(LangTextType.B1001);
@@ -119,19 +117,19 @@ namespace Lang {
             case Types.TileType.MistOnPlain     : return getText(LangTextType.B1031);
             case Types.TileType.MistOnRiver     : return getText(LangTextType.B1032);
             case Types.TileType.MistOnBeach     : return getText(LangTextType.B1033);
-            default                             : return undefined;
+            default                             : return null;
         }
     }
 
-    export function getTileDecoratorName(decoratorType: Types.TileDecoratorType): string | undefined {
+    export function getTileDecoratorName(decoratorType: Types.TileDecoratorType): string | null {
         switch (decoratorType) {
             case Types.TileDecoratorType.Corner : return getText(LangTextType.B0663);
             case Types.TileDecoratorType.Empty  : return getText(LangTextType.B0001);
-            default                             : return undefined;
+            default                             : return null;
         }
     }
 
-    export function getUnitName(unitType: Types.UnitType): string | undefined {
+    export function getUnitName(unitType: Types.UnitType): string | null {
         switch (unitType) {
             case Types.UnitType.Infantry        : return getText(LangTextType.B1200);
             case Types.UnitType.Mech            : return getText(LangTextType.B1201);
@@ -159,11 +157,11 @@ namespace Lang {
             case Types.UnitType.Cruiser         : return getText(LangTextType.B1223);
             case Types.UnitType.Lander          : return getText(LangTextType.B1224);
             case Types.UnitType.Gunboat         : return getText(LangTextType.B1225);
-            default                             : return undefined;
+            default                             : return null;
         }
     }
 
-    export function getUnitActionName(actionType: Types.UnitActionType): string | undefined{
+    export function getUnitActionName(actionType: Types.UnitActionType): string | null{
         switch (actionType) {
             case Types.UnitActionType.BeLoaded          : return getText(LangTextType.B0037);
             case Types.UnitActionType.Join              : return getText(LangTextType.B0038);
@@ -182,11 +180,11 @@ namespace Lang {
             case Types.UnitActionType.LoadCo            : return getText(LangTextType.B0139);
             case Types.UnitActionType.ProduceUnit       : return getText(LangTextType.B0049);
             case Types.UnitActionType.Wait              : return getText(LangTextType.B0050);
-            default                                     : return undefined;
+            default                                     : return null;
         }
     }
 
-    export function getRankName(playerRank: number): string | undefined {
+    export function getRankName(playerRank: number): string | null {
         switch (playerRank) {
             case 0  : return getText(LangTextType.B0061);
             case 1  : return getText(LangTextType.B0062);
@@ -204,11 +202,11 @@ namespace Lang {
             case 13 : return getText(LangTextType.B0074);
             case 14 : return getText(LangTextType.B0075);
             case 15 : return getText(LangTextType.B0076);
-            default : return undefined;
+            default : return null;
         }
     }
 
-    export function getMoveTypeName(t: Types.MoveType): string | undefined {
+    export function getMoveTypeName(t: Types.MoveType): string | null {
         switch (t) {
             case Types.MoveType.Air         : return getText(LangTextType.B0117);
             case Types.MoveType.Infantry    : return getText(LangTextType.B0112);
@@ -218,11 +216,11 @@ namespace Lang {
             case Types.MoveType.TireA       : return getText(LangTextType.B0115);
             case Types.MoveType.TireB       : return getText(LangTextType.B0116);
             case Types.MoveType.Transport   : return getText(LangTextType.B0119);
-            default                         : return undefined;
+            default                         : return null;
         }
     }
 
-    export function getUnitCategoryName(t: Types.UnitCategory): string | undefined {
+    export function getUnitCategoryName(t: Types.UnitCategory): string | null {
         switch (t) {
             case Types.UnitCategory.All                 : return getText(LangTextType.B0120);
             case Types.UnitCategory.Ground              : return getText(LangTextType.B0121);
@@ -241,11 +239,11 @@ namespace Lang {
             case Types.UnitCategory.Copter              : return getText(LangTextType.B0134);
             case Types.UnitCategory.Tank                : return getText(LangTextType.B0135);
             case Types.UnitCategory.AirExceptSeaplane   : return getText(LangTextType.B0136);
-            default                                     : return undefined;
+            default                                     : return null;
         }
     }
 
-    export function getWarTypeName(type: Types.WarType): string | undefined {
+    export function getWarTypeName(type: Types.WarType): string | null {
         switch (type) {
             case Types.WarType.McwStd   : return getText(LangTextType.B0417);
             case Types.WarType.McwFog   : return getText(LangTextType.B0418);
@@ -256,11 +254,11 @@ namespace Lang {
             case Types.WarType.ScwFog   : return getText(LangTextType.B0611);
             case Types.WarType.SfwStd   : return getText(LangTextType.B0612);
             case Types.WarType.SfwFog   : return getText(LangTextType.B0613);
-            default                     : return undefined;
+            default                     : return null;
         }
     }
 
-    export function getWarBasicSettingsName(type: Types.WarBasicSettingsType): string | undefined {
+    export function getWarBasicSettingsName(type: Types.WarBasicSettingsType): string | null {
         switch (type) {
             case Types.WarBasicSettingsType.MapName                 : return Lang.getText(LangTextType.B0225);
             case Types.WarBasicSettingsType.WarName                 : return Lang.getText(LangTextType.B0185);
@@ -274,21 +272,21 @@ namespace Lang {
             case Types.WarBasicSettingsType.TimerIncrementalParam2  : return Lang.getText(LangTextType.B0390);
             case Types.WarBasicSettingsType.SpmSaveSlotIndex        : return Lang.getText(LangTextType.B0255);
             case Types.WarBasicSettingsType.SpmSaveSlotComment      : return Lang.getText(LangTextType.B0605);
-            default                                                 : return undefined;
+            default                                                 : return null;
         }
     }
 
-    export function getMapReviewStatusText(status: Types.MapReviewStatus): string | undefined{
+    export function getMapReviewStatusText(status: Types.MapReviewStatus): string | null{
         switch (status) {
             case Types.MapReviewStatus.None         : return getText(LangTextType.B0273);
             case Types.MapReviewStatus.Reviewing    : return getText(LangTextType.B0274);
             case Types.MapReviewStatus.Rejected     : return getText(LangTextType.B0275);
             case Types.MapReviewStatus.Accepted     : return getText(LangTextType.B0276);
-            default                                 : return undefined;
+            default                                 : return null;
         }
     }
 
-    export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string | undefined{
+    export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string | null{
         switch (mode) {
             case Types.MapEditorDrawerMode.Preview              : return getText(LangTextType.B0286);
             case Types.MapEditorDrawerMode.DrawUnit             : return getText(LangTextType.B0281);
@@ -298,65 +296,65 @@ namespace Lang {
             case Types.MapEditorDrawerMode.DeleteUnit           : return getText(LangTextType.B0284);
             case Types.MapEditorDrawerMode.DeleteTileDecorator  : return getText(LangTextType.B0661);
             case Types.MapEditorDrawerMode.DeleteTileObject     : return getText(LangTextType.B0285);
-            default                                             : return undefined;
+            default                                             : return null;
         }
     }
 
-    export function getUnitActionStateText(state: Types.UnitActionState): string | undefined{
+    export function getUnitActionStateText(state: Types.UnitActionState): string | null{
         switch (state) {
             case Types.UnitActionState.Acted    : return getText(LangTextType.B0368);
             case Types.UnitActionState.Idle     : return getText(LangTextType.B0369);
-            default                             : return undefined;
+            default                             : return null;
         }
     }
 
-    export function getChatChannelName(channel: Types.ChatChannel): string | undefined {
+    export function getChatChannelName(channel: Types.ChatChannel): string | null {
         switch (channel) {
             case Types.ChatChannel.System   : return getText(LangTextType.B0374);
             case Types.ChatChannel.PublicEn : return getText(LangTextType.B0373);
             case Types.ChatChannel.PublicCn : return getText(LangTextType.B0384);
-            default                         : return undefined;
+            default                         : return null;
         }
     }
 
-    export function getUnitAndTileSkinName(skinId: number): string | undefined {
+    export function getUnitAndTileSkinName(skinId: number): string | null {
         switch (skinId) {
             case 0  : return "";
             case 1  : return getText(LangTextType.B0004);
             case 2  : return getText(LangTextType.B0005);
             case 3  : return getText(LangTextType.B0006);
             case 4  : return getText(LangTextType.B0007);
-            default : return undefined;
+            default : return null;
         }
     }
 
-    export function getCoSkillTypeName(skillType: Types.CoSkillType): string | undefined {
+    export function getCoSkillTypeName(skillType: Types.CoSkillType): string | null {
         switch (skillType) {
             case Types.CoSkillType.Passive      : return getText(LangTextType.B0576);
             case Types.CoSkillType.Power        : return getText(LangTextType.B0577);
             case Types.CoSkillType.SuperPower   : return getText(LangTextType.B0578);
-            default                             : return undefined;
+            default                             : return null;
         }
     }
 
-    export function getPlayerAliveStateName(state: Types.PlayerAliveState): string | undefined {
+    export function getPlayerAliveStateName(state: Types.PlayerAliveState): string | null {
         switch (state) {
             case Types.PlayerAliveState.Alive   : return getText(LangTextType.B0471);
             case Types.PlayerAliveState.Dead    : return getText(LangTextType.B0472);
             case Types.PlayerAliveState.Dying   : return getText(LangTextType.B0473);
-            default                             : return undefined;
+            default                             : return null;
         }
     }
 
-    export function getTurnPhaseName(phaseCode: Types.TurnPhaseCode): string | undefined {
+    export function getTurnPhaseName(phaseCode: Types.TurnPhaseCode): string | null {
         switch (phaseCode) {
             case Types.TurnPhaseCode.WaitBeginTurn  : return getText(LangTextType.B0474);
             case Types.TurnPhaseCode.Main           : return getText(LangTextType.B0475);
-            default                                 : return undefined;
+            default                                 : return null;
         }
     }
 
-    export function getBgmName(code: BgmCode): string | undefined {
+    export function getBgmName(code: BgmCode): string | null {
         switch (code) {
             case BgmCode.None           : return getText(LangTextType.B0001);
             case BgmCode.Lobby01        : return getText(LangTextType.B0632);
@@ -375,20 +373,20 @@ namespace Lang {
             case BgmCode.Co0010         : return getText(LangTextType.B0653);
             case BgmCode.Co0011         : return getText(LangTextType.B0659);
             case BgmCode.Co9999         : return getText(LangTextType.B0639);
-            default                     : return undefined;
+            default                     : return null;
         }
     }
 
-    export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined | null {
+    export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | null {
         if (warRule.ruleId == null) {
             return getText(LangTextType.B0321);
         } else {
             const ruleNameArray = warRule.ruleNameArray;
-            return ruleNameArray ? getLanguageText({ textArray: ruleNameArray }) : undefined;
+            return ruleNameArray ? getLanguageText({ textArray: ruleNameArray }) : null;
         }
     }
 
-    export function getWarEventConditionTypeName(type: WarEventConditionType): string | undefined {
+    export function getWarEventConditionTypeName(type: WarEventConditionType): string | null {
         switch (type) {
             case WarEventConditionType.WecTurnIndexEqualTo                  : return getText(LangTextType.B0504);
             case WarEventConditionType.WecTurnIndexGreaterThan              : return getText(LangTextType.B0505);
@@ -402,20 +400,20 @@ namespace Lang {
             case WarEventConditionType.WecEventCalledCountTotalGreaterThan  : return getText(LangTextType.B0513);
             case WarEventConditionType.WecEventCalledCountTotalLessThan     : return getText(LangTextType.B0514);
             case WarEventConditionType.WecPlayerAliveStateEqualTo           : return getText(LangTextType.B0515);
-            default                                                         : return undefined;
+            default                                                         : return null;
         }
     }
 
-    export function getWarEventActionTypeName(type: WarEventActionType): string | undefined {
+    export function getWarEventActionTypeName(type: WarEventActionType): string | null {
         switch (type) {
             case WarEventActionType.AddUnit                 : return getText(LangTextType.B0617);
             case WarEventActionType.SetPlayerAliveState     : return getText(LangTextType.B0618);
             case WarEventActionType.Dialogue                : return getText(LangTextType.B0674);
-            default                                         : return undefined;
+            default                                         : return null;
         }
     }
 
-    export function getPlayerRuleName(type: PlayerRuleType): string | undefined {
+    export function getPlayerRuleName(type: PlayerRuleType): string | null {
         switch (type) {
             case PlayerRuleType.TeamIndex               : return getText(LangTextType.B0019);
             case PlayerRuleType.BannedCoIdArray         : return getText(LangTextType.B0403);
@@ -430,30 +428,30 @@ namespace Lang {
             case PlayerRuleType.LuckUpperLimit          : return getText(LangTextType.B0190);
             case PlayerRuleType.AiCoIdInCcw             : return getText(LangTextType.B0641);
             case PlayerRuleType.AiControlInCcw          : return getText(LangTextType.B0642);
-            default                                     : return undefined;
+            default                                     : return null;
         }
     }
 
-    export function getGameVersionName(type: GameVersion): string | undefined {
+    export function getGameVersionName(type: GameVersion): string | null {
         switch (type) {
             case GameVersion.Legacy : return getText(LangTextType.B0621);
             case GameVersion.Test   : return getText(LangTextType.B0622);
             case GameVersion.Awbw   : return getText(LangTextType.B0649);
-            default                 : return undefined;
+            default                 : return null;
         }
     }
-    export function getGameVersionDesc(type: GameVersion): string | undefined {
+    export function getGameVersionDesc(type: GameVersion): string | null {
         switch (type) {
             case GameVersion.Legacy : return getText(LangTextType.A0217);
             case GameVersion.Test   : return getText(LangTextType.A0218);
             case GameVersion.Awbw   : return getText(LangTextType.A0224);
-            default                 : return undefined;
+            default                 : return null;
         }
     }
 
-    export function getStringInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
+    export function getStringInCurrentLanguage(nameList: Types.Undefinable<string[]>): string | null {
         if (!nameList) {
-            return undefined;
+            return null;
         } else {
             return getCurrentLanguageType() === LanguageType.Chinese
                 ? nameList[0]
@@ -487,14 +485,14 @@ namespace Lang {
         return strList.join(`, `);
     }
 
-    export function getBootTimerTypeName(type: Types.BootTimerType): string | undefined {
+    export function getBootTimerTypeName(type: Types.BootTimerType): string | null {
         switch (type) {
             case Types.BootTimerType.Regular    : return getText(LangTextType.B0387);
             case Types.BootTimerType.Incremental: return getText(LangTextType.B0388);
-            default                             : return undefined;
+            default                             : return null;
         }
     }
-    export function getBootTimerDesc(params: number[]): string | undefined {
+    export function getBootTimerDesc(params: number[]): string | null {
         params          = params || [];
         const timerType = params[0] as Types.BootTimerType;
         if (timerType === Types.BootTimerType.Regular) {
@@ -502,7 +500,7 @@ namespace Lang {
         } else if (timerType === Types.BootTimerType.Incremental) {
             return `${getText(LangTextType.B0388)} ${Helpers.getTimeDurationText2(params[1])} + ${Helpers.getTimeDurationText2(params[2])}`;
         } else {
-            return undefined;
+            return null;
         }
     }
     export async function getGameStartDesc(data: ProtoTypes.NetMessage.MsgMpwCommonBroadcastGameStart.IS): Promise<string> {

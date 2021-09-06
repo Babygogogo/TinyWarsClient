@@ -17,7 +17,7 @@ namespace ChangeLogProxy {
             { msgCode: NetMessageCodes.MsgChangeLogAddMessage,         callback: _onMsgChangeLogAddMessage },
             { msgCode: NetMessageCodes.MsgChangeLogModifyMessage,      callback: _onMsgChangeLogModifyMessage },
             { msgCode: NetMessageCodes.MsgChangeLogGetMessageList,     callback: _onMsgChangeLogGetMessageList, },
-        ], undefined);
+        ], null);
     }
 
     export function reqChangeLogAddMessage(textList: ILanguageText[]): void {
@@ -56,7 +56,7 @@ namespace ChangeLogProxy {
     function _onMsgChangeLogGetMessageList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChangeLogGetMessageList.IS;
         if (!data.errorCode) {
-            ChangeLogModel.setAllMessageList(data.messageList);
+            ChangeLogModel.setAllMessageList(data.messageList || []);
             Notify.dispatch(NotifyType.MsgChangeLogGetMessageList, data);
         }
     }

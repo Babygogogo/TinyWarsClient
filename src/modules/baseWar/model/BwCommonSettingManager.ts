@@ -1,10 +1,12 @@
 
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsBwWar            from "./BwWar";
 import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwCommonSettingManager {
     import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
@@ -16,7 +18,7 @@ namespace TwnsBwCommonSettingManager {
         private _settingsForCommon? : ISettingsForCommon;
 
         public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
-            settings                : ISettingsForCommon | null | undefined;
+            settings                : Types.Undefinable<ISettingsForCommon>;
             allWarEventIdArray      : number[];
             playersCountUnneutral   : number;
         }): Promise<ClientErrorCode> {
@@ -25,7 +27,9 @@ namespace TwnsBwCommonSettingManager {
             }
 
             const configVersion = settings.configVersion;
-            if ((configVersion == null) || (!await ConfigManager.checkIsVersionValid(configVersion))) {
+            if ((configVersion == null)                                                                                                     ||
+                (!await ConfigManager.checkIsVersionValid(configVersion).catch(err => { CompatibilityHelpers.showError(err); throw err; }))
+            ) {
                 return ClientErrorCode.BwCommonSettingManagerInit01;
             }
 
@@ -63,8 +67,8 @@ namespace TwnsBwCommonSettingManager {
         private _setWar(war: BwWar): void {
             this._war = war;
         }
-        protected _getWar(): BwWar | undefined {
-            return this._war;
+        protected _getWar(): BwWar {
+            return Helpers.getExisted(this._war);
         }
 
         protected _setSettingsForCommon(settings: ISettingsForCommon): void {

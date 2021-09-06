@@ -75,7 +75,7 @@ namespace TwnsMcrCreateSettingsPanel {
             if (!McrCreateSettingsPanel._instance) {
                 McrCreateSettingsPanel._instance = new McrCreateSettingsPanel();
             }
-            McrCreateSettingsPanel._instance.open(undefined);
+            McrCreateSettingsPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (McrCreateSettingsPanel._instance) {

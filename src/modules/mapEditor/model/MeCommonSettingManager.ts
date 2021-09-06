@@ -3,6 +3,7 @@ import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingMan
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Helpers                      from "../../tools/helpers/Helpers";
+import Types                        from "../../tools/helpers/Types";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import TwnsMeWar                    from "./MeWar";
 
@@ -13,7 +14,7 @@ namespace TwnsMeCommonSettingManager {
 
     export class MeCommonSettingManager extends TwnsBwCommonSettingManager.BwCommonSettingManager {
         public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
-            settings                : ISettingsForCommon | null | undefined;
+            settings                : Types.Undefinable<ISettingsForCommon>;
             allWarEventIdArray      : number[];
             playersCountUnneutral   : number;
         }): Promise<ClientErrorCode> {

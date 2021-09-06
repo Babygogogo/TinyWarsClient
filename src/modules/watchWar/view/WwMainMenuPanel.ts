@@ -45,7 +45,7 @@ namespace TwnsWwMainMenuPanel {
             if (!WwMainMenuPanel._instance) {
                 WwMainMenuPanel._instance = new WwMainMenuPanel();
             }
-            WwMainMenuPanel._instance.open(undefined);
+            WwMainMenuPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

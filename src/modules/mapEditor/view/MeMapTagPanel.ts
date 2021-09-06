@@ -35,7 +35,7 @@ namespace TwnsMeMapTagPanel {
             if (!MeMapTagPanel._instance) {
                 MeMapTagPanel._instance = new MeMapTagPanel();
             }
-            MeMapTagPanel._instance.open(undefined);
+            MeMapTagPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

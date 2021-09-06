@@ -25,38 +25,27 @@ namespace TwnsUserOnlineUsersPanel {
 
         private static _instance: UserOnlineUsersPanel;
 
-        // @ts-ignore
-        private readonly _imgMask               : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _group                 : eui.Group;
-        // @ts-ignore
-        private readonly _labelTitle            : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _btnClose              : TwnsUiButton.UiButton;
+        private readonly _imgMask!              : TwnsUiImage.UiImage;
+        private readonly _group!                : eui.Group;
+        private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!             : TwnsUiButton.UiButton;
 
-        // @ts-ignore
-        private readonly _labelTips             : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelUsersCountTitle  : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelUsersCount       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelNameTitle1       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelNameTitle2       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _listUser              : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
-        // @ts-ignore
-        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
+        private readonly _labelTips!            : TwnsUiLabel.UiLabel;
+        private readonly _labelUsersCountTitle! : TwnsUiLabel.UiLabel;
+        private readonly _labelUsersCount!      : TwnsUiLabel.UiLabel;
+        private readonly _labelNameTitle1!      : TwnsUiLabel.UiLabel;
+        private readonly _labelNameTitle2!      : TwnsUiLabel.UiLabel;
+        private readonly _listUser!             : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
+        private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
 
-        private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUsers.IS | null | undefined;
-        private _dataForList: DataForUserRenderer[] | null | undefined;
+        private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUsers.IS | null = null;
+        private _dataForList: DataForUserRenderer[] | null = null;
 
         public static show(): void {
             if (!UserOnlineUsersPanel._instance) {
                 UserOnlineUsersPanel._instance = new UserOnlineUsersPanel();
             }
-            UserOnlineUsersPanel._instance.open(undefined);
+            UserOnlineUsersPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (UserOnlineUsersPanel._instance) {
@@ -207,14 +196,12 @@ namespace TwnsUserOnlineUsersPanel {
 
     type DataForUserRenderer = {
         index       : number;
-        userId      : number | null | undefined;
-        nickname    : string | null | undefined;
+        userId      : Types.Undefinable<number>;
+        nickname    : Types.Undefinable<string>;
     };
     class UserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUserRenderer> {
-        // @ts-ignore
-        private readonly _imgBg     : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _labelName : TwnsUiLabel.UiLabel;
+        private readonly _imgBg!        : TwnsUiImage.UiImage;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([

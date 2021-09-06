@@ -41,7 +41,7 @@ namespace Timer {
         egret.setInterval(() => {
             (_serverTimestamp) && (++_serverTimestamp);
             Notify.dispatch(NotifyType.TimeTick);
-        }, undefined, 1000);
+        }, null, 1000);
 
         if (LocalStorage.getShowTileAnimation()) {
             startTileAnimationTick();
@@ -53,7 +53,7 @@ namespace Timer {
         egret.setInterval(() => {
             ++_gridAnimationTickCount;
             Notify.dispatch(NotifyType.GridAnimationTick);
-        }, undefined, GRID_ANIMATION_INTERVAL_MS);
+        }, null, GRID_ANIMATION_INTERVAL_MS);
     }
 
     export function getServerTimestamp(): number {
@@ -67,7 +67,7 @@ namespace Timer {
             ++_tileAnimationTickCount;
             CommonModel.tickTileImageSources();
             Notify.dispatch(NotifyType.TileAnimationTick);
-        }, undefined, TILE_ANIMATION_INTERVAL_MS);
+        }, null, TILE_ANIMATION_INTERVAL_MS);
     }
     export function stopTileAnimationTick(): void {
         if (_intervalIdForTileAnimation != null) {
@@ -89,7 +89,7 @@ namespace Timer {
             ++_unitAnimationTickCount;
             CommonModel.tickUnitImageSources();
             Notify.dispatch(NotifyType.UnitAnimationTick);
-        }, undefined, UNIT_ANIMATION_INTERVAL_MS);
+        }, null, UNIT_ANIMATION_INTERVAL_MS);
     }
     export function stopUnitAnimationTick(): void {
         if (_intervalIdForUnitAnimation != null) {
@@ -110,7 +110,7 @@ namespace Timer {
 
     function _onNotifyNetworkConnected(): void {
         (_heartbeatIntervalId != null) && (egret.clearInterval(_heartbeatIntervalId));
-        _heartbeatIntervalId = egret.setInterval(heartbeat, undefined, HEARTBEAT_INTERVAL_MS);
+        _heartbeatIntervalId = egret.setInterval(heartbeat, null, HEARTBEAT_INTERVAL_MS);
 
         _isHeartbeatAnswered = true;
         _heartbeatCounter    = 0;

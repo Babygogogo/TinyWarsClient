@@ -47,7 +47,7 @@ namespace TwnsUserLoginBackgroundPanel {
             if (!UserLoginBackgroundPanel._instance) {
                 UserLoginBackgroundPanel._instance = new UserLoginBackgroundPanel();
             }
-            UserLoginBackgroundPanel._instance.open(undefined);
+            UserLoginBackgroundPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

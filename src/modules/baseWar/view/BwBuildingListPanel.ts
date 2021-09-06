@@ -2,6 +2,7 @@
 import TwnsMeTileSimpleView     from "../../mapEditor/view/MeTileSimpleView";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -28,8 +29,8 @@ namespace TwnsBwBuildingListPanel {
 
         private static _instance: BwBuildingListPanel;
 
-        public _labelTitle  : TwnsUiLabel.UiLabel;
-        public _listTile    : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
+        public readonly _labelTitle!    : TwnsUiLabel.UiLabel;
+        public readonly _listTile!      : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
 
         public static show(openData: OpenDataForBwBuildingListPanel): void {
             if (!BwBuildingListPanel._instance) {
@@ -80,7 +81,7 @@ namespace TwnsBwBuildingListPanel {
                         dict.set(tileType, new Map<number, number>());
                     }
                     const playerIndex   = tile.getPlayerIndex();
-                    const subDict       = dict.get(tileType);
+                    const subDict       = Helpers.getExisted(dict.get(tileType));
                     subDict.set(playerIndex, (subDict.get(playerIndex) || 0) + 1);
                 }
             }
@@ -107,18 +108,18 @@ namespace TwnsBwBuildingListPanel {
         dict            : Map<number, number>;
     };
     class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
-        private _group          : eui.Group;
-        private _conTileView    : eui.Group;
-        private _labelNum0      : TwnsUiLabel.UiLabel;
-        private _labelNum1      : TwnsUiLabel.UiLabel;
-        private _labelNum2      : TwnsUiLabel.UiLabel;
-        private _labelNum3      : TwnsUiLabel.UiLabel;
-        private _labelNum4      : TwnsUiLabel.UiLabel;
-        private _labelTotalNum  : TwnsUiLabel.UiLabel;
+        private readonly _group!            : eui.Group;
+        private readonly _conTileView!      : eui.Group;
+        private readonly _labelNum0!        : TwnsUiLabel.UiLabel;
+        private readonly _labelNum1!        : TwnsUiLabel.UiLabel;
+        private readonly _labelNum2!        : TwnsUiLabel.UiLabel;
+        private readonly _labelNum3!        : TwnsUiLabel.UiLabel;
+        private readonly _labelNum4!        : TwnsUiLabel.UiLabel;
+        private readonly _labelTotalNum!    : TwnsUiLabel.UiLabel;
 
         private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
-        private _labelNumList   : TwnsUiLabel.UiLabel[];
+        private _labelNumList?  : TwnsUiLabel.UiLabel[];
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -142,14 +143,14 @@ namespace TwnsBwBuildingListPanel {
         }
 
         protected _onDataChanged(): void {
-            const data              = this.data;
+            const data              = this._getData();
             const dict              = data.dict;
             const playerManager     = data.playerManager;
             let totalNum            = 0;
             for (let playerIndex = 0; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
-                const num                               = dict.get(playerIndex) || 0;
-                totalNum                                += num;
-                this._labelNumList[playerIndex].text    = playerManager.getPlayer(playerIndex) ? `${num}` : `--`;
+                const num                                                   = dict.get(playerIndex) || 0;
+                totalNum                                                    += num;
+                Helpers.getExisted(this._labelNumList)[playerIndex].text    = playerManager.getPlayer(playerIndex) ? `${num}` : `--`;
             }
             this._labelTotalNum.text = `${totalNum}`;
 

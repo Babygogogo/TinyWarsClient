@@ -2,7 +2,6 @@
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import Helpers              from "../../tools/helpers/Helpers";
-import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import TwnsBwPlayer         from "./BwPlayer";
@@ -22,7 +21,7 @@ namespace TwnsBwPlayerManager {
 
         public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
 
-        public init(data: ISerialPlayerManager | null | undefined, configVersion: string): ClientErrorCode {
+        public init(data: Types.Undefinable<ISerialPlayerManager>, configVersion: string): ClientErrorCode {
             if (data == null) {
                 return ClientErrorCode.BwPlayerManagerInit00;
             }
@@ -155,13 +154,13 @@ namespace TwnsBwPlayerManager {
             return players;
         }
 
-        public getPlayerByUserId(userId: number): TwnsBwPlayer.BwPlayer | undefined {
+        public getPlayerByUserId(userId: number): TwnsBwPlayer.BwPlayer | null {
             for (const [, player] of this._players) {
                 if (player.getUserId() === userId) {
                     return player;
                 }
             }
-            return undefined;
+            return null;
         }
 
         public getPlayerInTurn(): TwnsBwPlayer.BwPlayer {
@@ -229,7 +228,7 @@ namespace TwnsBwPlayerManager {
                 ) {
                     const teamIndex = player.getTeamIndex();
                     if (teamIndex == null) {
-                        Logger.error(`BwPlayerManager.getAliveTeamIndexes() empty teamIndex.`);
+                        throw new Error(`BwPlayerManager.getAliveTeamIndexes() empty teamIndex.`);
                     } else {
                         indexes.add(teamIndex);
                     }

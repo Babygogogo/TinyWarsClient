@@ -68,7 +68,7 @@ namespace TwnsMeTopPanel {
             if (!MeTopPanel._instance) {
                 MeTopPanel._instance = new MeTopPanel();
             }
-            MeTopPanel._instance.open(undefined);
+            MeTopPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

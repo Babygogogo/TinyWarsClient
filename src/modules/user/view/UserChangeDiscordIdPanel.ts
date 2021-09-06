@@ -42,7 +42,7 @@ namespace TwnsUserChangeDiscordIdPanel {
             if (!UserChangeDiscordIdPanel._instance) {
                 UserChangeDiscordIdPanel._instance = new UserChangeDiscordIdPanel();
             }
-            UserChangeDiscordIdPanel._instance.open(undefined);
+            UserChangeDiscordIdPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

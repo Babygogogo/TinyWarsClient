@@ -10,7 +10,6 @@ import TwnsMmMainMenuPanel          from "../../mapManagement/view/MmMainMenuPan
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import Helpers                      from "../../tools/helpers/Helpers";
 import LocalStorage                 from "../../tools/helpers/LocalStorage";
-import Logger                       from "../../tools/helpers/Logger";
 import StageManager                 from "../../tools/helpers/StageManager";
 import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";
@@ -85,7 +84,7 @@ namespace TwnsUserSettingsPanel {
             if (!UserSettingsPanel._instance) {
                 UserSettingsPanel._instance = new UserSettingsPanel();
             }
-            UserSettingsPanel._instance.open(undefined);
+            UserSettingsPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -227,7 +226,7 @@ namespace TwnsUserSettingsPanel {
 
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                Logger.error(`UserSettingsPanel._onOpened() empty selfUserId.`);
+                throw new Error(`UserSettingsPanel._onOpened() empty selfUserId.`);
             } else {
                 UserProxy.reqUserGetPublicInfo(selfUserId);
             }
@@ -254,7 +253,7 @@ namespace TwnsUserSettingsPanel {
         private _onMsgUserSetNickname(): void {
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                Logger.error(`UserSettingsPanel._onMsgUserSetNickname() empty selfUserId.`);
+                throw new Error(`UserSettingsPanel._onMsgUserSetNickname() empty selfUserId.`);
             } else {
                 UserProxy.reqUserGetPublicInfo(selfUserId);
             }
@@ -262,7 +261,7 @@ namespace TwnsUserSettingsPanel {
         private _onMsgUserSetDiscordId(): void {
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                Logger.error(`UserSettingsPanel._onMsgUserSetDiscordId() empty selfUserId.`);
+                throw new Error(`UserSettingsPanel._onMsgUserSetDiscordId() empty selfUserId.`);
             } else {
                 UserProxy.reqUserGetPublicInfo(selfUserId);
             }
@@ -307,7 +306,7 @@ namespace TwnsUserSettingsPanel {
         private _onTouchedBtnSetPrivilege(): void {
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                Logger.error(`UserSettingsPanel._onTouchedBtnSetPrivilege() empty selfUserId.`);
+                throw new Error(`UserSettingsPanel._onTouchedBtnSetPrivilege() empty selfUserId.`);
             } else {
                 UserSetPrivilegePanel.show({ userId: selfUserId });
             }

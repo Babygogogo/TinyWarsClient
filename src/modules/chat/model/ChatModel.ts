@@ -1,10 +1,11 @@
 
-import TwnsChatPanel        from "../view/ChatPanel";
-import Logger               from "../../tools/helpers/Logger";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import Types                from "../../tools/helpers/Types";
-import UserModel            from "../../user/model/UserModel";
-import FloatText            from "../../tools/helpers/FloatText";
+import FloatText        from "../../tools/helpers/FloatText";
+import Helpers          from "../../tools/helpers/Helpers";
+import Logger           from "../../tools/helpers/Logger";
+import Types            from "../../tools/helpers/Types";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import UserModel        from "../../user/model/UserModel";
+import TwnsChatPanel    from "../view/ChatPanel";
 
 namespace ChatModel {
     import ChatCategory     = Types.ChatMessageToCategory;
@@ -37,7 +38,7 @@ namespace ChatModel {
             Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
         } else {
             const msgToCategory = msg.toCategory;
-            const msgToTarget   = msg.toTarget;
+            const msgToTarget   = Helpers.getExisted(msg.toTarget);
             const msgContent    = msg.content;
             const isSentBySelf  = UserModel.getSelfUserId() === fromUserId;
 
@@ -82,7 +83,7 @@ namespace ChatModel {
         if (!_allMessageDict.has(toCategory)) {
             _allMessageDict.set(toCategory, new Map());
         }
-        return _allMessageDict.get(toCategory);
+        return Helpers.getExisted(_allMessageDict.get(toCategory));
     }
     export function getLatestMessageTimestamp(toCategory: ChatCategory, toTarget: number): number {
         const messageList   = getMessagesForCategory(toCategory).get(toTarget) || [];
@@ -97,9 +98,9 @@ namespace ChatModel {
         }
     }
     export function setReadProgress(progress: ProtoTypes.Chat.IChatReadProgress): void {
-        const toCategory    = progress.toCategory;
-        const toTarget      = progress.toTarget;
-        const timestamp     = progress.timestamp;
+        const toCategory    = Helpers.getExisted(progress.toCategory);
+        const toTarget      = Helpers.getExisted(progress.toTarget);
+        const timestamp     = Helpers.getExisted(progress.timestamp);
         const subDict       = _allProgressDict.get(toCategory);
         if (subDict) {
             subDict.set(toTarget, timestamp);
@@ -116,7 +117,7 @@ namespace ChatModel {
 
     export function checkHasUnreadMessage(): boolean {
         for (const [toCategory, dict] of _allMessageDict) {
-            for (const [toTarget, _] of dict) {
+            for (const [toTarget, ] of dict) {
                 if (checkHasUnreadMessageForTarget(toCategory, toTarget)) {
                     return true;
                 }
@@ -130,7 +131,7 @@ namespace ChatModel {
         if (!length) {
             return false;
         } else {
-            return getReadProgressTimestamp(toCategory, toTarget) < messages[length - 1].timestamp;
+            return getReadProgressTimestamp(toCategory, toTarget) < Helpers.getExisted(messages[length - 1].timestamp);
         }
     }
 
@@ -140,7 +141,7 @@ namespace ChatModel {
             _allMessageDict.set(toCategory, new Map<number, IChatMessage[]>([[toTarget, [msg]]]));
         } else {
             if (dict.has(toTarget)) {
-                dict.get(toTarget).push(msg);
+                Helpers.getExisted(dict.get(toTarget)).push(msg);
             } else {
                 dict.set(toTarget, [msg]);
             }

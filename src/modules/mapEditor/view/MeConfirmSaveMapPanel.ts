@@ -43,7 +43,7 @@ namespace TwnsMeConfirmSaveMapPanel {
             if (!MeConfirmSaveMapPanel._instance) {
                 MeConfirmSaveMapPanel._instance = new MeConfirmSaveMapPanel();
             }
-            MeConfirmSaveMapPanel._instance.open(undefined);
+            MeConfirmSaveMapPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

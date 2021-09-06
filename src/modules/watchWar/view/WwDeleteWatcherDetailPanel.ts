@@ -36,7 +36,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
         private readonly _btnConfirm!               : TwnsUiButton.UiButton;
         private readonly _btnCancel!                : TwnsUiButton.UiButton;
 
-        private _dataForListPlayer  : DataForRequesterRenderer[] | undefined;
+        private _dataForListPlayer  : DataForRequesterRenderer[] | null = null;
 
         public static show(openData: OpenDataForMcrWatchDeleteWatcherDetailPanel): void {
             if (!WwDeleteWatcherDetailPanel._instance) {
@@ -73,7 +73,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._dataForListPlayer = undefined;
+            this._dataForListPlayer = null;
         }
 
         public setRequesterSelected(index: number, selected: boolean): void {

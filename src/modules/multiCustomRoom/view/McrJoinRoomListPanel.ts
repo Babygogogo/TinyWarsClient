@@ -67,7 +67,7 @@ namespace TwnsMcrJoinRoomListPanel {
             if (!McrJoinRoomListPanel._instance) {
                 McrJoinRoomListPanel._instance = new McrJoinRoomListPanel();
             }
-            McrJoinRoomListPanel._instance.open(undefined);
+            McrJoinRoomListPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (McrJoinRoomListPanel._instance) {
@@ -226,7 +226,7 @@ namespace TwnsMcrJoinRoomListPanel {
                 } else {
                     TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
                         mapId               : Helpers.getExisted(settingsForMcw.mapId),
-                        warName             : Helpers.getExisted(settingsForMcw.warName),
+                        warName             : settingsForMcw.warName ?? null,
                         password            : settingsForMcw.warPassword,
                         callbackOnSucceed   : callback,
                     });
@@ -494,7 +494,7 @@ namespace TwnsMcrJoinRoomListPanel {
             } else {
                 TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
                     mapId               : Helpers.getExisted(settingsForMcw.mapId),
-                    warName             : Helpers.getExisted(settingsForMcw.warName),
+                    warName             : settingsForMcw.warName ?? null,
                     password            : settingsForMcw.warPassword,
                     callbackOnSucceed   : callback,
                 });

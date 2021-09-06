@@ -280,20 +280,20 @@ namespace TwnsWeActionModifyPanel1 {
         private _onTouchedGroupIsDiving(): void {
             const data          = this._getData();
             const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
-            unitData.isDiving   = unitData.isDiving ? undefined : true;
+            unitData.isDiving   = unitData.isDiving ? null : true;
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedGroupHasLoadedCo(): void {
             const data              = this._getData();
             const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
-            unitData.hasLoadedCo    = unitData.hasLoadedCo ? undefined : true;
+            unitData.hasLoadedCo    = unitData.hasLoadedCo ? null : true;
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActionState(): void {
             const data      = this._getData();
             const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
             if (unitData.actionState === Types.UnitActionState.Acted) {
-                unitData.actionState = undefined;
+                unitData.actionState = null;
             } else {
                 unitData.actionState = Types.UnitActionState.Acted;
             }
@@ -343,7 +343,7 @@ namespace TwnsWeActionModifyPanel1 {
             const currentHp = unitData.currentHp == null ? maxHp : unitData.currentHp;
             const newHp     = Math.max(0, Math.min(parseInt(this._inputHp.text) || 0, maxHp));
             if (newHp !== currentHp) {
-                unitData.currentHp = newHp === maxHp ? undefined : newHp;
+                unitData.currentHp = newHp === maxHp ? null : newHp;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -354,7 +354,7 @@ namespace TwnsWeActionModifyPanel1 {
             const currentFuel   = unitData.currentFuel == null ? maxFuel : unitData.currentFuel;
             const newFuel       = Math.max(0, Math.min(parseInt(this._inputFuel.text) || 0, maxFuel));
             if (newFuel !== currentFuel) {
-                unitData.currentFuel = newFuel === maxFuel ? undefined : newFuel;
+                unitData.currentFuel = newFuel === maxFuel ? null : newFuel;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -365,7 +365,7 @@ namespace TwnsWeActionModifyPanel1 {
             const currentPromotion  = unitData.currentPromotion || 0;
             const newPromotion      = Math.max(0, Math.min(parseInt(this._inputPromotion.text) || 0, maxPromotion));
             if (newPromotion !== currentPromotion) {
-                unitData.currentPromotion = newPromotion === 0 ? undefined : newPromotion;
+                unitData.currentPromotion = newPromotion === 0 ? null : newPromotion;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -376,7 +376,7 @@ namespace TwnsWeActionModifyPanel1 {
             const currentAmmo   = unitData.primaryWeaponCurrentAmmo == null ? maxAmmo : unitData.primaryWeaponCurrentAmmo;
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputPrimaryAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
-                unitData.primaryWeaponCurrentAmmo = newAmmo === maxAmmo ? undefined : newAmmo;
+                unitData.primaryWeaponCurrentAmmo = newAmmo === maxAmmo ? null : newAmmo;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -387,7 +387,7 @@ namespace TwnsWeActionModifyPanel1 {
             const currentAmmo   = unitData.flareCurrentAmmo == null ? maxAmmo : unitData.flareCurrentAmmo;
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputFlareAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
-                unitData.flareCurrentAmmo = newAmmo === maxAmmo ? undefined : newAmmo;
+                unitData.flareCurrentAmmo = newAmmo === maxAmmo ? null : newAmmo;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -398,7 +398,7 @@ namespace TwnsWeActionModifyPanel1 {
             const currentMaterial   = unitData.currentBuildMaterial == null ? maxMaterial : unitData.currentBuildMaterial;
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputBuildMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
-                unitData.currentBuildMaterial = newMaterial === maxMaterial ? undefined : newMaterial;
+                unitData.currentBuildMaterial = newMaterial === maxMaterial ? null : newMaterial;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -409,7 +409,7 @@ namespace TwnsWeActionModifyPanel1 {
             const currentMaterial   = unitData.currentProduceMaterial == null ? maxMaterial : unitData.currentProduceMaterial;
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputProduceMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
-                unitData.currentProduceMaterial = newMaterial === maxMaterial ? undefined : newMaterial;
+                unitData.currentProduceMaterial = newMaterial === maxMaterial ? null : newMaterial;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -603,7 +603,7 @@ namespace TwnsWeActionModifyPanel1 {
     function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
         dataForAddUnit  : ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
         war             : BwWar;
-    }): string | undefined {
+    }): string | null {
         if (dataForAddUnit.canBeBlockedByUnit == null) {
             return Lang.getText(LangTextType.A0192);
         }
@@ -756,7 +756,7 @@ namespace TwnsWeActionModifyPanel1 {
 
         // unitData.hasLoadedCo的值不需要检查
 
-        return undefined;
+        return null;
     }
 }
 

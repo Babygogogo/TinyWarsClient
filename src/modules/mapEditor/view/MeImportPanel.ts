@@ -34,7 +34,7 @@ namespace TwnsMeImportPanel {
             if (!MeImportPanel._instance) {
                 MeImportPanel._instance = new MeImportPanel();
             }
-            MeImportPanel._instance.open(undefined);
+            MeImportPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeImportPanel._instance) {

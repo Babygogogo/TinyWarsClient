@@ -27,7 +27,7 @@ namespace TwnsBwUnitView {
         private _imgState   = new TwnsUiImage.UiImage();
         private _imgUnit    = new TwnsUiImage.UiImage();
 
-        private _unit                       : BwUnit;
+        private _unit                       : BwUnit | null = null;
         private _animationType              = UnitAnimationType.Stand;
         private _isDark                     = false;
         private _framesForStateAnimation    = [] as string[];
@@ -62,12 +62,12 @@ namespace TwnsBwUnitView {
         private _setUnit(unit: BwUnit): void {
             this._unit = unit;
         }
-        public getUnit(): BwUnit {
+        public getUnit(): BwUnit | null {
             return this._unit;
         }
 
         public resetAllViews(): void {
-            this._isDark = this.getUnit().getActionState() === Types.UnitActionState.Acted;
+            this._isDark = Helpers.getExisted(this.getUnit()).getActionState() === Types.UnitActionState.Acted;
             this.resetStateAnimationFrames();
             this.showUnitAnimation(UnitAnimationType.Stand);
             this.updateImageHp();
@@ -78,7 +78,7 @@ namespace TwnsBwUnitView {
             this.tickUnitAnimationFrame();
         }
         public tickUnitAnimationFrame(): void {
-            const unit              = this.getUnit();
+            const unit              = Helpers.getExisted(this.getUnit());
             this._imgUnit.source    = CommonModel.getCachedUnitImageSource({
                 version     : UserModel.getSelfSettingsTextureVersion(),
                 isDark      : this._isDark,
@@ -90,7 +90,7 @@ namespace TwnsBwUnitView {
         }
 
         public updateImageHp(): void {
-            const unit          = this.getUnit();
+            const unit          = Helpers.getExisted(this.getUnit());
             const normalizedHp  = unit.getNormalizedCurrentHp();
             if ((normalizedHp >= unit.getNormalizedMaxHp()) || (normalizedHp <= 0)) {
                 this._imgHp.visible = false;
@@ -118,7 +118,7 @@ namespace TwnsBwUnitView {
         public tickStateAnimationFrame(): void {
             const framesCount       = this._framesForStateAnimation.length;
             this._imgState.source   = framesCount <= 0
-                ? undefined
+                ? ``
                 : this._framesForStateAnimation[Math.floor(Timer.getUnitAnimationTickCount() / 6) % framesCount];
         }
 
@@ -133,7 +133,7 @@ namespace TwnsBwUnitView {
             path        : GridIndex[],
             isDiving    : boolean,
             isBlocked   : boolean,
-            aiming      : GridIndex | null | undefined
+            aiming      : GridIndex | null,
         ): Promise<void> {
             this.showUnitAnimation(UnitAnimationType.Move);
 
@@ -141,7 +141,7 @@ namespace TwnsBwUnitView {
             this.x              = startingPoint.x;
             this.y              = startingPoint.y;
 
-            const unit                  = this.getUnit();
+            const unit                  = Helpers.getExisted(this.getUnit());
             const war                   = unit.getWar();
             const playerIndex           = unit.getPlayerIndex();
             const skinIdMod             = unit.getSkinId() % 2;
@@ -258,7 +258,7 @@ namespace TwnsBwUnitView {
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _addFrameForCoSkill(): void {
-            const unit          = this._unit;
+            const unit          = Helpers.getExisted(this.getUnit());
             const player        = unit.getPlayer();
             const skillType     = player ? player.getCoUsingSkillType() : null;
             const strForSkinId  = Helpers.getNumText(unit.getSkinId());
@@ -269,7 +269,7 @@ namespace TwnsBwUnitView {
             }
         }
         private _addFrameForPromotion(): void {
-            const unit = this._unit;
+            const unit = Helpers.getExisted(this.getUnit());
             if (unit.getHasLoadedCo()) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s05_f99`);
             } else {
@@ -280,35 +280,36 @@ namespace TwnsBwUnitView {
             }
         }
         private _addFrameForFuel(): void {
-            if (this._unit.checkIsFuelInShort()) {
+            if (Helpers.getExisted(this.getUnit()).checkIsFuelInShort()) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s02_f01`);
             }
         }
         private _addFrameForAmmo(): void {
-            if ((this._unit.checkIsPrimaryWeaponAmmoInShort()) || (this._unit.checkIsFlareAmmoInShort())) {
+            const unit = Helpers.getExisted(this.getUnit());
+            if ((unit.checkIsPrimaryWeaponAmmoInShort()) || (unit.checkIsFlareAmmoInShort())) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s02_f02`);
             }
         }
         private _addFrameForDive(): void {
-            const unit = this._unit;
+            const unit = Helpers.getExisted(this.getUnit());
             if (unit.getIsDiving()) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s03_f${Helpers.getNumText(unit.getSkinId())}`);
             }
         }
         private _addFrameForCapture(): void {
-            const unit = this._unit;
+            const unit = Helpers.getExisted(this.getUnit());
             if (unit.getIsCapturingTile()) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(unit.getSkinId())}`);
             }
         }
         private _addFrameForBuild(): void {
-            const unit = this._unit;
+            const unit = Helpers.getExisted(this.getUnit());
             if (unit.getIsBuildingTile()) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(unit.getSkinId())}`);
             }
         }
         private _addFrameForLoader(): void {
-            const unit  = this.getUnit();
+            const unit  = Helpers.getExisted(this.getUnit());
             const war   = unit.getWar();
             if ((war) && (unit.getMaxLoadUnitsCount())) {
                 const strForSkinId = Helpers.getNumText(unit.getSkinId());
@@ -328,7 +329,8 @@ namespace TwnsBwUnitView {
             }
         }
         private _addFrameForMaterial(): void {
-            if ((this._unit.checkIsBuildMaterialInShort()) || (this._unit.checkIsProduceMaterialInShort())) {
+            const unit = Helpers.getExisted(this.getUnit());
+            if ((unit.checkIsBuildMaterialInShort()) || (unit.checkIsProduceMaterialInShort())) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s02_f04`);
             }
         }

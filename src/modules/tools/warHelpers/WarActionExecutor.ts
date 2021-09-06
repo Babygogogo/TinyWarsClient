@@ -12,7 +12,6 @@ import ConfigManager                from "../helpers/ConfigManager";
 import FloatText                    from "../helpers/FloatText";
 import GridIndexHelpers             from "../helpers/GridIndexHelpers";
 import Helpers                      from "../helpers/Helpers";
-import Logger                       from "../helpers/Logger";
 import Types                        from "../helpers/Types";
 import ProtoTypes                   from "../proto/ProtoTypes";
 import WarCommonHelpers             from "./WarCommonHelpers";
@@ -3864,14 +3863,12 @@ namespace WarActionExecutor {
                 const playerIndex1  = attackerPlayer.getPlayerIndex();
                 const multiplier1   = playerIndex1 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex1);
                 if (multiplier1 == null) {
-                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier1.`);
-                    return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00;
+                    throw new Error(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier1.`);
                 }
 
                 const energy1 = attackerPlayer.getCoCurrentEnergy();
                 if (energy1 == null) {
-                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty energy1.`);
-                    return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01;
+                    throw new Error(`ExeMpwUnitAttackUnit.handleEnergy() empty energy1.`);
                 }
 
                 attackerPlayer.setCoCurrentEnergy(Math.min(
@@ -3889,14 +3886,12 @@ namespace WarActionExecutor {
                 const playerIndex2  = targetPlayer.getPlayerIndex();
                 const multiplier2   = playerIndex2 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex2);
                 if (multiplier2 == null) {
-                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier2.`);
-                    return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_02;
+                    throw new Error(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier2.`);
                 }
 
                 const energy2 = targetPlayer.getCoCurrentEnergy();
                 if (energy2 == null) {
-                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty energy2.`);
-                    return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_03;
+                    throw new Error(`ExeMpwUnitAttackUnit.handleEnergy() empty energy2.`);
                 }
 
                 targetPlayer.setCoCurrentEnergy(Math.min(

@@ -36,7 +36,7 @@ namespace TwnsMmMainMenuPanel {
             if (!MmMainMenuPanel._instance) {
                 MmMainMenuPanel._instance = new MmMainMenuPanel();
             }
-            MmMainMenuPanel._instance.open(undefined);
+            MmMainMenuPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

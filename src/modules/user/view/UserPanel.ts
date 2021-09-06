@@ -177,7 +177,7 @@ namespace TwnsUserPanel {
 
         private async _updateView(): Promise<void> {
             const userId    = this._getOpenData().userId;
-            const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : undefined;
+            const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : null;
             if (info) {
                 const registerTime          = info.registerTime;
                 const labelRegisterTime1    = this._labelRegisterTime1;

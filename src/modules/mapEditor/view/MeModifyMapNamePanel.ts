@@ -40,7 +40,7 @@ namespace TwnsMeModifyMapNamePanel {
                 MeModifyMapNamePanel._instance = new MeModifyMapNamePanel();
             }
 
-            MeModifyMapNamePanel._instance.open(undefined);
+            MeModifyMapNamePanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

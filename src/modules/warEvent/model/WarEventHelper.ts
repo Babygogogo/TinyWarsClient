@@ -4,7 +4,6 @@ import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCod
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import Helpers                          from "../../tools/helpers/Helpers";
-import Logger                           from "../../tools/helpers/Logger";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -1707,7 +1706,7 @@ namespace WarEventHelper {
             };
         } else {
             // TODO handle more condition types.
-            Logger.error(`WarEventHelper.resetCondition() invalid conditionType.`);
+            throw new Error(`WarEventHelper.resetCondition() invalid conditionType.`);
         }
     }
 
@@ -1751,7 +1750,7 @@ namespace WarEventHelper {
         } else if (condition.WecPlayerAliveStateEqualTo) {
             WeConditionModifyPanel12.show({ fullData, condition });
         } else {
-            Logger.error(`WarEventHelper.openConditionModifyPanel() invalid condition.`);
+            throw new Error(`WarEventHelper.openConditionModifyPanel() invalid condition.`);
         }
     }
 
@@ -1795,7 +1794,7 @@ namespace WarEventHelper {
                 dataArray: [],
             };
         } else {
-            Logger.error(`WarEventHelper.resetCondition() invalid conditionType.`);
+            throw new Error(`WarEventHelper.resetCondition() invalid conditionType.`);
         }
     }
 
@@ -1812,7 +1811,7 @@ namespace WarEventHelper {
         } else if (action.WeaDialogue) {
             TwnsWeActionModifyPanel3.WeActionModifyPanel3.show({ war, fullData, action });
         } else {
-            Logger.error(`WarEventHelper.openActionModifyPanel() invalid action.`);
+            throw new Error(`WarEventHelper.openActionModifyPanel() invalid action.`);
         }
     }
 

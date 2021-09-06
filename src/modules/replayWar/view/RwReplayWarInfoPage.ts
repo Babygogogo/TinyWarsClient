@@ -121,7 +121,7 @@ namespace TwnsRwReplayWarInfoPage {
 
         private async _updateLabelTurnIndex(): Promise<void> {
             const replayInfo            = this._getReplayInfo();
-            const replayBriefInfo       = replayInfo ? replayInfo.replayBriefInfo : undefined;
+            const replayBriefInfo       = replayInfo?.replayBriefInfo;
             this._labelTurnIndex.text   = replayBriefInfo
                 ? `${replayBriefInfo.turnIndex}, ${replayBriefInfo.executedActionsCount}`
                 : `??`;

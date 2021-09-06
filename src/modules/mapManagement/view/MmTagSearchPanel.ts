@@ -40,7 +40,7 @@ namespace TwnsMmTagSearchPanel {
             if (!MmTagSearchPanel._instance) {
                 MmTagSearchPanel._instance = new MmTagSearchPanel();
             }
-            MmTagSearchPanel._instance.open(undefined);
+            MmTagSearchPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MmTagSearchPanel._instance) {

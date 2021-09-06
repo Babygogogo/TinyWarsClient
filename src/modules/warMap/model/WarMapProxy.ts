@@ -23,7 +23,7 @@ namespace WarMapProxy {
             { msgCode: NetMessageCodes.MsgMmGetReviewingMaps,           callback: _onMsgMmGetReviewingMaps },
             { msgCode: NetMessageCodes.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
             { msgCode: NetMessageCodes.MsgMmSetMapTag,                  callback: _onMsgMmSetMapTag },
-        ], undefined);
+        ], null);
     }
 
     function _onMsgMapGetEnabledBriefDataList(e: egret.Event): void {
@@ -148,7 +148,7 @@ namespace WarMapProxy {
         }
     }
 
-    export function reqMmSetMapTag(mapId: number, mapTag: ProtoTypes.Map.IDataForMapTag | null | undefined): void {
+    export function reqMmSetMapTag(mapId: number, mapTag: ProtoTypes.Map.IDataForMapTag | null): void {
         NetManager.send({ MsgMmSetMapTag: { c: {
             mapId,
             mapTag,
