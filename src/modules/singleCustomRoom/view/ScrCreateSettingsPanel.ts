@@ -1,9 +1,10 @@
 
 import TwnsCommonConfirmPanel               from "../../common/view/CommonConfirmPanel";
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import SpmModel                             from "../../singlePlayerMode/model/SpmModel";
 import SpmProxy                             from "../../singlePlayerMode/model/SpmProxy";
+import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";
@@ -64,7 +65,7 @@ namespace TwnsScrCreateSettingsPanel {
         }
         public static async hide(): Promise<void> {
             if (ScrCreateSettingsPanel._instance) {
-                await ScrCreateSettingsPanel._instance.close();
+                await ScrCreateSettingsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -91,7 +92,7 @@ namespace TwnsScrCreateSettingsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
                     pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
-                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -118,7 +119,7 @@ namespace TwnsScrCreateSettingsPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._clearTimeoutForBtnConfirm();
         }
 
@@ -191,7 +192,7 @@ namespace TwnsScrCreateSettingsPanel {
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
             }
         }
 
@@ -208,7 +209,7 @@ namespace TwnsScrCreateSettingsPanel {
                 dataArrayForListSettings: [
                     {
                         settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(ScrCreateModel.getMapId()),
+                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(ScrCreateModel.getMapId()).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                         warRule,
                         callbackOnModify: null,
                     },
@@ -217,7 +218,7 @@ namespace TwnsScrCreateSettingsPanel {
                         currentValue    : null,
                         warRule,
                         callbackOnModify: async () => {
-                            await ScrCreateModel.tickPresetWarRuleId();
+                            await ScrCreateModel.tickPresetWarRuleId().catch(err => { CompatibilityHelpers.showError(err); throw err; });
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },

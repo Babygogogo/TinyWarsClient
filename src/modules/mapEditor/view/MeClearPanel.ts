@@ -1,5 +1,6 @@
 
 import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import FloatText            from "../../tools/helpers/FloatText";
 import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
@@ -48,7 +49,7 @@ namespace TwnsMeClearPanel {
 
         public static async hide(): Promise<void> {
             if (MeClearPanel._instance) {
-                await MeClearPanel._instance.close();
+                await MeClearPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -97,7 +98,7 @@ namespace TwnsMeClearPanel {
                 await war.initWithMapEditorData({
                     mapRawData  : MeUtility.clearMap(war.serializeForMap(), width, height),
                     slotIndex   : war.getMapSlotIndex(),
-                });
+                }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 war.setIsMapModified(true);
                 war.startRunning()
                     .startRunningView();

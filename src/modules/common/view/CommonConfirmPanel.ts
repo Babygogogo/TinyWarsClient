@@ -1,12 +1,13 @@
 
-import Helpers          from "../../tools/helpers/Helpers";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonConfirmPanel {
     import LangTextType = TwnsLangTextType.LangTextType;
@@ -25,21 +26,14 @@ namespace TwnsCommonConfirmPanel {
 
         private static _instance: CommonConfirmPanel;
 
-        // @ts-ignore
-        private readonly _imgMask       : TwnsUiImage.UiImage;
+        private readonly _imgMask!      : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private readonly _group         : eui.Group;
-        // @ts-ignore
-        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _scrContent    : eui.Scroller;
-        // @ts-ignore
-        private readonly _labelContent  : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _btnCancel     : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnConfirm    : TwnsUiButton.UiButton;
+        private readonly _group!        : eui.Group;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _scrContent!   : eui.Scroller;
+        private readonly _labelContent! : TwnsUiLabel.UiLabel;
+        private readonly _btnCancel!    : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForCommonConfirmPanel): void {
             if (!CommonConfirmPanel._instance) {
@@ -50,7 +44,7 @@ namespace TwnsCommonConfirmPanel {
 
         public static async hide(): Promise<void> {
             if (CommonConfirmPanel._instance) {
-                await CommonConfirmPanel._instance.close();
+                await CommonConfirmPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -77,7 +71,7 @@ namespace TwnsCommonConfirmPanel {
             this._scrContent.viewport.scrollV = 0;
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private _onTouchedBtnCancel(): void {

@@ -1,5 +1,6 @@
 
-import Types from "../../tools/helpers/Types";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
@@ -75,7 +76,7 @@ namespace TwnsCommonWarMapInfoPage {
                         },
                     });
 
-                    const mapRawData = await WarMapModel.getRawData(mapId);
+                    const mapRawData = await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                     if (mapRawData) {
                         zoomMap.showMapByMapData(mapRawData);
                     } else {

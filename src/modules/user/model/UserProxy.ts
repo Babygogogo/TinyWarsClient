@@ -120,7 +120,7 @@ namespace UserProxy {
         if (data.errorCode) {
             Notify.dispatch(NotifyType.MsgUserSetNicknameFailed, data);
         } else {
-            await UserModel.updateOnMsgUserSetNickname(data);
+            UserModel.updateOnMsgUserSetNickname(data);
             Notify.dispatch(NotifyType.MsgUserSetNickname, data);
         }
     }
@@ -137,7 +137,7 @@ namespace UserProxy {
         if (data.errorCode) {
             Notify.dispatch(NotifyType.MsgUserSetDiscordIdFailed, data);
         } else {
-            await UserModel.updateOnMsgUserSetDiscordId(data);
+            UserModel.updateOnMsgUserSetDiscordId(data);
             Notify.dispatch(NotifyType.MsgUserSetDiscordId, data);
         }
     }
@@ -163,7 +163,7 @@ namespace UserProxy {
     async function _onMsgUserSetPrivilege(e: egret.Event): Promise<void> {
         const data = e.data as ProtoTypes.NetMessage.MsgUserSetPrivilege.IS;
         if (!data.errorCode) {
-            await UserModel.updateOnMsgUserSetPrivilege(data);
+            UserModel.updateOnMsgUserSetPrivilege(data);
             Notify.dispatch(NotifyType.MsgUserSetPrivilege, data);
         }
     }

@@ -1,10 +1,11 @@
 
-import SoundManager     from "../../tools/helpers/SoundManager";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import SoundManager         from "../../tools/helpers/SoundManager";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsBwBeginTurnPanel {
     type OpenDataForBwBeginTurnPanel = {
@@ -33,7 +34,7 @@ namespace TwnsBwBeginTurnPanel {
 
         public static async hide(): Promise<void> {
             if (BwBeginTurnPanel._instance) {
-                await BwBeginTurnPanel._instance.close();
+                await BwBeginTurnPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

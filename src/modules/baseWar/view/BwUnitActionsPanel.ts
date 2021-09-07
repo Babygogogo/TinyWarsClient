@@ -1,5 +1,6 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
 import StageManager             from "../../tools/helpers/StageManager";
 import Types                    from "../../tools/helpers/Types";
@@ -44,7 +45,7 @@ namespace TwnsBwUnitActionsPanel {
         }
         public static async hide(): Promise<void> {
             if (BwUnitActionsPanel._instance) {
-                await BwUnitActionsPanel._instance.close();
+                await BwUnitActionsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -68,7 +69,7 @@ namespace TwnsBwUnitActionsPanel {
             this._updatePosition();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,20 +186,16 @@ namespace TwnsBwUnitActionsPanel {
         private readonly _unitView      = new BwUnitView();
 
         protected _onOpened(): void {
-            this._setShortSfxCode(Types.ShortSfxCode.CursorConfirm01);
             this._setNotifyListenerArray([
                 { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.CursorConfirm01);
 
             this._conUnitView.addChild(this._unitView);
         }
 
         protected _onDataChanged(): void {
-            const data = this.data;
-            if (data == null) {
-                throw new Error(`BwUnitActionsPanel.UnitActionRenderer._onDataChanged() empty data.`);
-            }
-
+            const data              = this._getData();
             this._labelAction.text  = Lang.getUnitActionName(data.actionType) || CommonConstants.ErrorTextForUndefined;
 
             const unit      = data.unit;
@@ -219,8 +216,8 @@ namespace TwnsBwUnitActionsPanel {
         }
 
         public onItemTapEvent(): void {
-            const data = this.data;
-            if ((data) && (!data.war.getActionPlanner().checkIsStateRequesting())) {
+            const data = this._getData();
+            if (!data.war.getActionPlanner().checkIsStateRequesting()) {
                 data.callback();
             }
         }

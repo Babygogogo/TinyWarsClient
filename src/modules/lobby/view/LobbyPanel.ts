@@ -9,6 +9,7 @@ import MrrModel                 from "../../multiRankRoom/model/MrrModel";
 import TwnsMrrMainMenuPanel     from "../../multiRankRoom/view/MrrMainMenuPanel";
 import TwnsSpmMainMenuPanel     from "../../singlePlayerMode/view/SpmMainMenuPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -62,7 +63,7 @@ namespace TwnsLobbyPanel {
 
         public static async hide(): Promise<void> {
             if (LobbyPanel._instance) {
-                await LobbyPanel._instance.close();
+                await LobbyPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -97,7 +98,7 @@ namespace TwnsLobbyPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -258,19 +259,19 @@ namespace TwnsLobbyPanel {
 
         private async _updateBtnMultiPlayer(): Promise<void> {
             this._btnMultiPlayer.setRedVisible(
-                (MpwModel.checkIsRedForMyMcwWars())  ||
-                (MpwModel.checkIsRedForMyMfwWars())  ||
-                (MpwModel.checkIsRedForMyCcwWars())  ||
-                (await McrModel.checkIsRed())        ||
-                (await MfrModel.checkIsRed())        ||
-                (await CcrModel.checkIsRed())
+                (MpwModel.checkIsRedForMyMcwWars())                                                             ||
+                (MpwModel.checkIsRedForMyMfwWars())                                                             ||
+                (MpwModel.checkIsRedForMyCcwWars())                                                             ||
+                (await McrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; })) ||
+                (await MfrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; })) ||
+                (await CcrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }))
             );
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (MpwModel.checkIsRedForMyMrwWars()) ||
-                (await MrrModel.checkIsRed())
+                (MpwModel.checkIsRedForMyMrwWars())                                                             ||
+                (await MrrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }))
             );
         }
     }

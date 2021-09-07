@@ -10,10 +10,6 @@ namespace TwnsMeActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting common state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void {
-            // nothing to do
-        }
-
         protected _setStateRequestingUnitAttackUnit(gridIndex: GridIndex): void {
             // nothing to do
         }

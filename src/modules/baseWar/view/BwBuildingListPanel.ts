@@ -1,6 +1,7 @@
 
 import TwnsMeTileSimpleView     from "../../mapEditor/view/MeTileSimpleView";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -41,7 +42,7 @@ namespace TwnsBwBuildingListPanel {
 
         public static async hide(): Promise<void> {
             if (BwBuildingListPanel._instance) {
-                await BwBuildingListPanel._instance.close();
+                await BwBuildingListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -125,6 +126,7 @@ namespace TwnsBwBuildingListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
 
             const tileView      = this._tileView;
             const conTileView   = this._conTileView;

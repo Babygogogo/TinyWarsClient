@@ -10,6 +10,7 @@ import MpwProxy                             from "../../multiPlayerWar/model/Mpw
 import TwnsMrwWar                           from "../../multiRankWar/model/MrwWar";
 import TwnsClientErrorCode                  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
@@ -155,13 +156,13 @@ namespace MpwModel {
         const warRule                                                               = Helpers.getExisted(warInfo.settingsForCommon?.warRule);
         const { settingsForCcw, settingsForMcw, settingsForMfw, settingsForMrw }    = warInfo;
         if (settingsForMcw) {
-            return await createDataForCommonWarBasicSettingsPageForMcw(warRule, settingsForMcw);
+            return await createDataForCommonWarBasicSettingsPageForMcw(warRule, settingsForMcw).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         } else if (settingsForCcw) {
-            return await createDataForCommonWarBasicSettingsPageForCcw(warRule, settingsForCcw);
+            return await createDataForCommonWarBasicSettingsPageForCcw(warRule, settingsForCcw).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         } else if (settingsForMrw) {
-            return await createDataForCommonWarBasicSettingsPageForMrw(warRule, settingsForMrw);
+            return await createDataForCommonWarBasicSettingsPageForMrw(warRule, settingsForMrw).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         } else if (settingsForMfw) {
-            return await createDataForCommonWarBasicSettingsPageForMfw(warRule, settingsForMfw);
+            return await createDataForCommonWarBasicSettingsPageForMfw(warRule, settingsForMfw).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         } else {
             throw new Error(`Invalid warInfo.`);
         }
@@ -173,7 +174,7 @@ namespace MpwModel {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)),
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                     warRule,
                     callbackOnModify: null,
                 },
@@ -250,7 +251,7 @@ namespace MpwModel {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)),
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                     warRule,
                     callbackOnModify: null,
                 },
@@ -327,7 +328,7 @@ namespace MpwModel {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMrw.mapId)),
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMrw.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                     warRule,
                     callbackOnModify: null,
                 },
@@ -540,7 +541,7 @@ namespace MpwModel {
             return { errorCode: ClientErrorCode.MpwModel_LoadWar_00 };
         }
 
-        const initError = await war.init(data);
+        const initError = await war.init(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (initError) {
             return { errorCode: initError };
         }
@@ -604,7 +605,7 @@ namespace MpwModel {
                     if (warData == null) {
                         throw new Error(`MpwModel.updateOnPlayerSyncWar() empty warData 1.`);
                     } else {
-                        await FlowManager.gotoMultiPlayerWar(warData);
+                        await FlowManager.gotoMultiPlayerWar(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                         FloatText.show(Lang.getText(LangTextType.A0038));
                     }
 
@@ -619,7 +620,7 @@ namespace MpwModel {
                             if (warData == null) {
                                 throw new Error(`MpwModel.updateOnPlayerSyncWar() empty warData 2.`);
                             } else {
-                                await FlowManager.gotoMultiPlayerWar(warData);
+                                await FlowManager.gotoMultiPlayerWar(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                                 FloatText.show(Lang.getText(LangTextType.A0036));
                             }
 
@@ -703,7 +704,7 @@ namespace MpwModel {
 
         war.getExecutedActionManager().addExecutedAction(container);
 
-        const errorCode = await WarActionExecutor.checkAndExecute(war, container, false);
+        const errorCode = await WarActionExecutor.checkAndExecute(war, container, false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (errorCode) {
             throw new Error(`MpwModel.checkAndRunFirstCachedAction() errorCode: ${errorCode}.`);
         }

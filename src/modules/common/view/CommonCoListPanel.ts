@@ -1,6 +1,7 @@
 
 import TwnsBwWar                from "../../baseWar/model/BwWar";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -49,7 +50,7 @@ namespace TwnsCommonCoListPanel {
 
         public static async hide(): Promise<void> {
             if (CommonCoListPanel._instance) {
-                await CommonCoListPanel._instance.close();
+                await CommonCoListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getIsOpening(): boolean {
@@ -82,7 +83,7 @@ namespace TwnsCommonCoListPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             this._clearGroupCoNames();
             this._setPreviewingPlayerIndex(null);

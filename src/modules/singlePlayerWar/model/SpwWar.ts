@@ -4,6 +4,7 @@ import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
@@ -53,16 +54,16 @@ namespace TwnsSpwWar {
             return null;
         }
         public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | null> {
-            return Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
+            return Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; }), this.getPlayerIndexInTurn());
         }
         public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | null> {
             return null;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | null> {
-            return Lang.getFormattedText(action.deprecatedIsBoot ? LangTextType.F0028 : LangTextType.F0008, await this.getPlayerInTurn().getNickname());
+            return Lang.getFormattedText(action.deprecatedIsBoot ? LangTextType.F0028 : LangTextType.F0008, await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
         }
         public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | null> {
-            const nickname      = await this.getPlayerInTurn().getNickname();
+            const nickname      = await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             const playerIndex   = this.getPlayerIndexInTurn();
             if (!action.isAgree) {
                 return Lang.getFormattedText(LangTextType.F0017, playerIndex, nickname);
@@ -79,7 +80,7 @@ namespace TwnsSpwWar {
             if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
                 return Lang.getFormattedText(LangTextType.F0022, Lang.getText(LangTextType.B0111), playerIndex);
             } else {
-                return Lang.getFormattedText(LangTextType.F0022, await this.getPlayerInTurn().getNickname(), playerIndex);
+                return Lang.getFormattedText(LangTextType.F0022, await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; }), playerIndex);
             }
         }
         public async getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | null> {
@@ -87,16 +88,16 @@ namespace TwnsSpwWar {
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null> {
             const playerIndex = Helpers.getExisted(action.targetPlayerIndex);
-            return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(LangTextType.B0450)}`;
+            return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; })} ${Lang.getText(LangTextType.B0450)}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0087)}`;
         }
         public async getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | null> {
-            return Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
+            return Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; }), this.getPlayerIndexInTurn());
         }
         public async getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | null> {
-            return Lang.getFormattedText(LangTextType.F0028, await this.getPlayerInTurn().getNickname());
+            return Lang.getFormattedText(LangTextType.F0028, await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
         }
         public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | null> {
             return null;

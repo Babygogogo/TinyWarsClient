@@ -1,7 +1,8 @@
 
-import SoundManager     from "../../tools/helpers/SoundManager";
-import Types            from "../../tools/helpers/Types";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import SoundManager         from "../../tools/helpers/SoundManager";
+import Types                from "../../tools/helpers/Types";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsBwCaptureProgressPanel {
     type OpenDataForBwCaptureProgressPanel = {
@@ -28,7 +29,7 @@ namespace TwnsBwCaptureProgressPanel {
 
         public static async hide(): Promise<void> {
             if (BwCaptureProgressPanel._instance) {
-                await BwCaptureProgressPanel._instance.close();
+                await BwCaptureProgressPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

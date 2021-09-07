@@ -1,15 +1,16 @@
 
-import TwnsMeWar        from "../../mapEditor/model/MeWar";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
-import WarMapProxy      from "../../warMap/model/WarMapProxy";
+import TwnsMeWar            from "../../mapEditor/model/MeWar";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+import WarMapProxy          from "../../warMap/model/WarMapProxy";
 
 namespace TwnsMmAcceptMapPanel {
     import MeWar        = TwnsMeWar.MeWar;
@@ -25,58 +26,35 @@ namespace TwnsMmAcceptMapPanel {
 
         private static _instance: MmAcceptMapPanel;
 
-        // @ts-ignore
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _labelTips      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _inputReason    : TwnsUiTextInput.UiTextInput;
-        // @ts-ignore
-        private _btnCancel      : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private _btnConfirm     : TwnsUiButton.UiButton;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelTips!    : TwnsUiLabel.UiLabel;
+        private readonly _inputReason!  : TwnsUiTextInput.UiTextInput;
+        private readonly _btnCancel!    : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
-        // @ts-ignore
-        private _groupMcw       : eui.Group;
-        // @ts-ignore
-        private _labelMcw       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgMcw         : TwnsUiImage.UiImage;
+        private readonly _groupMcw!     : eui.Group;
+        private readonly _labelMcw!     : TwnsUiLabel.UiLabel;
+        private readonly _imgMcw!       : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private _groupCcw       : eui.Group;
-        // @ts-ignore
-        private _labelCcw       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgCcw         : TwnsUiImage.UiImage;
+        private readonly _groupCcw!     : eui.Group;
+        private readonly _labelCcw!     : TwnsUiLabel.UiLabel;
+        private readonly _imgCcw!       : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private _groupScw       : eui.Group;
-        // @ts-ignore
-        private _labelScw       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgScw         : TwnsUiImage.UiImage;
+        private readonly _groupScw!     : eui.Group;
+        private readonly _labelScw!     : TwnsUiLabel.UiLabel;
+        private readonly _imgScw!       : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private _groupSrw       : eui.Group;
-        // @ts-ignore
-        private _labelSrw       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgSrw         : TwnsUiImage.UiImage;
+        private readonly _groupSrw!     : eui.Group;
+        private readonly _labelSrw!     : TwnsUiLabel.UiLabel;
+        private readonly _imgSrw!       : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private _groupMrwStd    : eui.Group;
-        // @ts-ignore
-        private _labelMrwStd    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgMrwStd      : TwnsUiImage.UiImage;
+        private readonly _groupMrwStd!  : eui.Group;
+        private readonly _labelMrwStd!  : TwnsUiLabel.UiLabel;
+        private readonly _imgMrwStd!    : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private _groupMrwFog    : eui.Group;
-        // @ts-ignore
-        private _labelMrwFog    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgMrwFog      : TwnsUiImage.UiImage;
+        private readonly _groupMrwFog!  : eui.Group;
+        private readonly _labelMrwFog!  : TwnsUiLabel.UiLabel;
+        private readonly _imgMrwFog!    : TwnsUiImage.UiImage;
 
         public static show(openData: OpenData): void {
             if (!MmAcceptMapPanel._instance) {
@@ -87,7 +65,7 @@ namespace TwnsMmAcceptMapPanel {
 
         public static async hide(): Promise<void> {
             if (MmAcceptMapPanel._instance) {
-                await MmAcceptMapPanel._instance.close();
+                await MmAcceptMapPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

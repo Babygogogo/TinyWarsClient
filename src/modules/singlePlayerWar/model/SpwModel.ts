@@ -6,6 +6,7 @@ import TwnsSfwWar           from "../../singleFreeWar/model/SfwWar";
 import TwnsSrwWar           from "../../singleRankWar/model/SrwWar";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import FlowManager          from "../../tools/helpers/FlowManager";
 import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
@@ -51,7 +52,7 @@ namespace SpwModel {
         }
 
         const war       = createWarByWarData(warData);
-        const initError = await war.init(warData);
+        const initError = await war.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (initError) {
             throw new Error(`InitError: ${initError}`);
         }
@@ -85,9 +86,9 @@ namespace SpwModel {
     const _warsWithRobotRunning = new Set<BwWar>();
 
     export async function handlePlayerActionAndAutoActions(war: BwWar, action: IWarActionContainer): Promise<void> {
-        await handlePlayerOrRobotAction(war, action);
+        await handlePlayerOrRobotAction(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
-        await checkAndHandleAutoActionsAndRobotRecursively(war);
+        await checkAndHandleAutoActionsAndRobotRecursively(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
 
     export async function checkAndHandleAutoActionsAndRobotRecursively(war: BwWar): Promise<void> {
@@ -101,7 +102,7 @@ namespace SpwModel {
             return;
         }
 
-        await checkAndHandleSystemActions(war);
+        await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
         if ((checkAndEndWar(war)) || (!war.getIsRunning())) {
             _warsWithRobotRunning.delete(war);
@@ -116,7 +117,7 @@ namespace SpwModel {
         const {
             errorCode   : errorCodeForRobotAction,
             action      : robotAction,
-        } = await WarRobot.getNextAction(war);
+        } = await WarRobot.getNextAction(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (errorCodeForRobotAction) {
             throw new Error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() errorCodeForRobotAction: ${errorCodeForRobotAction}`);
         } else if (robotAction == null) {
@@ -128,10 +129,10 @@ namespace SpwModel {
             return;
         }
 
-        await handlePlayerOrRobotAction(war, robotAction);
+        await handlePlayerOrRobotAction(war, robotAction).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
         _warsWithRobotRunning.delete(war);
-        await checkAndHandleAutoActionsAndRobotRecursively(war);
+        await checkAndHandleAutoActionsAndRobotRecursively(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
 
     async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
@@ -139,7 +140,7 @@ namespace SpwModel {
             throw new Error(`SpwModel.handlePlayerOrRobotAction() checkCanExecuteAction(war) is not true!`);
         }
 
-        return await reviseAndExecute(war, action);
+        return await reviseAndExecute(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
 
     function checkAndEndWar(war: BwWar): boolean {
@@ -184,15 +185,15 @@ namespace SpwModel {
         // Handle war events.
         const callableWarEventId = war.getWarEventManager().getCallableWarEventId();
         if (callableWarEventId != null) {
-            await handleSystemCallWarEvent(war, callableWarEventId);
-            await checkAndHandleSystemActions(war);
+            await handleSystemCallWarEvent(war, callableWarEventId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             return true;
         }
 
         // Handle the ending war.
         if (war.checkCanEnd()) {
-            await handleSystemEndWar(war);
-            await checkAndHandleSystemActions(war);
+            await handleSystemEndWar(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             return true;
         }
 
@@ -209,8 +210,8 @@ namespace SpwModel {
         }
 
         if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
-            await handleSystemBeginTurn(war);
-            await checkAndHandleSystemActions(war);
+            await handleSystemBeginTurn(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             return true;
         }
 
@@ -220,8 +221,8 @@ namespace SpwModel {
                 throw new Error(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`);
             }
 
-            await handleSystemHandleBootPlayer(war);
-            await checkAndHandleSystemActions(war);
+            await handleSystemHandleBootPlayer(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             return true;
         }
 
@@ -234,8 +235,8 @@ namespace SpwModel {
             }
 
             if (player.getAliveState() === Types.PlayerAliveState.Dying) {
-                await handleSystemDestroyPlayerForce(war, playerIndex);
-                await checkAndHandleSystemActions(war);
+                await handleSystemDestroyPlayerForce(war, playerIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 return true;
             }
         }
@@ -246,8 +247,8 @@ namespace SpwModel {
                 throw new Error(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`);
             }
 
-            await handleSystemEndTurn(war);
-            await checkAndHandleSystemActions(war);
+            await handleSystemEndTurn(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             return true;
         }
 
@@ -257,8 +258,8 @@ namespace SpwModel {
                 throw new Error(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`);
             }
 
-            await handleSystemEndTurn(war);
-            await checkAndHandleSystemActions(war);
+            await handleSystemEndTurn(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             return true;
         }
 
@@ -270,7 +271,7 @@ namespace SpwModel {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemBeginTurn    : {
             },
-        });
+        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
     async function handleSystemCallWarEvent(war: BwWar, warEventId: number): Promise<ClientErrorCode> {
         return await reviseAndExecute(war, {
@@ -278,7 +279,7 @@ namespace SpwModel {
             WarActionSystemCallWarEvent : {
                 warEventId,
             },
-        });
+        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
     async function handleSystemDestroyPlayerForce(war: BwWar, playerIndex: number): Promise<ClientErrorCode> {
         return await reviseAndExecute(war, {
@@ -286,28 +287,28 @@ namespace SpwModel {
             WarActionSystemDestroyPlayerForce   : {
                 targetPlayerIndex           : playerIndex,
             },
-        });
+        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
     async function handleSystemEndWar(war: BwWar): Promise<ClientErrorCode> {
         return await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndWar   : {
             },
-        });
+        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
     async function handleSystemHandleBootPlayer(war: BwWar): Promise<ClientErrorCode> {
         return await reviseAndExecute(war, {
             actionId                        : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemHandleBootPlayer : {
             },
-        });
+        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
     async function handleSystemEndTurn(war: BwWar): Promise<ClientErrorCode> {
         return await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndTurn  : {
             },
-        });
+        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
 
     function checkCanExecuteAction(war: BwWar): boolean {
@@ -327,7 +328,7 @@ namespace SpwModel {
             throw new Error(`SpwModel.reviseAndExecute() empty revisedAction!.`);
         }
 
-        const errorCodeForExecute = await WarActionExecutor.checkAndExecute(war, revisedAction, false);
+        const errorCodeForExecute = await WarActionExecutor.checkAndExecute(war, revisedAction, false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (errorCodeForExecute) {
             throw new Error(`SpwModel.reviseAndExecute() errorCodeForExecute: ${errorCodeForExecute}.`);
         }

@@ -34,7 +34,6 @@ import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 namespace TwnsMeWarRulePanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonHelpPanel          = TwnsCommonHelpPanel.CommonHelpPanel;
-    import CommonInputPanel         = TwnsCommonInputPanel.CommonInputPanel;
     import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
     import MeField                  = TwnsMeField.MeField;
     import MeWar                    = TwnsMeWar.MeWar;
@@ -750,7 +749,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0178),
                             currentValue    : "" + currValue,
                             maxChars        : 7,
@@ -781,7 +780,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
                         const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0179),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -812,7 +811,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
                         const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0180),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -843,7 +842,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
                         const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0181),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -874,7 +873,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0182),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -905,7 +904,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
                         const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0183),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -936,7 +935,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0184),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -968,7 +967,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0189),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -1006,7 +1005,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0190),
                             currentValue    : "" + currValue,
                             maxChars        : 4,

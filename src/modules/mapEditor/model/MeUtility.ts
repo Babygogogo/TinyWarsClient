@@ -6,6 +6,7 @@ import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
 import TwnsTwWar            from "../../testWar/model/TwWar";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
@@ -88,7 +89,7 @@ namespace MeUtility {
         const mapWidth  = 20;
         const mapHeight = 15;
         return {
-            designerName            : await UserModel.getSelfNickname(),
+            designerName            : UserModel.getSelfNickname(),
             designerUserId          : UserModel.getSelfUserId(),
             mapNameArray            : [
                 { languageType: LanguageType.Chinese, text: `${Lang.getText(LangTextType.B0279, LanguageType.Chinese)} - ${slotIndex}`},
@@ -662,7 +663,7 @@ namespace MeUtility {
             return warEventError;
         }
 
-        const testWarError = await new TwWar().initByMapRawData(mapRawData);
+        const testWarError = await new TwWar().initByMapRawData(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (testWarError) {
             return testWarError;
         }

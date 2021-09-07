@@ -59,7 +59,6 @@ import TwnsClientErrorCode          from "./ClientErrorCode";
 import CompatibilityHelpers         from "./CompatibilityHelpers";
 import ConfigManager                from "./ConfigManager";
 import LocalStorage                 from "./LocalStorage";
-import Logger                       from "./Logger";
 import NoSleepManager               from "./NoSleepManager";
 import SoundManager                 from "./SoundManager";
 import StageManager                 from "./StageManager";

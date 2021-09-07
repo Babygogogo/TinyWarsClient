@@ -1,6 +1,7 @@
 
 import TwnsChatPanel            from "../../chat/view/ChatPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
@@ -41,7 +42,7 @@ namespace TwnsLobbyTopPanel {
 
         public static async hide(): Promise<void> {
             if (LobbyTopPanel._instance) {
-                await LobbyTopPanel._instance.close();
+                await LobbyTopPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -68,7 +69,7 @@ namespace TwnsLobbyTopPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private _onMsgUserLogin(): void {

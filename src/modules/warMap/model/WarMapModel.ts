@@ -1,11 +1,12 @@
 
-import Helpers          from "../../tools/helpers/Helpers";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import Notify           from "../../tools/notify/Notify";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import WarMapProxy      from "./WarMapProxy";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import WarMapProxy          from "./WarMapProxy";
 
 namespace WarMapModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -104,7 +105,7 @@ namespace WarMapModel {
     }
 
     export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {
-        const mapBriefData = await getBriefData(mapId);
+        const mapBriefData = await getBriefData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (!mapBriefData) {
             return null;
         } else {
@@ -112,10 +113,10 @@ namespace WarMapModel {
         }
     }
     export async function getDesignerName(mapId: number): Promise<string | null> {
-        return (await getRawData(mapId))?.designerName ?? null;
+        return (await getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }))?.designerName ?? null;
     }
     export async function getMultiPlayerTotalPlayedTimes(mapId: number): Promise<number> {
-        const mapBriefData  = Helpers.getExisted(await getBriefData(mapId));
+        const mapBriefData  = Helpers.getExisted(await getBriefData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
         const complexInfo   = mapBriefData.mapExtraData?.mapComplexInfo;
         let totalTimes      = 0;
         for (const info of complexInfo ? complexInfo.warStatisticsArray || [] : []) {
@@ -131,7 +132,7 @@ namespace WarMapModel {
         return totalTimes;
     }
     export async function getAverageRating(mapId: number): Promise<number | null> {
-        const mapBriefData = await getBriefData(mapId);
+        const mapBriefData = await getBriefData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         const mapExtraData = mapBriefData ? mapBriefData.mapExtraData : null;
         const totalRaters   = mapExtraData ? mapExtraData.totalRaters : null;
         return totalRaters

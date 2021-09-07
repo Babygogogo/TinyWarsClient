@@ -1,16 +1,17 @@
 
-import Types                from "../helpers/Types";
 import UserModel            from "../../user/model/UserModel";
 import WarMapModel          from "../../warMap/model/WarMapModel";
-import TwnsServerErrorCode  from "../helpers/ServerErrorCode";
 import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
-import TwnsLangTextType     from "./LangTextType";
+import CommonConstants      from "../helpers/CommonConstants";
+import CompatibilityHelpers from "../helpers/CompatibilityHelpers";
+import Helpers              from "../helpers/Helpers";
 import LocalStorage         from "../helpers/LocalStorage";
+import TwnsServerErrorCode  from "../helpers/ServerErrorCode";
+import Types                from "../helpers/Types";
+import ProtoTypes           from "../proto/ProtoTypes";
 import TwnsLangCommonText   from "./LangCommonText";
 import TwnsLangErrorText    from "./LangErrorText";
-import Helpers              from "../helpers/Helpers";
-import CommonConstants      from "../helpers/CommonConstants";
-import ProtoTypes           from "../proto/ProtoTypes";
+import TwnsLangTextType     from "./LangTextType";
 
 namespace Lang {
     import LanguageType             = Types.LanguageType;
@@ -508,13 +509,13 @@ namespace Lang {
         let playerIndex     = CommonConstants.WarFirstPlayerIndex;
         for (const playerInfo of data.playerInfoList || []) {
             const userId = playerInfo.userId;
-            playerArray.push(`P${playerIndex}: ${userId != null ? await UserModel.getUserNickname(userId) : `----`}`);
+            playerArray.push(`P${playerIndex}: ${userId != null ? await UserModel.getUserNickname(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) : `----`}`);
             ++playerIndex;
         }
 
         const mapId = data.mapId;
         return [
-            getFormattedText(LangTextType.F0027, mapId != null ? await WarMapModel.getMapNameInCurrentLanguage(mapId) : getText(LangTextType.B0557)),
+            getFormattedText(LangTextType.F0027, mapId != null ? await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) : getText(LangTextType.B0557)),
             ...playerArray,
             getText(LangTextType.A0125)
         ].join("\n");

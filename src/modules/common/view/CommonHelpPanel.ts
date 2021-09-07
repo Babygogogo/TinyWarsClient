@@ -1,10 +1,11 @@
 
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import Helpers          from "../../tools/helpers/Helpers";
-import Types            from "../../tools/helpers/Types";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonHelpPanel {
     type OpenData = {
@@ -33,7 +34,7 @@ namespace TwnsCommonHelpPanel {
 
         public static async hide(): Promise<void> {
             if (CommonHelpPanel._instance) {
-                await CommonHelpPanel._instance.close();
+                await CommonHelpPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -58,7 +59,7 @@ namespace TwnsCommonHelpPanel {
             this._showOpenAnimation();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private _showOpenAnimation(): void {

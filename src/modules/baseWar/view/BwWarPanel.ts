@@ -1,7 +1,8 @@
 
-import TwnsUiPanel  from "../../tools/ui/UiPanel";
-import TwnsBwWar    from "../model/BwWar";
-import Types        from "../../tools/helpers/Types";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsBwWar            from "../model/BwWar";
+import Types                from "../../tools/helpers/Types";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 
 namespace TwnsBwWarPanel {
     import BwWar            = TwnsBwWar.BwWar;
@@ -24,7 +25,7 @@ namespace TwnsBwWarPanel {
 
         public static async hide(): Promise<void> {
             if (BwWarPanel._instance) {
-                await BwWarPanel._instance.close();
+                await BwWarPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

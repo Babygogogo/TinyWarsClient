@@ -1,4 +1,5 @@
 
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import NetManager           from "../../tools/network/NetManager";
 import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
@@ -28,7 +29,7 @@ namespace MeProxy {
     async function _onMsgMeGetMapDataList(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMeGetMapDataList.IS;
         if (!data.errorCode) {
-            await MeModel.resetDataList(data.dataList || []);
+            await MeModel.resetDataList(data.dataList || []).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             Notify.dispatch(NotifyType.MsgMeGetDataList, data);
         }
     }

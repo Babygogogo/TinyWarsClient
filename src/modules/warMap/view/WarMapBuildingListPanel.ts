@@ -1,6 +1,7 @@
 
 import TwnsMeTileSimpleView     from "../../mapEditor/view/MeTileSimpleView";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -41,7 +42,7 @@ namespace TwnsWarMapBuildingListPanel {
 
         public static async hide(): Promise<void> {
             if (WarMapBuildingListPanel._instance) {
-                await WarMapBuildingListPanel._instance.close();
+                await WarMapBuildingListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

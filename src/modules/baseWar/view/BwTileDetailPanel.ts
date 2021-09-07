@@ -2,9 +2,10 @@
 import CommonModel              from "../../common/model/CommonModel";
 import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
-import Helpers from "../../tools/helpers/Helpers";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Timer                    from "../../tools/helpers/Timer";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -24,7 +25,6 @@ import TwnsBwTile               from "../model/BwTile";
 namespace TwnsBwTileDetailPanel {
     import WarMapUnitView   = TwnsWarMapUnitView.WarMapUnitView;
     import BwTile           = TwnsBwTile.BwTile;
-    import CommonInputPanel = TwnsCommonInputPanel.CommonInputPanel;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import UnitType         = Types.UnitType;
@@ -58,7 +58,7 @@ namespace TwnsBwTileDetailPanel {
         }
         public static async hide(): Promise<void> {
             if (BwTileDetailPanel._instance) {
-                await BwTileDetailPanel._instance.close();
+                await BwTileDetailPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getIsOpening(): boolean {
@@ -223,7 +223,7 @@ namespace TwnsBwTileDetailPanel {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            CommonInputPanel.show({
+                            TwnsCommonInputPanel.CommonInputPanel.show({
                                 title           : Lang.getText(LangTextType.B0339),
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,
@@ -259,7 +259,7 @@ namespace TwnsBwTileDetailPanel {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            CommonInputPanel.show({
+                            TwnsCommonInputPanel.CommonInputPanel.show({
                                 title           : Lang.getText(LangTextType.B0361),
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,
@@ -295,7 +295,7 @@ namespace TwnsBwTileDetailPanel {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            CommonInputPanel.show({
+                            TwnsCommonInputPanel.CommonInputPanel.show({
                                 title           : Lang.getText(LangTextType.B0362),
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,
@@ -360,6 +360,7 @@ namespace TwnsBwTileDetailPanel {
             this._setUiListenerArray([
                 { ui: this._btnTitle, callback: this._onTouchedBtnTitle },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
@@ -392,6 +393,7 @@ namespace TwnsBwTileDetailPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
 
             this._conView.addChild(this._unitView);
         }

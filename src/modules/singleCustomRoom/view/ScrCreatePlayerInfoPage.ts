@@ -2,6 +2,7 @@
 import TwnsCommonChooseCoPanel      from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonCoInfoPanel        from "../../common/view/CommonCoInfoPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Lang                         from "../../tools/lang/Lang";
@@ -57,7 +58,7 @@ namespace TwnsScrCreatePlayerInfoPage {
             // nothing to do
         }
         private async _updateComponentsForPlayerInfo(): Promise<void> {
-            const mapRawData    = await ScrCreateModel.getMapRawData();
+            const mapRawData    = await ScrCreateModel.getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             const listPlayer    = this._listPlayer;
             if (mapRawData) {
                 listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted(mapRawData.playersCountUnneutral)));

@@ -1,4 +1,5 @@
 
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -45,7 +46,7 @@ namespace TwnsWeNodeReplacePanel {
 
         public static async hide(): Promise<void> {
             if (WeNodeReplacePanel._instance) {
-                await WeNodeReplacePanel._instance.close();
+                await WeNodeReplacePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

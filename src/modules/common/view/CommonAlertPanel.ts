@@ -1,13 +1,14 @@
 
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import Types                from "../../tools/helpers/Types";
-import Helpers              from "../../tools/helpers/Helpers";
-import Lang                 from "../../tools/lang/Lang";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonAlertPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -41,7 +42,7 @@ namespace TwnsCommonAlertPanel {
 
         public static async hide(): Promise<void> {
             if (CommonAlertPanel._instance) {
-                await CommonAlertPanel._instance.close();
+                await CommonAlertPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -71,7 +72,7 @@ namespace TwnsCommonAlertPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private _onTouchedBtnClose(): void {

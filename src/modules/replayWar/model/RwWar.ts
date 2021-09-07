@@ -3,6 +3,7 @@ import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingMan
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
 import SoundManager                 from "../../tools/helpers/SoundManager";
@@ -55,7 +56,7 @@ namespace TwnsRwWar {
         private _checkPointDataListForCheckPointId  = new Map<number, CheckPointData>();
 
         public async init(warData: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(warData);
+            const baseInitError = await this._baseInit(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (baseInitError) {
                 return baseInitError;
             }
@@ -71,7 +72,7 @@ namespace TwnsRwWar {
                 warData         : Helpers.deepClone(warData),
             });
 
-            // await Helpers.checkAndCallLater();
+            // await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             this._initView();
 
@@ -110,16 +111,16 @@ namespace TwnsRwWar {
             return `${Lang.getText(LangTextType.B0081)} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | null> {
-            return `${Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn())} ${this._getDescSuffix()}`;
+            return `${Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; }), this.getPlayerIndexInTurn())} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0095)} ${Lang.getUnitName(Helpers.getExisted(action.unitType))} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | null> {
-            return `${await this.getPlayerInTurn().getNickname()} ${Lang.getText(action.deprecatedIsBoot ? LangTextType.B0396: LangTextType.B0055)} ${this._getDescSuffix()}`;
+            return `${await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; })} ${Lang.getText(action.deprecatedIsBoot ? LangTextType.B0396: LangTextType.B0055)} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | null> {
-            const nickname      = await this.getPlayerInTurn().getNickname();
+            const nickname      = await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             const playerIndex   = this.getPlayerIndexInTurn();
             const suffix        = this._getDescSuffix();
             if (!action.isAgree) {
@@ -133,23 +134,23 @@ namespace TwnsRwWar {
             }
         }
         public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | null> {
-            return `P${this.getPlayerIndexInTurn()} ${await this.getPlayerInTurn().getNickname()} ${Lang.getText(LangTextType.B0094)} ${this._getDescSuffix()}`;
+            return `P${this.getPlayerIndexInTurn()} ${await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; })} ${Lang.getText(LangTextType.B0094)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0451)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null> {
             const playerIndex = Helpers.getExisted(action.targetPlayerIndex);
-            return `P${playerIndex} ${await this.getPlayer(playerIndex).getNickname()}${Lang.getText(LangTextType.B0450)} ${this._getDescSuffix()}`;
+            return `P${playerIndex} ${await this.getPlayer(playerIndex).getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; })}${Lang.getText(LangTextType.B0450)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0087)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | null> {
-            return Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
+            return Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; }), this.getPlayerIndexInTurn());
         }
         public async getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | null> {
-            return Lang.getFormattedText(LangTextType.F0028, await this.getPlayerInTurn().getNickname());
+            return Lang.getFormattedText(LangTextType.F0028, await this.getPlayerInTurn().getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
         }
         public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0097)} ${this._getDescSuffix()}`;
@@ -354,13 +355,13 @@ namespace TwnsRwWar {
             this.setIsAutoReplay(false);
 
             while (!this.getCheckPointData(checkPointId)) {
-                await Helpers.checkAndCallLater();
-                await this._executeNextAction(true);
+                await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await this._executeNextAction(true).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
             this.stopRunning();
-            await Helpers.checkAndCallLater();
-            await this._loadCheckPoint(checkPointId);
-            await Helpers.checkAndCallLater();
+            await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._loadCheckPoint(checkPointId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this.startRunning().startRunningView();
             FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
         }
@@ -374,9 +375,9 @@ namespace TwnsRwWar {
             this.setIsAutoReplay(false);
 
             this.stopRunning();
-            await Helpers.checkAndCallLater();
-            await this._loadCheckPoint(checkPointId);
-            await Helpers.checkAndCallLater();
+            await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._loadCheckPoint(checkPointId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this.startRunning().startRunningView();
             FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
         }
@@ -403,7 +404,7 @@ namespace TwnsRwWar {
             });
             this.setIsEnded(this.checkIsInEnd());
 
-            await Helpers.checkAndCallLater();
+            await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._fastInitView();
             SoundManager.playCoBgmWithWar(this, false);
         }
@@ -424,12 +425,12 @@ namespace TwnsRwWar {
             ) {
                 FloatText.show(Lang.getText(LangTextType.B0110));
             } else {
-                await this._doExecuteAction(action, isFastExecute);
+                await this._doExecuteAction(action, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         private async _doExecuteAction(action: IWarActionContainer, isFastExecute: boolean): Promise<void> {
             this.setNextActionId(this.getNextActionId() + 1);
-            const errorCode = await WarActionExecutor.checkAndExecute(this, action, isFastExecute);
+            const errorCode = await WarActionExecutor.checkAndExecute(this, action, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (errorCode) {
                 throw new Error(`RwWar._doExecuteAction() errorCode: ${errorCode}`);
             }

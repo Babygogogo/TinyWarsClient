@@ -9,6 +9,7 @@ import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreate
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers             from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
@@ -35,8 +36,6 @@ import TwnsRwWar                        from "../model/RwWar";
 
 namespace TwnsRwWarMenuPanel {
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonInputPanel             = TwnsCommonInputPanel.CommonInputPanel;
-    import UserSettingsPanel            = TwnsUserSettingsPanel.UserSettingsPanel;
     import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
     import RwWar                        = TwnsRwWar.RwWar;
     import TwWar                        = TwnsTwWar.TwWar;
@@ -87,7 +86,7 @@ namespace TwnsRwWarMenuPanel {
         }
         public static async hide(): Promise<void> {
             if (RwWarMenuPanel._instance) {
-                await RwWarMenuPanel._instance.close();
+                await RwWarMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getIsOpening(): boolean {
@@ -209,8 +208,8 @@ namespace TwnsRwWarMenuPanel {
         private async _updateGroupInfo(): Promise<void> {
             const war                   = this._getWar();
             const mapId                 = war.getMapId();
-            this._labelMapName.text     = await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----";
-            this._labelMapDesigner.text = await WarMapModel.getDesignerName(mapId) || "----";
+            this._labelMapName.text     = await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || "----";
+            this._labelMapDesigner.text = await WarMapModel.getDesignerName(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || "----";
             this._labelWarId.text       = `${war.getReplayId()}`;
             this._labelTurnIndex.text   = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text    = `${war.getNextActionId()} / ${war.getExecutedActionManager().getExecutedActionsCount()}`;
@@ -275,7 +274,7 @@ namespace TwnsRwWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0365),
                 callback: () => {
-                    CommonInputPanel.show({
+                    TwnsCommonInputPanel.CommonInputPanel.show({
                         title           : `${Lang.getText(LangTextType.B0365)}`,
                         currentValue    : "",
                         maxChars        : 2,
@@ -361,7 +360,7 @@ namespace TwnsRwWarMenuPanel {
                         return;
                     }
 
-                    const errorCode = await (new TwWar()).init(warData);
+                    const errorCode = await (new TwWar()).init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
@@ -384,7 +383,7 @@ namespace TwnsRwWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0560),
                 callback: () => {
-                    UserSettingsPanel.show();
+                    TwnsUserSettingsPanel.UserSettingsPanel.show();
                 }
             };
         }
@@ -463,7 +462,7 @@ namespace TwnsRwWarMenuPanel {
             const data                  = this._getData();
             const war                   = data.war;
             const player                = data.player;
-            this._labelName.text        = await player.getNickname();
+            this._labelName.text        = await player.getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`

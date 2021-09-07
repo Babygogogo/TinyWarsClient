@@ -3,6 +3,7 @@ import TwnsCommonChooseCoPanel  from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonCoInfoPanel    from "../../common/view/CommonCoInfoPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
@@ -51,7 +52,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
         }
 
         private async _updateComponentsForPlayerInfo(): Promise<void> {
-            this._listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted((await CcrCreateModel.getMapRawData()).playersCountUnneutral)));
+            this._listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted((await CcrCreateModel.getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).playersCountUnneutral)));
         }
 
         private _createDataForListPlayer(playersCountUnneutral: number): DataForPlayerRenderer[] {

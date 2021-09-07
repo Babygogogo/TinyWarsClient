@@ -1,5 +1,6 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -51,7 +52,7 @@ namespace TwnsCommonChooseCoPanel {
         }
         public static async hide(): Promise<void> {
             if (CommonChooseCoPanel._instance) {
-                await CommonChooseCoPanel._instance.close();
+                await CommonChooseCoPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -79,7 +80,7 @@ namespace TwnsCommonChooseCoPanel {
             this._initListCo();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         public setAndReviseSelectedIndex(newIndex: number): void {

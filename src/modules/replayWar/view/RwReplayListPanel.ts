@@ -6,6 +6,7 @@ import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import FlowManager                  from "../../tools/helpers/FlowManager";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
@@ -68,7 +69,7 @@ namespace TwnsRwReplayListPanel {
         }
         public static async hide(): Promise<void> {
             if (RwReplayListPanel._instance) {
-                await RwReplayListPanel._instance.close();
+                await RwReplayListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -107,7 +108,7 @@ namespace TwnsRwReplayListPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -415,7 +416,7 @@ namespace TwnsRwReplayListPanel {
             } else {
                 labelId.text    = `ID: ${replayBriefInfo.replayId}`;
                 labelType.text  = Lang.getWarTypeName(Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined;
-                labelName.text  = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(replayBriefInfo.mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                labelName.text  = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(replayBriefInfo.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
 

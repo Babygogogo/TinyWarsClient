@@ -1,10 +1,10 @@
 
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
-import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
@@ -97,7 +97,7 @@ namespace TwnsBwWarEventManager {
             const extraDataList : IExtraDataForSystemCallWarEvent[] = [];
             const actionIdArray = event.actionIdArray || [];
             for (let index = 0; index < actionIdArray.length; ++index) {
-                const extraData = await this._callWarAction(actionIdArray[index], index, isFastExecute);
+                const extraData = await this._callWarAction(actionIdArray[index], index, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 if (extraData) {
                     extraDataList.push(extraData);
                 }
@@ -108,11 +108,11 @@ namespace TwnsBwWarEventManager {
         private async _callWarAction(warEventActionId: number, indexForActionIdList: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | null> {
             const action = this.getWarEventAction(warEventActionId);
             if (action.WeaAddUnit) {
-                return await this._callActionAddUnit(indexForActionIdList, action.WeaAddUnit, isFastExecute);
+                return await this._callActionAddUnit(indexForActionIdList, action.WeaAddUnit, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             } else if (action.WeaSetPlayerAliveState) {
-                return await this._callActionSetPlayerAliveState(action.WeaSetPlayerAliveState);
+                return await this._callActionSetPlayerAliveState(action.WeaSetPlayerAliveState).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             } else if (action.WeaDialogue) {
-                return await this._callActionDialogue(action.WeaDialogue, isFastExecute);
+                return await this._callActionDialogue(action.WeaDialogue, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             } else {
                 throw new Error(`Invalid action.`);
             }

@@ -3,9 +3,14 @@ import TwnsBwUnit               from "../../baseWar/model/BwUnit";
 import TwnsBwWar                from "../../baseWar/model/BwWar";
 import CommonModel              from "../../common/model/CommonModel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
+import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import Notify                   from "../../tools/notify/Notify";
+import NotifyData               from "../../tools/notify/NotifyData";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import TwnsUiButton             from "../../tools/ui/UiButton";
 import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -52,7 +57,7 @@ namespace TwnsBwUnitListPanel {
         }
         public static async hide(): Promise<void> {
             if (BwUnitListPanel._instance) {
-                await BwUnitListPanel._instance.close();
+                await BwUnitListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -76,6 +81,10 @@ namespace TwnsBwUnitListPanel {
             const war           = this._getOpenData().war;
             this._playerIndex   = war.getPlayerIndexInTurn();
             this._updateView();
+        }
+
+        public getSelectedData(): DataForUnitRenderer | null {
+            return this._listUnit.getSelectedData();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,6 +194,7 @@ namespace TwnsBwUnitListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
 
             this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
             this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
@@ -205,10 +215,23 @@ namespace TwnsBwUnitListPanel {
         public onItemTapEvent(): void {
             const data      = this._getData();
             const cursor    = data.cursor;
+            const war       = cursor.getWar();
+            if ((war.getIsExecutingAction()) || (war.getActionPlanner().checkIsStateRequesting())) {
+                return;
+            }
+
             const gridIndex = data.unit.getGridIndex();
-            cursor.setGridIndex(gridIndex);
-            cursor.updateView();
-            cursor.getWar().getView().tweenGridToCentralArea(gridIndex);
+            if (GridIndexHelpers.checkIsEqual(gridIndex, cursor.getGridIndex())) {
+                Notify.dispatch(NotifyType.BwCursorTapped, {
+                    current : gridIndex,
+                    tappedOn: gridIndex,
+                } as NotifyData.BwCursorTapped);
+            } else {
+                cursor.setGridIndex(gridIndex);
+                cursor.updateView();
+                war.getView().tweenGridToCentralArea(gridIndex);
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

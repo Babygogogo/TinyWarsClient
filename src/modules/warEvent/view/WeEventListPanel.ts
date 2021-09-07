@@ -1,6 +1,7 @@
 
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import TwnsMeWar                from "../../mapEditor/model/MeWar";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -49,7 +50,7 @@ namespace TwnsWeEventListPanel {
         }
         public static async hide(): Promise<void> {
             if (WeEventListPanel._instance) {
-                await WeEventListPanel._instance.close();
+                await WeEventListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

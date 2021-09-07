@@ -1,13 +1,14 @@
 
-import Helpers          from "../../tools/helpers/Helpers";
-import Logger           from "../../tools/helpers/Logger";
-import Notify           from "../../tools/notify/Notify";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoManager     from "../../tools/proto/ProtoManager";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
-import WarMapModel      from "../../warMap/model/WarMapModel";
-import TwnsRwWar        from "./RwWar";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoManager         from "../../tools/proto/ProtoManager";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+import WarMapModel          from "../../warMap/model/WarMapModel";
+import TwnsRwWar            from "./RwWar";
 
 namespace RwModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -61,7 +62,7 @@ namespace RwModel {
         }
 
         const warData                   = ProtoManager.decodeAsSerialWar(encodedWarData);
-        const mapRawData                = Helpers.getExisted(await WarMapModel.getRawData(Helpers.getExisted(WarCommonHelpers.getMapId(warData))));
+        const mapRawData                = Helpers.getExisted(await WarMapModel.getRawData(Helpers.getExisted(WarCommonHelpers.getMapId(warData))).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
         const unitDataArray             = mapRawData.unitDataArray || [];
         const field                     = Helpers.getExisted(warData.field);
         warData.seedRandomCurrentState  = Helpers.deepClone(warData.seedRandomInitialState);
@@ -72,7 +73,7 @@ namespace RwModel {
         };
 
         const war       = new RwWar();
-        const initError = await war.init(warData);
+        const initError = await war.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (initError) {
             throw new Error(`RwModel.loadWar() initError: ${initError}`);
         }

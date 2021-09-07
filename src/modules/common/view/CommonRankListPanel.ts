@@ -2,6 +2,7 @@
 import CommonModel              from "../../common/model/CommonModel";
 import CommonProxy              from "../../common/model/CommonProxy";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -52,7 +53,7 @@ namespace TwnsCommonRankListPanel {
         }
         public static async hide(): Promise<void> {
             if (CommonRankListPanel._instance) {
-                await CommonRankListPanel._instance.close();
+                await CommonRankListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -83,7 +84,7 @@ namespace TwnsCommonRankListPanel {
             this._updateComponentsForLanguage();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,7 +243,7 @@ namespace TwnsCommonRankListPanel {
             this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;
 
-            const userInfo = await UserModel.getUserPublicInfo(data.userId);
+            const userInfo = await UserModel.getUserPublicInfo(data.userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (userInfo == null) {
                 throw new Error(`UserRenderer._updateView() empty userInfo.`);
             }

@@ -4,6 +4,7 @@ import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
 import TwnsMrrMainMenuPanel         from "../../multiRankRoom/view/MrrMainMenuPanel";
 import TwnsScrCreateMapListPanel    from "../../singleCustomRoom/view/ScrCreateMapListPanel";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
@@ -46,7 +47,7 @@ namespace TwnsSpmMainMenuPanel {
 
         public static async hide(): Promise<void> {
             if (SpmMainMenuPanel._instance) {
-                await SpmMainMenuPanel._instance.close();
+                await SpmMainMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -72,7 +73,7 @@ namespace TwnsSpmMainMenuPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////

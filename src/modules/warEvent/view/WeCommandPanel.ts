@@ -21,7 +21,6 @@ import TwnsWeNodeReplacePanel       from "./WeNodeReplacePanel";
 
 namespace TwnsWeCommandPanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonInputPanel         = TwnsCommonInputPanel.CommonInputPanel;
     import MeWar                    = TwnsMeWar.MeWar;
     import WeEventRenamePanel       = TwnsWeEventRenamePanel.WeEventRenamePanel;
     import WeNodeReplacePanel       = TwnsWeNodeReplacePanel.WeNodeReplacePanel;
@@ -134,7 +133,7 @@ namespace TwnsWeCommandPanel {
                 const minValue  = 1;
                 const maxValue  = CommonConstants.WarEventMaxCallCountInPlayerTurn;
                 const eventData = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()?.eventArray?.find(v => v.eventId === data.eventId));
-                CommonInputPanel.show({
+                TwnsCommonInputPanel.CommonInputPanel.show({
                     title           : Lang.getText(LangTextType.B0476),
                     charRestrict    : `0-9`,
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
@@ -159,7 +158,7 @@ namespace TwnsWeCommandPanel {
                 const minValue  = 1;
                 const maxValue  = CommonConstants.WarEventMaxCallCountTotal;
                 const eventData = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()?.eventArray?.find(v => v.eventId === data.eventId));
-                CommonInputPanel.show({
+                TwnsCommonInputPanel.CommonInputPanel.show({
                     title           : Lang.getText(LangTextType.B0477),
                     charRestrict    : `0-9`,
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,

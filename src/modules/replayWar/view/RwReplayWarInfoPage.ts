@@ -1,5 +1,6 @@
 
 import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
@@ -115,7 +116,7 @@ namespace TwnsRwReplayWarInfoPage {
         private async _updateLabelMapName(): Promise<void> {
             const replayInfo        = this._getReplayInfo();
             this._labelMapName.text = replayInfo
-                ? (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(replayInfo.replayBriefInfo?.mapId)) ?? CommonConstants.ErrorTextForUndefined)
+                ? (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(replayInfo.replayBriefInfo?.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined)
                 : CommonConstants.ErrorTextForUndefined;
         }
 

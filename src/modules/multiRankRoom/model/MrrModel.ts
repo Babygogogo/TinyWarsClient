@@ -3,6 +3,7 @@ import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdv
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
@@ -121,12 +122,12 @@ namespace MrrModel {
         setRoomInfo(roomId, roomInfo);
 
         if (MrrSelfSettingsModel.getRoomId() === roomId) {
-            await MrrSelfSettingsModel.resetData(roomId);
+            await MrrSelfSettingsModel.resetData(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
     }
     export async function updateOnMsgMrrSetBannedCoIdList(data: ProtoTypes.NetMessage.MsgMrrSetBannedCoIdList.IS): Promise<void> {
         const roomId    = Helpers.getExisted(data.roomId);
-        const roomInfo  = await getRoomInfo(roomId);
+        const roomInfo  = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (!roomInfo) {
             return;
         }
@@ -153,7 +154,7 @@ namespace MrrModel {
         }
     }
     export async function updateOnMsgMrrSetSelfSettings(data: ProtoTypes.NetMessage.MsgMrrSetSelfSettings.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (!roomInfo) {
             return;
         }
@@ -201,14 +202,14 @@ namespace MrrModel {
 
     export async function checkIsRed(): Promise<boolean> {
         for (const roomId of getMyRoomIdArray()) {
-            if (await checkIsRedForRoom(roomId)) {
+            if (await checkIsRedForRoom(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) {
                 return true;
             }
         }
         return false;
     }
     export async function checkIsRedForRoom(roomId: number): Promise<boolean> {
-        const roomInfo = await getRoomInfo(roomId);
+        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (roomInfo == null) {
             return false;
         }
@@ -252,7 +253,7 @@ namespace MrrModel {
     }
 
     export async function createDataForCommonWarPlayerInfoPage(roomId: number | null): Promise<OpenDataForCommonWarPlayerInfoPage> {
-        const roomInfo = roomId == null ? null : await getRoomInfo(roomId);
+        const roomInfo = roomId == null ? null : await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (roomInfo == null) {
             return null;
         }
@@ -286,7 +287,7 @@ namespace MrrModel {
     }
 
     export async function createDataForCommonWarBasicSettingsPage(roomId: number | null): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const roomInfo = roomId == null ? null : await getRoomInfo(roomId);
+        const roomInfo = roomId == null ? null : await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (roomInfo == null) {
             return { dataArrayForListSettings: [] };
         }
@@ -299,7 +300,7 @@ namespace MrrModel {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMrw.mapId)),
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMrw.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                     warRule,
                     callbackOnModify: null,
                 },
@@ -353,7 +354,7 @@ namespace MrrModel {
     }
 
     export async function createDataForCommonWarAdvancedSettingsPage(roomId: number | null): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-        const roomInfo = roomId == null ? null : await getRoomInfo(roomId);
+        const roomInfo = roomId == null ? null : await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (roomInfo == null) {
             return null;
         }

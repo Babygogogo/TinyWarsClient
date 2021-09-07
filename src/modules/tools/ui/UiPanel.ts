@@ -1,11 +1,12 @@
 
-import Helpers          from "../helpers/Helpers";
-import Logger           from "../helpers/Logger";
-import SoundManager     from "../helpers/SoundManager";
-import StageManager     from "../helpers/StageManager";
-import Types            from "../helpers/Types";
-import TwnsUiButton     from "./UiButton";
-import TwnsUiComponent  from "./UiComponent";
+import CompatibilityHelpers from "../helpers/CompatibilityHelpers";
+import Helpers              from "../helpers/Helpers";
+import Logger               from "../helpers/Logger";
+import SoundManager         from "../helpers/SoundManager";
+import StageManager         from "../helpers/StageManager";
+import Types                from "../helpers/Types";
+import TwnsUiButton         from "./UiButton";
+import TwnsUiComponent      from "./UiComponent";
 
 namespace TwnsUiPanel {
     const NAMES_FOR_BUTTON_CONFIRM = [
@@ -111,7 +112,7 @@ namespace TwnsUiPanel {
             }
             this._setIsRunningClose(true);
 
-            await this._doClose();
+            await this._doClose().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             (this.parent) && (this.parent.removeChild(this));
             this._deleteOpenData();
 
@@ -134,7 +135,7 @@ namespace TwnsUiPanel {
                 this._setUiListenerArray(null);
                 this._setNotifyListenerArray(null);
                 this._setCallbackOnTouchedMask(null);
-                await this._onClosed();
+                await this._onClosed().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

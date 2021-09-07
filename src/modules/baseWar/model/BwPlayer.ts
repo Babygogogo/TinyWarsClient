@@ -1,6 +1,7 @@
 
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
@@ -283,7 +284,7 @@ namespace TwnsBwPlayer {
             const userId = this.getUserId();
             return (userId == null)
                 ?  `A.I.`
-                : await UserModel.getUserNickname(userId) || `??`;
+                : await UserModel.getUserNickname(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || `??`;
         }
 
         public setCoId(coId: number): void {

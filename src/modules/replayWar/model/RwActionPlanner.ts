@@ -1,6 +1,5 @@
 
 import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
-import TwnsBwProduceUnitPanel   from "../../baseWar/view/BwProduceUnitPanel";
 import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
 import FloatText                from "../../tools/helpers/FloatText";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
@@ -10,7 +9,6 @@ import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
 
 namespace TwnsRwActionPlanner {
-    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import UnitState            = Types.UnitActionState;
@@ -19,26 +17,6 @@ namespace TwnsRwActionPlanner {
     import UnitActionType       = Types.UnitActionType;
 
     export class RwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for setting common state.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void {
-            this._clearFocusUnitOnMap();
-            this._clearFocusUnitLoaded();
-            this._clearChoosingUnitForDrop();
-            this._clearChosenUnitsForDrop();
-            this._clearAvailableDropDestinations();
-            this._clearDataForPreviewingAttackableArea();
-            this._clearDataForPreviewingMovableArea();
-
-            this._setState(State.ChoosingProductionTarget);
-            this._updateView();
-            BwProduceUnitPanel.show({
-                gridIndex,
-                war     : this._getWar(),
-            });
-        }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

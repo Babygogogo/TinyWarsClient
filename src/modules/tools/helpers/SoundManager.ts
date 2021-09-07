@@ -1,11 +1,12 @@
 
-import TwnsBwWar        from "../../baseWar/model/BwWar";
-import Lang             from "../lang/Lang";
-import TwnsLangTextType from "../lang/LangTextType";
-import FloatText        from "./FloatText";
-import Helpers          from "./Helpers";
-import LocalStorage     from "./LocalStorage";
-import Types            from "./Types";
+import TwnsBwWar            from "../../baseWar/model/BwWar";
+import Lang                 from "../lang/Lang";
+import TwnsLangTextType     from "../lang/LangTextType";
+import CompatibilityHelpers from "./CompatibilityHelpers";
+import FloatText            from "./FloatText";
+import Helpers              from "./Helpers";
+import LocalStorage         from "./LocalStorage";
+import Types                from "./Types";
 
 namespace SoundManager {
     import SoundType            = Types.SoundType;
@@ -260,7 +261,7 @@ namespace SoundManager {
                 throw new Error(`SoundManager._playBgmForNormal() empty path.`);
             }
 
-            const audioBuffer = await loadAudioBuffer(path);
+            const audioBuffer = await loadAudioBuffer(path).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (audioBuffer == null) {
                 throw new Error(`SoundManager._playBgmForNormal() empty audioBuffer.`);
             }
@@ -370,7 +371,7 @@ namespace SoundManager {
                 throw new Error(`SoundManager._playEffectForNormal() empty path.`);
             }
 
-            const audioBuffer = await loadAudioBuffer(path);
+            const audioBuffer = await loadAudioBuffer(path).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (audioBuffer == null) {
                 throw new Error(`SoundManager.playShortSfx() empty audioBuffer.`);
             }
@@ -458,12 +459,12 @@ namespace SoundManager {
             },
             null,
             RES.ResourceItem.TYPE_BIN
-        );
+        ).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (!arrayBuffer) {
             return null;
         }
 
-        return await _audioContext.decodeAudioData(arrayBuffer);
+        return await _audioContext.decodeAudioData(arrayBuffer).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
 }
 

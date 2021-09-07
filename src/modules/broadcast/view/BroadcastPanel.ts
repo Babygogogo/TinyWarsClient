@@ -1,14 +1,15 @@
 
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import StageManager     from "../../tools/helpers/StageManager";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import BroadcastModel   from "../model/BroadcastModel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import StageManager         from "../../tools/helpers/StageManager";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import BroadcastModel       from "../model/BroadcastModel";
 
 namespace TwnsBroadcastPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -35,7 +36,7 @@ namespace TwnsBroadcastPanel {
 
         public static async hide(): Promise<void> {
             if (BroadcastPanel._instance) {
-                await BroadcastPanel._instance.close();
+                await BroadcastPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

@@ -1,10 +1,11 @@
 
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import Types            from "../../tools/helpers/Types";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonErrorPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -32,7 +33,7 @@ namespace TwnsCommonErrorPanel {
 
         public static async hide(): Promise<void> {
             if (CommonErrorPanel._instance) {
-                await CommonErrorPanel._instance.close();
+                await CommonErrorPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

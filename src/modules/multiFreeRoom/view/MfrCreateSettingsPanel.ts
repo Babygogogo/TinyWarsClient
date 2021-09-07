@@ -1,10 +1,11 @@
 
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
@@ -77,7 +78,7 @@ namespace TwnsMfrCreateSettingsPanel {
         }
         public static async hide(): Promise<void> {
             if (MfrCreateSettingsPanel._instance) {
-                await MfrCreateSettingsPanel._instance.close();
+                await MfrCreateSettingsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -134,7 +135,7 @@ namespace TwnsMfrCreateSettingsPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._clearTimeoutForBtnConfirm();
         }
 

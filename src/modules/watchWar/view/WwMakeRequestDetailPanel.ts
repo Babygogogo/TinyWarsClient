@@ -1,5 +1,6 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -46,7 +47,7 @@ namespace TwnsWwMakeRequestDetailPanel {
         }
         public static async hide(): Promise<void> {
             if (WwMakeRequestDetailPanel._instance) {
-                await WwMakeRequestDetailPanel._instance.close();
+                await WwMakeRequestDetailPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -224,7 +225,7 @@ namespace TwnsWwMakeRequestDetailPanel {
             if (userId == null) {
                 labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
             } else {
-                labelName.text = `${await UserModel.getUserNickname(userId)} ${coName}`;
+                labelName.text = `${await UserModel.getUserNickname(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; })} ${coName}`;
             }
         }
 

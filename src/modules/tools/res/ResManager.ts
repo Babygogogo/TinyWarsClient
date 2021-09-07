@@ -1,8 +1,9 @@
 
-import Logger           from "../helpers/Logger";
-import ResAutoRelease   from "./ResAutoRelease";
-import FloatText        from "../helpers/FloatText";
-import StageManager     from "../helpers/StageManager";
+import CompatibilityHelpers from "../helpers/CompatibilityHelpers";
+import FloatText            from "../helpers/FloatText";
+import Logger               from "../helpers/Logger";
+import StageManager         from "../helpers/StageManager";
+import ResAutoRelease       from "./ResAutoRelease";
 
 namespace ResManager {
     let _isLoadedMainResource = false;
@@ -11,9 +12,9 @@ namespace ResManager {
         egret.registerImplementation("eui.IAssetAdapter", new AssetAdapter());
         egret.registerImplementation("eui.IThemeAdapter", new ThemeAdapter());
 
-        await RES.loadConfig("resource/default.res.json", "resource/");
-        await _initTheme();
-        // await RES.loadGroup("preload", 0, LoadingUiPanel.create());
+        await RES.loadConfig("resource/default.res.json", "resource/").catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await _initTheme().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        // await RES.loadGroup("preload", 0, LoadingUiPanel.create()).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         // LoadingUiPanel.destroy();
         ResAutoRelease.startAutoRelease();
     }

@@ -1,4 +1,5 @@
 
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
@@ -54,7 +55,7 @@ namespace TwnsCcrCreateSearchMapPanel {
         }
         public static async hide(): Promise<void> {
             if (CcrCreateSearchMapPanel._instance) {
-                await CcrCreateSearchMapPanel._instance.close();
+                await CcrCreateSearchMapPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -81,7 +82,7 @@ namespace TwnsCcrCreateSearchMapPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private _onTouchedBtnReset(): void {

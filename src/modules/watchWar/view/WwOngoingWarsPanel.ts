@@ -3,6 +3,7 @@ import TwnsCommonBlockPanel         from "../../common/view/CommonBlockPanel";
 import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FlowManager                  from "../../tools/helpers/FlowManager";
 import Helpers                      from "../../tools/helpers/Helpers";
@@ -60,7 +61,7 @@ namespace TwnsWwOngoingWarsPanel {
         }
         public static async hide(): Promise<void> {
             if (McrWatchOngoingWarsPanel._instance) {
-                await McrWatchOngoingWarsPanel._instance.close();
+                await McrWatchOngoingWarsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -104,7 +105,7 @@ namespace TwnsWwOngoingWarsPanel {
 
             if (dataList[newIndex]) {
                 this._listWar.updateSingleData(newIndex, dataList[newIndex]);
-                await this._showMap(newIndex);
+                await this._showMap(newIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             } else {
                 this._zoomMap.clearMap();
                 this._groupInfo.visible = false;
@@ -233,8 +234,8 @@ namespace TwnsWwOngoingWarsPanel {
 
             } else if (settingsForCcw) {
                 const mapId             = settingsForCcw.mapId;
-                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
-                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
                 labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = settingsForCcw.warComment || "----";
@@ -247,8 +248,8 @@ namespace TwnsWwOngoingWarsPanel {
 
             } else if (settingsForMcw) {
                 const mapId             = settingsForMcw.mapId;
-                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
-                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
                 labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = settingsForMcw.warComment || "----";
@@ -261,8 +262,8 @@ namespace TwnsWwOngoingWarsPanel {
 
             } else if (settingsForMrw) {
                 const mapId             = settingsForMrw.mapId;
-                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId);
-                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                const mapRawData        = mapId == null ? null : await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                labelMapName.text       = Lang.getFormattedText(LangTextType.F0000, mapId == null ? CommonConstants.ErrorTextForUndefined : await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
                 labelDesigner.text      = Lang.getFormattedText(LangTextType.F0001, mapRawData?.designerName || CommonConstants.ErrorTextForUndefined);
                 labelHasFog.text        = Lang.getFormattedText(LangTextType.F0005, Lang.getText(hasFogByDefault ? LangTextType.B0012 : LangTextType.B0001));
                 labelWarComment.text    = "----";
@@ -340,7 +341,7 @@ namespace TwnsWwOngoingWarsPanel {
                         labelName.text = warName;
                     } else {
                         const mapId     = settingsForMcw.mapId;
-                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) || CommonConstants.ErrorTextForUndefined;
                     }
 
                 } else if (settingsForCcw) {
@@ -349,12 +350,12 @@ namespace TwnsWwOngoingWarsPanel {
                         labelName.text = warName;
                     } else {
                         const mapId     = settingsForCcw.mapId;
-                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) || CommonConstants.ErrorTextForUndefined;
                     }
 
                 } else if (settingsForMrw) {
                     const mapId     = settingsForMrw.mapId;
-                    labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                    labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) || CommonConstants.ErrorTextForUndefined;
                 }
             }
         }
@@ -384,7 +385,7 @@ namespace TwnsWwOngoingWarsPanel {
             if (userId == null) {
                 labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
             } else {
-                labelName.text = `${await UserModel.getUserNickname(userId)} ${coName}`;
+                labelName.text = `${await UserModel.getUserNickname(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; })} ${coName}`;
             }
         }
     }

@@ -1,10 +1,11 @@
 
-import Helpers          from "../../tools/helpers/Helpers";
-import Types            from "../../tools/helpers/Types";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import TwnsUiCoInfo     from "../../tools/ui/UiCoInfo";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiCoInfo         from "../../tools/ui/UiCoInfo";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonCoInfoPanel {
     import NotifyType   = TwnsNotifyType.NotifyType;
@@ -32,7 +33,7 @@ namespace TwnsCommonCoInfoPanel {
 
         public static async hide(): Promise<void> {
             if (CommonCoInfoPanel._instance) {
-                await CommonCoInfoPanel._instance.close();
+                await CommonCoInfoPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -61,7 +62,7 @@ namespace TwnsCommonCoInfoPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private _onNotifyLanguageChanged(): void {

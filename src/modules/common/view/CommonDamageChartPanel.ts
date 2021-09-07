@@ -1,8 +1,9 @@
 
 import CommonModel              from "../../common/model/CommonModel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
-import Helpers from "../../tools/helpers/Helpers";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Timer                    from "../../tools/helpers/Timer";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -66,7 +67,7 @@ namespace TwnsCommonDamageChartPanel {
         }
         public static async hide(): Promise<void> {
             if (CommonDamageChartPanel._instance) {
-                await CommonDamageChartPanel._instance.close();
+                await CommonDamageChartPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getIsOpening(): boolean {
@@ -106,7 +107,7 @@ namespace TwnsCommonDamageChartPanel {
             this.setSelectedIndexAndUpdateView(0);
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             this._selectedIndex = null;
             delete this._dataForListUnit;

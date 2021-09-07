@@ -1,13 +1,14 @@
 
-import TwnsMeWar        from "../../mapEditor/model/MeWar";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
-import WarMapProxy      from "../../warMap/model/WarMapProxy";
+import TwnsMeWar            from "../../mapEditor/model/MeWar";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+import WarMapProxy          from "../../warMap/model/WarMapProxy";
 
 namespace TwnsMmRejectMapPanel {
     import MeWar        = TwnsMeWar.MeWar;
@@ -22,16 +23,11 @@ namespace TwnsMmRejectMapPanel {
 
         private static _instance: MmRejectMapPanel;
 
-        // @ts-ignore
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _labelTips      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _inputReason    : TwnsUiTextInput.UiTextInput;
-        // @ts-ignore
-        private _btnCancel      : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private _btnConfirm     : TwnsUiButton.UiButton;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelTips!    : TwnsUiLabel.UiLabel;
+        private readonly _inputReason!  : TwnsUiTextInput.UiTextInput;
+        private readonly _btnCancel!    : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!MmRejectMapPanel._instance) {
@@ -42,7 +38,7 @@ namespace TwnsMmRejectMapPanel {
 
         public static async hide(): Promise<void> {
             if (MmRejectMapPanel._instance) {
-                await MmRejectMapPanel._instance.close();
+                await MmRejectMapPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

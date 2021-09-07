@@ -45,8 +45,6 @@ import TwnsMeWarRulePanel           from "./MeWarRulePanel";
 
 namespace TwnsMeWarMenuPanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonInputPanel         = TwnsCommonInputPanel.CommonInputPanel;
-    import UserSettingsPanel        = TwnsUserSettingsPanel.UserSettingsPanel;
     import BwUnitView               = TwnsBwUnitView.BwUnitView;
     import DataForDrawUnit          = TwnsMeDrawer.DataForDrawUnit;
     import MeWar                    = TwnsMeWar.MeWar;
@@ -235,7 +233,7 @@ namespace TwnsMeWarMenuPanel {
         private _onTouchedBtnModifyMapDesigner(): void {
             const war = this._getWar();
             if (!war.getIsReviewingMap()) {
-                CommonInputPanel.show({
+                TwnsCommonInputPanel.CommonInputPanel.show({
                     title           : Lang.getText(LangTextType.B0163),
                     tips            : null,
                     currentValue    : war.getMapDesignerName(),
@@ -677,7 +675,7 @@ namespace TwnsMeWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0560),
                 callback: () => {
-                    UserSettingsPanel.show();
+                    TwnsUserSettingsPanel.UserSettingsPanel.show();
                 }
             };
         }

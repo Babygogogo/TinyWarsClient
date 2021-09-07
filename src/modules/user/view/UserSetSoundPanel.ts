@@ -1,15 +1,16 @@
 
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import SoundManager     from "../../tools/helpers/SoundManager";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import SoundManager         from "../../tools/helpers/SoundManager";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsUserSetSoundPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -62,7 +63,7 @@ namespace TwnsUserSetSoundPanel {
 
         public static async hide(): Promise<void> {
             if (UserSetSoundPanel._instance) {
-                await UserSetSoundPanel._instance.close();
+                await UserSetSoundPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -110,7 +111,7 @@ namespace TwnsUserSetSoundPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

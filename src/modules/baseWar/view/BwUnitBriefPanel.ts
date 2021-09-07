@@ -2,6 +2,7 @@
 import CommonModel              from "../../common/model/CommonModel";
 import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
 import StageManager             from "../../tools/helpers/StageManager";
@@ -56,7 +57,7 @@ namespace TwnsBwUnitBriefPanel {
         }
         public static async hide(): Promise<void> {
             if (BwUnitBriefPanel._instance) {
-                await BwUnitBriefPanel._instance.close();
+                await BwUnitBriefPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getInstance(): BwUnitBriefPanel {
@@ -93,7 +94,7 @@ namespace TwnsBwUnitBriefPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             for (const cell of this._cellList) {
                 this._destroyCell(cell);
@@ -237,7 +238,7 @@ namespace TwnsBwUnitBriefPanel {
                     : currentIsLeftSide
                 );
             if (newIsLeftSide !== currentIsLeftSide) {
-                await this._showCloseAnimation();
+                await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 this._isLeftSide = newIsLeftSide;
                 this._updatePosition();
                 this._showOpenAnimation();

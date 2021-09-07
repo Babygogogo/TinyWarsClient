@@ -1,14 +1,14 @@
 
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import ConfigManager    from "../../tools/helpers/ConfigManager";
-import Helpers          from "../../tools/helpers/Helpers";
-import Logger           from "../../tools/helpers/Logger";
-import Types            from "../../tools/helpers/Types";
-import Notify           from "../../tools/notify/Notify";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
-import WarMapModel      from "../../warMap/model/WarMapModel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+import WarMapModel          from "../../warMap/model/WarMapModel";
 
 namespace McrCreateModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -34,7 +34,7 @@ namespace McrCreateModel {
     };
 
     export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
-        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
+        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
     }
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
@@ -45,7 +45,7 @@ namespace McrCreateModel {
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
-        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId));
+        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).warRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
@@ -80,13 +80,13 @@ namespace McrCreateModel {
 
     export async function resetDataByWarRuleId(ruleId: number | null): Promise<void> {
         if (ruleId == null) {
-            await resetDataByCustomWarRuleId();
+            await resetDataByCustomWarRuleId().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         } else {
-            await resetDataByPresetWarRuleId(ruleId);
+            await resetDataByPresetWarRuleId(ruleId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
     }
     async function resetDataByCustomWarRuleId(): Promise<void> {
-        const warRule = WarRuleHelpers.createDefaultWarRule(null, Helpers.getExisted((await getMapRawData()).playersCountUnneutral));
+        const warRule = WarRuleHelpers.createDefaultWarRule(null, Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).playersCountUnneutral));
         setWarRule(warRule);
         setCustomWarRuleId();
 
@@ -102,7 +102,7 @@ namespace McrCreateModel {
         Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
     }
     async function resetDataByPresetWarRuleId(ruleId: number): Promise<void> {
-        const warRule = Helpers.getExisted((await getMapRawData()).warRuleArray?.find(r => r.ruleId === ruleId));
+        const warRule = Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).warRuleArray?.find(r => r.ruleId === ruleId));
         setWarRule(Helpers.deepClone(warRule));
         setPresetWarRuleId(ruleId);
 
@@ -130,9 +130,9 @@ namespace McrCreateModel {
     }
     export async function tickPresetWarRuleId(): Promise<void> {
         const currWarRuleId = getPresetWarRuleId();
-        const warRuleArray  = Helpers.getExisted((await getMapRawData()).warRuleArray);
+        const warRuleArray  = Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).warRuleArray);
         if (currWarRuleId == null) {
-            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canMcw)?.ruleId));
+            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canMcw)?.ruleId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         } else {
             const warRuleIdList: number[] = [];
             for (let ruleId = currWarRuleId + 1; ruleId < warRuleArray.length; ++ruleId) {
@@ -143,7 +143,7 @@ namespace McrCreateModel {
             }
             for (const ruleId of warRuleIdList) {
                 if (warRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canMcw) {
-                    await resetDataByWarRuleId(ruleId);
+                    await resetDataByWarRuleId(ruleId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                     return;
                 }
             }

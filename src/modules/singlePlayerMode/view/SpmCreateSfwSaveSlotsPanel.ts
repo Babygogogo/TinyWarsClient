@@ -5,6 +5,7 @@ import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
 import SpmModel                 from "../../singlePlayerMode/model/SpmModel";
 import SpmProxy                 from "../../singlePlayerMode/model/SpmProxy";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -22,7 +23,6 @@ import WarMapModel              from "../../warMap/model/WarMapModel";
 namespace TwnsSpmCreateSfwSaveSlotsPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
-    import CommonInputPanel     = TwnsCommonInputPanel.CommonInputPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
@@ -51,7 +51,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
         }
         public static async hide(): Promise<void> {
             if (SpmCreateSfwSaveSlotsPanel._instance) {
-                await SpmCreateSfwSaveSlotsPanel._instance.close();
+                await SpmCreateSfwSaveSlotsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -155,7 +155,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
         private _onTouchedImgBg(): void {
             const data      = this._getData();
             const callback  = () => {
-                CommonInputPanel.show({
+                TwnsCommonInputPanel.CommonInputPanel.show({
                     title       : Lang.getText(LangTextType.B0088),
                     maxChars    : CommonConstants.SpmSaveSlotCommentMaxLength,
                     currentValue: ``,
@@ -205,7 +205,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
                     const mapId         = WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
+                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

@@ -4,6 +4,7 @@ import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Timer                        from "../../tools/helpers/Timer";
@@ -136,7 +137,7 @@ namespace TwnsTwWar {
         }
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data);
+            const baseInitError = await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (baseInitError) {
                 return baseInitError;
             }
@@ -144,12 +145,12 @@ namespace TwnsTwWar {
             return ClientErrorCode.NoError;
         }
         public async initByMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-            const warData = await _createDataForCreateTwWar(mapRawData);
+            const warData = await _createDataForCreateTwWar(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (warData == null) {
                 return ClientErrorCode.TwWarInitByMapRawData00;
             }
 
-            return await this.init(warData);
+            return await this.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         public getWarType(): Types.WarType {
@@ -177,8 +178,8 @@ namespace TwnsTwWar {
     }
 
     async function _createDataForCreateTwWar(mapRawData: IMapRawData): Promise<ISerialWar> {
-        const dataForPlayerManager  = await _createInitialPlayerManagerDataForTw(mapRawData);
-        const fieldData             = await _createInitialFieldData(mapRawData);
+        const dataForPlayerManager  = await _createInitialPlayerManagerDataForTw(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const fieldData             = await _createInitialFieldData(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         const warRule               = (mapRawData.warRuleArray || [])[0];
         const seedRandomState       = new Math.seedrandom("" + Math.random(), { state: true }).state();
         return {

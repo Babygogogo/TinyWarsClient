@@ -2,6 +2,7 @@
 import ChangeLogModel           from "../../changeLog/model/ChangeLogModel";
 import ChangeLogProxy           from "../../changeLog/model/ChangeLogProxy";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -47,7 +48,7 @@ namespace TwnsChangeLogPanel {
 
         public static async hide(): Promise<void> {
             if (ChangeLogPanel._instance) {
-                await ChangeLogPanel._instance.close();
+                await ChangeLogPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -80,7 +81,7 @@ namespace TwnsChangeLogPanel {
             }
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -122,7 +123,7 @@ namespace TwnsChangeLogPanel {
         private async _updateBtnAddMessage(): Promise<void> {
             const btn   = this._btnAddMessage;
             btn.visible = false;
-            btn.visible = await UserModel.checkCanSelfEditChangeLog();
+            btn.visible = UserModel.checkCanSelfEditChangeLog();
         }
 
         private _showOpenAnimation(): void {
@@ -164,6 +165,7 @@ namespace TwnsChangeLogPanel {
             this._setUiListenerArray([
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {

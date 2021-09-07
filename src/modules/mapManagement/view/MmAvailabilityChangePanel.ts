@@ -1,5 +1,6 @@
 
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -27,56 +28,34 @@ namespace TwnsMmAvailabilityChangePanel {
 
         private static _instance: MmAvailabilityChangePanel;
 
-        // @ts-ignore
-        private _groupMcw       : eui.Group;
-        // @ts-ignore
-        private _labelMcw       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgMcw         : TwnsUiImage.UiImage;
+        private readonly _groupMcw!     : eui.Group;
+        private readonly _labelMcw!     : TwnsUiLabel.UiLabel;
+        private readonly _imgMcw!       : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private _groupCcw       : eui.Group;
-        // @ts-ignore
-        private _labelCcw       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgCcw         : TwnsUiImage.UiImage;
+        private readonly _groupCcw!     : eui.Group;
+        private readonly _labelCcw!     : TwnsUiLabel.UiLabel;
+        private readonly _imgCcw!       : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private _groupScw       : eui.Group;
-        // @ts-ignore
-        private _labelScw       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgScw         : TwnsUiImage.UiImage;
+        private readonly _groupScw!     : eui.Group;
+        private readonly _labelScw!     : TwnsUiLabel.UiLabel;
+        private readonly _imgScw!       : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private _groupSrw       : eui.Group;
-        // @ts-ignore
-        private _labelSrw       : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgSrw         : TwnsUiImage.UiImage;
+        private readonly _groupSrw!     : eui.Group;
+        private readonly _labelSrw!     : TwnsUiLabel.UiLabel;
+        private readonly _imgSrw!       : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private _groupMrwStd    : eui.Group;
-        // @ts-ignore
-        private _labelMrwStd    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgMrwStd      : TwnsUiImage.UiImage;
+        private readonly _groupMrwStd!  : eui.Group;
+        private readonly _labelMrwStd!  : TwnsUiLabel.UiLabel;
+        private readonly _imgMrwStd!    : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private _groupMrwFog    : eui.Group;
-        // @ts-ignore
-        private _labelMrwFog    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _imgMrwFog      : TwnsUiImage.UiImage;
+        private readonly _groupMrwFog!  : eui.Group;
+        private readonly _labelMrwFog!  : TwnsUiLabel.UiLabel;
+        private readonly _imgMrwFog!    : TwnsUiImage.UiImage;
 
-        // @ts-ignore
-        private _btnDelete      : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private _btnWarRule     : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private _btnCancel      : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private _btnConfirm     : TwnsUiButton.UiButton;
+        private readonly _btnDelete!    : TwnsUiButton.UiButton;
+        private readonly _btnWarRule!   : TwnsUiButton.UiButton;
+        private readonly _btnCancel!    : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForMmAvailabilityChangePanel): void {
             if (!MmAvailabilityChangePanel._instance) {
@@ -87,7 +66,7 @@ namespace TwnsMmAvailabilityChangePanel {
 
         public static async hide(): Promise<void> {
             if (MmAvailabilityChangePanel._instance) {
-                await MmAvailabilityChangePanel._instance.close();
+                await MmAvailabilityChangePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -147,7 +126,7 @@ namespace TwnsMmAvailabilityChangePanel {
         }
 
         private async _onTouchedBtnWarRule(): Promise<void> {
-            const mapRawData = await WarMapModel.getRawData(this._getOpenData().mapId);
+            const mapRawData = await WarMapModel.getRawData(this._getOpenData().mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (mapRawData == null) {
                 throw new Error(`MmAvailabilityChangePanel._onTouchedBtnWarRule() empty mapRawData.`);
             }
@@ -180,7 +159,7 @@ namespace TwnsMmAvailabilityChangePanel {
         }
 
         private async _updateImages(): Promise<void> {
-            const briefData     = await WarMapModel.getBriefData(this._getOpenData().mapId);
+            const briefData     = await WarMapModel.getBriefData(this._getOpenData().mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             const extraData     = briefData ? briefData.mapExtraData : null;
             const complexInfo   = extraData ? extraData.mapComplexInfo : null;
             const availability  = complexInfo ? complexInfo.mapAvailability : null;

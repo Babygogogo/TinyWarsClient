@@ -1,6 +1,7 @@
 
 import TwnsCommonChangeVersionPanel from "../../common/view/CommonChangeVersionPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Helpers                      from "../../tools/helpers/Helpers";
 import SoundManager                 from "../../tools/helpers/SoundManager";
@@ -52,7 +53,7 @@ namespace TwnsUserLoginBackgroundPanel {
 
         public static async hide(): Promise<void> {
             if (UserLoginBackgroundPanel._instance) {
-                await UserLoginBackgroundPanel._instance.close();
+                await UserLoginBackgroundPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -88,7 +89,7 @@ namespace TwnsUserLoginBackgroundPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             this._clearGroupUnits();
         }

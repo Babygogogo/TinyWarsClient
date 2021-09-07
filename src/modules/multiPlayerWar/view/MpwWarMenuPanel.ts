@@ -11,6 +11,7 @@ import MpwProxy                         from "../../multiPlayerWar/model/MpwProx
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers             from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
@@ -83,7 +84,7 @@ namespace TwnsMpwWarMenuPanel {
         }
         public static async hide(): Promise<void> {
             if (MpwWarMenuPanel._instance) {
-                await MpwWarMenuPanel._instance.close();
+                await MpwWarMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getIsOpening(): boolean {
@@ -123,7 +124,7 @@ namespace TwnsMpwWarMenuPanel {
             Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
         }
@@ -254,7 +255,7 @@ namespace TwnsMpwWarMenuPanel {
             if (mapId == null) {
                 label.text = `----`;
             } else {
-                label.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----"} (${Lang.getText(LangTextType.B0163)}: ${await WarMapModel.getDesignerName(mapId) || "----"})`;
+                label.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || "----"} (${Lang.getText(LangTextType.B0163)}: ${await WarMapModel.getDesignerName(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || "----"})`;
             }
         }
 
@@ -513,7 +514,7 @@ namespace TwnsMpwWarMenuPanel {
                         return;
                     }
 
-                    const errorCode = await (new TwWar()).init(warData);
+                    const errorCode = await (new TwWar()).init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
@@ -702,7 +703,7 @@ namespace TwnsMpwWarMenuPanel {
             const data                  = this._getData();
             const war                   = data.war;
             const player                = data.player;
-            this._labelName.text        = await player.getNickname();
+            this._labelName.text        = await player.getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`

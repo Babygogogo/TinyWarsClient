@@ -1,5 +1,6 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -42,7 +43,7 @@ namespace TwnsWeActionAddUnitListPanel {
 
         public static async hide(): Promise<void> {
             if (WeActionAddUnitListPanel._instance) {
-                await WeActionAddUnitListPanel._instance.close();
+                await WeActionAddUnitListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

@@ -1,6 +1,7 @@
 
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -47,7 +48,7 @@ namespace TwnsUserChangeDiscordIdPanel {
 
         public static async hide(): Promise<void> {
             if (UserChangeDiscordIdPanel._instance) {
-                await UserChangeDiscordIdPanel._instance.close();
+                await UserChangeDiscordIdPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -85,7 +86,7 @@ namespace TwnsUserChangeDiscordIdPanel {
             this._updateComponentsForLanguage();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private _onTouchedBtnConfirm(): void {

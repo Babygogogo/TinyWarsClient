@@ -9,6 +9,7 @@ import SpmProxy                         from "../../singlePlayerMode/model/SpmPr
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers             from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
@@ -36,9 +37,6 @@ import TwnsSpwLoadWarPanel              from "./SpwLoadWarPanel";
 
 namespace TwnsSpwWarMenuPanel {
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonInputPanel             = TwnsCommonInputPanel.CommonInputPanel;
-    import UserSettingsPanel            = TwnsUserSettingsPanel.UserSettingsPanel;
-    import MfrCreateSettingsPanel       = TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel;
     import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
     import SpwPlayerManager             = TwnsSpwPlayerManager.SpwPlayerManager;
     import SpwWar                       = TwnsSpwWar.SpwWar;
@@ -87,7 +85,7 @@ namespace TwnsSpwWarMenuPanel {
         }
         public static async hide(): Promise<void> {
             if (SpwWarMenuPanel._instance) {
-                await SpwWarMenuPanel._instance.close();
+                await SpwWarMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getIsOpening(): boolean {
@@ -240,7 +238,7 @@ namespace TwnsSpwWarMenuPanel {
             if (mapId == null) {
                 label.text = `----`;
             } else {
-                label.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined} (${Lang.getText(LangTextType.B0163)}: ${await WarMapModel.getDesignerName(mapId) ?? CommonConstants.ErrorTextForUndefined})`;
+                label.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined} (${Lang.getText(LangTextType.B0163)}: ${await WarMapModel.getDesignerName(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined})`;
             }
         }
 
@@ -566,7 +564,7 @@ namespace TwnsSpwWarMenuPanel {
                         return;
                     }
 
-                    const errorCode = await (new TwWar()).init(warData);
+                    const errorCode = await (new TwWar()).init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
@@ -576,7 +574,7 @@ namespace TwnsSpwWarMenuPanel {
                         content : Lang.getText(LangTextType.A0201),
                         callback: () => {
                             MfrCreateModel.resetDataByInitialWarData(warData);
-                            MfrCreateSettingsPanel.show();
+                            TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
                             this.close();
                         }
                     });
@@ -605,7 +603,7 @@ namespace TwnsSpwWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0560),
                 callback: () => {
-                    UserSettingsPanel.show();
+                    TwnsUserSettingsPanel.UserSettingsPanel.show();
                 }
             };
         }
@@ -796,7 +794,7 @@ namespace TwnsSpwWarMenuPanel {
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : `P${player.getPlayerIndex()} ${Lang.getText(LangTextType.B0032)}`,
                             currentValue    : "" + currValue,
                             maxChars        : 7,
@@ -888,7 +886,7 @@ namespace TwnsSpwWarMenuPanel {
                         if (!hasLoadedCo) {
                             FloatText.show(Lang.getText(LangTextType.A0109));
                         } else {
-                            CommonInputPanel.show({
+                            TwnsCommonInputPanel.CommonInputPanel.show({
                                 title           : `P${playerIndex} ${Lang.getText(LangTextType.B0159)}`,
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,
@@ -940,7 +938,7 @@ namespace TwnsSpwWarMenuPanel {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0178),
                             currentValue    : "" + currValue,
                             maxChars        : 7,
@@ -977,7 +975,7 @@ namespace TwnsSpwWarMenuPanel {
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0179),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -1014,7 +1012,7 @@ namespace TwnsSpwWarMenuPanel {
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0180),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -1051,7 +1049,7 @@ namespace TwnsSpwWarMenuPanel {
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0181),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -1088,7 +1086,7 @@ namespace TwnsSpwWarMenuPanel {
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0182),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -1125,7 +1123,7 @@ namespace TwnsSpwWarMenuPanel {
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0183),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -1162,7 +1160,7 @@ namespace TwnsSpwWarMenuPanel {
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0184),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -1199,7 +1197,7 @@ namespace TwnsSpwWarMenuPanel {
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0189),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -1243,7 +1241,7 @@ namespace TwnsSpwWarMenuPanel {
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0190),
                             currentValue    : "" + currValue,
                             maxChars        : 4,

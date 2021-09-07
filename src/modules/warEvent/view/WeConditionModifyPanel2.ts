@@ -1,5 +1,6 @@
 
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
@@ -53,7 +54,7 @@ namespace TwnsWeConditionModifyPanel2 {
 
         public static async hide(): Promise<void> {
             if (WeConditionModifyPanel2._instance) {
-                await WeConditionModifyPanel2._instance.close();
+                await WeConditionModifyPanel2._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

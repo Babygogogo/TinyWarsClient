@@ -1,12 +1,13 @@
 
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import Logger           from "../../tools/helpers/Logger";
-import Types            from "../../tools/helpers/Types";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import UserModel        from "../../user/model/UserModel";
-import MeUtility        from "./MeUtility";
-import TwnsMeWar        from "./MeWar";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Logger               from "../../tools/helpers/Logger";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import UserModel            from "../../user/model/UserModel";
+import MeUtility            from "./MeUtility";
+import TwnsMeWar            from "./MeWar";
 
 namespace MeModel {
     import MeWar            = TwnsMeWar.MeWar;
@@ -73,12 +74,12 @@ namespace MeModel {
             unloadWar();
         }
 
-        mapRawData = mapRawData || await MeUtility.createDefaultMapRawData(slotIndex);
+        mapRawData = mapRawData || await MeUtility.createDefaultMapRawData(slotIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         _war = new MeWar();
         await _war.initWithMapEditorData({
             mapRawData,
             slotIndex
-        });
+        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         _war.setIsMapModified(false);
         _war.setIsReviewingMap(isReview);
         _war.startRunning()

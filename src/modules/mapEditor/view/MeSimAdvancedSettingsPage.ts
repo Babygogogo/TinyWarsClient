@@ -18,7 +18,6 @@ import MeSimModel               from "../model/MeSimModel";
 
 namespace TwnsMeSimAdvancedSettingsPage {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonInputPanel     = TwnsCommonInputPanel.CommonInputPanel;
     import CommonChooseCoPanel  = TwnsCommonChooseCoPanel.CommonChooseCoPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -188,7 +187,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
                     this._confirmUseCustomRule(() => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0178),
                             currentValue    : "" + currValue,
                             maxChars        : 7,
@@ -219,7 +218,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0179),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -250,7 +249,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0180),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -281,7 +280,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0181),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -312,7 +311,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0182),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -343,7 +342,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0183),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -374,7 +373,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0184),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -405,7 +404,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0189),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -442,7 +441,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0190),
                             currentValue    : "" + currValue,
                             maxChars        : 4,

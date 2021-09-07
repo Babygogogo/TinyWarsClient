@@ -2,6 +2,7 @@
 import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
@@ -76,7 +77,7 @@ namespace TwnsCcrCreateMapListPanel {
         }
         public static async hide(): Promise<void> {
             if (CcrCreateMapListPanel._instance) {
-                await CcrCreateMapListPanel._instance.close();
+                await CcrCreateMapListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getInstance(): CcrCreateMapListPanel {
@@ -107,7 +108,7 @@ namespace TwnsCcrCreateMapListPanel {
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         public async setAndReviseSelectedMapId(newMapId: number | null): Promise<void> {
@@ -122,7 +123,7 @@ namespace TwnsCcrCreateMapListPanel {
                 (dataList[oldIndex])    && (this._listMap.updateSingleData(oldIndex, dataList[oldIndex]));
                 (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
 
-                await this._showMap(dataList[newIndex].mapId);
+                await this._showMap(dataList[newIndex].mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public getSelectedMapId(): number | null {
@@ -131,7 +132,7 @@ namespace TwnsCcrCreateMapListPanel {
 
         public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
             this._mapFilters            = mapFilters;
-            const dataArray             = await this._createDataForListMap();
+            const dataArray             = await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._dataForList           = dataArray;
 
             const length                = dataArray.length;
@@ -164,7 +165,7 @@ namespace TwnsCcrCreateMapListPanel {
             const selectedMapId = this.getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
-                await CcrCreateModel.resetDataByMapId(selectedMapId);
+                await CcrCreateModel.resetDataByMapId(selectedMapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 CcrCreateSettingsPanel.show();
             }
         }
@@ -197,18 +198,19 @@ namespace TwnsCcrCreateMapListPanel {
             const { playersCount, playedTimes, minRating }  = mapFilters;
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapExtraData  = Helpers.getExisted(mapBriefData.mapExtraData);
-                const mapTag        = mapBriefData.mapTag || {};
-                const realMapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                const rating        = await WarMapModel.getAverageRating(mapId);
-                if ((!mapBriefData.ruleAvailability?.canCcw)                                                            ||
-                    (!mapExtraData.isEnabled)                                                                           ||
-                    (!mapExtraData.mapComplexInfo?.mapAvailability?.canCcw)                                             ||
-                    ((mapName) && (!realMapName.toLowerCase().includes(mapName)))                                       ||
-                    ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                ||
-                    ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                           ||
-                    ((playedTimes != null) && (await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId) < playedTimes))  ||
-                    ((minRating != null) && ((rating == null) || (rating < minRating)))                                 ||
+                const mapExtraData      = Helpers.getExisted(mapBriefData.mapExtraData);
+                const mapTag            = mapBriefData.mapTag || {};
+                const realMapName       = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                const rating            = await WarMapModel.getAverageRating(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                if ((!mapBriefData.ruleAvailability?.canCcw)                                                ||
+                    (!mapExtraData.isEnabled)                                                               ||
+                    (!mapExtraData.mapComplexInfo?.mapAvailability?.canCcw)                                 ||
+                    ((mapName) && (!realMapName.toLowerCase().includes(mapName)))                           ||
+                    ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))    ||
+                    ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))               ||
+                    ((playedTimes != null) && (actualPlayedTimes < playedTimes))                            ||
+                    ((minRating != null) && ((rating == null) || (rating < minRating)))                     ||
                     ((filterTag.fog != null) && ((!!mapTag.fog) !== filterTag.fog))
                 ) {
                     continue;
@@ -225,7 +227,7 @@ namespace TwnsCcrCreateMapListPanel {
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)));
+            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })));
             this._uiMapInfo.setData({
                 mapInfo: {
                     mapId,
@@ -353,7 +355,7 @@ namespace TwnsCcrCreateMapListPanel {
         private async _onTouchTapBtnNext(): Promise<void> {
             const data = this._getData();
             data.panel.close();
-            await CcrCreateModel.resetDataByMapId(data.mapId);
+            await CcrCreateModel.resetDataByMapId(data.mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             CcrCreateSettingsPanel.show();
         }
     }

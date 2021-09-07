@@ -1,6 +1,7 @@
 
 import TwnsChatPanel            from "../../chat/view/ChatPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -190,7 +191,7 @@ namespace TwnsCommonWarPlayerInfoPage {
                 const callback = data.callbackOnDeletePlayer;
                 if ((callback) && (data.isRoomOwnedBySelf)) {
                     CommonConfirmPanel.show({
-                        content : Lang.getFormattedText(LangTextType.F0029, await UserModel.getUserNickname(userId)),
+                        content : Lang.getFormattedText(LangTextType.F0029, await UserModel.getUserNickname(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; })),
                         callback: () => {
                             callback(playerInfo.playerIndex);
                         },
@@ -239,7 +240,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             }
 
             const userId        = playerInfo.userId;
-            const userInfo      = userId == null ? null : await UserModel.getUserPublicInfo(userId);
+            const userInfo      = userId == null ? null : await UserModel.getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             const labelNickname = this._labelNickname;
             if (userInfo) {
                 labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
@@ -282,7 +283,7 @@ namespace TwnsCommonWarPlayerInfoPage {
 
         private async _updateComponentsForRankInfo(): Promise<void> {
             const userId                = this._getData().playerInfo.userId;
-            const userInfo              = userId == null ? null : await UserModel.getUserPublicInfo(userId);
+            const userInfo              = userId == null ? null : await UserModel.getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             const rankScoreArray        = userInfo?.userMrwRankInfoArray;
             const stdRankInfo           = rankScoreArray?.find(v => v.warType === Types.WarType.MrwStd);
             const fogRankInfo           = rankScoreArray?.find(v => v.warType === Types.WarType.MrwFog);

@@ -310,16 +310,31 @@ namespace TwnsUiScrollList {
             return this.getIsOpening() ? this._getList().selectedItem : null;
         }
 
-        public getFirstIndex(predicate: (v: DataForRenderer) => boolean): number | null {
+        private _findIndex(predicate: (v: DataForRenderer) => boolean): number | null {
             return this.getIsOpening()
                 ? Helpers.getExisted(this._getDataProvider()).source.findIndex(predicate)
                 : null;
+        }
+        public getFirstIndex(predicate: (v: DataForRenderer) => boolean): number | null {
+            if (!this.getIsOpening()) {
+                return null;
+            } else {
+                const firstIndex = Helpers.getExisted(this._findIndex(predicate));
+                if (firstIndex >= 0) {
+                    return firstIndex;
+                } else {
+                    const dataLength = Helpers.getExisted(this._getDataProvider()?.length);
+                    return (dataLength <= 0)
+                        ? -1
+                        : 0;
+                }
+            }
         }
         public getRandomIndex(predicate: (v: DataForRenderer) => boolean): number | null {
             if (!this.getIsOpening()) {
                 return null;
             } else {
-                const firstIndex = Helpers.getExisted(this.getFirstIndex(predicate));
+                const firstIndex = Helpers.getExisted(this._findIndex(predicate));
                 if (firstIndex >= 0) {
                     return firstIndex;
                 } else {

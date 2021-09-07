@@ -1,7 +1,8 @@
 
-import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-import Types                        from "../../tools/helpers/Types";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Types                from "../../tools/helpers/Types";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonBlockPanel {
     type OpenDataForCommonBlockPanel = {
@@ -26,7 +27,7 @@ namespace TwnsCommonBlockPanel {
 
         public static async hide(): Promise<void> {
             if (CommonBlockPanel._instance) {
-                await CommonBlockPanel._instance.close();
+                await CommonBlockPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

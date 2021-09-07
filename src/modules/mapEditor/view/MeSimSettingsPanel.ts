@@ -1,6 +1,7 @@
 
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
+import CompatibilityHelpers             from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
 import Helpers                          from "../../tools/helpers/Helpers";
@@ -46,7 +47,7 @@ namespace TwnsMeSimSettingsPanel {
         }
         public static async hide(): Promise<void> {
             if (MeSimSettingsPanel._instance) {
-                await MeSimSettingsPanel._instance.close();
+                await MeSimSettingsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

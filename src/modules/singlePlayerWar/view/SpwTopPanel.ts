@@ -5,6 +5,7 @@ import ChatModel                from "../../chat/model/ChatModel";
 import TwnsChatPanel            from "../../chat/view/ChatPanel";
 import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
@@ -22,7 +23,6 @@ import TwnsSpwWarMenuPanel      from "./SpwWarMenuPanel";
 
 namespace TwnsSpwTopPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import ChatPanel            = TwnsChatPanel.ChatPanel;
     import UserPanel            = TwnsUserPanel.UserPanel;
     import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
     import SpwWarMenuPanel      = TwnsSpwWarMenuPanel.SpwWarMenuPanel;
@@ -64,7 +64,7 @@ namespace TwnsSpwTopPanel {
 
         public static async hide(): Promise<void> {
             if (SpwTopPanel._instance) {
-                await SpwTopPanel._instance.close();
+                await SpwTopPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -157,7 +157,7 @@ namespace TwnsSpwTopPanel {
         }
         private _onTouchedBtnChat(): void {
             SpwWarMenuPanel.hide();
-            ChatPanel.show({});
+            TwnsChatPanel.ChatPanel.show({});
         }
         private _onTouchedBtnUnitList(): void {
             const war = this._getOpenData().war;

@@ -1,18 +1,19 @@
 
-import ChangeLogModel   from "../../changeLog/model/ChangeLogModel";
-import ChangeLogProxy   from "../../changeLog/model/ChangeLogProxy";
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import FloatText        from "../../tools/helpers/FloatText";
-import Helpers          from "../../tools/helpers/Helpers";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
+import ChangeLogModel       from "../../changeLog/model/ChangeLogModel";
+import ChangeLogProxy       from "../../changeLog/model/ChangeLogProxy";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
 namespace TwnsChangeLogModifyPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -47,7 +48,7 @@ namespace TwnsChangeLogModifyPanel {
 
         public static async hide(): Promise<void> {
             if (ChangeLogModifyPanel._instance) {
-                await ChangeLogModifyPanel._instance.close();
+                await ChangeLogModifyPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

@@ -1,6 +1,7 @@
 
 import TwnsMpwWar           from "../../multiPlayerWar/model/MpwWar";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
@@ -15,7 +16,7 @@ namespace TwnsMfwWar {
         private _settingsForMfw?    : ISettingsForMfw;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data);
+            const baseInitError = await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (baseInitError) {
                 return baseInitError;
             }

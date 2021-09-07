@@ -2,6 +2,7 @@
 
 import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
@@ -16,8 +17,8 @@ import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import TwnsBwActionPlanner      from "../model/BwActionPlanner";
 import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsBwActionPlanner      from "../model/BwActionPlanner";
 import TwnsBwUnit               from "../model/BwUnit";
 import TwnsBwWar                from "../model/BwWar";
 import TwnsBwUnitDetailPanel    from "./BwUnitDetailPanel";
@@ -28,7 +29,6 @@ namespace TwnsBwProduceUnitPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import BwUnitDetailPanel    = TwnsBwUnitDetailPanel.BwUnitDetailPanel;
     import BwUnitView           = TwnsBwUnitView.BwUnitView;
-    import CommonInputPanel     = TwnsCommonInputPanel.CommonInputPanel;
     import UnitType             = Types.UnitType;
     import GridIndex            = Types.GridIndex;
     import BwWar                = TwnsBwWar.BwWar;
@@ -49,8 +49,6 @@ namespace TwnsBwProduceUnitPanel {
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnDetail!    : TwnsUiButton.UiButton;
 
-        private _dataForList: DataForUnitRenderer[] | null = null;
-
         public static show(openData: OpenDataForBwProduceUnitPanel): void {
             if (!BwProduceUnitPanel._instance) {
                 BwProduceUnitPanel._instance = new BwProduceUnitPanel();
@@ -59,7 +57,7 @@ namespace TwnsBwProduceUnitPanel {
         }
         public static async hide(): Promise<void> {
             if (BwProduceUnitPanel._instance) {
-                await BwProduceUnitPanel._instance.close();
+                await BwProduceUnitPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getIsOpening(): boolean {
@@ -71,7 +69,6 @@ namespace TwnsBwProduceUnitPanel {
             super();
 
             this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/baseWar/BwProduceUnitPanel.exml`;
         }
 
@@ -84,7 +81,11 @@ namespace TwnsBwProduceUnitPanel {
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
                 { ui: this._btnDetail, callback: this._onTouchedBtnDetail },
             ]);
+            this._setCallbackOnTouchedMask(() => {
+                this._getOpenData().war.getActionPlanner().setStateIdle();
+            });
             this._listUnit.setItemRenderer(UnitRenderer);
+            this._btnCancel.setShortSfxCode(Types.ShortSfxCode.None);
 
             this._showOpenAnimation();
 
@@ -93,9 +94,7 @@ namespace TwnsBwProduceUnitPanel {
             Notify.dispatch(NotifyType.BwProduceUnitPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
-
-            this._dataForList = null;
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             Notify.dispatch(NotifyType.BwProduceUnitPanelClosed);
         }
@@ -115,9 +114,7 @@ namespace TwnsBwProduceUnitPanel {
             this._getOpenData().war.getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnDetail(): void {
-            const selectedIndex = this._listUnit.getSelectedIndex();
-            const dataArray     = this._dataForList;
-            const data          = (selectedIndex != null) && (dataArray) ? dataArray[selectedIndex] : null;
+            const data = this._listUnit.getSelectedData();
             if (data) {
                 BwUnitDetailPanel.show({
                     unit  : data.unit,
@@ -131,8 +128,7 @@ namespace TwnsBwProduceUnitPanel {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            this._dataForList = this._createDataForList();
-            this._listUnit.bindData(this._dataForList);
+            this._listUnit.bindData(this._createDataForList());
         }
 
         private _updateComponentsForLanguage(): void {
@@ -260,7 +256,7 @@ namespace TwnsBwProduceUnitPanel {
         }
 
         private _onNotifyLanguageChanged(): void {
-            (this.data) && (this._updateView());
+            this._updateView();
         }
 
         protected _onDataChanged(): void {
@@ -300,7 +296,7 @@ namespace TwnsBwProduceUnitPanel {
                         rawMaxHp,
                         Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * data.costModifier * skillCfg[5] / 100) / normalizer) * normalizer
                     );
-                    CommonInputPanel.show({
+                    TwnsCommonInputPanel.CommonInputPanel.show({
                         title           : `${Lang.getUnitName(unitType)} HP`,
                         currentValue    : "" + maxHp,
                         maxChars        : 3,

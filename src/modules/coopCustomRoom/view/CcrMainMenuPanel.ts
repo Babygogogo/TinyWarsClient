@@ -11,6 +11,7 @@ import TwnsMfrMainMenuPanel         from "../../multiFreeRoom/view/MfrMainMenuPa
 import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
 import TwnsMrrMainMenuPanel         from "../../multiRankRoom/view/MrrMainMenuPanel";
 import TwnsSpmMainMenuPanel         from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
@@ -62,7 +63,7 @@ namespace TwnsCcrMainMenuPanel {
 
         public static async hide(): Promise<void> {
             if (CcrMainMenuPanel._instance) {
-                await CcrMainMenuPanel._instance.close();
+                await CcrMainMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -94,7 +95,7 @@ namespace TwnsCcrMainMenuPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -242,10 +243,10 @@ namespace TwnsCcrMainMenuPanel {
         }
 
         private async _updateView(): Promise<void> {
-            this._btnMyRoom.setRedVisible(await CcrModel.checkIsRed());
+            this._btnMyRoom.setRedVisible(await CcrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
             this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyCcwWars());
-            this._btnNormalMode.setRedVisible(MpwModel.checkIsRedForMyMcwWars() || await McrModel.checkIsRed());
-            this._btnFreeMode.setRedVisible(MpwModel.checkIsRedForMyMfwWars() || await MfrModel.checkIsRed());
+            this._btnNormalMode.setRedVisible(MpwModel.checkIsRedForMyMcwWars() || await McrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            this._btnFreeMode.setRedVisible(MpwModel.checkIsRedForMyMfwWars() || await MfrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
         }
     }
 }

@@ -7,6 +7,7 @@ import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
 import TwnsMpwWar               from "../../multiPlayerWar/model/MpwWar";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
@@ -28,13 +29,11 @@ import TwnsMpwActionPlanner     from "../model/MpwActionPlanner";
 import TwnsMpwWarMenuPanel      from "./MpwWarMenuPanel";
 
 namespace TwnsMpwTopPanel {
-    import ChatPanel            = TwnsChatPanel.ChatPanel;
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import UserPanel            = TwnsUserPanel.UserPanel;
     import MpwWar               = TwnsMpwWar.MpwWar;
     import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
     import MpwActionPlanner     = TwnsMpwActionPlanner.MpwActionPlanner;
-    import MpwWarMenuPanel      = TwnsMpwWarMenuPanel.MpwWarMenuPanel;
     import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -73,7 +72,7 @@ namespace TwnsMpwTopPanel {
 
         public static async hide(): Promise<void> {
             if (MpwTopPanel._instance) {
-                await MpwTopPanel._instance.close();
+                await MpwTopPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -208,11 +207,11 @@ namespace TwnsMpwTopPanel {
             CommonCoListPanel.show({
                 war             : this._getWar(),
             });
-            MpwWarMenuPanel.hide();
+            TwnsMpwWarMenuPanel.MpwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(): void {
-            MpwWarMenuPanel.hide();
-            ChatPanel.show({});
+            TwnsMpwWarMenuPanel.MpwWarMenuPanel.hide();
+            TwnsChatPanel.ChatPanel.show({});
         }
         private _onTouchedBtnUnitList(): void {
             const war           = this._getWar();
@@ -261,7 +260,7 @@ namespace TwnsMpwTopPanel {
                 actionPlanner.setStateIdle();
             }
             CommonCoListPanel.hide();
-            MpwWarMenuPanel.show();
+            TwnsMpwWarMenuPanel.MpwWarMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,7 +291,7 @@ namespace TwnsMpwTopPanel {
                 label.text      = Lang.getText(LangTextType.B0676);
                 label.textColor = Types.ColorValue.Green;
             } else {
-                const userPublicInfo = await UserModel.getUserPublicInfo(userId);
+                const userPublicInfo = await UserModel.getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 if ((userPublicInfo == null) || (!userPublicInfo.isOnline)) {
                     label.text      = Lang.getText(LangTextType.B0677);
                     label.textColor = Types.ColorValue.Red;
@@ -306,7 +305,7 @@ namespace TwnsMpwTopPanel {
         private async _updateLabelPlayer(): Promise<void> {
             const war                   = this._getWar();
             const player                = war.getPlayerInTurn();
-            this._labelPlayer.text      = `${await player.getNickname()} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`;
+            this._labelPlayer.text      = `${await player.getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; })} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`;
             this._labelPlayer.textColor = player === war.getPlayerLoggedIn() ? 0x00FF00 : 0xFFFFFF;
         }
 

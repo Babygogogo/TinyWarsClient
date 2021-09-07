@@ -3,6 +3,7 @@ import ChatModel                    from "../../chat/model/ChatModel";
 import TwnsChatPanel                from "../../chat/view/ChatPanel";
 import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
 import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";
@@ -43,7 +44,7 @@ namespace TwnsLobbyBottomPanel {
 
         public static async hide(): Promise<void> {
             if (LobbyBottomPanel._instance) {
-                await LobbyBottomPanel._instance.close();
+                await LobbyBottomPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -73,7 +74,7 @@ namespace TwnsLobbyBottomPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////

@@ -3,6 +3,7 @@ import TwnsBwUnitListPanel      from "../../baseWar/view/BwUnitListPanel";
 import ChatModel                from "../../chat/model/ChatModel";
 import TwnsChatPanel            from "../../chat/view/ChatPanel";
 import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
@@ -22,7 +23,6 @@ import TwnsRwWarMenuPanel       from "./RwWarMenuPanel";
 namespace TwnsRwTopPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import ChatPanel            = TwnsChatPanel.ChatPanel;
     import UserPanel            = TwnsUserPanel.UserPanel;
     import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
     import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
@@ -64,7 +64,7 @@ namespace TwnsRwTopPanel {
 
         public static async hide(): Promise<void> {
             if (RwTopPanel._instance) {
-                await RwTopPanel._instance.close();
+                await RwTopPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -157,7 +157,7 @@ namespace TwnsRwTopPanel {
         }
         private _onTouchedBtnChat(): void {
             RwWarMenuPanel.hide();
-            ChatPanel.show({});
+            TwnsChatPanel.ChatPanel.show({});
         }
         private async _onTouchedBtnFastRewind(): Promise<void> {
             const war = this._getWar();
@@ -170,9 +170,9 @@ namespace TwnsRwTopPanel {
             } else if (war.checkIsInBeginning()) {
                 FloatText.show(Lang.getText(LangTextType.A0042));
             } else {
-                await Helpers.checkAndCallLater();
-                await war.loadPreviousCheckPoint();
-                await Helpers.checkAndCallLater();
+                await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await war.loadPreviousCheckPoint().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 this._updateView();
             }
         }
@@ -187,9 +187,9 @@ namespace TwnsRwTopPanel {
             } else if (war.checkIsInEnd()) {
                 FloatText.show(Lang.getText(LangTextType.A0043));
             } else {
-                await Helpers.checkAndCallLater();
-                await war.loadNextCheckPoint();
-                await Helpers.checkAndCallLater();
+                await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await war.loadNextCheckPoint().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 this._updateView();
             }
         }
@@ -251,7 +251,7 @@ namespace TwnsRwTopPanel {
             const war               = this._getWar();
             const player            = war.getPlayerInTurn();
             this._labelPlayer.text  = player
-                ? `${await player.getNickname()} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`
+                ? `${await player.getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; })} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`
                 : ``;
         }
 

@@ -1,6 +1,7 @@
 
-import Notify   from "../notify/Notify";
-import Types    from "../helpers/Types";
+import CompatibilityHelpers from "../helpers/CompatibilityHelpers";
+import Types                from "../helpers/Types";
+import Notify               from "../notify/Notify";
 
 namespace TwnsUiComponent {
     import UiListener   = Types.UiListener;
@@ -68,7 +69,7 @@ namespace TwnsUiComponent {
                 this._unregisterListeners();
                 this._setUiListenerArray(null);
                 this._setNotifyListenerArray(null);
-                await this._onClosed();
+                await this._onClosed().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

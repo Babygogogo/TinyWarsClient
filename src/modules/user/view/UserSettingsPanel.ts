@@ -8,6 +8,7 @@ import TwnsCommonServerStatusPanel  from "../../common/view/CommonServerStatusPa
 import TwnsLobbyBackgroundPanel     from "../../lobby/view/LobbyBackgroundPanel";
 import TwnsMmMainMenuPanel          from "../../mapManagement/view/MmMainMenuPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import LocalStorage                 from "../../tools/helpers/LocalStorage";
 import StageManager                 from "../../tools/helpers/StageManager";
@@ -89,7 +90,7 @@ namespace TwnsUserSettingsPanel {
 
         public static async hide(): Promise<void> {
             if (UserSettingsPanel._instance) {
-                await UserSettingsPanel._instance.close();
+                await UserSettingsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -235,7 +236,7 @@ namespace TwnsUserSettingsPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -365,10 +366,10 @@ namespace TwnsUserSettingsPanel {
             group.addChild(this._btnChangeLog);
             group.addChild(this._btnUnitsInfo);
             group.addChild(this._btnComplaint);
-            if (await UserModel.getIsSelfAdmin()) {
+            if (UserModel.getIsSelfAdmin()) {
                 group.addChild(this._btnSetPrivilege);
             }
-            if ((await UserModel.getIsSelfAdmin()) || (await UserModel.getIsSelfMapCommittee())) {
+            if ((UserModel.getIsSelfAdmin()) || (UserModel.getIsSelfMapCommittee())) {
                 group.addChild(this._btnMapManagement);
             }
         }

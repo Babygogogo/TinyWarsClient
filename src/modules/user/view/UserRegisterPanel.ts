@@ -1,19 +1,20 @@
 
-import TwnsUiImage                  from "../../tools/ui/UiImage";
-import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-import TwnsUiTextInput              from "../../tools/ui/UiTextInput";
-import FloatText                    from "../../tools/helpers/FloatText";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import LocalStorage                 from "../../tools/helpers/LocalStorage";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import Types                        from "../../tools/helpers/Types";
-import UserModel                    from "../model/UserModel";
-import UserProxy                    from "../model/UserProxy";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
+import LocalStorage         from "../../tools/helpers/LocalStorage";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+import UserModel            from "../model/UserModel";
+import UserProxy            from "../model/UserProxy";
 
 namespace TwnsUserRegisterPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -47,7 +48,7 @@ namespace TwnsUserRegisterPanel {
 
         public static async hide(): Promise<void> {
             if (UserRegisterPanel._instance) {
-                await UserRegisterPanel._instance.close();
+                await UserRegisterPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -76,7 +77,7 @@ namespace TwnsUserRegisterPanel {
             this._updateComponentsForLanguage();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         private _onMsgUserRegister(e: egret.Event): void {

@@ -3,6 +3,7 @@ import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import TwnsSpmMainMenuPanel         from "../../singlePlayerMode/view/SpmMainMenuPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
@@ -75,7 +76,7 @@ namespace TwnsScrCreateMapListPanel {
         }
         public static async hide(): Promise<void> {
             if (ScrCreateMapListPanel._instance) {
-                await ScrCreateMapListPanel._instance.close();
+                await ScrCreateMapListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getInstance(): ScrCreateMapListPanel {
@@ -106,7 +107,7 @@ namespace TwnsScrCreateMapListPanel {
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         public async setAndReviseSelectedMapId(newMapId: number | null): Promise<void> {
@@ -122,7 +123,7 @@ namespace TwnsScrCreateMapListPanel {
                 (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
 
                 this._listMap.setSelectedIndex(newIndex);
-                await this._showMap(dataList[newIndex].mapId);
+                await this._showMap(dataList[newIndex].mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public getSelectedMapId(): number | null {
@@ -131,7 +132,7 @@ namespace TwnsScrCreateMapListPanel {
 
         public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
             this._mapFilters            = mapFilters;
-            const dataArray             = await this._createDataForListMap();
+            const dataArray             = await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._dataForList           = dataArray;
 
             const length                = dataArray.length;
@@ -164,7 +165,7 @@ namespace TwnsScrCreateMapListPanel {
             const selectedMapId = this.getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
-                await ScrCreateModel.resetDataByMapId(selectedMapId);
+                await ScrCreateModel.resetDataByMapId(selectedMapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 ScrCreateSettingsPanel.show();
             }
         }
@@ -199,8 +200,8 @@ namespace TwnsScrCreateMapListPanel {
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
                 const mapExtraData  = Helpers.getExisted(mapBriefData.mapExtraData);
                 const mapTag        = mapBriefData.mapTag || {};
-                const realMapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                const rating        = await WarMapModel.getAverageRating(mapId);
+                const realMapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                const rating        = await WarMapModel.getAverageRating(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 if ((!mapBriefData.ruleAvailability?.canScw)                                                ||
                     (!mapExtraData.isEnabled)                                                               ||
                     (!mapExtraData.mapComplexInfo?.mapAvailability?.canScw)                                 ||
@@ -224,7 +225,7 @@ namespace TwnsScrCreateMapListPanel {
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)));
+            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })));
             this._uiMapInfo.setData({
                 mapInfo: {
                     mapId,
@@ -353,7 +354,7 @@ namespace TwnsScrCreateMapListPanel {
         private async _onTouchTapBtnNext(): Promise<void> {
             const data = this._getData();
             data.panel.close();
-            await ScrCreateModel.resetDataByMapId(data.mapId);
+            await ScrCreateModel.resetDataByMapId(data.mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             ScrCreateSettingsPanel.show();
         }
     }

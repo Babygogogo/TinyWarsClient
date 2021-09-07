@@ -5,6 +5,7 @@ import UserModel                from "../../user/model/UserModel";
 import UserProxy                from "../../user/model/UserProxy";
 import WarMapModel              from "../../warMap/model/WarMapModel";
 import CommonConstants          from "../helpers/CommonConstants";
+import CompatibilityHelpers     from "../helpers/CompatibilityHelpers";
 import ConfigManager            from "../helpers/ConfigManager";
 import FloatText                from "../helpers/FloatText";
 import Helpers                  from "../helpers/Helpers";
@@ -154,15 +155,15 @@ namespace TwnsUiMapInfo {
             const mapInfo = data.mapInfo;
             if (mapInfo) {
                 const mapId             = mapInfo.mapId;
-                const mapRawData        = Helpers.getExisted(await WarMapModel.getRawData(mapId));
-                const rating            = await WarMapModel.getAverageRating(mapId);
+                const mapRawData        = Helpers.getExisted(await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                const rating            = await WarMapModel.getAverageRating(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 const myRating          = UserModel.getMapRating(mapId);
-                labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
+                labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || CommonConstants.ErrorTextForUndefined;
                 labelDesigner.text      = mapRawData.designerName || CommonConstants.ErrorTextForUndefined;
                 labelPlayersCount.text  = `${mapRawData.playersCountUnneutral}`;
                 labelRating.text        = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
                 labelMyRating.text      = myRating != null ? `${myRating}` : Lang.getText(LangTextType.B0001);
-                labelPlayedTimes.text   = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)}`;
+                labelPlayedTimes.text   = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })}`;
                 labelMapSize.text       = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
                 btnSetMyRating.visible  = true;
                 this._listTile.bindData(generateDataForListTile(Helpers.getExisted(mapRawData.tileDataArray)));

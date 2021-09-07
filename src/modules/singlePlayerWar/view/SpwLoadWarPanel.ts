@@ -3,6 +3,7 @@ import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
 import SpmModel                 from "../../singlePlayerMode/model/SpmModel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FlowManager              from "../../tools/helpers/FlowManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -47,7 +48,7 @@ namespace TwnsSpwLoadWarPanel {
         }
         public static async hide(): Promise<void> {
             if (SpwLoadWarPanel._instance) {
-                await SpwLoadWarPanel._instance.close();
+                await SpwLoadWarPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -186,7 +187,7 @@ namespace TwnsSpwLoadWarPanel {
                     const mapId         = WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
+                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

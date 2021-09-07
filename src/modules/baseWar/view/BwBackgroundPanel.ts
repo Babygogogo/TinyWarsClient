@@ -1,6 +1,7 @@
 
-import TwnsUiPanel  from "../../tools/ui/UiPanel";
-import Types        from "../../tools/helpers/Types";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import Types                from "../../tools/helpers/Types";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 
 namespace TwnsBwBackgroundPanel {
     export class BwBackgroundPanel extends TwnsUiPanel.UiPanel<void> {
@@ -18,7 +19,7 @@ namespace TwnsBwBackgroundPanel {
 
         public static async hide(): Promise<void> {
             if (BwBackgroundPanel._instance) {
-                await BwBackgroundPanel._instance.close();
+                await BwBackgroundPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

@@ -1,5 +1,6 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -46,7 +47,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
         }
         public static async hide(): Promise<void> {
             if (WwDeleteWatcherDetailPanel._instance) {
-                await WwDeleteWatcherDetailPanel._instance.close();
+                await WwDeleteWatcherDetailPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

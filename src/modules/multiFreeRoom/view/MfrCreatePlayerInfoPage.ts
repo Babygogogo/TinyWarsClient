@@ -1,6 +1,7 @@
 
 import TwnsCommonCoInfoPanel    from "../../common/view/CommonCoInfoPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -140,7 +141,7 @@ namespace TwnsMfrCreatePlayerInfoPage {
             this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
-            const userInfo              = MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(Helpers.getExisted(UserModel.getSelfUserId())) : null;
+            const userInfo              = MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(Helpers.getExisted(UserModel.getSelfUserId())).catch(err => { CompatibilityHelpers.showError(err); throw err; }) : null;
             const labelNickname         = this._labelNickname;
             if (userInfo) {
                 labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;

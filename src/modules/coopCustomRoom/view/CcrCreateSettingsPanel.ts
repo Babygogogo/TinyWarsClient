@@ -1,6 +1,7 @@
 
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
@@ -60,7 +61,7 @@ namespace TwnsCcrCreateSettingsPanel {
         }
         public static async hide(): Promise<void> {
             if (CcrCreateSettingsPanel._instance) {
-                await CcrCreateSettingsPanel._instance.close();
+                await CcrCreateSettingsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -86,7 +87,7 @@ namespace TwnsCcrCreateSettingsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
                     pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
-                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -113,7 +114,7 @@ namespace TwnsCcrCreateSettingsPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._clearTimeoutForBtnConfirm();
         }
 
@@ -169,7 +170,7 @@ namespace TwnsCcrCreateSettingsPanel {
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
             }
         }
 
@@ -181,7 +182,7 @@ namespace TwnsCcrCreateSettingsPanel {
                 dataArrayForListSettings: [
                     {
                         settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(CcrCreateModel.getMapId()),
+                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(CcrCreateModel.getMapId()).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                         warRule,
                         callbackOnModify: null,
                     },
@@ -226,7 +227,7 @@ namespace TwnsCcrCreateSettingsPanel {
                         currentValue    : null,
                         warRule,
                         callbackOnModify: async () => {
-                            await CcrCreateModel.tickPresetWarRuleId();
+                            await CcrCreateModel.tickPresetWarRuleId().catch(err => { CompatibilityHelpers.showError(err); throw err; });
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },

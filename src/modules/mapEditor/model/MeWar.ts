@@ -2,6 +2,7 @@
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";
@@ -49,7 +50,7 @@ namespace TwnsMeWar {
         private _mapTag?            : IDataForMapTag;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data);
+            const baseInitError = await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (baseInitError) {
                 return baseInitError;
             }
@@ -62,7 +63,7 @@ namespace TwnsMeWar {
         }
         public async initWithMapEditorData(data: ProtoTypes.Map.IMapEditorData): Promise<void> {
             const warData = MeUtility.createISerialWar(data);
-            await this.init(warData);
+            await this.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             const mapRawData = Helpers.getExisted(data.mapRawData);
             this.setMapSlotIndex(Helpers.getExisted(data.slotIndex));

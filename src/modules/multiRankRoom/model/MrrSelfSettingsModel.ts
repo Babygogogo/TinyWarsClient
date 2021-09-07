@@ -1,12 +1,13 @@
 
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import Notify           from "../../tools/notify/Notify";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel        from "../../user/model/UserModel";
-import MrrModel         from "./MrrModel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import Helpers              from "../../tools/helpers/Helpers";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel            from "../../user/model/UserModel";
+import MrrModel             from "./MrrModel";
 
 namespace MrrSelfSettingsModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -23,7 +24,7 @@ namespace MrrSelfSettingsModel {
         clearUnitAndTileSkinId();
         clearAvailableCoIdArray();
 
-        const roomInfo          = Helpers.getExisted(await MrrModel.getRoomInfo(roomId));
+        const roomInfo          = Helpers.getExisted(await MrrModel.getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
         const playerDataList    = roomInfo ? roomInfo.playerDataList || [] : [];
         const selfUserId        = UserModel.getSelfUserId();
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);

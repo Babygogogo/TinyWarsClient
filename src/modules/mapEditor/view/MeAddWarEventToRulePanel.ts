@@ -1,5 +1,6 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -42,7 +43,7 @@ namespace TwnsMeAddWarEventToRulePanel {
 
         public static async hide(): Promise<void> {
             if (MeAddWarEventToRulePanel._instance) {
-                await MeAddWarEventToRulePanel._instance.close();
+                await MeAddWarEventToRulePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

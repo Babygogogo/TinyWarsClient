@@ -4,6 +4,7 @@ import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
 import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
 import TwnsCommonInputPanel         from "../../common/view/CommonInputPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
@@ -28,7 +29,6 @@ namespace TwnsBwUnitDetailPanel {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarMapUnitView           = TwnsWarMapUnitView.WarMapUnitView;
     import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
-    import CommonInputPanel         = TwnsCommonInputPanel.CommonInputPanel;
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import UnitType                 = Types.UnitType;
     import TileType                 = Types.TileType;
@@ -71,7 +71,7 @@ namespace TwnsBwUnitDetailPanel {
         }
         public static async hide(): Promise<void> {
             if (BwUnitDetailPanel._instance) {
-                await BwUnitDetailPanel._instance.close();
+                await BwUnitDetailPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getIsOpening(): boolean {
@@ -232,7 +232,7 @@ namespace TwnsBwUnitDetailPanel {
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0339),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -268,7 +268,7 @@ namespace TwnsBwUnitDetailPanel {
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0342),
                             currentValue    : "" + currValue,
                             maxChars        : 2,
@@ -307,7 +307,7 @@ namespace TwnsBwUnitDetailPanel {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            CommonInputPanel.show({
+                            TwnsCommonInputPanel.CommonInputPanel.show({
                                 title           : Lang.getText(LangTextType.B0370),
                                 currentValue    : "" + currValue,
                                 maxChars        : 1,
@@ -347,7 +347,7 @@ namespace TwnsBwUnitDetailPanel {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            CommonInputPanel.show({
+                            TwnsCommonInputPanel.CommonInputPanel.show({
                                 title           : Lang.getText(LangTextType.B0350),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -387,7 +387,7 @@ namespace TwnsBwUnitDetailPanel {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            CommonInputPanel.show({
+                            TwnsCommonInputPanel.CommonInputPanel.show({
                                 title           : Lang.getText(LangTextType.B0347),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -427,7 +427,7 @@ namespace TwnsBwUnitDetailPanel {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            CommonInputPanel.show({
+                            TwnsCommonInputPanel.CommonInputPanel.show({
                                 title           : Lang.getText(LangTextType.B0348),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -467,7 +467,7 @@ namespace TwnsBwUnitDetailPanel {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            CommonInputPanel.show({
+                            TwnsCommonInputPanel.CommonInputPanel.show({
                                 title           : Lang.getText(LangTextType.B0349),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -616,6 +616,7 @@ namespace TwnsBwUnitDetailPanel {
             this._setUiListenerArray([
                 { ui: this._btnTitle, callback: this._onTouchedBtnTitle },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
@@ -654,6 +655,7 @@ namespace TwnsBwUnitDetailPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
 
             this._conView.addChild(this._unitView);
         }

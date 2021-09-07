@@ -5,6 +5,7 @@ import TwnsMcrMainMenuPanel                 from "../../multiCustomRoom/view/Mcr
 import MpwModel                             from "../../multiPlayerWar/model/MpwModel";
 import TwnsMrwMyWarListPanel                from "../../multiRankWar/view/MrwMyWarListPanel";
 import TwnsSpmMainMenuPanel                 from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";
 import TwnsNotifyType                       from "../../tools/notify/NotifyType";
@@ -50,7 +51,7 @@ namespace TwnsMrrMainMenuPanel {
 
         public static async hide(): Promise<void> {
             if (MrrMainMenuPanel._instance) {
-                await MrrMainMenuPanel._instance.close();
+                await MrrMainMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -82,7 +83,7 @@ namespace TwnsMrrMainMenuPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +143,7 @@ namespace TwnsMrrMainMenuPanel {
         }
 
         private async _updateComponentsForRed(): Promise<void> {
-            this._btnMyRoom.setRedVisible(await MrrModel.checkIsRed());
+            this._btnMyRoom.setRedVisible(await MrrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
             this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMrwWars());
         }
 

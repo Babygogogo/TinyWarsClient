@@ -1,7 +1,6 @@
 
 import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
 import TwnsBwUnit               from "../../baseWar/model/BwUnit";
-import TwnsBwProduceUnitPanel   from "../../baseWar/view/BwProduceUnitPanel";
 import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import FloatText                from "../../tools/helpers/FloatText";
@@ -18,7 +17,6 @@ import TwnsSpwWar               from "./SpwWar";
 
 namespace TwnsSpwActionPlanner {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
     import SpwWar               = TwnsSpwWar.SpwWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
@@ -31,26 +29,6 @@ namespace TwnsSpwActionPlanner {
     export class SpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
         private _getPlayerIndexInTurn(): number {
             return this._getWar().getPlayerIndexInTurn();
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for setting common state.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void {
-            this._clearFocusUnitOnMap();
-            this._clearFocusUnitLoaded();
-            this._clearChoosingUnitForDrop();
-            this._clearChosenUnitsForDrop();
-            this._clearAvailableDropDestinations();
-            this._clearDataForPreviewingAttackableArea();
-            this._clearDataForPreviewingMovableArea();
-
-            this._setState(State.ChoosingProductionTarget);
-            this._updateView();
-            BwProduceUnitPanel.show({
-                gridIndex,
-                war     : this._getWar(),
-            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

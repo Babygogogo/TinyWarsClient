@@ -1,4 +1,7 @@
 
+import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import StageManager             from "../../tools/helpers/StageManager";
 import Types                    from "../../tools/helpers/Types";
@@ -9,12 +12,10 @@ import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsBwWar                from "../model/BwWar";
-import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
 import TwnsBwTileDetailPanel    from "./BwTileDetailPanel";
 import TwnsBwTileView           from "./BwTileView";
 import TwnsBwUnitBriefPanel     from "./BwUnitBriefPanel";
-import CommonConstants from "../../tools/helpers/CommonConstants";
 
 namespace TwnsBwTileBriefPanel {
     import BwCoListPanel        = TwnsCommonCoListPanel.CommonCoListPanel;
@@ -60,7 +61,7 @@ namespace TwnsBwTileBriefPanel {
         }
         public static async hide(): Promise<void> {
             if (BwTileBriefPanel._instance) {
-                await BwTileBriefPanel._instance.close();
+                await BwTileBriefPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
         public static getInstance(): BwTileBriefPanel {
@@ -106,7 +107,7 @@ namespace TwnsBwTileBriefPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,7 +232,7 @@ namespace TwnsBwTileBriefPanel {
                     : currentX
                 );
             if (newX !== currentX) {
-                await this._showCloseAnimation();
+                await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 group.x = newX;
                 this._showOpenAnimation();
             }

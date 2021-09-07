@@ -4,6 +4,7 @@ import Notify           from "../notify/Notify";
 import TwnsNotifyType   from "../notify/NotifyType";
 import ProtoManager     from "../proto/ProtoManager";
 import CommonConstants  from "./CommonConstants";
+import CompatibilityHelpers from "./CompatibilityHelpers";
 import Helpers          from "./Helpers";
 import Types            from "./Types";
 
@@ -200,7 +201,7 @@ namespace ConfigManager {
         _latestConfigVersion = version;
     }
     export async function checkIsVersionValid(version: string): Promise<boolean> {
-        return (await loadConfig(version)) != null;
+        return (await loadConfig(version).catch(err => { CompatibilityHelpers.showError(err); throw err; })) != null;
     }
 
     export async function loadConfig(version: string): Promise<ExtendedFullConfig | null> {
@@ -213,19 +214,14 @@ namespace ConfigManager {
             return null;
         }
 
-        let configBin: any;
-        let rawConfig: Types.FullConfig | null = null;
-        try {
-            configBin = await RES.getResByUrl(
-                `resource/config/FullConfig${version}.bin`,
-                void 0,
-                null,
-                RES.ResourceItem.TYPE_BIN
-            );
-            rawConfig = configBin ? ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : null;
-        } catch (e) {
-            // nothing to do for now
-        }
+        let rawConfig   : Types.FullConfig | null = null;
+        const configBin = await RES.getResByUrl(
+            `resource/config/FullConfig${version}.bin`,
+            void 0,
+            null,
+            RES.ResourceItem.TYPE_BIN
+        ).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        rawConfig = configBin ? ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : null;
 
         if (rawConfig == null) {
             _INVALID_CONFIGS.add(version);

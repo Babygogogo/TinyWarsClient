@@ -1,8 +1,8 @@
 
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -51,7 +51,7 @@ namespace TwnsBwDialoguePanel {
 
         public static async hide(): Promise<void> {
             if (BwDialoguePanel._instance) {
-                await BwDialoguePanel._instance.close();
+                await BwDialoguePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -78,7 +78,7 @@ namespace TwnsBwDialoguePanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             this._getOpenData().callbackOnClose();
         }

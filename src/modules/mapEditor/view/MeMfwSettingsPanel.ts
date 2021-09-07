@@ -5,6 +5,7 @@ import TwnsLobbyBackgroundPanel         from "../../lobby/view/LobbyBackgroundPa
 import MfrCreateModel                   from "../../multiFreeRoom/model/MfrCreateModel";
 import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
+import CompatibilityHelpers             from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
 import Helpers                          from "../../tools/helpers/Helpers";
@@ -52,7 +53,7 @@ namespace TwnsMeMfwSettingsPanel {
         }
         public static async hide(): Promise<void> {
             if (MeMfwSettingsPanel._instance) {
-                await MeMfwSettingsPanel._instance.close();
+                await MeMfwSettingsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -97,7 +98,7 @@ namespace TwnsMeMfwSettingsPanel {
         private async _onTouchedBtnConfirm(): Promise<void> {
             MeMfwModel.reviseWarRuleForAi();
             const warData   = MeMfwModel.getWarData();
-            const errorCode = await (new TwWar().init(warData));
+            const errorCode = await (new TwWar().init(warData)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {

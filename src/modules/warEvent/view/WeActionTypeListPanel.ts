@@ -1,6 +1,7 @@
 
 import TwnsBwWar                from "../../baseWar/model/BwWar";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -46,7 +47,7 @@ namespace TwnsWeActionTypeListPanel {
 
         public static async hide(): Promise<void> {
             if (WeActionTypeListPanel._instance) {
-                await WeActionTypeListPanel._instance.close();
+                await WeActionTypeListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 

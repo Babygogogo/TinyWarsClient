@@ -11,6 +11,7 @@ import TwnsMfwMyWarListPanel    from "../../multiFreeWar/view/MfwMyWarListPanel"
 import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
 import TwnsMrrMainMenuPanel     from "../../multiRankRoom/view/MrrMainMenuPanel";
 import TwnsSpmMainMenuPanel     from "../../singlePlayerMode/view/SpmMainMenuPanel";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
@@ -35,31 +36,19 @@ namespace TwnsMfrMainMenuPanel {
 
         private static _instance: MfrMainMenuPanel;
 
-        // @ts-ignore
-        private readonly _group             : eui.Group;
-        // @ts-ignore
-        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnRanking        : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
+        private readonly _group!            : eui.Group;
+        private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
+        private readonly _btnRanking!       : TwnsUiButton.UiButton;
+        private readonly _btnSinglePlayer!  : TwnsUiButton.UiButton;
 
-        // @ts-ignore
-        private readonly _groupLeft         : eui.Group;
-        // @ts-ignore
-        private readonly _btnCreateRoom     : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnJoinRoom       : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnMyRoom         : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnHelp           : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnNormalMode     : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnCoopMode       : TwnsUiButton.UiButton;
+        private readonly _groupLeft!        : eui.Group;
+        private readonly _btnCreateRoom!    : TwnsUiButton.UiButton;
+        private readonly _btnJoinRoom!      : TwnsUiButton.UiButton;
+        private readonly _btnMyRoom!        : TwnsUiButton.UiButton;
+        private readonly _btnContinueWar!   : TwnsUiButton.UiButton;
+        private readonly _btnHelp!          : TwnsUiButton.UiButton;
+        private readonly _btnNormalMode!    : TwnsUiButton.UiButton;
+        private readonly _btnCoopMode!      : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MfrMainMenuPanel._instance) {
@@ -70,7 +59,7 @@ namespace TwnsMfrMainMenuPanel {
 
         public static async hide(): Promise<void> {
             if (MfrMainMenuPanel._instance) {
-                await MfrMainMenuPanel._instance.close();
+                await MfrMainMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -102,7 +91,7 @@ namespace TwnsMfrMainMenuPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -252,10 +241,10 @@ namespace TwnsMfrMainMenuPanel {
         }
 
         private async _updateView(): Promise<void> {
-            this._btnMyRoom.setRedVisible(await MfrModel.checkIsRed());
+            this._btnMyRoom.setRedVisible(await MfrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
             this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMfwWars());
-            this._btnNormalMode.setRedVisible((MpwModel.checkIsRedForMyMcwWars()) || (await McrModel.checkIsRed()));
-            this._btnCoopMode.setRedVisible((MpwModel.checkIsRedForMyCcwWars()) || (await CcrModel.checkIsRed()));
+            this._btnNormalMode.setRedVisible((MpwModel.checkIsRedForMyMcwWars()) || (await McrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; })));
+            this._btnCoopMode.setRedVisible((MpwModel.checkIsRedForMyCcwWars()) || (await CcrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; })));
         }
     }
 }

@@ -1,6 +1,7 @@
 
 import SpmModel                 from "../../singlePlayerMode/model/SpmModel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -39,7 +40,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
         }
         public static async hide(): Promise<void> {
             if (ScrCreateSaveSlotsPanel._instance) {
-                await ScrCreateSaveSlotsPanel._instance.close();
+                await ScrCreateSaveSlotsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
@@ -157,7 +158,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
                     const mapId         = WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
+                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

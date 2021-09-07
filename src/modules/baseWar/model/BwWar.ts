@@ -1,10 +1,11 @@
 
-import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
 import WarEventHelper               from "../../warEvent/model/WarEventHelper";
 import TwnsBwWarView                from "../view/BwWarView";
 import TwnsBwActionPlanner          from "./BwActionPlanner";
@@ -101,7 +102,7 @@ namespace TwnsBwWar {
             }
 
             const configVersion = settingsForCommon.configVersion;
-            if ((configVersion == null) || (!await ConfigManager.checkIsVersionValid(configVersion))) {
+            if ((configVersion == null) || (!await ConfigManager.checkIsVersionValid(configVersion).catch(err => { CompatibilityHelpers.showError(err); throw err; }))) {
                 return ClientErrorCode.BwWarBaseInit01;
             }
 
@@ -111,7 +112,7 @@ namespace TwnsBwWar {
             }
 
             const dataForWarEventManager    = data.warEventManager;
-            const commonSettingManagerError = await this.getCommonSettingManager().init({
+            const commonSettingManagerError = this.getCommonSettingManager().init({
                 settings                : data.settingsForCommon,
                 allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager?.warEventFullData),
                 playersCountUnneutral   : WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),

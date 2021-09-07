@@ -119,9 +119,9 @@ namespace TwnsMeImportPanel {
                     const war = Helpers.getExisted(MeModel.getWar());
                     war.stopRunning();
                     await war.initWithMapEditorData({
-                        mapRawData  : await WarMapModel.getRawData(data.mapId),
+                        mapRawData  : await WarMapModel.getRawData(data.mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
                         slotIndex   : war.getMapSlotIndex(),
-                    });
+                    }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                     war.setIsMapModified(true);
                     war.startRunning()
                         .startRunningView();

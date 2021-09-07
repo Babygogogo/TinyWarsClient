@@ -1,8 +1,9 @@
 
-import Types            from "./Types";
-import ProtoTypes       from "../proto/ProtoTypes";
-import Lang             from "../lang/Lang";
-import TwnsLangTextType from "../lang/LangTextType";
+import Types                from "./Types";
+import ProtoTypes           from "../proto/ProtoTypes";
+import Lang                 from "../lang/Lang";
+import TwnsLangTextType     from "../lang/LangTextType";
+import CompatibilityHelpers from "./CompatibilityHelpers";
 
 namespace Helpers {
     import ColorType            = Types.ColorType;
@@ -394,7 +395,7 @@ namespace Helpers {
                     _frameBeginTime = Date.now();
                     resolve();
                 }, null);
-            });
+            }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
     }
     export function createLazyFunc<T>(func: () => T): () => T {

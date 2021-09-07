@@ -5,6 +5,7 @@ import TwnsCommonChooseCoPanel      from "../../common/view/CommonChooseCoPanel"
 import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
 import TwnsCommonInputPanel         from "../../common/view/CommonInputPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
@@ -61,7 +62,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
         public static async hide(): Promise<void> {
             if (WeActionModifyPanel3._instance) {
-                await WeActionModifyPanel3._instance.close();
+                await WeActionModifyPanel3._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
         }
 
