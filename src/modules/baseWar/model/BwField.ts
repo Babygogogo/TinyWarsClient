@@ -92,15 +92,8 @@ namespace TwnsBwField {
                 }
             }
 
-            const actionPlannerError = this.getActionPlanner().init(mapSize);
-            if (actionPlannerError) {
-                return actionPlannerError;
-            }
-
-            const cursorError = this.getCursor().init(mapSize);
-            if (cursorError) {
-                return cursorError;
-            }
+            this.getActionPlanner().init(mapSize);
+            this.getCursor().init(mapSize);
 
             const gridVisualEffectError = this.getGridVisualEffect().init();
             if (gridVisualEffectError) {
@@ -146,15 +139,8 @@ namespace TwnsBwField {
                 return unitMapError;
             }
 
-            const cursorError = this.getCursor().fastInit(mapSize);
-            if (cursorError) {
-                return cursorError;
-            }
-
-            const actionPlannerError = this.getActionPlanner().fastInit(mapSize);
-            if (actionPlannerError) {
-                return actionPlannerError;
-            }
+            this.getCursor().fastInit();
+            this.getActionPlanner().fastInit();
 
             const gridVisualEffectError = this.getGridVisualEffect().fastInit();
             if (gridVisualEffectError) {

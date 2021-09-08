@@ -1,5 +1,6 @@
 
 import TwnsMeWar            from "../../mapEditor/model/MeWar";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";
@@ -55,10 +56,11 @@ namespace TwnsMmRejectMapPanel {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
             ]);
 
-            this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
-            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
-            this._labelTitle.text   = Lang.getText(LangTextType.B0297);
-            this._labelTips.text    = Lang.getText(LangTextType.A0094);
+            this._inputReason.maxChars  = CommonConstants.MapReviewCommentMaxLength;
+            this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+            this._labelTitle.text       = Lang.getText(LangTextType.B0297);
+            this._labelTips.text        = Lang.getText(LangTextType.A0094);
         }
 
         private _onTouchedBtnCancel(): void {

@@ -1,6 +1,7 @@
 
 import TwnsBwWar            from "../../baseWar/model/BwWar";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
@@ -15,7 +16,7 @@ namespace TwnsBwDrawVoteManager {
         private _remainingVotes?    : number | null;
         private _war?               : BwWar;
 
-        public init(playerManagerData: Types.Undefinable<ISerialPlayerManager>, remainingVotes: Types.Undefinable<number>): ClientErrorCode {
+        public init(playerManagerData: Types.Undefinable<ISerialPlayerManager>, remainingVotes: Types.Undefinable<number>): void {
             if (remainingVotes == null) {
                 this.setRemainingVotes(null);
             } else {
@@ -29,11 +30,9 @@ namespace TwnsBwDrawVoteManager {
                     }
                 }
                 if (remainingVotes >= maxVotes) {
-                    return ClientErrorCode.BwDrawVoteManagerInit00;
+                    throw CompatibilityHelpers.newError(`remainingVotes >= maxVotes.`, ClientErrorCode.BwDrawVoteManager_Init_00);
                 }
             }
-
-            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

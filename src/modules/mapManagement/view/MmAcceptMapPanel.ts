@@ -1,5 +1,6 @@
 
 import TwnsMeWar            from "../../mapEditor/model/MeWar";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";
@@ -93,12 +94,13 @@ namespace TwnsMmAcceptMapPanel {
 
             this._updateComponentsForLanguage();
 
-            this._imgMcw.visible    = false;
-            this._imgCcw.visible    = false;
-            this._imgScw.visible    = false;
-            this._imgSrw.visible    = false;
-            this._imgMrwStd.visible = false;
-            this._imgMrwFog.visible = false;
+            this._inputReason.maxChars  = CommonConstants.MapReviewCommentMaxLength;
+            this._imgMcw.visible        = false;
+            this._imgCcw.visible        = false;
+            this._imgScw.visible        = false;
+            this._imgSrw.visible        = false;
+            this._imgMrwStd.visible     = false;
+            this._imgMrwFog.visible     = false;
         }
 
         private _onNotifyLanguageChanged(): void {

@@ -1,5 +1,4 @@
 
-import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
 import TwnsBwProduceUnitPanel   from "../../baseWar/view/BwProduceUnitPanel";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
@@ -23,7 +22,6 @@ import TwnsBwWar                from "./BwWar";
 
 namespace TwnsBwActionPlanner {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import UnitState        = Types.UnitActionState;
     import GridIndex        = Types.GridIndex;
     import State            = Types.ActionPlannerState;
@@ -79,17 +77,13 @@ namespace TwnsBwActionPlanner {
             { type: NotifyType.BwCursorDragEnded,   callback: this._onNotifyBwCursorDragEnded },
         ];
 
-        public init(mapSize: Types.MapSize): ClientErrorCode {
+        public init(mapSize: Types.MapSize): void {
             this._setMapSize(Helpers.deepClone(mapSize));
 
             this.getView().init(this);
-
-            return ClientErrorCode.NoError;
         }
-        public fastInit(mapSize: Types.MapSize): ClientErrorCode {
+        public fastInit(): void {
             this.getView().fastInit(this);
-
-            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

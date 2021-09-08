@@ -35,7 +35,7 @@ namespace ScrCreateModel {
             slotComment     : null,
         },
         settingsForCommon   : {
-            configVersion   : ConfigManager.getLatestConfigVersion(),
+            configVersion   : null,
             presetWarRuleId : null,
             warRule         : null,
         },

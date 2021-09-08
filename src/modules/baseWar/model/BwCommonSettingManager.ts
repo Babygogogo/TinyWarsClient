@@ -3,7 +3,6 @@ import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 import TwnsBwWar            from "./BwWar";
@@ -18,24 +17,20 @@ namespace TwnsBwCommonSettingManager {
         private _settingsForCommon? : ISettingsForCommon;
 
         public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
-            settings                : Types.Undefinable<ISettingsForCommon>;
+            settings                : ISettingsForCommon;
             allWarEventIdArray      : number[];
             playersCountUnneutral   : number;
-        }): Promise<ClientErrorCode> {
-            if (settings == null) {
-                return ClientErrorCode.BwCommonSettingManagerInit00;
-            }
-
+        }): Promise<void> {
             const configVersion = settings.configVersion;
             if ((configVersion == null)                                                                                                     ||
                 (!await ConfigManager.checkIsVersionValid(configVersion).catch(err => { CompatibilityHelpers.showError(err); throw err; }))
             ) {
-                return ClientErrorCode.BwCommonSettingManagerInit01;
+                throw CompatibilityHelpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwCommonSettingManager_Init_00);
             }
 
             const warRule = settings.warRule;
             if (warRule == null) {
-                return ClientErrorCode.BwCommonSettingManagerInit02;
+                throw CompatibilityHelpers.newError(`Empty warRule.`, ClientErrorCode.BwCommonSettingManager_Init_01);
             }
 
             const errorCodeForWarRule = WarRuleHelpers.getErrorCodeForWarRule({
@@ -45,12 +40,10 @@ namespace TwnsBwCommonSettingManager {
                 playersCountUnneutral,
             });
             if (errorCodeForWarRule) {
-                return errorCodeForWarRule;
+                throw CompatibilityHelpers.newError(`Invalid warRule.`, errorCodeForWarRule);
             }
 
             this._setSettingsForCommon(settings);
-
-            return ClientErrorCode.NoError;
         }
 
         public serializeForCreateSfw(): ISettingsForCommon {

@@ -1,9 +1,9 @@
 
 import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Helpers                      from "../../tools/helpers/Helpers";
-import Types                        from "../../tools/helpers/Types";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 import TwnsMeWar                    from "./MeWar";
 
@@ -14,27 +14,21 @@ namespace TwnsMeCommonSettingManager {
 
     export class MeCommonSettingManager extends TwnsBwCommonSettingManager.BwCommonSettingManager {
         public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
-            settings                : Types.Undefinable<ISettingsForCommon>;
+            settings                : ISettingsForCommon;
             allWarEventIdArray      : number[];
             playersCountUnneutral   : number;
-        }): Promise<ClientErrorCode> {
-            if (settings == null) {
-                return ClientErrorCode.MeCommonSettingManagerInit00;
-            }
-
+        }): Promise<void> {
             const configVersion = settings.configVersion;
-            if (configVersion !== ConfigManager.getLatestConfigVersion()) {
-                return ClientErrorCode.MeCommonSettingManagerInit01;
+            if ((configVersion == null) || (configVersion !== ConfigManager.getLatestConfigVersion())) {
+                throw CompatibilityHelpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
             }
 
             const warRule = settings.warRule;
             if (warRule == null) {
-                return ClientErrorCode.MeCommonSettingManagerInit02;
+                throw CompatibilityHelpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
             }
 
             this._setSettingsForCommon(settings);
-
-            return ClientErrorCode.NoError;
         }
 
         public serializeForCreateSfw(): ISettingsForCommon {

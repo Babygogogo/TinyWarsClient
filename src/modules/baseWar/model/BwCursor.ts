@@ -1,5 +1,4 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import Helpers              from "../../tools/helpers/Helpers";
 import SoundManager         from "../../tools/helpers/SoundManager";
 import Types                from "../../tools/helpers/Types";
@@ -11,7 +10,6 @@ import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwCursor {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import BwWar            = TwnsBwWar.BwWar;
     import BwCursorView     = TwnsBwCursorView.BwCursorView;
 
@@ -31,18 +29,14 @@ namespace TwnsBwCursor {
             { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
-        public init(mapSize: Types.MapSize): ClientErrorCode {
+        public init(mapSize: Types.MapSize): void {
             this._setMapSize(Helpers.deepClone(mapSize));
             this.setGridIndex({ x: 0, y: 0 });
 
             this.getView().init(this);
-
-            return ClientErrorCode.NoError;
         }
-        public fastInit(mapSize: Types.MapSize): ClientErrorCode {
+        public fastInit(): void {
             this.getView().fastInit(this);
-
-            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

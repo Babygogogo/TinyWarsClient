@@ -1,5 +1,6 @@
 
-import ProtoTypes  from "../proto/ProtoTypes";
+import ProtoTypes           from "../proto/ProtoTypes";
+import TwnsClientErrorCode  from "./ClientErrorCode";
 
 namespace Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -198,7 +199,7 @@ namespace Types {
 
     export interface CustomError extends Error {
         isShown?    : boolean;
-        errorCode?  : number;
+        errorCode?  : TwnsClientErrorCode.ClientErrorCode;
     }
 
     ////////////////////////////////////////////////////////////////////////////////

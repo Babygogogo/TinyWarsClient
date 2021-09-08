@@ -9,7 +9,7 @@
                         locked="true" />
         <TwnsUiLabel:UiLabel id="_labelTips" text="请输入您的评价和改进意见，可留空" textColor="0xFFFFFF" size="18" left="10" right="10"
                         top="40" wordWrap="true" textAlign="center" locked="true" />
-        <TwnsUiTextInput:UiTextInput id="_inputReason" anchorOffsetX="0" anchorOffsetY="0" maxChars="200" left="10" right="10"
+        <TwnsUiTextInput:UiTextInput id="_inputReason" anchorOffsetX="0" anchorOffsetY="0" left="10" right="10"
                             height="100" top="70">
             <TwnsUiButton:skinName>
                 <e:Skin width="100" height="30">

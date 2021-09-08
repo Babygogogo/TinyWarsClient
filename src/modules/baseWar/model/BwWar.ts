@@ -106,20 +106,14 @@ namespace TwnsBwWar {
                 return ClientErrorCode.BwWarBaseInit01;
             }
 
-            const drawVoteManagerError = this.getDrawVoteManager().init(data.playerManager, data.remainingVotesForDraw);
-            if (drawVoteManagerError) {
-                return drawVoteManagerError;
-            }
+            this.getDrawVoteManager().init(data.playerManager, data.remainingVotesForDraw);
 
             const dataForWarEventManager    = data.warEventManager;
-            const commonSettingManagerError = this.getCommonSettingManager().init({
-                settings                : data.settingsForCommon,
+            await this.getCommonSettingManager().init({
+                settings                : settingsForCommon,
                 allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager?.warEventFullData),
                 playersCountUnneutral   : WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
             });
-            if (commonSettingManagerError) {
-                return commonSettingManagerError;
-            }
 
             const warEventManagerError = this.getWarEventManager().init(dataForWarEventManager);
             if (warEventManagerError) {
