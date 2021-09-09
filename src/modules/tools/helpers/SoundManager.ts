@@ -6,6 +6,7 @@ import CompatibilityHelpers from "./CompatibilityHelpers";
 import FloatText            from "./FloatText";
 import Helpers              from "./Helpers";
 import LocalStorage         from "./LocalStorage";
+import Logger               from "./Logger";
 import Types                from "./Types";
 
 namespace SoundManager {
@@ -261,9 +262,14 @@ namespace SoundManager {
                 throw new Error(`SoundManager._playBgmForNormal() empty path.`);
             }
 
-            const audioBuffer = await loadAudioBuffer(path).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const audioBuffer = await loadAudioBuffer(path).catch(err => {
+                // CompatibilityHelpers.showError(err); throw err;
+                Logger.error(`SoundManager._playBgmForNormal() loadAudioBuffer error: ${(err as Error).message}.`);
+            });
             if (audioBuffer == null) {
-                throw new Error(`SoundManager._playBgmForNormal() empty audioBuffer.`);
+                // throw new Error(`SoundManager._playBgmForNormal() empty audioBuffer.`);
+                Logger.error(`SoundManager._playBgmForNormal() empty audioBuffer.`);
+                return;
             }
 
             cacheDict.set(bgmCode, audioBuffer);
@@ -371,9 +377,14 @@ namespace SoundManager {
                 throw new Error(`SoundManager._playEffectForNormal() empty path.`);
             }
 
-            const audioBuffer = await loadAudioBuffer(path).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const audioBuffer = await loadAudioBuffer(path).catch(err => {
+                // CompatibilityHelpers.showError(err); throw err;
+                Logger.error(`SoundManager.playShortSfx() loadAudioBuffer error: ${(err as Error).message}`);
+            });
             if (audioBuffer == null) {
-                throw new Error(`SoundManager.playShortSfx() empty audioBuffer.`);
+                // throw new Error(`SoundManager.playShortSfx() empty audioBuffer.`);
+                Logger.error(`SoundManager.playShortSfx() empty audioBuffer.`);
+                return;
             }
 
             cacheDict.set(shortSfxCode, audioBuffer);
@@ -464,7 +475,11 @@ namespace SoundManager {
             return null;
         }
 
-        return await _audioContext.decodeAudioData(arrayBuffer).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const buffer = await _audioContext.decodeAudioData(arrayBuffer).catch(err => {
+            // CompatibilityHelpers.showError(err); throw err;
+            Logger.error(`SoundManager.loadAudioBuffer() decodeAudioData error: ${(err as Error).message}`);
+        });
+        return buffer || null;
     }
 }
 
