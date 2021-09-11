@@ -32,6 +32,7 @@ namespace TwnsBwDrawVoteManager {
                 if (remainingVotes >= maxVotes) {
                     throw CompatibilityHelpers.newError(`remainingVotes >= maxVotes.`, ClientErrorCode.BwDrawVoteManager_Init_00);
                 }
+                this.setRemainingVotes(remainingVotes);
             }
         }
 

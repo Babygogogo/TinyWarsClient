@@ -1264,14 +1264,19 @@ namespace TwnsBwActionPlanner {
             return false;
         }
         private _createAttackableGridsAfterMove(): GridIndex[] {
-            const unit = Helpers.getExisted(this.getFocusUnit());
-            return GridIndexHelpers.getGridsWithinDistance(
-                this.getMovePathDestination(),
-                Helpers.getExisted(unit.getMinAttackRange()),
-                Helpers.getExisted(unit.getFinalMaxAttackRange()),
-                this.getMapSize(),
-                (gridIndex) => unit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)
-            );
+            const unit              = Helpers.getExisted(this.getFocusUnit());
+            const minAttackRange    = unit.getMinAttackRange();
+            if (minAttackRange == null) {
+                return [];
+            } else {
+                return GridIndexHelpers.getGridsWithinDistance(
+                    this.getMovePathDestination(),
+                    Helpers.getExisted(minAttackRange),
+                    Helpers.getExisted(unit.getFinalMaxAttackRange()),
+                    this.getMapSize(),
+                    (gridIndex) => unit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)
+                );
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

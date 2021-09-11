@@ -265,8 +265,9 @@ namespace SoundManager {
             const audioBuffer = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager._playBgmForNormal() loadAudioBuffer error: ${(err as Error).message}.`);
+                return;
             });
-            if (audioBuffer == null) {
+            if (!audioBuffer) {
                 // throw new Error(`SoundManager._playBgmForNormal() empty audioBuffer.`);
                 Logger.error(`SoundManager._playBgmForNormal() empty audioBuffer.`);
                 return;
@@ -380,8 +381,9 @@ namespace SoundManager {
             const audioBuffer = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager.playShortSfx() loadAudioBuffer error: ${(err as Error).message}`);
+                return;
             });
-            if (audioBuffer == null) {
+            if (!audioBuffer) {
                 // throw new Error(`SoundManager.playShortSfx() empty audioBuffer.`);
                 Logger.error(`SoundManager.playShortSfx() empty audioBuffer.`);
                 return;
@@ -478,8 +480,9 @@ namespace SoundManager {
         const buffer = await _audioContext.decodeAudioData(arrayBuffer).catch(err => {
             // CompatibilityHelpers.showError(err); throw err;
             Logger.error(`SoundManager.loadAudioBuffer() decodeAudioData error: ${(err as Error).message}`);
+            return null;
         });
-        return buffer || null;
+        return buffer;
     }
 }
 

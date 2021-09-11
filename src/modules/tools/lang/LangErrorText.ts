@@ -75,39 +75,39 @@ namespace TwnsLangErrorText {
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ],
-        [ServerErrorCode.MsgMcrCreateRoom0007]: [
+        [ServerErrorCode.ExeMcrCreateRoom_DoExecute_0007]: [
             "您已加入了许多未开战的房间，请退出部分后重试",
             "You have joined too many rooms.",
         ],
-        [ServerErrorCode.MsgMcrCreateRoom0008]: [
+        [ServerErrorCode.ExeMcrCreateRoom_DoExecute_0008]: [
             "您已创建了许多未开始的房间，请退出部分后重试",
             "You have created too many rooms simultaneously.",
         ],
-        [ServerErrorCode.MsgMcrExitRoom0002]: [
+        [ServerErrorCode.ExeMcrExitRoom_DoExecute_0001]: [
             "房间不存在",
             "The room doesn't exist.",
         ],
-        [ServerErrorCode.MsgMcrExitRoom0004]: [
+        [ServerErrorCode.ExeMcrExitRoom_DoExecute_0003]: [
             "您并未参加该战局",
             "You haven't joined the game.",
         ],
-        [ServerErrorCode.MsgMcrJoinRoom0004]: [
+        [ServerErrorCode.ExeMcrJoinRoom_DoExecute_0003]: [
             "您已参与了许多未开始的战局，请退出部分后重试",
             "You have joined too many wars.",
         ],
-        [ServerErrorCode.MsgMcrJoinRoom0006]: [
+        [ServerErrorCode.ExeMcrJoinRoom_DoExecute_0005]: [
             "房间不存在",
             "The room doesn't exist.",
         ],
-        [ServerErrorCode.MsgMcrJoinRoom0013]: [
+        [ServerErrorCode.ExeMcrJoinRoom_DoExecute_0011]: [
             "您已加入了该房间。",
             "You have already joined the room.",
         ],
-        [ServerErrorCode.MsgMcrStartWar0008]: [
+        [ServerErrorCode.ExeMcrStartWar_DoExecute_0006]: [
             `房间未满员`,
             `There not enough players in the room.`,
         ],
-        [ServerErrorCode.MsgMcrStartWar0009]: [
+        [ServerErrorCode.ExeMcrStartWar_DoExecute_0007]: [
             `还有玩家未准备就绪`,
             `Some players are not ready yet.`,
         ],
@@ -167,7 +167,7 @@ namespace TwnsLangErrorText {
             `您已创建了许多未开始的房间，请删除部分后重试`,
             `You have created too many rooms simultaneously.`,
         ],
-        [ServerErrorCode.MsgMfrStartWar0006]: [
+        [ServerErrorCode.ExeMfrStartWar_DoExecute_0005]: [
             `玩家数量不足，请等待更多玩家进入房间。`,
             `There not enough players in the room. Please wait until more players join.`,
         ],
