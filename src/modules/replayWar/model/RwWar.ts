@@ -235,7 +235,7 @@ namespace TwnsRwWar {
             } else if (this._getSettingsForScw()) {
                 return hasFog ? WarType.ScwFog : WarType.ScwStd;
             } else {
-                throw new Error(`Invalid war data.`);
+                throw Helpers.newError(`Invalid war data.`);
             }
         }
         public getIsNeedExecutedAction(): boolean {
@@ -260,7 +260,7 @@ namespace TwnsRwWar {
                 return Helpers.getExisted(settingsForScw.mapId);
             }
 
-            throw new Error(`Invalid war data.`);
+            throw Helpers.newError(`Invalid war data.`);
         }
         public getIsWarMenuPanelOpening(): boolean {
             return RwWarMenuPanel.getIsOpening();
@@ -432,7 +432,7 @@ namespace TwnsRwWar {
             this.setNextActionId(this.getNextActionId() + 1);
             const errorCode = await WarActionExecutor.checkAndExecute(this, action, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (errorCode) {
-                throw new Error(`RwWar._doExecuteAction() errorCode: ${errorCode}`);
+                throw Helpers.newError(`RwWar._doExecuteAction() errorCode: ${errorCode}`);
             }
 
             const isInEnd = this.checkIsInEnd();

@@ -478,9 +478,9 @@ namespace Helpers {
         }
     }
 
-    export function getDefined<T>(value: T | undefined): T {
+    export function getDefined<T>(value: T | undefined, errorCode?: ClientErrorCode): T {
         if (value === undefined) {
-            throw new Error(`Undefined value.`);
+            throw Helpers.newError(`Undefined value.`, errorCode);
         }
 
         return value;

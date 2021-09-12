@@ -86,7 +86,7 @@ namespace TwnsUserRegisterPanel {
 
             const account = data.account;
             if (account == null) {
-                throw new Error(`RegisterPanel._onMsgUserRegister() empty account!`);
+                throw Helpers.newError(`RegisterPanel._onMsgUserRegister() empty account!`);
             }
 
             const password  = this._inputPassword.text;

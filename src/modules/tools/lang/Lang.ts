@@ -51,7 +51,7 @@ namespace Lang {
         if (text != null) {
             return text;
         } else {
-            throw new Error(`Lang.getText() empty text: ${t} ${languageType}`);
+            throw Helpers.newError(`Lang.getText() empty text: ${t} ${languageType}`);
         }
     }
 

@@ -462,7 +462,7 @@ namespace WarCommonHelpers {
             return (distance != null) && (distance <= coZoneRadius);
 
         } else {
-            throw new Error(`Invalid coSkillAreaType: ${coSkillAreaType}`);
+            throw Helpers.newError(`Invalid coSkillAreaType: ${coSkillAreaType}`);
         }
     }
 
@@ -612,7 +612,7 @@ namespace WarCommonHelpers {
             for (const unitData of unitsData) {
                 const unitId = unitData.unitId;
                 if (unitId == null) {
-                    throw new Error(`WarCommonHelpers.addUnitsBeforeExecutingAction() empty unitId.`);
+                    throw Helpers.newError(`WarCommonHelpers.addUnitsBeforeExecutingAction() empty unitId.`);
                 }
 
                 if (!unitMap.getUnitById(unitId)) {
@@ -678,7 +678,7 @@ namespace WarCommonHelpers {
     export function getIdleBuildingGridIndex(war: BwWar): Types.GridIndex | null {
         const playerIndex = war.getPlayerIndexInTurn();
         if (playerIndex == null) {
-            throw new Error(`WarCommonHelpers.getIdleBuildingGridIndex() empty playerIndex.`);
+            throw Helpers.newError(`WarCommonHelpers.getIdleBuildingGridIndex() empty playerIndex.`);
         }
 
         const field                     = war.getField();

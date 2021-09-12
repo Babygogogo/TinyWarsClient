@@ -126,7 +126,7 @@ namespace TwnsCommonRankListPanel {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
-                        throw new Error(`CommonRankListPanel._updateComponentsForStd() empty userId.`);
+                        throw Helpers.newError(`CommonRankListPanel._updateComponentsForStd() empty userId.`);
                     }
 
                     dataList.push({
@@ -150,7 +150,7 @@ namespace TwnsCommonRankListPanel {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
-                        throw new Error(`CommonRankListPanel._updateComponentsForFog() empty userId.`);
+                        throw Helpers.newError(`CommonRankListPanel._updateComponentsForFog() empty userId.`);
                     }
 
                     dataList.push({
@@ -245,7 +245,7 @@ namespace TwnsCommonRankListPanel {
 
             const userInfo = await UserModel.getUserPublicInfo(data.userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (userInfo == null) {
-                throw new Error(`UserRenderer._updateView() empty userInfo.`);
+                throw Helpers.newError(`UserRenderer._updateView() empty userInfo.`);
             }
             labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
 
@@ -253,7 +253,7 @@ namespace TwnsCommonRankListPanel {
                 return (v.playersCountUnneutral === data.playersCount) && (v.warType === data.warType);
             });
             if (rankInfo == null) {
-                throw new Error(`UserRenderer._updateView() empty rankInfo.`);
+                throw Helpers.newError(`UserRenderer._updateView() empty rankInfo.`);
             } else {
                 labelScore.text = `${rankInfo.currentScore}`;
             }

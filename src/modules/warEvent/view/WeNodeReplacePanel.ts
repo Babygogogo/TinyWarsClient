@@ -151,7 +151,7 @@ namespace TwnsWeNodeReplacePanel {
             const candidateNodeId   = data.candidateNodeId;
             const candidateNode     = (fullData.conditionNodeArray || []).find(v => v.nodeId === candidateNodeId);
             if (candidateNode == null) {
-                throw new Error(`Empty candidateNode.`);
+                throw Helpers.newError(`Empty candidateNode.`);
             }
 
             const isAnd             = Helpers.getExisted(candidateNode.isAnd);

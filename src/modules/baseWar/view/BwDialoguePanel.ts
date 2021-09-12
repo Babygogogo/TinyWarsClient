@@ -159,7 +159,7 @@ namespace TwnsBwDialoguePanel {
                     Helpers.changeColor(imgCo1, Types.ColorType.Dark);
                     Helpers.changeColor(imgCo2, Types.ColorType.Origin);
                 } else {
-                    throw new Error(`BwDialoguePanel._updateComponentsForDialogue() invalid side.`);
+                    throw Helpers.newError(`BwDialoguePanel._updateComponentsForDialogue() invalid side.`);
                 }
 
                 labelContent.setRichText(Helpers.getExisted(Lang.getLanguageText({

@@ -1852,6 +1852,17 @@ namespace TwnsClientErrorCode {
         BwWarActionExecutor_HandleDestructionForUnit_07,
         BwWarActionExecutor_HandleDestructionForUnit_08,
         BwWarActionExecutor_HandleDestructionForUnit_09,
+
+        MrrPreviewMapListPanel_SetSelectedMapId_00,
+        MrrPreviewMapListPanel_SetSelectedMapId_01,
+        MrrPreviewMapListPanel_SetSelectedMapId_02,
+        MrrPreviewMapListPanel_SetSelectedMapId_03,
+        MrrPreviewMapListPanel_SetSelectedMapId_04,
+        MrrPreviewMapListPanel_SetSelectedMapId_05,
+        MrrPreviewMapListPanel_SetSelectedMapId_06,
+        MrrPreviewMapListPanel_SetSelectedMapId_07,
+        MrrPreviewMapListPanel_SetSelectedMapId_08,
+        MrrPreviewMapListPanel_SetSelectedMapId_09,
     }
 }
 

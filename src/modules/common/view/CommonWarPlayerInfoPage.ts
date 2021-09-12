@@ -87,7 +87,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 const playerInfo = playerInfoArray.find(v => v.playerIndex === playerIndex);
                 if (playerInfo == null) {
-                    throw new Error(`CommonWarPlayerInfoPage._updateListPlayer() empty playerInfo.`);
+                    throw Helpers.newError(`CommonWarPlayerInfoPage._updateListPlayer() empty playerInfo.`);
                 }
 
                 dataArray.push({

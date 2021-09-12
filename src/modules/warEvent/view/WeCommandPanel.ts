@@ -391,7 +391,7 @@ namespace TwnsWeCommandPanel {
             } else if (descType === WarEventDescType.EventMaxCallCountTotal) {
                 label.text = `${Lang.getText(LangTextType.B0317)} E${openData.eventId || `???`}`;
             } else {
-                throw new Error(`Invalid descType: ${descType}`);
+                throw Helpers.newError(`Invalid descType: ${descType}`);
             }
         }
 
@@ -411,7 +411,7 @@ namespace TwnsWeCommandPanel {
             } else if (descType === WarEventDescType.Action) {
                 this._updateForAction(data);
             } else {
-                throw new Error(`Invalid descType: ${descType}`);
+                throw Helpers.newError(`Invalid descType: ${descType}`);
             }
         }
         private _updateForEvent(data: OpenDataForWeCommandPanel): void {                      // DONE

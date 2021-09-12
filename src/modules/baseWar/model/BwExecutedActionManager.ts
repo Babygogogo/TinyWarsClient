@@ -44,7 +44,7 @@ namespace TwnsBwExecutedActionManager {
         }
         public addExecutedAction(rawAction: IWarActionContainer): void {
             if (rawAction.actionId !== this.getExecutedActionsCount()) {
-                throw new Error(`Invalid actionId: ${rawAction.actionId}`);
+                throw Helpers.newError(`Invalid actionId: ${rawAction.actionId}`);
             }
 
             const executedActions = this.getAllExecutedActions();

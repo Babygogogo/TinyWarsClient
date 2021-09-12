@@ -217,7 +217,7 @@ namespace TwnsTwWar {
         const configVersion         = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
         const playersCountUnneutral = mapRawData.playersCountUnneutral;
         if ((playersCountUnneutral == null) || (playersCountUnneutral < 2)) {
-            throw new Error(`Invalid playersCountUnneutral: ${playersCountUnneutral}`);
+            throw Helpers.newError(`Invalid playersCountUnneutral: ${playersCountUnneutral}`);
         }
 
         const bootTimerParams   = [Types.BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue];
@@ -237,7 +237,7 @@ namespace TwnsTwWar {
         if ((WarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability })) ||
             ((ruleForPlayers.playerRuleDataArray || []).length !== playersCountUnneutral)
         ) {
-            throw new Error(`Invalid ruleForPlayers.`);
+            throw Helpers.newError(`Invalid ruleForPlayers.`);
         }
 
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {

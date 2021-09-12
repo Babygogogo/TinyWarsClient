@@ -64,7 +64,6 @@ namespace TwnsNotifyType {
         ScrCreateWarSaveSlotChanged,
         ScrCreatePlayerInfoChanged,
 
-        MrrPreviewingMapIdChanged,
         McwPreviewingWarIdChanged,
         MrwPreviewingWarIdChanged,
         MfwPreviewingWarIdChanged,

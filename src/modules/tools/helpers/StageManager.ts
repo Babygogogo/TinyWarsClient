@@ -100,7 +100,7 @@ namespace StageManager {
 
     function _addLayer(layerType: LayerType): void {
         if (_LAYERS.has(layerType)) {
-            throw new Error(`StageManager._addLayer() duplicated layer: ${layerType}.`);
+            throw Helpers.newError(`StageManager._addLayer() duplicated layer: ${layerType}.`);
         }
 
         const layer = new UiLayer();

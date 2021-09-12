@@ -244,7 +244,7 @@ namespace TwnsCcwMyWarListPanel {
             for (const warInfo of MpwModel.getMyCcwWarInfoArray()) {
                 const warId = warInfo.warId;
                 if (warId == null) {
-                    throw new Error(`CcwMyWarListPanel._createDataForListWar() empty warId.`);
+                    throw Helpers.newError(`CcwMyWarListPanel._createDataForListWar() empty warId.`);
                 }
                 dataArray.push({
                     warId,
@@ -380,7 +380,7 @@ namespace TwnsCcwMyWarListPanel {
 
                 const settingsForCcw = warInfo.settingsForCcw;
                 if (settingsForCcw == null) {
-                    throw new Error(`CcwMyWarListPanel.WarRenderer._onDataChanged() empty settingsForCcw.`);
+                    throw Helpers.newError(`CcwMyWarListPanel.WarRenderer._onDataChanged() empty settingsForCcw.`);
                 } else {
                     const warName = settingsForCcw.warName;
                     if (warName) {
@@ -388,11 +388,11 @@ namespace TwnsCcwMyWarListPanel {
                     } else {
                         const mapId = settingsForCcw.mapId;
                         if (mapId == null) {
-                            throw new Error(`CcwMyWarListPanel.WarRenderer._onDataChanged() empty mapId.`);
+                            throw Helpers.newError(`CcwMyWarListPanel.WarRenderer._onDataChanged() empty mapId.`);
                         } else {
                             const mapName = await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                             if (mapName == null) {
-                                throw new Error(`CcwMyWarListPanel.WarRenderer._onDataChanged() empty mapName.`);
+                                throw Helpers.newError(`CcwMyWarListPanel.WarRenderer._onDataChanged() empty mapName.`);
                             } else {
                                 labelName.text = mapName;
                             }

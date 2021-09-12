@@ -95,7 +95,7 @@ namespace TwnsCommonChangeVersionPanel {
 
             const url = getUrlForGameVersion(selectedVersion);
             if (url == null) {
-                throw new Error(`CommonChangeVersionPanel._onTouchedBtnConfirm() empty url.`);
+                throw Helpers.newError(`CommonChangeVersionPanel._onTouchedBtnConfirm() empty url.`);
             } else {
                 window.open(url);
             }
@@ -195,7 +195,7 @@ namespace TwnsCommonChangeVersionPanel {
 
             const data = this.data;
             if (data == null) {
-                throw new Error(`CommonChangeVersionPanel.VersionRenderer._updateView() empty data.`);
+                throw Helpers.newError(`CommonChangeVersionPanel.VersionRenderer._updateView() empty data.`);
             }
 
             const gameVersion       = data.gameVersion;

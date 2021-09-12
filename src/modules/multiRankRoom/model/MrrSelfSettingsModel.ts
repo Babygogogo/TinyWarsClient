@@ -35,7 +35,7 @@ namespace MrrSelfSettingsModel {
         const selfPlayerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
         const availableCoIdArray    = generateAvailableCoIdArray(roomInfo, selfPlayerIndex);
         if ((availableCoIdArray == null) || (!availableCoIdArray.length)) {
-            throw new Error(`Empty availableCoIdArray`);
+            throw Helpers.newError(`Empty availableCoIdArray`);
         }
         setAvailableCoIdArray(availableCoIdArray);
 
@@ -45,7 +45,7 @@ namespace MrrSelfSettingsModel {
         } else {
             const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
             if ((availableSkinIdList == null) || (!availableSkinIdList.length)) {
-                throw new Error(`Empty availableSkinIdList.`);
+                throw Helpers.newError(`Empty availableSkinIdList.`);
             }
 
             setCoId(CommonConstants.CoEmptyId);
@@ -117,7 +117,7 @@ namespace MrrSelfSettingsModel {
             if (playerData.isReady) {
                 const skinId = Helpers.getExisted(playerData.unitAndTileSkinId);
                 if (usedSkinIds.has(skinId)) {
-                    throw new Error(`Duplicated skinId: ${skinId}`);
+                    throw Helpers.newError(`Duplicated skinId: ${skinId}`);
                 }
 
                 usedSkinIds.add(skinId);

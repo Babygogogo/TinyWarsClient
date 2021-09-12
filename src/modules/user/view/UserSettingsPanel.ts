@@ -227,7 +227,7 @@ namespace TwnsUserSettingsPanel {
 
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                throw new Error(`UserSettingsPanel._onOpened() empty selfUserId.`);
+                throw Helpers.newError(`UserSettingsPanel._onOpened() empty selfUserId.`);
             } else {
                 UserProxy.reqUserGetPublicInfo(selfUserId);
             }
@@ -254,7 +254,7 @@ namespace TwnsUserSettingsPanel {
         private _onMsgUserSetNickname(): void {
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                throw new Error(`UserSettingsPanel._onMsgUserSetNickname() empty selfUserId.`);
+                throw Helpers.newError(`UserSettingsPanel._onMsgUserSetNickname() empty selfUserId.`);
             } else {
                 UserProxy.reqUserGetPublicInfo(selfUserId);
             }
@@ -262,7 +262,7 @@ namespace TwnsUserSettingsPanel {
         private _onMsgUserSetDiscordId(): void {
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                throw new Error(`UserSettingsPanel._onMsgUserSetDiscordId() empty selfUserId.`);
+                throw Helpers.newError(`UserSettingsPanel._onMsgUserSetDiscordId() empty selfUserId.`);
             } else {
                 UserProxy.reqUserGetPublicInfo(selfUserId);
             }
@@ -307,7 +307,7 @@ namespace TwnsUserSettingsPanel {
         private _onTouchedBtnSetPrivilege(): void {
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                throw new Error(`UserSettingsPanel._onTouchedBtnSetPrivilege() empty selfUserId.`);
+                throw Helpers.newError(`UserSettingsPanel._onTouchedBtnSetPrivilege() empty selfUserId.`);
             } else {
                 UserSetPrivilegePanel.show({ userId: selfUserId });
             }

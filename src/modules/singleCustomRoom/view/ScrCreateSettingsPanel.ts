@@ -246,7 +246,7 @@ namespace TwnsScrCreateSettingsPanel {
                         warRule,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw new Error(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             ScrCreateModel.setSlotComment(newValue);
                             this._updateCommonWarBasicSettingsPage();

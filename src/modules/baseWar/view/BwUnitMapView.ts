@@ -206,7 +206,7 @@ namespace TwnsBwUnitMapView {
             } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Naval)) {
                 return this._layerForNaval;
             } else {
-                throw new Error(`Invalid unitType: ${unitType}`);
+                throw Helpers.newError(`Invalid unitType: ${unitType}`);
             }
         }
 

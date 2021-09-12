@@ -197,7 +197,7 @@ namespace TwnsSpwWarMenuPanel {
                 this._menuType = MenuType.Main;
                 this._updateListCommand();
             } else {
-                throw new Error(`Invalid menuType: ${type}`);
+                throw Helpers.newError(`Invalid menuType: ${type}`);
             }
         }
 
@@ -287,7 +287,7 @@ namespace TwnsSpwWarMenuPanel {
             } else if (type === MenuType.Advanced) {
                 return this._createDataForAdvancedMenu();
             } else {
-                throw new Error(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
+                throw Helpers.newError(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
             }
         }
 

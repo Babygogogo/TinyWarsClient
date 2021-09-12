@@ -1,7 +1,8 @@
 
-import Types        from "./Types";
-import StageManager from "./StageManager";
 import TwnsUiLabel  from "../ui/UiLabel";
+import Helpers      from "./Helpers";
+import StageManager from "./StageManager";
+import Types        from "./Types";
 
 namespace FloatText {
     const SHOW_TIME_MS      = 3000;
@@ -29,7 +30,7 @@ namespace FloatText {
 
             const layer = StageManager.getLayer(Types.LayerType.Notify2);
             if (layer == null) {
-                throw new Error(`FloatText.showFloatText() empty layer.`);
+                throw Helpers.newError(`FloatText.showFloatText() empty layer.`);
             }
 
             const floatText = new UiFloatText(_dataArray.splice(0, 1)[0]);

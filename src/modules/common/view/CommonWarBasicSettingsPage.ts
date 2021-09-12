@@ -121,7 +121,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             } else if (settingsType === WarBasicSettingsType.SpmSaveSlotComment) {
                 this._modifyAsSpmSaveSlotComment();
             } else {
-                throw new Error(`CommonWarBasicSettingsPage.SettingsRenderer._onTouchedBtnModify() invalid settingsType: ${settingsType}`);
+                throw Helpers.newError(`CommonWarBasicSettingsPage.SettingsRenderer._onTouchedBtnModify() invalid settingsType: ${settingsType}`);
             }
         }
         private _onTouchedBtnHelp(): void {
@@ -173,7 +173,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             } else if (settingsType === WarBasicSettingsType.SpmSaveSlotComment) {
                 this._updateViewAsSpmSaveSlotComment();
             } else {
-                throw new Error(`CommonWarBasicSettingsPage.SettingsRenderer._updateView() invalid settingsType: ${settingsType}.`);
+                throw Helpers.newError(`CommonWarBasicSettingsPage.SettingsRenderer._updateView() invalid settingsType: ${settingsType}.`);
             }
         }
         private _updateViewAsMapName(): void {

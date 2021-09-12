@@ -379,7 +379,7 @@ namespace McrModel {
                 },
             );
         } else {
-            throw new Error(`McrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            throw Helpers.newError(`McrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
         }
 
         return openData;

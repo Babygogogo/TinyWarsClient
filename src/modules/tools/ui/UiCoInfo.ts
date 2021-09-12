@@ -142,7 +142,7 @@ namespace TwnsUiCoInfo {
                 // nothing to do
 
             } else {
-                throw new Error(`Invalid coType: ${coType}`);
+                throw Helpers.newError(`Invalid coType: ${coType}`);
             }
 
             this._updateComponentsForSkill();

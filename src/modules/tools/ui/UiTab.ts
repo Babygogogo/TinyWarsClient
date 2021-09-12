@@ -76,7 +76,7 @@ namespace TwnsUiTab {
 
         private _setSelectedIndex(index: number): void {
             if (!this.getIsOpening()) {
-                throw new Error(`UiTab._setSelectedIndex() not opening.`);
+                throw Helpers.newError(`UiTab._setSelectedIndex() not opening.`);
             }
 
             const data = Helpers.getExisted(this._getTabDataArray()[index]);
@@ -111,7 +111,7 @@ namespace TwnsUiTab {
 
         public bindData(dataArray: DataForUiTab<DataForTabItemRenderer, DataForPage>[], selectedIndex = 0): void {
             if (!dataArray.length) {
-                throw new Error(`UiTab.bindData() empty data.`);
+                throw Helpers.newError(`UiTab.bindData() empty data.`);
             }
 
             if (!this.getIsOpening()) {

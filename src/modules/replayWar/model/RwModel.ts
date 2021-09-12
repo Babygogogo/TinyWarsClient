@@ -75,7 +75,7 @@ namespace RwModel {
         const war       = new RwWar();
         const initError = await war.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (initError) {
-            throw new Error(`RwModel.loadWar() initError: ${initError}`);
+            throw Helpers.newError(`RwModel.loadWar() initError: ${initError}`);
         }
 
         war.startRunning().startRunningView();

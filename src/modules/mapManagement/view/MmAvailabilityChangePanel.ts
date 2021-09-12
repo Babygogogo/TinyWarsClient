@@ -1,6 +1,7 @@
 
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -128,7 +129,7 @@ namespace TwnsMmAvailabilityChangePanel {
         private async _onTouchedBtnWarRule(): Promise<void> {
             const mapRawData = await WarMapModel.getRawData(this._getOpenData().mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (mapRawData == null) {
-                throw new Error(`MmAvailabilityChangePanel._onTouchedBtnWarRule() empty mapRawData.`);
+                throw Helpers.newError(`MmAvailabilityChangePanel._onTouchedBtnWarRule() empty mapRawData.`);
             }
 
             MmWarRulePanel.show(mapRawData);
@@ -164,7 +165,7 @@ namespace TwnsMmAvailabilityChangePanel {
             const complexInfo   = extraData ? extraData.mapComplexInfo : null;
             const availability  = complexInfo ? complexInfo.mapAvailability : null;
             if (availability == null) {
-                throw new Error(`MmAvailabilityChangePanel._updateImages() empty availability.`);
+                throw Helpers.newError(`MmAvailabilityChangePanel._updateImages() empty availability.`);
             }
 
             this._imgMcw.visible        = !!availability.canMcw;

@@ -1706,7 +1706,7 @@ namespace WarEventHelper {
             };
         } else {
             // TODO handle more condition types.
-            throw new Error(`WarEventHelper.resetCondition() invalid conditionType.`);
+            throw Helpers.newError(`WarEventHelper.resetCondition() invalid conditionType.`);
         }
     }
 
@@ -1750,7 +1750,7 @@ namespace WarEventHelper {
         } else if (condition.WecPlayerAliveStateEqualTo) {
             WeConditionModifyPanel12.show({ fullData, condition });
         } else {
-            throw new Error(`WarEventHelper.openConditionModifyPanel() invalid condition.`);
+            throw Helpers.newError(`WarEventHelper.openConditionModifyPanel() invalid condition.`);
         }
     }
 
@@ -1794,7 +1794,7 @@ namespace WarEventHelper {
                 dataArray: [],
             };
         } else {
-            throw new Error(`WarEventHelper.resetCondition() invalid conditionType.`);
+            throw Helpers.newError(`WarEventHelper.resetCondition() invalid conditionType.`);
         }
     }
 
@@ -1811,7 +1811,7 @@ namespace WarEventHelper {
         } else if (action.WeaDialogue) {
             TwnsWeActionModifyPanel3.WeActionModifyPanel3.show({ war, fullData, action });
         } else {
-            throw new Error(`WarEventHelper.openActionModifyPanel() invalid action.`);
+            throw Helpers.newError(`WarEventHelper.openActionModifyPanel() invalid action.`);
         }
     }
 
@@ -2016,7 +2016,7 @@ namespace WarEventHelper {
     export function addDefaultCondition(fullData: IWarEventFullData, nodeId: number): number { // DONE
         const node = getNode(fullData, nodeId);
         if (node == null) {
-            throw new Error(`Empty node.`);
+            throw Helpers.newError(`Empty node.`);
         }
 
         if (node.conditionIdArray == null) {

@@ -228,7 +228,7 @@ namespace TwnsMeDrawer {
                 // nothing to do
 
             } else {
-                throw new Error(`MeDrawer._handleAction() invalid mode.`);
+                throw Helpers.newError(`MeDrawer._handleAction() invalid mode.`);
             }
 
             this._getWar().setIsMapModified(true);

@@ -350,16 +350,16 @@ namespace TwnsBwUnitMap {
         public setUnitLoaded(unit: BwUnit): void {
             const loadedUnits = this.getLoadedUnits();
             if (loadedUnits == null) {
-                throw new Error(`BwUnitMap.setUnitLoaded() the map is not initialized.`);
+                throw Helpers.newError(`BwUnitMap.setUnitLoaded() the map is not initialized.`);
             }
 
             const unitId = unit.getUnitId();
             if (unitId == null) {
-                throw new Error(`BwUnitMap.setUnitLoaded() the unit has no unitId.`);
+                throw Helpers.newError(`BwUnitMap.setUnitLoaded() the unit has no unitId.`);
             }
 
             if (loadedUnits.has(unitId)) {
-                throw new Error(`BwUnitMap.setUnitLoaded() the unit is already loaded?!?.`);
+                throw Helpers.newError(`BwUnitMap.setUnitLoaded() the unit is already loaded?!?.`);
             }
 
             loadedUnits.set(unitId, unit);
@@ -375,15 +375,15 @@ namespace TwnsBwUnitMap {
             const mapSize   = this.getMapSize();
             const map       = this._getMap();
             if ((!mapSize) || (!map)) {
-                throw new Error(`BwUnitMap.setUnitOnMap() the map is not initialized.`);
+                throw Helpers.newError(`BwUnitMap.setUnitOnMap() the map is not initialized.`);
             }
 
             const gridIndex = unit.getGridIndex();
             if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
-                throw new Error(`BwUnitMap.setUnitOnMap() the unit is outside map! gridIndex: ${JSON.stringify(gridIndex)}`);
+                throw Helpers.newError(`BwUnitMap.setUnitOnMap() the unit is outside map! gridIndex: ${JSON.stringify(gridIndex)}`);
             }
             if (this.getUnitOnMap(gridIndex)) {
-                throw new Error(`BwUnitMap.setUnitOnMap() another unit exists in the same grid! gridIndex: ${JSON.stringify(gridIndex)}`);
+                throw Helpers.newError(`BwUnitMap.setUnitOnMap() another unit exists in the same grid! gridIndex: ${JSON.stringify(gridIndex)}`);
             }
 
             map[gridIndex.x][gridIndex.y] = unit;

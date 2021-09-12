@@ -429,9 +429,9 @@ namespace TwnsBwCursorView {
                         targetGridIndex : gridIndex,
                     });
                     if (errorCode) {
-                        throw new Error(`BwCursorView._updateConForDamage() errorCode: ${errorCode}.`);
+                        throw Helpers.newError(`BwCursorView._updateConForDamage() errorCode: ${errorCode}.`);
                     } else if (battleDamageInfoArray == null) {
-                        throw new Error(`BwCursorView._updateConForDamage() empty battleDamageInfoArray.`);
+                        throw Helpers.newError(`BwCursorView._updateConForDamage() empty battleDamageInfoArray.`);
                     } else {
                         con.visible = true;
 
@@ -442,9 +442,9 @@ namespace TwnsBwCursorView {
                             unitMap,
                         });
                         if (errorCodeForDamages) {
-                            throw new Error(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
+                            throw Helpers.newError(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
                         } else if (damages == null) {
-                            throw new Error(`BwCursorView._updateConForDamage() empty damages.`);
+                            throw Helpers.newError(`BwCursorView._updateConForDamage() empty damages.`);
                         }
 
                         const { attackDamage, counterDamage } = damages;
@@ -471,9 +471,9 @@ namespace TwnsBwCursorView {
                         targetGridIndex : gridIndex,
                     });
                     if (errorCode) {
-                        throw new Error(`BwCursorView._updateConForDamage() errorCode: ${errorCode}.`);
+                        throw Helpers.newError(`BwCursorView._updateConForDamage() errorCode: ${errorCode}.`);
                     } else if (battleDamageInfoArray == null) {
-                        throw new Error(`BwCursorView._updateConForDamage() empty battleDamageInfoArray.`);
+                        throw Helpers.newError(`BwCursorView._updateConForDamage() empty battleDamageInfoArray.`);
                     } else {
                         con.visible = true;
 
@@ -484,9 +484,9 @@ namespace TwnsBwCursorView {
                             unitMap,
                         });
                         if (errorCodeForDamages) {
-                            throw new Error(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
+                            throw Helpers.newError(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
                         } else if (damages == null) {
-                            throw new Error(`BwCursorView._updateConForDamage() empty damages.`);
+                            throw Helpers.newError(`BwCursorView._updateConForDamage() empty damages.`);
                         }
 
                         const { attackDamage, counterDamage } = damages;

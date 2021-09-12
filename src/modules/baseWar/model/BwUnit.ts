@@ -122,7 +122,7 @@ namespace TwnsBwUnit {
 
         public startRunning(war: BwWar): void {
             if (war.getConfigVersion() !== this.getConfigVersion()) {
-                throw new Error(`BwUnit.startRunning() invalid configVersion.`);
+                throw Helpers.newError(`BwUnit.startRunning() invalid configVersion.`);
                 return;
             }
 
@@ -309,7 +309,7 @@ namespace TwnsBwUnit {
             if (((maxHp == null) && (hp != null))               ||
                 ((maxHp != null) && ((hp < 0) || (hp > maxHp)))
             ) {
-                throw new Error(`BwUnit.setCurrentHp() invalid hp: ${hp}, maxHp: ${maxHp}`);
+                throw Helpers.newError(`BwUnit.setCurrentHp() invalid hp: ${hp}, maxHp: ${maxHp}`);
             }
             this._currentHp = hp;
         }
@@ -331,7 +331,7 @@ namespace TwnsBwUnit {
             if (data.deltaHp) {
                 const hp = this.getCurrentHp();
                 if (hp == null) {
-                    throw new Error(`BwUnit.updateByRepairData() invalid currentHp: ${hp}`);
+                    throw Helpers.newError(`BwUnit.updateByRepairData() invalid currentHp: ${hp}`);
                 } else {
                     this.setCurrentHp(hp + data.deltaHp);
                 }
@@ -339,7 +339,7 @@ namespace TwnsBwUnit {
             if (data.deltaFuel) {
                 const fuel = this.getCurrentFuel();
                 if (fuel == null) {
-                    throw new Error(`BwUnit.updateByRepairData() invalid currentFuel: ${fuel}`);
+                    throw Helpers.newError(`BwUnit.updateByRepairData() invalid currentFuel: ${fuel}`);
                 } else {
                     this.setCurrentFuel(fuel + data.deltaFuel);
                 }
@@ -347,7 +347,7 @@ namespace TwnsBwUnit {
             if (data.deltaPrimaryWeaponAmmo) {
                 const ammo = this.getPrimaryWeaponCurrentAmmo();
                 if (ammo == null) {
-                    throw new Error(`BwUnit.updateByRepairData() invalid primary current ammo: ${ammo}`);
+                    throw Helpers.newError(`BwUnit.updateByRepairData() invalid primary current ammo: ${ammo}`);
                 } else {
                     this.setPrimaryWeaponCurrentAmmo(ammo + data.deltaPrimaryWeaponAmmo);
                 }
@@ -355,7 +355,7 @@ namespace TwnsBwUnit {
             if (data.deltaFlareAmmo) {
                 const ammo = this.getFlareCurrentAmmo();
                 if (ammo == null) {
-                    throw new Error(`BwUnit.updateByRepairData() invalid flare ammo: ${ammo}`);
+                    throw Helpers.newError(`BwUnit.updateByRepairData() invalid flare ammo: ${ammo}`);
                 } else {
                     this.setFlareCurrentAmmo(ammo + data.deltaFlareAmmo);
                 }
@@ -385,7 +385,7 @@ namespace TwnsBwUnit {
             if (((maxAmmo == null) && (ammo != null))                                   ||
                 ((maxAmmo != null) && ((ammo == null) || (ammo < 0) || (ammo > maxAmmo)))
             ){
-                throw new Error(`Invalid ammo: ${ammo}`);
+                throw Helpers.newError(`Invalid ammo: ${ammo}`);
             }
 
             this._primaryWeaponCurrentAmmo = ammo;
@@ -398,7 +398,7 @@ namespace TwnsBwUnit {
             } else {
                 const currentAmmo = this.getPrimaryWeaponCurrentAmmo();
                 if (currentAmmo == null) {
-                    throw new Error(`Empty currentAmmo.`);
+                    throw Helpers.newError(`Empty currentAmmo.`);
                 } else {
                     return maxAmmo - currentAmmo;
                 }
@@ -440,7 +440,7 @@ namespace TwnsBwUnit {
             for (const skillId of player.getCoCurrentSkills()) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
                 if (skillCfg == null) {
-                    throw new Error(`Empty skillCfg.`);
+                    throw Helpers.newError(`Empty skillCfg.`);
                 }
 
                 {
@@ -544,7 +544,7 @@ namespace TwnsBwUnit {
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
                 if (skillCfg == null) {
-                    throw new Error(`Empty skillCfg.`);
+                    throw Helpers.newError(`Empty skillCfg.`);
                 }
 
                 {
@@ -594,7 +594,7 @@ namespace TwnsBwUnit {
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
                 if (skillCfg == null) {
-                    throw new Error(`Empty skillCfg.`);
+                    throw Helpers.newError(`Empty skillCfg.`);
                 }
 
                 const bonusCfg = skillCfg.selfLuckRangeBonus;
@@ -621,13 +621,13 @@ namespace TwnsBwUnit {
         public checkHasSecondaryWeapon(): boolean {
             const configVersion = this.getConfigVersion();
             if (configVersion == null) {
-                throw new Error(`BwUnit.checkHasSecondaryWeapon() configVersion is null.`);
+                throw Helpers.newError(`BwUnit.checkHasSecondaryWeapon() configVersion is null.`);
                 return false;
             }
 
             const unitType = this.getUnitType();
             if (unitType == null) {
-                throw new Error(`BwUnit.checkHasSecondaryWeapon() unitType is null.`);
+                throw Helpers.newError(`BwUnit.checkHasSecondaryWeapon() unitType is null.`);
                 return false;
             }
 
@@ -771,7 +771,7 @@ namespace TwnsBwUnit {
         }
         public setIsCapturingTile(isCapturing: boolean): void {
             if ((!this.checkIsCapturer()) && (isCapturing)) {
-                throw new Error(`UnitModel.setIsCapturingTile() error, isCapturing: ${isCapturing}`);
+                throw Helpers.newError(`UnitModel.setIsCapturingTile() error, isCapturing: ${isCapturing}`);
             }
             this._isCapturingTile = isCapturing;
         }
@@ -805,7 +805,7 @@ namespace TwnsBwUnit {
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
                 if (skillCfg == null) {
-                    throw new Error(`Empty skillCfg.`);
+                    throw Helpers.newError(`Empty skillCfg.`);
                 }
 
                 {
@@ -862,7 +862,7 @@ namespace TwnsBwUnit {
         }
         public setCurrentFuel(fuel: number): void {
             if ((fuel < 0) || (fuel > this.getMaxFuel())) {
-                throw new Error(`Invalid fuel: ${fuel}`);
+                throw Helpers.newError(`Invalid fuel: ${fuel}`);
             }
 
             this._currentFuel = fuel;
@@ -886,7 +886,7 @@ namespace TwnsBwUnit {
             } else {
                 const cfg = templateCfg.diveCfgs;
                 if (cfg == null) {
-                    throw new Error(`Empty cfg.`);
+                    throw Helpers.newError(`Empty cfg.`);
                 }
                 return cfg[0];
             }
@@ -952,7 +952,7 @@ namespace TwnsBwUnit {
             if (((maxAmmo == null) && (ammo != null))                                   ||
                 ((maxAmmo != null) && ((ammo == null) || (ammo < 0) || (ammo > maxAmmo)))
             ) {
-                throw new Error(`Invalid ammo: ${ammo}`);
+                throw Helpers.newError(`Invalid ammo: ${ammo}`);
             }
 
             this._flareCurrentAmmo = ammo;
@@ -965,7 +965,7 @@ namespace TwnsBwUnit {
             } else {
                 const currentAmmo = this.getFlareCurrentAmmo();
                 if (currentAmmo == null) {
-                    throw new Error(`Empty currentAmmo.`);
+                    throw Helpers.newError(`Empty currentAmmo.`);
                 } else {
                     return maxAmmo - currentAmmo;
                 }
@@ -979,7 +979,7 @@ namespace TwnsBwUnit {
             } else {
                 const currentAmmo = this.getFlareCurrentAmmo();
                 if (currentAmmo == null) {
-                    throw new Error(`Empty currentAmmo.`);
+                    throw Helpers.newError(`Empty currentAmmo.`);
                 }
 
                 return currentAmmo <= maxAmmo * 0.4;
@@ -1024,7 +1024,7 @@ namespace TwnsBwUnit {
         public getProduceUnitCost(): number {
             const produceUnitType = this.getProduceUnitType();
             if (produceUnitType == null) {
-                throw new Error(`Empty produceUnitType.`);
+                throw Helpers.newError(`Empty produceUnitType.`);
             }
 
             const cfgCost   = ConfigManager.getUnitTemplateCfg(this.getConfigVersion(), produceUnitType).productionCost;
@@ -1044,7 +1044,7 @@ namespace TwnsBwUnit {
             if (((maxMaterial == null) && (material != null))                                               ||
                 ((maxMaterial != null) && ((material == null) || (material < 0) || (material > maxMaterial)))
             ) {
-                throw new Error(`Invalid material: ${material}`);
+                throw Helpers.newError(`Invalid material: ${material}`);
             }
 
             this._currentProduceMaterial = material;
@@ -1057,7 +1057,7 @@ namespace TwnsBwUnit {
             } else {
                 const currentMaterial = this.getCurrentProduceMaterial();
                 if (currentMaterial == null) {
-                    throw new Error(`BwUnit.checkIsProduceMaterialInShort() empty currentMaterial.`);
+                    throw Helpers.newError(`BwUnit.checkIsProduceMaterialInShort() empty currentMaterial.`);
                     return false;
                 }
 
@@ -1145,7 +1145,7 @@ namespace TwnsBwUnit {
         public setCurrentPromotion(promotion: number): void {
             const maxPromotion = this.getMaxPromotion();
             if ((maxPromotion == null) || (promotion < 0) || (promotion > maxPromotion)) {
-                throw new Error(`BwUnit.setCurrentPromotion() invalid promotion: ${promotion}, maxPromotion: ${maxPromotion}`);
+                throw Helpers.newError(`BwUnit.setCurrentPromotion() invalid promotion: ${promotion}, maxPromotion: ${maxPromotion}`);
             }
             this._currentPromotion = promotion;
         }
@@ -1153,7 +1153,7 @@ namespace TwnsBwUnit {
             const currPromotion = this.getCurrentPromotion();
             const maxPromotion  = this.getMaxPromotion();
             if ((currPromotion == null) || (maxPromotion == null)) {
-                throw new Error(`BwUnit.addPromotion() invalid promotion: ${currPromotion}, maxPromotion: ${maxPromotion}`);
+                throw Helpers.newError(`BwUnit.addPromotion() invalid promotion: ${currPromotion}, maxPromotion: ${maxPromotion}`);
             } else {
                 this.setCurrentPromotion(Math.min(maxPromotion, currPromotion + 1));
             }
@@ -1182,7 +1182,7 @@ namespace TwnsBwUnit {
         }
         public setIsBuildingTile(isBuilding: boolean): void {
             if ((!this.checkIsTileBuilder()) && (isBuilding)) {
-                throw new Error(`UnitModel.setIsBuildingTile() error, isBuilding: ${isBuilding}`);
+                throw Helpers.newError(`UnitModel.setIsBuildingTile() error, isBuilding: ${isBuilding}`);
             }
             this._isBuildingTile = isBuilding;
         }
@@ -1193,13 +1193,13 @@ namespace TwnsBwUnit {
         public checkCanBuildOnTile(tile: BwTile): boolean {
             const tileObjectType = tile.getObjectType();
             if (tileObjectType == null) {
-                throw new Error(`BwUnit.checkCanBuildOnTile() tileObjectType is empty.`);
+                throw Helpers.newError(`BwUnit.checkCanBuildOnTile() tileObjectType is empty.`);
                 return false;
             }
 
             const tileBaseType = tile.getBaseType();
             if (tileBaseType == null) {
-                throw new Error(`BwUnit.checkCanBuildOnTile() empty tileBaseType.`);
+                throw Helpers.newError(`BwUnit.checkCanBuildOnTile() empty tileBaseType.`);
                 return false;
             }
 
@@ -1231,7 +1231,7 @@ namespace TwnsBwUnit {
             if (((maxMaterial == null) && (material != null))                                               ||
                 ((maxMaterial != null) && ((material == null) || (material < 0) || (material > maxMaterial)))
             ) {
-                throw new Error(`Invalid material: ${material}`);
+                throw Helpers.newError(`Invalid material: ${material}`);
             }
 
             this._currentBuildMaterial = material;
@@ -1244,7 +1244,7 @@ namespace TwnsBwUnit {
             } else {
                 const currentMaterial = this.getCurrentBuildMaterial();
                 if (currentMaterial == null) {
-                    throw new Error(`BwUnit.checkIsBuildMaterialInShort() empty currentMaterial.`);
+                    throw Helpers.newError(`BwUnit.checkIsBuildMaterialInShort() empty currentMaterial.`);
                     return false;
                 }
 
@@ -1295,13 +1295,13 @@ namespace TwnsBwUnit {
         public checkCanDropLoadedUnit(tileType: TileType): boolean {
             const configVersion = this.getConfigVersion();
             if (configVersion == null) {
-                throw new Error(`BwUnit.checkCanDropLoadedUnit() configVersion is empty.`);
+                throw Helpers.newError(`BwUnit.checkCanDropLoadedUnit() configVersion is empty.`);
                 return false;
             }
 
             const cfg = this._getTemplateCfg();
             if (cfg == null) {
-                throw new Error(`BwUnit.checkCanDropLoadedUnit() cfg is empty.`);
+                throw Helpers.newError(`BwUnit.checkCanDropLoadedUnit() cfg is empty.`);
                 return false;
             }
 
@@ -1374,13 +1374,13 @@ namespace TwnsBwUnit {
         public checkCanSupplyAdjacentUnit(unit: BwUnit): boolean {
             const thisGridIndex = this.getGridIndex();
             if (thisGridIndex == null) {
-                throw new Error(`BwUnit.checkCanSupplyAdjacentUnit() thisGridIndex is empty.`);
+                throw Helpers.newError(`BwUnit.checkCanSupplyAdjacentUnit() thisGridIndex is empty.`);
                 return false;
             }
 
             const unitGridIndex = unit.getGridIndex();
             if (unitGridIndex == null) {
-                throw new Error(`BwUnit.checkCanSupplyAdjacentUnit() unitGridIndex is empty.`);
+                throw Helpers.newError(`BwUnit.checkCanSupplyAdjacentUnit() unitGridIndex is empty.`);
                 return false;
             }
 
@@ -1395,13 +1395,13 @@ namespace TwnsBwUnit {
         public checkCanBeSuppliedWithFuel(): boolean {
             const maxFuel = this.getMaxFuel();
             if (maxFuel == null) {
-                throw new Error(`BwUnit.checkCanBeSuppliedWithFuel() empty maxFuel.`);
+                throw Helpers.newError(`BwUnit.checkCanBeSuppliedWithFuel() empty maxFuel.`);
                 return false;
             }
 
             const currentFuel = this.getCurrentFuel();
             if (currentFuel == null) {
-                throw new Error(`BwUnit.checkCanBeSuppliedWithFuel() empty currentFuel.`);
+                throw Helpers.newError(`BwUnit.checkCanBeSuppliedWithFuel() empty currentFuel.`);
                 return false;
             }
 
@@ -1414,7 +1414,7 @@ namespace TwnsBwUnit {
             } else {
                 const currentAmmo = this.getPrimaryWeaponCurrentAmmo();
                 if (currentAmmo == null) {
-                    throw new Error(`BwUnit.checkCanBeSuppliedWithPrimaryWeaponAmmo() empty currentAmmo.`);
+                    throw Helpers.newError(`BwUnit.checkCanBeSuppliedWithPrimaryWeaponAmmo() empty currentAmmo.`);
                     return false;
                 }
 
@@ -1428,7 +1428,7 @@ namespace TwnsBwUnit {
             } else {
                 const currentAmmo = this.getFlareCurrentAmmo();
                 if (currentAmmo == null) {
-                    throw new Error(`BwUnit.checkCanBeSuppliedWithFlareAmmo() empty currentAmmo.`);
+                    throw Helpers.newError(`BwUnit.checkCanBeSuppliedWithFlareAmmo() empty currentAmmo.`);
                     return false;
                 }
 
@@ -1512,19 +1512,19 @@ namespace TwnsBwUnit {
         public checkIsTrueVision(gridIndex: GridIndex): boolean {
             const configVersion = this.getConfigVersion();
             if (configVersion == null) {
-                throw new Error(`BwUnit.checkIsTrueVision() configVersion is empty.`);
+                throw Helpers.newError(`BwUnit.checkIsTrueVision() configVersion is empty.`);
                 return false;
             }
 
             const unitType = this.getUnitType();
             if (unitType == null) {
-                throw new Error(`BwUnit.checkIsTrueVision() unitType is empty.`);
+                throw Helpers.newError(`BwUnit.checkIsTrueVision() unitType is empty.`);
                 return false;
             }
 
             const player = this.getPlayer();
             if (!player) {
-                throw new Error(`BwUnit.checkIsTrueVision() player is empty.`);
+                throw Helpers.newError(`BwUnit.checkIsTrueVision() player is empty.`);
                 return false;
             }
 
@@ -1534,7 +1534,7 @@ namespace TwnsBwUnit {
 
             const coZoneRadius = player.getCoZoneRadius();
             if (coZoneRadius == null) {
-                throw new Error(`BwUnit.checkIsTrueVision() empty coZoneRadius.`);
+                throw Helpers.newError(`BwUnit.checkIsTrueVision() empty coZoneRadius.`);
                 return false;
             }
 
@@ -1563,13 +1563,13 @@ namespace TwnsBwUnit {
         public checkCanJoinUnit(unit: BwUnit): boolean {
             const hp1 = unit.getNormalizedCurrentHp();
             if (hp1 == null) {
-                throw new Error(`BwUnit.checkCanJoinUnit() empty hp1.`);
+                throw Helpers.newError(`BwUnit.checkCanJoinUnit() empty hp1.`);
                 return false;
             }
 
             const hp2 = unit.getNormalizedMaxHp();
             if (hp2 == null) {
-                throw new Error(`BwUnit.checkCanJoinUnit() empty hp2.`);
+                throw Helpers.newError(`BwUnit.checkCanJoinUnit() empty hp2.`);
                 return false;
             }
 
@@ -1583,7 +1583,7 @@ namespace TwnsBwUnit {
 
         public getJoinIncome(unit: BwUnit): number {
             if (!this.checkCanJoinUnit(unit)) {
-                throw new Error(`Can not join.`);
+                throw Helpers.newError(`Can not join.`);
             }
 
             const maxHp         = this.getNormalizedMaxHp();

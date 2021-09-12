@@ -228,7 +228,7 @@ namespace TwnsBwPlayerManager {
                 ) {
                     const teamIndex = player.getTeamIndex();
                     if (teamIndex == null) {
-                        throw new Error(`BwPlayerManager.getAliveTeamIndexes() empty teamIndex.`);
+                        throw Helpers.newError(`BwPlayerManager.getAliveTeamIndexes() empty teamIndex.`);
                     } else {
                         indexes.add(teamIndex);
                     }

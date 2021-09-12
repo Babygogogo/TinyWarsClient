@@ -233,11 +233,11 @@ namespace TwnsSpwActionPlanner {
         }
 
         public setStateRequestingPlayerVoteForDraw(): void {
-            throw new Error(`Should not be called.`);
+            throw Helpers.newError(`Should not be called.`);
         }
 
         public setStateRequestingPlayerSurrender(): void {
-            throw new Error(`Should not be called.`);
+            throw Helpers.newError(`Should not be called.`);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

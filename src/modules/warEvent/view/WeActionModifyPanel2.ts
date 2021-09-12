@@ -163,7 +163,7 @@ namespace TwnsWeActionModifyPanel2 {
             case PlayerAliveState.Alive : return Lang.getText(LangTextType.A0214);
             case PlayerAliveState.Dying : return Lang.getText(LangTextType.A0215);
             case PlayerAliveState.Dead  : return Lang.getText(LangTextType.A0216);
-            default                     : throw new Error(`Invalid playerAliveState: ${playerAliveState}`);
+            default                     : throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
         }
     }
 }

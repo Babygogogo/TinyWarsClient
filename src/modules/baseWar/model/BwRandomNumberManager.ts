@@ -21,12 +21,12 @@ namespace TwnsBwRandomNumberManager {
             if (isNeedSeedRandom) {
                 // TODO: check if the states are valid.
                 if (initialState == null) {
-                    throw new Error(`Empty initialState.`);
+                    throw Helpers.newError(`Empty initialState.`);
                 }
                 this._setSeedRandomInitialState(initialState);
 
                 if (currentState == null) {
-                    throw new Error(`Empty currentState.`);
+                    throw Helpers.newError(`Empty currentState.`);
                 }
                 this._setRandomNumberGenerator(new Math.seedrandom("", { state: currentState }));
             }

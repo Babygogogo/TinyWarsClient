@@ -1,4 +1,5 @@
 
+import Helpers      from "../../tools/helpers/Helpers";
 import ProtoTypes   from "../../tools/proto/ProtoTypes";
 
 namespace SpmSrwRankModel {
@@ -15,7 +16,7 @@ namespace SpmSrwRankModel {
     export function updateOnMsgSpmGetSrwRankInfo(data: ProtoTypes.NetMessage.MsgSpmGetSrwRankInfo.IS): void {
         const mapId = data.mapId;
         if (mapId == null) {
-            throw new Error(`Empty mapId.`);
+            throw Helpers.newError(`Empty mapId.`);
         }
 
         _rankInfoDict.set(mapId, data.infoArray || []);

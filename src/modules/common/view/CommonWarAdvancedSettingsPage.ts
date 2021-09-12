@@ -234,7 +234,7 @@ namespace TwnsCommonWarAdvancedSettingsPage {
             } else if (playerRuleType === PlayerRuleType.AiCoIdInCcw) {
                 this._updateViewAsAiCoIdInCcw();
             } else {
-                throw new Error(`CommonWarAdvancedSettingsPage.InfoRenderer._updateView() invalid playerRuleType: ${playerRuleType}`);
+                throw Helpers.newError(`CommonWarAdvancedSettingsPage.InfoRenderer._updateView() invalid playerRuleType: ${playerRuleType}`);
             }
         }
         private _updateViewAsTeamIndex(): void {

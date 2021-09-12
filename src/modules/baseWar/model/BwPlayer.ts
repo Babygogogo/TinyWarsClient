@@ -361,7 +361,7 @@ namespace TwnsBwPlayer {
                 case Types.CoSkillType.Passive      : return cfg.passiveSkills || [];
                 case Types.CoSkillType.Power        : return cfg.powerSkills || [];
                 case Types.CoSkillType.SuperPower   : return cfg.superPowerSkills || [];
-                default                             : throw new Error(`Invalid skillType: ${skillType}`);
+                default                             : throw Helpers.newError(`Invalid skillType: ${skillType}`);
             }
         }
         public checkCoIsUsingActiveSkill(): boolean {

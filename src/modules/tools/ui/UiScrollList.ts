@@ -82,12 +82,12 @@ namespace TwnsUiScrollList {
 
         private _onOpened(): void {
             if (this.numChildren !== 1) {
-                throw new Error(`UiScrollList._onAllSkinPartsAdded() this.numChildren !== 1`);
+                throw Helpers.newError(`UiScrollList._onAllSkinPartsAdded() this.numChildren !== 1`);
             }
 
             const list = this.getChildAt(0);
             if ((list == null) || (!(list instanceof eui.List))) {
-                throw new Error(`UiScrollList._onAllSkinPartsAdded() invalid list!`);
+                throw Helpers.newError(`UiScrollList._onAllSkinPartsAdded() invalid list!`);
             }
 
             this._setNotifyListenerArray([
@@ -235,7 +235,7 @@ namespace TwnsUiScrollList {
 
             const dataProvider = this._getDataProvider();
             if (dataProvider == null) {
-                throw new Error(`UiScrollList.bindData() empty dataProvider.`);
+                throw Helpers.newError(`UiScrollList.bindData() empty dataProvider.`);
             }
 
             dataProvider.replaceAll(dataArray);
@@ -250,11 +250,11 @@ namespace TwnsUiScrollList {
             if (this.getIsOpening()) {
                 const dataProvider = this._getDataProvider();
                 if (dataProvider == null) {
-                    throw new Error(`UiScrollList.updateSingleData() empty dataProvider.`);
+                    throw Helpers.newError(`UiScrollList.updateSingleData() empty dataProvider.`);
                 }
 
                 if ((index < 0) || (index >= dataProvider.length)) {
-                    throw new Error(`UiScrollList.updateSingleData() invalid index.`);
+                    throw Helpers.newError(`UiScrollList.updateSingleData() invalid index.`);
                 } else {
                     dataProvider.replaceItemAt(data, index);
                 }
@@ -272,7 +272,7 @@ namespace TwnsUiScrollList {
             if (this.getIsOpening()) {
                 const dataProvider = this._getDataProvider();
                 if (dataProvider == null) {
-                    throw new Error(`UiScrollList.refresh() empty dataProvider.`);
+                    throw Helpers.newError(`UiScrollList.refresh() empty dataProvider.`);
                 }
 
                 dataProvider.refresh();
@@ -289,7 +289,7 @@ namespace TwnsUiScrollList {
             if (this.getIsOpening()) {
                 const dataProvider = this._getDataProvider();
                 if (dataProvider == null) {
-                    throw new Error(`UiScrollList.clear() empty dataProvider.`);
+                    throw Helpers.newError(`UiScrollList.clear() empty dataProvider.`);
                 }
 
                 dataProvider.removeAll();
@@ -310,7 +310,7 @@ namespace TwnsUiScrollList {
             return this.getIsOpening() ? this._getList().selectedItem : null;
         }
 
-        private _findIndex(predicate: (v: DataForRenderer) => boolean): number | null {
+        public findIndex(predicate: (v: DataForRenderer) => boolean): number | null {
             return this.getIsOpening()
                 ? Helpers.getExisted(this._getDataProvider()).source.findIndex(predicate)
                 : null;
@@ -319,7 +319,7 @@ namespace TwnsUiScrollList {
             if (!this.getIsOpening()) {
                 return null;
             } else {
-                const firstIndex = Helpers.getExisted(this._findIndex(predicate));
+                const firstIndex = Helpers.getExisted(this.findIndex(predicate));
                 if (firstIndex >= 0) {
                     return firstIndex;
                 } else {
@@ -334,7 +334,7 @@ namespace TwnsUiScrollList {
             if (!this.getIsOpening()) {
                 return null;
             } else {
-                const firstIndex = Helpers.getExisted(this._findIndex(predicate));
+                const firstIndex = Helpers.getExisted(this.findIndex(predicate));
                 if (firstIndex >= 0) {
                     return firstIndex;
                 } else {

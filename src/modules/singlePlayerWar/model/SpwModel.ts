@@ -8,6 +8,7 @@ import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import FlowManager          from "../../tools/helpers/FlowManager";
+import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";
@@ -54,7 +55,7 @@ namespace SpwModel {
         const war       = createWarByWarData(warData);
         const initError = await war.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (initError) {
-            throw new Error(`InitError: ${initError}`);
+            throw Helpers.newError(`InitError: ${initError}`);
         }
 
         war.startRunning().startRunningView();
@@ -128,7 +129,7 @@ namespace SpwModel {
 
     async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
         if (!checkCanExecuteAction(war)) {
-            throw new Error(`SpwModel.handlePlayerOrRobotAction() checkCanExecuteAction(war) is not true!`);
+            throw Helpers.newError(`SpwModel.handlePlayerOrRobotAction() checkCanExecuteAction(war) is not true!`);
         }
 
         return await reviseAndExecute(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
@@ -191,13 +192,13 @@ namespace SpwModel {
         // Handle the WaitBeginTurn phase.
         const turnPhaseCode = war.getTurnPhaseCode();
         if (turnPhaseCode == null) {
-            throw new Error(`SpwModel.checkAndHandleSystemActions() empty turnPhaseCode.`);
+            throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() empty turnPhaseCode.`);
         }
 
         const playerManager = war.getPlayerManager();
         const playerInTurn  = playerManager.getPlayerInTurn();
         if (playerInTurn == null) {
-            throw new Error(`SpwModel.checkAndHandleSystemActions() empty playerInTurn.`);
+            throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() empty playerInTurn.`);
         }
 
         if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
@@ -209,7 +210,7 @@ namespace SpwModel {
         // Handle the booted players (make them dying).
         if (war.checkIsBoot()) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                throw new Error(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`);
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`);
             }
 
             await handleSystemHandleBootPlayer(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
@@ -222,7 +223,7 @@ namespace SpwModel {
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
             const player = playerManager.getPlayer(playerIndex);
             if (player == null) {
-                throw new Error(`SpwModel.checkAndHandleSystemActions() empty player.`);
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() empty player.`);
             }
 
             if (player.getAliveState() === Types.PlayerAliveState.Dying) {
@@ -235,7 +236,7 @@ namespace SpwModel {
         // Handle neutral player (end turn).
         if (playerInTurn.checkIsNeutral()) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                throw new Error(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`);
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`);
             }
 
             await handleSystemEndTurn(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
@@ -246,7 +247,7 @@ namespace SpwModel {
         // Handle the dead player in turn (end turn).
         if (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                throw new Error(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`);
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`);
             }
 
             await handleSystemEndTurn(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
@@ -314,14 +315,14 @@ namespace SpwModel {
             action      : revisedAction,
         } = WarActionReviser.revise(war, action);
         if (errorCodeForRevisedAction) {
-            throw new Error(`SpwModel.reviseAndExecute() errorCodeForRevisedAction: ${errorCodeForRevisedAction}.`);
+            throw Helpers.newError(`SpwModel.reviseAndExecute() errorCodeForRevisedAction: ${errorCodeForRevisedAction}.`);
         } else if (revisedAction == null) {
-            throw new Error(`SpwModel.reviseAndExecute() empty revisedAction!.`);
+            throw Helpers.newError(`SpwModel.reviseAndExecute() empty revisedAction!.`);
         }
 
         const errorCodeForExecute = await WarActionExecutor.checkAndExecute(war, revisedAction, false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (errorCodeForExecute) {
-            throw new Error(`SpwModel.reviseAndExecute() errorCodeForExecute: ${errorCodeForExecute}.`);
+            throw Helpers.newError(`SpwModel.reviseAndExecute() errorCodeForExecute: ${errorCodeForExecute}.`);
         }
 
         war.getExecutedActionManager().addExecutedAction(revisedAction);
@@ -336,7 +337,7 @@ namespace SpwModel {
         } else if (warData.settingsForSrw) {
             return new SrwWar();
         } else {
-            throw new Error(`Invalid warData.`);
+            throw Helpers.newError(`Invalid warData.`);
         }
     }
 }

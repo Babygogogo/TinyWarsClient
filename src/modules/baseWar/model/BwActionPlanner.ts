@@ -169,22 +169,22 @@ namespace TwnsBwActionPlanner {
                 this._setStateRequestingUnitAttackTile(gridIndex);
 
             } else if (nextState === State.RequestingUnitBeLoaded) {
-                throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 1, nextState: ${nextState}`);
+                throw Helpers.newError(`McwActionPlanner._onNotifyMcwCursorTapped() error 1, nextState: ${nextState}`);
 
             } else if (nextState === State.RequestingUnitBuildTile) {
-                throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 2, nextState: ${nextState}`);
+                throw Helpers.newError(`McwActionPlanner._onNotifyMcwCursorTapped() error 2, nextState: ${nextState}`);
 
             } else if (nextState === State.RequestingUnitCaptureTile) {
-                throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 3, nextState: ${nextState}`);
+                throw Helpers.newError(`McwActionPlanner._onNotifyMcwCursorTapped() error 3, nextState: ${nextState}`);
 
             } else if (nextState === State.RequestingUnitDive) {
-                throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 4, nextState: ${nextState}`);
+                throw Helpers.newError(`McwActionPlanner._onNotifyMcwCursorTapped() error 4, nextState: ${nextState}`);
 
             } else if (nextState === State.RequestingUnitDrop) {
                 this._setStateRequestingUnitDropOnTap(gridIndex);
 
             } else if (nextState === State.RequestingUnitJoin) {
-                throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 5, nextState: ${nextState}`);
+                throw Helpers.newError(`McwActionPlanner._onNotifyMcwCursorTapped() error 5, nextState: ${nextState}`);
 
             } else if (nextState === State.RequestingUnitLaunchFlare) {
                 this._setStateRequestingUnitLaunchFlare(gridIndex);
@@ -193,19 +193,19 @@ namespace TwnsBwActionPlanner {
                 this._setStateRequestingUnitLaunchSilo(gridIndex);
 
             } else if (nextState === State.RequestingUnitProduceUnit) {
-                throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 6, nextState: ${nextState}`);
+                throw Helpers.newError(`McwActionPlanner._onNotifyMcwCursorTapped() error 6, nextState: ${nextState}`);
 
             } else if (nextState === State.RequestingUnitSupply) {
-                throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 7, nextState: ${nextState}`);
+                throw Helpers.newError(`McwActionPlanner._onNotifyMcwCursorTapped() error 7, nextState: ${nextState}`);
 
             } else if (nextState === State.RequestingUnitSurface) {
-                throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 8, nextState: ${nextState}`);
+                throw Helpers.newError(`McwActionPlanner._onNotifyMcwCursorTapped() error 8, nextState: ${nextState}`);
 
             } else if (nextState === State.RequestingUnitWait) {
-                throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 9, nextState: ${nextState}`);
+                throw Helpers.newError(`McwActionPlanner._onNotifyMcwCursorTapped() error 9, nextState: ${nextState}`);
 
             } else {
-                throw new Error(`McwActionPlanner._onNotifyMcwCursorTapped() error 10, nextState: ${nextState}`);
+                throw Helpers.newError(`McwActionPlanner._onNotifyMcwCursorTapped() error 10, nextState: ${nextState}`);
             }
         }
 
@@ -250,7 +250,7 @@ namespace TwnsBwActionPlanner {
                     this._setStatePreviewingMovableAreaOnDrag(gridIndex);
 
                 } else {
-                    throw new Error(`BwActionPlanner._onNotifyBwCursorTapped() invalid nextState: ${nextState}`);
+                    throw Helpers.newError(`BwActionPlanner._onNotifyBwCursorTapped() invalid nextState: ${nextState}`);
                 }
             }
         }
@@ -266,7 +266,7 @@ namespace TwnsBwActionPlanner {
                     this._setStateChoosingActionOnDragEnded(gridIndex);
 
                 } else {
-                    throw new Error(`McwActionPlanner._onNotifyBwCursorDragEnded() error 10, nextState: ${nextState}`);
+                    throw Helpers.newError(`McwActionPlanner._onNotifyBwCursorDragEnded() error 10, nextState: ${nextState}`);
                 }
             }
         }
@@ -337,7 +337,7 @@ namespace TwnsBwActionPlanner {
                 SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
 
             } else if (currState === State.ExecutingAction) {
-                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 1, currState: ${currState}`);
+                throw Helpers.newError(`McwActionPlanner._setStateMakingMovePathOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
                 if (Helpers.getExisted(this.getFocusUnit()).checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
@@ -409,16 +409,16 @@ namespace TwnsBwActionPlanner {
                 }
 
             } else if (currState === State.ChoosingAttackTarget) {
-                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 2, currState: ${currState}`);
+                throw Helpers.newError(`McwActionPlanner._setStateMakingMovePathOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 3, currState: ${currState}`);
+                throw Helpers.newError(`McwActionPlanner._setStateMakingMovePathOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 4, currState: ${currState}`);
+                throw Helpers.newError(`McwActionPlanner._setStateMakingMovePathOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 5, currState: ${currState}`);
+                throw Helpers.newError(`McwActionPlanner._setStateMakingMovePathOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
                 this._setFocusUnitOnMap(Helpers.getExisted(this._getUnitMap().getUnitOnMap(gridIndex)));
@@ -441,7 +441,7 @@ namespace TwnsBwActionPlanner {
                 this._clearDataForPreviewingMovableArea();
 
             } else {
-                throw new Error(`McwActionPlanner._setStateMakingMovePathOnTap() error 6, currState: ${currState}`);
+                throw Helpers.newError(`McwActionPlanner._setStateMakingMovePathOnTap() error 6, currState: ${currState}`);
             }
 
             this._setState(State.MakingMovePath);
@@ -451,10 +451,10 @@ namespace TwnsBwActionPlanner {
         private _setStateMakingMovePathOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 2, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
                 const focusUnit = Helpers.getExisted(this.getFocusUnit());
@@ -503,28 +503,28 @@ namespace TwnsBwActionPlanner {
                 }
 
             } else if (currState === State.ChoosingAttackTarget) {
-                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 4, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 5, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 6, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 7, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 8, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 9, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 10, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                throw new Error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 11, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.MakingMovePath);
@@ -533,10 +533,10 @@ namespace TwnsBwActionPlanner {
         private _setStateMakingMovePathOnChooseAction(unitForLaunch: BwUnit): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateMakingMovePathOnChooseAction() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 if (this.getFocusUnitLoaded()) {
-                    throw new Error(`BwActionPlanner._setStateMakingMovePathOnChooseAction() error 2, currState: ${currState}`);
+                    throw Helpers.newError(`BwActionPlanner._setStateMakingMovePathOnChooseAction() error 2, currState: ${currState}`);
                 } else {
                     this._setFocusUnitLoaded(unitForLaunch);
                     this._resetMovableArea();
@@ -552,10 +552,10 @@ namespace TwnsBwActionPlanner {
         protected _setStateChoosingActionOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 2, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
                 if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
@@ -563,7 +563,7 @@ namespace TwnsBwActionPlanner {
                     SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                 } else {
                     if (!this.getFocusUnitLoaded()) {
-                        throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 3, currState: ${currState}`);
+                        throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnTap() error 3, currState: ${currState}`);
                     } else {
                         this._clearFocusUnitLoaded();
                         this._resetMovableArea();
@@ -610,19 +610,19 @@ namespace TwnsBwActionPlanner {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingSiloDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 5, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 6, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 7, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 8, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnTap() error 8, currState: ${currState}`);
 
             } else {
-                throw new Error(`BwActionPlanner._setStateChoosingActionOnTap() error 9, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnTap() error 9, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingAction);
@@ -631,7 +631,7 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingActionOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingActionOnDrag() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnDrag() error 1, currState: ${currState}`);
             } else {
                 // Nothing to do.
             }
@@ -643,40 +643,40 @@ namespace TwnsBwActionPlanner {
         protected _setStateChoosingAttackTargetOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 2, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 3, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 4, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
                 SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
 
             } else if (currState === State.ChoosingDropDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 5, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 6, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 7, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 8, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 9, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 10, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 10, currState: ${currState}`);
 
             } else {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 11, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnTap() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingAttackTarget);
@@ -685,40 +685,40 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingAttackTargetOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 2, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 3, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 4, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingDropDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 5, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 6, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 7, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 8, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 9, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 10, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 11, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingAttackTarget);
@@ -727,7 +727,7 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingAttackTargetOnChooseAction(): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingAttackTargetOnChooseAction() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingAttackTargetOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 this._setAttackableGridsAfterMove(this._createAttackableGridsAfterMove());
             }
@@ -739,13 +739,13 @@ namespace TwnsBwActionPlanner {
         protected _setStateChoosingDropDestinationOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 2, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 3, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
                 const data = this._popBackChosenUnitForDrop();
@@ -753,28 +753,28 @@ namespace TwnsBwActionPlanner {
                 this._setAvailableDropDestinations(this._calculateAvailableDropDestination(data.unit, this._getChosenDropDestinations()));
 
             } else if (currState === State.ChoosingAttackTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 4, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 5, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 6, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 7, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 8, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 9, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 10, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 10, currState: ${currState}`);
 
             } else {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 11, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnTap() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingDropDestination);
@@ -783,40 +783,40 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingDropDestinationOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 2, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 3, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 4, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 5, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingFlareDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 6, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 7, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 8, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 9, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 10, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 11, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingDropDestination);
@@ -825,7 +825,7 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingDropDestinationOnChooseAction(unitForDrop: BwUnit): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingDropDestinationOnChooseAction() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingDropDestinationOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 this._setChoosingUnitForDrop(unitForDrop);
                 this._setAvailableDropDestinations(this._calculateAvailableDropDestination(unitForDrop, this._getChosenDropDestinations()));
@@ -838,40 +838,40 @@ namespace TwnsBwActionPlanner {
         protected _setStateChoosingFlareDestinationOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 2, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 3, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 4, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 5, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 6, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingSiloDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 7, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 8, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 9, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 10, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 10, currState: ${currState}`);
 
             } else {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 11, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnTap() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingFlareDestination);
@@ -880,40 +880,40 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingFlareDestinationOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 2, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 3, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 4, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 5, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 6, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingSiloDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 7, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 8, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 9, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 10, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 11, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingFlareDestination);
@@ -922,7 +922,7 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingFlareDestinationOnChooseAction(): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingFlareDestinationOnChooseAction() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingFlareDestinationOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 // Nothing to do.
             }
@@ -934,40 +934,40 @@ namespace TwnsBwActionPlanner {
         protected _setStateChoosingSiloDestinationOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 2, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 3, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 4, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 5, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 6, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 7, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingProductionTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 8, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 9, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 10, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 10, currState: ${currState}`);
 
             } else {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 11, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnTap error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingSiloDestination);
@@ -976,40 +976,40 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingSiloDestinationOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 2, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 3, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 4, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 5, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 6, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 7, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingProductionTarget) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 8, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 9, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 10, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 11, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingSiloDestination);
@@ -1018,7 +1018,7 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingSiloDestinationOnChooseAction(): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                throw new Error(`BwActionPlanner._setStateChoosingSiloDestinationOnChooseAction() error 1, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingSiloDestinationOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 // Nothing to do.
             }
@@ -1046,7 +1046,7 @@ namespace TwnsBwActionPlanner {
             });
         }
         private _setStateChoosingProductionTargetOnDrag(gridIndex: GridIndex): void {
-            throw new Error(`BwActionPlanner._setStateChoosingProductionTargetOnDrag() error 1, currState: ${this.getState()}`);
+            throw Helpers.newError(`BwActionPlanner._setStateChoosingProductionTargetOnDrag() error 1, currState: ${this.getState()}`);
         }
 
         protected _setStatePreviewingAttackableAreaOnTap(gridIndex: GridIndex): void {
@@ -1089,11 +1089,11 @@ namespace TwnsBwActionPlanner {
                 if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
                 } else {
-                    throw new Error(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 1, currState: ${currState}`);
+                    throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 1, currState: ${currState}`);
                 }
 
             } else {
-                throw new Error(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 2, currState: ${currState}`);
+                throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 2, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingAction);
@@ -1439,7 +1439,7 @@ namespace TwnsBwActionPlanner {
                     case State.ChoosingProductionTarget : return this._getNextStateOnTapWhenChoosingProductionTarget(gridIndex);
                     case State.PreviewingAttackableArea : return this._getNextStateOnTapWhenPreviewingAttackableArea(gridIndex);
                     case State.PreviewingMovableArea    : return this._getNextStateOnTapWhenPreviewingMovableArea(gridIndex);
-                    default                             : throw new Error(`BwActionPlanner._getNextStateOnTap() invalid currState!`);
+                    default                             : throw Helpers.newError(`BwActionPlanner._getNextStateOnTap() invalid currState!`);
                 }
             }
         }

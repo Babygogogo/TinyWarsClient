@@ -1430,13 +1430,13 @@ namespace TwnsBwTurnManager {
     function sorterForRepairUnits(unit1: BwUnit, unit2: BwUnit): number {
         const cost1 = unit1.getProductionFinalCost();
         if (cost1 == null) {
-            throw new Error(`BwTurnManagerHelper.sorterForRepairUnit empty cost1.`);
+            throw Helpers.newError(`BwTurnManagerHelper.sorterForRepairUnit empty cost1.`);
             return 0;
         }
 
         const cost2 = unit2.getProductionFinalCost();
         if (cost2 == null) {
-            throw new Error(`BwTurnManagerHelper.sorterForRepairUnit empty cost2.`);
+            throw Helpers.newError(`BwTurnManagerHelper.sorterForRepairUnit empty cost2.`);
             return 0;
         }
 
@@ -1445,13 +1445,13 @@ namespace TwnsBwTurnManager {
         } else {
             const unitId1 = unit1.getUnitId();
             if (unitId1 == null) {
-                throw new Error(`BwTurnManagerHelper.sorterForRepairUnit empty unitId1.`);
+                throw Helpers.newError(`BwTurnManagerHelper.sorterForRepairUnit empty unitId1.`);
                 return 0;
             }
 
             const unitId2 = unit2.getUnitId();
             if (unitId2 == null) {
-                throw new Error(`BwTurnManagerHelper.sorterForRepairUnit empty unitId2.`);
+                throw Helpers.newError(`BwTurnManagerHelper.sorterForRepairUnit empty unitId2.`);
                 return 0;
             }
 

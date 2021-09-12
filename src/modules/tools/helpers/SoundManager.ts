@@ -120,7 +120,7 @@ namespace SoundManager {
         try {
             _audioContext.resume();
         } catch (e) {
-            // throw new Error(`SoundManager.resume() error.`);
+            // throw Helpers.newError(`SoundManager.resume() error.`);
         }
     }
     export function pause(): void {
@@ -129,7 +129,7 @@ namespace SoundManager {
         try {
             _audioContext.suspend();
         } catch (e) {
-            // throw new Error(`SoundManager.pause() error.`);
+            // throw Helpers.newError(`SoundManager.pause() error.`);
         }
         _stopAllShortSfx();
     }
@@ -160,7 +160,7 @@ namespace SoundManager {
     export function playCoBgmWithWar(war: TwnsBwWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
         if (player == null) {
-            throw new Error(`SoundManager.playCoBgmWithWar() empty player.`);
+            throw Helpers.newError(`SoundManager.playCoBgmWithWar() empty player.`);
         }
 
         if ((player.checkIsNeutral()) && (!force)) {
@@ -249,7 +249,7 @@ namespace SoundManager {
     async function _playBgmForNormal(bgmCode: BgmCode): Promise<void> {
         const params = _BGM_PARAMS.get(bgmCode);
         if (params == null) {
-            throw new Error(`SoundManager._playBgmForNormal() empty params.`);
+            throw Helpers.newError(`SoundManager._playBgmForNormal() empty params.`);
         }
 
         const cacheDict     = _bgmBufferCache;
@@ -259,7 +259,7 @@ namespace SoundManager {
         } else {
             const path = getResourcePath(params.name, SoundType.Bgm);
             if (path == null) {
-                throw new Error(`SoundManager._playBgmForNormal() empty path.`);
+                throw Helpers.newError(`SoundManager._playBgmForNormal() empty path.`);
             }
 
             const audioBuffer = await loadAudioBuffer(path).catch(err => {
@@ -268,7 +268,7 @@ namespace SoundManager {
                 return;
             });
             if (!audioBuffer) {
-                // throw new Error(`SoundManager._playBgmForNormal() empty audioBuffer.`);
+                // throw Helpers.newError(`SoundManager._playBgmForNormal() empty audioBuffer.`);
                 Logger.error(`SoundManager._playBgmForNormal() empty audioBuffer.`);
                 return;
             }
@@ -365,7 +365,7 @@ namespace SoundManager {
 
         const params = _SHORT_SFX_PARAM.get(shortSfxCode);
         if (params == null) {
-            throw new Error(`SoundManager.playShortSfx() empty params.`);
+            throw Helpers.newError(`SoundManager.playShortSfx() empty params.`);
         }
 
         const cacheDict     = _shortSfxBufferCache;
@@ -375,7 +375,7 @@ namespace SoundManager {
         } else {
             const path = getResourcePath(params.name, SoundType.Effect);
             if (path == null) {
-                throw new Error(`SoundManager._playEffectForNormal() empty path.`);
+                throw Helpers.newError(`SoundManager._playEffectForNormal() empty path.`);
             }
 
             const audioBuffer = await loadAudioBuffer(path).catch(err => {
@@ -384,7 +384,7 @@ namespace SoundManager {
                 return;
             });
             if (!audioBuffer) {
-                // throw new Error(`SoundManager.playShortSfx() empty audioBuffer.`);
+                // throw Helpers.newError(`SoundManager.playShortSfx() empty audioBuffer.`);
                 Logger.error(`SoundManager.playShortSfx() empty audioBuffer.`);
                 return;
             }
@@ -413,7 +413,7 @@ namespace SoundManager {
     //         try {
     //             eff.stop();
     //         } catch (e) {
-    //             throw new Error(`SoundManager._stopShortSfx() error.`);
+    //             throw Helpers.newError(`SoundManager._stopShortSfx() error.`);
     //         }
     //         effectDict[shortSfxCode] = null;
     //     }
@@ -427,7 +427,7 @@ namespace SoundManager {
         //         try {
         //             eff.stop();
         //         } catch (e) {
-        //             throw new Error(`SoundManager._stopAllShortSfx() error.`);
+        //             throw Helpers.newError(`SoundManager._stopAllShortSfx() error.`);
         //         }
         //     }
         // }

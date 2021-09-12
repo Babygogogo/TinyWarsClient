@@ -58,6 +58,7 @@ import ResManager                   from "../res/ResManager";
 import TwnsClientErrorCode          from "./ClientErrorCode";
 import CompatibilityHelpers         from "./CompatibilityHelpers";
 import ConfigManager                from "./ConfigManager";
+import Helpers                      from "./Helpers";
 import LocalStorage                 from "./LocalStorage";
 import NoSleepManager               from "./NoSleepManager";
 import SoundManager                 from "./SoundManager";
@@ -254,7 +255,7 @@ namespace FlowManager {
         } else if (warType === WarType.Me) {
             _gotoMeMapListPanel();
         } else {
-            throw new Error(`FlowManager.gotoMyWarListPanel() invalid warType: ${warType}.`);
+            throw Helpers.newError(`FlowManager.gotoMyWarListPanel() invalid warType: ${warType}.`);
         }
     }
     export function gotoRwReplayListPanel(): void {
@@ -319,7 +320,7 @@ namespace FlowManager {
         const data      = e.data as ProtoTypes.NetMessage.MsgMpwCommonContinueWar.IS;
         const warData   = data.war;
         if (warData == null) {
-            throw new Error(`FlowManager._onMsgMpwCommonContinueWar() empty warData.`);
+            throw Helpers.newError(`FlowManager._onMsgMpwCommonContinueWar() empty warData.`);
         }
 
         gotoMultiPlayerWar(warData);

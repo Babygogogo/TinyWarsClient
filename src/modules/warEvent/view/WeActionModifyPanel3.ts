@@ -272,7 +272,7 @@ namespace TwnsWeActionModifyPanel3 {
                 }
             }
 
-            throw new Error(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnChangeType() invalid dataForDialogue.`);
+            throw Helpers.newError(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnChangeType() invalid dataForDialogue.`);
         }
 
         private _onTouchedBtnInsert(): void {

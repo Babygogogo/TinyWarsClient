@@ -261,12 +261,12 @@ namespace ConfigManager {
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
         const mapping = CommonConstants.TileTypeMapping.get(baseType);
         if (mapping == null) {
-            throw new Error(`Empty mapping.`);
+            throw Helpers.newError(`Empty mapping.`);
         }
 
         const tileType = mapping.get(objectType);
         if (tileType == null) {
-            throw new Error(`Empty tileType`);
+            throw Helpers.newError(`Empty tileType`);
         }
 
         return tileType;
@@ -275,12 +275,12 @@ namespace ConfigManager {
     export function getTileTemplateCfgByType(version: string, tileType: TileType): TileTemplateCfg {
         const dict = _ALL_CONFIGS.get(version)?.TileTemplate;
         if (dict == null) {
-            throw new Error(`Empty dict.`);
+            throw Helpers.newError(`Empty dict.`);
         }
 
         const cfg = dict[tileType];
         if (cfg == null) {
-            throw new Error(`Empty cfg.`);
+            throw Helpers.newError(`Empty cfg.`);
         }
 
         return cfg;
@@ -292,12 +292,12 @@ namespace ConfigManager {
     export function getTileTypesByCategory(version: string, category: TileCategory): TileType[] {
         const dict = _ALL_CONFIGS.get(version)?.TileCategory;
         if (dict == null) {
-            throw new Error(`Empty dict.`);
+            throw Helpers.newError(`Empty dict.`);
         }
 
         const cfg = dict[category];
         if (cfg == null) {
-            throw new Error(`Empty cfg.`);
+            throw Helpers.newError(`Empty cfg.`);
         }
 
         return cfg.tileTypes || [];
@@ -367,12 +367,12 @@ namespace ConfigManager {
     export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg {
         const templateCfgDict = _ALL_CONFIGS.get(version)?.UnitTemplate;
         if (templateCfgDict == null) {
-            throw new Error(`Empty templateCfgDict.`);
+            throw Helpers.newError(`Empty templateCfgDict.`);
         }
 
         const cfg = templateCfgDict[unitType];
         if (cfg == null) {
-            throw new Error(`Empty cfg.`);
+            throw Helpers.newError(`Empty cfg.`);
         }
 
         return cfg;
@@ -381,12 +381,12 @@ namespace ConfigManager {
     export function getUnitTypesByCategory(version: string, category: UnitCategory): UnitType[] {
         const categoryDict = _ALL_CONFIGS.get(version)?.UnitCategory;
         if (categoryDict == null) {
-            throw new Error(`Empty categoryDict.`);
+            throw Helpers.newError(`Empty categoryDict.`);
         }
 
         const categoryCfg  = categoryDict[category];
         if (categoryCfg == null) {
-            throw new Error(`Empty categoryCfg.`);
+            throw Helpers.newError(`Empty categoryCfg.`);
         }
 
         return categoryCfg.unitTypes || [];
@@ -411,7 +411,7 @@ namespace ConfigManager {
     export function getUnitMaxPromotion(version: string): number {
         const maxPromotion = _ALL_CONFIGS.get(version)?.maxUnitPromotion;
         if (maxPromotion == null) {
-            throw new Error(`Empty maxPromotion.`);
+            throw Helpers.newError(`Empty maxPromotion.`);
         }
 
         return maxPromotion;
@@ -425,12 +425,12 @@ namespace ConfigManager {
     export function getUnitPromotionAttackBonus(version: string, promotion: number): number {
         const dict = _ALL_CONFIGS.get(version)?.UnitPromotion;
         if (dict == null) {
-            throw new Error(`Empty dict.`);
+            throw Helpers.newError(`Empty dict.`);
         }
 
         const bonus = dict[promotion]?.attackBonus;
         if (bonus == null) {
-            throw new Error(`Empty bonus.`);
+            throw Helpers.newError(`Empty bonus.`);
         }
 
         return bonus;
@@ -438,12 +438,12 @@ namespace ConfigManager {
     export function getUnitPromotionDefenseBonus(version: string, promotion: number): number {
         const dict = _ALL_CONFIGS.get(version)?.UnitPromotion;
         if (dict == null) {
-            throw new Error(`Empty dict.`);
+            throw Helpers.newError(`Empty dict.`);
         }
 
         const bonus = dict[promotion]?.defenseBonus;
         if (bonus == null) {
-            throw new Error(`Empty dict.`);
+            throw Helpers.newError(`Empty dict.`);
         }
 
         return bonus;
@@ -452,12 +452,12 @@ namespace ConfigManager {
     export function getDamageChartCfgs(version: string, attackerType: UnitType): { [armorType: number]: { [weaponType: number]: DamageChartCfg } } {
         const cfgDict = _ALL_CONFIGS.get(version)?.DamageChart;
         if (cfgDict == null) {
-            throw new Error(`Empty cfgDict.`);
+            throw Helpers.newError(`Empty cfgDict.`);
         }
 
         const cfg = cfgDict[attackerType];
         if (cfg == null) {
-            throw new Error(`Empty cfg`);
+            throw Helpers.newError(`Empty cfg`);
         }
 
         return cfg;
@@ -466,7 +466,7 @@ namespace ConfigManager {
     export function getBuildableTileCfgs(version: string, unitType: UnitType): { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } | null {
         const cfgDict = _ALL_CONFIGS.get(version)?.BuildableTile;
         if (cfgDict == null) {
-            throw new Error(`Empty cfgDict.`);
+            throw Helpers.newError(`Empty cfgDict.`);
         }
 
         return cfgDict[unitType] ?? null;
@@ -475,7 +475,7 @@ namespace ConfigManager {
     export function getVisionBonusCfg(version: string, unitType: UnitType): { [tileType: number]: VisionBonusCfg } | null {
         const cfgDict = _ALL_CONFIGS.get(version)?.VisionBonus;
         if (cfgDict == null) {
-            throw new Error(`Empty cfgDict.`);
+            throw Helpers.newError(`Empty cfgDict.`);
         }
 
         return cfgDict[unitType] ?? null;
@@ -487,12 +487,12 @@ namespace ConfigManager {
     export function getMoveCostCfgByTileType(version: string, tileType: TileType): { [moveType: number]: MoveCostCfg } {
         const cfgDict = _ALL_CONFIGS.get(version)?.MoveCost;
         if (cfgDict == null) {
-            throw new Error(`Empty cfgDict.`);
+            throw Helpers.newError(`Empty cfgDict.`);
         }
 
         const cfg = cfgDict[tileType];
         if (cfg == null) {
-            throw new Error(`Empty cfg.`);
+            throw Helpers.newError(`Empty cfg.`);
         }
 
         return cfg;
@@ -501,7 +501,7 @@ namespace ConfigManager {
     export function getTileObjectTypeByTileType(type: TileType): TileObjectType {
         const tileObjectType = CommonConstants.TileTypeToTileObjectType.get(type);
         if (tileObjectType == null) {
-            throw new Error(`Empty tileObjectType.`);
+            throw Helpers.newError(`Empty tileObjectType.`);
         }
 
         return tileObjectType;
@@ -521,7 +521,7 @@ namespace ConfigManager {
 
         const cfgForFrame = CommonConstants.TileBaseFrameConfigs.get(version)?.get(baseType);
         if (cfgForFrame == null) {
-            throw new Error(`Empty cfgForFrame.`);
+            throw Helpers.newError(`Empty cfgForFrame.`);
         }
 
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
@@ -549,7 +549,7 @@ namespace ConfigManager {
 
         const cfgForFrame = CommonConstants.TileDecoratorFrameConfigs.get(version)?.get(decoratorType);
         if (cfgForFrame == null) {
-            throw new Error(`Empty cfgForFrame.`);
+            throw Helpers.newError(`Empty cfgForFrame.`);
         }
 
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
@@ -577,7 +577,7 @@ namespace ConfigManager {
 
         const cfgForFrame = CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType);
         if (cfgForFrame == null) {
-            throw new Error(`Empty cfgForFrame.`);
+            throw Helpers.newError(`Empty cfgForFrame.`);
         }
 
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
@@ -606,7 +606,7 @@ namespace ConfigManager {
     }): string {
         const cfgForUnit = CommonConstants.UnitImageConfigs.get(version)?.get(unitType);
         if (cfgForUnit == null) {
-            throw new Error(`Empty cfgForUnit.`);
+            throw Helpers.newError(`Empty cfgForUnit.`);
         }
 
         const cfgForFrame       = isMoving ? cfgForUnit.moving : cfgForUnit.idle;
@@ -623,7 +623,7 @@ namespace ConfigManager {
     export function getRankName(version: string, rankScore: number): string {
         const name = Lang.getStringInCurrentLanguage(getPlayerRankCfg(version, rankScore).nameList);
         if (name == null) {
-            throw new Error(`Empty name.`);
+            throw Helpers.newError(`Empty name.`);
         }
 
         return name;
@@ -631,7 +631,7 @@ namespace ConfigManager {
     export function getPlayerRankCfg(version: string, rankScore: number): PlayerRankCfg {
         const cfgDict = _ALL_CONFIGS.get(version)?.PlayerRank;
         if (cfgDict == null) {
-            throw new Error(`Empty cfgDict.`);
+            throw Helpers.newError(`Empty cfgDict.`);
         }
 
         let maxRank = -1;
@@ -646,7 +646,7 @@ namespace ConfigManager {
         }
 
         if (maxCfg == null) {
-            throw new Error(`Empty maxCfg.`);
+            throw Helpers.newError(`Empty maxCfg.`);
         }
         return maxCfg;
     }
@@ -654,7 +654,7 @@ namespace ConfigManager {
     export function getCoBasicCfg(version: string, coId: number): CoBasicCfg {
         const cfg = getAllCoBasicCfgDict(version)[coId];
         if (cfg == null) {
-            throw new Error(`Empty cfg.`);
+            throw Helpers.newError(`Empty cfg.`);
         }
 
         return cfg;
@@ -662,7 +662,7 @@ namespace ConfigManager {
     export function getAllCoBasicCfgDict(version: string): { [coId: number]: CoBasicCfg } {
         const cfgDict = _ALL_CONFIGS.get(version)?.CoBasic;
         if (cfgDict == null) {
-            throw new Error(`Empty cfgDict.`);
+            throw Helpers.newError(`Empty cfgDict.`);
         }
 
         return cfgDict;
@@ -676,7 +676,7 @@ namespace ConfigManager {
 
         const name = getCoBasicCfg(version, coId).name;
         if (name == null) {
-            throw new Error(`Empty name.`);
+            throw Helpers.newError(`Empty name.`);
         }
 
         return name;
@@ -684,7 +684,7 @@ namespace ConfigManager {
     export function getCoType(version: string, coId: number): Types.CoType {
         const maxLoadCount = getCoBasicCfg(version, coId).maxLoadCount;
         if (maxLoadCount == null) {
-            throw new Error(`Empty maxLoadCount.`);
+            throw Helpers.newError(`Empty maxLoadCount.`);
         }
 
         return maxLoadCount > 0 ? Types.CoType.Zoned : Types.CoType.Global;
@@ -693,12 +693,12 @@ namespace ConfigManager {
     export function getCoSkillCfg(version: string, skillId: number): CoSkillCfg {
         const cfgDict = _ALL_CONFIGS.get(version)?.CoSkill;
         if (cfgDict == null) {
-            throw new Error(`Empty cfgDict.`);
+            throw Helpers.newError(`Empty cfgDict.`);
         }
 
         const cfg = cfgDict[skillId];
         if (cfg == null) {
-            throw new Error(`Empty cfg.`);
+            throw Helpers.newError(`Empty cfg.`);
         }
 
         return cfg;
@@ -709,7 +709,7 @@ namespace ConfigManager {
             case Types.CoSkillType.Passive      : return coConfig.passiveSkills || [];
             case Types.CoSkillType.Power        : return coConfig.powerSkills || [];
             case Types.CoSkillType.SuperPower   : return coConfig.superPowerSkills || [];
-            default                             : throw new Error(`Invalid skillType.`);
+            default                             : throw Helpers.newError(`Invalid skillType.`);
         }
     }
     export function getCoSkillDescArray(version: string, coId: number, skillType: Types.CoSkillType): string[] {
@@ -718,7 +718,7 @@ namespace ConfigManager {
             case Types.CoSkillType.Passive      : return coConfig.passiveDesc || [];
             case Types.CoSkillType.Power        : return coConfig.copDesc || [];
             case Types.CoSkillType.SuperPower   : return coConfig.scopDesc || [];
-            default                             : throw new Error(`Invalid skillType.`);
+            default                             : throw Helpers.newError(`Invalid skillType.`);
         }
     }
 
@@ -800,7 +800,7 @@ namespace ConfigManager {
 
         const cfgs = _CO_ID_LIST_IN_TIER.get(version);
         if (cfgs == null) {
-            throw new Error(`ConfigManager.getEnabledCoIdListInTier() empty cfgs.`);
+            throw Helpers.newError(`ConfigManager.getEnabledCoIdListInTier() empty cfgs.`);
         }
 
         const currentIdArray = cfgs.get(tier);

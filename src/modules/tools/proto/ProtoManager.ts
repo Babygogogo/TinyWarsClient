@@ -42,7 +42,7 @@ namespace ProtoManager {
         if (Helpers.getMessageName(action) != null) {
             return MessageContainerClass.encode(action).finish();
         } else {
-            throw new Error(`ProtoManager.encodeAsMessageContainer() invalid message! ${JSON.stringify(action)}`);
+            throw Helpers.newError(`ProtoManager.encodeAsMessageContainer() invalid message! ${JSON.stringify(action)}`);
         }
     }
     export function decodeAsMessageContainer(data: Uint8Array | ArrayBuffer): IMessageContainer {

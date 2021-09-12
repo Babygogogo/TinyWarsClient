@@ -85,7 +85,7 @@ namespace TwnsBwUnitActionsPanel {
         private _updateView(): void {
             const openData = this._getOpenData();
             if (openData == null) {
-                throw new Error(`BwUnitActionsPanel._updateView() empty openData.`);
+                throw Helpers.newError(`BwUnitActionsPanel._updateView() empty openData.`);
             }
 
             const war       = openData.war;
@@ -103,7 +103,7 @@ namespace TwnsBwUnitActionsPanel {
                 } else {
                     const configVersion = war.getConfigVersion();
                     if (configVersion == null) {
-                        throw new Error(`BwUnitActionsPanel._updateView() empty configVersion.`);
+                        throw Helpers.newError(`BwUnitActionsPanel._updateView() empty configVersion.`);
                     }
 
                     const unitForProduce = new TwnsBwUnit.BwUnit();
@@ -132,7 +132,7 @@ namespace TwnsBwUnitActionsPanel {
         private _updatePosition(): void {
             const openData = this._getOpenData();
             if (openData == null) {
-                throw new Error(`BwUnitActionsPanel._updatePosition() empty openData.`);
+                throw Helpers.newError(`BwUnitActionsPanel._updatePosition() empty openData.`);
             }
 
             const container = openData.war.getView().getFieldContainer();

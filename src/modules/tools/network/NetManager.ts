@@ -36,13 +36,13 @@ namespace NetManager {
         public dispatchWithContainer(container: ProtoTypes.NetMessage.IMessageContainer): void {
             const messageName = Helpers.getMessageName(container);
             if (messageName == null) {
-                throw new Error(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageName.`);
+                throw Helpers.newError(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageName.`);
             }
 
             const message       = container[messageName];
             const messageData   = message ? message.s : null;
             if (messageData == null) {
-                throw new Error(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageData.`);
+                throw Helpers.newError(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageData.`);
             }
 
             if (container.MsgMpwCommonHandleBoot) {
@@ -101,12 +101,12 @@ namespace NetManager {
         } else {
             const messageName = Helpers.getMessageName(container);
             if (messageName == null) {
-                throw new Error(`NetManager.send() empty name.`);
+                throw Helpers.newError(`NetManager.send() empty name.`);
             }
 
             const encodedData = ProtoManager.encodeAsMessageContainer(container);
             if (encodedData == null) {
-                throw new Error(`NetManager.send() empty encodedData.`);
+                throw Helpers.newError(`NetManager.send() empty encodedData.`);
             }
 
             Logger.log("%cNetManager send: ", "background:#97FF4F;", messageName, ", length: ", encodedData.byteLength, "\n", container[messageName]);
@@ -164,14 +164,14 @@ namespace NetManager {
             (tips) && (FloatText.show(tips));
 
             if (_socket == null) {
-                throw new Error(`NetManager.onSocketClose() empty _socket.`);
+                throw Helpers.newError(`NetManager.onSocketClose() empty _socket.`);
             }
             _socket.connectByUrl(FULL_URL);
         }
     }
     function onSocketData(): void {
         if (_socket == null) {
-            throw new Error(`NetManager.onSocketData() empty _socket.`);
+            throw Helpers.newError(`NetManager.onSocketData() empty _socket.`);
         }
 
         const data = new egret.ByteArray();
@@ -180,7 +180,7 @@ namespace NetManager {
         const container     = ProtoManager.decodeAsMessageContainer(data.rawBuffer);
         const messageName   = Helpers.getMessageName(container);
         if (messageName == null) {
-            throw new Error(`NetManager.onSocketData() empty messageName.`);
+            throw Helpers.newError(`NetManager.onSocketData() empty messageName.`);
         }
 
         Logger.log("%cNetManager receive: ", "background:#FFD777", messageName, ", length: ", data.length, "\n", container[messageName]);

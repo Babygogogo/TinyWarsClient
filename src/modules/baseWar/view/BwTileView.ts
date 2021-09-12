@@ -53,7 +53,7 @@ namespace TwnsBwTileView {
                 const objectType    = tileData.objectType;
                 const imgObject     = this.getImgObject();
                 if (objectType == null) {
-                    throw new Error(`BwTileView.updateView() empty objectType.`);
+                    throw Helpers.newError(`BwTileView.updateView() empty objectType.`);
                 } else if (objectType === TileObjectType.Empty) {
                     imgObject.visible = false;
                 } else {
@@ -73,7 +73,7 @@ namespace TwnsBwTileView {
                 const baseType  = tileData.baseType;
                 const imgBase   = this.getImgBase();
                 if (baseType == null) {
-                    throw new Error(`BwTileView.updateView() empty baseType.`);
+                    throw Helpers.newError(`BwTileView.updateView() empty baseType.`);
                 } else if (baseType === TileBaseType.Empty) {
                     imgBase.visible = false;
                 } else {

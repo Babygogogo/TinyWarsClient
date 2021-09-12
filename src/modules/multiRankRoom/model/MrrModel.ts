@@ -26,7 +26,6 @@ namespace MrrModel {
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
     let _previewingRoomId           : number | null = null;
-    let _previewingMapId            : number | null = null;
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;
     const _roomInfoDict             = new Map<number, IMrrRoomInfo | null>();
@@ -242,16 +241,6 @@ namespace MrrModel {
         }
     }
 
-    export function getPreviewingMapId(): number | null {
-        return _previewingMapId;
-    }
-    export function setPreviewingMapId(mapId: number): void {
-        if (getPreviewingMapId() != mapId) {
-            _previewingMapId = mapId;
-            Notify.dispatch(NotifyType.MrrPreviewingMapIdChanged);
-        }
-    }
-
     export async function createDataForCommonWarPlayerInfoPage(roomId: number | null): Promise<OpenDataForCommonWarPlayerInfoPage> {
         const roomInfo = roomId == null ? null : await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (roomInfo == null) {
@@ -347,7 +336,7 @@ namespace MrrModel {
                 },
             );
         } else {
-            throw new Error(`MrrModel.createDataForCommonWarBasicSettingsPage() invalid timerType: ${timerType}`);
+            throw Helpers.newError(`MrrModel.createDataForCommonWarBasicSettingsPage() invalid timerType: ${timerType}`);
         }
 
         return openData;

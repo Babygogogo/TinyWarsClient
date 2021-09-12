@@ -243,7 +243,7 @@ namespace TwnsMcwMyWarListPanel {
             for (const warInfo of MpwModel.getMyMcwWarInfoArray()) {
                 const warId = warInfo.warId;
                 if (warId == null) {
-                    throw new Error(`McwMyWarListPanel._createDataForListWar() empty warId.`);
+                    throw Helpers.newError(`McwMyWarListPanel._createDataForListWar() empty warId.`);
                 }
                 dataArray.push({
                     warId,

@@ -127,7 +127,7 @@ namespace TwnsCommonBanCoPanel {
             const openData = this._getOpenData();
             const callback = openData.callbackOnConfirm;
             if (callback == null) {
-                throw new Error(`CommonBanCoPanel._onTouchedBtnConfirm() empty callback.`);
+                throw Helpers.newError(`CommonBanCoPanel._onTouchedBtnConfirm() empty callback.`);
             } else {
                 const bannedCoIdSet = this._bannedCoIdSet;
                 if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {

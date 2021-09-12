@@ -374,7 +374,7 @@ namespace CcrModel {
                 },
             );
         } else {
-            throw new Error(`CcrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            throw Helpers.newError(`CcrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
         }
 
         return openData;

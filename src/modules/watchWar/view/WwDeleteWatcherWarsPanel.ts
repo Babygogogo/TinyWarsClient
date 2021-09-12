@@ -193,7 +193,7 @@ namespace TwnsWwDeleteWatcherWarsPanel {
         private async _showMap(index: number): Promise<void> {
             const warInfo = this._dataForListWar[index].info.warInfo;
             if (warInfo == null) {
-                throw new Error(`WwDeleteWatcherWarsPanel._showMap() empty warInfo.`);
+                throw Helpers.newError(`WwDeleteWatcherWarsPanel._showMap() empty warInfo.`);
             }
 
             const hasFogByDefault   = warInfo.settingsForCommon?.warRule?.ruleForGlobalParams?.hasFogByDefault;

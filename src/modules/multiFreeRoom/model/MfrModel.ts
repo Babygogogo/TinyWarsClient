@@ -362,7 +362,7 @@ namespace MfrModel {
                 },
             );
         } else {
-            throw new Error(`MfrModel.createDataForCommonWarBasicSettingsPage() invalid timerType: ${timerType}.`);
+            throw Helpers.newError(`MfrModel.createDataForCommonWarBasicSettingsPage() invalid timerType: ${timerType}.`);
         }
 
         return openData;

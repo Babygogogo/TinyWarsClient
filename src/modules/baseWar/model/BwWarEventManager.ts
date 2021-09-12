@@ -91,7 +91,7 @@ namespace TwnsBwWarEventManager {
         public async callWarEvent(warEventId: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent[]> { // DONE
             const event = this.getWarEvent(warEventId);
             if (event == null) {
-                throw new Error(`Empty event.`);
+                throw Helpers.newError(`Empty event.`);
             }
 
             const extraDataList : IExtraDataForSystemCallWarEvent[] = [];
@@ -114,7 +114,7 @@ namespace TwnsBwWarEventManager {
             } else if (action.WeaDialogue) {
                 return await this._callActionDialogue(action.WeaDialogue, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             } else {
-                throw new Error(`Invalid action.`);
+                throw Helpers.newError(`Invalid action.`);
             }
 
             // TODO add more actions.
@@ -122,7 +122,7 @@ namespace TwnsBwWarEventManager {
         private async _callActionAddUnit(indexForActionIdList: number, action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | null> {
             const unitArray = action.unitArray;
             if ((unitArray == null) || (!unitArray.length)) {
-                throw new Error(`Empty unitArray.`);
+                throw Helpers.newError(`Empty unitArray.`);
             }
 
             const war               = this._getWar();
@@ -135,7 +135,7 @@ namespace TwnsBwWarEventManager {
             for (const data of unitArray) {
                 const unitData = Helpers.getExisted(data.unitData);
                 if (unitData.loaderUnitId != null) {
-                    throw new Error(`unitData.loaderUnitId != null: ${unitData.loaderUnitId}`);
+                    throw Helpers.newError(`unitData.loaderUnitId != null: ${unitData.loaderUnitId}`);
                 }
 
                 const canBeBlockedByUnit    = Helpers.getExisted(data.canBeBlockedByUnit);
@@ -151,7 +151,7 @@ namespace TwnsBwWarEventManager {
                     configVersion,
                     playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
                 })) {
-                    throw new Error(`Invalid unitData: ${JSON.stringify(unitData)}`);
+                    throw Helpers.newError(`Invalid unitData: ${JSON.stringify(unitData)}`);
                 }
 
                 const playerIndex = Helpers.getExisted(unitData.playerIndex);
@@ -182,7 +182,7 @@ namespace TwnsBwWarEventManager {
                 const unit      = new TwnsBwUnit.BwUnit();
                 const unitError = unit.init(revisedUnitData, configVersion);
                 if (unitError) {
-                    throw new Error(`BwWarEventManager._callActionAddUnit() unitError: ${unitError}`);
+                    throw Helpers.newError(`BwWarEventManager._callActionAddUnit() unitError: ${unitError}`);
                 }
 
                 resultingUnitList.push(revisedUnitData);
@@ -201,7 +201,7 @@ namespace TwnsBwWarEventManager {
             const war = this._getWar();
             const playerIndex = action.playerIndex;
             if ((playerIndex == null) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {
-                throw new Error(`Invalid playerIndex: ${playerIndex}`);
+                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`);
             }
 
             const playerAliveState = Helpers.getExisted(action.playerAliveState);
@@ -209,7 +209,7 @@ namespace TwnsBwWarEventManager {
                 (playerAliveState !== Types.PlayerAliveState.Dead)  &&
                 (playerAliveState !== Types.PlayerAliveState.Dying)
             ) {
-                throw new Error(`Invalid playerAliveState: ${playerAliveState}`);
+                throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
             }
 
             const player = war.getPlayer(playerIndex);
@@ -244,10 +244,10 @@ namespace TwnsBwWarEventManager {
                 const data = calledCountList.find(v => v.eventId === eventId);
                 if (data) {
                     if (data.calledCountInPlayerTurn == null) {
-                        throw new Error(`Empty data.calledCountInPlayerTurn.`);
+                        throw Helpers.newError(`Empty data.calledCountInPlayerTurn.`);
                     }
                     if (data.calledCountTotal == null) {
-                        throw new Error(`Empty data.calledCountTotal`);
+                        throw Helpers.newError(`Empty data.calledCountTotal`);
                     }
                     ++data.calledCountInPlayerTurn;
                     ++data.calledCountTotal;
@@ -306,7 +306,7 @@ namespace TwnsBwWarEventManager {
             const conditionIdArray  = node.conditionIdArray;
             const subNodeIdArray    = node.subNodeIdArray;
             if ((!conditionIdArray?.length) && (!subNodeIdArray?.length)) {
-                throw new Error(`Empty conditionIdArray and subNodeIdArray.`);
+                throw Helpers.newError(`Empty conditionIdArray and subNodeIdArray.`);
             }
 
             if (conditionIdArray) {
@@ -422,7 +422,7 @@ namespace TwnsBwWarEventManager {
                 }
             }
 
-            throw new Error(`Invalid condition!`);
+            throw Helpers.newError(`Invalid condition!`);
         }
 
         private _checkIsMeetConEventCalledCountTotalEqualTo(condition: WarEvent.IWecEventCalledCountTotalEqualTo): boolean {

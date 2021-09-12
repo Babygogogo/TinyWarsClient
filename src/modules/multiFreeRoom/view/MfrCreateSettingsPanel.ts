@@ -239,7 +239,7 @@ namespace TwnsMfrCreateSettingsPanel {
                         warRule,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw new Error(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             MfrCreateModel.setWarName(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -251,7 +251,7 @@ namespace TwnsMfrCreateSettingsPanel {
                         warRule,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw new Error(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             MfrCreateModel.setWarPassword(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -263,7 +263,7 @@ namespace TwnsMfrCreateSettingsPanel {
                         warRule,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw new Error(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             MfrCreateModel.setWarComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -310,7 +310,7 @@ namespace TwnsMfrCreateSettingsPanel {
                         warRule,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
-                                throw new Error(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             MfrCreateModel.setTimerIncrementalInitialTime(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -322,7 +322,7 @@ namespace TwnsMfrCreateSettingsPanel {
                         warRule,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
-                                throw new Error(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             MfrCreateModel.setTimerIncrementalIncrementalValue(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -330,7 +330,7 @@ namespace TwnsMfrCreateSettingsPanel {
                     },
                 );
             } else {
-                throw new Error(`MfrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+                throw Helpers.newError(`MfrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
             }
 
             return openData;

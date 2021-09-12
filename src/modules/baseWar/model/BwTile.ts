@@ -351,11 +351,11 @@ namespace TwnsBwTile {
             const maxHp = this.getMaxHp();
             if (maxHp == null) {
                 if (hp != null) {
-                    throw new Error(`Non null hp: ${hp}.`);
+                    throw Helpers.newError(`Non null hp: ${hp}.`);
                 }
             } else {
                 if ((hp == null) || (hp < 0) || (hp > maxHp)) {
-                    throw new Error(`Invalid hp: ${hp}`);
+                    throw Helpers.newError(`Invalid hp: ${hp}`);
                 }
             }
 
@@ -384,11 +384,11 @@ namespace TwnsBwTile {
             const maxPoint = this.getMaxBuildPoint();
             if (maxPoint == null) {
                 if (point != null) {
-                    throw new Error(`Non null point: ${point}`);
+                    throw Helpers.newError(`Non null point: ${point}`);
                 }
             } else {
                 if ((point == null) || (point < 0) || (point > maxPoint)) {
-                    throw new Error(`Invalid point: ${point}`);
+                    throw Helpers.newError(`Invalid point: ${point}`);
                 }
             }
 
@@ -409,11 +409,11 @@ namespace TwnsBwTile {
             const maxPoint = this.getMaxCapturePoint();
             if (maxPoint == null) {
                 if (point != null) {
-                    throw new Error(`Non null point: ${point}`);
+                    throw Helpers.newError(`Non null point: ${point}`);
                 }
             } else {
                 if ((point == null) || (point < 0) || (point > maxPoint)) {
-                    throw new Error(`Invalid point: ${point}`);
+                    throw Helpers.newError(`Invalid point: ${point}`);
                 }
             }
 
@@ -423,7 +423,7 @@ namespace TwnsBwTile {
         public checkIsDefeatOnCapture(): boolean {
             const cfg = this._getTemplateCfg();
             if (cfg == null) {
-                throw new Error(`BwTile.checkIsDefeatOnCapture() templateCfg is empty.`);
+                throw Helpers.newError(`BwTile.checkIsDefeatOnCapture() templateCfg is empty.`);
             }
 
             return cfg.isDefeatedOnCapture === 1;
@@ -488,7 +488,7 @@ namespace TwnsBwTile {
             playerIndex     : number;
         }): void {
             if (!ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType)) {
-                throw new Error(`Invalid playerIndex: ${playerIndex}, baseType: ${baseType}, objectType: ${objectType}`);
+                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}, baseType: ${baseType}, objectType: ${objectType}`);
             }
 
             if (this.init({
@@ -501,7 +501,7 @@ namespace TwnsBwTile {
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
             }, this.getConfigVersion())) {
-                throw new Error(`BwTile.resetByTypeAndPlayerIndex() failed to init!`);
+                throw Helpers.newError(`BwTile.resetByTypeAndPlayerIndex() failed to init!`);
             }
             this.startRunning(this.getWar());
         }
@@ -634,7 +634,7 @@ namespace TwnsBwTile {
 
             const cfgNormalizedRepairHp = this.getCfgNormalizedRepairHp();
             if (cfgNormalizedRepairHp == null) {
-                throw new Error(`Empty cfgNormalizedRepairHp`);
+                throw Helpers.newError(`Empty cfgNormalizedRepairHp`);
             }
 
             const unitPlayer            = unit.getPlayer();

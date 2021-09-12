@@ -121,7 +121,7 @@ namespace WarActionExecutor {
         else if (action.WarActionUnitSurface)               { return await exeUnitSurface(war, action.WarActionUnitSurface, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
         else if (action.WarActionUnitUseCoSkill)            { return await exeUnitUseCoSkill(war, action.WarActionUnitUseCoSkill, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
         else if (action.WarActionUnitWait)                  { return await exeUnitWait(war, action.WarActionUnitWait, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else                                                { throw new Error(`Unknown action.`); }
+        else                                                { throw Helpers.newError(`Unknown action.`); }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -595,7 +595,7 @@ namespace WarActionExecutor {
 
         const playerInTurn = war.getPlayerInTurn();
         if (playerInTurn == null) {
-            throw new Error(`WarActionExecutor.normalExeSystemBeginTurn() empty playerInTurn.`);
+            throw Helpers.newError(`WarActionExecutor.normalExeSystemBeginTurn() empty playerInTurn.`);
         }
 
         const playerIndex = playerInTurn.getPlayerIndex();
@@ -3859,12 +3859,12 @@ namespace WarActionExecutor {
                 const playerIndex1  = attackerPlayer.getPlayerIndex();
                 const multiplier1   = playerIndex1 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex1);
                 if (multiplier1 == null) {
-                    throw new Error(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier1.`);
+                    throw Helpers.newError(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier1.`);
                 }
 
                 const energy1 = attackerPlayer.getCoCurrentEnergy();
                 if (energy1 == null) {
-                    throw new Error(`ExeMpwUnitAttackUnit.handleEnergy() empty energy1.`);
+                    throw Helpers.newError(`ExeMpwUnitAttackUnit.handleEnergy() empty energy1.`);
                 }
 
                 attackerPlayer.setCoCurrentEnergy(Math.min(
@@ -3882,12 +3882,12 @@ namespace WarActionExecutor {
                 const playerIndex2  = targetPlayer.getPlayerIndex();
                 const multiplier2   = playerIndex2 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex2);
                 if (multiplier2 == null) {
-                    throw new Error(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier2.`);
+                    throw Helpers.newError(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier2.`);
                 }
 
                 const energy2 = targetPlayer.getCoCurrentEnergy();
                 if (energy2 == null) {
-                    throw new Error(`ExeMpwUnitAttackUnit.handleEnergy() empty energy2.`);
+                    throw Helpers.newError(`ExeMpwUnitAttackUnit.handleEnergy() empty energy2.`);
                 }
 
                 targetPlayer.setCoCurrentEnergy(Math.min(

@@ -164,7 +164,7 @@ namespace MpwModel {
         } else if (settingsForMfw) {
             return await createDataForCommonWarBasicSettingsPageForMfw(warRule, settingsForMfw).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         } else {
-            throw new Error(`Invalid warInfo.`);
+            throw Helpers.newError(`Invalid warInfo.`);
         }
     }
     async function createDataForCommonWarBasicSettingsPageForMcw(warRule: IWarRule, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
@@ -239,7 +239,7 @@ namespace MpwModel {
                 },
             );
         } else {
-            throw new Error(`MpwModel.createDataForCommonWarBasicSettingsPageForMcw() invalid timerType.`);
+            throw Helpers.newError(`MpwModel.createDataForCommonWarBasicSettingsPageForMcw() invalid timerType.`);
         }
 
         return openData;
@@ -316,7 +316,7 @@ namespace MpwModel {
                 },
             );
         } else {
-            throw new Error(`MpwModel.createDataForCommonWarBasicSettingsPageForCcw() invalid timerType.`);
+            throw Helpers.newError(`MpwModel.createDataForCommonWarBasicSettingsPageForCcw() invalid timerType.`);
         }
 
         return openData;
@@ -375,7 +375,7 @@ namespace MpwModel {
                 },
             );
         } else {
-            throw new Error(`MpwModel.createDataForCommonWarBasicSettingsPageForMrw() invalid timerType.`);
+            throw Helpers.newError(`MpwModel.createDataForCommonWarBasicSettingsPageForMrw() invalid timerType.`);
         }
 
         return openData;
@@ -446,7 +446,7 @@ namespace MpwModel {
                 },
             );
         } else {
-            throw new Error(`MpwModel.createDataForCommonWarBasicSettingsPageForMfw() invalid timerType.`);
+            throw Helpers.newError(`MpwModel.createDataForCommonWarBasicSettingsPageForMfw() invalid timerType.`);
         }
 
         return openData;
@@ -488,7 +488,7 @@ namespace MpwModel {
                 warType     : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };
         } else {
-            throw new Error(`MpwModel.createDataForCommonWarAdvancedSettingsPage() invalid warInfo.`);
+            throw Helpers.newError(`MpwModel.createDataForCommonWarAdvancedSettingsPage() invalid warInfo.`);
         }
     }
 
@@ -603,7 +603,7 @@ namespace MpwModel {
                 if (requestType === Types.SyncWarRequestType.PlayerForce) {
                     war.setIsEnded(true);
                     if (warData == null) {
-                        throw new Error(`MpwModel.updateOnPlayerSyncWar() empty warData 1.`);
+                        throw Helpers.newError(`MpwModel.updateOnPlayerSyncWar() empty warData 1.`);
                     } else {
                         await FlowManager.gotoMultiPlayerWar(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                         FloatText.show(Lang.getText(LangTextType.A0038));
@@ -613,12 +613,12 @@ namespace MpwModel {
                     const cachedActionsCount    = _cachedActions.length;
                     const executedActionsCount  = war.getExecutedActionManager().getExecutedActionsCount();
                     if (executedActionsCount == null) {
-                        throw new Error(`MpwModel.updateOnPlayerSyncWar() empty executedActionsCount.`);
+                        throw Helpers.newError(`MpwModel.updateOnPlayerSyncWar() empty executedActionsCount.`);
                     } else {
                         if (data.executedActionsCount !== executedActionsCount + cachedActionsCount) {
                             war.setIsEnded(true);
                             if (warData == null) {
-                                throw new Error(`MpwModel.updateOnPlayerSyncWar() empty warData 2.`);
+                                throw Helpers.newError(`MpwModel.updateOnPlayerSyncWar() empty warData 2.`);
                             } else {
                                 await FlowManager.gotoMultiPlayerWar(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                                 FloatText.show(Lang.getText(LangTextType.A0036));
@@ -675,7 +675,7 @@ namespace MpwModel {
         if ((war) && (war.getWarId() === warId)) {
             const executedActionsCount = war.getExecutedActionManager().getExecutedActionsCount();
             if (executedActionsCount == null) {
-                throw new Error(`MpwModel.updateByActionContainer() empty executedActionsCount.`);
+                throw Helpers.newError(`MpwModel.updateByActionContainer() empty executedActionsCount.`);
             } else {
                 if (container.actionId !== executedActionsCount + _cachedActions.length) {
                     MpwProxy.reqMpwCommonSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
@@ -699,14 +699,14 @@ namespace MpwModel {
 
         const selfUserId = UserModel.getSelfUserId();
         if (selfUserId == null) {
-            throw new Error(`MpwModel.checkAndRunFirstCachedAction() empty selfUserId.`);
+            throw Helpers.newError(`MpwModel.checkAndRunFirstCachedAction() empty selfUserId.`);
         }
 
         war.getExecutedActionManager().addExecutedAction(container);
 
         const errorCode = await WarActionExecutor.checkAndExecute(war, container, false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (errorCode) {
-            throw new Error(`MpwModel.checkAndRunFirstCachedAction() errorCode: ${errorCode}.`);
+            throw Helpers.newError(`MpwModel.checkAndRunFirstCachedAction() errorCode: ${errorCode}.`);
         }
 
         const playerManager     = war.getPlayerManager();
@@ -763,7 +763,7 @@ namespace MpwModel {
         } else if (data.settingsForCcw) {
             return new CcwWar();
         } else {
-            throw new Error(`Invalid data.`);
+            throw Helpers.newError(`Invalid data.`);
         }
     }
 }

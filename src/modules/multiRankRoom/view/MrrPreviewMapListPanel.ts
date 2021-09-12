@@ -4,6 +4,7 @@ import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBas
 import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import TwnsClientErrorCode                  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                        from "../../tools/helpers/ConfigManager";
@@ -21,7 +22,6 @@ import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
 import TwnsUiTab                            from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
 import WarMapModel                          from "../../warMap/model/WarMapModel";
-import MrrModel                             from "../model/MrrModel";
 import TwnsMrrMainMenuPanel                 from "./MrrMainMenuPanel";
 
 namespace TwnsMrrPreviewMapListPanel {
@@ -31,6 +31,7 @@ namespace TwnsMrrPreviewMapListPanel {
     import LangTextType                                 = TwnsLangTextType.LangTextType;
     import NotifyType                                   = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                         = Types.WarBasicSettingsType;
+    import ClientErrorCode                              = TwnsClientErrorCode.ClientErrorCode;
 
     type OpenDataForMrrPreviewMapListPanel = {
         hasFog: boolean;
@@ -79,8 +80,7 @@ namespace TwnsMrrPreviewMapListPanel {
 
         protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MrrPreviewingMapIdChanged,  callback: this._onNotifyMrrPreviewingMapIdChanged },
+                { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
@@ -94,12 +94,23 @@ namespace TwnsMrrPreviewMapListPanel {
             this._isTabInitialized = false;
             await this._initTabSettings().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._updateComponentsForLanguage();
-            this._updateGroupMapList();
-            this._updateComponentsForTargetMapInfo();
+            await this._initGroupMapList();
+            this.setAndReviseSelectedMapId(-1, true);
         }
 
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        }
+
+        public async setAndReviseSelectedMapId(mapId: number, needScroll: boolean): Promise<void> {
+            const listMap   = this._listMap;
+            const index     = Helpers.getExisted(listMap.getFirstIndex(v => v.mapId === mapId), ClientErrorCode.MrrPreviewMapListPanel_SetSelectedMapId_00);
+            listMap.setSelectedIndex(index);
+
+            if (needScroll) {
+                listMap.scrollVerticalToIndex(index);
+            }
+            await this._updateComponentsForTargetMapInfo();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -107,10 +118,6 @@ namespace TwnsMrrPreviewMapListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
-        }
-
-        private _onNotifyMrrPreviewingMapIdChanged(): void {
-            this._updateComponentsForTargetMapInfo();
         }
 
         private _onTouchedBtnBack(): void {
@@ -160,23 +167,21 @@ namespace TwnsMrrPreviewMapListPanel {
             this._btnSwitch.label       = Lang.getText(LangTextType.B0597);
         }
 
-        private async _updateGroupMapList(): Promise<void> {
+        private async _initGroupMapList(): Promise<void> {
             const labelLoading      = this._labelLoading;
             const labelNoMap        = this._labelNoMap;
             const listMap           = this._listMap;
             labelNoMap.visible      = false;
 
             const dataArray         = await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            const mapId             = MrrModel.getPreviewingMapId();
             labelLoading.visible    = false;
             labelNoMap.visible      = !dataArray.length;
             listMap.bindData(dataArray);
-            listMap.setSelectedIndex(dataArray.findIndex(v => v.mapId === mapId));
         }
 
         private async _updateComponentsForTargetMapInfo(): Promise<void> {
             const groupTab      = this._groupTab;
-            const mapId         = MrrModel.getPreviewingMapId();
+            const mapId         = this._getPreviewingMapId();
             if (mapId == null) {
                 groupTab.visible    = false;
             } else {
@@ -234,6 +239,7 @@ namespace TwnsMrrPreviewMapListPanel {
                     dataArray.push({
                         mapId   : Helpers.getExisted(mapRawData.mapId),
                         mapName : Lang.getLanguageText({ textArray: mapRawData.mapNameArray }) || CommonConstants.ErrorTextForUndefined,
+                        panel   : this,
                     });
                 }
             }
@@ -242,14 +248,14 @@ namespace TwnsMrrPreviewMapListPanel {
         }
 
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
-            const mapId = MrrModel.getPreviewingMapId();
+            const mapId = this._getPreviewingMapId();
             return mapId == null
                 ? {}
                 : { mapInfo: { mapId } };
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const mapId = MrrModel.getPreviewingMapId();
+            const mapId = this._getPreviewingMapId();
             if (mapId == null) {
                 return null;
             }
@@ -321,14 +327,14 @@ namespace TwnsMrrPreviewMapListPanel {
                     },
                 );
             } else {
-                throw new Error(`Invalid timerType: ${timerType}`);
+                throw Helpers.newError(`Invalid timerType: ${timerType}`);
             }
 
             return openData;
         }
 
         private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-            const mapId = MrrModel.getPreviewingMapId();
+            const mapId = this._getPreviewingMapId();
             if (mapId == null) {
                 return null;
             }
@@ -347,6 +353,10 @@ namespace TwnsMrrPreviewMapListPanel {
                 warRule         : warRuleArray[0],
                 warType         : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };
+        }
+
+        private _getPreviewingMapId(): number | null {
+            return this._listMap.getSelectedData()?.mapId ?? null;
         }
 
         private _showOpenAnimation(): void {
@@ -422,6 +432,7 @@ namespace TwnsMrrPreviewMapListPanel {
     type DataForMapNameRenderer = {
         mapId   : number;
         mapName : string;
+        panel   : MrrPreviewMapListPanel;
     };
     class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
@@ -439,7 +450,8 @@ namespace TwnsMrrPreviewMapListPanel {
         }
 
         private _onTouchTapBtnChoose(): void {
-            MrrModel.setPreviewingMapId(this._getData().mapId);
+            const data = this._getData();
+            data.panel.setAndReviseSelectedMapId(data.mapId, false);
         }
     }
 }

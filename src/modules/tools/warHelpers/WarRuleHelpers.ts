@@ -209,7 +209,7 @@ namespace WarRuleHelpers {
         const warEventIdArray   = Helpers.getExisted(warRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
-            throw new Error(`WarRuleHelpers.moveWarEventId() invalid currIndex: ${currIndex}`);
+            throw Helpers.newError(`WarRuleHelpers.moveWarEventId() invalid currIndex: ${currIndex}`);
         }
 
         const newIndex = Math.max(0, Math.min(warEventIdArray.length - 1, currIndex + deltaIndex));
@@ -222,7 +222,7 @@ namespace WarRuleHelpers {
         const warEventIdArray   = Helpers.getExisted(warRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
-            throw new Error(`BwWarRuleHelper.deleteWarEventId() invalid currIndex: ${currIndex}`);
+            throw Helpers.newError(`BwWarRuleHelper.deleteWarEventId() invalid currIndex: ${currIndex}`);
         }
 
         warEventIdArray.splice(currIndex, 1);
@@ -234,7 +234,7 @@ namespace WarRuleHelpers {
 
         const warEventIdArray = warRule.warEventIdArray;
         if (warEventIdArray.indexOf(warEventId) >= 0) {
-            throw new Error(`BwWarRuleHelper.addWarEventId() the warEventId exists: ${warEventId}.`);
+            throw Helpers.newError(`BwWarRuleHelper.addWarEventId() the warEventId exists: ${warEventId}.`);
         }
 
         warEventIdArray.push(warEventId);
@@ -249,7 +249,7 @@ namespace WarRuleHelpers {
     }
     export function getRandomCoIdWithCoIdList(coIdList: number[]): number {
         if ((coIdList == null) || (coIdList.length <= 0)) {
-            throw new Error(`Empty coIdList.`);
+            throw Helpers.newError(`Empty coIdList.`);
         } else {
             if (coIdList.length <= 1) {
                 return coIdList[0];

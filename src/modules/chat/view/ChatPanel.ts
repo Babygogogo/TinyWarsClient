@@ -664,7 +664,7 @@ namespace TwnsChatPanel {
                 });
 
             } else {
-                throw new Error(`Invalid data.`);
+                throw Helpers.newError(`Invalid data.`);
             }
         }
 
