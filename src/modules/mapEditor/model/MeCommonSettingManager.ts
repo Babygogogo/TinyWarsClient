@@ -1,7 +1,6 @@
 
 import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
-import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Helpers                      from "../../tools/helpers/Helpers";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
@@ -20,12 +19,12 @@ namespace TwnsMeCommonSettingManager {
         }): Promise<void> {
             const configVersion = settings.configVersion;
             if ((configVersion == null) || (configVersion !== ConfigManager.getLatestConfigVersion())) {
-                throw CompatibilityHelpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
+                throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
             }
 
             const warRule = settings.warRule;
             if (warRule == null) {
-                throw CompatibilityHelpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
+                throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
             }
 
             this._setSettingsForCommon(settings);

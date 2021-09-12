@@ -1,7 +1,6 @@
 
 import TwnsBwWar            from "../../baseWar/model/BwWar";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
@@ -30,7 +29,7 @@ namespace TwnsBwDrawVoteManager {
                     }
                 }
                 if (remainingVotes >= maxVotes) {
-                    throw CompatibilityHelpers.newError(`remainingVotes >= maxVotes.`, ClientErrorCode.BwDrawVoteManager_Init_00);
+                    throw Helpers.newError(`remainingVotes >= maxVotes.`, ClientErrorCode.BwDrawVoteManager_Init_00);
                 }
                 this.setRemainingVotes(remainingVotes);
             }

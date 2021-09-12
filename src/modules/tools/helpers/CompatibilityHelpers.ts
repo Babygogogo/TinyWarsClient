@@ -3,7 +3,6 @@ import ChatProxy            from "../../chat/model/ChatProxy";
 import TwnsCommonErrorPanel from "../../common/view/CommonErrorPanel";
 import Lang                 from "../lang/Lang";
 import TwnsLangTextType     from "../lang/LangTextType";
-import TwnsClientErrorCode  from "./ClientErrorCode";
 import CommonConstants      from "./CommonConstants";
 import FloatText            from "./FloatText";
 import SoundManager         from "./SoundManager";
@@ -11,7 +10,6 @@ import Types                from "./Types";
 
 namespace CompatibilityHelpers {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export function init(): void {
         initListenerForWindowOnError();
@@ -25,11 +23,6 @@ namespace CompatibilityHelpers {
             err.isShown = true;
             showErrorText(`Code: ${err.errorCode ?? `--`}\n${err.message}\n${err.stack ?? "No available call stack."}`);
         }
-    }
-    export function newError(msg: string, errorCode: ClientErrorCode): Types.CustomError {
-        const error     : Types.CustomError = new Error(msg);
-        error.errorCode = errorCode;
-        return error;
     }
 
     function initListenerForWindowOnError(): void {

@@ -1,5 +1,4 @@
 
-import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
 import GridIndexHelpers     from "../helpers/GridIndexHelpers";
 import Helpers              from "../helpers/Helpers";
 import Types                from "../helpers/Types";
@@ -11,7 +10,6 @@ import TwnsBwWar            from "../../baseWar/model/BwWar";
 namespace WarVisibilityHelpers {
     import GridIndex        = Types.GridIndex;
     import Visibility       = Types.Visibility;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import BwUnit           = TwnsBwUnit.BwUnit;
     import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
     import BwWar            = TwnsBwWar.BwWar;
@@ -351,32 +349,12 @@ namespace WarVisibilityHelpers {
         movingUnit      : BwUnit;
         isUnitDestroyed : boolean;
         visibleUnits    : Set<BwUnit>;
-    }): { errorCode: ClientErrorCode, discoveredUnits?: Set<BwUnit> } {
-        const observerTeamIndex = movingUnit.getTeamIndex();
-        if (observerTeamIndex == null) {
-            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_00 };
-        }
-
-        const tileMap = war.getTileMap();
-        if (tileMap == null) {
-            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_01 };
-        }
-
-        const mapSize = tileMap.getMapSize();
-        if (mapSize == null) {
-            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_02 };
-        }
-
-        const visibilityMap = _createVisibilityMapFromPath(war, path, movingUnit);
-        if (visibilityMap == null) {
-            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_03 };
-        }
-
-        const unitMap = war.getUnitMap();
-        if (unitMap == null) {
-            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_04 };
-        }
-
+    }): Set<BwUnit> {
+        const observerTeamIndex                         = movingUnit.getTeamIndex();
+        const tileMap                                   = war.getTileMap();
+        const mapSize                                   = tileMap.getMapSize();
+        const visibilityMap                             = _createVisibilityMapFromPath(war, path, movingUnit);
+        const unitMap                                   = war.getUnitMap();
         const discoveredUnits                           = new Set<BwUnit>();
         const destination                               = path[path.length - 1];
         const { width: mapWidth, height: mapHeight }    = mapSize;
@@ -388,16 +366,6 @@ namespace WarVisibilityHelpers {
 
                     const unit = unitMap.getUnitOnMap(gridIndex);
                     if ((unit) && (!visibleUnits.has(unit))) {
-                        const unitType = unit.getUnitType();
-                        if (unitType == null) {
-                            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_05 };
-                        }
-
-                        const unitPlayerIndex = unit.getPlayerIndex();
-                        if (unitPlayerIndex == null) {
-                            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_06 };
-                        }
-
                         if (unit.getIsDiving()) {
                             if ((!isUnitDestroyed)                                          &&
                                 (GridIndexHelpers.checkIsAdjacent(gridIndex, destination))
@@ -416,10 +384,7 @@ namespace WarVisibilityHelpers {
             }
         }
 
-        return {
-            errorCode       : ClientErrorCode.NoError,
-            discoveredUnits,
-        };
+        return discoveredUnits;
     }
 
     function _checkHasUnitWithTeamIndexesOnAdjacentGrids(unitMap: BwUnitMap, origin: GridIndex, teamIndexes: Set<number>): boolean {

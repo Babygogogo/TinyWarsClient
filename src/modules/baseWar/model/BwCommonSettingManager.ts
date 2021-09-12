@@ -25,12 +25,12 @@ namespace TwnsBwCommonSettingManager {
             if ((configVersion == null)                                                                                                     ||
                 (!await ConfigManager.checkIsVersionValid(configVersion).catch(err => { CompatibilityHelpers.showError(err); throw err; }))
             ) {
-                throw CompatibilityHelpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwCommonSettingManager_Init_00);
+                throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwCommonSettingManager_Init_00);
             }
 
             const warRule = settings.warRule;
             if (warRule == null) {
-                throw CompatibilityHelpers.newError(`Empty warRule.`, ClientErrorCode.BwCommonSettingManager_Init_01);
+                throw Helpers.newError(`Empty warRule.`, ClientErrorCode.BwCommonSettingManager_Init_01);
             }
 
             const errorCodeForWarRule = WarRuleHelpers.getErrorCodeForWarRule({
@@ -40,7 +40,7 @@ namespace TwnsBwCommonSettingManager {
                 playersCountUnneutral,
             });
             if (errorCodeForWarRule) {
-                throw CompatibilityHelpers.newError(`Invalid warRule.`, errorCodeForWarRule);
+                throw Helpers.newError(`Invalid warRule.`, errorCodeForWarRule);
             }
 
             this._setSettingsForCommon(settings);

@@ -114,16 +114,7 @@ namespace SpwModel {
             return;
         }
 
-        const {
-            errorCode   : errorCodeForRobotAction,
-            action      : robotAction,
-        } = await WarRobot.getNextAction(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-        if (errorCodeForRobotAction) {
-            throw new Error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() errorCodeForRobotAction: ${errorCodeForRobotAction}`);
-        } else if (robotAction == null) {
-            throw new Error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() empty robotAction!`);
-        }
-
+        const robotAction = await WarRobot.getNextAction(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         if (!war.getIsRunning()) {
             _warsWithRobotRunning.delete(war);
             return;

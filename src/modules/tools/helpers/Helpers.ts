@@ -1,9 +1,10 @@
 
-import Types                from "./Types";
-import ProtoTypes           from "../proto/ProtoTypes";
 import Lang                 from "../lang/Lang";
 import TwnsLangTextType     from "../lang/LangTextType";
+import ProtoTypes           from "../proto/ProtoTypes";
+import TwnsClientErrorCode  from "./ClientErrorCode";
 import CompatibilityHelpers from "./CompatibilityHelpers";
+import Types                from "./Types";
 
 namespace Helpers {
     import ColorType            = Types.ColorType;
@@ -11,6 +12,7 @@ namespace Helpers {
     import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import LangTextType         = TwnsLangTextType.LangTextType;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     const COLOR_MATRIX_FILTERS = {
         [ColorType.Gray]: new egret.ColorMatrixFilter([
@@ -483,12 +485,18 @@ namespace Helpers {
 
         return value;
     }
-    export function getExisted<T>(value: Types.Undefinable<T>): T {
+    export function getExisted<T>(value: Types.Undefinable<T>, errorCode?: ClientErrorCode): T {
         if (value == null) {
-            throw new Error(`Empty value`);
+            throw newError(`Empty value`, errorCode);
         }
 
         return value;
+    }
+
+    export function newError(msg: string, errorCode?: ClientErrorCode): Types.CustomError {
+        const error     : Types.CustomError = new Error(msg);
+        error.errorCode = errorCode;
+        return error;
     }
 }
 

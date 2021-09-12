@@ -44,7 +44,7 @@
         "scope": "typescript",
         "prefix": "te",
         "body": [
-            "throw new Error(`$1`);",
+            "throw Helpers.newError(`$1`);",
         ],
     },
 }
