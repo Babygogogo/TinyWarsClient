@@ -128,7 +128,7 @@ namespace TwnsMcrCreateMapListPanel {
             const dataArray             = await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._labelNoMap.visible    = dataArray.length <= 0;
             this._listMap.bindData(dataArray);
-            this.setAndReviseSelectedMapId(oldSelectedMapId ?? -1, true);
+            await this.setAndReviseSelectedMapId(oldSelectedMapId ?? -1, true).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////

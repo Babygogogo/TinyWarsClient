@@ -94,7 +94,7 @@ namespace TwnsMrrPreviewMapListPanel {
             this._isTabInitialized = false;
             await this._initTabSettings().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._updateComponentsForLanguage();
-            await this._initGroupMapList();
+            await this._initGroupMapList().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this.setAndReviseSelectedMapId(-1, true);
         }
 
@@ -110,7 +110,7 @@ namespace TwnsMrrPreviewMapListPanel {
             if (needScroll) {
                 listMap.scrollVerticalToIndex(index);
             }
-            await this._updateComponentsForTargetMapInfo();
+            await this._updateComponentsForTargetMapInfo().catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
         ////////////////////////////////////////////////////////////////////////////////

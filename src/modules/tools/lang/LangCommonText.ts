@@ -1820,7 +1820,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0206]: [
             `观战`,
-            `Watch`,
+            `Spectate Wars`,
         ],
         [LangTextType.B0207]: [
             `发起请求`,
@@ -1828,7 +1828,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0208]: [
             `处理请求`,
-            `Handle Request`,
+            `Handle Requests`,
         ],
         [LangTextType.B0209]: [
             `暂无请求`,
@@ -1872,7 +1872,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0219]: [
             `删除观战者`,
-            `Delete Watcher`,
+            `Delete Spectators`,
         ],
         [LangTextType.B0220]: [
             `删除`,

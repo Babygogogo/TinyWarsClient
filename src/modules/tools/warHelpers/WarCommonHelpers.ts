@@ -780,6 +780,25 @@ namespace WarCommonHelpers {
             return WarType.Undefined;
         }
     }
+    export function getWarTypeByMpwWarInfo(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo): WarType {
+        const warRule   = warInfo.settingsForCommon?.warRule;
+        const hasFog    = warRule ? WarRuleHelpers.getHasFogByDefault(warRule) : null;
+        if (hasFog == null) {
+            return WarType.Undefined;
+        }
+
+        if (warInfo.settingsForMcw) {
+            return hasFog ? WarType.McwFog : WarType.McwStd;
+        } else if (warInfo.settingsForMfw) {
+            return hasFog ? WarType.MfwFog : WarType.MfwStd;
+        } else if (warInfo.settingsForMrw) {
+            return hasFog ? WarType.MrwFog : WarType.MrwStd;
+        } else if (warInfo.settingsForCcw) {
+            return hasFog ? WarType.CcwFog : WarType.CcwStd;
+        } else {
+            return WarType.Undefined;
+        }
+    }
 
     export function getPlayersCountUnneutral(playerManagerData: Types.Undefinable<WarSerialization.ISerialPlayerManager>): number {
         const playerIndexSet = new Set<number>();

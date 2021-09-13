@@ -200,7 +200,8 @@ var mouse;
     mouse.enable = function (stage) {
         isPC = egret.Capabilities.os == "Windows PC" || egret.Capabilities.os == "Mac OS";
         stageObj = stage;
-        if (isPC) {
+        // if (isPC) {
+        if (isPC || egret.Capabilities.os == "Unknown") {   // 尝试解决linux环境鼠标滚轮失效问题
             addMouseWheelEvent();
         }
         var check = function (x, y) {
