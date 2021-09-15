@@ -7,6 +7,7 @@ import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
@@ -101,18 +102,13 @@ namespace TwnsBwUnitActionsPanel {
                         costForProduceUnit  : data.costForProduceUnit ?? null,
                     });
                 } else {
-                    const configVersion = war.getConfigVersion();
-                    if (configVersion == null) {
-                        throw Helpers.newError(`BwUnitActionsPanel._updateView() empty configVersion.`);
-                    }
-
                     const unitForProduce = new TwnsBwUnit.BwUnit();
                     unitForProduce.init({
                         gridIndex   : { x: -1, y: -1 },
                         unitId      : -1,
                         unitType    : produceUnitType,
                         playerIndex : war.getPlayerIndexInTurn(),
-                    }, configVersion);
+                    }, war.getConfigVersion());
                     unitForProduce.startRunning(war);
 
                     dataArray.push({
@@ -125,8 +121,9 @@ namespace TwnsBwUnitActionsPanel {
                 }
             }
 
+            dataArray[dataArray.length - 1].isLastAction = true;
             this._listAction.bindData(dataArray);
-            this._group.height = Math.min(300, (dataArray.length || 1) * 60);
+            this._group.height = Math.min(300, dataArray.length * 60);
         }
 
         private _updatePosition(): void {
@@ -146,7 +143,7 @@ namespace TwnsBwUnitActionsPanel {
                 (gridIndex.y + 1) * gridSize.height,
             );
 
-            group.x         = Math.max(0, Math.min(point.x, stage.stageWidth - 130));
+            group.x         = Math.max(0, Math.min(point.x, stage.stageWidth - 140));
             group.y         = Math.max(40, Math.min(point.y, stage.stageHeight - group.height));
         }
 
@@ -177,11 +174,13 @@ namespace TwnsBwUnitActionsPanel {
         callback            : () => void;
         unit?               : TwnsBwUnit.BwUnit;
         costForProduceUnit  : number | null;
+        isLastAction?       : boolean;
     };
     class UnitActionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitActionRenderer> {
-        private readonly _labelAction!  : TwnsUiLabel.UiLabel;
-        private readonly _labelCost!    : TwnsUiLabel.UiLabel;
-        private readonly _conUnitView!  : eui.Group;
+        private readonly _labelAction!      : TwnsUiLabel.UiLabel;
+        private readonly _labelCost!        : TwnsUiLabel.UiLabel;
+        private readonly _conUnitView!      : eui.Group;
+        private readonly _imgBottomLine!    : TwnsUiImage.UiImage;
 
         private readonly _unitView      = new BwUnitView();
 
@@ -195,23 +194,25 @@ namespace TwnsBwUnitActionsPanel {
         }
 
         protected _onDataChanged(): void {
-            const data              = this._getData();
-            this._labelAction.text  = Lang.getUnitActionName(data.actionType) || CommonConstants.ErrorTextForUndefined;
+            const data                  = this._getData();
+            this._labelAction.text      = Lang.getUnitActionName(data.actionType) || CommonConstants.ErrorTextForUndefined;
+            this._imgBottomLine.visible = !data.isLastAction;
 
             const unit      = data.unit;
+            const unitView  = this._unitView;
             const labelCost = this._labelCost;
             if (unit == null) {
-                this.currentState   = "withoutUnit";
                 labelCost.text      = "";
+                unitView.visible    = false;
             } else {
-                this.currentState   = "withUnit";
                 if (data.actionType !== Types.UnitActionType.ProduceUnit) {
                     labelCost.text = ``;
                 } else {
                     const cost      = data.costForProduceUnit;
                     labelCost.text  = `${Lang.getText(LangTextType.B0079)}: ${cost != null ? cost : CommonConstants.ErrorTextForUndefined}`;
                 }
-                this._unitView.init(unit).startRunningView();
+                unitView.visible = true;
+                unitView.init(unit).startRunningView();
             }
         }
 

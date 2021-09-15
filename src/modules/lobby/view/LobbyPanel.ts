@@ -33,7 +33,7 @@ namespace TwnsLobbyPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: LobbyPanel;
+        private static _instance            : LobbyPanel | null = null;
 
         private readonly _groupTips!        : eui.Group;
         private readonly _groupWelcome!     : eui.Group;
@@ -60,11 +60,13 @@ namespace TwnsLobbyPanel {
             }
             LobbyPanel._instance.open();
         }
-
         public static async hide(): Promise<void> {
             if (LobbyPanel._instance) {
                 await LobbyPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
+        }
+        public static getInstance(): LobbyPanel | null {
+            return LobbyPanel._instance;
         }
 
         private constructor() {

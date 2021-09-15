@@ -833,6 +833,27 @@ namespace WarCommonHelpers {
         }
     }
 
+    export function getTextColorForSkinId(skinId: number): number {
+        switch (skinId) {
+            case 0  : return 0xFFFFFF;
+            case 1  : return 0xF4664F;
+            case 2  : return 0x34A7DE;
+            case 3  : return 0xF9D803;
+            case 4  : return 0x000000;
+            default : throw Helpers.newError(`Invalid skinId: ${skinId}`);
+        }
+    }
+    export function getTextStrokeForSkinId(skinId: number): number {
+        switch (skinId) {
+            case 0  : return 0;
+            case 1  : return 0;
+            case 2  : return 0;
+            case 3  : return 0;
+            case 4  : return 1;
+            default : throw Helpers.newError(`Invalid skinId: ${skinId}`);
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Other validators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////

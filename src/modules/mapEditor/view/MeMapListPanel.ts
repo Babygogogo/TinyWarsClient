@@ -117,10 +117,7 @@ namespace TwnsMeMapListPanel {
         }
 
         private _onTouchTapBtnBack(): void {
-            this.close();
-            TwnsLobbyPanel.LobbyPanel.show();
-            TwnsLobbyTopPanel.LobbyTopPanel.show();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+            FlowManager.gotoLobby();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

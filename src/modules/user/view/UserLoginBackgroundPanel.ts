@@ -1,7 +1,7 @@
 
 import TwnsCommonChangeVersionPanel from "../../common/view/CommonChangeVersionPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
+import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Helpers                      from "../../tools/helpers/Helpers";
 import SoundManager                 from "../../tools/helpers/SoundManager";
@@ -31,7 +31,7 @@ namespace TwnsUserLoginBackgroundPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Bottom;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: UserLoginBackgroundPanel;
+        private static _instance            : UserLoginBackgroundPanel | null = null;
 
         private readonly _imgBackground!    : TwnsUiImage.UiImage;
 
@@ -50,11 +50,13 @@ namespace TwnsUserLoginBackgroundPanel {
             }
             UserLoginBackgroundPanel._instance.open();
         }
-
         public static async hide(): Promise<void> {
             if (UserLoginBackgroundPanel._instance) {
                 await UserLoginBackgroundPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
+        }
+        public static getInstance(): UserLoginBackgroundPanel | null {
+            return UserLoginBackgroundPanel._instance;
         }
 
         private constructor() {

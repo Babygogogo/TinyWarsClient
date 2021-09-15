@@ -1,5 +1,6 @@
 
 import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
+import TwnsBwDamagePreviewPanel from "../../baseWar/view/BwDamagePreviewPanel";
 import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
 import FloatText                from "../../tools/helpers/FloatText";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
@@ -28,6 +29,11 @@ namespace TwnsRwActionPlanner {
                 TwnsBwUnitActionsPanel.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
             } else {
                 TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
+            }
+            if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
+                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.show({ war: this._getWar() });
+            } else {
+                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.hide();
             }
         }
 

@@ -1,13 +1,9 @@
 
 import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
-import WarDamageCalculator  from "../../tools/warHelpers/WarDamageCalculator";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
-import Lang                 from "../../tools/lang/Lang";
 import NotifyData           from "../../tools/notify/NotifyData";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import Types                from "../../tools/helpers/Types";
@@ -16,7 +12,6 @@ import TwnsBwCursor         from "../model/BwCursor";
 namespace TwnsBwCursorView {
     import GridIndex            = Types.GridIndex;
     import ActionPlannerState   = Types.ActionPlannerState;
-    import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import BwCursor             = TwnsBwCursor.BwCursor;
 
@@ -51,9 +46,6 @@ namespace TwnsBwCursorView {
     const _LOWER_RIGHT_CORNER_INNER_X   = _GRID_WIDTH  - 4;
     const _LOWER_RIGHT_CORNER_INNER_Y   = _GRID_HEIGHT - 4;
 
-    const _DAMAGE_CON_WIDTH     = 140;
-    const _DAMAGE_CON_HEIGHT    = 60;
-
     export class BwCursorView extends eui.Group {
         private _cursor?                : BwCursor;
         private _frameIndexForImgTarget = 0;
@@ -68,14 +60,12 @@ namespace TwnsBwCursorView {
         private _conForNormal           = new egret.DisplayObjectContainer();
         private _conForTarget           = new egret.DisplayObjectContainer();
         private _conForSiloArea         = new egret.DisplayObjectContainer();
-        private _conForDamage           = new egret.DisplayObjectContainer();
         private _imgUpperLeftCorner     = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgUpperRightCorner    = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgLowerLeftCorner     = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgLowerRightCorner    = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgTarget              = new TwnsUiImage.UiImage(_IMG_SOURCES_FOR_TARGET[this._frameIndexForImgTarget]);
         private _imgSiloArea            = new TwnsUiImage.UiImage(`c04_t03_s03_f01`);
-        private _labelDamage            = new TwnsUiLabel.UiLabel();
 
         public constructor() {
             super();
@@ -84,7 +74,6 @@ namespace TwnsBwCursorView {
             this._initConForNormal();
             this._initConForTarget();
             this._initConForSiloArea();
-            this._initConForDamage();
         }
 
         public init(cursor: BwCursor): void {
@@ -135,7 +124,6 @@ namespace TwnsBwCursorView {
             this._updateConForNormal();
             this._updateConForTarget();
             this._updateConForSiloArea();
-            this._updateConForDamage();
         }
 
         public setVisibleForConForNormal(visible: boolean): void {
@@ -405,102 +393,6 @@ namespace TwnsBwCursorView {
                 // TODO
             }
         }
-        private _updateConForDamage(): void {
-            const cursor        = this._getCursor();
-            const actionPlanner = cursor.getWar().getActionPlanner();
-            const con           = this._getConForDamage();
-            const gridIndex     = cursor.getGridIndex();
-            const labelDamage   = this._getLabelDamage();
-            const state         = actionPlanner.getState();
-
-            if (state === ActionPlannerState.MakingMovePath) {
-                const war           = cursor.getWar();
-                const unitMap       = war.getUnitMap();
-                const attackerUnit  = Helpers.getExisted(actionPlanner.getFocusUnit());
-                const movePath      = actionPlanner.getMovePath();
-                if (!attackerUnit.checkCanAttackTargetAfterMovePath(movePath, gridIndex)) {
-                    con.visible = false;
-                } else {
-                    const attackerUnitId                        = attackerUnit.getUnitId();
-                    const { errorCode, battleDamageInfoArray }  = WarDamageCalculator.getEstimatedBattleDamage({
-                        war,
-                        attackerMovePath: movePath,
-                        launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
-                        targetGridIndex : gridIndex,
-                    });
-                    if (errorCode) {
-                        throw Helpers.newError(`BwCursorView._updateConForDamage() errorCode: ${errorCode}.`);
-                    } else if (battleDamageInfoArray == null) {
-                        throw Helpers.newError(`BwCursorView._updateConForDamage() empty battleDamageInfoArray.`);
-                    } else {
-                        con.visible = true;
-
-                        const { errorCode: errorCodeForDamages, damages } = WarDamageCalculator.getAttackAndCounterDamage({
-                            battleDamageInfoArray,
-                            attackerUnitId,
-                            targetGridIndex     : gridIndex,
-                            unitMap,
-                        });
-                        if (errorCodeForDamages) {
-                            throw Helpers.newError(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
-                        } else if (damages == null) {
-                            throw Helpers.newError(`BwCursorView._updateConForDamage() empty damages.`);
-                        }
-
-                        const { attackDamage, counterDamage } = damages;
-                        const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
-                        labelDamage.text    = `${Lang.getText(LangTextType.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
-                            + `${Lang.getText(LangTextType.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
-                        this._updatePositionForConForDamage();
-                    }
-                }
-
-            } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                const war           = cursor.getWar();
-                const unitMap       = war.getUnitMap();
-                const attackerUnit  = Helpers.getExisted(actionPlanner.getFocusUnit());
-                const movePath      = actionPlanner.getMovePath();
-                if (!attackerUnit.checkCanAttackTargetAfterMovePath(movePath, gridIndex)) {
-                    con.visible = false;
-                } else {
-                    const attackerUnitId                        = attackerUnit.getUnitId();
-                    const { errorCode, battleDamageInfoArray }  = WarDamageCalculator.getEstimatedBattleDamage({
-                        war,
-                        attackerMovePath: movePath,
-                        launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
-                        targetGridIndex : gridIndex,
-                    });
-                    if (errorCode) {
-                        throw Helpers.newError(`BwCursorView._updateConForDamage() errorCode: ${errorCode}.`);
-                    } else if (battleDamageInfoArray == null) {
-                        throw Helpers.newError(`BwCursorView._updateConForDamage() empty battleDamageInfoArray.`);
-                    } else {
-                        con.visible = true;
-
-                        const { errorCode: errorCodeForDamages, damages } = WarDamageCalculator.getAttackAndCounterDamage({
-                            battleDamageInfoArray,
-                            attackerUnitId,
-                            targetGridIndex     : gridIndex,
-                            unitMap,
-                        });
-                        if (errorCodeForDamages) {
-                            throw Helpers.newError(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
-                        } else if (damages == null) {
-                            throw Helpers.newError(`BwCursorView._updateConForDamage() empty damages.`);
-                        }
-
-                        const { attackDamage, counterDamage } = damages;
-                        const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
-                        labelDamage.text    = `${Lang.getText(LangTextType.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
-                            + `${Lang.getText(LangTextType.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
-                        this._updatePositionForConForDamage();
-                    }
-                }
-
-            } else {
-                con.visible = false;
-            }
-        }
 
         private _initConForNormal(): void {
             this._imgUpperLeftCorner.x = _UPPER_LEFT_CORNER_OUTER_X;
@@ -537,26 +429,6 @@ namespace TwnsBwCursorView {
             this._conForSiloArea.addChild(this._imgSiloArea);
 
             this._conForAll.addChild(this._conForSiloArea);
-        }
-        private _initConForDamage(): void {
-            const imgBg         = new TwnsUiImage.UiImage("c04_t01_s02_f01");
-            imgBg.scale9Grid    = new egret.Rectangle(9, 9, 2, 2);
-            imgBg.width         = _DAMAGE_CON_WIDTH;
-            imgBg.height        = _DAMAGE_CON_HEIGHT;
-            imgBg.alpha         = 0.9;
-            this._conForDamage.addChild(imgBg);
-
-            const labelDamage           = this._labelDamage;
-            labelDamage.size            = 18;
-            labelDamage.width           = _DAMAGE_CON_WIDTH;
-            labelDamage.height          = _DAMAGE_CON_HEIGHT;
-            labelDamage.textAlign       = egret.HorizontalAlign.CENTER;
-            labelDamage.verticalAlign   = egret.VerticalAlign.MIDDLE;
-            this._conForDamage.addChild(labelDamage);
-
-            this._conForDamage.x = (_GRID_WIDTH - _DAMAGE_CON_WIDTH) / 2;
-            this._conForDamage.y = -_DAMAGE_CON_HEIGHT;
-            this._conForAll.addChild(this._conForDamage);
         }
 
         private _startNormalAnimation(): void {
@@ -631,19 +503,6 @@ namespace TwnsBwCursorView {
         private _getGridIndexByGlobalXY(globalX: number, globalY: number): GridIndex {
             const point = this.globalToLocal(globalX, globalY);
             return this._getGridIndexByLocalXY(point.x, point.y);
-        }
-
-        protected _getConForDamage(): egret.DisplayObjectContainer {
-            return this._conForDamage;
-        }
-        protected _getLabelDamage(): TwnsUiLabel.UiLabel {
-            return this._labelDamage;
-        }
-
-        protected _updatePositionForConForDamage(): void {
-            this._getConForDamage().y = (this._getCursor().getGridY() <= 0)
-                ? _GRID_HEIGHT
-                : -_DAMAGE_CON_HEIGHT;
         }
     }
 }

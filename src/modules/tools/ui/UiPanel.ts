@@ -56,7 +56,7 @@ namespace TwnsUiPanel {
             this._setOpenData(openData);
 
             const layer = StageManager.getLayer(this._LAYER_TYPE);
-            (this._IS_EXCLUSIVE) && (layer.closeAllPanels(this));
+            (this._IS_EXCLUSIVE) && (layer.closeAllPanels([this]));
             (!this.parent) && (layer.addChild(this));
 
             this._doOpen();

@@ -92,9 +92,9 @@ namespace StageManager {
         return _stageScale;
     }
 
-    export function closeAllPanels(): void {
+    export function closeAllPanels(exceptions?: (TwnsUiPanel.UiPanel<any>)[]): void {
         for (const [, layer] of _LAYERS) {
-            layer.closeAllPanels();
+            layer.closeAllPanels(exceptions);
         }
     }
 
@@ -131,10 +131,10 @@ namespace StageManager {
             this.addEventListener(egret.Event.RESIZE, this._onResize, this);
         }
 
-        public closeAllPanels<T>(except?: TwnsUiPanel.UiPanel<T>): void {
+        public closeAllPanels(exceptions?: (TwnsUiPanel.UiPanel<any>)[]): void {
             for (let i = this.numChildren - 1; i >= 0; --i) {
                 const child = this.getChildAt(i);
-                if ((child instanceof TwnsUiPanel.UiPanel) && (child !== except)) {
+                if ((child instanceof TwnsUiPanel.UiPanel) && (!exceptions?.some(v => child === v))) {
                     child.close();
                 }
             }

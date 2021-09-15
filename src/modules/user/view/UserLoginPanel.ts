@@ -26,6 +26,8 @@ namespace TwnsUserLoginPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
+        private static _instance                    : UserLoginPanel | null = null;
+
         private readonly _imgTitle!                 : TwnsUiImage.UiImage;
 
         private readonly _groupAccount!             : eui.Group;
@@ -46,19 +48,19 @@ namespace TwnsUserLoginPanel {
         private readonly _btnRegister!              : TwnsUiButton.UiButton;
         private readonly _btnLogin!                 : TwnsUiButton.UiButton;
 
-        private static _instance: UserLoginPanel;
-
         public static show(): void {
             if (!UserLoginPanel._instance) {
                 UserLoginPanel._instance = new UserLoginPanel();
             }
             UserLoginPanel._instance.open();
         }
-
         public static async hide(): Promise<void> {
             if (UserLoginPanel._instance) {
                 await UserLoginPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
+        }
+        public static getInstance(): UserLoginPanel | null {
+            return UserLoginPanel._instance;
         }
 
         private constructor() {

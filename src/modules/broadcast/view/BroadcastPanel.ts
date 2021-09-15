@@ -20,7 +20,7 @@ namespace TwnsBroadcastPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Notify0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: BroadcastPanel;
+        private static _instance        : BroadcastPanel | null = null;
 
         private readonly _groupLamp!    : eui.Group;
         private readonly _labelLamp!    : TwnsUiLabel.UiLabel;
@@ -33,11 +33,13 @@ namespace TwnsBroadcastPanel {
             }
             BroadcastPanel._instance.open();
         }
-
         public static async hide(): Promise<void> {
             if (BroadcastPanel._instance) {
                 await BroadcastPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
+        }
+        public static getInstance(): BroadcastPanel | null {
+            return BroadcastPanel._instance;
         }
 
         private constructor() {

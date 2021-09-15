@@ -16,6 +16,7 @@ import TwnsLobbyBackgroundPanel     from "../../lobby/view/LobbyBackgroundPanel"
 import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyPanel               from "../../lobby/view/LobbyPanel";
 import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+import TwnsLobbyTopRightPanel       from "../../lobby/view/LobbyTopRightPanel";
 import MeModel                      from "../../mapEditor/model/MeModel";
 import MeProxy                      from "../../mapEditor/model/MeProxy";
 import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
@@ -139,7 +140,11 @@ namespace FlowManager {
         RwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        StageManager.closeAllPanels();
+        StageManager.closeAllPanels(Helpers.getNonNullElements([
+            TwnsUserLoginBackgroundPanel.UserLoginBackgroundPanel.getInstance(),
+            TwnsUserLoginPanel.UserLoginPanel.getInstance(),
+            TwnsBroadcastPanel.BroadcastPanel.getInstance(),
+        ]));
         TwnsUserLoginBackgroundPanel.UserLoginBackgroundPanel.show();
         TwnsUserLoginPanel.UserLoginPanel.show();
         TwnsBroadcastPanel.BroadcastPanel.show();
@@ -153,10 +158,18 @@ namespace FlowManager {
         RwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        StageManager.closeAllPanels();
+        StageManager.closeAllPanels(Helpers.getNonNullElements([
+            TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.getInstance(),
+            TwnsLobbyPanel.LobbyPanel.getInstance(),
+            TwnsLobbyTopPanel.LobbyTopPanel.getInstance(),
+            TwnsLobbyTopRightPanel.LobbyTopRightPanel.getInstance(),
+            TwnsLobbyBottomPanel.LobbyBottomPanel.getInstance(),
+            TwnsBroadcastPanel.BroadcastPanel.getInstance(),
+        ]));
         TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
         TwnsLobbyPanel.LobbyPanel.show();
         TwnsLobbyTopPanel.LobbyTopPanel.show();
+        TwnsLobbyTopRightPanel.LobbyTopRightPanel.show();
         TwnsLobbyBottomPanel.LobbyBottomPanel.show();
         TwnsBroadcastPanel.BroadcastPanel.show();
 

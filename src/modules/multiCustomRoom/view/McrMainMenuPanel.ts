@@ -24,15 +24,6 @@ import TwnsMcrJoinRoomListPanel     from "./McrJoinRoomListPanel";
 import TwnsMcrMyRoomListPanel       from "./McrMyRoomListPanel";
 
 namespace TwnsMcrMainMenuPanel {
-    import MfrMainMenuPanel         = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
-    import MrrMainMenuPanel         = TwnsMrrMainMenuPanel.MrrMainMenuPanel;
-    import RwReplayListPanel        = TwnsRwReplayListPanel.RwReplayListPanel;
-    import SpmMainMenuPanel         = TwnsSpmMainMenuPanel.SpmMainMenuPanel;
-    import McrWatchMainMenuPanel    = TwnsWwMainMenuPanel.WwMainMenuPanel;
-    import McrCreateMapListPanel    = TwnsMcrCreateMapListPanel.McrCreateMapListPanel;
-    import McrJoinRoomListPanel     = TwnsMcrJoinRoomListPanel.McrJoinRoomListPanel;
-    import McrMyRoomListPanel       = TwnsMcrMyRoomListPanel.McrMyRoomListPanel;
-    import CcrMainMenuPanel         = TwnsCcrMainMenuPanel.CcrMainMenuPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import Tween                    = egret.Tween;
 
@@ -107,29 +98,29 @@ namespace TwnsMcrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnRanking(): void {
             this.close();
-            MrrMainMenuPanel.show();
+            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            SpmMainMenuPanel.show();
+            TwnsSpmMainMenuPanel.SpmMainMenuPanel.show();
         }
         private _onTouchedBtnCreateRoom(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            McrCreateMapListPanel.show({});
+            TwnsMcrCreateMapListPanel.McrCreateMapListPanel.show({});
         }
         private _onTouchedBtnJoinRoom(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            McrJoinRoomListPanel.show();
+            TwnsMcrJoinRoomListPanel.McrJoinRoomListPanel.show();
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            McrMyRoomListPanel.show();
+            TwnsMcrMyRoomListPanel.McrMyRoomListPanel.show();
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
@@ -139,21 +130,21 @@ namespace TwnsMcrMainMenuPanel {
         }
         private _onTouchedBtnWatchWar(): void {
             this.close();
-            McrWatchMainMenuPanel.show();
+            TwnsWwMainMenuPanel.WwMainMenuPanel.show();
         }
         private _onTouchedBtnReplayWar(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            RwReplayListPanel.show();
+            TwnsRwReplayListPanel.RwReplayListPanel.show();
         }
         private _onTouchedBtnCoopMode(): void {
             this.close();
-            CcrMainMenuPanel.show();
+            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
         }
         private _onTouchedBtnFreeMode(): void {
             this.close();
-            MfrMainMenuPanel.show();
+            TwnsMfrMainMenuPanel.MfrMainMenuPanel.show();
         }
 
         private _onMsgUserLogout(): void {

@@ -3,6 +3,7 @@ import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import StageManager             from "../../tools/helpers/StageManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -18,11 +19,6 @@ import TwnsBwTileView           from "./BwTileView";
 import TwnsBwUnitBriefPanel     from "./BwUnitBriefPanel";
 
 namespace TwnsBwTileBriefPanel {
-    import BwCoListPanel        = TwnsCommonCoListPanel.CommonCoListPanel;
-    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
-    import BwTileDetailPanel    = TwnsBwTileDetailPanel.BwTileDetailPanel;
-    import BwTileView           = TwnsBwTileView.BwTileView;
-    import BwWar                = TwnsBwWar.BwWar;
     import Tween                = egret.Tween;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -35,7 +31,7 @@ namespace TwnsBwTileBriefPanel {
     const _CELL_WIDTH           = 80;
 
     type OpenData = {
-        war : BwWar;
+        war : TwnsBwWar.BwWar;
     };
     export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -45,7 +41,7 @@ namespace TwnsBwTileBriefPanel {
 
         private readonly _group!            : eui.Group;
         private readonly _conTileView!      : eui.Group;
-        private readonly _tileView          = new BwTileView();
+        private readonly _tileView          = new TwnsBwTileView.BwTileView();
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
         private readonly _labelGridIndex!   : TwnsUiLabel.UiLabel;
         private readonly _labelState!       : TwnsUiLabel.UiLabel;
@@ -161,7 +157,8 @@ namespace TwnsBwTileBriefPanel {
         private _onTouchedThis(): void {
             const war   = this._getOpenData().war;
             const tile  = war.getTileMap().getTile(war.getCursor().getGridIndex());
-            (tile) && (BwTileDetailPanel.show({ tile }));
+            (tile) && (TwnsBwTileDetailPanel.BwTileDetailPanel.show({ tile }));
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,9 +166,9 @@ namespace TwnsBwTileBriefPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const war = this._getOpenData().war;
-            if ((war.getIsWarMenuPanelOpening())            ||
-                (BwProduceUnitPanel.getIsOpening()) ||
-                (BwCoListPanel.getIsOpening())
+            if ((war.getIsWarMenuPanelOpening())                            ||
+                (TwnsBwProduceUnitPanel.BwProduceUnitPanel.getIsOpening())  ||
+                (TwnsCommonCoListPanel.CommonCoListPanel.getIsOpening())
             ) {
                 this.visible = false;
             } else {
@@ -187,8 +184,8 @@ namespace TwnsBwTileBriefPanel {
                 });
                 tileView.updateView();
                 this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
-                this._labelName.text        = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
                 this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
+                this._labelName.text        = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
 
                 if (tile.getCurrentHp() != null) {
                     this._imgState.visible      = true;
@@ -202,7 +199,7 @@ namespace TwnsBwTileBriefPanel {
                     this._labelState.text       = `${tile.getCurrentCapturePoint()}`;
                 } else if (tile.getCurrentBuildPoint() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = _IMAGE_SOURCE_BUILD;
+                    this._imgState.source       = _IMAGE_SOURCE_CAPTURE;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${tile.getCurrentBuildPoint()}`;
                 } else {
@@ -213,29 +210,29 @@ namespace TwnsBwTileBriefPanel {
         }
 
         private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
-            const unitBriefPanel = TwnsBwUnitBriefPanel.BwUnitBriefPanel.getInstance();
-            let target = e.target as egret.DisplayObject;
-            while (target) {
-                if ((target) && ((target === this) || (target === unitBriefPanel))) {
-                    return;
-                }
-                target = target.parent;
-            }
+            // const unitBriefPanel = TwnsBwUnitBriefPanel.BwUnitBriefPanel.getInstance();
+            // let target = e.target as egret.DisplayObject;
+            // while (target) {
+            //     if ((target) && ((target === this) || (target === unitBriefPanel))) {
+            //         return;
+            //     }
+            //     target = target.parent;
+            // }
 
-            const stageWidth    = StageManager.getStage().stageWidth;
-            const group         = this._group;
-            const currentX      = group.x;
-            const newX          = e.stageX >= stageWidth / 4 * 3
-                ? 0
-                : (e.stageX < stageWidth / 4
-                    ? stageWidth - _CELL_WIDTH
-                    : currentX
-                );
-            if (newX !== currentX) {
-                await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
-                group.x = newX;
-                this._showOpenAnimation();
-            }
+            // const stageWidth    = StageManager.getStage().stageWidth;
+            // const group         = this._group;
+            // const currentX      = group.x;
+            // const newX          = e.stageX >= stageWidth / 4 * 3
+            //     ? 0
+            //     : (e.stageX < stageWidth / 4
+            //         ? stageWidth - _CELL_WIDTH
+            //         : currentX
+            //     );
+            // if (newX !== currentX) {
+            //     await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            //     group.x = newX;
+            //     this._showOpenAnimation();
+            // }
         }
 
         private _showOpenAnimation(): void {

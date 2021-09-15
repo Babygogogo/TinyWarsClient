@@ -1,6 +1,7 @@
 
 import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
 import TwnsBwUnit               from "../../baseWar/model/BwUnit";
+import TwnsBwDamagePreviewPanel from "../../baseWar/view/BwDamagePreviewPanel";
 import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import FloatText                from "../../tools/helpers/FloatText";
@@ -251,6 +252,11 @@ namespace TwnsSpwActionPlanner {
                 TwnsBwUnitActionsPanel.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
             } else {
                 TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
+            }
+            if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
+                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.show({ war: this._getWar() });
+            } else {
+                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.hide();
             }
         }
 

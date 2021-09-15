@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_group" height="120" width="80" x="0" bottom="0">
-        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <e:Group id="_conTileView" y="74" scaleX="0.5" scaleY="0.5" x="22" touchChildren="false" touchEnabled="false" />
-        <TwnsUiLabel:UiLabel id="_labelName" text="地名五个字" size="12" textColor="0xffffff" y="8" horizontalCenter="0"
-                        stroke="2" />
-        <TwnsUiLabel:UiLabel id="_labelGridIndex" text="x11 y22" size="12" textColor="0xFFFFFF" y="22" horizontalCenter="0"
-                        stroke="2" />
-        <TwnsUiImage:UiImage id="_imgDefense" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" source="c04_t10_s03_f00" y="76"
-                        x="20" />
-        <TwnsUiImage:UiImage id="_imgState" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="94" x="20"
-                        source="c04_t10_s04_f00" />
-        <TwnsUiLabel:UiLabel id="_labelDefense" text="4" size="14" textColor="0xFFFFFF" y="78" x="46" />
-        <TwnsUiLabel:UiLabel id="_labelState" text="20" size="14" textColor="0xFFFFFF" y="96" x="46" />
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group id="_group" width="70" height="120" x="0" bottom="0">
+        <e:Group height="120" bottom="0" y="0" scaleX="1" scaleY="1" left="0" right="2">
+            <e:Group y="0" left="0" right="0" locked="true">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" source="commonColorGrey0001"
+                                     scale9Grid="1,1,1,1" height="20" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelName" text="地名五个字" size="12" textColor="0xffffff" horizontalCenter="0"
+                                     verticalCenter="0" maxTextWidth="66" />
+            </e:Group>
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="19" bottom="0"
+                                 x="10" y="10" visible="true" source="commonColorBlack0001" scale9Grid="1,1,2,2" />
+            <e:Group id="_conTileView" y="74" scaleX="0.5" scaleY="0.5" x="16" touchChildren="false"
+                     touchEnabled="false" />
+            <TwnsUiLabel:UiLabel id="_labelGridIndex" text="x11 y22" size="10" textColor="0xFFFFFF" y="22"
+                                 horizontalCenter="0" />
+            <e:Group y="74" horizontalCenter="0">
+                <e:Group x="0" y="0">
+                    <TwnsUiImage:UiImage id="_imgDefense" anchorOffsetX="0" anchorOffsetY="0" source="c04_t10_s03_f00"
+                                         x="0" width="10" height="10" verticalCenter="0" />
+                    <TwnsUiLabel:UiLabel id="_labelDefense" text="4" size="12" textColor="0xFFFFFF" x="16"
+                                         verticalCenter="1" />
+                </e:Group>
+                <e:Group x="0" y="30">
+                    <TwnsUiImage:UiImage id="_imgState" anchorOffsetX="0" anchorOffsetY="0" x="0"
+                                         source="c04_t10_s04_f00" height="10" width="10" verticalCenter="0" />
+                    <TwnsUiLabel:UiLabel id="_labelState" text="20" size="12" textColor="0xFFFFFF" x="16"
+                                         verticalCenter="1" />
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout gap="16" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
     </e:Group>
 </e:Skin>

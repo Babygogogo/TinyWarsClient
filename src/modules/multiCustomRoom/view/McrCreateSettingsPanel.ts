@@ -39,10 +39,10 @@ namespace TwnsMcrCreateSettingsPanel {
     const CONFIRM_INTERVAL_MS = 5000;
 
     export class McrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = true;
+        protected readonly _LAYER_TYPE              = Types.LayerType.Scene;
+        protected readonly _IS_EXCLUSIVE            = true;
 
-        private static _instance: McrCreateSettingsPanel;
+        private static _instance                    : McrCreateSettingsPanel | null = null;
 
         private readonly _groupNavigator!           : eui.Group;
         private readonly _labelMultiPlayer!         : TwnsUiLabel.UiLabel;

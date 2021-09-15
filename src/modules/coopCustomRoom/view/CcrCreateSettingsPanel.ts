@@ -33,7 +33,7 @@ namespace TwnsCcrCreateSettingsPanel {
     const CONFIRM_INTERVAL_MS = 5000;
 
     export class CcrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
+        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CcrCreateSettingsPanel;

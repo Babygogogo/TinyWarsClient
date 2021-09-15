@@ -5,6 +5,7 @@ import CommonConstants          from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
+import SoundManager from "../../tools/helpers/SoundManager";
 import StageManager             from "../../tools/helpers/StageManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -31,7 +32,7 @@ namespace TwnsBwUnitBriefPanel {
     import BwUnit               = TwnsBwUnit.BwUnit;
     import Tween                = egret.Tween;
 
-    const _CELL_WIDTH           = 80;
+    const _CELL_WIDTH           = 70;
 
     type OpenDataForBwUnitBriefPanel = {
         war : BwWar;
@@ -154,6 +155,7 @@ namespace TwnsBwUnitBriefPanel {
         }
 
         private _onCellTouchTap(e: egret.TouchEvent): void {
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             for (let i = 0; i < this._cellList.length; ++i) {
                 if (this._cellList[i] === e.currentTarget) {
                     BwUnitDetailPanel.show({ unit: this._unitList[i] });
@@ -220,29 +222,29 @@ namespace TwnsBwUnitBriefPanel {
         }
 
         private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
-            const tileBriefPanel = TwnsBwTileBriefPanel.BwTileBriefPanel.getInstance();
-            let target = e.target as egret.DisplayObject;
-            while (target) {
-                if ((target) && ((target === tileBriefPanel) || (target === this))) {
-                    return;
-                }
-                target = target.parent;
-            }
+            // const tileBriefPanel = TwnsBwTileBriefPanel.BwTileBriefPanel.getInstance();
+            // let target = e.target as egret.DisplayObject;
+            // while (target) {
+            //     if ((target) && ((target === tileBriefPanel) || (target === this))) {
+            //         return;
+            //     }
+            //     target = target.parent;
+            // }
 
-            const stageWidth        = StageManager.getStage().stageWidth;
-            const currentIsLeftSide = this._isLeftSide;
-            const newIsLeftSide     = e.stageX >= stageWidth / 4 * 3
-                ? true
-                : (e.stageX < stageWidth / 4
-                    ? false
-                    : currentIsLeftSide
-                );
-            if (newIsLeftSide !== currentIsLeftSide) {
-                await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
-                this._isLeftSide = newIsLeftSide;
-                this._updatePosition();
-                this._showOpenAnimation();
-            }
+            // const stageWidth        = StageManager.getStage().stageWidth;
+            // const currentIsLeftSide = this._isLeftSide;
+            // const newIsLeftSide     = e.stageX >= stageWidth / 4 * 3
+            //     ? true
+            //     : (e.stageX < stageWidth / 4
+            //         ? false
+            //         : currentIsLeftSide
+            //     );
+            // if (newIsLeftSide !== currentIsLeftSide) {
+            //     await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            //     this._isLeftSide = newIsLeftSide;
+            //     this._updatePosition();
+            //     this._showOpenAnimation();
+            // }
         }
 
         private _updatePosition(): void {
@@ -281,11 +283,11 @@ namespace TwnsBwUnitBriefPanel {
         }
     }
 
-    const _IMAGE_SOURCE_HP          = `c03_t99_s02_f03`;
-    const _IMAGE_SOURCE_FUEL        = `c03_t99_s02_f01`;
-    const _IMAGE_SOURCE_AMMO        = `c03_t99_s02_f02`;
-    const _IMAGE_SOURCE_MATERIAL    = `c03_t99_s02_f04`;
-    const _IMAGE_SOURCE_FLARE       = `c03_t99_s02_f02`;
+    const _IMAGE_SOURCE_HP          = `c04_t10_s00_f00`;
+    const _IMAGE_SOURCE_FUEL        = `c04_t10_s01_f00`;
+    const _IMAGE_SOURCE_AMMO        = `c04_t10_s02_f00`;
+    const _IMAGE_SOURCE_MATERIAL    = `c04_t10_s05_f00`;
+    const _IMAGE_SOURCE_FLARE       = `c04_t10_s02_f00`;
 
     class BwUnitBriefCell extends eui.Component {
         private readonly _group!        : eui.Group;
@@ -313,8 +315,8 @@ namespace TwnsBwUnitBriefPanel {
 
             this._isChildrenCreated = true;
 
-            this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
-            this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
+            this._imgHp.source      = _IMAGE_SOURCE_HP;
+            this._imgFuel.source    = _IMAGE_SOURCE_FUEL;
             this._conUnitView.addChild(this._unitView);
             this._updateView();
         }
@@ -344,22 +346,22 @@ namespace TwnsBwUnitBriefPanel {
 
                 if (unit.getCurrentBuildMaterial() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_MATERIAL;
+                    this._imgState.source       = _IMAGE_SOURCE_MATERIAL;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getCurrentBuildMaterial()}`;
                 } else if (unit.getCurrentProduceMaterial() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_MATERIAL;
+                    this._imgState.source       = _IMAGE_SOURCE_MATERIAL;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getCurrentProduceMaterial()}`;
                 } else if (unit.getFlareCurrentAmmo() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FLARE;
+                    this._imgState.source       = _IMAGE_SOURCE_FLARE;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getFlareCurrentAmmo()}`;
                 } else if (unit.getPrimaryWeaponCurrentAmmo() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_AMMO;
+                    this._imgState.source       = _IMAGE_SOURCE_AMMO;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getPrimaryWeaponCurrentAmmo()}`;
                 } else {

@@ -15,7 +15,7 @@ namespace TwnsBwWarView {
     import Point                = Types.Point;
     import BwWar                = TwnsBwWar.BwWar;
     const PADDING_HORIZONTAL    = 150;
-    const PADDING_VERTICAL      = 50;
+    const PADDING_VERTICAL      = 120;
 
     export class BwWarView extends eui.Group {
         private _fieldContainer     = new TwnsUiZoomableComponent.UiZoomableComponent();

@@ -347,7 +347,7 @@ namespace TwnsRwWar {
         }
 
         public async loadNextCheckPoint(): Promise<void> {
-            if (this.checkIsInEnd()) {
+            if ((this.checkIsInEnd()) || (this.getIsExecutingAction()) || (!this.getIsRunning())) {
                 return;
             }
 

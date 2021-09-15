@@ -27,7 +27,7 @@ namespace TwnsLobbyBottomPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: LobbyBottomPanel;
+        private static _instance        : LobbyBottomPanel | null = null;
 
         private readonly _groupBottom!  : eui.Group;
         private readonly _btnMyInfo!    : TwnsUiButton.UiButton;
@@ -41,11 +41,13 @@ namespace TwnsLobbyBottomPanel {
             }
             LobbyBottomPanel._instance.open();
         }
-
         public static async hide(): Promise<void> {
             if (LobbyBottomPanel._instance) {
                 await LobbyBottomPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
             }
+        }
+        public static getInstance(): LobbyBottomPanel | null {
+            return LobbyBottomPanel._instance;
         }
 
         private constructor() {
