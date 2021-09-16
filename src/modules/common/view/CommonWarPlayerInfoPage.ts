@@ -302,11 +302,11 @@ namespace TwnsCommonWarPlayerInfoPage {
 
     function getSourceForImgSkin(skinId: Types.Undefinable<number>): string {
         switch (skinId) {
-            case 1  : return `commonRectangle0002`;
-            case 2  : return `commonRectangle0003`;
-            case 3  : return `commonRectangle0004`;
-            case 4  : return `commonRectangle0005`;
-            default : return `commonRectangle0006`;
+            case 1  : return `uncompressedRectangle0002`;
+            case 2  : return `uncompressedRectangle0003`;
+            case 3  : return `uncompressedRectangle0004`;
+            case 4  : return `uncompressedRectangle0005`;
+            default : return `uncompressedRectangle0006`;
         }
     }
 }

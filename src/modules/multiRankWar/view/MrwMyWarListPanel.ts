@@ -1,4 +1,5 @@
 
+import TwnsCommonBlockPanel                 from "../../common/view/CommonBlockPanel";
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
@@ -131,6 +132,10 @@ namespace TwnsMrwMyWarListPanel {
         private _onTouchedBtnNextStep(): void {
             const warId = MpwModel.getMrwPreviewingWarId();
             if (warId != null) {
+                TwnsCommonBlockPanel.CommonBlockPanel.show({
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0040),
+                });
                 MpwProxy.reqMpwCommonContinueWar(warId);
             }
         }
@@ -384,6 +389,10 @@ namespace TwnsMrwMyWarListPanel {
         }
 
         private _onTouchTapBtnNext(): void {
+            TwnsCommonBlockPanel.CommonBlockPanel.show({
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0040),
+            });
             MpwProxy.reqMpwCommonContinueWar(this._getData().warId);
         }
 

@@ -46,7 +46,7 @@
                 <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
+                            <e:Image source="uncompressedPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
                                 <TwnsUiLabel:UiLabel size="20" text="Create Rooms" textAlign="center"
@@ -68,7 +68,7 @@
                 <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
+                            <e:Image source="uncompressedPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
                                 <TwnsUiLabel:UiLabel size="20" text="Join Rooms" textAlign="center"
@@ -90,7 +90,7 @@
                 <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
+                            <e:Image source="uncompressedPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
                                 <TwnsUiLabel:UiLabel size="20" text="My Rooms" textAlign="center" verticalAlign="middle"
@@ -176,7 +176,7 @@
                 <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
+                            <e:Image source="uncompressedPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
                                 <TwnsUiLabel:UiLabel size="20" text="Coop Mode" textAlign="center"
@@ -198,7 +198,7 @@
                 <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
+                            <e:Image source="uncompressedPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
                                 <TwnsUiLabel:UiLabel size="20" text="Free Mode" textAlign="center"

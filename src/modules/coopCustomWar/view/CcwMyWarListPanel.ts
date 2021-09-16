@@ -1,13 +1,15 @@
 
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonBlockPanel                 from "../../common/view/CommonBlockPanel";
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import TwnsCcrMainMenuPanel                 from "../../coopCustomRoom/view/CcrMainMenuPanel";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import MpwModel                             from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                             from "../../multiPlayerWar/model/MpwProxy";
+import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
@@ -21,7 +23,6 @@ import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
 import TwnsUiTab                            from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
 import WarMapModel                          from "../../warMap/model/WarMapModel";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 
 namespace TwnsCcwMyWarListPanel {
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -131,6 +132,10 @@ namespace TwnsCcwMyWarListPanel {
         private _onTouchedBtnNextStep(): void {
             const warId = MpwModel.getCcwPreviewingWarId();
             if (warId != null) {
+                TwnsCommonBlockPanel.CommonBlockPanel.show({
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0040),
+                });
                 MpwProxy.reqMpwCommonContinueWar(warId);
             }
         }
@@ -411,6 +416,10 @@ namespace TwnsCcwMyWarListPanel {
         }
 
         private _onTouchTapBtnNext(): void {
+            TwnsCommonBlockPanel.CommonBlockPanel.show({
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0040),
+            });
             MpwProxy.reqMpwCommonContinueWar(this._getData().warId);
         }
 

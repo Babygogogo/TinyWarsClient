@@ -2,8 +2,8 @@
 <e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing"
         class="Skins.Component.Button.ButtonBlack001">
     <e:Group left="0" right="0" top="0" bottom="0">
-        <e:Image scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0" source="commonColorBlack0002" />
-        <e:Image left="0" right="0" bottom="0" x="10" y="10" source="commonColorBlack0000" height="1" />
+        <e:Image scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0002" />
+        <e:Image left="0" right="0" bottom="0" x="10" y="10" source="uncompressedColorBlack0000" height="1" />
         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="Change Password" textAlign="center"
                         verticalAlign="middle" wordWrap="true" width="100" horizontalCenter="0" verticalCenter="0" />
         <TwnsUiImage:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16" height="16" />

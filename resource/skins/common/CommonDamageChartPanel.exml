@@ -3,7 +3,7 @@
         xmlns:w="http://ns.egret.com/wing">
     <e:Group bottom="0" top="40" horizontalCenter="0" width="960">
         <e:Group id="_groupList" width="160" top="0" bottom="0" left="0">
-            <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                             alpha="0.9" left="0" right="0" top="0" bottom="0" locked="true" />
             <TwnsUiLabel:UiLabel id="_labelTitle" text="部队信息" y="10" bold="true" size="20" textColor="0xffffff"
                             horizontalCenter="0" />
@@ -13,7 +13,7 @@
                         <e:Skin width="160" height="40" currentState="up" states="up,down">
                             <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="22" verticalCenter="0"
                                             textColor.down="0x00ff00" horizontalCenter="0" maxTextWidth="150" />
-                            <e:Image id="_imgChoose" source="commonColorTransparent0000" left="0" right="0" top="0" bottom="0" />
+                            <e:Image id="_imgChoose" source="uncompressedColorTransparent0000" left="0" right="0" top="0" bottom="0" />
                         </e:Skin>
                     </e:itemRendererSkinName>
                 </e:List>
@@ -22,7 +22,7 @@
                              right="0" bottom="0" />
         </e:Group>
         <e:Group id="_groupInfo" width="800" top="0" bottom="0" right="0">
-            <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                             alpha="0.9" left="0" right="0" top="0" bottom="0" locked="true" />
             <e:Scroller left="0" right="0" top="8" bottom="8">
                 <e:Group>
@@ -41,7 +41,7 @@
                                             <TwnsUiButton:skinName>
                                                 <e:Skin states="up,down,disabled">
                                                     <e:Group y="0" x="0">
-                                                        <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2"
+                                                        <e:Image source="uncompressedRectangle0007" scale9Grid="9,9,2,2"
                                                                  left="0" right="0" top="0"
                                                                  bottom="0" />
                                                         <e:Group>

@@ -4,7 +4,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" y="40" x="830">
         <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="0" bottom="0"
-                             source="commonColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
+                             source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
         <TwnsUiScrollList:UiScrollList id="_listAction" left="0" right="0" top="0" bottom="0">
             <e:List>
                 <e:itemRendererSkinName>
@@ -15,7 +15,7 @@
                                              textAlign="left" right="0" left="40" top="0" bottom="0" />
                         <TwnsUiLabel:UiLabel id="_labelCost" text="费用: 99999" size="12" textColor="0x00ff00" y="4"
                                              x="40" />
-                        <TwnsUiImage:UiImage id="_imgBottomLine" height="1" source="commonColorWhite0000" bottom="0"
+                        <TwnsUiImage:UiImage id="_imgBottomLine" height="1" source="uncompressedColorWhite0000" bottom="0"
                                              left="0" right="0" />
                     </e:Skin>
                 </e:itemRendererSkinName>

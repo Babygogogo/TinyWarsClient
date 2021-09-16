@@ -3,7 +3,7 @@
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" top="40" bottom="0" width="160" x="0">
-        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <TwnsUiLabel:UiLabel id="_labelMenuTitle" text="菜单" y="10" bold="true" size="20" textColor="0xffffff"
                              horizontalCenter="0" />
@@ -14,7 +14,7 @@
                 <e:itemRendererSkinName>
                     <e:Skin width="160" height="50" currentState="up" states="down,up">
                         <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                            <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
                                                  anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
                                                  visible.up="false" />
                             <TwnsUiLabel:UiLabel id="_labelName" text="选项名六个字" size="20" textColor="0xffffff"
@@ -28,7 +28,7 @@
                                left="0" right="0"></TwnsUiButton:UiButton>
     </e:Group>
     <e:Group top="40" bottom="0" right="0" left="160">
-        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <e:Scroller left="0" right="0" top="10" bottom="10">
             <e:Group left="0" right="0" y="10">

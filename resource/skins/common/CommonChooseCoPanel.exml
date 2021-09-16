@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing" xmlns:TwnsUiCoInfo="TwnsUiCoInfo.*">
-    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                     scale9Grid="1,1,2,2" />
     <e:Group id="_group" horizontalCenter="0" verticalCenter="0">
         <e:Group width="360" height="400" y="0" x="0">
             <e:Group left="0" right="0" top="0" bottom="0">
-                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001" scale9Grid="1,1,2,2"
                                 left="0" right="0" top="38" bottom="0" />
                 <e:Group y="0" left="0" right="0">
                     <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
-                                    source="commonColorGrey0001" y="0" left="0" right="0" />
+                                    source="uncompressedColorGrey0001" y="0" left="0" right="0" />
                     <TwnsUiLabel:UiLabel id="_labelChooseCo" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
                 </e:Group>
             </e:Group>
@@ -19,9 +19,9 @@
                     <e:itemRendererSkinName>
                         <e:Skin height="30" width="100" currentState="up" states="up,down">
                             <e:Group left="0" right="0" top="0" bottom="0">
-                                <TwnsUiImage:UiImage source="commonRectangle0000" left="0" right="0" top="0" bottom="0"
+                                <TwnsUiImage:UiImage source="uncompressedRectangle0000" left="0" right="0" top="0" bottom="0"
                                                 scale9Grid="2,2,1,1" visible.up="false" />
-                                <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonRectangle0001"
+                                <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedRectangle0001"
                                                 scale9Grid="2,2,1,1" visible.down="false" />
                                 <TwnsUiLabel:UiLabel id="_labelName" text="Forsythe" textColor="0xFFFFFF" size="14"
                                                 horizontalCenter="0" verticalCenter="0" />

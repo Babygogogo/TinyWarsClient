@@ -128,14 +128,14 @@ namespace TwnsWarMapView {
             const gridBorderLayer                           = this._gridBorderLayer;
             gridBorderLayer.removeChildren();
             for (let x = 0; x <= mapWidth; ++x) {
-                const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
+                const img   = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                 img.width   = 2;
                 img.height  = borderHeight;
                 img.x       = (x * GRID_WIDTH) - 1;
                 gridBorderLayer.addChild(img);
             }
             for (let y = 0; y <= mapHeight; ++y) {
-                const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
+                const img   = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                 img.width   = borderWidth;
                 img.height  = 2;
                 img.y       = (y * GRID_HEIGHT) - 1;

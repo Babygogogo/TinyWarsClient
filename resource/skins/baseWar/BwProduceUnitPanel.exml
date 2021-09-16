@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
-    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                     scale9Grid="1,1,2,2" locked="true" />
     <e:Group id="_group" width="960" height="440" horizontalCenter="0" verticalCenter="0">
-        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <TwnsUiScrollList:UiScrollList id="_listUnit" left="15" right="15" bottom="50" top="0">
             <e:List requireSelection="true">
                 <e:itemRendererSkinName>
                     <e:Skin width="170" height="80" currentState="up" states="down,up">
                         <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                            <TwnsUiImage:UiImage id="_imgBg" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                            <TwnsUiImage:UiImage id="_imgBg" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
                                             anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
                                             visible.up="false" />
                             <TwnsUiLabel:UiLabel id="_labelName" text="部队名五字" size="12" textColor="0xffffff" y="8"

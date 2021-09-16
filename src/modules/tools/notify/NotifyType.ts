@@ -93,6 +93,7 @@ namespace TwnsNotifyType {
         BwFieldDragged,
 
         BwActionPlannerStateChanged,
+        BwActionPlannerMovePathChanged,
 
         BwWarMenuPanelOpened,
         BwWarMenuPanelClosed,

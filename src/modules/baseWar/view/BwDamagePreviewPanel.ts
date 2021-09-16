@@ -60,13 +60,13 @@ namespace TwnsBwDamagePreviewPanel {
                 // { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
                 // { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
                 // { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
-                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.ZoomableContentsMoved,       callback: this._onNotifyZoomableContentsMoved },
-                { type: NotifyType.BwCursorGridIndexChanged,    callback: this._onNotifyBwCursorGridIndexChanged },
+                { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.ZoomableContentsMoved,           callback: this._onNotifyZoomableContentsMoved },
+                { type: NotifyType.BwCursorGridIndexChanged,        callback: this._onNotifyBwCursorGridIndexChanged },
+                { type: NotifyType.BwActionPlannerMovePathChanged,  callback: this._onNotifyBwActionPlannerMovePathChanged },
             ]);
 
             this._updateView();
-            this._updatePosition();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,9 @@ namespace TwnsBwDamagePreviewPanel {
         }
         private _onNotifyBwCursorGridIndexChanged(): void {
             this._updateView();
-            this._updatePosition();
+        }
+        private _onNotifyBwActionPlannerMovePathChanged(): void {
+            this._updateView();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,6 +90,7 @@ namespace TwnsBwDamagePreviewPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
+            this._updatePosition();
 
             const war               = this._getOpenData().war;
             const cursor            = war.getCursor();

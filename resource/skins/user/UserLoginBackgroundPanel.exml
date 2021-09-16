@@ -9,7 +9,7 @@
             <e:itemRendererSkinName>
                 <e:Skin states="down,up" currentState="up">
                     <e:Group y="0" width="160" x="0" height="36" alpha.up="0.5">
-                        <e:Image left="0" right="0" top="0" bottom="0" scale9Grid="3,3,1,1" source="commonPentagon0010" />
+                        <e:Image left="0" right="0" top="0" bottom="0" scale9Grid="3,3,1,1" source="uncompressedPentagon0010" />
                         <TwnsUiLabel:UiLabel id="_labelLanguage" size="20" textColor="0xffffff" text="English"
                                              textColor.up="0x999999" wordWrap="true" left="10" right="40" bold="true"
                                              top="8" bottom="8" verticalAlign="middle" textAlign="right" />
@@ -42,7 +42,7 @@
             <TwnsUiButton:skinName>
                 <e:Skin>
                     <e:Group y="0" width="160" x="0" height="36">
-                        <e:Image scale9Grid="3,3,1,1" source="commonPentagon0010" width="160" height="36" y="0"
+                        <e:Image scale9Grid="3,3,1,1" source="uncompressedPentagon0010" width="160" height="36" y="0"
                                  scaleX="-1" left="0" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0xffffff" text="English"
                                              wordWrap="true" bold="true" verticalAlign="middle" verticalCenter="0"
@@ -55,7 +55,7 @@
             <TwnsUiButton:skinName>
                 <e:Skin>
                     <e:Group y="0" width="160" x="0" height="36">
-                        <e:Image scale9Grid="3,3,1,1" source="commonPentagon0010" width="160" height="36" y="0"
+                        <e:Image scale9Grid="3,3,1,1" source="uncompressedPentagon0010" width="160" height="36" y="0"
                                  scaleX="-1" left="0" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0xffffff" text="English"
                                              wordWrap="true" bold="true" verticalAlign="middle" verticalCenter="0"

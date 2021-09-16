@@ -2,9 +2,9 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" />
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001" />
     <e:Group id="_group" top="40" bottom="0" width="640" horizontalCenter="0">
-        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <e:Scroller left="0" right="0" top="8" bottom="8">
             <e:Group>
@@ -25,7 +25,7 @@
                                         <TwnsUiButton:skinName>
                                             <e:Skin states="up,down,disabled">
                                                 <e:Group y="0" x="0">
-                                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" left="0"
+                                                    <e:Image source="uncompressedRectangle0007" scale9Grid="9,9,2,2" left="0"
                                                              right="0" top="0" bottom="0" />
                                                     <e:Group>
                                                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12"

@@ -48,7 +48,7 @@ namespace TwnsUiZoomableComponent {
         public setMaskEnabled(enabled: boolean): void {
             if (enabled) {
                 if (!this._maskForContents) {
-                    const mask  = new TwnsUiImage.UiImage("c08_t06_s01_f01");
+                    const mask  = new TwnsUiImage.UiImage("uncompressedColorPink0000");
                     mask.left   = 0;
                     mask.right  = 0;
                     mask.top    = 0;

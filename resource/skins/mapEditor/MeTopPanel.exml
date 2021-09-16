@@ -3,7 +3,7 @@
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" top="0" right="0" height="40">
-        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <e:Group id="_groupMode" x="10" verticalCenter="0">
             <TwnsUiLabel:UiLabel id="_labelMode" text="Mode: Draw Unit" size="14" x="10" textColor="0xFFFFFF" y="10"
@@ -20,7 +20,7 @@
             <TwnsUiButton:UiButton id="_btnModePreview" label="预览" x="0" width="70" height="40" y="0">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">
-                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0x00ff00" verticalCenter="0"
                                              left="4" right="4" textAlign="center" />
                     </e:Skin>
@@ -29,7 +29,7 @@
             <TwnsUiButton:UiButton id="_btnModeDrawTileBase" label="绘制地形基底" x="70" width="70" height="40" y="0">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">
-                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0x00ff00" verticalCenter="0"
                                              left="4" right="4" textAlign="center" />
                     </e:Skin>
@@ -38,7 +38,7 @@
             <TwnsUiButton:UiButton id="_btnModeDrawTileDecorator" label="绘制地形基底" x="70" width="70" height="40">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">
-                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0x00ff00" verticalCenter="0"
                                              left="4" right="4" textAlign="center" />
                     </e:Skin>
@@ -47,7 +47,7 @@
             <TwnsUiButton:UiButton id="_btnModeDrawTileObject" label="绘制地形物体" x="140" width="70" height="40" y="0">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">
-                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0x00ff00" verticalCenter="0"
                                              left="4" right="4" textAlign="center" />
                     </e:Skin>
@@ -56,7 +56,7 @@
             <TwnsUiButton:UiButton id="_btnModeDrawUnit" label="绘制部队" x="210" width="70" height="40" y="0">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">
-                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0x00ff00" verticalCenter="0"
                                              left="4" right="4" textAlign="center" />
                     </e:Skin>
@@ -65,7 +65,7 @@
             <TwnsUiButton:UiButton id="_btnModeDeleteTileDecorator" label="删除地形物体" x="280" width="70" height="40">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">
-                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" verticalCenter="0" left="4" right="4"
                                              textAlign="center" textColor="0xFF0000" />
                     </e:Skin>
@@ -74,7 +74,7 @@
             <TwnsUiButton:UiButton id="_btnModeDeleteTileObject" label="删除地形物体" x="280" width="70" height="40" y="0">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">
-                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" verticalCenter="0" left="4" right="4"
                                              textAlign="center" textColor="0xFF0000" />
                     </e:Skin>
@@ -83,7 +83,7 @@
             <TwnsUiButton:UiButton id="_btnModeDeleteUnit" label="删除部队" x="350" width="70" height="40" y="0">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">
-                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" verticalCenter="0" left="4" right="4"
                                              textAlign="center" textColor="0xFF0000" />
                     </e:Skin>
@@ -92,7 +92,7 @@
             <TwnsUiButton:UiButton id="_btnVisibility" label="可见性" width="70" x="420" height="40" y="0">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">
-                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0x00ff00" verticalCenter="0"
                                              left="4" right="4" textAlign="center" />
                     </e:Skin>
@@ -101,7 +101,7 @@
             <TwnsUiButton:UiButton id="_btnSymmetry" label="对称性" width="70" x="490" height="40" y="0">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">
-                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0x00ff00" verticalCenter="0"
                                              left="4" right="4" textAlign="center" />
                     </e:Skin>
@@ -110,7 +110,7 @@
             <TwnsUiButton:UiButton id="_btnMenu" label="菜单" width="70" x="560" height="40" y="0">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">
-                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0x00ff00" verticalCenter="0"
                                              left="4" right="4" textAlign="center" />
                     </e:Skin>

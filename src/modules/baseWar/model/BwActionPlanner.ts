@@ -1287,6 +1287,7 @@ namespace TwnsBwActionPlanner {
         }
         private _setMovePath(movePath: MovePathNode[]): void {
             this._movePath = movePath;
+            Notify.dispatch(NotifyType.BwActionPlannerMovePathChanged);
         }
         public getMovePath(): MovePathNode[] {
             return this._movePath;

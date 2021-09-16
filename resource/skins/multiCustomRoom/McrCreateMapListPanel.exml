@@ -25,9 +25,9 @@
             </e:Group>
             <e:Group x="34" y="17">
                 <TwnsUiImage:UiImage x="0" y="0" source="point0000" />
-                <TwnsUiImage:UiImage x="10" y="10" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
+                <TwnsUiImage:UiImage x="10" y="10" source="uncompressedColorWhite0000" width="80" scale9Grid="1,1,1,1" />
                 <TwnsUiImage:UiImage x="10" y="10" source="point0000" />
-                <TwnsUiImage:UiImage x="10" y="10" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
+                <TwnsUiImage:UiImage x="10" y="10" source="uncompressedColorWhite0000" width="80" scale9Grid="1,1,1,1" />
                 <TwnsUiImage:UiImage x="20" y="20" source="point0000" />
                 <e:layout>
                     <e:HorizontalLayout gap="0" verticalAlign="middle" />
@@ -41,7 +41,7 @@
             <TwnsUiButton:skinName>
                 <e:Skin>
                     <e:Group left="0" right="0" top="0" bottom="0">
-                        <e:Image source="commonPentagon0000" scale9Grid="4,4,1,1" left="0" right="0" top="0" bottom="0" />
+                        <e:Image source="uncompressedPentagon0000" scale9Grid="4,4,1,1" left="0" right="0" top="0" bottom="0" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="16" textColor="0xffffff" text="Change Password"
                                              textAlign="center" verticalAlign="middle" wordWrap="true"
                                              verticalCenter="0" bold="true" x="10" />
@@ -58,14 +58,14 @@
                 <e:List>
                     <e:itemRendererSkinName>
                         <e:Skin width="200" height="40" currentState="up" states="up,down">
-                            <TwnsUiImage:UiImage source="commonPentagon0002" left="0" right="0" top="0" bottom="0"
+                            <TwnsUiImage:UiImage source="uncompressedPentagon0002" left="0" right="0" top="0" bottom="0"
                                                  visible.down="false" scale9Grid="4,4,1,1" />
                             <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" x="10" y="10"
-                                                 source="commonPentagon0003" visible.up="false" scale9Grid="4,4,1,1" />
+                                                 source="uncompressedPentagon0003" visible.up="false" scale9Grid="4,4,1,1" />
                             <TwnsUiButton:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0">
                                 <TwnsUiButton:skinName>
                                     <e:Skin states="up,down,disabled">
-                                        <e:Image source="commonColorTransparent0000" left="0" right="0" top="0"
+                                        <e:Image source="uncompressedColorTransparent0000" left="0" right="0" top="0"
                                                  bottom="0" />
                                         <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
                                                  bold="true" textColor="0x000000" />

@@ -2,7 +2,7 @@
 <e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing"
         class="Skins.Component.Button.ButtonGrey001">
     <e:Group left="0" right="0" y="0">
-        <e:Image source="commonPentagon0003" left="0" right="0" top="0" bottom="0" scale9Grid="4,4,1,1" />
+        <e:Image source="uncompressedPentagon0003" left="0" right="0" top="0" bottom="0" scale9Grid="4,4,1,1" />
         <TwnsUiLabel:UiLabel id="labelDisplay" size="16" text="啊啊啊啊啊啊" wordWrap="true" left="10" right="20" bold="true"
                         top="8" bottom="8" verticalAlign="middle" textColor="0xFFFFFF" />
         <TwnsUiImage:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16" height="16" />
