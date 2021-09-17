@@ -2,7 +2,7 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_groupLeft" left="20" top="130" touchThrough="true">
+    <e:Group id="_groupLeft" left="20" touchThrough="true" bottom="268">
         <TwnsUiButton:UiButton id="_btnCop" label="Power" left="0" top="0" icon="commonIcon0009">
             <TwnsUiButton:skinName>
                 <e:Skin width="50" height="66">

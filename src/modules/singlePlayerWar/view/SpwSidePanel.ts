@@ -285,9 +285,8 @@ namespace TwnsSpwSidePanel {
             const actionPlanner = war.getActionPlanner();
             const turnManager   = war.getTurnManager();
             const btn           = this._btnNextUnit;
-            if ((actionPlanner.checkIsStateRequesting())                                ||
-                (actionPlanner.getState() === Types.ActionPlannerState.ExecutingAction) ||
-                (!war.checkIsHumanInTurn())                                             ||
+            if ((actionPlanner.getState() !== Types.ActionPlannerState.Idle)    ||
+                (!war.checkIsHumanInTurn())                                     ||
                 (turnManager.getPhaseCode() !== Types.TurnPhaseCode.Main)
             ) {
                 btn.visible = false;
@@ -302,9 +301,8 @@ namespace TwnsSpwSidePanel {
             const actionPlanner = war.getActionPlanner();
             const turnManager   = war.getTurnManager();
             const btn           = this._btnNextTile;
-            if ((actionPlanner.checkIsStateRequesting())                                ||
-                (actionPlanner.getState() === Types.ActionPlannerState.ExecutingAction) ||
-                (!war.checkIsHumanInTurn())                                             ||
+            if ((actionPlanner.getState() !== Types.ActionPlannerState.Idle)    ||
+                (!war.checkIsHumanInTurn())                                     ||
                 (turnManager.getPhaseCode() !== Types.TurnPhaseCode.Main)
             ) {
                 btn.visible = false;

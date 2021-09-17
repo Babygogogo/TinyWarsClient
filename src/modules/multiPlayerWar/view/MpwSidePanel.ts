@@ -285,8 +285,7 @@ namespace TwnsMpwSidePanel {
             const actionPlanner = war.getActionPlanner();
             const turnManager   = war.getTurnManager();
             const btn           = this._btnNextUnit;
-            if ((actionPlanner.checkIsStateRequesting())                                ||
-                (actionPlanner.getState() === Types.ActionPlannerState.ExecutingAction) ||
+            if ((actionPlanner.getState() !== Types.ActionPlannerState.Idle)            ||
                 (turnManager.getPlayerIndexInTurn() !== war.getPlayerIndexLoggedIn())   ||
                 (turnManager.getPhaseCode() !== Types.TurnPhaseCode.Main)
             ) {
@@ -302,8 +301,7 @@ namespace TwnsMpwSidePanel {
             const actionPlanner = war.getActionPlanner();
             const turnManager   = war.getTurnManager();
             const btn           = this._btnNextTile;
-            if ((actionPlanner.checkIsStateRequesting())                                ||
-                (actionPlanner.getState() === Types.ActionPlannerState.ExecutingAction) ||
+            if ((actionPlanner.getState() !== Types.ActionPlannerState.Idle)            ||
                 (turnManager.getPlayerIndexInTurn() !== war.getPlayerIndexLoggedIn())   ||
                 (turnManager.getPhaseCode() !== Types.TurnPhaseCode.Main)
             ) {
