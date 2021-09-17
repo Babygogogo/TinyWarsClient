@@ -16,7 +16,6 @@ import TwnsUiButton             from "../../tools/ui/UiButton";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsUserPanel            from "../../user/view/UserPanel";
-import RwModel                  from "../model/RwModel";
 import TwnsRwWar                from "../model/RwWar";
 import TwnsRwWarMenuPanel       from "./RwWarMenuPanel";
 
@@ -28,8 +27,11 @@ namespace TwnsRwTopPanel {
     import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
     import RwWarMenuPanel       = TwnsRwWarMenuPanel.RwWarMenuPanel;
 
+    type OpenData = {
+        war : TwnsRwWar.RwWar;
+    };
     // eslint-disable-next-line no-shadow
-    export class RwTopPanel extends TwnsUiPanel.UiPanel<void> {
+    export class RwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -55,11 +57,11 @@ namespace TwnsRwTopPanel {
         private readonly _btnUnitList!      : TwnsUiButton.UiButton;
         private readonly _btnMenu!          : TwnsUiButton.UiButton;
 
-        public static show(): void {
+        public static show(openData: OpenData): void {
             if (!RwTopPanel._instance) {
                 RwTopPanel._instance = new RwTopPanel();
             }
-            RwTopPanel._instance.open();
+            RwTopPanel._instance.open(openData);
         }
 
         public static async hide(): Promise<void> {
@@ -104,7 +106,7 @@ namespace TwnsRwTopPanel {
         }
 
         private _getWar(): TwnsRwWar.RwWar {
-            return Helpers.getExisted(RwModel.getWar());
+            return this._getOpenData().war;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

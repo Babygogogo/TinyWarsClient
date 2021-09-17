@@ -1,5 +1,6 @@
 
 import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
+import TwnsBwUnitListPanel              from "../../baseWar/view/BwUnitListPanel";
 import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
@@ -294,8 +295,7 @@ namespace TwnsSpwWarMenuPanel {
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return Helpers.getNonNullElements([
                 // this._createCommandOpenCoInfoMenu(),
-                this._createCommandPlayerUseCop(),
-                this._createCommandPlayerUseScop(),
+                this._createCommandOpenUnitListPanel(),
                 this._createCommandSaveScw(),
                 this._createCommandSaveSfw(),
                 this._createCommandLoadGame(),
@@ -350,55 +350,19 @@ namespace TwnsSpwWarMenuPanel {
         //         },
         //     };
         // }
-
-        private _createCommandPlayerUseCop(): DataForCommandRenderer | null {
-            const war           = this._getWar();
-            const skillType     = Types.CoSkillType.Power;
-            const playerInTurn  = war.getPlayerInTurn();
-            const actionPlanner = war.getActionPlanner();
-            if ((!war.checkIsHumanInTurn())                                         ||
-                (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (actionPlanner.checkIsStateRequesting())
-            ) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0142),
-                    callback: () => {
-                        CommonConfirmPanel.show({
-                            title   : Lang.getText(LangTextType.B0142),
-                            content : Lang.getText(LangTextType.A0054),
-                            callback: () => actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
-                        });
-                    },
-                };
-            }
-        }
-
-        private _createCommandPlayerUseScop(): DataForCommandRenderer | null {
-            const war           = this._getWar();
-            const skillType     = Types.CoSkillType.SuperPower;
-            const playerInTurn  = war.getPlayerInTurn();
-            const actionPlanner = war.getActionPlanner();
-            if ((!war.checkIsHumanInTurn())                                         ||
-                (!playerInTurn.checkCanUseCoSkill(skillType))                       ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (actionPlanner.checkIsStateRequesting())
-            ) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0144),
-                    callback: () => {
-                        CommonConfirmPanel.show({
-                            title   : Lang.getText(LangTextType.B0144),
-                            content : Lang.getText(LangTextType.A0058),
-                            callback: () => actionPlanner.setStateRequestingPlayerUseCoSkill(skillType),
-                        });
-                    },
-                };
-            }
+        private _createCommandOpenUnitListPanel(): DataForCommandRenderer {
+            return {
+                name    : Lang.getText(LangTextType.B0152),
+                callback: () => {
+                    const war           = this._getWar();
+                    const actionPlanner = war.getField().getActionPlanner();
+                    if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
+                        actionPlanner.setStateIdle();
+                        this.close();
+                        TwnsBwUnitListPanel.BwUnitListPanel.show({ war });
+                    }
+                },
+            };
         }
 
         private _createCommandSaveScw(): DataForCommandRenderer | null {

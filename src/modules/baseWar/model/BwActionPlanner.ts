@@ -281,10 +281,13 @@ namespace TwnsBwActionPlanner {
             return this._prevState;
         }
         protected _setState(state: State): void {
+            const isChanged = this._state !== state;
             this._prevState = this._state;
             this._state     = state;
+
             Logger.log(`BwActionPlanner._setState() ${state}`);
-            Notify.dispatch(NotifyType.BwActionPlannerStateChanged);
+            Notify.dispatch(NotifyType.BwActionPlannerStateSet);
+            (isChanged) && (Notify.dispatch(NotifyType.BwActionPlannerStateChanged));
         }
 
         public setStateIdle(shortSfxCode?: ShortSfxCode): void {

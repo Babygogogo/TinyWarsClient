@@ -1563,7 +1563,7 @@ namespace TwnsLangCommonText {
             `Infinity`,
         ],
         [LangTextType.B0142]: [
-            `发动COP`,
+            `Power`,
             `Power`,
         ],
         [LangTextType.B0143]: [
@@ -1571,8 +1571,8 @@ namespace TwnsLangCommonText {
             `Help`,
         ],
         [LangTextType.B0144]: [
-            `发动SCOP`,
-            `SCOP`,
+            `S-Power`,
+            `S-Power`,
         ],
         [LangTextType.B0145]: [
             `选择CO`,
@@ -3717,6 +3717,14 @@ namespace TwnsLangCommonText {
         [LangTextType.B0684]: [
             `英文名称`,
             `English Name`,
+        ],
+        [LangTextType.B0685]: [
+            `空闲部队`,
+            `Idle Unit`,
+        ],
+        [LangTextType.B0686]: [
+            `空闲建筑`,
+            `Idle Tile`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

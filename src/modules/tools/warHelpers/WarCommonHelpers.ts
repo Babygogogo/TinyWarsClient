@@ -676,11 +676,7 @@ namespace WarCommonHelpers {
     }
 
     export function getIdleBuildingGridIndex(war: BwWar): Types.GridIndex | null {
-        const playerIndex = war.getPlayerIndexInTurn();
-        if (playerIndex == null) {
-            throw Helpers.newError(`WarCommonHelpers.getIdleBuildingGridIndex() empty playerIndex.`);
-        }
-
+        const playerIndex               = war.getPlayerIndexInTurn();
         const field                     = war.getField();
         const tileMap                   = field.getTileMap();
         const unitMap                   = field.getUnitMap();
@@ -696,6 +692,41 @@ namespace WarCommonHelpers {
                 }
             }
             return false;
+        };
+
+        for (let y = currY; y < height; ++y) {
+            for (let x = 0; x < width; ++x) {
+                if ((y > currY) || (x > currX)) {
+                    const gridIndex = { x, y };
+                    if (checkIsIdle(gridIndex)) {
+                        return gridIndex;
+                    }
+                }
+            }
+        }
+
+        for (let y = 0; y <= currY; ++y) {
+            for (let x = 0; x < width; ++x) {
+                if ((y < currY) || (x <= currX)) {
+                    const gridIndex = { x, y };
+                    if (checkIsIdle(gridIndex)) {
+                        return gridIndex;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+    export function getIdleUnitGridIndex(war: BwWar): Types.GridIndex | null {
+        const playerIndex               = war.getPlayerIndexInTurn();
+        const field                     = war.getField();
+        const unitMap                   = field.getUnitMap();
+        const { x: currX, y: currY }    = field.getCursor().getGridIndex();
+        const { width, height}          = unitMap.getMapSize();
+        const checkIsIdle               = (gridIndex: Types.GridIndex): boolean => {
+            const unit = unitMap.getUnitOnMap(gridIndex);
+            return (unit?.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle);
         };
 
         for (let y = currY; y < height; ++y) {

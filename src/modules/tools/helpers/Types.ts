@@ -271,6 +271,7 @@ namespace Types {
         ButtonNeutral01,
         ButtonConfirm01,
         ButtonCancel01,
+        ButtonForbidden01,
         CursorConfirm01,
         CursorMove01,
     }

@@ -92,6 +92,7 @@ namespace TwnsNotifyType {
         BwFieldZoomed,
         BwFieldDragged,
 
+        BwActionPlannerStateSet,
         BwActionPlannerStateChanged,
         BwActionPlannerMovePathChanged,
 

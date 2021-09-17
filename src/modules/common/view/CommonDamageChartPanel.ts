@@ -87,7 +87,7 @@ namespace TwnsCommonDamageChartPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-                { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
+                { type: NotifyType.BwActionPlannerStateSet,    callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this.close },

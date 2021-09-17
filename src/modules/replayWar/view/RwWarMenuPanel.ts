@@ -103,7 +103,7 @@ namespace TwnsRwWarMenuPanel {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.BwActionPlannerStateChanged,        callback: this._onNotifyMcwPlannerStateChanged },
+                { type: NotifyType.BwActionPlannerStateSet,        callback: this._onNotifyMcwPlannerStateChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: NotifyType.MsgSpmCreateSfw,                    callback: this._onNotifyMsgSpmCreateSfw },
                 { type: NotifyType.MsgReplaySetRating,                 callback: this._onMsgReplaySetRating },

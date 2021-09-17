@@ -26,7 +26,7 @@ namespace TwnsBwCursor {
         private _notifyListeners: Notify.Listener[] = [
             { type: NotifyType.BwCursorTapped,                 callback: this._onNotifyBwCursorTapped },
             { type: NotifyType.BwCursorDragged,                callback: this._onNotifyBwCursorDragged },
-            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.BwActionPlannerStateSet,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
         public init(mapSize: Types.MapSize): void {

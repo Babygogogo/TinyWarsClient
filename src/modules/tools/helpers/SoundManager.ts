@@ -53,11 +53,12 @@ namespace SoundManager {
         // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],
     ]);
     const _SHORT_SFX_PARAM = new Map<ShortSfxCode, ShortSfxParams>([
-        [ ShortSfxCode.ButtonNeutral01,   { name: "buttonNeutral01.mp3" } ],
-        [ ShortSfxCode.ButtonConfirm01,   { name: "buttonConfirm01.mp3" } ],
-        [ ShortSfxCode.ButtonCancel01,    { name: "buttonCancel01.mp3"  } ],
-        [ ShortSfxCode.CursorConfirm01,   { name: "cursorConfirm01.mp3" } ],
-        [ ShortSfxCode.CursorMove01,      { name: "cursorMove01.mp3"    } ],
+        [ ShortSfxCode.ButtonNeutral01,     { name: "buttonNeutral01.mp3" } ],
+        [ ShortSfxCode.ButtonConfirm01,     { name: "buttonConfirm01.mp3" } ],
+        [ ShortSfxCode.ButtonCancel01,      { name: "buttonCancel01.mp3"  } ],
+        [ ShortSfxCode.ButtonForbidden01,   { name: `buttonForbidden01.mp3`} ],
+        [ ShortSfxCode.CursorConfirm01,     { name: "cursorConfirm01.mp3" } ],
+        [ ShortSfxCode.CursorMove01,        { name: "cursorMove01.mp3"    } ],
     ]);
 
     let _isInitialized          = false;

@@ -18,7 +18,6 @@ import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import UserModel                from "../../user/model/UserModel";
 import TwnsBwCursor             from "../model/BwCursor";
 import TwnsBwUnitView           from "./BwUnitView";
 
@@ -64,14 +63,15 @@ namespace TwnsBwUnitListPanel {
         public constructor() {
             super();
 
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/baseWar/BwUnitListPanel.exml`;
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-                { type: NotifyType.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.BwActionPlannerStateChanged, callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnSwitch, callback: this._onTouchedBtnSwitch },
@@ -94,20 +94,14 @@ namespace TwnsBwUnitListPanel {
             this._updateComponentsForLanguage();
         }
         private _onNotifyBwPlannerStateChanged(): void {
-            const war = this._getOpenData().war;
-            if (war.getPlayerInTurn()?.getUserId() === UserModel.getSelfUserId()) {
-                this.close();
-            }
-        }
-        private _onNotifyBwWarMenuPanelOpened(): void {
-            this.close();
+            this._updateComponentsForUnits();
         }
 
         private _onTouchedBtnSwitch(): void {
             const playerIndex = this._playerIndex;
             if (playerIndex != null) {
                 this._playerIndex = this._getOpenData().war.getTurnManager().getNextPlayerIndex(playerIndex);
-                this._updateView();
+                this._updateComponentsForUnits();
             }
         }
 
@@ -123,7 +117,10 @@ namespace TwnsBwUnitListPanel {
 
         private _updateView(): void {
             this._updateComponentsForLanguage();
+            this._updateComponentsForUnits();
+        }
 
+        private _updateComponentsForUnits(): void {
             const dataArray = this._createDataForList();
             this._listUnit.bindData(dataArray);
             this._labelCount.text = `${dataArray.length}`;
@@ -226,6 +223,7 @@ namespace TwnsBwUnitListPanel {
                     current : gridIndex,
                     tappedOn: gridIndex,
                 } as NotifyData.BwCursorTapped);
+                BwUnitListPanel.hide();
             } else {
                 cursor.setGridIndex(gridIndex);
                 cursor.updateView();

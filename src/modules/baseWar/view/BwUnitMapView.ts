@@ -24,7 +24,7 @@ namespace TwnsBwUnitMapView {
         private readonly _layerForAir       = new egret.DisplayObjectContainer();
         private readonly _notifyListeners   = [
             { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.BwActionPlannerStateSet,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
         private _unitMap    : BwUnitMap | null = null;

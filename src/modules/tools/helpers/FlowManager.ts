@@ -27,6 +27,7 @@ import MfrProxy                     from "../../multiFreeRoom/model/MfrProxy";
 import TwnsMfwMyWarListPanel        from "../../multiFreeWar/view/MfwMyWarListPanel";
 import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                     from "../../multiPlayerWar/model/MpwProxy";
+import TwnsMpwSidePanel             from "../../multiPlayerWar/view/MpwSidePanel";
 import TwnsMpwTopPanel              from "../../multiPlayerWar/view/MpwTopPanel";
 import MrrProxy                     from "../../multiRankRoom/model/MrrProxy";
 import TwnsMrwMyWarListPanel        from "../../multiRankWar/view/MrwMyWarListPanel";
@@ -39,6 +40,7 @@ import SpmModel                     from "../../singlePlayerMode/model/SpmModel"
 import SpmProxy                     from "../../singlePlayerMode/model/SpmProxy";
 import TwnsSpmWarListPanel          from "../../singlePlayerMode/view/SpmWarListPanel";
 import SpwModel                     from "../../singlePlayerWar/model/SpwModel";
+import TwnsSpwSidePanel             from "../../singlePlayerWar/view/SpwSidePanel";
 import TwnsSpwTopPanel              from "../../singlePlayerWar/view/SpwTopPanel";
 import UserModel                    from "../../user/model/UserModel";
 import UserProxy                    from "../../user/model/UserProxy";
@@ -189,7 +191,8 @@ namespace FlowManager {
 
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();
-        TwnsMpwTopPanel.MpwTopPanel.show();
+        TwnsMpwTopPanel.MpwTopPanel.show({ war });
+        TwnsMpwSidePanel.MpwSidePanel.show({ war });
         TwnsBwWarPanel.BwWarPanel.show({ war });
         TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
         TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
@@ -207,7 +210,7 @@ namespace FlowManager {
 
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();
-        TwnsRwTopPanel.RwTopPanel.show();
+        TwnsRwTopPanel.RwTopPanel.show({ war });
         TwnsBwWarPanel.BwWarPanel.show({ war });
         TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
         TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
@@ -228,6 +231,7 @@ namespace FlowManager {
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();
         TwnsSpwTopPanel.SpwTopPanel.show({ war });
+        TwnsSpwSidePanel.SpwSidePanel.show({ war });
         TwnsBwWarPanel.BwWarPanel.show({ war });
         TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
         TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });

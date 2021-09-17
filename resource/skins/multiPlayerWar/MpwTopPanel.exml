@@ -20,15 +20,6 @@
                 <e:HorizontalLayout verticalAlign="middle" gap="0" />
             </e:layout>
         </e:Group>
-        <e:Group id="_groupTimer" x="270" verticalCenter="0">
-            <TwnsUiLabel:UiLabel id="_labelTimerTitle" text="Timer:" size="12" x="0" textColor="0xFFFFFF" y="0"
-                                 maxTextWidth="200" />
-            <TwnsUiLabel:UiLabel id="_labelTimer" text="999:00:00" size="14" x="0" textColor="0xFFFFFF" y="14"
-                                 maxTextWidth="200" />
-            <e:layout>
-                <e:VerticalLayout gap="2" />
-            </e:layout>
-        </e:Group>
         <e:Group x="340" verticalCenter="0">
             <TwnsUiImage:UiImage x="0" y="0" scaleX="0.8" scaleY="0.8" source="icon_fund_001" />
             <TwnsUiLabel:UiLabel id="_labelFund" text="999999" size="16" x="330" textColor="0xffffff" y="2"
@@ -66,59 +57,44 @@
                 <e:HorizontalLayout verticalAlign="middle" />
             </e:layout>
         </e:Group>
-        <TwnsUiButton:UiButton id="_btnChat" label="" x="710" width="50" top="0" bottom="0">
-            <TwnsUiButton:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
-                    <e:Image scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" source="icon_chat_001" />
-                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                         horizontalCenter="0" maxTextWidth="70" />
-                    <TwnsUiImage:UiImage id="_imgRed" width="20" height="20" source="uncompressedCircle0009" right="0" top="0" />
-                </e:Skin>
-            </TwnsUiButton:skinName>
-        </TwnsUiButton:UiButton>
-        <TwnsUiButton:UiButton id="_btnUnitList" label="" x="760" width="50" top="0" bottom="0">
-            <TwnsUiButton:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
-                    <e:Image scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" source="icon_person_003" />
-                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                         horizontalCenter="0" maxTextWidth="70" />
-                </e:Skin>
-            </TwnsUiButton:skinName>
-        </TwnsUiButton:UiButton>
-        <TwnsUiButton:UiButton id="_btnFindBuilding" label="" x="810" top="0" bottom="0" width="50">
-            <TwnsUiButton:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
-                    <e:Image scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0"
-                             source="icon_building_001" />
-                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                         horizontalCenter="0" maxTextWidth="70" />
-                </e:Skin>
-            </TwnsUiButton:skinName>
-        </TwnsUiButton:UiButton>
-        <TwnsUiButton:UiButton id="_btnEndTurn" label="" x="860" width="50" top="0" bottom="0">
-            <TwnsUiButton:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
-                    <e:Image source="icon_switch_001" scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" />
-                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                         horizontalCenter="0" maxTextWidth="70" />
-                </e:Skin>
-            </TwnsUiButton:skinName>
-        </TwnsUiButton:UiButton>
-        <TwnsUiButton:UiButton id="_btnCancel" label="" x="860" width="50" top="0" bottom="0">
-            <TwnsUiButton:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
-                    <e:Image source="icon_close_001" horizontalCenter="0" verticalCenter="0" scaleX="0.8" scaleY="0.8" />
-                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                         horizontalCenter="0" maxTextWidth="70" />
-                </e:Skin>
-            </TwnsUiButton:skinName>
-        </TwnsUiButton:UiButton>
-        <TwnsUiButton:UiButton id="_btnMenu" label="" width="50" top="0" bottom="0" x="910"
-                               skinName="Skins.Component.Button.ButtonMenu001"></TwnsUiButton:UiButton>
+        <e:Group y="0" right="20">
+            <e:Group id="_groupTimer" x="270" verticalCenter="0" width="90">
+                <TwnsUiImage:UiImage x="10" y="10" scaleX="0.7" scaleY="0.7" source="commonIcon0008" />
+                <TwnsUiLabel:UiLabel id="_labelTimer" text="999:00:00" size="14" x="0" textColor="0xFFFFFF" y="14"
+                                     maxTextWidth="63" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" gap="4" />
+                </e:layout>
+            </e:Group>
+            <TwnsUiButton:UiButton id="_btnChat" label="" x="0" width="50" y="0" height="40">
+                <TwnsUiButton:skinName>
+                    <e:Skin states="up,down,disabled">
+                        <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                        <e:Image horizontalCenter="0" verticalCenter="0" source="commonIcon0006" x="10" y="10"
+                                 scaleX="0.9" scaleY="0.9" />
+                        <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                             horizontalCenter="0" maxTextWidth="70" />
+                        <TwnsUiImage:UiImage id="_imgRed" width="20" height="20" source="uncompressedCircle0009"
+                                             right="0" top="0" />
+                    </e:Skin>
+                </TwnsUiButton:skinName>
+            </TwnsUiButton:UiButton>
+            <TwnsUiButton:UiButton id="_btnSettings" label="" x="10" width="50" y="0" height="40">
+                <TwnsUiButton:skinName>
+                    <e:Skin states="up,down,disabled">
+                        <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                        <e:Image horizontalCenter="0" verticalCenter="0" source="commonIcon0007" scaleX="0.9"
+                                 scaleY="0.9" />
+                        <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                             horizontalCenter="0" maxTextWidth="70" />
+                        <TwnsUiImage:UiImage id="_imgRed" width="20" height="20" source="uncompressedCircle0009"
+                                             right="0" top="0" />
+                    </e:Skin>
+                </TwnsUiButton:skinName>
+            </TwnsUiButton:UiButton>
+            <e:layout>
+                <e:HorizontalLayout gap="20" verticalAlign="middle" />
+            </e:layout>
+        </e:Group>
     </e:Group>
 </e:Skin>
