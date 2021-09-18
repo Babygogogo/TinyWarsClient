@@ -4,6 +4,7 @@ import TwnsChatPanel            from "../../chat/view/ChatPanel";
 import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
 import TwnsMpwWar               from "../../multiPlayerWar/model/MpwWar";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
@@ -12,11 +13,16 @@ import Timer                    from "../../tools/helpers/Timer";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
+import NotifyData               from "../../tools/notify/NotifyData";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import ProtoTypes               from "../../tools/proto/ProtoTypes";
 import TwnsUiButton             from "../../tools/ui/UiButton";
+import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
+import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
+import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 import UserModel                from "../../user/model/UserModel";
 import UserProxy                from "../../user/model/UserProxy";
 import TwnsUserPanel            from "../../user/view/UserPanel";
@@ -29,6 +35,12 @@ namespace TwnsMpwTopPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
+    // eslint-disable-next-line no-shadow
+    enum PanelSkinState {
+        Normal,
+        Expanded,
+    }
+
     type OpenData = {
         war     : TwnsMpwWar.MpwWar;
     };
@@ -38,19 +50,28 @@ namespace TwnsMpwTopPanel {
 
         private static _instance: MpwTopPanel;
 
-        private readonly _groupPlayer!      : eui.Group;
-        private readonly _labelPlayerState! : TwnsUiLabel.UiLabel;
-        private readonly _labelPlayer!      : TwnsUiLabel.UiLabel;
-        private readonly _labelFund!        : TwnsUiLabel.UiLabel;
-        private readonly _groupTimer!       : eui.Group;
-        private readonly _labelTimer!       : TwnsUiLabel.UiLabel;
-        private readonly _groupCo!          : eui.Group;
-        private readonly _labelCo!          : TwnsUiLabel.UiLabel;
-        private readonly _labelCurrEnergy!  : TwnsUiLabel.UiLabel;
-        private readonly _labelPowerEnergy! : TwnsUiLabel.UiLabel;
-        private readonly _labelZoneEnergy!  : TwnsUiLabel.UiLabel;
-        private readonly _btnChat!          : TwnsUiButton.UiButton;
-        private readonly _btnSettings!      : TwnsUiButton.UiButton;
+        private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
+        private readonly _groupTimer!           : eui.Group;
+        private readonly _labelTimer!           : TwnsUiLabel.UiLabel;
+        private readonly _btnChat!              : TwnsUiButton.UiButton;
+        private readonly _btnSettings!          : TwnsUiButton.UiButton;
+
+        private readonly _groupCo!              : eui.Group;
+        private readonly _imgSkin!              : TwnsUiImage.UiImage;
+        private readonly _imgCo!                : TwnsUiImage.UiImage;
+
+        private readonly _groupPlayer!          : eui.Group;
+        private readonly _labelPlayer!          : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerState!     : TwnsUiLabel.UiLabel;
+
+        private readonly _groupInfo!            : eui.Group;
+        private readonly _labelCurrEnergy!      : TwnsUiLabel.UiLabel;
+        private readonly _labelPowerEnergy!     : TwnsUiLabel.UiLabel;
+        private readonly _labelZoneEnergy!      : TwnsUiLabel.UiLabel;
+        private readonly _labelFund!            : TwnsUiLabel.UiLabel;
+        private readonly _labelAddFund!         : TwnsUiLabel.UiLabel;
+        private readonly _btnExpand!            : TwnsUiButton.UiButton;
+        private readonly _btnNarrow!            : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!MpwTopPanel._instance) {
@@ -79,6 +100,7 @@ namespace TwnsMpwTopPanel {
                 { type: NotifyType.BwPlayerIndexInTurnChanged,      callback: this._onNotifyBwPlayerIndexInTurnChanged },
                 { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
+                { type: NotifyType.BwTileBeCaptured,                callback: this._onNotifyBwTileBeCaptured },
                 { type: NotifyType.MsgChatGetAllReadProgressList,   callback: this._onNotifyMsgChatGetAllReadProgressList },
                 { type: NotifyType.MsgChatUpdateReadProgress,       callback: this._onNotifyMsgChatUpdateReadProgress },
                 { type: NotifyType.MsgChatGetAllMessages,           callback: this._onNotifyMsgChatGetAllMessages },
@@ -88,15 +110,20 @@ namespace TwnsMpwTopPanel {
             this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
+                { ui: this._groupInfo,          callback: this._onTouchedGroupInfo },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnSettings,        callback: this._onTouchedBtnSettings, },
+                { ui: this._btnExpand,          callback: this._onTouchedBtnExpand },
+                { ui: this._btnNarrow,          callback: this._onTouchedBtnNarrow },
             ]);
+            this._listPlayer.setItemRenderer(PlayerRenderer);
+            this._setPanelSkinState(PanelSkinState.Normal);
 
             this._updateView();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Callbacks.
+        // Callbacks for notify.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
@@ -118,7 +145,7 @@ namespace TwnsMpwTopPanel {
             }
         }
         private _onNotifyBwPlayerFundChanged(): void {
-            this._updateLabelFund();
+            this._updateLabelFundAndAddFund();
         }
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
             const war = this._getOpenData().war;
@@ -131,11 +158,14 @@ namespace TwnsMpwTopPanel {
             }
         }
         private _onNotifyBwCoEnergyChanged(): void {
-            this._updateLabelCoAndEnergy();
+            this._updateLabelEnergy();
         }
         private _onNotifyBwCoUsingSkillChanged(): void {
-            this._updateLabelCoAndEnergy();
+            this._updateLabelEnergy();
             SoundManager.playCoBgmWithWar(this._getOpenData().war, false);
+        }
+        private _onNotifyBwTileBeCaptured(): void {
+            this._updateLabelFundAndAddFund();
         }
 
         private _onNotifyMsgChatGetAllReadProgressList(): void {
@@ -157,6 +187,9 @@ namespace TwnsMpwTopPanel {
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Callbacks for touch.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedGroupPlayer(): void {
             const userId = this._getOpenData().war.getPlayerInTurn().getUserId();
             if (userId != null) {
@@ -165,20 +198,42 @@ namespace TwnsMpwTopPanel {
                 if (userId !== UserModel.getSelfUserId()) {
                     UserProxy.reqUserGetOnlineState(userId);
                 }
+
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             }
         }
+
         private _onTouchedGroupCo(): void {
             CommonCoListPanel.show({
-                war             : this._getOpenData().war,
+                war : this._getOpenData().war,
             });
             TwnsMpwWarMenuPanel.MpwWarMenuPanel.hide();
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
+
+        private _onTouchedGroupInfo(): void {
+            CommonCoListPanel.show({
+                war : this._getOpenData().war,
+            });
+            TwnsMpwWarMenuPanel.MpwWarMenuPanel.hide();
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+
         private _onTouchedBtnChat(): void {
             TwnsMpwWarMenuPanel.MpwWarMenuPanel.hide();
             TwnsChatPanel.ChatPanel.show({});
         }
+
         private _onTouchedBtnSettings(): void {
             TwnsUserSettingsPanel.UserSettingsPanel.show();
+        }
+
+        private _onTouchedBtnExpand(): void {
+            this._setPanelSkinState(PanelSkinState.Expanded);
+        }
+
+        private _onTouchedBtnNarrow(): void {
+            this._setPanelSkinState(PanelSkinState.Normal);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,16 +241,22 @@ namespace TwnsMpwTopPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
+            this._updateListPlayer();
+            this._updateImgSkinAndCo();
             this._updateLabelPlayerState();
             this._updateLabelPlayer();
             this._updateGroupTimer();
-            this._updateLabelFund();
-            this._updateLabelCoAndEnergy();
+            this._updateLabelFundAndAddFund();
+            this._updateLabelEnergy();
             this._updateBtnChat();
         }
 
         private _updateComponentsForLanguage(): void {
             // nothing to do
+        }
+
+        private _updateListPlayer(): void {
+            this._listPlayer.bindData(this._createDataArrayForListPlayer());
         }
 
         private async _updateLabelPlayerState(): Promise<void> {
@@ -217,10 +278,8 @@ namespace TwnsMpwTopPanel {
         }
 
         private async _updateLabelPlayer(): Promise<void> {
-            const war                   = this._getOpenData().war;
-            const player                = war.getPlayerInTurn();
-            this._labelPlayer.text      = `${await player.getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; })} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`;
-            this._labelPlayer.textColor = player === war.getPlayerLoggedIn() ? 0x00FF00 : 0xFFFFFF;
+            const player            = this._getOpenData().war.getPlayerInTurn();
+            this._labelPlayer.text  = `${await player.getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; })}`;
         }
 
         private _updateGroupTimer(): void {
@@ -240,46 +299,209 @@ namespace TwnsMpwTopPanel {
             }
         }
 
-        private _updateLabelFund(): void {
-            const war               = this._getOpenData().war;
-            const playerInTurn      = war.getPlayerInTurn();
-            if ((war.getFogMap().checkHasFogCurrently())                                                                        &&
+        private _updateLabelFundAndAddFund(): void {
+            const war           = this._getOpenData().war;
+            const playerInTurn  = war.getPlayerInTurn();
+            const labelFund     = this._labelFund;
+            const labelAddFund  = this._labelAddFund;
+            if ((war.getFogMap().checkHasFogCurrently())                                                        &&
                 (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
             ) {
-                this._labelFund.text = `????`;
+                labelFund.text      = `????`;
+                labelAddFund.text   = `(+??)`;
             } else {
-                this._labelFund.text = `${playerInTurn.getFund()}`;
+                labelFund.text      = `${playerInTurn.getFund()}`;
+                labelAddFund.text   = `(+${war.getTileMap().getTotalIncomeForPlayer(playerInTurn.getPlayerIndex())})`;
             }
         }
 
-        private _updateLabelCoAndEnergy(): void {
+        private _updateImgSkinAndCo(): void {
+            const player            = this._getOpenData().war.getPlayerInTurn();
+            this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
+            this._imgCo.source      = ConfigManager.getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+        }
+
+        private _updateLabelEnergy(): void {
             const war = this._getOpenData().war;
             if ((war) && (war.getIsRunning())) {
-                const player        = war.getPlayerInTurn();
-                const coId          = player.getCoId();
-                this._labelCo.text  = `${coId == null ? "----" : ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
-
-                const skillType = player.getCoUsingSkillType();
+                const player            = war.getPlayerInTurn();
+                const skillType         = player.getCoUsingSkillType();
+                const labelCurrEnergy   = this._labelCurrEnergy;
+                const currentEnergy     = player.getCoCurrentEnergy();
                 if (skillType === Types.CoSkillType.Power) {
-                    this._labelCurrEnergy.text = "COP";
+                    labelCurrEnergy.text = `${currentEnergy}(P)`;
                 } else if (skillType === Types.CoSkillType.SuperPower) {
-                    this._labelCurrEnergy.text = "SCOP";
+                    labelCurrEnergy.text = `${currentEnergy}(SP)`;
                 } else {
-                    const currentEnergy = player.getCoCurrentEnergy();
-                    this._labelCurrEnergy.text = `${currentEnergy != null ? currentEnergy : `--`}`;
+                    labelCurrEnergy.text = `${player.getCoCurrentEnergy()}`;
                 }
 
                 const powerEnergy           = player.getCoPowerEnergy();
                 const superPowerEnergy      = player.getCoSuperPowerEnergy();
-                this._labelPowerEnergy.text = `P ${powerEnergy == null ? `--` : powerEnergy} / ${superPowerEnergy == null ? `--` : superPowerEnergy}`;
+                this._labelPowerEnergy.text = `P:${powerEnergy == null ? `--` : powerEnergy} / ${superPowerEnergy == null ? `--` : superPowerEnergy}`;
 
                 const zoneEnergyText        = (player.getCoZoneExpansionEnergyList() || []).join(` / `);
-                this._labelZoneEnergy.text  = `Z ${zoneEnergyText.length ? zoneEnergyText : `--`}`;
+                this._labelZoneEnergy.text  = `Z:${zoneEnergyText.length ? zoneEnergyText : `--`}`;
             }
         }
 
         private _updateBtnChat(): void {
             this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
+        }
+
+        private _setPanelSkinState(state: PanelSkinState): void {
+            this.currentState = state === PanelSkinState.Normal ? `normal` : `expanded`;
+            this._listPlayer.scrollVerticalTo(0);
+        }
+
+        private _createDataArrayForListPlayer(): DataForListPlayer[] {
+            const war                   = this._getOpenData().war;
+            const playerIndexInTurn     = war.getPlayerIndexInTurn();
+            const playersCountUnneutral = war.getPlayerManager().getTotalPlayersCount(false);
+            const dataArray             : DataForListPlayer[] = [];
+            for (let playerIndex = playerIndexInTurn + 1; playerIndex <= playersCountUnneutral; ++playerIndex) {
+                dataArray.push({
+                    war,
+                    playerIndex,
+                });
+            }
+            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex < playerIndexInTurn; ++playerIndex) {
+                dataArray.push({
+                    war,
+                    playerIndex,
+                });
+            }
+            return dataArray;
+        }
+    }
+
+    type DataForListPlayer = {
+        war         : TwnsMpwWar.MpwWar
+        playerIndex : number;
+    };
+    class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForListPlayer> {
+        private readonly _imgSkin!          : TwnsUiImage.UiImage;
+        private readonly _imgCo!            : TwnsUiImage.UiImage;
+        private readonly _imgOnlineState!   : TwnsUiImage.UiImage;
+        private readonly _labelEnergy!      : TwnsUiLabel.UiLabel;
+        private readonly _labelFund!        : TwnsUiLabel.UiLabel;
+        private readonly _labelAddFund!     : TwnsUiLabel.UiLabel;
+
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: NotifyType.MsgUserGetOnlineState,       callback: this._onNotifyMsgUserGetOnlineState },
+                { type: NotifyType.TimeTick,                    callback: this._onNotifyTimeTick },
+                { type: NotifyType.BwPlayerFundChanged,         callback: this._onNotifyBwPlayerFundChanged },
+                { type: NotifyType.BwTileBeCaptured,            callback: this._onNotifyBwTileBeCaptured },
+                { type: NotifyType.BwCoUsingSkillTypeChanged,   callback: this._onNotifyBwCoUsingSkillChanged },
+                { type: NotifyType.BwCoEnergyChanged,           callback: this._onNotifyBwCoEnergyChanged },
+            ]);
+        }
+
+        protected _onDataChanged(): void {
+            const data              = this._getData();
+            const player            = data.war.getPlayer(data.playerIndex);
+            this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
+            this._imgCo.source      = ConfigManager.getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._updateImgOnlineState();
+            this._updateLabelFundAndAddFund();
+            this._updateLabelEnergy();
+        }
+
+        private _onNotifyMsgUserGetOnlineState(): void {
+            this._updateImgOnlineState();
+        }
+
+        private _onNotifyTimeTick(): void {
+            const data      = this._getData();
+            const war       = data.war;
+            const userId    = war.getPlayer(data.playerIndex).getUserId();
+            if ((userId != null)                        &&
+                (userId !== UserModel.getSelfUserId())  &&
+                (Timer.getServerTimestamp() % 60 == 0)
+            ) {
+                UserProxy.reqUserGetOnlineState(userId);
+            }
+        }
+
+        private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
+            const data = e.data as NotifyData.BwPlayerFundChanged;
+            if (data.getPlayerIndex() === this._getData().playerIndex) {
+                this._updateLabelFundAndAddFund();
+            }
+        }
+
+        private _onNotifyBwTileBeCaptured(): void {
+            this._updateLabelFundAndAddFund();
+        }
+
+        private _onNotifyBwCoUsingSkillChanged(): void {
+            this._updateLabelEnergy();
+        }
+
+        private _onNotifyBwCoEnergyChanged(): void {
+            this._updateLabelEnergy();
+        }
+
+        public onItemTapEvent(): void {
+            const data      = this._getData();
+            const userId    = data.war.getPlayer(data.playerIndex).getUserId();
+            if (userId != null) {
+                UserPanel.show({ userId });
+
+                if (userId !== UserModel.getSelfUserId()) {
+                    UserProxy.reqUserGetOnlineState(userId);
+                }
+            }
+        }
+
+        private async _updateImgOnlineState(): Promise<void> {
+            const data      = this._getData();
+            const userId    = data.war.getPlayer(data.playerIndex).getUserId();
+            const img       = this._imgOnlineState;
+            if ((userId == null) || (userId === UserModel.getSelfUserId())) {
+                img.source = `uncompressedColorGreen0000`;
+            } else {
+                const userPublicInfo = await UserModel.getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                if ((userPublicInfo == null) || (!userPublicInfo.isOnline)) {
+                    img.source = `uncompressedColorRed0000`;
+                } else {
+                    img.source = (Timer.getServerTimestamp() - Helpers.getExisted(userPublicInfo.lastActivityTime) > 60) ? `uncompressedColorYellow0000` : `uncompressedColorGreen0000`;
+                }
+            }
+        }
+
+        private _updateLabelFundAndAddFund(): void {
+            const data          = this._getData();
+            const war           = data.war;
+            const player        = war.getPlayer(data.playerIndex);
+            const labelFund     = this._labelFund;
+            const labelAddFund  = this._labelAddFund;
+            if ((war.getFogMap().checkHasFogCurrently())                                                &&
+                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
+            ) {
+                labelFund.text      = `????`;
+                labelAddFund.text   = `(+??)`;
+            } else {
+                labelFund.text      = `${player.getFund()}`;
+                labelAddFund.text   = `(+${war.getTileMap().getTotalIncomeForPlayer(player.getPlayerIndex())})`;
+            }
+        }
+
+        private _updateLabelEnergy(): void {
+            const data          = this._getData();
+            const war           = data.war;
+            const player        = war.getPlayer(data.playerIndex);
+            const skillType     = player.getCoUsingSkillType();
+            const label         = this._labelEnergy;
+            const currentEnergy = player.getCoCurrentEnergy();
+            if (skillType === Types.CoSkillType.Power) {
+                label.text = `${currentEnergy}(P)`;
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                label.text = `${currentEnergy}(SP)`;
+            } else {
+                label.text = `${player.getCoCurrentEnergy()}`;
+            }
         }
     }
 }

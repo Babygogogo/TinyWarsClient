@@ -276,12 +276,8 @@ namespace FlowManager {
         }
     }
     export function gotoRwReplayListPanel(): void {
-        _unloadAllWarsAndCloseAllPanels();
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        _unloadAllWarsAndOpenCommonPanels();
         TwnsRwReplayListPanel.RwReplayListPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
-
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -363,61 +359,45 @@ namespace FlowManager {
         }
     }
 
-    function _unloadAllWarsAndCloseAllPanels(): void {
+    function _unloadAllWarsAndOpenCommonPanels(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        StageManager.closeAllPanels();
+        StageManager.closeAllPanels(Helpers.getNonNullElements([
+            TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.getInstance(),
+            TwnsLobbyTopRightPanel.LobbyTopRightPanel.getInstance(),
+            TwnsBroadcastPanel.BroadcastPanel.getInstance(),
+        ]));
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsLobbyTopRightPanel.LobbyTopRightPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
     function _gotoMrwMyWarListPanel(): void {
-        _unloadAllWarsAndCloseAllPanels();
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        _unloadAllWarsAndOpenCommonPanels();
         TwnsMrwMyWarListPanel.MrwMyWarListPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
-
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
     function _gotoMcwMyWarListPanel(): void {
-        _unloadAllWarsAndCloseAllPanels();
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        _unloadAllWarsAndOpenCommonPanels();
         TwnsMcwMyWarListPanel.McwMyWarListPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
-
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
     function _gotoMfwMyWarListPanel(): void {
-        _unloadAllWarsAndCloseAllPanels();
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        _unloadAllWarsAndOpenCommonPanels();
         TwnsMfwMyWarListPanel.MfwMyWarListPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
-
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
     function _gotoCcwMyWarListPanel(): void {
-        _unloadAllWarsAndCloseAllPanels();
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        _unloadAllWarsAndOpenCommonPanels();
         TwnsCcwMyWarListPanel.CcwMyWarListPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
-
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
     function _gotoSpmWarListPanel(): void {
-        _unloadAllWarsAndCloseAllPanels();
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        _unloadAllWarsAndOpenCommonPanels();
         TwnsSpmWarListPanel.SpmWarListPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
-
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
     function _gotoMeMapListPanel(): void {
-        _unloadAllWarsAndCloseAllPanels();
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        _unloadAllWarsAndOpenCommonPanels();
         TwnsMeMapListPanel.MeMapListPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
-
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 }
 

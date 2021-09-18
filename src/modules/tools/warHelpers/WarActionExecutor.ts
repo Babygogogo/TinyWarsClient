@@ -14,6 +14,8 @@ import FloatText                    from "../helpers/FloatText";
 import GridIndexHelpers             from "../helpers/GridIndexHelpers";
 import Helpers                      from "../helpers/Helpers";
 import Types                        from "../helpers/Types";
+import Notify                       from "../notify/Notify";
+import TwnsNotifyType               from "../notify/NotifyType";
 import ProtoTypes                   from "../proto/ProtoTypes";
 import WarCommonHelpers             from "./WarCommonHelpers";
 import WarCoSkillHelpers            from "./WarCoSkillHelpers";
@@ -62,6 +64,7 @@ namespace WarActionExecutor {
     import BwUnit                               = TwnsBwUnit.BwUnit;
     import BwTile                               = TwnsBwTile.BwTile;
     import BwWar                                = TwnsBwWar.BwWar;
+    import NotifyType                           = TwnsNotifyType.NotifyType;
 
     type ResultForHandleDestructionForTile = {
         errorCode           : ClientErrorCode;
@@ -2348,6 +2351,7 @@ namespace WarActionExecutor {
                     objectType      : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
                     playerIndex     : focusUnit.getPlayerIndex(),
                 });
+                Notify.dispatch(NotifyType.BwTileBeCaptured);
             }
         }
 
@@ -2413,6 +2417,7 @@ namespace WarActionExecutor {
             }
             focusUnit.updateView();
             tile.flushDataToView();
+            Notify.dispatch(NotifyType.BwTileBeCaptured);
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();

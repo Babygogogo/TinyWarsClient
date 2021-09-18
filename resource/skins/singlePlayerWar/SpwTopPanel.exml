@@ -1,87 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="40" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+<e:Skin width="960" height="40" currentState="normal" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
-        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <e:Group left="0" top="0" right="0" height="40">
-        <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="0" bottom="0"
-                             source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" />
-        <e:Group id="_groupPlayer" x="0" verticalCenter="0">
-            <TwnsUiImage:UiImage source="icon_person_001" x="0" y="0" scaleX="0.8" scaleY="0.8" />
-            <TwnsUiLabel:UiLabel id="_labelPlayer" text="玩家名居然能有十个字(红)" size="16" x="10" textColor="0xffffff" y="12"
-                                 maxTextWidth="320" />
-            <e:layout>
-                <e:HorizontalLayout verticalAlign="middle" gap="0" />
-            </e:layout>
-        </e:Group>
-        <e:Group x="340" verticalCenter="0">
-            <TwnsUiImage:UiImage x="0" y="0" scaleX="0.8" scaleY="0.8" source="icon_fund_001" />
-            <TwnsUiLabel:UiLabel id="_labelFund" text="999999" size="16" x="330" textColor="0xffffff" y="2"
-                                 maxTextWidth="100" />
-            <e:layout>
-                <e:HorizontalLayout gap="0" verticalAlign="middle" />
-            </e:layout>
-        </e:Group>
-        <TwnsUiLabel:UiLabel id="_labelSinglePlayer" text="SinglePlayer" size="16" x="240" y="12" maxTextWidth="90"
-                             textColor="0x00ff00" bold="true" />
-        <e:Group id="_groupCo" x="440" verticalCenter="0">
-            <e:Group x="0" y="0">
-                <TwnsUiImage:UiImage x="0" y="0" scaleX="0.8" scaleY="0.8" source="icon_person_002" />
-                <TwnsUiLabel:UiLabel id="_labelCo" text="Greyfield" size="16" x="38" textColor="0xFFFFFF" y="0"
-                                     maxTextWidth="100" />
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing" states="expanded,normal">
+    <e:Group left="0" right="0" top="0" touchThrough="true">
+        <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scaleX="1" scaleY="1" source="uncompressedTriangle0000"
+                             scale9Grid="1,1,1,1" top="39.7" y="0" width="390" left="216" visible.normal="false" />
+        <e:Group left="0" top="0" right="0" height="40" x="0" y="0" scaleX="1" scaleY="1">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
+                                 source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" />
+            <TwnsUiScrollList:UiScrollList id="_listPlayer" width="280" height="24" x="290" y="8" height.expanded="84">
+                <e:List>
+                    <e:itemRendererSkinName>
+                        <e:Skin>
+                            <e:Group left="0" right="0" top="0" bottom="0">
+                                <e:Group x="0" y="0" scaleX="0.7" scaleY="0.7">
+                                    <TwnsUiImage:UiImage id="_imgSkin" source="uncompressedTriangle0001"
+                                                         scale9Grid="1,1,1,1" width="94" x="0" y="0" />
+                                    <TwnsUiImage:UiImage id="_imgCo" scale9Grid="1,1,1,1" x="2" source="coEyeNormal0001"
+                                                         verticalCenter="0" />
+                                </e:Group>
+                                <e:Group x="80" verticalCenter="0">
+                                    <TwnsUiLabel:UiLabel text="EN:" textColor="0xFFFFFF" size="14" x="10" bold="true"
+                                                         y="0" />
+                                    <TwnsUiLabel:UiLabel id="_labelEnergy" text="999(SP)" textColor="0xFFFFFF" size="14"
+                                                         x="0" bold="true" y="0" />
+                                    <e:layout>
+                                        <e:HorizontalLayout gap="2" />
+                                    </e:layout>
+                                </e:Group>
+                                <e:Group x="160" verticalCenter="0">
+                                    <TwnsUiLabel:UiLabel text="F:" size="14" bold="true" textColor="0xF9D803" left="0"
+                                                         top="0" />
+                                    <TwnsUiLabel:UiLabel id="_labelFund" text="999999" size="14" x="20" bold="true"
+                                                         textColor="0xF9D803" top="0" />
+                                    <TwnsUiLabel:UiLabel id="_labelAddFund" text="(+99999)" size="12" x="70"
+                                                         textColor="0xFFFFFF" height="13" bottom="0" />
+                                </e:Group>
+                            </e:Group>
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:VerticalLayout/>
+                    </e:layout>
+                </e:List>
+            </TwnsUiScrollList:UiScrollList>
+            <e:Group y="0" right="20">
+                <TwnsUiLabel:UiLabel id="_labelSinglePlayer" text="Single Player" size="14" x="0" textColor="0xFFFFFF"
+                                     y="14" />
+                <TwnsUiButton:UiButton id="_btnChat" label="" x="0" width="50" y="0" height="40">
+                    <TwnsUiButton:skinName>
+                        <e:Skin states="up,down,disabled">
+                            <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                            <e:Image horizontalCenter="0" verticalCenter="0" source="commonIcon0006" x="10" y="10"
+                                     scaleX="0.9" scaleY="0.9" />
+                            <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                                 horizontalCenter="0" maxTextWidth="70" />
+                            <TwnsUiImage:UiImage id="_imgRed" width="20" height="20" source="uncompressedCircle0009"
+                                                 right="0" top="0" />
+                        </e:Skin>
+                    </TwnsUiButton:skinName>
+                </TwnsUiButton:UiButton>
+                <TwnsUiButton:UiButton id="_btnSettings" label="" x="10" width="50" y="0" height="40">
+                    <TwnsUiButton:skinName>
+                        <e:Skin states="up,down,disabled">
+                            <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                            <e:Image horizontalCenter="0" verticalCenter="0" source="commonIcon0007" scaleX="0.9"
+                                     scaleY="0.9" />
+                            <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                                 horizontalCenter="0" maxTextWidth="70" />
+                            <TwnsUiImage:UiImage id="_imgRed" width="20" height="20" source="uncompressedCircle0009"
+                                                 right="0" top="0" />
+                        </e:Skin>
+                    </TwnsUiButton:skinName>
+                </TwnsUiButton:UiButton>
                 <e:layout>
-                    <e:HorizontalLayout gap="0" verticalAlign="middle" />
+                    <e:HorizontalLayout gap="20" verticalAlign="middle" />
                 </e:layout>
             </e:Group>
-            <e:Group x="105" y="0">
-                <TwnsUiLabel:UiLabel id="_labelCurrEnergy" text="99" size="22" x="0" textColor="0xFFFFFF" y="6"
-                                     maxTextWidth="200" />
-                <e:Group x="20" y="0">
-                    <TwnsUiLabel:UiLabel id="_labelPowerEnergy" text="P 99 / 99" size="12" x="0" textColor="0xFFFFFF"
-                                         y="0" maxTextWidth="200" />
-                    <TwnsUiLabel:UiLabel id="_labelZoneEnergy" text="Z 99 / 99" size="12" x="0" textColor="0xFFFFFF"
-                                         y="14" maxTextWidth="200" />
+        </e:Group>
+        <e:Group width="240" left="0" top="39.7">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" x="0" scaleX="1" scaleY="1"
+                                 source="uncompressedTriangle0000" scale9Grid="1,1,1,1" top="0" locked="true" />
+            <e:Group x="20" y="-33">
+                <e:Group id="_groupCo" top="0" left="0">
+                    <TwnsUiImage:UiImage id="_imgSkin" source="uncompressedTriangle0001" scale9Grid="1,11,1,12"
+                                         width="94" left="0" top="0" />
+                    <TwnsUiImage:UiImage id="_imgCo" source="coEyeNormal0001" left="2" verticalCenter="0" />
+                </e:Group>
+                <e:Group id="_groupPlayer" x="32" y="8">
+                    <TwnsUiLabel:UiLabel id="_labelPlayer" text="玩家名居然能有十个字" size="16" x="-374" textColor="0xffffff"
+                                         y="-8" maxTextWidth="160" />
                     <e:layout>
                         <e:VerticalLayout gap="2" />
                     </e:layout>
                 </e:Group>
                 <e:layout>
-                    <e:HorizontalLayout verticalAlign="middle" />
+                    <e:HorizontalLayout verticalAlign="middle" gap="2" />
                 </e:layout>
             </e:Group>
-            <e:layout>
-                <e:HorizontalLayout verticalAlign="middle" />
-            </e:layout>
-        </e:Group>
-        <e:Group y="0" right="20">
-            <TwnsUiButton:UiButton id="_btnChat" label="" x="0" width="50" y="0" height="40">
+            <e:Group id="_groupInfo" x="20" y="10">
+                <e:Group x="0" y="0">
+                    <e:Group x="0" y="5">
+                        <TwnsUiLabel:UiLabel text="EN:" size="16" textColor="0xF9D803" maxTextWidth="200" left="0"
+                                             top="0" bold="true" />
+                        <TwnsUiLabel:UiLabel id="_labelCurrEnergy" text="99" size="16" x="28" textColor="0xF9D803"
+                                             maxTextWidth="200" top="0" bold="true" />
+                    </e:Group>
+                    <e:Group x="20" y="0" height="13">
+                        <TwnsUiLabel:UiLabel id="_labelPowerEnergy" text="P 99 / 99" size="12" x="0"
+                                             textColor="0xFFFFFF" y="0" maxTextWidth="200" />
+                        <TwnsUiLabel:UiLabel id="_labelZoneEnergy" text="Z 99 / 99" size="12" x="0" textColor="0xFFFFFF"
+                                             y="14" maxTextWidth="200" />
+                        <e:layout>
+                            <e:HorizontalLayout/>
+                        </e:layout>
+                    </e:Group>
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="bottom" />
+                    </e:layout>
+                </e:Group>
+                <e:Group x="0" y="24">
+                    <e:Group x="0" y="0">
+                        <TwnsUiLabel:UiLabel text="F:" size="16" maxTextWidth="100" textColor="0xF9D803" top="0"
+                                             left="0" bold="true" />
+                        <TwnsUiLabel:UiLabel id="_labelFund" text="999999" size="16" textColor="0xF9D803"
+                                             maxTextWidth="100" top="0" x="28" bold="true" />
+                    </e:Group>
+                    <TwnsUiLabel:UiLabel id="_labelAddFund" text="(+10000)" size="12" x="340" y="12" maxTextWidth="100"
+                                         textColor="0xFFFFFF" height="13" />
+                    <e:layout>
+                        <e:HorizontalLayout gap="2" verticalAlign="bottom" />
+                    </e:layout>
+                </e:Group>
+            </e:Group>
+            <TwnsUiButton:UiButton id="_btnExpand" label="Button" x="200" verticalCenter="0" width="30" height="50"
+                                   visible.expanded="false">
                 <TwnsUiButton:skinName>
-                    <e:Skin states="up,down,disabled">
-                        <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
-                        <e:Image horizontalCenter="0" verticalCenter="0" source="commonIcon0006" x="10" y="10"
-                                 scaleX="0.9" scaleY="0.9" />
-                        <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                             horizontalCenter="0" maxTextWidth="70" />
-                        <TwnsUiImage:UiImage id="_imgRed" width="20" height="20" source="uncompressedCircle0009"
-                                             right="0" top="0" />
+                    <e:Skin>
+                        <e:Group left="0" right="0" top="0" bottom="0">
+                            <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                            <e:Image source="commonTriangle0000" verticalCenter="0" horizontalCenter="0" />
+                        </e:Group>
                     </e:Skin>
                 </TwnsUiButton:skinName>
             </TwnsUiButton:UiButton>
-            <TwnsUiButton:UiButton id="_btnSettings" label="" x="10" width="50" y="0" height="40">
+            <TwnsUiButton:UiButton id="_btnNarrow" label="Button" x="200" width="30" height="50" verticalCenter="0"
+                                   visible="false" visible.expanded="true">
                 <TwnsUiButton:skinName>
-                    <e:Skin states="up,down,disabled">
-                        <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
-                        <e:Image horizontalCenter="0" verticalCenter="0" source="commonIcon0007" scaleX="0.9"
-                                 scaleY="0.9" />
-                        <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                             horizontalCenter="0" maxTextWidth="70" />
-                        <TwnsUiImage:UiImage id="_imgRed" width="20" height="20" source="uncompressedCircle0009"
-                                             right="0" top="0" />
+                    <e:Skin>
+                        <e:Group left="0" right="0" top="0" bottom="0">
+                            <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                            <e:Image source="commonTriangle0000" verticalCenter="0" horizontalCenter="0" scaleX="-1" />
+                        </e:Group>
                     </e:Skin>
                 </TwnsUiButton:skinName>
             </TwnsUiButton:UiButton>
-            <e:layout>
-                <e:HorizontalLayout gap="20" verticalAlign="middle" />
-            </e:layout>
         </e:Group>
     </e:Group>
 </e:Skin>

@@ -839,6 +839,9 @@ namespace ConfigManager {
     export function getCoHeadImageSource(coId: number): string {
         return `coHead${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
     }
+    export function getCoEyeImageSource(coId: number, isAlive: boolean): string {
+        return `coEye${isAlive ? `Normal` : `Grey`}${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    }
 
     export function checkIsUnitDivingByDefault(version: string, unitType: UnitType): boolean {
         return checkIsUnitDivingByDefaultWithTemplateCfg(getUnitTemplateCfg(version, unitType));

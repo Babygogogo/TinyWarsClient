@@ -863,6 +863,16 @@ namespace WarCommonHelpers {
             return ``;
         }
     }
+    export function getImageSourceForCoEyeFrame(skinId: number): string {
+        switch (skinId) {
+            case CommonConstants.WarNeutralPlayerIndex  : return ``;
+            case 1                                      : return `uncompressedTriangle0001`;
+            case 2                                      : return `uncompressedTriangle0002`;
+            case 3                                      : return `uncompressedTriangle0003`;
+            case 4                                      : return `uncompressedTriangle0004`;
+            default                                     : throw Helpers.newError(`Invalid skinId: ${skinId}`);
+        }
+    }
 
     export function getTextColorForSkinId(skinId: number): number {
         switch (skinId) {
