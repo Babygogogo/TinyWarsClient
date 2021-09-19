@@ -425,8 +425,9 @@ namespace TwnsMpwTopPanel {
         }
 
         private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
-            const data = e.data as NotifyData.BwPlayerFundChanged;
-            if (data.getPlayerIndex() === this._getData().playerIndex) {
+            const eventData = e.data as NotifyData.BwPlayerFundChanged;
+            const data      = this._getData();
+            if (eventData === data.war.getPlayer(data.playerIndex)) {
                 this._updateLabelFundAndAddFund();
             }
         }

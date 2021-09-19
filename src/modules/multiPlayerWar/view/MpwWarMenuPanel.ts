@@ -5,8 +5,6 @@ import TwnsBwUnitListPanel              from "../../baseWar/view/BwUnitListPanel
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonDamageChartPanel       from "../../common/view/CommonDamageChartPanel";
-import MfrCreateModel                   from "../../multiFreeRoom/model/MfrCreateModel";
-import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                         from "../../multiPlayerWar/model/MpwProxy";
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
@@ -40,7 +38,6 @@ namespace TwnsMpwWarMenuPanel {
     import BwBuildingListPanel          = TwnsBwBuildingListPanel.BwBuildingListPanel;
     import CommonDamageChartPanel       = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
     import UserSettingsPanel            = TwnsUserSettingsPanel.UserSettingsPanel;
-    import MfrCreateSettingsPanel       = TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel;
     import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
     import TwWar                        = TwnsTwWar.TwWar;
     import LangTextType                 = TwnsLangTextType.LangTextType;
@@ -487,9 +484,7 @@ namespace TwnsMpwWarMenuPanel {
                     CommonConfirmPanel.show({
                         content : Lang.getText(LangTextType.A0201),
                         callback: () => {
-                            MfrCreateModel.resetDataByInitialWarData(warData);
-                            MfrCreateSettingsPanel.show();
-                            this.close();
+                            FlowManager.gotoMfrCreateSettingsPanel(warData);
                         }
                     });
                 }

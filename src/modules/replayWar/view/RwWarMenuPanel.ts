@@ -3,9 +3,6 @@ import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
-import TwnsLobbyBackgroundPanel         from "../../lobby/view/LobbyBackgroundPanel";
-import MfrCreateModel                   from "../../multiFreeRoom/model/MfrCreateModel";
-import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
@@ -14,7 +11,6 @@ import ConfigManager                    from "../../tools/helpers/ConfigManager"
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
 import Helpers                          from "../../tools/helpers/Helpers";
-import StageManager                     from "../../tools/helpers/StageManager";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -369,11 +365,7 @@ namespace TwnsRwWarMenuPanel {
                     CommonConfirmPanel.show({
                         content : Lang.getText(LangTextType.A0201),
                         callback: () => {
-                            MfrCreateModel.resetDataByInitialWarData(warData);
-                            RwModel.unloadWar();
-                            StageManager.closeAllPanels();
-                            TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-                            TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
+                            FlowManager.gotoMfrCreateSettingsPanel(warData);
                         }
                     });
                 }

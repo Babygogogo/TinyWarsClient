@@ -23,7 +23,9 @@ import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
 import TwnsMeTopPanel               from "../../mapEditor/view/MeTopPanel";
 import McrProxy                     from "../../multiCustomRoom/model/McrProxy";
 import TwnsMcwMyWarListPanel        from "../../multiCustomWar/view/McwMyWarListPanel";
+import MfrCreateModel               from "../../multiFreeRoom/model/MfrCreateModel";
 import MfrProxy                     from "../../multiFreeRoom/model/MfrProxy";
+import TwnsMfrCreateSettingsPanel   from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import TwnsMfwMyWarListPanel        from "../../multiFreeWar/view/MfwMyWarListPanel";
 import MpwModel                     from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                     from "../../multiPlayerWar/model/MpwProxy";
@@ -278,6 +280,19 @@ namespace FlowManager {
     export function gotoRwReplayListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
         TwnsRwReplayListPanel.RwReplayListPanel.show();
+    }
+
+    export function gotoMfrCreateSettingsPanel(warData: ProtoTypes.WarSerialization.ISerialWar): void {
+        MpwModel.unloadWar();
+        RwModel.unloadWar();
+        SpwModel.unloadWar();
+        MeModel.unloadWar();
+        MfrCreateModel.resetDataByInitialWarData(warData);
+        StageManager.closeAllPanels();
+        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+        TwnsLobbyTopRightPanel.LobbyTopRightPanel.show();
+        TwnsBroadcastPanel.BroadcastPanel.show();
+        TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

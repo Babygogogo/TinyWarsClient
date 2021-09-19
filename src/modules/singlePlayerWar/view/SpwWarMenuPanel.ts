@@ -4,8 +4,6 @@ import TwnsBwUnitListPanel              from "../../baseWar/view/BwUnitListPanel
 import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
-import MfrCreateModel                   from "../../multiFreeRoom/model/MfrCreateModel";
-import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import SpmProxy                         from "../../singlePlayerMode/model/SpmProxy";
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
@@ -522,12 +520,7 @@ namespace TwnsSpwWarMenuPanel {
                         return;
                     }
 
-                    const warData = war.serializeForCreateMfr();
-                    if (warData == null) {
-                        FloatText.show(Lang.getText(LangTextType.A0200));
-                        return;
-                    }
-
+                    const warData   = war.serializeForCreateMfr();
                     const errorCode = await (new TwWar()).init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
@@ -537,9 +530,7 @@ namespace TwnsSpwWarMenuPanel {
                     CommonConfirmPanel.show({
                         content : Lang.getText(LangTextType.A0201),
                         callback: () => {
-                            MfrCreateModel.resetDataByInitialWarData(warData);
-                            TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
-                            this.close();
+                            FlowManager.gotoMfrCreateSettingsPanel(warData);
                         }
                     });
                 }
@@ -835,39 +826,34 @@ namespace TwnsSpwWarMenuPanel {
             const superPowerEnergy  = player.getCoSuperPowerEnergy();
             const skillType         = player.getCoUsingSkillType();
             const playerIndex       = player.getPlayerIndex();
-            const hasLoadedCo       = war.getUnitMap().checkIsCoLoadedByAnyUnit(playerIndex);
             const currEnergyText    = skillType === Types.CoSkillType.Passive
                 ? "" + currValue
                 : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
 
             return {
                 titleText               : Lang.getText(LangTextType.B0159),
-                infoText                : `${!hasLoadedCo ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
+                infoText                : `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : ((!war.getCanCheat()) || (!maxValue))
                     ? null
                     : () => {
-                        if (!hasLoadedCo) {
-                            FloatText.show(Lang.getText(LangTextType.A0109));
-                        } else {
-                            TwnsCommonInputPanel.CommonInputPanel.show({
-                                title           : `P${playerIndex} ${Lang.getText(LangTextType.B0159)}`,
-                                currentValue    : "" + currValue,
-                                maxChars        : 3,
-                                charRestrict    : "0-9",
-                                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                                callback        : panel => {
-                                    const text  = panel.getInputText();
-                                    const value = text ? Number(text) : NaN;
-                                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                        FloatText.show(Lang.getText(LangTextType.A0098));
-                                    } else {
-                                        player.setCoCurrentEnergy(value);
-                                        menuPanel.updateListPlayer();
-                                    }
-                                },
-                            });
-                        }
+                        TwnsCommonInputPanel.CommonInputPanel.show({
+                            title           : `P${playerIndex} ${Lang.getText(LangTextType.B0159)}`,
+                            currentValue    : "" + currValue,
+                            maxChars        : 3,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                } else {
+                                    player.setCoCurrentEnergy(value);
+                                    menuPanel.updateListPlayer();
+                                }
+                            },
+                        });
                     },
             };
         }

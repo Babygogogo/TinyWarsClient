@@ -185,7 +185,7 @@ namespace TwnsBwPlayer {
         private _setWar(war: BwWar): void {
             this._war = war;
         }
-        protected _getWar(): BwWar {
+        private _getWar(): BwWar {
             return Helpers.getDefined(this._war);
         }
 

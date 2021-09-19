@@ -1,15 +1,10 @@
 
-import TwnsBroadcastPanel               from "../../broadcast/view/BroadcastPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import TwnsLobbyBackgroundPanel         from "../../lobby/view/LobbyBackgroundPanel";
-import MfrCreateModel                   from "../../multiFreeRoom/model/MfrCreateModel";
-import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
 import CompatibilityHelpers             from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
 import Helpers                          from "../../tools/helpers/Helpers";
-import StageManager                     from "../../tools/helpers/StageManager";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -21,7 +16,6 @@ import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import TwnsUiTab                        from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
 import MeMfwModel                       from "../model/MeMfwModel";
-import MeModel                          from "../model/MeModel";
 import TwnsMeMfwAdvancedSettingsPage    from "./MeMfwAdvancedSettingsPage";
 import TwnsMeMfwBasicSettingsPage       from "./MeMfwBasicSettingsPage";
 import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
@@ -105,12 +99,7 @@ namespace TwnsMeMfwSettingsPanel {
                 CommonConfirmPanel.show({
                     content : Lang.getText(LangTextType.A0201),
                     callback: () => {
-                        MfrCreateModel.resetDataByInitialWarData(warData);
-                        MeModel.unloadWar();
-                        StageManager.closeAllPanels();
-                        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-                        TwnsBroadcastPanel.BroadcastPanel.show();
-                        TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
+                        FlowManager.gotoMfrCreateSettingsPanel(warData);
                     },
                 });
             }
