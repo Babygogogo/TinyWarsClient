@@ -196,6 +196,10 @@ namespace TwnsLangErrorText {
             `尚未设置预设规则的可用性`,
             `The availability of the preset rule has not been set.`,
         ],
+        [ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_02]: [
+            `势力的队伍设置不合法`,
+            `The team settings is invalid.`,
+        ],
         [ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_22]: [
             `合作模式下，至少要有一个势力由AI控制`,
             `There must be at least 1 A.I. player in the Coop Mode.`,

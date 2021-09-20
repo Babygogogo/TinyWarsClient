@@ -99,6 +99,7 @@ namespace TwnsChatPanel {
             ]);
             this._listChat.setItemRenderer(ChatPageRenderer);
             this._listMessage.setItemRenderer(MessageRenderer);
+            this._inputMessage.maxChars = CommonConstants.ChatMessageMaxLength;
 
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
@@ -208,9 +209,9 @@ namespace TwnsChatPanel {
         }
 
         private _onTouchedBtnSend(): void {
-            const content = this._inputMessage.text;
+            const content = (this._inputMessage.text ?? ``).trim();
             if (content) {
-                if (content.length > CommonConstants.ChatContentMaxLength) {
+                if (content.length > CommonConstants.ChatMessageMaxLength) {
                     FloatText.show(Lang.getText(LangTextType.B0375));
                 } else {
                     const selectedIndex = this.getSelectedIndex();

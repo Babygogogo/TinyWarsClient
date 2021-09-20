@@ -63,12 +63,13 @@ namespace CommonConstants {
     export const SpmSaveSlotCommentMaxLength            = 15;
 
     export const RankInitialScore                       = 1200;
-    export const RankMaxConcurrentCount                 = 5;
+    export const RankMaxConcurrentCount                 = 10;
     export const RankMinConcurrentCount                 = 0;
     export const RankMaxBanCoCount                      = 3;
     export const RankRoomPhaseTime                      = 3600 * 24;
 
-    export const ChatContentMaxLength                   = 200;
+    export const ChatMessageMaxLength                   = 200;
+    export const ChatErrorMaxLength                     = 2000;
     export const ChatTeamDivider                        = 100;
 
     export const SiloRadius                             = 2;

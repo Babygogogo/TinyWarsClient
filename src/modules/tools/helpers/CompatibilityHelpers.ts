@@ -110,7 +110,7 @@ namespace CompatibilityHelpers {
             content: text,
         });
         ChatProxy.reqChatAddMessage(
-            text.substr(0, CommonConstants.ChatContentMaxLength),
+            text.substr(0, CommonConstants.ChatErrorMaxLength),
             Types.ChatMessageToCategory.Private,
             CommonConstants.AdminUserId,
         );

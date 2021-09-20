@@ -118,13 +118,21 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
 
         private _onTouchedGroupStd(e: egret.Event): void {
             const width                 = this._groupStd.width;
-            this._selectedCountForStd   = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            const countForStd           = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            this._selectedCountForStd   = countForStd;
             this._updateGroupStd();
+
+            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, CommonConstants.RankMaxConcurrentCount - countForStd);
+            this._updateGroupFog();
         }
         private _onTouchMoveGroupStd(e: egret.Event): void {
             const width                 = this._groupStd.width;
-            this._selectedCountForStd   = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            const countForStd           = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            this._selectedCountForStd   = countForStd;
             this._updateGroupStd();
+
+            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, CommonConstants.RankMaxConcurrentCount - countForStd);
+            this._updateGroupFog();
         }
         private _onTouchEndGroupStd(): void {
             // nothing to do
@@ -135,13 +143,21 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
 
         private _onTouchedGroupFog(e: egret.Event): void {
             const width                 = this._groupFog.width;
-            this._selectedCountForFog   = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            const countForFog           = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            this._selectedCountForFog   = countForFog;
             this._updateGroupFog();
+
+            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, CommonConstants.RankMaxConcurrentCount - countForFog);
+            this._updateGroupStd();
         }
         private _onTouchMoveGroupFog(e: egret.Event): void {
             const width                 = this._groupFog.width;
-            this._selectedCountForFog   = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            const countForFog           = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            this._selectedCountForFog   = countForFog;
             this._updateGroupFog();
+
+            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, CommonConstants.RankMaxConcurrentCount - countForFog);
+            this._updateGroupStd();
         }
         private _onTouchEndGroupFog(): void {
             // nothing to do
