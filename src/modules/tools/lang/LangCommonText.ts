@@ -277,8 +277,14 @@ namespace TwnsLangCommonText {
             `You can use any character for the nickname, and the nickname should consist of at least 4 characters.`,
         ],
         [LangTextType.A0067]: [
-            `输入正确的Discord ID，并加入以下游戏频道即可实时收到游戏相关消息，如回合轮转等。`,
-            `By entering your correct discord ID and joining the following discord server you can receive tinywars-related information, including turn notification.`,
+            [
+                `输入正确的Discord ID，并加入以下游戏频道即可实时收到游戏相关消息，如回合轮转等。`,
+                `Discord ID 是一串17或18位的纯数字。要获取该ID，您需要前往您的Discord设置，打开开发者模式，然后可以在个人信息中找到它。`,
+            ].join(`\n`),
+            [
+                `By entering your correct discord ID and joining the following discord server you can receive tinywars-related information, including turn notification.`,
+                `The Discord ID is a string of 17 or 18 digits. Please go to your discord settings, turn on the developer mode, and then you can find it in your personal info page.`,
+            ].join(`\n`),
         ],
         [LangTextType.A0068]: [
             `可点击以下各个文字以更改设置`,
@@ -990,6 +996,10 @@ namespace TwnsLangCommonText {
             `当前的地图数据将被覆盖（但存档不受影响）。您确定要继续导入吗？`,
             `The current map data will be overwritten, but the saved data will not be affected. Are you sure to import?`,
         ],
+        [LangTextType.A0238]: [
+            `您对地图的评分越高，该地图在您参与的排位赛中的出现率也越高。`,
+            `The higher your rating, the higher the probability that the map will be selected in your ranked matches.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1123,7 +1133,7 @@ namespace TwnsLangCommonText {
             `Player`,
         ],
         [LangTextType.B0032]: [
-            `金钱`,
+            `资金`,
             `Fund`,
         ],
         [LangTextType.B0033]: [
@@ -3726,6 +3736,18 @@ namespace TwnsLangCommonText {
             `空闲建筑`,
             `Idle Tile`,
         ],
+        [LangTextType.B0687]: [
+            `回合`,
+            `Turn`,
+        ],
+        [LangTextType.B0688]: [
+            `部队数与价值`,
+            `Units and Value`,
+        ],
+        [LangTextType.B0689]: [
+            `建筑数与收入`,
+            `Buildings and Income`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4260,6 +4282,10 @@ namespace TwnsLangCommonText {
         [LangTextType.F0071]: [
             `#%d 对话数据不合法`,
             `The #%d dialogue is invalid.`,
+        ],
+        [LangTextType.F0072]: [
+            `您确定要修改 P%d 的所属队伍吗？`,
+            `Are you sure to modify the team of P%d?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

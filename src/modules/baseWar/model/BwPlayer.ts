@@ -290,7 +290,7 @@ namespace TwnsBwPlayer {
         public setCoId(coId: number): void {
             if (this._coId !== coId) {
                 this._coId = coId;
-                Notify.dispatch(NotifyType.BwCoIdChanged);
+                Notify.dispatch(NotifyType.BwCoIdChanged, this);
             }
         }
         public getCoId(): number {

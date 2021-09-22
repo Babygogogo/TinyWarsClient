@@ -67,12 +67,12 @@
                 <e:List>
                     <e:itemRendererSkinName>
                         <e:Skin width="200" height="40" currentState="up" states="up,down">
-                            <TwnsUiImage:UiImage source="uncompressedPentagon0002" left="10" right="0" top="0" bottom="0"
-                                                 visible.down="false" scale9Grid="4,4,1,1" />
+                            <TwnsUiImage:UiImage source="uncompressedPentagon0002" left="10" right="0" top="0"
+                                                 bottom="0" visible.down="false" scale9Grid="4,4,1,1" />
                             <TwnsUiImage:UiImage left="10" right="0" top="0" bottom="0" x="10" y="10"
-                                                 source="uncompressedPentagon0003" visible.up="false" scale9Grid="4,4,1,1" />
-                            <TwnsUiButton:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
-                                                   visible.down="false">
+                                                 source="uncompressedPentagon0003" visible.up="false"
+                                                 scale9Grid="4,4,1,1" />
+                            <TwnsUiButton:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0">
                                 <TwnsUiButton:skinName>
                                     <e:Skin states="up,down,disabled">
                                         <e:Image source="uncompressedColorTransparent0000" left="0" right="0" top="0"

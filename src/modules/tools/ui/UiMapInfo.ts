@@ -104,7 +104,7 @@ namespace TwnsUiMapInfo {
                     currentValue    : `${UserModel.getMapRating(mapId) || 0}`,
                     maxChars        : 2,
                     charRestrict    : "0-9",
-                    tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                    tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]\n${Lang.getText(LangTextType.A0238)}`,
                     callback        : panel => {
                         const text  = panel.getInputText();
                         const value = text ? Number(text) : NaN;

@@ -82,7 +82,7 @@
                                 <TwnsUiImage:UiImage id="_imgOnlineState" x="70" source="uncompressedColorRed0000"
                                                      width="4" height="4" verticalCenter="0" />
                                 <e:Group x="80" verticalCenter="0">
-                                    <TwnsUiLabel:UiLabel text="EN:" textColor="0xFFFFFF" size="14" x="10" bold="true"
+                                    <TwnsUiLabel:UiLabel text="E:" textColor="0xFFFFFF" size="14" x="10" bold="true"
                                                          y="0" />
                                     <TwnsUiLabel:UiLabel id="_labelEnergy" text="999(SP)" textColor="0xFFFFFF" size="14"
                                                          x="0" bold="true" y="0" />
@@ -109,7 +109,7 @@
             <e:Group id="_groupInfo" x="20" y="10">
                 <e:Group x="0" y="0">
                     <e:Group x="0" y="5">
-                        <TwnsUiLabel:UiLabel text="EN:" size="16" textColor="0xF9D803" maxTextWidth="200" left="0"
+                        <TwnsUiLabel:UiLabel text="E:" size="16" textColor="0xF9D803" maxTextWidth="200" left="0"
                                              top="0" bold="true" />
                         <TwnsUiLabel:UiLabel id="_labelCurrEnergy" text="99" size="16" x="28" textColor="0xF9D803"
                                              maxTextWidth="200" top="0" bold="true" />

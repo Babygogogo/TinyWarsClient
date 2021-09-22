@@ -198,11 +198,11 @@ namespace TwnsBwTileMap {
             return Helpers.getExisted(this._mapSize);
         }
 
-        public getTilesCount(tileType: Types.TileType, playerIndex: number): number {
+        public getTilesCount(playerIndex: number): number {
             let count = 0;
             for (const column of this._getMap()) {
                 for (const tile of column) {
-                    if ((tile.getType() === tileType) && (tile.getPlayerIndex() === playerIndex)) {
+                    if (tile.getPlayerIndex() === playerIndex) {
                         ++ count;
                     }
                 }

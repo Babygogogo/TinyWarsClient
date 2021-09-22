@@ -313,6 +313,7 @@ namespace TwnsSpwTopPanel {
                 { type: NotifyType.BwTileBeCaptured,            callback: this._onNotifyBwTileBeCaptured },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,   callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: NotifyType.BwCoEnergyChanged,           callback: this._onNotifyBwCoEnergyChanged },
+                { type: NotifyType.BwCoIdChanged,               callback: this._onNotifyBwCoIdChanged },
             ]);
         }
 
@@ -320,7 +321,7 @@ namespace TwnsSpwTopPanel {
             const data              = this._getData();
             const player            = data.war.getPlayer(data.playerIndex);
             this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source      = ConfigManager.getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._updateImgCo();
             this._updateLabelFundAndAddFund();
             this._updateLabelEnergy();
         }
@@ -345,12 +346,26 @@ namespace TwnsSpwTopPanel {
             this._updateLabelEnergy();
         }
 
+        private _onNotifyBwCoIdChanged(e: egret.Event): void {
+            const eventData = e.data as NotifyData.BwCoIdChanged;
+            const data      = this._getData();
+            if (eventData === data.war.getPlayer(data.playerIndex)) {
+                this._updateImgCo();
+            }
+        }
+
         public onItemTapEvent(): void {
             const data      = this._getData();
             const userId    = data.war.getPlayer(data.playerIndex).getUserId();
             if (userId != null) {
                 UserPanel.show({ userId });
             }
+        }
+
+        private _updateImgCo(): void {
+            const data          = this._getData();
+            const player        = data.war.getPlayer(data.playerIndex);
+            this._imgCo.source  = ConfigManager.getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
         }
 
         private _updateLabelFundAndAddFund(): void {

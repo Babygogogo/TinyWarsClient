@@ -8,8 +8,9 @@ namespace NotifyData {
 
     export type ConfigLoaded                = number;
     export type McwPlayerIndexInTurnChanged = number;
-    export type BwPlayerFundChanged        = TwnsBwPlayer.BwPlayer;
+    export type BwPlayerFundChanged         = TwnsBwPlayer.BwPlayer;
     export type McwPlayerEnergyChanged      = TwnsBwPlayer.BwPlayer;
+    export type BwCoIdChanged               = TwnsBwPlayer.BwPlayer;
     export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
     export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
     export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };

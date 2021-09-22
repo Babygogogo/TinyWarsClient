@@ -1,4 +1,5 @@
 
+import TwnsBwWarInfoPanel       from "../../baseWar/view/BwWarInfoPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                from "../../tools/helpers/FloatText";
@@ -195,15 +196,14 @@ namespace TwnsSpwSidePanel {
             this._getOpenData().war.getField().getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnInfo(): void {
-            // TODO
-            const actionPlanner = this._getOpenData().war.getActionPlanner();
+            const war           = this._getOpenData().war;
+            const actionPlanner = war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsSpwWarMenuPanel.SpwWarMenuPanel.show();
+            TwnsBwWarInfoPanel.BwWarInfoPanel.show({ war });
         }
         private _onTouchedBtnMenu(): void {
-            // TODO
             const actionPlanner = this._getOpenData().war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();

@@ -77,13 +77,11 @@ namespace TwnsBwCursorView {
         }
 
         public init(cursor: BwCursor): void {
-            if (!this._cursor) {
-                this._cursor    = cursor;
+            this._cursor    = cursor;
 
-                const mapSize   = cursor.getMapSize();
-                this.width      = mapSize.width * _GRID_WIDTH;
-                this.height     = mapSize.height * _GRID_HEIGHT;
-            }
+            const mapSize   = cursor.getMapSize();
+            this.width      = mapSize.width * _GRID_WIDTH;
+            this.height     = mapSize.height * _GRID_HEIGHT;
         }
         public fastInit(cursor: BwCursor): void {
             this._cursor = cursor;
@@ -116,7 +114,6 @@ namespace TwnsBwCursorView {
             this._touchIdForTouchingCursor = null;
             delete this._initialGlobalTouchPoint;
             delete this._isTouchMovedOrMultiple;
-            delete this._cursor;
         }
 
         public updateView(): void {

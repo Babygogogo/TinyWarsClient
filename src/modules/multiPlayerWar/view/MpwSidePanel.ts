@@ -1,6 +1,6 @@
 
+import TwnsBwWarInfoPanel       from "../../baseWar/view/BwWarInfoPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import TwnsMpwWar               from "../model/MpwWar";
 import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
@@ -12,6 +12,7 @@ import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import TwnsUiButton             from "../../tools/ui/UiButton";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import TwnsMpwWar               from "../model/MpwWar";
 import TwnsMpwWarMenuPanel      from "./MpwWarMenuPanel";
 
 namespace TwnsMpwSidePanel {
@@ -195,15 +196,14 @@ namespace TwnsMpwSidePanel {
             this._getOpenData().war.getField().getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnInfo(): void {
-            // TODO
-            const actionPlanner = this._getOpenData().war.getActionPlanner();
+            const war           = this._getOpenData().war;
+            const actionPlanner = war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsMpwWarMenuPanel.MpwWarMenuPanel.show();
+            TwnsBwWarInfoPanel.BwWarInfoPanel.show({ war });
         }
         private _onTouchedBtnMenu(): void {
-            // TODO
             const actionPlanner = this._getOpenData().war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
