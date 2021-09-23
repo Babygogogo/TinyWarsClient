@@ -1919,6 +1919,17 @@ namespace TwnsClientErrorCode {
         BwWarInfoPanel_PlayerRenderer_UpdateComponentsForPlayerInfo_08,
         BwWarInfoPanel_PlayerRenderer_UpdateComponentsForPlayerInfo_09,
 
+        SpwWarMenuPanel_OnTOuchedBtnSaveGame_00,
+        SpwWarMenuPanel_OnTOuchedBtnSaveGame_01,
+        SpwWarMenuPanel_OnTOuchedBtnSaveGame_02,
+        SpwWarMenuPanel_OnTOuchedBtnSaveGame_03,
+        SpwWarMenuPanel_OnTOuchedBtnSaveGame_04,
+        SpwWarMenuPanel_OnTOuchedBtnSaveGame_05,
+        SpwWarMenuPanel_OnTOuchedBtnSaveGame_06,
+        SpwWarMenuPanel_OnTOuchedBtnSaveGame_07,
+        SpwWarMenuPanel_OnTOuchedBtnSaveGame_08,
+        SpwWarMenuPanel_OnTOuchedBtnSaveGame_09,
+
         MrrPreviewMapListPanel_SetSelectedMapId_00,
         MrrPreviewMapListPanel_SetSelectedMapId_01,
         MrrPreviewMapListPanel_SetSelectedMapId_02,

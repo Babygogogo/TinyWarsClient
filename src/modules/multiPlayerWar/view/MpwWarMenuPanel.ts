@@ -1,8 +1,6 @@
 
 import TwnsBwUnitListPanel              from "../../baseWar/view/BwUnitListPanel";
-import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import TwnsCommonDamageChartPanel       from "../../common/view/CommonDamageChartPanel";
 import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                         from "../../multiPlayerWar/model/MpwProxy";
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
@@ -18,30 +16,20 @@ import Notify                           from "../../tools/notify/Notify";
 import TwnsNotifyType                   from "../../tools/notify/NotifyType";
 import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 import TwnsUiButton                     from "../../tools/ui/UiButton";
+import TwnsUiImage                      from "../../tools/ui/UiImage";
 import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 import UserModel                        from "../../user/model/UserModel";
 import UserProxy                        from "../../user/model/UserProxy";
-import TwnsUserSettingsPanel            from "../../user/view/UserSettingsPanel";
 import TwnsMpwWar                       from "../model/MpwWar";
 
 namespace TwnsMpwWarMenuPanel {
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MpwWar                       = TwnsMpwWar.MpwWar;
-    import CommonDamageChartPanel       = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
-    import UserSettingsPanel            = TwnsUserSettingsPanel.UserSettingsPanel;
     import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
     import TwWar                        = TwnsTwWar.TwWar;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
-
-    // eslint-disable-next-line no-shadow
-    enum MenuType {
-        Main,
-        Advanced,
-    }
 
     export class MpwWarMenuPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -49,14 +37,21 @@ namespace TwnsMpwWarMenuPanel {
 
         private static _instance: MpwWarMenuPanel;
 
+        private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
-        private readonly _listCommand!          : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
-        private readonly _labelNoCommand!       : TwnsUiLabel.UiLabel;
-        private readonly _btnBack!              : TwnsUiButton.UiButton;
-        private readonly _btnHome!              : TwnsUiButton.UiButton;
-        private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!             : TwnsUiButton.UiButton;
 
-        private _menuType       = MenuType.Main;
+        private readonly _btnSync!              : TwnsUiButton.UiButton;
+        private readonly _btnUnitList!          : TwnsUiButton.UiButton;
+        private readonly _btnDeleteUnit!        : TwnsUiButton.UiButton;
+        private readonly _btnSimulation!        : TwnsUiButton.UiButton;
+        private readonly _btnFreeMode!          : TwnsUiButton.UiButton;
+        private readonly _btnSetPath!           : TwnsUiButton.UiButton;
+        private readonly _btnSetDraw!           : TwnsUiButton.UiButton;
+        private readonly _btnSurrender!         : TwnsUiButton.UiButton;
+        private readonly _btnGotoWarList!       : TwnsUiButton.UiButton;
+        private readonly _btnGotoLobby!         : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MpwWarMenuPanel._instance) {
@@ -84,19 +79,26 @@ namespace TwnsMpwWarMenuPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: NotifyType.MsgSpmCreateSfw,                    callback: this._onNotifyMsgSpmCreateSfw },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onNotifyMsgSpmCreateSfw },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnBack,        callback: this._onTouchedBtnBack },
-                { ui: this._btnHome,        callback: this._onTouchedBtnHome },
+                { ui: this._btnClose,                                   callback: this.close },
+                { ui: this._btnSync,                                    callback: this._onTouchedBtnSync },
+                { ui: this._btnUnitList,                                callback: this._onTouchedBtnUnitList },
+                { ui: this._btnDeleteUnit,                              callback: this._onTouchedBtnDeleteUnit },
+                { ui: this._btnSimulation,                              callback: this._onTouchedBtnSimulation },
+                { ui: this._btnFreeMode,                                callback: this._onTouchedBtnFreeMode },
+                { ui: this._btnSetPath,                                 callback: this._onTouchedBtnSetPath },
+                { ui: this._btnSetDraw,                                 callback: this._onTouchedBtnSetDraw },
+                { ui: this._btnSurrender,                               callback: this._onTouchedBtnSurrender },
+                { ui: this._btnGotoWarList,                             callback: this._onTouchedBtnGotoWarList },
+                { ui: this._btnGotoLobby,                               callback: this._onTouchedBtnGotoLobby },
             ]);
-            this._listCommand.setItemRenderer(CommandRenderer);
 
             this._showOpenAnimation();
 
-            this._menuType = MenuType.Main;
             this._updateView();
 
             Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
@@ -112,7 +114,7 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Callbacks.
+        // Callbacks for notify.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
@@ -134,20 +136,202 @@ namespace TwnsMpwWarMenuPanel {
             });
         }
 
-        private _onTouchedBtnBack(): void {
-            const type = this._menuType;
-            if (type === MenuType.Main) {
-                this.close();
-            } else if (type === MenuType.Advanced) {
-                this._menuType = MenuType.Main;
-                this._updateListCommand();
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Callbacks for ui.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onTouchedBtnSync(): void {
+            const war = this._getWar();
+            MpwProxy.reqMpwCommonSyncWar(
+                war,
+                war.getActionPlanner().checkIsStateRequesting()
+                    ? Types.SyncWarRequestType.PlayerForce
+                    : Types.SyncWarRequestType.PlayerRequest
+            );
+            this.close();
+        }
+
+        private _onTouchedBtnUnitList(): void {
+            TwnsBwUnitListPanel.BwUnitListPanel.show({
+                war: this._getWar(),
+            });
+            this.close();
+        }
+
+        private _onTouchedBtnDeleteUnit(): void {
+            if (!this._checkCanDoAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0239));
+                return;
+            }
+
+            const war = this._getWar();
+            if (war.getPlayerInTurn().getUserId() !== UserModel.getSelfUserId()) {
+                FloatText.show(Lang.getText(LangTextType.A0242));
+                return;
+            }
+
+            const unitMap       = war.getUnitMap();
+            const unit          = unitMap.getVisibleUnitOnMap(war.getCursor().getGridIndex());
+            const playerIndex   = war.getPlayerIndexInTurn();
+            if (!unit) {
+                FloatText.show(Lang.getText(LangTextType.A0027));
+            } else if ((unit.getPlayerIndex() !== playerIndex) || (unit.getActionState() !== Types.UnitActionState.Idle)) {
+                FloatText.show(Lang.getText(LangTextType.A0028));
+            } else if (unitMap.countUnitsOnMapForPlayer(playerIndex) <= 1) {
+                FloatText.show(Lang.getText(LangTextType.A0076));
             } else {
-                throw Helpers.newError(`Invalid menuType: ${type}`);
+                TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                    title   : Lang.getText(LangTextType.B0081),
+                    content : Lang.getText(LangTextType.A0029),
+                    callback: () => war.getActionPlanner().setStateRequestingPlayerDeleteUnit(),
+                });
             }
         }
 
-        private _onTouchedBtnHome(): void {
-            CommonConfirmPanel.show({
+        private _onTouchedBtnSimulation(): void {
+            if (!this._checkCanDoAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0239));
+                return;
+            }
+
+            const war = this._getWar();
+            SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
+        }
+
+        private async _onTouchedBtnFreeMode(): Promise<void> {
+            if (!this._checkCanDoAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0239));
+                return;
+            }
+
+            const war = this._getWar();
+            if (war.getPlayerManager().getAliveOrDyingTeamsCount(false) < 2) {
+                FloatText.show(Lang.getText(LangTextType.A0199));
+                return;
+            }
+
+            const warData   = war.serializeForCreateMfr();
+            const errorCode = await (new TwWar()).init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            if (errorCode) {
+                FloatText.show(Lang.getErrorText(errorCode));
+                return;
+            }
+
+            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0201),
+                callback: () => {
+                    FlowManager.gotoMfrCreateSettingsPanel(warData);
+                }
+            });
+        }
+
+        private _onTouchedBtnSetPath(): void {
+            const isEnabled = UserModel.getSelfSettingsIsSetPathMode();
+            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                content : Lang.getFormattedText(
+                    LangTextType.F0033,
+                    Lang.getText(isEnabled ? LangTextType.B0431 : LangTextType.B0432),
+                ),
+                textForConfirm  : Lang.getText(LangTextType.B0433),
+                textForCancel   : Lang.getText(LangTextType.B0434),
+                callback: () => {
+                    if (!isEnabled) {
+                        UserProxy.reqUserSetSettings({
+                            isSetPathMode   : true,
+                        });
+                    }
+                },
+                callbackOnCancel: () => {
+                    if (isEnabled) {
+                        UserProxy.reqUserSetSettings({
+                            isSetPathMode   : false,
+                        });
+                    }
+                }
+            });
+        }
+
+        private _onTouchedBtnSetDraw(): void {
+            if (!this._checkCanDoAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0239));
+                return;
+            }
+
+            const war = this._getWar();
+            if (war.getPlayerInTurn().getUserId() !== UserModel.getSelfUserId()) {
+                FloatText.show(Lang.getText(LangTextType.A0242));
+                return;
+            }
+            if (war.getPlayerInTurn().getHasVotedForDraw()) {
+                FloatText.show(Lang.getText(LangTextType.A0240));
+                return;
+            }
+
+            const actionPlanner = war.getActionPlanner();
+            if (war.getDrawVoteManager().getRemainingVotes() == null) {
+                TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                    content : Lang.getText(LangTextType.A0031),
+                    callback: () => actionPlanner.setStateRequestingPlayerVoteForDraw(true),
+                });
+            } else {
+                TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                    content             : Lang.getText(LangTextType.A0241),
+                    textForConfirm      : Lang.getText(LangTextType.B0214),
+                    textForCancel       : Lang.getText(LangTextType.B0215),
+                    showButtonClose     : true,
+                    callback            : () => {
+                        actionPlanner.setStateRequestingPlayerVoteForDraw(true);
+                        this.close();
+                    },
+                    callbackOnCancel    : () => {
+                        actionPlanner.setStateRequestingPlayerVoteForDraw(false);
+                        this.close();
+                    },
+                });
+            }
+        }
+
+        private _onTouchedBtnSurrender(): void {
+            if (!this._checkCanDoAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0239));
+                return;
+            }
+
+            const war = this._getWar();
+            if (war.getPlayerInTurn().getUserId() !== UserModel.getSelfUserId()) {
+                FloatText.show(Lang.getText(LangTextType.A0242));
+                return;
+            }
+
+            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                title   : Lang.getText(LangTextType.B0055),
+                content : Lang.getText(LangTextType.A0026),
+                callback: () => {
+                    war.getActionPlanner().setStateRequestingPlayerSurrender();
+                    this.close();
+                },
+            });
+        }
+
+        private _onTouchedBtnGotoWarList(): void {
+            if (!this._checkCanDoAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0239));
+                return;
+            }
+
+            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                title   : Lang.getText(LangTextType.B0652),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => FlowManager.gotoMyWarListPanel(this._getWar().getWarType()),
+            });
+        }
+
+        private _onTouchedBtnGotoLobby(): void {
+            if (!this._checkCanDoAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0239));
+                return;
+            }
+
+            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                 title   : Lang.getText(LangTextType.B0054),
                 content : Lang.getText(LangTextType.A0025),
                 callback: () => FlowManager.gotoLobby(),
@@ -158,387 +342,59 @@ namespace TwnsMpwWarMenuPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _showOpenAnimation(): void {
-            const group = this._group;
-            egret.Tween.removeTweens(group);
-            egret.Tween.get(group)
-                .set({ alpha: 0, left: -40 })
-                .to({ alpha: 1, left: 0 }, 200);
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: 40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+            });
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>((resolve) => {
-                const group = this._group;
-                egret.Tween.removeTweens(group);
-                egret.Tween.get(group)
-                    .set({ alpha: 1, left: 0 })
-                    .to({ alpha: 0, left: -40 }, 200)
-                    .call(resolve);
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: 40 },
+                    callback    : resolve,
+                });
             });
         }
 
         private _updateView(): void {
             this._updateComponentsForLanguage();
-            this._updateListCommand();
-        }
-
-        private _updateListCommand(): void {
-            const dataArray = this._createDataForList();
-            if (!dataArray.length) {
-                this._labelNoCommand.visible = true;
-                this._listCommand.clear();
-            } else {
-                this._labelNoCommand.visible = false;
-                this._listCommand.bindData(dataArray);
-            }
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(LangTextType.B0155);
+            this._labelTitle.text       = Lang.getText(LangTextType.B0155);
+            this._btnSync.label         = Lang.getText(LangTextType.B0089);
+            this._btnUnitList.label     = Lang.getText(LangTextType.B0152);
+            this._btnDeleteUnit.label   = Lang.getText(LangTextType.B0081);
+            this._btnSimulation.label   = Lang.getText(LangTextType.B0325);
+            this._btnFreeMode.label     = Lang.getText(LangTextType.B0557);
+            this._btnSetPath.label      = Lang.getText(LangTextType.B0430);
+            this._btnSetDraw.label      = Lang.getText(LangTextType.B0690);
+            this._btnSurrender.label    = Lang.getText(LangTextType.B0055);
+            this._btnGotoWarList.label  = Lang.getText(LangTextType.B0652);
+            this._btnGotoLobby.label    = Lang.getText(LangTextType.B0054);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Menu item data creators.
+        // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _createDataForList(): DataForCommandRenderer[] {
-            const type = this._menuType;
-            if (type === MenuType.Main) {
-                return this._createDataForMainMenu();
-            } else if (type === MenuType.Advanced) {
-                return this._createDataForAdvancedMenu();
-            } else {
-                throw Helpers.newError(`MpwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
-            }
-        }
-
-        private _createDataForMainMenu(): DataForCommandRenderer[] {
-            return Helpers.getNonNullElements([
-                this._createCommandOpenUnitListPanel(),
-                this._createCommandOpenDamageChartPanel(),
-                this._createCommandPlayerAgreeDraw(),
-                this._createCommandPlayerDeclineDraw(),
-                this._createCommandSyncWar(),
-                this._createCommandOpenAdvancedMenu(),
-                this._createCommandGotoWarListPanel(),
-            ]);
-        }
-
-        private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            return Helpers.getNonNullElements([
-                this._createCommandPlayerDeleteUnit(),
-                this._createCommandPlayerRequestDraw(),
-                this._createCommandPlayerSurrender(),
-                this._createCommandSimulation(),
-                this._createCommandCreateMfr(),
-                this._createCommandUserSettings(),
-                this._createCommandSetPathMode(),
-            ]);
-        }
-
-        private _createCommandOpenAdvancedMenu(): DataForCommandRenderer {
-            return {
-                name    : Lang.getText(LangTextType.B0080),
-                callback: () => {
-                    this._menuType = MenuType.Advanced;
-                    this._updateListCommand();
-                },
-            };
-        }
-
-        private _createCommandOpenUnitListPanel(): DataForCommandRenderer {
-            return {
-                name    : Lang.getText(LangTextType.B0152),
-                callback: () => {
-                    const war           = this._getWar();
-                    const actionPlanner = war.getField().getActionPlanner();
-                    if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
-                        actionPlanner.setStateIdle();
-                        this.close();
-                        TwnsBwUnitListPanel.BwUnitListPanel.show({ war });
-                    }
-                },
-            };
-        }
-        private _createCommandOpenDamageChartPanel(): DataForCommandRenderer {
-            return {
-                name    : Lang.getText(LangTextType.B0440),
-                callback: () => {
-                    CommonDamageChartPanel.show();
-                    this.close();
-                },
-            };
-        }
-
-        private _createCommandSyncWar(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(LangTextType.B0089),
-                callback: () => {
-                    const war = this._getWar();
-                    MpwProxy.reqMpwCommonSyncWar(
-                        war,
-                        war.getActionPlanner().checkIsStateRequesting()
-                            ? Types.SyncWarRequestType.PlayerForce
-                            : Types.SyncWarRequestType.PlayerRequest
-                    );
-                    this.close();
-                },
-            };
-        }
-
-        private _createCommandGotoWarListPanel(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(LangTextType.B0652),
-                callback: () => {
-                    CommonConfirmPanel.show({
-                        title   : Lang.getText(LangTextType.B0652),
-                        content : Lang.getText(LangTextType.A0225),
-                        callback: () => {
-                            FlowManager.gotoMyWarListPanel(this._getWar().getWarType());
-                        },
-                    });
-                },
-            };
-        }
-
-        private _createCommandChat(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(LangTextType.B0383),
-                callback: () => {
-                    this.close();
-                    TwnsChatPanel.ChatPanel.show({});
-                },
-            };
-        }
-
-        private _createCommandPlayerRequestDraw(): DataForCommandRenderer | null {
-            const war           = this._getWar();
-            const player        = war.getPlayerInTurn();
-            const actionPlanner = war.getActionPlanner();
-            if ((player !== war.getPlayerLoggedIn())                                ||
-                (player.getHasVotedForDraw())                                       ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (actionPlanner.getState() !== Types.ActionPlannerState.Idle)        ||
-                (war.getDrawVoteManager().getRemainingVotes() != null)
-            ) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0083),
-                    callback: () => {
-                        CommonConfirmPanel.show({
-                            content : Lang.getText(LangTextType.A0031),
-                            callback: () => actionPlanner.setStateRequestingPlayerVoteForDraw(true),
-                        });
-                    },
-                };
-            }
-        }
-
-        private _createCommandPlayerSurrender(): DataForCommandRenderer | null {
-            const war           = this._getWar();
-            const actionPlanner = war.getActionPlanner();
-            if ((war.getPlayerInTurn() !== war.getPlayerLoggedIn())                 ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (actionPlanner.checkIsStateRequesting())
-            ) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0055),
-                    callback: () => {
-                        CommonConfirmPanel.show({
-                            title   : Lang.getText(LangTextType.B0055),
-                            content : Lang.getText(LangTextType.A0026),
-                            callback: () => actionPlanner.setStateRequestingPlayerSurrender(),
-                        });
-                    },
-                };
-            }
-        }
-
-        private _createCommandSimulation(): DataForCommandRenderer | null {
+        private _checkCanDoAction(): boolean {
             const war = this._getWar();
-            return {
-                name    : Lang.getText(LangTextType.B0325),
-                callback: () => {
-                    if (war.getIsExecutingAction()) {
-                        FloatText.show(Lang.getText(LangTextType.A0103));
-                    } else {
-                        SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
-                    }
-                },
-            };
-        }
-
-        private _createCommandCreateMfr(): DataForCommandRenderer | null {
-            const war = this._getWar();
-            return {
-                name    : Lang.getText(LangTextType.B0557),
-                callback: async () => {
-                    if (war.getPlayerManager().getAliveOrDyingTeamsCount(false) < 2) {
-                        FloatText.show(Lang.getText(LangTextType.A0199));
-                        return;
-                    }
-
-                    const warData = war.serializeForCreateMfr();
-                    if (warData == null) {
-                        FloatText.show(Lang.getText(LangTextType.A0200));
-                        return;
-                    }
-
-                    const errorCode = await (new TwWar()).init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-                    if (errorCode) {
-                        FloatText.show(Lang.getErrorText(errorCode));
-                        return;
-                    }
-
-                    CommonConfirmPanel.show({
-                        content : Lang.getText(LangTextType.A0201),
-                        callback: () => {
-                            FlowManager.gotoMfrCreateSettingsPanel(warData);
-                        }
-                    });
-                }
-            };
-        }
-
-        private _createCommandPlayerAgreeDraw(): DataForCommandRenderer | null {
-            const war           = this._getWar();
-            const player        = war.getPlayerInTurn();
-            const actionPlanner = war.getActionPlanner();
-            if ((player !== war.getPlayerLoggedIn())                                ||
-                (player.getHasVotedForDraw())                                       ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (actionPlanner.getState() !== Types.ActionPlannerState.Idle)        ||
-                (!war.getDrawVoteManager().getRemainingVotes())
-            ) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0084),
-                    callback: () => {
-                        CommonConfirmPanel.show({
-                            content : Lang.getText(LangTextType.A0032),
-                            callback: () => actionPlanner.setStateRequestingPlayerVoteForDraw(true),
-                        });
-                    },
-                };
-            }
-        }
-
-        private _createCommandPlayerDeclineDraw(): DataForCommandRenderer | null {
-            const war           = this._getWar();
-            const player        = war.getPlayerInTurn();
-            const actionPlanner = war.getActionPlanner();
-            if ((player !== war.getPlayerLoggedIn())                                ||
-                (player.getHasVotedForDraw())                                       ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (actionPlanner.getState() !== Types.ActionPlannerState.Idle)        ||
-                (!war.getDrawVoteManager().getRemainingVotes())
-            ) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0085),
-                    callback: () => {
-                        CommonConfirmPanel.show({
-                            content : Lang.getText(LangTextType.A0033),
-                            callback: () => actionPlanner.setStateRequestingPlayerVoteForDraw(false),
-                        });
-                    },
-                };
-            }
-        }
-
-        private _createCommandPlayerDeleteUnit(): DataForCommandRenderer | null {
-            const war           = this._getWar();
-            const actionPlanner = war.getActionPlanner();
-            if ((war.getPlayerInTurn() !== war.getPlayerLoggedIn())                 ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (actionPlanner.getState() !== Types.ActionPlannerState.Idle)
-            ) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0081),
-                    callback: () => {
-                        const unitMap       = war.getUnitMap();
-                        const unit          = unitMap.getUnitOnMap(war.getCursor().getGridIndex());
-                        const playerIndex   = war.getPlayerIndexLoggedIn();
-                        if (!unit) {
-                            FloatText.show(Lang.getText(LangTextType.A0027));
-                        } else if ((unit.getPlayerIndex() !== playerIndex) || (unit.getActionState() !== Types.UnitActionState.Idle)) {
-                            FloatText.show(Lang.getText(LangTextType.A0028));
-                        } else if (unitMap.countUnitsOnMapForPlayer(playerIndex) <= 1) {
-                            FloatText.show(Lang.getText(LangTextType.A0076));
-                        } else {
-                            CommonConfirmPanel.show({
-                                title   : Lang.getText(LangTextType.B0081),
-                                content : Lang.getText(LangTextType.A0029),
-                                callback: () => actionPlanner.setStateRequestingPlayerDeleteUnit(),
-                            });
-                        }
-                    },
-                };
-            }
-        }
-        private _createCommandUserSettings(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(LangTextType.B0560),
-                callback: () => {
-                    UserSettingsPanel.show();
-                }
-            };
-        }
-        private _createCommandSetPathMode(): DataForCommandRenderer {
-            return {
-                name    : Lang.getText(LangTextType.B0430),
-                callback: () => {
-                    const isEnabled = UserModel.getSelfSettingsIsSetPathMode();
-                    CommonConfirmPanel.show({
-                        content : Lang.getFormattedText(
-                            LangTextType.F0033,
-                            Lang.getText(isEnabled ? LangTextType.B0431 : LangTextType.B0432),
-                        ),
-                        textForConfirm  : Lang.getText(LangTextType.B0433),
-                        textForCancel   : Lang.getText(LangTextType.B0434),
-                        callback: () => {
-                            if (!isEnabled) {
-                                UserProxy.reqUserSetSettings({
-                                    isSetPathMode   : true,
-                                });
-                            }
-                        },
-                        callbackOnCancel: () => {
-                            if (isEnabled) {
-                                UserProxy.reqUserSetSettings({
-                                    isSetPathMode   : false,
-                                });
-                            }
-                        }
-                    });
-                }
-            };
-        }
-    }
-
-    type DataForCommandRenderer = {
-        name    : string;
-        callback: () => void;
-    };
-    class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
-        private readonly _group!        : eui.Group;
-        private readonly _labelName!    : TwnsUiLabel.UiLabel;
-
-        protected _onDataChanged(): void {
-            this._updateView();
-        }
-
-        public onItemTapEvent(): void {
-            this._getData().callback();
-        }
-
-        private _updateView(): void {
-            const data              = this._getData();
-            this._labelName.text    = data.name;
+            return (war.checkIsHumanInTurn())                                           &&
+                (war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.Main)      &&
+                (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle);
         }
     }
 }

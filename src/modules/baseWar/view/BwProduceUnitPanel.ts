@@ -239,8 +239,9 @@ namespace TwnsBwProduceUnitPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.LanguageChanged,         callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
 
             this._imgBg.touchEnabled = true;
@@ -251,6 +252,11 @@ namespace TwnsBwProduceUnitPanel {
         private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
                 this._unitView.tickUnitAnimationFrame();
+            }
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            if (this.data) {
                 this._unitView.tickStateAnimationFrame();
             }
         }

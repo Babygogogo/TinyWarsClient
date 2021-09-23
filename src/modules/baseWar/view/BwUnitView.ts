@@ -119,7 +119,7 @@ namespace TwnsBwUnitView {
             const framesCount       = this._framesForStateAnimation.length;
             this._imgState.source   = framesCount <= 0
                 ? ``
-                : this._framesForStateAnimation[Math.floor(Timer.getUnitAnimationTickCount() / 6) % framesCount];
+                : this._framesForStateAnimation[Timer.getUnitStateIndicatorTickCount() % framesCount];
         }
 
         protected _getIsDark(): boolean {

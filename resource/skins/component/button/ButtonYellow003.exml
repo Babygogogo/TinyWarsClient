@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*"
+        xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*"
+        xmlns:w="http://ns.egret.com/wing" class="Skins.Component.Button.ButtonYellow003">
+    <e:Group left="0" right="0" top="0" bottom="0">
+        <e:Image left="0" right="0" top="0" bottom="0" scale9Grid="1,1,1,1" source="uncompressedColorYellow0001" />
+        <e:Image left="0" right="0" bottom="0" x="10" y="10" source="uncompressedColorBlack0000" height="1" />
+        <TwnsUiLabel:UiLabel id="labelDisplay" size="14" text="Change Password" textAlign="center"
+                             verticalAlign="middle" wordWrap="true" verticalCenter="0" horizontalCenter="0"
+                             textColor="0x000000" bold="true" />
+        <TwnsUiImage:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="14" height="14" />
+    </e:Group>
+</e:Skin>

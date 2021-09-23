@@ -1000,6 +1000,22 @@ namespace TwnsLangCommonText {
             `您对地图的评分越高，该地图在您参与的排位赛中的出现率也越高。`,
             `The higher your rating, the higher the probability that the map will be selected in your ranked matches.`,
         ],
+        [LangTextType.A0239]: [
+            `请等待电脑回合结束后再进行此操作`,
+            `Please wait until the A.I.'s turn ends.`,
+        ],
+        [LangTextType.A0240]: [
+            `您在本回合内已处理过求和信息`,
+            `You have already set draw in this turn.`,
+        ],
+        [LangTextType.A0241]: [
+            `已有其他玩家发起了和局请求。您是否同意该请求？`,
+            `Another player has requested a drawn game. Do you want to accept the request?`,
+        ],
+        [LangTextType.A0242]: [
+            `请等到您的回合再进行此操作`,
+            `Please wait until your turn begins.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1222,7 +1238,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0054]: [
             `返回大厅`,
-            `Go to lobby`,
+            `Go to Lobby`,
         ],
         [LangTextType.B0055]: [
             `投降`,
@@ -3747,6 +3763,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B0689]: [
             `建筑数与收入`,
             `Buildings and Income`,
+        ],
+        [LangTextType.B0690]: [
+            `和局`,
+            `Set Draw`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

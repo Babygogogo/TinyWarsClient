@@ -189,7 +189,8 @@ namespace TwnsMeChooseUnitPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
 
             this._conUnitView.addChild(this._unitView);
@@ -197,8 +198,11 @@ namespace TwnsMeChooseUnitPanel {
 
         private _onNotifyUnitAnimationTick(): void {
             const unitView = this._unitView;
-            unitView.tickStateAnimationFrame();
             unitView.tickUnitAnimationFrame();
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            this._unitView.tickStateAnimationFrame();
         }
 
         protected _onDataChanged(): void {

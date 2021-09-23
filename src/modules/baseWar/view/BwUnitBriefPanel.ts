@@ -73,18 +73,19 @@ namespace TwnsBwUnitBriefPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
-                { type: NotifyType.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: NotifyType.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
-                { type: NotifyType.BwActionPlannerStateSet,    callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: NotifyType.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
-                { type: NotifyType.BwWarMenuPanelClosed,           callback: this._onNotifyBwWarMenuPanelClosed },
-                { type: NotifyType.BwCoListPanelOpened,            callback: this._onNotifyBwCoListPanelOpened },
-                { type: NotifyType.BwCoListPanelClosed,            callback: this._onNotifyBwCoListPanelClosed },
-                { type: NotifyType.BwProduceUnitPanelOpened,       callback: this._onNotifyBwProduceUnitPanelOpened },
-                { type: NotifyType.BwProduceUnitPanelClosed,       callback: this._onNotifyBwProduceUnitPanelClosed },
-                { type: NotifyType.MeUnitChanged,                  callback: this._onNotifyMeUnitChanged },
-                { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.GlobalTouchBegin,                callback: this._onNotifyGlobalTouchBegin },
+                { type: NotifyType.GlobalTouchMove,                 callback: this._onNotifyGlobalTouchMove },
+                { type: NotifyType.BwCursorGridIndexChanged,        callback: this._onNotifyBwCursorGridIndexChanged },
+                { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: NotifyType.BwWarMenuPanelOpened,            callback: this._onNotifyBwWarMenuPanelOpened },
+                { type: NotifyType.BwWarMenuPanelClosed,            callback: this._onNotifyBwWarMenuPanelClosed },
+                { type: NotifyType.BwCoListPanelOpened,             callback: this._onNotifyBwCoListPanelOpened },
+                { type: NotifyType.BwCoListPanelClosed,             callback: this._onNotifyBwCoListPanelClosed },
+                { type: NotifyType.BwProduceUnitPanelOpened,        callback: this._onNotifyBwProduceUnitPanelOpened },
+                { type: NotifyType.BwProduceUnitPanelClosed,        callback: this._onNotifyBwProduceUnitPanelClosed },
+                { type: NotifyType.MeUnitChanged,                   callback: this._onNotifyMeUnitChanged },
+                { type: NotifyType.UnitAnimationTick,               callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,          callback: this._onNotifyUnitStateIndicatorTick },
             ]);
 
             const group     = this._group;
@@ -151,6 +152,11 @@ namespace TwnsBwUnitBriefPanel {
         private _onNotifyUnitAnimationTick(): void {
             for (const cell of this._cellList) {
                 cell.updateOnAnimationTick();
+            }
+        }
+        private _onNotifyUnitStateIndicatorTick(): void {
+            for (const cell of this._cellList) {
+                cell.updateOnStateIndicatorTick();
             }
         }
 
@@ -329,6 +335,11 @@ namespace TwnsBwUnitBriefPanel {
         public updateOnAnimationTick(): void {
             if (this._isChildrenCreated) {
                 this._unitView.tickUnitAnimationFrame();
+            }
+        }
+
+        public updateOnStateIndicatorTick(): void {
+            if (this._isChildrenCreated) {
                 this._unitView.tickStateAnimationFrame();
             }
         }

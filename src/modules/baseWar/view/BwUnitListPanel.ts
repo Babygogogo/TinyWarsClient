@@ -189,7 +189,8 @@ namespace TwnsBwUnitListPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
 
@@ -201,6 +202,11 @@ namespace TwnsBwUnitListPanel {
         private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
                 this._unitView.tickUnitAnimationFrame();
+            }
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            if (this.data) {
                 this._unitView.tickStateAnimationFrame();
             }
         }

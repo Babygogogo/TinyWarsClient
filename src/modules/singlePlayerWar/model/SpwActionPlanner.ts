@@ -233,12 +233,18 @@ namespace TwnsSpwActionPlanner {
             SpwLocalProxy.reqPlayerDeleteUnit(this._getWar(), this.getCursor().getGridIndex());
         }
 
-        public setStateRequestingPlayerVoteForDraw(): void {
-            throw Helpers.newError(`Should not be called.`);
+        public setStateRequestingPlayerVoteForDraw(isAgree: boolean): void {
+            this._setState(State.RequestingPlayerVoteForDraw);
+
+            this._updateView();
+            SpwLocalProxy.reqPlayerVoteForDraw(this._getWar(), isAgree);
         }
 
         public setStateRequestingPlayerSurrender(): void {
-            throw Helpers.newError(`Should not be called.`);
+            this._setState(State.RequestingPlayerSurrender);
+
+            this._updateView();
+            SpwLocalProxy.reqPlayerSurrender(this._getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

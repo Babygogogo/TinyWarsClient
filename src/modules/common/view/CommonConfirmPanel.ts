@@ -19,6 +19,7 @@ namespace TwnsCommonConfirmPanel {
         callbackOnCancel?   : () => any;
         textForConfirm?     : string;
         textForCancel?      : string;
+        showButtonClose?    : boolean;
     };
     export class CommonConfirmPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonConfirmPanel> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
@@ -32,6 +33,7 @@ namespace TwnsCommonConfirmPanel {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _scrContent!   : eui.Scroller;
         private readonly _labelContent! : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!     : TwnsUiButton.UiButton;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
@@ -57,6 +59,7 @@ namespace TwnsCommonConfirmPanel {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
+                { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
             ]);
@@ -64,6 +67,7 @@ namespace TwnsCommonConfirmPanel {
             this._showOpenAnimation();
 
             const openData          = this._getOpenData();
+            this._btnClose.visible  = !!openData.showButtonClose;
             this._btnConfirm.label  = openData.textForConfirm || Lang.getText(LangTextType.B0026);
             this._btnCancel.label   = openData.textForCancel || Lang.getText(LangTextType.B0154);
             this._labelTitle.text   = openData.title || Lang.getText(LangTextType.B0088);

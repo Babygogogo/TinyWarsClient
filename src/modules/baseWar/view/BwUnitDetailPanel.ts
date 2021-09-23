@@ -89,9 +89,10 @@ namespace TwnsBwUnitDetailPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-                { type: NotifyType.BwActionPlannerStateSet,    callback: this._onNotifyBwPlannerStateChanged },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAnimationTick,           callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,      callback: this._onNotifyUnitStateIndicatorTick },
+                { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnUnitsInfo,   callback: this._onTouchedBtnUnitsInfo },
@@ -114,6 +115,11 @@ namespace TwnsBwUnitDetailPanel {
         private _onNotifyUnitAnimationTick(): void {
             this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
         }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            this._unitView.updateOnStateIndicatorTick();
+        }
+
         private _onNotifyBwPlannerStateChanged(): void {
             // this.close();
         }
@@ -653,7 +659,8 @@ namespace TwnsBwUnitDetailPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
 
@@ -662,6 +669,10 @@ namespace TwnsBwUnitDetailPanel {
 
         private _onNotifyUnitAnimationTick(): void {
             this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            this._unitView.updateOnStateIndicatorTick();
         }
 
         protected _onDataChanged(): void {

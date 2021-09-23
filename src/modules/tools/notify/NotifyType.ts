@@ -8,6 +8,7 @@ namespace TwnsNotifyType {
         TimeTick,
         TileAnimationTick,
         UnitAnimationTick,
+        UnitStateIndicatorTick,
         GridAnimationTick,
         UnitAndTileTextureVersionChanged,
         IsShowGridBorderChanged,

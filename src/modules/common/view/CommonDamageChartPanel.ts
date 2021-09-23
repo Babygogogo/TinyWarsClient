@@ -85,9 +85,10 @@ namespace TwnsCommonDamageChartPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-                { type: NotifyType.BwActionPlannerStateSet,    callback: this._onNotifyBwPlannerStateChanged },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAnimationTick,           callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,      callback: this._onNotifyUnitStateIndicatorTick },
+                { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this.close },
@@ -138,6 +139,11 @@ namespace TwnsCommonDamageChartPanel {
         private _onNotifyUnitAnimationTick(): void {
             this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
         }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            this._unitView.updateOnStateIndicatorTick();
+        }
+
         private _onNotifyBwPlannerStateChanged(): void {
             // this.close();
         }
@@ -470,7 +476,8 @@ namespace TwnsCommonDamageChartPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
 
             this._conView.addChild(this._unitView);
@@ -479,6 +486,12 @@ namespace TwnsCommonDamageChartPanel {
         private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
                 this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
+            }
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            if (this.data) {
+                this._unitView.updateOnStateIndicatorTick();
             }
         }
 

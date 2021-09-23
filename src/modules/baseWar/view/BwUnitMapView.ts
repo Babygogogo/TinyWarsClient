@@ -23,8 +23,9 @@ namespace TwnsBwUnitMapView {
         private readonly _layerForGround    = new egret.DisplayObjectContainer();
         private readonly _layerForAir       = new egret.DisplayObjectContainer();
         private readonly _notifyListeners   = [
-            { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-            { type: NotifyType.BwActionPlannerStateSet,    callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.UnitAnimationTick,           callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitStateIndicatorTick,      callback: this._onNotifyUnitStateIndicatorTick },
+            { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
         private _unitMap    : BwUnitMap | null = null;
@@ -96,6 +97,12 @@ namespace TwnsBwUnitMapView {
             this._updateAnimationsOnTick(this._layerForAir);
             this._updateAnimationsOnTick(this._layerForGround);
             this._updateAnimationsOnTick(this._layerForNaval);
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            this._updateIndicatorOnTick(this._layerForAir);
+            this._updateIndicatorOnTick(this._layerForGround);
+            this._updateIndicatorOnTick(this._layerForNaval);
         }
 
         private _onNotifyBwActionPlannerStateChanged(): void {
@@ -192,8 +199,15 @@ namespace TwnsBwUnitMapView {
             const viewsCount = layer.numChildren;
             for (let i = 0; i < viewsCount; ++i) {
                 const view = layer.getChildAt(i) as BwUnitView;
-                view.tickStateAnimationFrame();
                 view.tickUnitAnimationFrame();
+            }
+        }
+
+        private _updateIndicatorOnTick(layer: egret.DisplayObjectContainer): void {
+            const viewsCount = layer.numChildren;
+            for (let i = 0; i < viewsCount; ++i) {
+                const view = layer.getChildAt(i) as BwUnitView;
+                view.tickStateAnimationFrame();
             }
         }
 

@@ -100,8 +100,9 @@ namespace TwnsBwActionPlannerView {
         private _focusUnitViews         = new Map<number, BwUnitView>();
 
         private _notifyEvents: Notify.Listener[] = [
-            { type: NotifyType.GridAnimationTick, callback: this._onNotifyGridAnimationTick },
-            { type: NotifyType.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.GridAnimationTick,       callback: this._onNotifyGridAnimationTick },
+            { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
         ];
 
         public constructor() {
@@ -226,6 +227,11 @@ namespace TwnsBwActionPlannerView {
         private _onNotifyUnitAnimationTick(): void {
             for (const [, view] of this._focusUnitViews) {
                 view.tickUnitAnimationFrame();
+            }
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            for (const [, view] of this._focusUnitViews) {
                 view.tickStateAnimationFrame();
             }
         }

@@ -21,10 +21,12 @@
     "uncompressedColorPink0000": {"x":60,"y":241,"w":3,"h":3},
     "uncompressedColorPurple0000": {"x":54,"y":237,"w":4,"h":4},
     "uncompressedColorRed0000": {"x":44,"y":244,"w":3,"h":3},
-    "uncompressedColorTransparent0000": {"x":44,"y":249,"w":3,"h":3,"offX":0,"offY":0,"sourceW":4,"sourceH":4},
+    "uncompressedColorRed0001": {"x":44,"y":249,"w":3,"h":3},
+    "uncompressedColorTransparent0000": {"x":38,"y":129,"w":3,"h":3,"offX":0,"offY":0,"sourceW":4,"sourceH":4},
     "uncompressedColorTransparent0001": {"x":44,"y":238,"w":4,"h":4},
-    "uncompressedColorWhite0000": {"x":38,"y":129,"w":3,"h":3},
-    "uncompressedColorYellow0000": {"x":43,"y":129,"w":3,"h":3},
+    "uncompressedColorWhite0000": {"x":43,"y":129,"w":3,"h":3},
+    "uncompressedColorYellow0000": {"x":49,"y":244,"w":3,"h":3},
+    "uncompressedColorYellow0001": {"x":49,"y":249,"w":3,"h":3},
     "uncompressedLine0000": {"x":31,"y":120,"w":8,"h":1},
     "uncompressedPbar0000": {"x":17,"y":120,"w":12,"h":12},
     "uncompressedPbar0001": {"x":47,"y":217,"w":12,"h":12},
@@ -57,6 +59,6 @@
     "app": "https://www.codeandweb.com/texturepacker",
     "exporter": "egret",
     "sheetsize": "63x255",
-    "smartupdate": "$TexturePacker:SmartUpdate:3e062b44f7ccfa97a2ed4adec0b61495:8d9eaaf3585a6add299392cbe79bf626:06603b7443b9482a9c04b2c0ab5118a4$"
+    "smartupdate": "$TexturePacker:SmartUpdate:e3c44731bce722bf6b1dc2f469347f18:83c148515dccf019f603d8eb8d780737:06603b7443b9482a9c04b2c0ab5118a4$"
   }
 }

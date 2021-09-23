@@ -391,7 +391,8 @@ namespace TwnsBwTileDetailPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
 
@@ -401,6 +402,12 @@ namespace TwnsBwTileDetailPanel {
         private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
                 this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
+            }
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            if (this.data) {
+                this._unitView.updateOnStateIndicatorTick();
             }
         }
 

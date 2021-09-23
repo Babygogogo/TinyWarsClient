@@ -308,7 +308,8 @@ namespace TwnsWarMapView {
         private readonly _groundLayer           = new egret.DisplayObjectContainer();
         private readonly _seaLayer              = new egret.DisplayObjectContainer();
         private readonly _notifyListenerArray   : Notify.Listener[] = [
-            { type: NotifyType.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
+            { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
         ];
 
         public constructor() {
@@ -358,6 +359,11 @@ namespace TwnsWarMapView {
             const tickCount = Timer.getUnitAnimationTickCount();
             for (const view of this._unitViews) {
                 view.updateOnAnimationTick(tickCount);
+            }
+        }
+        private _onNotifyUnitStateIndicatorTick(): void {
+            for (const view of this._unitViews) {
+                view.updateOnStateIndicatorTick();
             }
         }
 

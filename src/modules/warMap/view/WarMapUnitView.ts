@@ -70,7 +70,6 @@ namespace TwnsWarMapUnitView {
                 return;
             }
 
-            this._tickStateAnimationFrame();
             this._imgUnit.source = CommonModel.getCachedUnitImageSource({
                 version     : UserModel.getSelfSettingsTextureVersion(),
                 skinId      : data.skinId || ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data.playerIndex)),
@@ -79,6 +78,12 @@ namespace TwnsWarMapUnitView {
                 isDark      : this._isDark,
                 tickCount,
             });
+        }
+
+        public updateOnStateIndicatorTick(): void {
+            if (this.getUnitData() != null) {
+                this._tickStateAnimationFrame();
+            }
         }
 
         private _updateImageHp(): void {
@@ -120,7 +125,7 @@ namespace TwnsWarMapUnitView {
             const framesCount       = frames.length;
             this._imgState.source   = framesCount <= 0
                 ? ``
-                : frames[Math.floor(Timer.getUnitAnimationTickCount() / 6) % framesCount];
+                : frames[Timer.getUnitAnimationTickCount() % framesCount];
         }
 
         private _addFrameForCoSkill(): void {

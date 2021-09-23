@@ -3,7 +3,15 @@ declare module Skins.Component.Button{
 	}
 }
 declare module Skins.Component.Button{
+	class ButtonBlack002 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
 	class ButtonBlue001 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
+	class ButtonBlue002 extends eui.Skin{
 	}
 }
 declare module Skins.Component.Button{
@@ -35,6 +43,10 @@ declare module Skins.Component.Button{
 	}
 }
 declare module Skins.Component.Button{
+	class ButtonRed001 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
 	class ButtonSelfAdaption001 extends eui.Skin{
 	}
 }
@@ -56,6 +68,10 @@ declare module Skins.Component.Button{
 }
 declare module Skins.Component.Button{
 	class ButtonYellow002 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
+	class ButtonYellow003 extends eui.Skin{
 	}
 }
 declare module Skins.Component.CheckBox{

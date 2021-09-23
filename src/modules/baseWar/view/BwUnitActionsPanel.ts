@@ -186,7 +186,8 @@ namespace TwnsBwUnitActionsPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.CursorConfirm01);
 
@@ -226,6 +227,11 @@ namespace TwnsBwUnitActionsPanel {
         private _onNotifyUnitAnimationTick(): void {
             if (this.data?.unit) {
                 this._unitView.tickUnitAnimationFrame();
+            }
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            if (this.data?.unit) {
                 this._unitView.tickStateAnimationFrame();
             }
         }

@@ -51,6 +51,23 @@ namespace SpwLocalProxy {
         });
     }
 
+    export function reqPlayerVoteForDraw(war: BwWar, isAgree: boolean): void {
+        SpwModel.handlePlayerActionAndAutoActions(war, {
+            actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
+            WarActionPlayerVoteForDraw  : {
+                isAgree,
+            },
+        });
+    }
+
+    export function reqPlayerSurrender(war: BwWar): void {
+        SpwModel.handlePlayerActionAndAutoActions(war, {
+            actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
+            WarActionPlayerSurrender    : {
+            },
+        });
+    }
+
     export function reqUnitAttackUnit({ war, path, launchUnitId, targetGridIndex }: {
         war             : BwWar;
         path            : IMovePath;

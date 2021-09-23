@@ -15,21 +15,23 @@ namespace Timer {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    const TILE_ANIMATION_INTERVAL_MS    = 350;
-    const UNIT_ANIMATION_INTERVAL_MS    = 120;
-    const GRID_ANIMATION_INTERVAL_MS    = 100;
-    const HEARTBEAT_INTERVAL_MS         = 10 * 1000;
+    const TILE_ANIMATION_INTERVAL_MS        = 350;
+    const UNIT_ANIMATION_INTERVAL_MS        = 120;
+    const UNIT_STATE_INDICATOR_INTERVAL_MS  = 720;
+    const GRID_ANIMATION_INTERVAL_MS        = 100;
+    const HEARTBEAT_INTERVAL_MS             = 10 * 1000;
 
-    let _isHeartbeatAnswered        : boolean;
-    let _heartbeatCounter           : number;
-    let _heartbeatIntervalId        : number;
-    let _serverTimestamp            : number;
+    let _isHeartbeatAnswered            : boolean;
+    let _heartbeatCounter               : number;
+    let _heartbeatIntervalId            : number;
+    let _serverTimestamp                : number;
 
-    let _intervalIdForTileAnimation : number | null;
-    let _tileAnimationTickCount     = 0;
-    let _intervalIdForUnitAnimation : number | null;
-    let _unitAnimationTickCount     = 0;
-    let _gridAnimationTickCount     = 0;
+    let _intervalIdForTileAnimation     : number | null;
+    let _tileAnimationTickCount         = 0;
+    let _intervalIdForUnitAnimation     : number | null;
+    let _unitAnimationTickCount         = 0;
+    let _unitStateIndicatorTickCount    = 0;
+    let _gridAnimationTickCount         = 0;
 
     export function init(): void {
         Notify.addEventListeners([
@@ -54,6 +56,11 @@ namespace Timer {
             ++_gridAnimationTickCount;
             Notify.dispatch(NotifyType.GridAnimationTick);
         }, null, GRID_ANIMATION_INTERVAL_MS);
+
+        egret.setInterval(() => {
+            ++_unitStateIndicatorTickCount;
+            Notify.dispatch(NotifyType.UnitStateIndicatorTick);
+        }, null, UNIT_STATE_INDICATOR_INTERVAL_MS);
     }
 
     export function getServerTimestamp(): number {
@@ -102,6 +109,9 @@ namespace Timer {
     }
     export function getUnitAnimationTickCount(): number {
         return _unitAnimationTickCount;
+    }
+    export function getUnitStateIndicatorTickCount(): number {
+        return _unitStateIndicatorTickCount;
     }
 
     export function getGridAnimationTickCount(): number {
