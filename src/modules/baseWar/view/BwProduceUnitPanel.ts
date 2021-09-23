@@ -6,6 +6,7 @@ import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -234,7 +235,11 @@ namespace TwnsBwProduceUnitPanel {
         private readonly _conUnitView!  : eui.Group;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _labelCost!    : TwnsUiLabel.UiLabel;
+
+        private readonly _groupProduce! : eui.Group;
+        private readonly _imgProduce!   : TwnsUiImage.UiImage;
         private readonly _labelProduce! : TwnsUiLabel.UiLabel;
+
         private readonly _unitView      = new BwUnitView();
 
         protected _onOpened(): void {
@@ -243,9 +248,13 @@ namespace TwnsBwProduceUnitPanel {
                 { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
                 { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
+            this._setUiListenerArray([
+                { ui: this._imgBg,                          callback: this._onTouchedImgBg,         eventType: egret.TouchEvent.TOUCH_BEGIN },
+                { ui: this._groupProduce,                   callback: this._onTouchedGroupProduce },
+            ]);
 
             this._imgBg.touchEnabled = true;
-            this._imgBg.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgBg, this);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
             this._conUnitView.addChild(this._unitView);
         }
 
@@ -270,24 +279,32 @@ namespace TwnsBwProduceUnitPanel {
         }
 
         private _onTouchedImgBg(): void {
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+
+        private _onTouchedGroupProduce(): void {
             const data = this._getData();
             if (data.currentFund < data.minCost) {
                 FloatText.show(Lang.getText(LangTextType.B0053));
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
 
             if (!data.panel.getIsOpening()) {
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
 
             const actionPlanner = data.actionPlanner;
             if (actionPlanner.checkIsStateRequesting()) {
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
 
             const skillCfg  = data.unitProductionSkillCfg;
             const unitType  = data.unitType;
             const gridIndex = data.gridIndex;
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonConfirm01);
             if (!skillCfg) {
                 actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, CommonConstants.UnitMaxHp);
             } else {
@@ -325,15 +342,19 @@ namespace TwnsBwProduceUnitPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data                      = this._getData();
-            const unitType                  = data.unitType;
-            const isFundEnough              = data.currentFund >= data.minCost;
-            this._labelCost.text            = `${Lang.getText(LangTextType.B0079)}: ${data.minCost}`;
-            this._labelCost.textColor       = isFundEnough ? 0x00FF00 : 0xFF0000;
-            this._labelName.text            = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
-            this._labelProduce.textColor    = isFundEnough ? 0x00FF00 : 0xFF0000;
-            this._labelProduce.text         = Lang.getText(LangTextType.B0095);
-
+            const data              = this._getData();
+            const unitType          = data.unitType;
+            const isFundEnough      = data.currentFund >= data.minCost;
+            const labelCost         = this._labelCost;
+            const labelName         = this._labelName;
+            const labelProduce      = this._labelProduce;
+            labelCost.text          = `${data.minCost}G`;
+            labelCost.textColor     = isFundEnough ? 0xFFFFFF : 0x667A85;
+            labelName.text          = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
+            labelName.textColor     = isFundEnough ? 0xFFFFFF : 0x667A85;
+            labelProduce.textColor  = isFundEnough ? 0x000000 : 0xFFFFFF;
+            labelProduce.text       = Lang.getText(LangTextType.B0691);
+            this._imgProduce.source = isFundEnough ? `uncompressedColorYellow0000` : `uncompressedColorGrey0002`;
             this._unitView.init(data.unit).startRunningView();
         }
     }
