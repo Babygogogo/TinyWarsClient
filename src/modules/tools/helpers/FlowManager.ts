@@ -288,7 +288,9 @@ namespace FlowManager {
         SpwModel.unloadWar();
         MeModel.unloadWar();
         MfrCreateModel.resetDataByInitialWarData(warData);
-        StageManager.closeAllPanels();
+        StageManager.closeAllPanels(Helpers.getNonNullElements([
+            TwnsLobbyTopRightPanel.LobbyTopRightPanel.getInstance(),
+        ]));
         TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
         TwnsLobbyTopRightPanel.LobbyTopRightPanel.show();
         TwnsBroadcastPanel.BroadcastPanel.show();

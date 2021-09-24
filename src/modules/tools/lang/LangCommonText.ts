@@ -279,11 +279,13 @@ namespace TwnsLangCommonText {
         [LangTextType.A0067]: [
             [
                 `输入正确的Discord ID，并加入以下游戏频道即可实时收到游戏相关消息，如回合轮转等。`,
-                `Discord ID 是一串17或18位的纯数字。要获取该ID，您需要前往您的Discord设置，打开开发者模式，然后可以在个人信息中找到它。`,
+                `Discord ID 是一串17或18位的纯数字。要获取该ID，您需要前往您的Discord用户设置，打开开发者模式，然后可以在个人账号信息页面中找到它。`,
+                `Discord ID 对所有打开了开发者模式的discord用户都是公开的（无论您本人是否打开开发者模式），因此不存在隐私和安全问题。`
             ].join(`\n`),
             [
                 `By entering your correct discord ID and joining the following discord server you can receive tinywars-related information, including turn notification.`,
-                `The Discord ID is a string of 17 or 18 digits. Please go to your discord settings, turn on the developer mode, and then you can find it in your personal info page.`,
+                `The discord ID is a string of 17 or 18 digits. Please go to your discord user settings, turn on the developer mode in the advanced page, and then you can find it in your account info page by clicking the icon next to your username.`,
+                `The discord ID is public to every discord user who turns on the developer mode no matter you turn on the developer mode or not, therefore there is no security and/or privacy issue.`
             ].join(`\n`),
         ],
         [LangTextType.A0068]: [

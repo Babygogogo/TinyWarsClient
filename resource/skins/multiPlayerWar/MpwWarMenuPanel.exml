@@ -4,7 +4,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="370" horizontalCenter="0" height="320" verticalCenter="0">
+    <e:Group id="_group" width="370" horizontalCenter="0" height="280" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0">
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                  scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />

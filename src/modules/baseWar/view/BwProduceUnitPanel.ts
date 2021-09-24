@@ -354,7 +354,7 @@ namespace TwnsBwProduceUnitPanel {
             labelName.textColor     = isFundEnough ? 0xFFFFFF : 0x667A85;
             labelProduce.textColor  = isFundEnough ? 0x000000 : 0xFFFFFF;
             labelProduce.text       = Lang.getText(LangTextType.B0691);
-            this._imgProduce.source = isFundEnough ? `uncompressedColorYellow0000` : `uncompressedColorGrey0002`;
+            this._imgProduce.source = isFundEnough ? `uncompressedColorYellow0001` : `uncompressedColorGrey0002`;
             this._unitView.init(data.unit).startRunningView();
         }
     }

@@ -1,8 +1,5 @@
 
 import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
-import TwnsLobbyBottomPanel     from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyPanel           from "../../lobby/view/LobbyPanel";
-import TwnsLobbyTopPanel        from "../../lobby/view/LobbyTopPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FlowManager              from "../../tools/helpers/FlowManager";
@@ -62,8 +59,8 @@ namespace TwnsMeMapListPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMeGetDataList,     callback: this._onNotifySMeGetDataList },
+                { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMeGetDataList,    callback: this._onNotifySMeGetDataList },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },

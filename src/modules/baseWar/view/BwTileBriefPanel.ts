@@ -4,7 +4,6 @@ import CommonConstants          from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import SoundManager             from "../../tools/helpers/SoundManager";
-import StageManager             from "../../tools/helpers/StageManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import NotifyData               from "../../tools/notify/NotifyData";
@@ -16,7 +15,6 @@ import TwnsBwWar                from "../model/BwWar";
 import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
 import TwnsBwTileDetailPanel    from "./BwTileDetailPanel";
 import TwnsBwTileView           from "./BwTileView";
-import TwnsBwUnitBriefPanel     from "./BwUnitBriefPanel";
 
 namespace TwnsBwTileBriefPanel {
     import Tween                = egret.Tween;
@@ -72,18 +70,18 @@ namespace TwnsBwTileBriefPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
-                { type: NotifyType.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: NotifyType.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
-                { type: NotifyType.BwActionPlannerStateSet,    callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: NotifyType.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
-                { type: NotifyType.BwWarMenuPanelClosed,           callback: this._onNotifyBwWarMenuPanelClosed },
-                { type: NotifyType.BwCoListPanelOpened,            callback: this._onNotifyBwCoListPanelOpened },
-                { type: NotifyType.BwCoListPanelClosed,            callback: this._onNotifyBwCoListPanelClosed },
-                { type: NotifyType.BwProduceUnitPanelOpened,       callback: this._onNotifyBwProduceUnitPanelOpened },
-                { type: NotifyType.BwProduceUnitPanelClosed,       callback: this._onNotifyBwProduceUnitPanelClosed },
-                { type: NotifyType.MeTileChanged,                  callback: this._onNotifyMeTileChanged },
-                { type: NotifyType.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
+                { type: NotifyType.GlobalTouchBegin,            callback: this._onNotifyGlobalTouchBegin },
+                { type: NotifyType.GlobalTouchMove,             callback: this._onNotifyGlobalTouchMove },
+                { type: NotifyType.BwCursorGridIndexChanged,    callback: this._onNotifyBwCursorGridIndexChanged },
+                { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: NotifyType.BwWarMenuPanelOpened,        callback: this._onNotifyBwWarMenuPanelOpened },
+                { type: NotifyType.BwWarMenuPanelClosed,        callback: this._onNotifyBwWarMenuPanelClosed },
+                { type: NotifyType.BwCoListPanelOpened,         callback: this._onNotifyBwCoListPanelOpened },
+                { type: NotifyType.BwCoListPanelClosed,         callback: this._onNotifyBwCoListPanelClosed },
+                { type: NotifyType.BwProduceUnitPanelOpened,    callback: this._onNotifyBwProduceUnitPanelOpened },
+                { type: NotifyType.BwProduceUnitPanelClosed,    callback: this._onNotifyBwProduceUnitPanelClosed },
+                { type: NotifyType.MeTileChanged,               callback: this._onNotifyMeTileChanged },
+                { type: NotifyType.TileAnimationTick,           callback: this._onNotifyTileAnimationTick },
             ]);
             this._setUiListenerArray([
                 { ui: this, callback: this._onTouchedThis, },
@@ -115,8 +113,12 @@ namespace TwnsBwTileBriefPanel {
         private _onNotifyGlobalTouchMove(e: egret.Event): void {
             this._adjustPositionOnTouch(e.data);
         }
-        private _onNotifyBwCursorGridIndexChanged(): void {
-            this._updateView();
+        private _onNotifyBwCursorGridIndexChanged(e: egret.Event): void {
+            const data  = e.data as NotifyData.BwCursorGridIndexChanged;
+            const war   = this._getOpenData().war;
+            if ((war.getIsRunning()) && (data === war.getCursor())) {
+                this._updateView();
+            }
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
             const planner = this._getOpenData().war.getActionPlanner();
@@ -145,8 +147,9 @@ namespace TwnsBwTileBriefPanel {
             this._updateView();
         }
         private _onNotifyMeTileChanged(e: egret.Event): void {
-            const data = e.data as NotifyData.MeTileChanged;
-            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
+            const data  = e.data as NotifyData.MeTileChanged;
+            const war   = this._getOpenData().war;
+            if ((war.getIsRunning()) && (GridIndexHelpers.checkIsEqual(data.gridIndex, war.getCursor().getGridIndex()))) {
                 this._updateView();
             }
         }

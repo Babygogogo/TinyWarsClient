@@ -1,4 +1,5 @@
 
+import TwnsBwCursor     from "../../baseWar/model/BwCursor";
 import TwnsBwPlayer     from "../../baseWar/model/BwPlayer";
 import Types            from "../helpers/Types";
 
@@ -11,6 +12,7 @@ namespace NotifyData {
     export type BwPlayerFundChanged         = TwnsBwPlayer.BwPlayer;
     export type McwPlayerEnergyChanged      = TwnsBwPlayer.BwPlayer;
     export type BwCoIdChanged               = TwnsBwPlayer.BwPlayer;
+    export type BwCursorGridIndexChanged    = TwnsBwCursor.BwCursor;
     export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
     export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
     export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };

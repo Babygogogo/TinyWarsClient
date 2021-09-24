@@ -40,10 +40,10 @@ namespace TwnsUiMapInfo {
 
         private readonly _groupMapInfo!             : eui.Group;
         private readonly _labelMapName!             : TwnsUiLabel.UiLabel;
-        private readonly _labelDesignerTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelDesigner!            : TwnsUiLabel.UiLabel;
         private readonly _labelRatingTitle!         : TwnsUiLabel.UiLabel;
         private readonly _labelRating!              : TwnsUiLabel.UiLabel;
+        private readonly _labelRaters!              : TwnsUiLabel.UiLabel;
         private readonly _groupMyRating!            : eui.Group;
         private readonly _labelMyRatingTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelMyRating!            : TwnsUiLabel.UiLabel;
@@ -120,20 +120,22 @@ namespace TwnsUiMapInfo {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelDesignerTitle.text       = `${Lang.getText(LangTextType.B0163)}:`;
             this._labelPlayersCountTitle.text   = Lang.getText(LangTextType.B0229);
             this._labelPlayedTimesTitle.text    = Lang.getText(LangTextType.B0565);
             this._labelMapSizeTitle.text        = Lang.getText(LangTextType.B0300);
             this._labelRatingTitle.text         = Lang.getText(LangTextType.B0364);
             this._labelMyRatingTitle.text       = Lang.getText(LangTextType.B0363);
+            this._updateLabelDesigner();
         }
 
         private async _updateComponentsForMapInfo(): Promise<void> {
+            this._updateLabelDesigner();
+
             const data              = this._data;
             const labelMapName      = this._labelMapName;
-            const labelDesigner     = this._labelDesigner;
             const labelPlayersCount = this._labelPlayersCount;
             const labelRating       = this._labelRating;
+            const labelRaters       = this._labelRaters;
             const labelMyRating     = this._labelMyRating;
             const labelPlayedTimes  = this._labelPlayedTimes;
             const labelMapSize      = this._labelMapSize;
@@ -141,9 +143,9 @@ namespace TwnsUiMapInfo {
 
             if (data == null) {
                 labelMapName.text       = `--`;
-                labelDesigner.text      = `--`;
                 labelPlayersCount.text  = `--`;
                 labelRating.text        = `--`;
+                labelRaters.text        = `(--)`;
                 labelMyRating.text      = `--`;
                 labelPlayedTimes.text   = `--`;
                 labelMapSize.text       = `--`;
@@ -159,9 +161,9 @@ namespace TwnsUiMapInfo {
                 const rating            = await WarMapModel.getAverageRating(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                 const myRating          = UserModel.getMapRating(mapId);
                 labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || CommonConstants.ErrorTextForUndefined;
-                labelDesigner.text      = mapRawData.designerName || CommonConstants.ErrorTextForUndefined;
                 labelPlayersCount.text  = `${mapRawData.playersCountUnneutral}`;
                 labelRating.text        = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
+                labelRaters.text        = `(${await WarMapModel.getTotalRatersCount(mapId)})`;
                 labelMyRating.text      = myRating != null ? `${myRating}` : Lang.getText(LangTextType.B0001);
                 labelPlayedTimes.text   = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })}`;
                 labelMapSize.text       = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
@@ -176,14 +178,37 @@ namespace TwnsUiMapInfo {
                 const tileMapData       = Helpers.getExisted(warData.field?.tileMap);
                 const mapSize           = WarCommonHelpers.getMapSize(tileMapData);
                 labelMapName.text       = `--`;
-                labelDesigner.text      = `--`;
                 labelPlayersCount.text  = `${Helpers.getExisted(warData.playerManager?.players).length - 1}`;
                 labelRating.text        = `--`;
+                labelRaters.text        = `(--)`;
                 labelPlayedTimes.text   = `--`;
                 labelMapSize.text       = `${mapSize.width} x ${mapSize.height}`;
                 btnSetMyRating.visible  = false;
                 this._listTile.bindData(generateDataForListTile(Helpers.getExisted(tileMapData.tiles)));
 
+                return;
+            }
+        }
+
+        private async _updateLabelDesigner(): Promise<void> {
+            const data              = this._data;
+            const labelDesigner     = this._labelDesigner;
+            const prefix            = `${Lang.getText(LangTextType.B0163)}: `;
+            if (data == null) {
+                labelDesigner.text  = `${prefix}--`;
+                return;
+            }
+
+            const mapInfo = data.mapInfo;
+            if (mapInfo) {
+                const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapInfo.mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                labelDesigner.text  = `${prefix}${mapRawData.designerName || CommonConstants.ErrorTextForUndefined}`;
+                return;
+            }
+
+            const warData = data.warData;
+            if (warData) {
+                labelDesigner.text  = `${prefix}--`;
                 return;
             }
         }

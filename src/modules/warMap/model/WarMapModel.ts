@@ -134,10 +134,14 @@ namespace WarMapModel {
     export async function getAverageRating(mapId: number): Promise<number | null> {
         const mapBriefData = await getBriefData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         const mapExtraData = mapBriefData ? mapBriefData.mapExtraData : null;
-        const totalRaters   = mapExtraData ? mapExtraData.totalRaters : null;
+        const totalRaters  = mapExtraData ? mapExtraData.totalRaters : null;
         return totalRaters
             ? (Helpers.getExisted(mapExtraData?.totalRating) / totalRaters)
             : null;
+    }
+    export async function getTotalRatersCount(mapId: number): Promise<number | null> {
+        const mapBriefData = await getBriefData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        return mapBriefData ? mapBriefData.mapExtraData?.totalRaters ?? 0 : null;
     }
 
     export function updateRawDataDict(dataList: IMapRawData[]): void {

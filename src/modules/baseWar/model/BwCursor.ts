@@ -117,7 +117,7 @@ namespace TwnsBwCursor {
 
             this._gridX = gridIndex.x;
             this._gridY = gridIndex.y;
-            Notify.dispatch(NotifyType.BwCursorGridIndexChanged);
+            Notify.dispatch(NotifyType.BwCursorGridIndexChanged, this);
         }
         public getGridIndex(): Types.GridIndex {
             return { x: this.getGridX(), y: this.getGridY() };
