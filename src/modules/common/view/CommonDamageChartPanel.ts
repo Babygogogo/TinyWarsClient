@@ -25,7 +25,22 @@ namespace TwnsCommonDamageChartPanel {
     import WarMapUnitView   = TwnsWarMapUnitView.WarMapUnitView;
     import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
-    import IUnitTemplateCfg = ProtoTypes.Config.IUnitTemplateCfg;
+
+    // eslint-disable-next-line no-shadow
+    enum UnitInfoType {
+        Hp,
+        ProductionCost,
+        Movement,
+        Fuel,
+        AttackRange,
+        Vision,
+        PrimaryWeaponAmmo,
+        FlareAmmo,
+        BuildMaterial,
+        ProduceMaterial,
+        IsDiver,
+        LoadUnit,
+    }
 
     export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -33,31 +48,29 @@ namespace TwnsCommonDamageChartPanel {
 
         private static _instance: CommonDamageChartPanel;
 
+        private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _groupList!            : eui.Group;
-        private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _listUnit!             : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
         private readonly _btnBack!              : TwnsUiButton.UiButton;
 
         private readonly _groupInfo!            : eui.Group;
         private readonly _conUnitView!          : eui.Group;
         private readonly _labelName!            : TwnsUiLabel.UiLabel;
+        private readonly _labelName1!           : TwnsUiLabel.UiLabel;
 
         private readonly _listInfo!             : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
         private readonly _listDamageChart!      : TwnsUiScrollList.UiScrollList<DataForDamageRenderer>;
         private readonly _labelDamageChart!     : TwnsUiLabel.UiLabel;
-        private readonly _labelOffenseMain1!    : TwnsUiLabel.UiLabel;
-        private readonly _labelOffenseSub1!     : TwnsUiLabel.UiLabel;
-        private readonly _labelDefenseMain1!    : TwnsUiLabel.UiLabel;
-        private readonly _labelDefenseSub1!     : TwnsUiLabel.UiLabel;
-        private readonly _labelOffenseMain2!    : TwnsUiLabel.UiLabel;
-        private readonly _labelOffenseSub2!     : TwnsUiLabel.UiLabel;
-        private readonly _labelDefenseMain2!    : TwnsUiLabel.UiLabel;
-        private readonly _labelDefenseSub2!     : TwnsUiLabel.UiLabel;
+        private readonly _labelOffense!         : TwnsUiLabel.UiLabel;
+        private readonly _labelDefense!         : TwnsUiLabel.UiLabel;
+        private readonly _labelMain1!           : TwnsUiLabel.UiLabel;
+        private readonly _labelSub1!            : TwnsUiLabel.UiLabel;
+        private readonly _labelMain2!           : TwnsUiLabel.UiLabel;
+        private readonly _labelSub2!            : TwnsUiLabel.UiLabel;
 
-        private _selectedIndex              : number | null = null;
-        private _dataForListUnit?           : DataForUnitRenderer[];
-        private _dataForListDamageChart?    : DataForDamageRenderer[];
-        private _unitView                   = new WarMapUnitView();
+        private _selectedIndex                  : number | null = null;
+        private _dataForListUnit?               : DataForUnitRenderer[];
+        private readonly _unitView              = new WarMapUnitView();
 
         public static show(): void {
             if (!CommonDamageChartPanel._instance) {
@@ -106,13 +119,13 @@ namespace TwnsCommonDamageChartPanel {
             listUnit.scrollVerticalTo(0);
             this._updateComponentsForLanguage();
             this.setSelectedIndexAndUpdateView(0);
+            this._updateListInfo();
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             this._selectedIndex = null;
             delete this._dataForListUnit;
-            delete this._dataForListDamageChart;
         }
 
         public setSelectedIndexAndUpdateView(newIndex: number): void {
@@ -152,6 +165,12 @@ namespace TwnsCommonDamageChartPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+
             const groupList = this._groupList;
             egret.Tween.removeTweens(groupList);
             egret.Tween.get(groupList)
@@ -166,6 +185,12 @@ namespace TwnsCommonDamageChartPanel {
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+
                 const groupList = this._groupList;
                 egret.Tween.removeTweens(groupList);
                 egret.Tween.get(groupList)
@@ -183,17 +208,13 @@ namespace TwnsCommonDamageChartPanel {
 
         private _updateComponentsForLanguage(): void {
             this._btnBack.label             = Lang.getText(LangTextType.B0146);
-            this._labelTitle.text           = Lang.getText(LangTextType.B0440);
             this._labelDamageChart.text     = Lang.getText(LangTextType.B0334);
-            this._labelOffenseMain1.text    = Lang.getText(LangTextType.B0335);
-            this._labelOffenseSub1.text     = Lang.getText(LangTextType.B0336);
-            this._labelDefenseMain1.text    = Lang.getText(LangTextType.B0337);
-            this._labelDefenseSub1.text     = Lang.getText(LangTextType.B0338);
-            this._labelOffenseMain2.text    = Lang.getText(LangTextType.B0335);
-            this._labelOffenseSub2.text     = Lang.getText(LangTextType.B0336);
-            this._labelDefenseMain2.text    = Lang.getText(LangTextType.B0337);
-            this._labelDefenseSub2.text     = Lang.getText(LangTextType.B0338);
-            this._updateListInfo();
+            this._labelOffense.text         = Lang.getText(LangTextType.B0694);
+            this._labelDefense.text         = Lang.getText(LangTextType.B0695);
+            this._labelMain1.text           = Lang.getText(LangTextType.B0692);
+            this._labelSub1.text            = Lang.getText(LangTextType.B0693);
+            this._labelMain2.text           = Lang.getText(LangTextType.B0692);
+            this._labelSub2.text            = Lang.getText(LangTextType.B0693);
         }
 
         private _updateUnitViewAndLabelName(): void {
@@ -205,6 +226,7 @@ namespace TwnsCommonDamageChartPanel {
             if (data) {
                 const unitType          = data.unitType;
                 this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelName1.text   = Lang.getUnitName(unitType, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
                 this._unitView.update({
                     gridIndex       : { x: 0, y: 0 },
                     playerIndex     : CommonConstants.WarFirstPlayerIndex,
@@ -215,154 +237,145 @@ namespace TwnsCommonDamageChartPanel {
         }
 
         private _updateListInfo(): void {
-            const selectedIndex = this.getSelectedIndex();
-            const dataArray     = this._dataForListUnit;
-            const data          = (selectedIndex == null) || (dataArray == null)
+            const selectedIndex     = this.getSelectedIndex();
+            const dataArrayForUnit  = this._dataForListUnit;
+            const unitData          = (selectedIndex == null) || (dataArrayForUnit == null)
                 ? null
-                : dataArray[selectedIndex];
+                : dataArrayForUnit[selectedIndex];
             const listInfo      = this._listInfo;
-            if (data == null) {
+            if (unitData == null) {
                 listInfo.clear();
             } else {
-                const configVersion = data.configVersion;
-                const unitType      = data.unitType;
-                const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
-                this._listInfo.bindData(Helpers.getNonNullElements([
-                    this._createInfoHp(cfg),
-                    this._createInfoProductionCost(cfg),
-                    this._createInfoMovement(cfg),
-                    this._createInfoFuel(cfg),
-                    this._createInfoFuelConsumption(cfg),
-                    this._createInfoFuelDestruction(cfg),
-                    this._createInfoAttackRange(cfg),
-                    this._createInfoAttackAfterMove(cfg),
-                    this._createInfoVisionRange(cfg),
-                    this._createInfoPrimaryWeaponAmmo(cfg),
-                    this._createInfoBuildMaterial(cfg),
-                    this._createInfoProduceMaterial(cfg),
-                    this._createInfoFlareAmmo(cfg),
-                    this._createInfoDive(cfg),
-                ]));
-            }
+                const configVersion     = unitData.configVersion;
+                const unitType          = unitData.unitType;
+                const unitTemplateCfg   = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+                const dataArray         : DataForInfoRenderer[] = Helpers.getNonNullElements([
+                    this._createInfoHp(unitTemplateCfg),
+                    this._createInfoProductionCost(unitTemplateCfg),
+                    this._createInfoMovement(unitTemplateCfg),
+                    this._createInfoFuel(unitTemplateCfg),
+                    this._createInfoAttackRange(unitTemplateCfg),
+                    this._createInfoVision(unitTemplateCfg),
+                    this._createInfoPrimaryWeaponAmmo(unitTemplateCfg),
+                    this._createInfoBuildMaterial(unitTemplateCfg),
+                    this._createInfoProduceMaterial(unitTemplateCfg),
+                    this._createInfoFlareAmmo(unitTemplateCfg),
+                    this._createInfoIsDiver(unitTemplateCfg),
+                    this._createInfoLoadUnit(unitTemplateCfg),
+                ]);
+                let index = 0;
+                for (const data of dataArray) {
+                    data.index = index++;
+                }
 
+                this._listInfo.bindData(dataArray);
+            }
         }
 
         private _updateListDamageChart(): void {
-            this._dataForListDamageChart = this._createDataForListDamageChart();
-            this._listDamageChart.bindData(this._dataForListDamageChart);
+            this._listDamageChart.bindData(this._createDataForListDamageChart());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Util functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _createInfoHp(cfg: IUnitTemplateCfg): DataForInfoRenderer {
-            const maxHp = cfg.maxHp;
+        private _createInfoHp(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(LangTextType.B0339),
-                valueText   : `${maxHp} / ${maxHp}`,
+                index           : 0,
+                infoType        : UnitInfoType.Hp,
+                unitTemplateCfg,
             };
         }
-        private _createInfoProductionCost(cfg: IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoProductionCost(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(LangTextType.B0341),
-                valueText   : `${cfg.productionCost}`,
+                index       : 0,
+                infoType    : UnitInfoType.ProductionCost,
+                unitTemplateCfg,
             };
         }
-        private _createInfoMovement(cfg: IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoMovement(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(LangTextType.B0340),
-                valueText   : `${cfg.moveRange} (${Lang.getMoveTypeName(Helpers.getExisted(cfg.moveType))})`,
+                index       : 0,
+                infoType    : UnitInfoType.Movement,
+                unitTemplateCfg,
             };
         }
-        private _createInfoFuel(cfg: IUnitTemplateCfg): DataForInfoRenderer {
-            const maxFuel = cfg.maxFuel;
+        private _createInfoFuel(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(LangTextType.B0342),
-                valueText   : `${maxFuel} / ${maxFuel}`,
+                index       : 0,
+                infoType    : UnitInfoType.Fuel,
+                unitTemplateCfg,
             };
         }
-        private _createInfoFuelConsumption(cfg: IUnitTemplateCfg): DataForInfoRenderer {
-            return {
-                titleText   : Lang.getText(LangTextType.B0343),
-                valueText   : `${cfg.fuelConsumptionPerTurn}${cfg.diveCfgs == null ? `` : ` (${cfg.diveCfgs[0]})`}`,
-            };
-        }
-        private _createInfoFuelDestruction(cfg: IUnitTemplateCfg): DataForInfoRenderer {
-            return {
-                titleText   : Lang.getText(LangTextType.B0344),
-                valueText   : cfg.isDestroyedOnOutOfFuel
-                    ? Lang.getText(LangTextType.B0012)
-                    : Lang.getText(LangTextType.B0013),
-            };
-        }
-        private _createInfoAttackRange(cfg: IUnitTemplateCfg): DataForInfoRenderer {
-            return {
-                titleText   : Lang.getText(LangTextType.B0345),
-                valueText   : cfg.minAttackRange == null ? Lang.getText(LangTextType.B0001) : `${cfg.minAttackRange} - ${cfg.maxAttackRange}`,
-            };
-        }
-        private _createInfoAttackAfterMove(cfg: IUnitTemplateCfg): DataForInfoRenderer {
-            return {
-                titleText   : Lang.getText(LangTextType.B0346),
-                valueText   : cfg.canAttackAfterMove ? Lang.getText(LangTextType.B0012) : Lang.getText(LangTextType.B0013),
-            };
-        }
-        private _createInfoVisionRange(cfg: IUnitTemplateCfg): DataForInfoRenderer {
-            return {
-                titleText   : Lang.getText(LangTextType.B0354),
-                valueText   : `${cfg.visionRange}`,
-            };
-        }
-        private _createInfoPrimaryWeaponAmmo(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
-            const maxValue = cfg.primaryWeaponMaxAmmo;
-            if (maxValue == null) {
-                return null;
-            } else {
-                return {
-                    titleText   : Lang.getText(LangTextType.B0350),
-                    valueText   : `${maxValue} / ${maxValue}`,
+        private _createInfoAttackRange(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+            return unitTemplateCfg.minAttackRange == null
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : UnitInfoType.AttackRange,
+                    unitTemplateCfg,
                 };
-            }
         }
-        private _createInfoBuildMaterial(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
-            const maxValue = cfg.maxBuildMaterial;
-            if (maxValue == null) {
-                return null;
-            } else {
-                return {
-                    titleText   : Lang.getText(LangTextType.B0347),
-                    valueText   : `${maxValue} / ${maxValue}`,
-                };
-            }
-        }
-        private _createInfoProduceMaterial(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
-            const maxValue = cfg.maxProduceMaterial;
-            if (maxValue == null) {
-                return null;
-            } else {
-                return {
-                    titleText   : Lang.getText(LangTextType.B0348),
-                    valueText   : `${maxValue} / ${maxValue}`,
-                };
-            }
-        }
-        private _createInfoFlareAmmo(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
-            const maxValue = cfg.flareMaxAmmo;
-            if (maxValue == null) {
-                return null;
-            } else {
-                return {
-                    titleText   : Lang.getText(LangTextType.B0349),
-                    valueText   : `${maxValue} / ${maxValue}`,
-                };
-            }
-        }
-        private _createInfoDive(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
-            const isDiver = !!cfg.diveCfgs;
+        private _createInfoVision(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
             return {
-                titleText   : Lang.getText(LangTextType.B0439),
-                valueText   : isDiver ? Lang.getText(LangTextType.B0012) : Lang.getText(LangTextType.B0013),
+                index       : 0,
+                infoType    : UnitInfoType.Vision,
+                unitTemplateCfg,
             };
+        }
+        private _createInfoPrimaryWeaponAmmo(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+            return unitTemplateCfg.primaryWeaponMaxAmmo == null
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : UnitInfoType.PrimaryWeaponAmmo,
+                    unitTemplateCfg,
+                };
+        }
+        private _createInfoBuildMaterial(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+            return unitTemplateCfg.maxBuildMaterial == null
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : UnitInfoType.BuildMaterial,
+                    unitTemplateCfg,
+                };
+        }
+        private _createInfoProduceMaterial(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+            return unitTemplateCfg.maxProduceMaterial == null
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : UnitInfoType.ProduceMaterial,
+                    unitTemplateCfg,
+                };
+        }
+        private _createInfoFlareAmmo(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+            return unitTemplateCfg.flareMaxAmmo == null
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : UnitInfoType.FlareAmmo,
+                    unitTemplateCfg,
+                };
+        }
+        private _createInfoIsDiver(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+            return !unitTemplateCfg.diveCfgs
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : UnitInfoType.IsDiver,
+                    unitTemplateCfg,
+                };
+        }
+        private _createInfoLoadUnit(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+            return unitTemplateCfg.loadUnitCategory == null
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : UnitInfoType.LoadUnit,
+                    unitTemplateCfg,
+                };
         }
 
         private _createDataForListDamageChart(): DataForDamageRenderer[] {
@@ -374,20 +387,25 @@ namespace TwnsCommonDamageChartPanel {
                 const configVersion     = dataForUnit.configVersion;
                 const attackUnitType    = dataForUnit.unitType;
                 const playerIndex       = CommonConstants.WarFirstPlayerIndex;
+                let index               = 0;
                 for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
                     dataArray.push({
+                        index,
                         configVersion,
                         attackUnitType,
                         targetUnitType,
                         playerIndex,
                     });
+                    ++index;
                 }
                 for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.Destroyable)) {
                     dataArray.push({
+                        index,
                         configVersion,
                         attackUnitType,
                         targetTileType,
                     });
+                    ++index;
                 }
             }
 
@@ -443,22 +461,202 @@ namespace TwnsCommonDamageChartPanel {
     }
 
     type DataForInfoRenderer = {
-        titleText   : string;
-        valueText   : string;
+        index           : number;
+        infoType        : UnitInfoType;
+        unitTemplateCfg : ProtoTypes.Config.IUnitTemplateCfg;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
-        private readonly _btnTitle!     : TwnsUiButton.UiButton;
-        private readonly _labelValue!   : TwnsUiLabel.UiLabel;
+        private readonly _imgBg!            : TwnsUiImage.UiImage;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelValue!       : TwnsUiLabel.UiLabel;
+        private readonly _groupExtra!       : eui.Group;
+        private readonly _labelExtraInfo!   : TwnsUiLabel.UiLabel;
+
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
+        }
 
         protected _onDataChanged(): void {
-            const data              = this._getData();
-            this._labelValue.text   = data.valueText;
-            this._btnTitle.label    = data.titleText;
+            this._updateView();
+        }
+
+        private _onNotifyLanguageChanged(): void {
+            this._updateView();
+        }
+
+        private _updateView(): void {
+            const data          = this._getData();
+            this._imgBg.visible = data.index % 2 === 0;
+
+            const infoType = data.infoType;
+            if (infoType === UnitInfoType.AttackRange) {
+                this._updateViewAsAttackRange();
+            } else if (infoType === UnitInfoType.BuildMaterial) {
+                this._updateViewAsBuildMaterial();
+            } else if (infoType === UnitInfoType.FlareAmmo) {
+                this._updateViewAsFlareAmmo();
+            } else if (infoType === UnitInfoType.Fuel) {
+                this._updateViewAsFuel();
+            } else if (infoType === UnitInfoType.Hp) {
+                this._updateViewAsHp();
+            } else if (infoType === UnitInfoType.IsDiver) {
+                this._updateViewAsIsDiver();
+            } else if (infoType === UnitInfoType.Movement) {
+                this._updateViewAsMovement();
+            } else if (infoType === UnitInfoType.PrimaryWeaponAmmo) {
+                this._updateViewAsPrimaryWeaponAmmo();
+            } else if (infoType === UnitInfoType.ProduceMaterial) {
+                this._updateViewAsProduceMaterial();
+            } else if (infoType === UnitInfoType.ProductionCost) {
+                this._updateViewAsProductionCost();
+            } else if (infoType === UnitInfoType.Vision) {
+                this._updateViewAsVision();
+            } else if (infoType === UnitInfoType.LoadUnit) {
+                this._updateViewAsLoadUnit();
+            } else {
+                throw Helpers.newError(`Invalid infoType: ${infoType}`);
+            }
+        }
+        private _updateViewAsAttackRange(): void {
+            const data                  = this._getData();
+            const unit                  = data.unitTemplateCfg;
+            const minRange              = unit.minAttackRange;
+            const maxRange              = unit.maxAttackRange;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0696);
+            this._labelValue.text       = minRange == null ? `--` : `${minRange} - ${maxRange}`;
+
+            const groupExtra = this._groupExtra;
+            if (!unit.canAttackAfterMove) {
+                groupExtra.visible = false;
+            } else {
+                groupExtra.visible          = true;
+                this._labelExtraInfo.text   = Lang.getText(LangTextType.B0697);
+            }
+        }
+        private _updateViewAsBuildMaterial(): void {
+            const data                  = this._getData();
+            const unit                  = data.unitTemplateCfg;
+            const currentValue          = unit.maxBuildMaterial;
+            const maxValue              = unit.maxBuildMaterial;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0347);
+            this._labelValue.text       = currentValue == null ? `--` : `${currentValue} / ${maxValue}`;
+            this._groupExtra.visible    = false;
+        }
+        private _updateViewAsFlareAmmo(): void {
+            const data                  = this._getData();
+            const unit                  = data.unitTemplateCfg;
+            const currentValue          = unit.flareMaxAmmo;
+            const maxValue              = unit.flareMaxAmmo;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0349);
+            this._labelValue.text       = currentValue == null ? `--` : `${currentValue} / ${maxValue}`;
+            this._groupExtra.visible    = false;
+        }
+        private _updateViewAsFuel(): void {
+            const data                  = this._getData();
+            const unit                  = data.unitTemplateCfg;
+            const currentValue          = unit.maxFuel;
+            const maxValue              = unit.maxFuel;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0342);
+            this._labelValue.text       = `${currentValue} / ${maxValue}`;
+
+            const fuelConsumption   = Helpers.getExisted(unit.fuelConsumptionPerTurn);
+            const groupExtra        = this._groupExtra;
+            if (fuelConsumption == 0) {
+                groupExtra.visible = false;
+            } else {
+                groupExtra.visible          = true;
+                this._labelExtraInfo.text   = fuelConsumption < 0 ? `+${-fuelConsumption}` : `-${fuelConsumption}`;
+            }
+        }
+        private _updateViewAsHp(): void {
+            const data                  = this._getData();
+            const unit                  = data.unitTemplateCfg;
+            const currentValue          = unit.maxHp;
+            const maxValue              = unit.maxHp;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0339);
+            this._labelValue.text       = `${currentValue} / ${maxValue}`;
+            this._groupExtra.visible    = false;
+        }
+        private _updateViewAsIsDiver(): void {
+            const data                  = this._getData();
+            const unit                  = data.unitTemplateCfg;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0371);
+            this._labelValue.text       = unit.diveCfgs ? Lang.getText(LangTextType.B0012) : Lang.getText(LangTextType.B0013);
+            this._groupExtra.visible    = false;
+        }
+        private _updateViewAsMovement(): void {
+            const data                  = this._getData();
+            const unit                  = data.unitTemplateCfg;
+            const currentValue          = unit.moveRange;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0340);
+            this._labelValue.text       = `${currentValue}`;
+            this._groupExtra.visible    = true;
+            this._labelExtraInfo.text   = Lang.getMoveTypeName(Helpers.getExisted(unit.moveType)) ?? CommonConstants.ErrorTextForUndefined;
+        }
+        private _updateViewAsPrimaryWeaponAmmo(): void {
+            const data                  = this._getData();
+            const unit                  = data.unitTemplateCfg;
+            const currentValue          = unit.primaryWeaponMaxAmmo;
+            const maxValue              = unit.primaryWeaponMaxAmmo;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0350);
+            this._labelValue.text       = currentValue == null ? `--` : `${currentValue} / ${maxValue}`;
+            this._groupExtra.visible    = false;
+        }
+        private _updateViewAsProduceMaterial(): void {
+            const data                  = this._getData();
+            const unit                  = data.unitTemplateCfg;
+            const currentValue          = unit.maxProduceMaterial;
+            const maxValue              = unit.maxProduceMaterial;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0348);
+            this._labelValue.text       = currentValue == null ? `--` : `${currentValue} / ${maxValue}`;
+
+            const groupExtra = this._groupExtra;
+            if (currentValue == null) {
+                groupExtra.visible = false;
+            } else {
+                groupExtra.visible          = true;
+                this._labelExtraInfo.text   = Lang.getUnitName(Helpers.getExisted(unit.produceUnitType)) ?? CommonConstants.ErrorTextForUndefined;
+            }
+        }
+        private _updateViewAsProductionCost(): void {
+            const data                  = this._getData();
+            this._labelTitle.text       = Lang.getText(LangTextType.B0341);
+            this._labelValue.text       = `${data.unitTemplateCfg.productionCost}`;
+            this._groupExtra.visible    = false;
+        }
+        private _updateViewAsVision(): void {
+            const data                  = this._getData();
+            const unit                  = data.unitTemplateCfg;
+            const currentValue          = unit.visionRange;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0354);
+            this._labelValue.text       = `${currentValue}`;
+            this._groupExtra.visible    = false;
+        }
+        private _updateViewAsLoadUnit(): void {
+            this._labelTitle.text   = Lang.getText(LangTextType.B0698);
+
+            const data          = this._getData();
+            const unit          = data.unitTemplateCfg;
+            const maxValue      = unit.maxLoadUnitsCount;
+            const labelValue    = this._labelValue;
+            const groupExtra    = this._groupExtra;
+            if (maxValue == null) {
+                labelValue.text     = `--`;
+                groupExtra.visible  = false;
+            } else {
+                labelValue.text             = `0 / ${maxValue}`;
+                groupExtra.visible          = true;
+                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Helpers.getExisted(unit.loadUnitCategory)) ?? CommonConstants.ErrorTextForUndefined;
+            }
         }
     }
 
     type DataForDamageRenderer = {
         configVersion   : string;
+        index           : number;
         attackUnitType  : UnitType;
         playerIndex?    : number;
         targetUnitType? : UnitType;
@@ -466,6 +664,7 @@ namespace TwnsCommonDamageChartPanel {
     };
     class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {
         private readonly _group!                : eui.Group;
+        private readonly _imgBg!                : TwnsUiImage.UiImage;
         private readonly _conView!              : eui.Group;
         private readonly _unitView              = new WarMapUnitView();
         private readonly _tileView!             : TwnsUiImage.UiImage;
@@ -504,6 +703,8 @@ namespace TwnsCommonDamageChartPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const data              = this._getData();
+            this._imgBg.visible     = data.index % 2 === 1;
+
             const configVersion     = data.configVersion;
             const attackUnitType    = data.attackUnitType;
             const targetUnitType    = data.targetUnitType;

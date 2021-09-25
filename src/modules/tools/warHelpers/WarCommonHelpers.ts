@@ -831,6 +831,13 @@ namespace WarCommonHelpers {
         }
     }
 
+    export function checkCanCheatInWar(warType: Types.WarType): boolean {
+        return (warType === Types.WarType.ScwFog)
+            || (warType === Types.WarType.ScwStd)
+            || (warType === Types.WarType.SfwFog)
+            || (warType === Types.WarType.SfwStd);
+    }
+
     export function getPlayersCountUnneutral(playerManagerData: Types.Undefinable<WarSerialization.ISerialPlayerManager>): number {
         const playerIndexSet = new Set<number>();
         for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {

@@ -130,34 +130,34 @@ namespace Lang {
         }
     }
 
-    export function getUnitName(unitType: Types.UnitType): string | null {
+    export function getUnitName(unitType: Types.UnitType, languageType?: LanguageType): string | null {
         switch (unitType) {
-            case Types.UnitType.Infantry        : return getText(LangTextType.B1200);
-            case Types.UnitType.Mech            : return getText(LangTextType.B1201);
-            case Types.UnitType.Bike            : return getText(LangTextType.B1202);
-            case Types.UnitType.Recon           : return getText(LangTextType.B1203);
-            case Types.UnitType.Flare           : return getText(LangTextType.B1204);
-            case Types.UnitType.AntiAir         : return getText(LangTextType.B1205);
-            case Types.UnitType.Tank            : return getText(LangTextType.B1206);
-            case Types.UnitType.MediumTank      : return getText(LangTextType.B1207);
-            case Types.UnitType.WarTank         : return getText(LangTextType.B1208);
-            case Types.UnitType.Artillery       : return getText(LangTextType.B1209);
-            case Types.UnitType.AntiTank        : return getText(LangTextType.B1210);
-            case Types.UnitType.Rockets         : return getText(LangTextType.B1211);
-            case Types.UnitType.Missiles        : return getText(LangTextType.B1212);
-            case Types.UnitType.Rig             : return getText(LangTextType.B1213);
-            case Types.UnitType.Fighter         : return getText(LangTextType.B1214);
-            case Types.UnitType.Bomber          : return getText(LangTextType.B1215);
-            case Types.UnitType.Duster          : return getText(LangTextType.B1216);
-            case Types.UnitType.BattleCopter    : return getText(LangTextType.B1217);
-            case Types.UnitType.TransportCopter : return getText(LangTextType.B1218);
-            case Types.UnitType.Seaplane        : return getText(LangTextType.B1219);
-            case Types.UnitType.Battleship      : return getText(LangTextType.B1220);
-            case Types.UnitType.Carrier         : return getText(LangTextType.B1221);
-            case Types.UnitType.Submarine       : return getText(LangTextType.B1222);
-            case Types.UnitType.Cruiser         : return getText(LangTextType.B1223);
-            case Types.UnitType.Lander          : return getText(LangTextType.B1224);
-            case Types.UnitType.Gunboat         : return getText(LangTextType.B1225);
+            case Types.UnitType.Infantry        : return getText(LangTextType.B1200, languageType);
+            case Types.UnitType.Mech            : return getText(LangTextType.B1201, languageType);
+            case Types.UnitType.Bike            : return getText(LangTextType.B1202, languageType);
+            case Types.UnitType.Recon           : return getText(LangTextType.B1203, languageType);
+            case Types.UnitType.Flare           : return getText(LangTextType.B1204, languageType);
+            case Types.UnitType.AntiAir         : return getText(LangTextType.B1205, languageType);
+            case Types.UnitType.Tank            : return getText(LangTextType.B1206, languageType);
+            case Types.UnitType.MediumTank      : return getText(LangTextType.B1207, languageType);
+            case Types.UnitType.WarTank         : return getText(LangTextType.B1208, languageType);
+            case Types.UnitType.Artillery       : return getText(LangTextType.B1209, languageType);
+            case Types.UnitType.AntiTank        : return getText(LangTextType.B1210, languageType);
+            case Types.UnitType.Rockets         : return getText(LangTextType.B1211, languageType);
+            case Types.UnitType.Missiles        : return getText(LangTextType.B1212, languageType);
+            case Types.UnitType.Rig             : return getText(LangTextType.B1213, languageType);
+            case Types.UnitType.Fighter         : return getText(LangTextType.B1214, languageType);
+            case Types.UnitType.Bomber          : return getText(LangTextType.B1215, languageType);
+            case Types.UnitType.Duster          : return getText(LangTextType.B1216, languageType);
+            case Types.UnitType.BattleCopter    : return getText(LangTextType.B1217, languageType);
+            case Types.UnitType.TransportCopter : return getText(LangTextType.B1218, languageType);
+            case Types.UnitType.Seaplane        : return getText(LangTextType.B1219, languageType);
+            case Types.UnitType.Battleship      : return getText(LangTextType.B1220, languageType);
+            case Types.UnitType.Carrier         : return getText(LangTextType.B1221, languageType);
+            case Types.UnitType.Submarine       : return getText(LangTextType.B1222, languageType);
+            case Types.UnitType.Cruiser         : return getText(LangTextType.B1223, languageType);
+            case Types.UnitType.Lander          : return getText(LangTextType.B1224, languageType);
+            case Types.UnitType.Gunboat         : return getText(LangTextType.B1225, languageType);
             default                             : return null;
         }
     }

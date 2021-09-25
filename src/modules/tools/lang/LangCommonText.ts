@@ -1018,6 +1018,10 @@ namespace TwnsLangCommonText {
             `请等到您的回合再进行此操作`,
             `Please wait until your turn begins.`,
         ],
+        [LangTextType.A0243]: [
+            `您确定要切换CO搭载状态吗？`,
+            `Are you sure to switch the CO onboard state?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3773,6 +3777,34 @@ namespace TwnsLangCommonText {
         [LangTextType.B0691]: [
             `生产`,
             `Build`,
+        ],
+        [LangTextType.B0692]: [
+            `主武器`,
+            `Main`,
+        ],
+        [LangTextType.B0693]: [
+            `副武器`,
+            `Sub`,
+        ],
+        [LangTextType.B0694]: [
+            `攻击`,
+            `ATK`,
+        ],
+        [LangTextType.B0695]: [
+            `防御`,
+            `DEF`,
+        ],
+        [LangTextType.B0696]: [
+            `射程`,
+            `Range`,
+        ],
+        [LangTextType.B0697]: [
+            `可移动后攻击`,
+            `Run & Hit`,
+        ],
+        [LangTextType.B0698]: [
+            `搭载部队`,
+            `Loaded Units`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
