@@ -82,42 +82,42 @@ namespace Lang {
         }
     }
 
-    export function getTileName(tileType: Types.TileType): string | null {
+    export function getTileName(tileType: Types.TileType, languageType?: LanguageType): string | null {
         switch (tileType) {
-            case Types.TileType.Plain           : return getText(LangTextType.B1000);
-            case Types.TileType.River           : return getText(LangTextType.B1001);
-            case Types.TileType.Sea             : return getText(LangTextType.B1002);
-            case Types.TileType.Beach           : return getText(LangTextType.B1003);
-            case Types.TileType.Road            : return getText(LangTextType.B1004);
-            case Types.TileType.BridgeOnPlain   : return getText(LangTextType.B1005);
-            case Types.TileType.BridgeOnRiver   : return getText(LangTextType.B1006);
-            case Types.TileType.BridgeOnBeach   : return getText(LangTextType.B1007);
-            case Types.TileType.BridgeOnSea     : return getText(LangTextType.B1008);
-            case Types.TileType.Wood            : return getText(LangTextType.B1009);
-            case Types.TileType.Mountain        : return getText(LangTextType.B1010);
-            case Types.TileType.Wasteland       : return getText(LangTextType.B1011);
-            case Types.TileType.Ruins           : return getText(LangTextType.B1012);
-            case Types.TileType.Fire            : return getText(LangTextType.B1013);
-            case Types.TileType.Rough           : return getText(LangTextType.B1014);
-            case Types.TileType.MistOnSea       : return getText(LangTextType.B1015);
-            case Types.TileType.Reef            : return getText(LangTextType.B1016);
-            case Types.TileType.Plasma          : return getText(LangTextType.B1017);
-            case Types.TileType.GreenPlasma     : return getText(LangTextType.B1018);
-            case Types.TileType.Meteor          : return getText(LangTextType.B1019);
-            case Types.TileType.Silo            : return getText(LangTextType.B1020);
-            case Types.TileType.EmptySilo       : return getText(LangTextType.B1021);
-            case Types.TileType.Headquarters    : return getText(LangTextType.B1022);
-            case Types.TileType.City            : return getText(LangTextType.B1023);
-            case Types.TileType.CommandTower    : return getText(LangTextType.B1024);
-            case Types.TileType.Radar           : return getText(LangTextType.B1025);
-            case Types.TileType.Factory         : return getText(LangTextType.B1026);
-            case Types.TileType.Airport         : return getText(LangTextType.B1027);
-            case Types.TileType.Seaport         : return getText(LangTextType.B1028);
-            case Types.TileType.TempAirport     : return getText(LangTextType.B1029);
-            case Types.TileType.TempSeaport     : return getText(LangTextType.B1030);
-            case Types.TileType.MistOnPlain     : return getText(LangTextType.B1031);
-            case Types.TileType.MistOnRiver     : return getText(LangTextType.B1032);
-            case Types.TileType.MistOnBeach     : return getText(LangTextType.B1033);
+            case Types.TileType.Plain           : return getText(LangTextType.B1000, languageType);
+            case Types.TileType.River           : return getText(LangTextType.B1001, languageType);
+            case Types.TileType.Sea             : return getText(LangTextType.B1002, languageType);
+            case Types.TileType.Beach           : return getText(LangTextType.B1003, languageType);
+            case Types.TileType.Road            : return getText(LangTextType.B1004, languageType);
+            case Types.TileType.BridgeOnPlain   : return getText(LangTextType.B1005, languageType);
+            case Types.TileType.BridgeOnRiver   : return getText(LangTextType.B1006, languageType);
+            case Types.TileType.BridgeOnBeach   : return getText(LangTextType.B1007, languageType);
+            case Types.TileType.BridgeOnSea     : return getText(LangTextType.B1008, languageType);
+            case Types.TileType.Wood            : return getText(LangTextType.B1009, languageType);
+            case Types.TileType.Mountain        : return getText(LangTextType.B1010, languageType);
+            case Types.TileType.Wasteland       : return getText(LangTextType.B1011, languageType);
+            case Types.TileType.Ruins           : return getText(LangTextType.B1012, languageType);
+            case Types.TileType.Fire            : return getText(LangTextType.B1013, languageType);
+            case Types.TileType.Rough           : return getText(LangTextType.B1014, languageType);
+            case Types.TileType.MistOnSea       : return getText(LangTextType.B1015, languageType);
+            case Types.TileType.Reef            : return getText(LangTextType.B1016, languageType);
+            case Types.TileType.Plasma          : return getText(LangTextType.B1017, languageType);
+            case Types.TileType.GreenPlasma     : return getText(LangTextType.B1018, languageType);
+            case Types.TileType.Meteor          : return getText(LangTextType.B1019, languageType);
+            case Types.TileType.Silo            : return getText(LangTextType.B1020, languageType);
+            case Types.TileType.EmptySilo       : return getText(LangTextType.B1021, languageType);
+            case Types.TileType.Headquarters    : return getText(LangTextType.B1022, languageType);
+            case Types.TileType.City            : return getText(LangTextType.B1023, languageType);
+            case Types.TileType.CommandTower    : return getText(LangTextType.B1024, languageType);
+            case Types.TileType.Radar           : return getText(LangTextType.B1025, languageType);
+            case Types.TileType.Factory         : return getText(LangTextType.B1026, languageType);
+            case Types.TileType.Airport         : return getText(LangTextType.B1027, languageType);
+            case Types.TileType.Seaport         : return getText(LangTextType.B1028, languageType);
+            case Types.TileType.TempAirport     : return getText(LangTextType.B1029, languageType);
+            case Types.TileType.TempSeaport     : return getText(LangTextType.B1030, languageType);
+            case Types.TileType.MistOnPlain     : return getText(LangTextType.B1031, languageType);
+            case Types.TileType.MistOnRiver     : return getText(LangTextType.B1032, languageType);
+            case Types.TileType.MistOnBeach     : return getText(LangTextType.B1033, languageType);
             default                             : return null;
         }
     }
@@ -223,6 +223,7 @@ namespace Lang {
 
     export function getUnitCategoryName(t: Types.UnitCategory): string | null {
         switch (t) {
+            case Types.UnitCategory.None                : return getText(LangTextType.B0001);
             case Types.UnitCategory.All                 : return getText(LangTextType.B0120);
             case Types.UnitCategory.Ground              : return getText(LangTextType.B0121);
             case Types.UnitCategory.Naval               : return getText(LangTextType.B0122);

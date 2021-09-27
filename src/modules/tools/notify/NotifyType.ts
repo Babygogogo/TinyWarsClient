@@ -11,7 +11,8 @@ namespace TwnsNotifyType {
         UnitStateIndicatorTick,
         GridAnimationTick,
         UnitAndTileTextureVersionChanged,
-        IsShowGridBorderChanged,
+        UserSettingsIsShowGridBorderChanged,
+        UserSettingsUnitOpacityChanged,
 
         MouseWheel,
         GlobalTouchBegin,

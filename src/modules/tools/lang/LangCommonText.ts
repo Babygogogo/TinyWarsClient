@@ -2435,8 +2435,8 @@ namespace TwnsLangCommonText {
             `For all players`,
         ],
         [LangTextType.B0356]: [
-            `雾战中隐蔽部队`,
-            `Hide units in FoW`,
+            `隐蔽部队`,
+            `Hide units`,
         ],
         [LangTextType.B0357]: [
             `被占领即失败`,
@@ -3805,6 +3805,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B0698]: [
             `搭载部队`,
             `Loaded Units`,
+        ],
+        [LangTextType.B0697]: [
+            `隐藏部队`,
+            `Hide Units`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

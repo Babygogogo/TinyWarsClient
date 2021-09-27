@@ -75,8 +75,8 @@ namespace TwnsBwProduceUnitPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.BwActionPlannerStateSet,    callback: this._onNotifyBwPlannerStateChanged },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
@@ -155,7 +155,7 @@ namespace TwnsBwProduceUnitPanel {
             for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
                 const unit = new TwnsBwUnit.BwUnit();
                 unit.init({
-                    gridIndex   : { x: -1, y: -1 },
+                    gridIndex,
                     unitId      : -1,
                     unitType,
                     playerIndex,

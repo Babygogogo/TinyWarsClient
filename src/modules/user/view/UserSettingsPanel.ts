@@ -34,18 +34,8 @@ import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
 import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
 
 namespace TwnsUserSettingsPanel {
-    import UserChangeNicknamePanel  = TwnsUserChangeNicknamePanel.UserChangeNicknamePanel;
-    import UserSetPasswordPanel     = TwnsUserSetPasswordPanel.UserSetPasswordPanel;
-    import UserChangeDiscordIdPanel = TwnsUserChangeDiscordIdPanel.UserChangeDiscordIdPanel;
-    import UserOnlineUsersPanel     = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
-    import UserSetSoundPanel        = TwnsUserSetSoundPanel.UserSetSoundPanel;
-    import UserSetStageScalePanel   = TwnsUserSetStageScalePanel.UserSetStageScalePanel;
-    import UserSetPrivilegePanel    = TwnsUserSetPrivilegePanel.UserSetPrivilegePanel;
-    import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
-    import MmMainMenuPanel          = TwnsMmMainMenuPanel.MmMainMenuPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import CommonChangeVersionPanel = TwnsCommonChangeVersionPanel.CommonChangeVersionPanel;
 
     export class UserSettingsPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -64,6 +54,7 @@ namespace TwnsUserSettingsPanel {
         private readonly _uiRadioUnitAnimation!     : TwnsUiRadioButton.UiRadioButton;
         private readonly _uiRadioTileAnimation!     : TwnsUiRadioButton.UiRadioButton;
         private readonly _uiRadioShowGridBorder!    : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioUnitOpacity!       : TwnsUiRadioButton.UiRadioButton;
 
         private readonly _groupButtons!             : eui.Group;
         private readonly _btnChangeNickname!        : TwnsUiButton.UiButton;
@@ -104,12 +95,13 @@ namespace TwnsUserSettingsPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: NotifyType.IsShowGridBorderChanged,            callback: this._onNotifyIsShowGridBorderChanged },
-                { type: NotifyType.MsgUserGetPublicInfo,               callback: this._onMsgUserGetPublicInfo },
-                { type: NotifyType.MsgUserSetNickname,                 callback: this._onMsgUserSetNickname },
-                { type: NotifyType.MsgUserSetDiscordId,                callback: this._onMsgUserSetDiscordId },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyUserSettingsIsShowGridBorderChanged },
+                { type: NotifyType.UserSettingsUnitOpacityChanged,      callback: this._onNotifyUserSettingsUnitOpacityChanged },
+                { type: NotifyType.MsgUserGetPublicInfo,                callback: this._onMsgUserGetPublicInfo },
+                { type: NotifyType.MsgUserSetNickname,                  callback: this._onMsgUserSetNickname },
+                { type: NotifyType.MsgUserSetDiscordId,                 callback: this._onMsgUserSetDiscordId },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,               callback: this.close },
@@ -222,6 +214,24 @@ namespace TwnsUserSettingsPanel {
                     return UserModel.getSelfSettingsIsShowGridBorder();
                 },
             });
+            this._uiRadioUnitOpacity.setData({
+                titleTextType   : LangTextType.B0697,
+                leftTextType    : LangTextType.B0561,
+                rightTextType   : LangTextType.B0562,
+                callbackOnLeft  : () => {
+                    UserProxy.reqUserSetSettings({
+                        unitOpacity : 0,
+                    });
+                },
+                callbackOnRight : () => {
+                    UserProxy.reqUserSetSettings({
+                        unitOpacity : 100,
+                    });
+                },
+                checkerForLeftOn: () => {
+                    return UserModel.getSelfSettingsUnitOpacity() != 100;
+                },
+            });
 
             this._showOpenAnimation();
 
@@ -245,8 +255,11 @@ namespace TwnsUserSettingsPanel {
         private _onNotifyUnitAndTileTextureVersionChanged(): void {
             this._uiRadioTexture.updateView();
         }
-        private _onNotifyIsShowGridBorderChanged(): void {
+        private _onNotifyUserSettingsIsShowGridBorderChanged(): void {
             this._uiRadioShowGridBorder.updateView();
+        }
+        private _onNotifyUserSettingsUnitOpacityChanged(): void {
+            this._uiRadioUnitOpacity.updateView();
         }
         private _onMsgUserGetPublicInfo(): void {
             this._updateView();
@@ -268,28 +281,28 @@ namespace TwnsUserSettingsPanel {
             }
         }
         private _onTouchedBtnChangeNickname(): void {
-            UserChangeNicknamePanel.show();
+            TwnsUserChangeNicknamePanel.UserChangeNicknamePanel.show();
         }
         private _onTouchedBtnChangePassword(): void {
-            UserSetPasswordPanel.show();
+            TwnsUserSetPasswordPanel.UserSetPasswordPanel.show();
         }
         private _onTouchedBtnChangeDiscordId(): void {
-            UserChangeDiscordIdPanel.show();
+            TwnsUserChangeDiscordIdPanel.UserChangeDiscordIdPanel.show();
         }
         private _onTouchedBtnChangeGameVersion(): void {
-            CommonChangeVersionPanel.show();
+            TwnsCommonChangeVersionPanel.CommonChangeVersionPanel.show();
         }
         private _onTouchedBtnRankList(): void {
             TwnsCommonRankListPanel.CommonRankListPanel.show();
         }
         private _onTouchedBtnShowOnlineUsers(): void {
-            UserOnlineUsersPanel.show();
+            TwnsUserOnlineUsersPanel.UserOnlineUsersPanel.show();
         }
         private _onTouchedBtnSetSound(): void {
-            UserSetSoundPanel.show();
+            TwnsUserSetSoundPanel.UserSetSoundPanel.show();
         }
         private _onTouchedBtnSetStageScaler(): void {
-            UserSetStageScalePanel.show();
+            TwnsUserSetStageScalePanel.UserSetStageScalePanel.show();
         }
         private _onTouchedBtnServerStatus(): void {
             TwnsCommonServerStatusPanel.CommonServerStatusPanel.show();
@@ -299,7 +312,7 @@ namespace TwnsUserSettingsPanel {
             TwnsChatPanel.ChatPanel.show({ toUserId: CommonConstants.AdminUserId });
         }
         private _onTouchedBtnUnitsInfo(): void {
-            CommonDamageChartPanel.show();
+            TwnsCommonDamageChartPanel.CommonDamageChartPanel.show();
         }
         private _onTouchedBtnChangeLog(): void {
             TwnsChangeLogPanel.ChangeLogPanel.show();
@@ -309,13 +322,13 @@ namespace TwnsUserSettingsPanel {
             if (selfUserId == null) {
                 throw Helpers.newError(`UserSettingsPanel._onTouchedBtnSetPrivilege() empty selfUserId.`);
             } else {
-                UserSetPrivilegePanel.show({ userId: selfUserId });
+                TwnsUserSetPrivilegePanel.UserSetPrivilegePanel.show({ userId: selfUserId });
             }
         }
         private _onTouchedBtnMapManagement(): void {
             StageManager.closeAllPanels();
             TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-            MmMainMenuPanel.show();
+            TwnsMmMainMenuPanel.MmMainMenuPanel.show();
         }
 
         private _showOpenAnimation(): void {

@@ -20186,6 +20186,9 @@ export declare namespace User {
 
         /** UserSettings isShowGridBorder */
         isShowGridBorder?: (boolean|null);
+
+        /** UserSettings unitOpacity */
+        unitOpacity?: (number|null);
     }
 
     /** Represents a UserSettings. */
@@ -20205,6 +20208,9 @@ export declare namespace User {
 
         /** UserSettings isShowGridBorder. */
         public isShowGridBorder: boolean;
+
+        /** UserSettings unitOpacity. */
+        public unitOpacity: number;
 
         /**
          * Creates a new UserSettings instance using the specified properties.

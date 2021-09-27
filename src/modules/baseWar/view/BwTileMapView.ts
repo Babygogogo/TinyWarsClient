@@ -27,8 +27,8 @@ namespace TwnsBwTileMapView {
         private readonly _coZoneImageDict   = new Map<number, TwnsUiImage.UiImage[][]>();
 
         private readonly _notifyListeners   = [
-            { type: NotifyType.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
-            { type: NotifyType.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
+            { type: NotifyType.TileAnimationTick,                   callback: this._onNotifyTileAnimationTick },
+            { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyIsShowGridBorderChanged },
         ];
 
         private _tileMap?: BwTileMap;

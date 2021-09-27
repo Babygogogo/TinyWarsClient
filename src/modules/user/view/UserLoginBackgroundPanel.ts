@@ -4,6 +4,7 @@ import CommonConstants              from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Helpers                      from "../../tools/helpers/Helpers";
+import LocalStorage                 from "../../tools/helpers/LocalStorage";
 import SoundManager                 from "../../tools/helpers/SoundManager";
 import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";
@@ -249,6 +250,7 @@ namespace TwnsUserLoginBackgroundPanel {
             const languageType = this._getData().languageType;
             if (Lang.getCurrentLanguageType() !== languageType) {
                 Lang.setLanguageType(languageType);
+                LocalStorage.setLanguageType(languageType);
                 Notify.dispatch(NotifyType.LanguageChanged);
             }
         }

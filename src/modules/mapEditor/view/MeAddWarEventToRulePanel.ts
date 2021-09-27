@@ -155,8 +155,10 @@ namespace TwnsMeAddWarEventToRulePanel {
         }
 
         private _updateLabelName(): void {
-            const data              = this._getData();
-            this._labelName.text    = Lang.getLanguageText({ textArray: Helpers.getExisted(MeModel.getWar()).getWarEventManager().getWarEvent(data.warEventId).eventNameArray }) ?? CommonConstants.ErrorTextForUndefined;
+            if (this._checkHasData()) {
+                const data              = this._getData();
+                this._labelName.text    = Lang.getLanguageText({ textArray: Helpers.getExisted(MeModel.getWar()).getWarEventManager().getWarEvent(data.warEventId).eventNameArray }) ?? CommonConstants.ErrorTextForUndefined;
+            }
         }
 
         private _updateBtnAddAndBtnDelete(): void {

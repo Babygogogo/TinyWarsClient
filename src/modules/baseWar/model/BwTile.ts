@@ -520,7 +520,7 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for income.
         ////////////////////////////////////////////////////////////////////////////////
-        private _getCfgIncome(): number {
+        public getCfgIncome(): number {
             return this._getTemplateCfg().incomePerTurn ?? 0;
         }
         public getIncomeForPlayer(playerIndex: number): number {
@@ -554,7 +554,7 @@ namespace TwnsBwTile {
             }
 
             return Math.floor(
-                this._getCfgIncome()
+                this.getCfgIncome()
                 * war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex)
                 / 100
                 * modifierForSkill
@@ -659,18 +659,18 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         public checkCanHideUnit(unitType: Types.UnitType): boolean {
             const configVersion = this.getConfigVersion();
-            const category      = this._getCfgHideUnitCategory();
+            const category      = this.getCfgHideUnitCategory();
             return category == null
                 ? false
                 : ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category);
         }
 
         public checkIsUnitHider(): boolean {
-            const category = this._getCfgHideUnitCategory();
+            const category = this.getCfgHideUnitCategory();
             return (category != null) && (category != Types.UnitCategory.None);
         }
 
-        private _getCfgHideUnitCategory(): Types.UnitCategory | null {
+        public getCfgHideUnitCategory(): Types.UnitCategory | null {
             return this._getTemplateCfg().hideUnitCategory ?? null;
         }
 

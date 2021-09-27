@@ -83,6 +83,7 @@ namespace TwnsChatPanel {
             super();
 
             this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/chat/ChatPanel.exml";
         }
 

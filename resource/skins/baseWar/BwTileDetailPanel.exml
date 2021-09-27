@@ -2,79 +2,78 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001" />
-    <e:Group id="_group" top="40" bottom="0" width="640" horizontalCenter="0">
-        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                             alpha="0.8" left="0" right="0" top="0" bottom="0" />
-        <e:Scroller left="0" right="0" top="8" bottom="8">
-            <e:Group>
-                <e:Group x="20" y="8" locked="true">
-                    <e:Group y="16" x="0" touchChildren="false" touchEnabled="false" scaleX="0.4" scaleY="0.4">
-                        <TwnsUiImage:UiImage id="_imgTileBase" />
-                        <TwnsUiImage:UiImage id="_imgTileDecorator" />
-                        <TwnsUiImage:UiImage id="_imgTileObject" />
-                    </e:Group>
-                    <TwnsUiLabel:UiLabel id="_labelName" text="地形名五字" size="20" textColor="0xffffff" y="22" x="40" />
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group id="_group" width="640" horizontalCenter="0" height="340" verticalCenter="0">
+        <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="0" bottom="0"
+                             source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
+        <e:Group left="30" top="20" bottom="20">
+            <e:Group left="0" top="0">
+                <e:Group id="_conTileView" y="34" x="0" touchChildren="false" touchEnabled="false" scaleX="0.4" scaleY="0.4"></e:Group>
+                <e:Group x="110" top="0">
+                    <TwnsUiLabel:UiLabel id="_labelName" text="地形名五字" size="20" textColor="0xffffff" y="0" x="0"
+                                         bold="true" />
+                    <TwnsUiLabel:UiLabel id="_labelName1" text="地形名五字" size="14" textColor="0xFFFFFF" y="10" x="10" />
+                    <e:layout>
+                        <e:VerticalLayout gap="2" />
+                    </e:layout>
                 </e:Group>
-                <TwnsUiScrollList:UiScrollList id="_listInfo" y="215" left="0" right="0">
-                    <e:List>
-                        <e:itemRendererSkinName>
-                            <e:Skin width="310" height="28">
-                                <e:Group x="0" y="0" width="160">
-                                    <TwnsUiButton:UiButton id="_btnTitle" label="造价" y="0" right="0">
-                                        <TwnsUiButton:skinName>
-                                            <e:Skin states="up,down,disabled">
-                                                <e:Group y="0" x="0">
-                                                    <e:Image source="uncompressedRectangle0007" scale9Grid="9,9,2,2" left="0"
-                                                             right="0" top="0" bottom="0" />
-                                                    <e:Group>
-                                                        <TwnsUiLabel:UiLabel id="labelDisplay" size="12"
-                                                                             verticalCenter="0" horizontalCenter="0"
-                                                                             textColor="0xffffff" x="98" y="97" text="" />
-                                                        <e:layout>
-                                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                paddingLeft="10" paddingRight="10" />
-                                                        </e:layout>
-                                                    </e:Group>
-                                                </e:Group>
-                                            </e:Skin>
-                                        </TwnsUiButton:skinName>
-                                    </TwnsUiButton:UiButton>
-                                </e:Group>
-                                <TwnsUiLabel:UiLabel id="_labelValue" text="(Empty)" size="16" textColor="0xFFFFFF"
-                                                     x="160" width="150" y="6" />
-                            </e:Skin>
-                        </e:itemRendererSkinName>
-                        <e:layout>
-                            <e:TileLayout orientation="rows" horizontalGap="0" verticalGap="0" requestedColumnCount="2" />
-                        </e:layout>
-                    </e:List>
-                </TwnsUiScrollList:UiScrollList>
-                <e:Group left="0" right="0" y="110">
-                    <TwnsUiLabel:UiLabel id="_labelMoveCost" text="移动基础消耗表" size="20" textColor="0xFFFFFF" y="0"
-                                         horizontalCenter="0" />
-                    <TwnsUiScrollList:UiScrollList id="_listMoveCost" y="20" horizontalCenter="0">
-                        <e:List>
-                            <e:itemRendererSkinName>
-                                <e:Skin width="90" height="40">
-                                    <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                                        <e:Group id="_conView" y="10" scaleX="0.3" scaleY="0.3" x="20" touchChildren="false" touchEnabled="false"></e:Group>
-                                        <TwnsUiLabel:UiLabel id="_labelMoveCost" text="9" size="18" textColor="0xffffff"
-                                                             x="56" verticalCenter="0" />
-                                    </e:Group>
-                                </e:Skin>
-                            </e:itemRendererSkinName>
-                            <e:layout>
-                                <e:TileLayout orientation="rows" horizontalGap="0" requestedColumnCount="6"
-                                              verticalGap="8" />
-                            </e:layout>
-                        </e:List>
-                    </TwnsUiScrollList:UiScrollList>
-                </e:Group>
-                <e:layout>
-                    <e:VerticalLayout horizontalAlign="center" />
-                </e:layout>
             </e:Group>
-        </e:Scroller>
+            <TwnsUiScrollList:UiScrollList id="_listInfo" left="0" width="300" top="50" bottom="0">
+                <e:List>
+                    <e:itemRendererSkinName>
+                        <e:Skin width="300" height="24">
+                            <e:Group left="0" right="0" top="0" bottom="0">
+                                <TwnsUiImage:UiImage id="_imgBg" right="0" source="uncompressedColorBlack0002"
+                                                     scale9Grid="1,1,2,2" left="0" top="0" bottom="0" alpha="0.9" />
+                                <TwnsUiLabel:UiLabel id="_labelTitle" text="(Empty)" size="15" textColor="0xFFFFFF"
+                                                     x="4" verticalCenter="1" y="16" maxTextWidth="96" />
+                                <TwnsUiLabel:UiLabel id="_labelValue" text="(Empty)" size="15" textColor="0xFFFFFF"
+                                                     x="110" verticalCenter="1" />
+                                <e:Group id="_groupExtra" x="200" verticalCenter="0" width="60" height="20">
+                                    <TwnsUiImage:UiImage source="uncompressedRectangle0006" scale9Grid="2,2,1,1"
+                                                         left="0" right="0" top="0" bottom="0" />
+                                    <TwnsUiLabel:UiLabel id="_labelExtraInfo" text="可移动后攻击" size="12"
+                                                         textColor="0xFFFFFF" horizontalCenter="0" verticalCenter="1"
+                                                         maxTextWidth="56" />
+                                </e:Group>
+                                <TwnsUiImage:UiImage id="_imgModify" source="commonIcon0021" scaleX="0.8" scaleY="0.8"
+                                                     verticalCenter="0" right="4" />
+                            </e:Group>
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:VerticalLayout gap="0" />
+                    </e:layout>
+                </e:List>
+            </TwnsUiScrollList:UiScrollList>
+        </e:Group>
+        <e:Group width="240" right="30" top="20" bottom="70" locked="true">
+            <TwnsUiLabel:UiLabel id="_labelMoveCost" text="移动基础消耗表" size="20" textColor="0xFFFFFF" y="0" left="0"
+                                 bold="true" />
+            <TwnsUiScrollList:UiScrollList id="_listMoveCost" left="0" top="30" bottom="0" width="240">
+                <e:List>
+                    <e:itemRendererSkinName>
+                        <e:Skin width="60" height="32">
+                            <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                                <TwnsUiImage:UiImage id="_imgBg" left="0" right="0" top="0" bottom="0"
+                                                     source="uncompressedColorBlack0002" scale9Grid="1,1,2,2" />
+                                <TwnsUiImage:UiImage top="0" bottom="0" source="uncompressedColorWhite0000" width="1"
+                                                     left="0" />
+                                <e:Group id="_conView" y="6" scaleX="0.3" scaleY="0.3" touchChildren="false"
+                                         touchEnabled="false" left="4" />
+                                <TwnsUiLabel:UiLabel id="_labelMoveCost" text="9" size="18" textColor="0xffffff" x="36"
+                                                     verticalCenter="1" />
+                            </e:Group>
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:TileLayout orientation="rows" horizontalGap="0" requestedColumnCount="4" verticalGap="0" />
+                    </e:layout>
+                </e:List>
+            </TwnsUiScrollList:UiScrollList>
+        </e:Group>
+        <TwnsUiButton:UiButton id="_btnClose" label="Close" skinName="Skins.Component.Button.ButtonYellow003"
+                               bottom="20" right="30" width="100" height="30" />
     </e:Group>
 </e:Skin>

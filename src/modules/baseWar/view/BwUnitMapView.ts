@@ -6,6 +6,7 @@ import Types                from "../../tools/helpers/Types";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import UserModel            from "../../user/model/UserModel";
 import TwnsBwUnitMap        from "../model/BwUnitMap";
 import TwnsBwUnitView       from "./BwUnitView";
 
@@ -23,9 +24,10 @@ namespace TwnsBwUnitMapView {
         private readonly _layerForGround    = new egret.DisplayObjectContainer();
         private readonly _layerForAir       = new egret.DisplayObjectContainer();
         private readonly _notifyListeners   = [
-            { type: NotifyType.UnitAnimationTick,           callback: this._onNotifyUnitAnimationTick },
-            { type: NotifyType.UnitStateIndicatorTick,      callback: this._onNotifyUnitStateIndicatorTick },
-            { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.UnitAnimationTick,               callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitStateIndicatorTick,          callback: this._onNotifyUnitStateIndicatorTick },
+            { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.UserSettingsUnitOpacityChanged,  callback: this._onNotifyUserSettingsUnitOpacityChanged },
         ];
 
         private _unitMap    : BwUnitMap | null = null;
@@ -39,6 +41,7 @@ namespace TwnsBwUnitMapView {
             this.addChild(this._layerForNaval);
             this.addChild(this._layerForGround);
             this.addChild(this._layerForAir);
+            this._updateOpacityForAllLayers();
         }
 
         public init(unitMap: BwUnitMap): void {
@@ -169,6 +172,10 @@ namespace TwnsBwUnitMapView {
             }
         }
 
+        private _onNotifyUserSettingsUnitOpacityChanged(): void {
+            this._updateOpacityForAllLayers();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other private functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,6 +238,13 @@ namespace TwnsBwUnitMapView {
             for (const unit of unitMap.getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
             }
+        }
+
+        private _updateOpacityForAllLayers(): void {
+            const opacity               = UserModel.getSelfSettingsUnitOpacity() / 100;
+            this._layerForAir.alpha     = opacity;
+            this._layerForGround.alpha  = opacity;
+            this._layerForNaval.alpha   = opacity;
         }
     }
 }

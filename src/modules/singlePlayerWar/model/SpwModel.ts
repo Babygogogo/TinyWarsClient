@@ -128,8 +128,14 @@ namespace SpwModel {
     }
 
     async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
-        if (!checkCanExecuteAction(war)) {
-            throw Helpers.newError(`SpwModel.handlePlayerOrRobotAction() checkCanExecuteAction(war) is not true!`);
+        if (war.getIsEnded()) {
+            throw Helpers.newError(`war.getIsEnded() is true.`);
+        }
+        if (war.getIsExecutingAction()) {
+            throw Helpers.newError(`war.getIsExecutingAction() is true.`);
+        }
+        if (!war.getIsRunning()) {
+            throw Helpers.newError(`war.getIsRunning() is false.`);
         }
 
         return await reviseAndExecute(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
@@ -303,12 +309,6 @@ namespace SpwModel {
         }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
 
-    function checkCanExecuteAction(war: BwWar): boolean {
-        return (war != null)                &&
-            (!war.getIsEnded())             &&
-            (!war.getIsExecutingAction())   &&
-            (war.getIsRunning());
-    }
     async function reviseAndExecute(war: BwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
         const {
             errorCode   : errorCodeForRevisedAction,

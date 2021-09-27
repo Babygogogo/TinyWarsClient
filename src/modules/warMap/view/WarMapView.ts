@@ -74,8 +74,8 @@ namespace TwnsWarMapView {
         private readonly _objectLayer           = new TileObjectLayer();
 
         private readonly _notifyListenerArray   : Notify.Listener[] = [
-            { type: NotifyType.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
-            { type: NotifyType.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
+            { type: NotifyType.TileAnimationTick,                   callback: this._onNotifyTileAnimationTick },
+            { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyIsShowGridBorderChanged },
         ];
 
         public constructor() {

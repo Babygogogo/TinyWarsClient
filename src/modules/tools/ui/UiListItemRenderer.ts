@@ -127,6 +127,9 @@ namespace TwnsUiListItemRenderer {
         protected _getData(): DataForRenderer {
             return Helpers.getExisted(this.data);
         }
+        protected _checkHasData(): boolean {
+            return this.data != null;
+        }
 
         protected _setShortSfxCode(code: ShortSfxCode): void {
             this._shortSfxCode = code;
