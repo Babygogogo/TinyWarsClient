@@ -195,14 +195,14 @@ namespace TwnsBwUnit {
             this._war = war;
         }
         public getWar(): BwWar {
-            return Helpers.getDefined(this._war);
+            return Helpers.getExisted(this._war);
         }
 
         private _setTemplateCfg(cfg: UnitTemplateCfg): void {
             this._templateCfg = cfg;
         }
         private _getTemplateCfg(): UnitTemplateCfg {
-            return Helpers.getDefined(this._templateCfg);
+            return Helpers.getExisted(this._templateCfg);
         }
 
         public getConfigVersion(): string {
@@ -253,7 +253,7 @@ namespace TwnsBwUnit {
         // Functions for unit id.
         ////////////////////////////////////////////////////////////////////////////////
         public getUnitId(): number {
-            return Helpers.getDefined(this._unitId);
+            return Helpers.getExisted(this._unitId);
         }
         public setUnitId(id: number): void {
             this._unitId = id;
@@ -268,7 +268,7 @@ namespace TwnsBwUnit {
         // Functions for state.
         ////////////////////////////////////////////////////////////////////////////////
         public getActionState(): UnitActionState {
-            return Helpers.getDefined(this._actionState);
+            return Helpers.getExisted(this._actionState);
         }
         public setActionState(state: UnitActionState): void {
             this._actionState = state;
@@ -281,7 +281,7 @@ namespace TwnsBwUnit {
             this._playerIndex = index;
         }
         public getPlayerIndex(): number {
-            return Helpers.getDefined(this._playerIndex);
+            return Helpers.getExisted(this._playerIndex);
         }
 
         public getTeamIndex(): number {
@@ -302,7 +302,7 @@ namespace TwnsBwUnit {
             return WarCommonHelpers.getNormalizedHp(this.getCurrentHp());
         }
         public getCurrentHp(): number {
-            return Helpers.getDefined(this._currentHp);
+            return Helpers.getExisted(this._currentHp);
         }
         public setCurrentHp(hp: number): void {
             const maxHp = this.getMaxHp();
@@ -378,7 +378,7 @@ namespace TwnsBwUnit {
         }
 
         public getPrimaryWeaponCurrentAmmo(): number | null {
-            return Helpers.getDefined(this._primaryWeaponCurrentAmmo);
+            return Helpers.getDefined(this._primaryWeaponCurrentAmmo, ClientErrorCode.BwUnit_GetPrimaryWeaponCurrentAmmo_00);
         }
         public setPrimaryWeaponCurrentAmmo(ammo: number | null): void {
             const maxAmmo = this.getPrimaryWeaponMaxAmmo();
@@ -834,7 +834,7 @@ namespace TwnsBwUnit {
         // Functions for dive.
         ////////////////////////////////////////////////////////////////////////////////
         public getIsDiving(): boolean {
-            return Helpers.getDefined(this._isDiving);
+            return Helpers.getExisted(this._isDiving);
         }
         public setIsDiving(isDiving: boolean): void {
             this._isDiving = isDiving;
@@ -858,7 +858,7 @@ namespace TwnsBwUnit {
         // Functions for fuel.
         ////////////////////////////////////////////////////////////////////////////////
         public getCurrentFuel(): number {
-            return Helpers.getDefined(this._currentFuel);
+            return Helpers.getExisted(this._currentFuel);
         }
         public setCurrentFuel(fuel: number): void {
             if ((fuel < 0) || (fuel > this.getMaxFuel())) {
@@ -945,7 +945,7 @@ namespace TwnsBwUnit {
         }
 
         public getFlareCurrentAmmo(): number | null {
-            return Helpers.getDefined(this._flareCurrentAmmo);
+            return Helpers.getDefined(this._flareCurrentAmmo, ClientErrorCode.BwUnit_GetFlareCurrentAmmo_00);
         }
         public setFlareCurrentAmmo(ammo: number | null): void {
             const maxAmmo = this.getFlareMaxAmmo();
@@ -1037,7 +1037,7 @@ namespace TwnsBwUnit {
         }
 
         public getCurrentProduceMaterial(): number | null {
-            return Helpers.getDefined(this._currentProduceMaterial);
+            return Helpers.getDefined(this._currentProduceMaterial, ClientErrorCode.BwUnit_GetCurrentProduceMaterial_00);
         }
         public setCurrentProduceMaterial(material: number | null): void {
             const maxMaterial = this.getMaxProduceMaterial();
@@ -1140,7 +1140,7 @@ namespace TwnsBwUnit {
         }
 
         public getCurrentPromotion(): number {
-            return Helpers.getDefined(this._currentPromotion);
+            return Helpers.getExisted(this._currentPromotion);
         }
         public setCurrentPromotion(promotion: number): void {
             const maxPromotion = this.getMaxPromotion();
@@ -1224,7 +1224,7 @@ namespace TwnsBwUnit {
         }
 
         public getCurrentBuildMaterial(): number | null {
-            return Helpers.getDefined(this._currentBuildMaterial);
+            return Helpers.getDefined(this._currentBuildMaterial, ClientErrorCode.BwUnit_GetCurrentBuildMaterial_00);
         }
         public setCurrentBuildMaterial(material: number | null): void {
             const maxMaterial = this.getMaxBuildMaterial();
@@ -1329,7 +1329,7 @@ namespace TwnsBwUnit {
             this._loaderUnitId = loaderUnitId;
         }
         public getLoaderUnitId(): number | null {
-            return Helpers.getDefined(this._loaderUnitId);
+            return Helpers.getDefined(this._loaderUnitId, ClientErrorCode.BwUnit_GetLoaderUnitId_00);
         }
         public getLoaderUnit(): BwUnit | null {
             const unitId = this.getLoaderUnitId();
@@ -1603,7 +1603,7 @@ namespace TwnsBwUnit {
             this._hasLoadedCo = isCoOnBoard;
         }
         public getHasLoadedCo(): boolean {
-            return Helpers.getDefined(this._hasLoadedCo);
+            return Helpers.getExisted(this._hasLoadedCo);
         }
 
         public checkCanLoadCoAfterMovePath(movePath: GridIndex[]): boolean {

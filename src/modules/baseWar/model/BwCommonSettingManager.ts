@@ -68,7 +68,7 @@ namespace TwnsBwCommonSettingManager {
             this._settingsForCommon = settings;
         }
         public getSettingsForCommon(): ISettingsForCommon {
-            return Helpers.getDefined(this._settingsForCommon);
+            return Helpers.getExisted(this._settingsForCommon, ClientErrorCode.BwCommonSettingManager_GetSettingsForCommon_00);
         }
         public getWarRule(): ProtoTypes.WarRule.IWarRule {
             return Helpers.getExisted(this.getSettingsForCommon().warRule);

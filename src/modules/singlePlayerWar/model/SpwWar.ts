@@ -169,14 +169,14 @@ namespace TwnsSpwWar {
             this._saveSlotIndex = slotIndex;
         }
         public getSaveSlotIndex(): number {
-            return Helpers.getDefined(this._saveSlotIndex);
+            return Helpers.getExisted(this._saveSlotIndex);
         }
 
         public setSaveSlotExtraData(extraData: ISpmWarSaveSlotExtraData): void {
             this._saveSlotExtraData = extraData;
         }
         public getSaveSlotExtraData(): ISpmWarSaveSlotExtraData {
-            return Helpers.getDefined(this._saveSlotExtraData);
+            return Helpers.getExisted(this._saveSlotExtraData);
         }
 
         public getHumanPlayerIndexes(): number[] {

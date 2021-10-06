@@ -173,10 +173,16 @@ namespace TwnsWeActionReplacePanel {
         }
 
         private _updateLabelActionId(): void {
-            const data = this._getData();
-            this._labelActionId.text  = `${Lang.getText(LangTextType.B0616)}: A${data.candidateActionId}`;
+            if (this._checkHasData()) {
+                const data = this._getData();
+                this._labelActionId.text  = `${Lang.getText(LangTextType.B0616)}: A${data.candidateActionId}`;
+            }
         }
         private _updateLabelAction(): void {
+            if (!this._checkHasData()) {
+                return;
+            }
+
             const data      = this._getData();
             const action    = (data.fullData.actionArray || []).find(v => v.WeaCommonData?.actionId === data.candidateActionId);
             const label     = this._labelAction;

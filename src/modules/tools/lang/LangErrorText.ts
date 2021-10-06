@@ -196,15 +196,23 @@ namespace TwnsLangErrorText {
             `尚未设置预设规则的可用性`,
             `The availability of the preset rule has not been set.`,
         ],
-        [ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_02]: [
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_02]: [
             `势力的队伍设置不合法`,
             `The team settings is invalid.`,
         ],
-        [ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_22]: [
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_12]: [
+            `不能禁用“无CO”`,
+            `You can't ban "No CO".`,
+        ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_13]: [
+            `您禁用了不存在的CO`,
+            `You can't ban a non-existing CO.`,
+        ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_22]: [
             `合作模式下，至少要有一个势力由AI控制`,
             `There must be at least 1 A.I. player in the Coop Mode.`,
         ],
-        [ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_23]: [
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_23]: [
             `合作模式下，至少要有两个势力由真人玩家控制`,
             `There must be at least 2 human players in the Coop Mode.`,
         ],

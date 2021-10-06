@@ -24,7 +24,6 @@ import TwnsMeWar            from "./MeWar";
 namespace MeUtility {
     import BwTile               = TwnsBwTile.BwTile;
     import MeWar                = TwnsMeWar.MeWar;
-    import TwWar                = TwnsTwWar.TwWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import GridIndex            = Types.GridIndex;
     import TileObjectType       = Types.TileObjectType;
@@ -663,12 +662,7 @@ namespace MeUtility {
             return warEventError;
         }
 
-        const testWarError = await new TwWar().initByMapRawData(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-        if (testWarError) {
-            return testWarError;
-        }
-
-        return ClientErrorCode.NoError;
+        return await new TwnsTwWar.TwWar().getErrorCodeForInitByMapRawData(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
     function getErrorCodeForMapDesigner(mapDesigner: Types.Undefinable<string>): ClientErrorCode {
         if ((mapDesigner == null)                                       ||

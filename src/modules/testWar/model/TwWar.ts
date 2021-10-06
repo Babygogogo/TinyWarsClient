@@ -136,21 +136,33 @@ namespace TwnsTwWar {
             return null;
         }
 
-        public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            if (baseInitError) {
-                return baseInitError;
+        public async init(data: ISerialWar): Promise<void> {
+            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        }
+        public async initByMapRawData(mapRawData: IMapRawData): Promise<void> {
+            const warData = await _createDataForCreateTwWar(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        }
+
+        public async getErrorCodeForInit(data: ISerialWar): Promise<ClientErrorCode> {
+            try {
+                await this.init(data);
+            } catch (e) {
+                const error = e as Types.CustomError;
+                return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInit_00;
             }
 
             return ClientErrorCode.NoError;
         }
-        public async initByMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-            const warData = await _createDataForCreateTwWar(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            if (warData == null) {
-                return ClientErrorCode.TwWarInitByMapRawData00;
+        public async getErrorCodeForInitByMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
+            try {
+                await this.initByMapRawData(mapRawData);
+            } catch (e) {
+                const error = e as Types.CustomError;
+                return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitByMapRawData_00;
             }
 
-            return await this.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            return ClientErrorCode.NoError;
         }
 
         public getWarType(): Types.WarType {

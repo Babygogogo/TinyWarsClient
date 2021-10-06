@@ -3806,10 +3806,6 @@ namespace TwnsLangCommonText {
             `搭载部队`,
             `Loaded Units`,
         ],
-        [LangTextType.B0697]: [
-            `隐藏部队`,
-            `Hide Units`,
-        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

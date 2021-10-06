@@ -1,5 +1,6 @@
 
 import TwnsBwProduceUnitPanel   from "../../baseWar/view/BwProduceUnitPanel";
+import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Logger                   from "../../tools/helpers/Logger";
@@ -33,6 +34,7 @@ namespace TwnsBwActionPlanner {
     import BwUnit           = TwnsBwUnit.BwUnit;
     import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
     import BwWar            = TwnsBwWar.BwWar;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     type ChosenUnitForDrop = {
         unit        : BwUnit;
@@ -66,7 +68,7 @@ namespace TwnsBwActionPlanner {
         private _attackableGridsAfterMove   : GridIndex[] | null = null;
         private _movePath                   : MovePathNode[] = [];
 
-        private _unitsForPreviewAttack       = new Map<number, BwUnit>();
+        private _unitsForPreviewAttack      = new Map<number, BwUnit>();
         private _areaForPreviewAttack       : AttackableArea = [];
         private _unitForPreviewMove         : BwUnit | null = null;
         private _areaForPreviewMove         : MovableArea | null = null;
@@ -102,7 +104,7 @@ namespace TwnsBwActionPlanner {
         }
 
         protected _getWar(): BwWar {
-            return Helpers.getDefined(this._war);
+            return Helpers.getExisted(this._war, ClientErrorCode.BwActionPlanner_GetWar_00);
         }
         protected _getUnitMap(): BwUnitMap {
             return this._getWar().getUnitMap();

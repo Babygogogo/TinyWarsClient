@@ -30,7 +30,6 @@ namespace TwnsSpwWarMenuPanel {
     import SpwWar                       = TwnsSpwWar.SpwWar;
     import SpwLoadWarPanel              = TwnsSpwLoadWarPanel.SpwLoadWarPanel;
     import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
-    import TwWar                        = TwnsTwWar.TwWar;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
 
@@ -129,7 +128,7 @@ namespace TwnsSpwWarMenuPanel {
             this._war = war;
         }
         private _getWar(): SpwWar {
-            return Helpers.getDefined(this._war);
+            return Helpers.getExisted(this._war);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +259,7 @@ namespace TwnsSpwWarMenuPanel {
             }
 
             const warData   = war.serializeForCreateMfr();
-            const errorCode = await (new TwWar()).init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const errorCode = await (new TwnsTwWar.TwWar()).getErrorCodeForInit(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
                 return;

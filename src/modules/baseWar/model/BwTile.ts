@@ -256,7 +256,7 @@ namespace TwnsBwTile {
             this._war = war;
         }
         public getWar(): BwWar {
-            return Helpers.getDefined(this._war);
+            return Helpers.getExisted(this._war);
         }
 
         public getConfigVersion(): string {
@@ -267,7 +267,7 @@ namespace TwnsBwTile {
             this._templateCfg = cfg;
         }
         private _getTemplateCfg(): Types.TileTemplateCfg {
-            return Helpers.getDefined(this._templateCfg);
+            return Helpers.getExisted(this._templateCfg);
         }
 
         public updateOnUnitLeave(): void {
@@ -295,42 +295,42 @@ namespace TwnsBwTile {
             this._baseType = baseType;
         }
         public getBaseType(): TileBaseType {
-            return Helpers.getDefined(this._baseType);
+            return Helpers.getExisted(this._baseType);
         }
 
         private _setObjectType(objectType: TileObjectType): void {
             this._objectType = objectType;
         }
         public getObjectType(): TileObjectType {
-            return Helpers.getDefined(this._objectType);
+            return Helpers.getExisted(this._objectType);
         }
 
         private _setDecoratorType(decoratorType: TileDecoratorType | null): void {
             this._decoratorType = decoratorType;
         }
         public getDecoratorType(): TileDecoratorType | null {
-            return Helpers.getDefined(this._decoratorType);
+            return Helpers.getDefined(this._decoratorType, ClientErrorCode.BwTile_GetDecoratorType_00);
         }
 
         private _setBaseShapeId(id: number): void {
             this._baseShapeId = id;
         }
         public getBaseShapeId(): number {
-            return Helpers.getDefined(this._baseShapeId);
+            return Helpers.getExisted(this._baseShapeId);
         }
 
         private _setObjectShapeId(id: number): void {
             this._objectShapeId = id;
         }
         public getObjectShapeId(): number {
-            return Helpers.getDefined(this._objectShapeId);
+            return Helpers.getExisted(this._objectShapeId);
         }
 
         private _setDecoratorShapeId(id: number | null): void {
             this._decoratorShapeId = id;
         }
         public getDecoratorShapeId(): number | null {
-            return Helpers.getDefined(this._decoratorShapeId);
+            return Helpers.getDefined(this._decoratorShapeId, ClientErrorCode.BwTile_GetDecoratorShapeId_00);
         }
 
         public getSkinId(): number {
@@ -345,7 +345,7 @@ namespace TwnsBwTile {
         }
 
         public getCurrentHp(): number | null {
-            return Helpers.getDefined(this._currentHp);
+            return Helpers.getDefined(this._currentHp, ClientErrorCode.BwTile_GetCurrentHp_00);
         }
         public setCurrentHp(hp: number | null): void {
             const maxHp = this.getMaxHp();
@@ -378,7 +378,7 @@ namespace TwnsBwTile {
         }
 
         public getCurrentBuildPoint(): number | null {
-            return Helpers.getDefined(this._currentBuildPoint);
+            return Helpers.getDefined(this._currentBuildPoint, ClientErrorCode.BwTile_GetCurrentBuildPoint_00);
         }
         public setCurrentBuildPoint(point: number | null): void {
             const maxPoint = this.getMaxBuildPoint();
@@ -403,7 +403,7 @@ namespace TwnsBwTile {
         }
 
         public getCurrentCapturePoint(): number | null {
-            return Helpers.getDefined(this._currentCapturePoint);
+            return Helpers.getDefined(this._currentCapturePoint, ClientErrorCode.BwTile_GetCurrentCapturePoint_00);
         }
         public setCurrentCapturePoint(point: number | null): void {
             const maxPoint = this.getMaxCapturePoint();
@@ -422,10 +422,6 @@ namespace TwnsBwTile {
 
         public checkIsDefeatOnCapture(): boolean {
             const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                throw Helpers.newError(`BwTile.checkIsDefeatOnCapture() templateCfg is empty.`);
-            }
-
             return cfg.isDefeatedOnCapture === 1;
         }
 
@@ -458,14 +454,14 @@ namespace TwnsBwTile {
             this._gridX = x;
         }
         public getGridX(): number {
-            return Helpers.getDefined(this._gridX);
+            return Helpers.getExisted(this._gridX);
         }
 
         private _setGridY(y: number): void {
             this._gridY = y;
         }
         public getGridY(): number {
-            return Helpers.getDefined(this._gridY);
+            return Helpers.getExisted(this._gridY);
         }
 
         public getGridIndex(): Types.GridIndex {
@@ -568,7 +564,7 @@ namespace TwnsBwTile {
             this._playerIndex = index;
         }
         public getPlayerIndex(): number {
-            return Helpers.getDefined(this._playerIndex);
+            return Helpers.getExisted(this._playerIndex);
         }
 
         public getPlayer(): TwnsBwPlayer.BwPlayer {

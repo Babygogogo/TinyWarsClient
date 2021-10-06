@@ -87,7 +87,7 @@ namespace TwnsMeDrawer {
             this._war = war;
         }
         private _getWar(): MeWar {
-            return Helpers.getDefined(this._war);
+            return Helpers.getExisted(this._war);
         }
 
         private _setMode(mode: DrawerMode): void {

@@ -215,7 +215,7 @@ namespace TwnsUserSettingsPanel {
                 },
             });
             this._uiRadioUnitOpacity.setData({
-                titleTextType   : LangTextType.B0697,
+                titleTextType   : LangTextType.B0356,
                 leftTextType    : LangTextType.B0561,
                 rightTextType   : LangTextType.B0562,
                 callbackOnLeft  : () => {

@@ -72,12 +72,8 @@ namespace RwModel {
             nextUnitId  : unitDataArray.length,
         };
 
-        const war       = new RwWar();
-        const initError = await war.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-        if (initError) {
-            throw Helpers.newError(`RwModel.loadWar() initError: ${initError}`);
-        }
-
+        const war = new RwWar();
+        await war.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         war.startRunning().startRunningView();
         war.setReplayId(replayId);
         _war = war;

@@ -34,7 +34,6 @@ namespace TwnsRwWarMenuPanel {
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
     import RwWar                        = TwnsRwWar.RwWar;
-    import TwWar                        = TwnsTwWar.TwWar;
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import BwPlayer                     = TwnsBwPlayer.BwPlayer;
@@ -356,7 +355,7 @@ namespace TwnsRwWarMenuPanel {
                         return;
                     }
 
-                    const errorCode = await (new TwWar()).init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                    const errorCode = await (new TwnsTwWar.TwWar()).getErrorCodeForInit(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;

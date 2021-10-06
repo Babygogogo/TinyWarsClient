@@ -22,7 +22,7 @@ namespace TwnsBwExecutedActionManager {
             this._isNeedReplay = isNeedReplay;
         }
         private _getIsNeedReplay(): boolean {
-            return Helpers.getDefined(this._isNeedReplay);
+            return Helpers.getExisted(this._isNeedReplay);
         }
 
         public getExecutedActionsCount(): number {
@@ -33,7 +33,7 @@ namespace TwnsBwExecutedActionManager {
             this._executedActions = actions;
         }
         public getAllExecutedActions(): IWarActionContainer[] {
-            return Helpers.getDefined(this._executedActions);
+            return Helpers.getExisted(this._executedActions);
         }
 
         public generateEmptyExecutedActions(): IWarActionContainer[] {

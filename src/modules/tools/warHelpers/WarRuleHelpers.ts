@@ -542,7 +542,7 @@ namespace WarRuleHelpers {
     }): ClientErrorCode {
         const ruleArray = ruleForPlayers.playerRuleDataArray;
         if ((ruleArray == null) || (ruleArray.length !== playersCountUnneutral)) {
-            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_00;
+            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_00;
         }
 
         const { canSrw, canCcw }            = ruleAvailability;
@@ -560,7 +560,7 @@ namespace WarRuleHelpers {
                 (playerIndex >  playersCountUnneutral)                  ||
                 (allPlayerIndexSet.has(playerIndex))
             ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_01;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_01;
             }
 
             const teamIndex = data.teamIndex;
@@ -568,7 +568,7 @@ namespace WarRuleHelpers {
                 (teamIndex <  CommonConstants.WarFirstTeamIndex)    ||
                 (teamIndex >  playersCountUnneutral)
             ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_02;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_02;
             }
 
             allPlayerIndexSet.add(playerIndex);
@@ -579,7 +579,7 @@ namespace WarRuleHelpers {
                 (initialFund > CommonConstants.WarRuleInitialFundMaxLimit)  ||
                 (initialFund < CommonConstants.WarRuleInitialFundMinLimit)
             ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_03;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_03;
             }
 
             const incomeMultiplier = data.incomeMultiplier;
@@ -587,7 +587,7 @@ namespace WarRuleHelpers {
                 (incomeMultiplier > CommonConstants.WarRuleIncomeMultiplierMaxLimit)    ||
                 (incomeMultiplier < CommonConstants.WarRuleIncomeMultiplierMinLimit)
             ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_04;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_04;
             }
 
             const energyAddPctOnLoadCo = data.energyAddPctOnLoadCo;
@@ -595,7 +595,7 @@ namespace WarRuleHelpers {
                 (energyAddPctOnLoadCo > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
                 (energyAddPctOnLoadCo < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
             ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_05;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_05;
             }
 
             const energyGrowthMultiplier = data.energyGrowthMultiplier;
@@ -603,7 +603,7 @@ namespace WarRuleHelpers {
                 (energyGrowthMultiplier > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit)    ||
                 (energyGrowthMultiplier < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
             ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_06;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_06;
             }
 
             const moveRangeModifier = data.moveRangeModifier;
@@ -611,7 +611,7 @@ namespace WarRuleHelpers {
                 (moveRangeModifier > CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
                 (moveRangeModifier < CommonConstants.WarRuleMoveRangeModifierMinLimit)
             ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_07;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_07;
             }
 
             const attackPowerModifier = data.attackPowerModifier;
@@ -619,7 +619,7 @@ namespace WarRuleHelpers {
                 (attackPowerModifier > CommonConstants.WarRuleOffenseBonusMaxLimit) ||
                 (attackPowerModifier < CommonConstants.WarRuleOffenseBonusMinLimit)
             ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_08;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_08;
             }
 
             const visionRangeModifier = data.visionRangeModifier;
@@ -627,7 +627,7 @@ namespace WarRuleHelpers {
                 (visionRangeModifier > CommonConstants.WarRuleVisionRangeModifierMaxLimit)  ||
                 (visionRangeModifier < CommonConstants.WarRuleVisionRangeModifierMinLimit)
             ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_09;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_09;
             }
 
             const luckLowerLimit = data.luckLowerLimit;
@@ -635,7 +635,7 @@ namespace WarRuleHelpers {
                 (luckLowerLimit > CommonConstants.WarRuleLuckMaxLimit)  ||
                 (luckLowerLimit < CommonConstants.WarRuleLuckMinLimit)
             ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_10;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_10;
             }
 
             const luckUpperLimit = data.luckUpperLimit;
@@ -644,14 +644,15 @@ namespace WarRuleHelpers {
                 (luckUpperLimit < CommonConstants.WarRuleLuckMinLimit)  ||
                 (luckUpperLimit < luckLowerLimit)
             ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_11;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_11;
             }
 
             const bannedCoIdArray = data.bannedCoIdArray || [];
-            if ((bannedCoIdArray.indexOf(CommonConstants.CoEmptyId) >= 0)                               ||
-                (bannedCoIdArray.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null))
-            ) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_12;
+            if (bannedCoIdArray.indexOf(CommonConstants.CoEmptyId) >= 0) {
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_12;
+            }
+            if (bannedCoIdArray.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null)) {
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_13;
             }
 
             {
@@ -662,10 +663,10 @@ namespace WarRuleHelpers {
                     }
                 } else {
                     if (!canSrw) {
-                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_14;
+                        return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_14;
                     } else {
                         if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInSrw) == null) {
-                            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_15;
+                            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_15;
                         }
                         teamIndexSetForAiInSrw.add(teamIndex);
                     }
@@ -680,10 +681,10 @@ namespace WarRuleHelpers {
                     }
                 } else {
                     if (!canCcw) {
-                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_16;
+                        return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_16;
                     } else {
                         if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInCcw) == null) {
-                            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_17;
+                            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_17;
                         }
                         playerIndexSetForAiInCcw.add(playerIndex);
                     }
@@ -692,27 +693,27 @@ namespace WarRuleHelpers {
         }
 
         if (allPlayerIndexSet.size !== playersCountUnneutral) {
-            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_18;
+            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_18;
         }
         if (allTeamIndexSet.size <= 1) {
-            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_19;
+            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_19;
         }
 
         if (canSrw) {
             if (!teamIndexSetForAiInSrw.size) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_20;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_20;
             }
             if (teamIndexSetForHumanInSrw.size !== 1) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_21;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_21;
             }
         }
 
         if (canCcw) {
             if (!playerIndexSetForAiInCcw.size) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_22;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_22;
             }
             if (playerIndexSetForHumanInCcw.size <= 1) {
-                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_23;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_23;
             }
         }
 

@@ -1,6 +1,5 @@
 
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
-import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
@@ -29,7 +28,6 @@ namespace TwnsMeWar {
     import IMapRawData              = ProtoTypes.Map.IMapRawData;
     import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
     import ILanguageText            = ProtoTypes.Structure.ILanguageText;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import BwWar                    = TwnsBwWar.BwWar;
 
     export class MeWar extends BwWar {
@@ -49,17 +47,11 @@ namespace TwnsMeWar {
         private _isMapModified      = false;
         private _mapTag?            : IDataForMapTag;
 
-        public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            if (baseInitError) {
-                return baseInitError;
-            }
-
+        public async init(data: ISerialWar): Promise<void> {
+            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this.getDrawer().init();
 
             this._initView();
-
-            return ClientErrorCode.NoError;
         }
         public async initWithMapEditorData(data: ProtoTypes.Map.IMapEditorData): Promise<void> {
             const warData = MeUtility.createISerialWar(data);
@@ -246,32 +238,32 @@ namespace TwnsMeWar {
             this._mapModifiedTime = time;
         }
         public getMapModifiedTime(): number {
-            return Helpers.getDefined(this._mapModifiedTime);
+            return Helpers.getExisted(this._mapModifiedTime);
         }
 
         public getMapSlotIndex(): number {
-            return Helpers.getDefined(this._mapSlotIndex);
+            return Helpers.getExisted(this._mapSlotIndex);
         }
         public setMapSlotIndex(value: number): void {
             this._mapSlotIndex = value;
         }
 
         public getMapDesignerUserId(): number {
-            return Helpers.getDefined(this._mapDesignerUserId);
+            return Helpers.getExisted(this._mapDesignerUserId);
         }
         public setMapDesignerUserId(value: number): void {
             this._mapDesignerUserId = value;
         }
 
         public getMapDesignerName(): string {
-            return Helpers.getDefined(this._mapDesignerName);
+            return Helpers.getExisted(this._mapDesignerName);
         }
         public setMapDesignerName(value: string): void {
             this._mapDesignerName = value;
         }
 
         public getMapNameArray(): ILanguageText[] {
-            return Helpers.getDefined(this._mapNameList);
+            return Helpers.getExisted(this._mapNameList);
         }
         public setMapNameArray(value: ILanguageText[]): void {
             this._mapNameList = value;
@@ -339,7 +331,7 @@ namespace TwnsMeWar {
         }
 
         public getMapTag(): IDataForMapTag {
-            return Helpers.getDefined(this._mapTag);
+            return Helpers.getExisted(this._mapTag);
         }
         public setMapTag(mapTag: IDataForMapTag): void {
             this._mapTag = mapTag;

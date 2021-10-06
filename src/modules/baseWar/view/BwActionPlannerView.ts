@@ -139,7 +139,7 @@ namespace TwnsBwActionPlannerView {
         }
 
         private _getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
-            return Helpers.getDefined(this._actionPlanner);
+            return Helpers.getExisted(this._actionPlanner);
         }
 
         public getContainerForGrids(): egret.DisplayObjectContainer {
@@ -150,13 +150,13 @@ namespace TwnsBwActionPlannerView {
         }
 
         private _getImgsForMovableGrids(): TwnsUiImage.UiImage[][] {
-            return Helpers.getDefined(this._imgsForMovableGrids);
+            return Helpers.getExisted(this._imgsForMovableGrids);
         }
         private _getImgsForAttackableGrids(): TwnsUiImage.UiImage[][] {
-            return Helpers.getDefined(this._imgsForAttackableGrids);
+            return Helpers.getExisted(this._imgsForAttackableGrids);
         }
         private _getImgForMoveDestination(): TwnsUiImage.UiImage {
-            return Helpers.getDefined(this._imgForMoveDestination);
+            return Helpers.getExisted(this._imgForMoveDestination);
         }
 
         private _initConForMovableGrids(): void {

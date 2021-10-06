@@ -160,18 +160,19 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+        isFast
             ? await fastExePlayerEndTurn(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
             : await normalExePlayerEndTurn(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        return ClientErrorCode.NoError;
     }
-    async function fastExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<ClientErrorCode> {
-        return war.getTurnManager().endPhaseMain(action);
+    async function fastExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
+        war.getTurnManager().endPhaseMain(action);
     }
-    async function normalExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<ClientErrorCode> {
+    async function normalExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
         // const desc = await war.getDescForExePlayerEndTurn(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         // (desc) && (FloatText.show(desc));
 
-        return war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -583,14 +584,16 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+        isFast
             ? await fastExeSystemBeginTurn(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
             : await normalExeSystemBeginTurn(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+
+        return ClientErrorCode.NoError;
     }
-    async function fastExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<ClientErrorCode> {
-        return war.getTurnManager().endPhaseWaitBeginTurn(action);
+    async function fastExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
+        war.getTurnManager().endPhaseWaitBeginTurn(action);
     }
-    async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<ClientErrorCode> {
+    async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
         // const desc = await war.getDescForExeSystemBeginTurn(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         // (desc) && (FloatText.show(desc));
 
@@ -614,7 +617,7 @@ namespace WarActionExecutor {
             }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         }
 
-        return war.getTurnManager().endPhaseWaitBeginTurn(action);
+        war.getTurnManager().endPhaseWaitBeginTurn(action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -717,18 +720,19 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+        isFast
             ? fastExeSystemEndTurn(war, action)
             : normalExeSystemEndTurn(war, action);
+        return ClientErrorCode.NoError;
     }
-    async function fastExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<ClientErrorCode> {
-        return war.getTurnManager().endPhaseMain(action);
+    async function fastExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
+        war.getTurnManager().endPhaseMain(action);
     }
-    async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<ClientErrorCode> {
+    async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
         // const desc = await war.getDescForExeSystemEndTurn(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         // (desc) && (FloatText.show(desc));
 
-        return war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

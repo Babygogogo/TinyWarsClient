@@ -40,23 +40,15 @@ namespace TwnsBwPlayer {
 
         private _war?                       : BwWar;
 
-        public init(data: ISerialPlayer, configVersion: string): ClientErrorCode {
-            const fund = data.fund;
-            if (fund == null) {
-                return ClientErrorCode.BwPlayerInit00;
-            }
-
-            const hasVotedForDraw = data.hasVotedForDraw;
-            if (hasVotedForDraw == null) {
-                return ClientErrorCode.BwPlayerInit01;
-            }
-
-            const aliveState = data.aliveState as PlayerAliveState;
+        public init(data: ISerialPlayer, configVersion: string): void {
+            const fund              = Helpers.getExisted(data.fund, ClientErrorCode.BwPlayer_Init_00);
+            const hasVotedForDraw   = Helpers.getExisted(data.hasVotedForDraw, ClientErrorCode.BwPlayer_Init_01);
+            const aliveState        = data.aliveState as PlayerAliveState;
             if ((aliveState !== PlayerAliveState.Alive) &&
                 (aliveState !== PlayerAliveState.Dead)  &&
                 (aliveState !== PlayerAliveState.Dying)
             ) {
-                return ClientErrorCode.BwPlayerInit02;
+                throw Helpers.newError(`Invalid aliveState: ${aliveState}`, ClientErrorCode.BwPlayer_Init_02);
             }
 
             const playerIndex = data.playerIndex;
@@ -64,60 +56,44 @@ namespace TwnsBwPlayer {
                 (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
                 (playerIndex < CommonConstants.WarNeutralPlayerIndex)
             ) {
-                return ClientErrorCode.BwPlayerInit03;
+                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwPlayer_Init_03);
             }
 
-            const restTimeToBoot = data.restTimeToBoot;
-            if (restTimeToBoot == null) {
-                return ClientErrorCode.BwPlayerInit04;
-            }
-
-            const coIsDestroyedInTurn = data.coIsDestroyedInTurn;
-            if (coIsDestroyedInTurn == null) {
-                return ClientErrorCode.BwPlayerInit05;
-            }
-
-            const unitAndTileSkinId = data.unitAndTileSkinId;
+            const restTimeToBoot        = Helpers.getExisted(data.restTimeToBoot, ClientErrorCode.BwPlayer_Init_04);
+            const coIsDestroyedInTurn   = Helpers.getExisted(data.coIsDestroyedInTurn, ClientErrorCode.BwPlayer_Init_05);
+            const unitAndTileSkinId     = data.unitAndTileSkinId;
             if ((unitAndTileSkinId == null)                                                             ||
                 ((unitAndTileSkinId === 0) && (playerIndex !== CommonConstants.WarNeutralPlayerIndex))  ||
                 ((unitAndTileSkinId !== 0) && (playerIndex === CommonConstants.WarNeutralPlayerIndex))
             ) {
-                return ClientErrorCode.BwPlayerInit06;
+                throw Helpers.newError(`Invalid unitAndTileSkinId: ${unitAndTileSkinId}`, ClientErrorCode.BwPlayer_Init_06);
             }
 
-            const coId = data.coId;
-            if (coId == null) {
-                return ClientErrorCode.BwPlayerInit07;
-            }
-
-            const coConfig = ConfigManager.getCoBasicCfg(configVersion, coId);
-            if (coConfig == null) {
-                return ClientErrorCode.BwPlayerInit08;
-            }
-
-            const coUsingSkillType = data.coUsingSkillType as CoSkillType;
+            const coId              = Helpers.getExisted(data.coId, ClientErrorCode.BwPlayer_Init_07);
+            const coConfig          = ConfigManager.getCoBasicCfg(configVersion, coId);
+            const coUsingSkillType  = data.coUsingSkillType as CoSkillType;
             if ((coUsingSkillType !== CoSkillType.Passive)  &&
                 (coUsingSkillType !== CoSkillType.Power)    &&
                 (coUsingSkillType !== CoSkillType.SuperPower)
             ) {
-                return ClientErrorCode.BwPlayerInit09;
+                throw Helpers.newError(`Invalid coUsingSkillType: ${coUsingSkillType}`, ClientErrorCode.BwPlayer_Init_08);
             }
 
             if (((coUsingSkillType === CoSkillType.Power)       && (!(coConfig.powerSkills || []).length))      ||
                 ((coUsingSkillType === CoSkillType.SuperPower)  && (!(coConfig.superPowerSkills || []).length))
             ) {
-                return ClientErrorCode.BwPlayerInit10;
+                throw Helpers.newError(`Invalid coUsingSkillType: ${coUsingSkillType}`, ClientErrorCode.BwPlayer_Init_09);
             }
 
             const coCurrentEnergy = data.coCurrentEnergy || 0;
             if (coCurrentEnergy > WarCommonHelpers.getCoMaxEnergy(coConfig)) {
-                return ClientErrorCode.BwPlayerInit11;
+                throw Helpers.newError(`Invalid coCurrentEnergy: ${coCurrentEnergy}`, ClientErrorCode.BwPlayer_Init_10);
             }
 
             if ((playerIndex === CommonConstants.WarNeutralPlayerIndex) &&
                 (aliveState !== PlayerAliveState.Alive)
             ) {
-                return ClientErrorCode.BwPlayerInit12;
+                throw Helpers.newError(`The neutral player is not alive.`, ClientErrorCode.BwPlayer_Init_11);
             }
 
             this.setFund(fund);
@@ -133,8 +109,6 @@ namespace TwnsBwPlayer {
             this.setCoCurrentEnergy(coCurrentEnergy);
             this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
             this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
-
-            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {
@@ -186,7 +160,7 @@ namespace TwnsBwPlayer {
             this._war = war;
         }
         private _getWar(): BwWar {
-            return Helpers.getDefined(this._war);
+            return Helpers.getExisted(this._war);
         }
 
         public setFund(fund: number): void {
@@ -196,14 +170,14 @@ namespace TwnsBwPlayer {
             }
         }
         public getFund(): number {
-            return Helpers.getDefined(this._fund);
+            return Helpers.getExisted(this._fund);
         }
 
         public setHasVotedForDraw(voted: boolean): void {
             this._hasVotedForDraw = voted;
         }
         public getHasVotedForDraw(): boolean {
-            return Helpers.getDefined(this._hasVotedForDraw);
+            return Helpers.getExisted(this._hasVotedForDraw);
         }
         public checkCanVoteForDraw(): boolean {
             return WarCommonHelpers.checkCanVoteForDraw({
@@ -216,14 +190,14 @@ namespace TwnsBwPlayer {
             this._aliveState = alive;
         }
         public getAliveState(): Types.PlayerAliveState {
-            return Helpers.getDefined(this._aliveState);
+            return Helpers.getExisted(this._aliveState);
         }
 
         private _setPlayerIndex(index: number): void {
             this._playerIndex = index;
         }
         public getPlayerIndex(): number {
-            return Helpers.getDefined(this._playerIndex);
+            return Helpers.getExisted(this._playerIndex);
         }
         public checkIsNeutral(): boolean {
             return this.getPlayerIndex() === 0;
@@ -237,14 +211,14 @@ namespace TwnsBwPlayer {
             this._restTimeToBoot = seconds;
         }
         public getRestTimeToBoot(): number {
-            return Helpers.getDefined(this._restTimeToBoot);
+            return Helpers.getExisted(this._restTimeToBoot);
         }
 
         private _setWatchOngoingSrcUserIds(list: number[]): void {
             this._watchOngoingSrcUserIds = new Set(list);
         }
         public getWatchOngoingSrcUserIds(): Set<number> {
-            return Helpers.getDefined(this._watchOngoingSrcUserIds);
+            return Helpers.getExisted(this._watchOngoingSrcUserIds);
         }
         public addWatchOngoingSrcUserId(userId: number): void {
             this.getWatchOngoingSrcUserIds().add(userId);
@@ -257,7 +231,7 @@ namespace TwnsBwPlayer {
             this._watchRequestSrcUserIds = new Set(list);
         }
         public getWatchRequestSrcUserIds(): Set<number> {
-            return Helpers.getDefined(this._watchRequestSrcUserIds);
+            return Helpers.getExisted(this._watchRequestSrcUserIds);
         }
         public addWatchRequestSrcUserId(userId: number): void {
             this.getWatchRequestSrcUserIds().add(userId);
@@ -270,14 +244,14 @@ namespace TwnsBwPlayer {
             this._userId = id;
         }
         public getUserId(): number | null {
-            return Helpers.getDefined(this._userId);
+            return Helpers.getDefined(this._userId, ClientErrorCode.BwPlayer_GetUserId_00);
         }
 
         private _setUnitAndTileSkinId(unitAndTileSkinId: number): void {
             this._unitAndTileSkinId = unitAndTileSkinId;
         }
         public getUnitAndTileSkinId(): number {
-            return Helpers.getDefined(this._unitAndTileSkinId);
+            return Helpers.getExisted(this._unitAndTileSkinId);
         }
 
         public async getNickname(): Promise<string> {
@@ -294,7 +268,7 @@ namespace TwnsBwPlayer {
             }
         }
         public getCoId(): number {
-            return Helpers.getDefined(this._coId);
+            return Helpers.getExisted(this._coId);
         }
 
         public setCoCurrentEnergy(energy: number): void {
@@ -302,7 +276,7 @@ namespace TwnsBwPlayer {
             Notify.dispatch(NotifyType.BwCoEnergyChanged);
         }
         public getCoCurrentEnergy(): number {
-            return Helpers.getDefined(this._coCurrentEnergy);
+            return Helpers.getExisted(this._coCurrentEnergy);
         }
         public getCoMaxEnergy(): number {
             const config = this._getCoBasicCfg();
@@ -344,7 +318,7 @@ namespace TwnsBwPlayer {
         }
 
         public getCoUsingSkillType(): Types.CoSkillType {
-            return Helpers.getDefined(this._coUsingSkillType);
+            return Helpers.getExisted(this._coUsingSkillType);
         }
         public setCoUsingSkillType(skillType: Types.CoSkillType): void {
             if (this._coUsingSkillType !== skillType) {
@@ -408,7 +382,7 @@ namespace TwnsBwPlayer {
         }
 
         public getCoIsDestroyedInTurn(): boolean {
-            return Helpers.getDefined(this._coIsDestroyedInTurn);
+            return Helpers.getExisted(this._coIsDestroyedInTurn);
         }
         public setCoIsDestroyedInTurn(isDestroyed: boolean): void {
             this._coIsDestroyedInTurn = isDestroyed;

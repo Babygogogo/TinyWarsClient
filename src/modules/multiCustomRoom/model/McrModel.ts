@@ -36,11 +36,11 @@ namespace McrModel {
     // Functions for rooms.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getRoomInfo(roomId: number): Promise<IMcrRoomInfo | null> {
-        if (roomId == null) {
-            return new Promise((resolve) => resolve(null));
-        }
-        if (_roomInfoDict.has(roomId)) {
-            return new Promise(resolve => resolve(Helpers.getDefined(_roomInfoDict.get(roomId))));
+        {
+            const cachedInfo = _roomInfoDict.get(roomId);
+            if (cachedInfo !== undefined) {
+                return new Promise(resolve => resolve(cachedInfo));
+            }
         }
 
         if (_roomInfoRequests.has(roomId)) {

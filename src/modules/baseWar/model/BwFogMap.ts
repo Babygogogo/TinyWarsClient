@@ -207,14 +207,14 @@ namespace TwnsBwFogMap {
             this._forceExpireTurnIndex = index;
         }
         public getForceExpireTurnIndex(): number | null {
-            return Helpers.getDefined(this._forceExpireTurnIndex);
+            return Helpers.getDefined(this._forceExpireTurnIndex, ClientErrorCode.BwFogMap_GetForceExpireTurnIndex_00);
         }
 
         public setForceExpirePlayerIndex(index: number | null): void {
             this._forceExpirePlayerIndex = index;
         }
         public getForceExpirePlayerIndex(): number | null {
-            return Helpers.getDefined(this._forceExpirePlayerIndex);
+            return Helpers.getDefined(this._forceExpirePlayerIndex, ClientErrorCode.BwFogMap_GetForceExpirePlayerIndex_00);
         }
 
         public resetAllMapsForPlayer(playerIndex: number): void {

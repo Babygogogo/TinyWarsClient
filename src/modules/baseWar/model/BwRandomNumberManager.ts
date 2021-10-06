@@ -1,10 +1,12 @@
 
-import Helpers      from "../../tools/helpers/Helpers";
-import Types        from "../../tools/helpers/Types";
-import ProtoTypes   from "../../tools/proto/ProtoTypes";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 namespace TwnsBwRandomNumberManager {
     import ISeedRandomState = ProtoTypes.Structure.ISeedRandomState;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwRandomNumberManager {
         private _isNeedReplay?              : boolean;
@@ -36,14 +38,14 @@ namespace TwnsBwRandomNumberManager {
             this._isNeedReplay = isNeedReplay;
         }
         private _getIsNeedReplay(): boolean {
-            return Helpers.getDefined(this._isNeedReplay);
+            return Helpers.getExisted(this._isNeedReplay);
         }
 
         private _setRandomNumberGenerator(generator: seedrandom.prng): void {
             this._randomNumberGenerator = generator;
         }
         private _getRandomNumberGenerator(): seedrandom.prng | null {
-            return Helpers.getDefined(this._randomNumberGenerator);
+            return Helpers.getDefined(this._randomNumberGenerator, ClientErrorCode.BwRandomNumberManager_GetRandomNumberGenerator_00);
         }
 
         public getRandomNumber(): number {
@@ -62,7 +64,7 @@ namespace TwnsBwRandomNumberManager {
             this._seedRandomInitialState = state;
         }
         public getSeedRandomInitialState(): ProtoTypes.Structure.ISeedRandomState | null {
-            return Helpers.getDefined(this._seedRandomInitialState);
+            return Helpers.getDefined(this._seedRandomInitialState, ClientErrorCode.BwRandomNumberManager_GetSeedRandomInitialState_00);
         }
     }
 }

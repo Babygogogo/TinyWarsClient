@@ -15,22 +15,11 @@ namespace TwnsCcwWar {
     export class CcwWar extends MpwWar {
         private _settingsForCcw?: ISettingsForCcw;
 
-        public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            if (baseInitError) {
-                return baseInitError;
-            }
-
-            const settingsForCcw = data.settingsForCcw;
-            if (settingsForCcw == null) {
-                return ClientErrorCode.CcwWar_Init_00;
-            }
-
-            this._setSettingsForCcw(settingsForCcw);
+        public async init(data: ISerialWar): Promise<void> {
+            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            this._setSettingsForCcw(Helpers.getExisted(data.settingsForCcw, ClientErrorCode.CcwWar_Init_00));
 
             this._initView();
-
-            return ClientErrorCode.NoError;
         }
 
         public getCanCheat(): boolean {

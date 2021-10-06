@@ -1,4 +1,5 @@
 
+import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
 import CompatibilityHelpers from "../helpers/CompatibilityHelpers";
 import Helpers              from "../helpers/Helpers";
 import Logger               from "../helpers/Logger";
@@ -17,6 +18,8 @@ namespace TwnsUiPanel {
         `_btnCancel`,
         `_btnBack`,
     ];
+
+    import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
     export abstract class UiPanel<OpenData> extends TwnsUiComponent.UiComponent {
         protected abstract readonly _LAYER_TYPE  : Types.LayerType;
@@ -87,7 +90,7 @@ namespace TwnsUiPanel {
             delete this._openData;
         }
         protected _getOpenData(): OpenData {
-            return Helpers.getDefined(this._openData);
+            return Helpers.getDefined(this._openData, ClientErrorCode.UiPanel_GetOpenData_00);
         }
 
         private _setCachedOpenFunc(func: (() => void) | null): void {

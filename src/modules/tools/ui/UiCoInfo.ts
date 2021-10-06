@@ -69,7 +69,7 @@ namespace TwnsUiCoInfo {
             this._updateComponentsForCoInfo();
         }
         public getCoData(): CoData {
-            return Helpers.getDefined(this._coData);
+            return Helpers.getExisted(this._coData);
         }
 
         public setSelectedSkillType(skillType: CoSkillType): void {

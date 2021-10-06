@@ -18,22 +18,11 @@ namespace TwnsSrwWar {
     export class SrwWar extends SpwWar {
         private _settingsForSrw?    : ISettingsForSrw;
 
-        public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            if (baseInitError) {
-                return baseInitError;
-            }
-
-            const settingsForSrw = data.settingsForSrw;
-            if (settingsForSrw == null) {
-                return ClientErrorCode.SrwWarInit00;
-            }
-
-            this._setSettingsForSrw(settingsForSrw);
+        public async init(data: ISerialWar): Promise<void> {
+            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            this._setSettingsForSrw(Helpers.getExisted(data.settingsForSrw, ClientErrorCode.SrwWar_Init_00));
 
             this._initView();
-
-            return ClientErrorCode.NoError;
         }
 
         public serialize(): ISerialWar {
@@ -107,7 +96,7 @@ namespace TwnsSrwWar {
             this._settingsForSrw = settings;
         }
         private _getSettingsForSrw(): ISettingsForSrw {
-            return Helpers.getDefined(this._settingsForSrw);
+            return Helpers.getExisted(this._settingsForSrw);
         }
 
         public calculateTotalScore(): number {

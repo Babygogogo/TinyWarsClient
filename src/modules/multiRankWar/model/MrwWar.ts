@@ -16,22 +16,11 @@ namespace TwnsMrwWar {
     export class MrwWar extends MpwWar {
         private _settingsForMrw?    : ISettingsForMrw;
 
-        public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            if (baseInitError) {
-                return baseInitError;
-            }
-
-            const settingsForMrw = data.settingsForMrw;
-            if (settingsForMrw == null) {
-                return ClientErrorCode.MrwWarInit00;
-            }
-
-            this._setSettingsForMrw(settingsForMrw);
+        public async init(data: ISerialWar): Promise<void> {
+            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            this._setSettingsForMrw(Helpers.getExisted(data.settingsForMrw, ClientErrorCode.MrwWar_Init_00));
 
             this._initView();
-
-            return ClientErrorCode.NoError;
         }
 
         public getCanCheat(): boolean {
@@ -56,7 +45,7 @@ namespace TwnsMrwWar {
             this._settingsForMrw = settings;
         }
         public getSettingsForMrw(): ISettingsForMrw {
-            return Helpers.getDefined(this._settingsForMrw);
+            return Helpers.getExisted(this._settingsForMrw);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -2,6 +2,7 @@
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
+import Helpers                      from "../../tools/helpers/Helpers";
 import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
@@ -53,7 +54,7 @@ namespace TwnsBwWar {
         private _isExecutingAction      = false;
         private _isEnded                = false;
 
-        public abstract init(data: ISerialWar): Promise<ClientErrorCode>;
+        public abstract init(data: ISerialWar): Promise<void>;
         public abstract getWarType(): Types.WarType;
         public abstract getMapId(): number | null;
         public abstract getIsNeedExecutedAction(): boolean;
@@ -95,64 +96,42 @@ namespace TwnsBwWar {
         public abstract getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | null>;
         public abstract getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | null>;
 
-        protected async _baseInit(data: ISerialWar): Promise<ClientErrorCode> {
-            const settingsForCommon = data.settingsForCommon;
-            if (!settingsForCommon) {
-                return ClientErrorCode.BwWarBaseInit00;
-            }
-
-            const configVersion = settingsForCommon.configVersion;
-            if ((configVersion == null) || (!await ConfigManager.checkIsVersionValid(configVersion).catch(err => { CompatibilityHelpers.showError(err); throw err; }))) {
-                return ClientErrorCode.BwWarBaseInit01;
+        protected async _baseInit(data: ISerialWar): Promise<void> {
+            const settingsForCommon = Helpers.getExisted(data.settingsForCommon, ClientErrorCode.BwWar_BaseInit_00);
+            const configVersion     = Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.BwWar_BaseInit_01);
+            if (!await ConfigManager.checkIsVersionValid(configVersion).catch(err => { CompatibilityHelpers.showError(err); throw err; })) {
+                throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwWar_BaseInit_02);
             }
 
             this.getDrawVoteManager().init(data.playerManager, data.remainingVotesForDraw);
 
-            const dataForWarEventManager    = data.warEventManager;
+            const dataForWarEventManager = data.warEventManager;
             await this.getCommonSettingManager().init({
                 settings                : settingsForCommon,
                 allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager?.warEventFullData),
                 playersCountUnneutral   : WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
             });
 
-            const warEventManagerError = this.getWarEventManager().init(dataForWarEventManager);
-            if (warEventManagerError) {
-                return warEventManagerError;
-            }
-
+            this.getWarEventManager().init(dataForWarEventManager);
             this.getRandomNumberManager().init({
                 isNeedSeedRandom: this.getIsNeedSeedRandom(),
                 initialState    : data.seedRandomInitialState,
                 currentState    : data.seedRandomCurrentState,
             });
-
             this.getExecutedActionManager().init(this.getIsNeedExecutedAction(), data.executedActions || []);
 
-            const playerManager         = this.getPlayerManager();
-            const playerManagerError    = playerManager.init(data.playerManager, configVersion);
-            if (playerManagerError) {
-                return playerManagerError;
-            }
+            const playerManager = this.getPlayerManager();
+            playerManager.init(data.playerManager, configVersion);
 
             const playersCountUnneutral = playerManager.getTotalPlayersCount(false);
-            const turnManagerError      = this.getTurnManager().init(data.turnManager, playersCountUnneutral);
-            if (turnManagerError) {
-                return turnManagerError;
-            }
-
-            const field         = this.getField();
-            const fieldError    = field.init({
+            this.getTurnManager().init(data.turnManager, playersCountUnneutral);
+            this.getField().init({
                 data                : data.field,
                 configVersion,
                 playersCountUnneutral,
             });
-            if (fieldError) {
-                return fieldError;
-            }
 
             this._setWarId(data.warId ?? null);
-
-            return ClientErrorCode.NoError;
         }
 
         protected _initView(): void {

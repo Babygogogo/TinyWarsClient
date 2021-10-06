@@ -541,11 +541,7 @@ namespace MpwModel {
             return { errorCode: ClientErrorCode.MpwModel_LoadWar_00 };
         }
 
-        const initError = await war.init(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-        if (initError) {
-            return { errorCode: initError };
-        }
-
+        await war.init(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         war.startRunning().startRunningView();
         _setWar(war);
 

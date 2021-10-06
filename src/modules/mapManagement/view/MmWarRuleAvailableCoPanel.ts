@@ -194,7 +194,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             this._labelName.text    = `Tier ${tier}`;
         }
         public getCoTier(): number {
-            return Helpers.getDefined(this._tier);
+            return Helpers.getExisted(this._tier);
         }
 
         public setIsCustomSwitch(isCustomSwitch: boolean): void {
@@ -217,7 +217,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
         }
         public getState(): CoTierState {
-            return Helpers.getDefined(this._state);
+            return Helpers.getExisted(this._state);
         }
     }
 
@@ -240,7 +240,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             this._labelName.text = `${ConfigManager.getCoBasicCfg(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId).name}`;
         }
         public getCoId(): number {
-            return Helpers.getDefined(this._coId);
+            return Helpers.getExisted(this._coId);
         }
 
         public setIsSelected(isSelected: boolean): void {
@@ -249,7 +249,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             Helpers.changeColor(this._imgSelected, isSelected ? Types.ColorType.Origin : Types.ColorType.Gray);
         }
         public getIsSelected(): boolean {
-            return Helpers.getDefined(this._isSelected);
+            return Helpers.getExisted(this._isSelected);
         }
     }
 }

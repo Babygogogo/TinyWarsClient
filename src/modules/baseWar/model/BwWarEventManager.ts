@@ -29,7 +29,7 @@ namespace TwnsBwWarEventManager {
         private _warEventFullData?  : IWarEventFullData | null;
         private _calledCountList?   : IDataForWarEventCalledCount[] | null;
 
-        public init(data: Types.Undefinable<ISerialWarEventManager>): ClientErrorCode {
+        public init(data: Types.Undefinable<ISerialWarEventManager>): void {
             if (!data) {
                 this._setWarEventFullData(null);
                 this._setCalledCountList(null);
@@ -40,11 +40,9 @@ namespace TwnsBwWarEventManager {
                 this._setWarEventFullData(warEventFullData);
                 this._setCalledCountList(data.calledCountList ?? null);
             }
-
-            return ClientErrorCode.NoError;
         }
-        public fastInit(data: ISerialWarEventManager): ClientErrorCode {
-            return this.init(data);
+        public fastInit(data: ISerialWarEventManager): void {
+            this.init(data);
         }
 
         public serialize(): ISerialWarEventManager {
@@ -71,21 +69,21 @@ namespace TwnsBwWarEventManager {
             this._war = war;
         }
         private _getWar(): BwWar {
-            return Helpers.getDefined(this._war);
+            return Helpers.getExisted(this._war);
         }
 
         protected _setWarEventFullData(data: IWarEventFullData | null): void {
             this._warEventFullData = data;
         }
         public getWarEventFullData(): IWarEventFullData | null {
-            return Helpers.getDefined(this._warEventFullData);
+            return Helpers.getDefined(this._warEventFullData, ClientErrorCode.BwWarEventManager_GetWarEventFullData_00);
         }
 
         protected _setCalledCountList(list: IDataForWarEventCalledCount[] | null): void {
             this._calledCountList = list;
         }
         private _getCalledCountList(): IDataForWarEventCalledCount[] | null {
-            return Helpers.getDefined(this._calledCountList);
+            return Helpers.getDefined(this._calledCountList, ClientErrorCode.BwWarEventManager_GetCalledCountList_00);
         }
 
         public async callWarEvent(warEventId: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent[]> { // DONE

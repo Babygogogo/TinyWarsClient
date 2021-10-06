@@ -17,22 +17,11 @@ namespace TwnsSfwWar {
     export class SfwWar extends SpwWar {
         private _settingsForSfw?    : ISettingsForSfw;
 
-        public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            if (baseInitError) {
-                return baseInitError;
-            }
-
-            const settingsForSfw = data.settingsForSfw;
-            if (settingsForSfw == null) {
-                return ClientErrorCode.SfwWarInit00;
-            }
-
-            this._setSettingsForSfw(settingsForSfw);
+        public async init(data: ISerialWar): Promise<void> {
+            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            this._setSettingsForSfw(Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
 
             this._initView();
-
-            return ClientErrorCode.NoError;
         }
 
         public serialize(): ISerialWar {
@@ -87,7 +76,7 @@ namespace TwnsSfwWar {
             this._settingsForSfw = settings;
         }
         private _getSettingsForSfw(): ISettingsForSfw {
-            return Helpers.getDefined(this._settingsForSfw);
+            return Helpers.getExisted(this._settingsForSfw);
         }
     }
 }

@@ -1,16 +1,18 @@
 
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import Types            from "../../tools/helpers/Types";
-import Notify           from "../../tools/notify/Notify";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 namespace MfrJoinModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IMfrRoomInfo     = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
-    export type DataForJoinRoom = ProtoTypes.NetMessage.MsgMfrJoinRoom.IC;
+    type DataForJoinRoom    = ProtoTypes.NetMessage.MsgMfrJoinRoom.IC;
 
     const _dataForJoinRoom: DataForJoinRoom = {
         roomId              : null,
@@ -36,7 +38,7 @@ namespace MfrJoinModel {
     }
 
     export function getTargetRoomId(): number | null {
-        return Helpers.getDefined(getData().roomId);
+        return Helpers.getDefined(getData().roomId, ClientErrorCode.MfrJoinModel_GetTargetRoomId_00);
     }
     export function setTargetRoomId(roomId: number): void {
         if (getTargetRoomId() !== roomId) {

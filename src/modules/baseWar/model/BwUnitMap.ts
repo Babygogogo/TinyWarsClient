@@ -225,7 +225,7 @@ namespace TwnsBwUnitMap {
             this._map = map;
         }
         private _getMap(): (BwUnit | null)[][] {
-            return Helpers.getDefined(this._map);
+            return Helpers.getExisted(this._map);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -318,7 +318,7 @@ namespace TwnsBwUnitMap {
             this._loadedUnits = units;
         }
         public getLoadedUnits(): Map<number, BwUnit> {
-            return Helpers.getDefined(this._loadedUnits);
+            return Helpers.getExisted(this._loadedUnits);
         }
         public getUnitsLoadedByLoader(loader: BwUnit, isRecursive: boolean): BwUnit[] {
             const units: BwUnit[] = [];

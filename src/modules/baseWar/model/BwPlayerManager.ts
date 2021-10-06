@@ -21,9 +21,9 @@ namespace TwnsBwPlayerManager {
 
         public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
 
-        public init(data: Types.Undefinable<ISerialPlayerManager>, configVersion: string): ClientErrorCode {
+        public init(data: Types.Undefinable<ISerialPlayerManager>, configVersion: string): void {
             if (data == null) {
-                return ClientErrorCode.BwPlayerManagerInit00;
+                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwPlayerManager_Init_00);
             }
 
             const playerArray = data.players;
@@ -31,7 +31,7 @@ namespace TwnsBwPlayerManager {
                 (playerArray.length < 3)                                    ||
                 (playerArray.length > CommonConstants.WarMaxPlayerIndex + 1)
             ) {
-                return ClientErrorCode.BwPlayerManagerInit01;
+                throw Helpers.newError(`Invalid playerArray.`, ClientErrorCode.BwPlayerManager_Init_01);
             }
 
             const newPlayerMap  = new Map<number, TwnsBwPlayer.BwPlayer>();
@@ -39,34 +39,33 @@ namespace TwnsBwPlayerManager {
             for (const playerData of playerArray) {
                 const playerIndex = playerData.playerIndex;
                 if ((playerIndex == null) || (newPlayerMap.has(playerIndex))) {
-                    return ClientErrorCode.BwPlayerManagerInit02;
+                    throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwPlayerManager_Init_02);
                 }
 
                 const skinId = playerData.unitAndTileSkinId;
                 if ((skinId == null) || (skinIdSet.has(skinId))) {
-                    return ClientErrorCode.BwPlayerManagerInit03;
+                    throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.BwPlayerManager_Init_03);
                 }
                 skinIdSet.add(skinId);
 
-                const player        = new TwnsBwPlayer.BwPlayer();
-                const playerError   = player.init(playerData, configVersion);
-                if (playerError) {
-                    return playerError;
-                }
+                const player = new TwnsBwPlayer.BwPlayer();
+                player.init(playerData, configVersion);
 
                 newPlayerMap.set(playerIndex, player);
             }
 
             if (!newPlayerMap.has(CommonConstants.WarNeutralPlayerIndex)) {
-                return ClientErrorCode.BwPlayerManagerInit04;
+                throw Helpers.newError(`No WarNeutralPlayerIndex.`, ClientErrorCode.BwPlayerManager_Init_04);
             }
+
             for (const [playerIndex] of newPlayerMap) {
                 if ((playerIndex > CommonConstants.WarNeutralPlayerIndex) && (!newPlayerMap.has(playerIndex - 1))) {
-                    return ClientErrorCode.BwPlayerManagerInit05;
+                    throw Helpers.newError(`Non-continuous`, ClientErrorCode.BwPlayerManager_Init_05);
                 }
             }
+
             if ((newPlayerMap.size < 3) || (newPlayerMap.size > CommonConstants.WarMaxPlayerIndex + 1)) {
-                return ClientErrorCode.BwPlayerManagerInit06;
+                throw Helpers.newError(`Invalid playersCount: ${newPlayerMap.size}`, ClientErrorCode.BwPlayerManager_Init_06);
             }
 
             const playerMap = this.getAllPlayersDict();
@@ -74,8 +73,6 @@ namespace TwnsBwPlayerManager {
             for (const [playerIndex, player] of newPlayerMap) {
                 playerMap.set(playerIndex, player);
             }
-
-            return ClientErrorCode.NoError;
         }
         public fastInit(data: ISerialPlayerManager, configVersion: string): ClientErrorCode {
             for (const playerData of data ? data.players || [] : []) {
@@ -89,10 +86,7 @@ namespace TwnsBwPlayerManager {
                     return ClientErrorCode.BwPlayerManager_FastInit_01;
                 }
 
-                const errorCode = player.init(playerData, configVersion);
-                if (errorCode) {
-                    return errorCode;
-                }
+                player.init(playerData, configVersion);
             }
 
             return ClientErrorCode.NoError;
@@ -134,7 +128,7 @@ namespace TwnsBwPlayerManager {
             this._war = war;
         }
         protected _getWar(): BwWar {
-            return Helpers.getDefined(this._war);
+            return Helpers.getExisted(this._war);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

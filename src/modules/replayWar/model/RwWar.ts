@@ -55,12 +55,8 @@ namespace TwnsRwWar {
         private _checkPointIdsForNextActionId       = new Map<number, number>();
         private _checkPointDataListForCheckPointId  = new Map<number, CheckPointData>();
 
-        public async init(warData: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            if (baseInitError) {
-                return baseInitError;
-            }
-
+        public async init(warData: ISerialWar): Promise<void> {
+            await this._baseInit(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             this._setSettingsForMcw(warData.settingsForMcw ?? null);
             this._setSettingsForScw(warData.settingsForScw ?? null);
             this._setSettingsForMrw(warData.settingsForMrw ?? null);
@@ -75,8 +71,6 @@ namespace TwnsRwWar {
             // await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             this._initView();
-
-            return ClientErrorCode.NoError;
         }
 
         public getCanCheat(): boolean {
@@ -275,19 +269,19 @@ namespace TwnsRwWar {
         }
 
         private _getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw | null {
-            return Helpers.getDefined(this._settingsForMcw);
+            return Helpers.getDefined(this._settingsForMcw, ClientErrorCode.RwWar_GetSettingsForMcw_00);
         }
         private _setSettingsForMcw(value: ProtoTypes.WarSettings.ISettingsForMcw | null): void {
             this._settingsForMcw = value;
         }
         private _getSettingsForScw(): ProtoTypes.WarSettings.ISettingsForScw | null {
-            return Helpers.getDefined(this._settingsForScw);
+            return Helpers.getDefined(this._settingsForScw, ClientErrorCode.RwWar_GetSettingsForScw_00);
         }
         private _setSettingsForScw(value: ProtoTypes.WarSettings.ISettingsForScw | null): void {
             this._settingsForScw = value;
         }
         private _getSettingsForMrw(): ProtoTypes.WarSettings.ISettingsForMrw | null {
-            return Helpers.getDefined(this._settingsForMrw);
+            return Helpers.getDefined(this._settingsForMrw, ClientErrorCode.RwWar_GetSettingsForMrw_00);
         }
         private _setSettingsForMrw(value: ProtoTypes.WarSettings.ISettingsForMrw | null): void {
             this._settingsForMrw = value;
@@ -297,7 +291,7 @@ namespace TwnsRwWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getReplayId(): number {
-            return Helpers.getDefined(this._replayId);
+            return Helpers.getExisted(this._replayId);
         }
         public setReplayId(replayId: number): void {
             this._replayId = replayId;

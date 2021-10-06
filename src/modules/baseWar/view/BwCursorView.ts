@@ -134,7 +134,7 @@ namespace TwnsBwCursorView {
         }
 
         private _getCursor(): BwCursor {
-            return Helpers.getDefined(this._cursor);
+            return Helpers.getExisted(this._cursor);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

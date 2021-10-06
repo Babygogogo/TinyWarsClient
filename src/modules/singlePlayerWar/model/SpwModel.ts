@@ -52,12 +52,8 @@ namespace SpwModel {
             unloadWar();
         }
 
-        const war       = createWarByWarData(warData);
-        const initError = await war.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-        if (initError) {
-            throw Helpers.newError(`InitError: ${initError}`);
-        }
-
+        const war = createWarByWarData(warData);
+        await war.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
         war.setSaveSlotExtraData(slotExtraData);

@@ -24,7 +24,6 @@ namespace TwnsMeMfwSettingsPanel {
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MeMfwAdvancedSettingsPage    = TwnsMeMfwAdvancedSettingsPage.MeMfwAdvancedSettingsPage;
     import MeMfwBasicSettingsPage       = TwnsMeMfwBasicSettingsPage.MeMfwBasicSettingsPage;
-    import TwWar                        = TwnsTwWar.TwWar;
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import LangTextType                 = TwnsLangTextType.LangTextType;
 
@@ -92,7 +91,7 @@ namespace TwnsMeMfwSettingsPanel {
         private async _onTouchedBtnConfirm(): Promise<void> {
             MeMfwModel.reviseWarRuleForAi();
             const warData   = MeMfwModel.getWarData();
-            const errorCode = await (new TwWar().init(warData)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const errorCode = await (new TwnsTwWar.TwWar().getErrorCodeForInit(warData)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {

@@ -43,7 +43,7 @@ namespace TwnsBwDrawVoteManager {
             this._remainingVotes = votes;
         }
         public getRemainingVotes(): number | null {
-            return Helpers.getDefined(this._remainingVotes);
+            return Helpers.getDefined(this._remainingVotes, ClientErrorCode.BwDrawVoteManager_GetRemainingVotes_00);
         }
 
         public getMaxVotes(): number {

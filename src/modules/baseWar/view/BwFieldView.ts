@@ -51,10 +51,10 @@ namespace TwnsBwFieldView {
         }
 
         private _getUnitMapView(): BwUnitMapView {
-            return Helpers.getDefined(this._unitMapView);
+            return Helpers.getExisted(this._unitMapView);
         }
         private _getTileMapView(): BwTileMapView {
-            return Helpers.getDefined(this._tileMapView);
+            return Helpers.getExisted(this._tileMapView);
         }
 
         public setUnitsVisible(visible: boolean): void {

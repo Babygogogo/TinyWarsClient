@@ -17,22 +17,11 @@ namespace TwnsScwWar {
     export class ScwWar extends SpwWar {
         private _settingsForScw?    : ISettingsForScw;
 
-        public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            if (baseInitError) {
-                return baseInitError;
-            }
-
-            const settingsForScw = data.settingsForScw;
-            if (settingsForScw == null) {
-                return ClientErrorCode.ScwWarInit00;
-            }
-
-            this._setSettingsForScw(settingsForScw);
+        public async init(data: ISerialWar): Promise<void> {
+            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            this._setSettingsForScw(Helpers.getExisted(data.settingsForScw, ClientErrorCode.ScwWar_Init_00));
 
             this._initView();
-
-            return ClientErrorCode.NoError;
         }
 
         public serialize(): ISerialWar {
@@ -87,7 +76,7 @@ namespace TwnsScwWar {
             this._settingsForScw = settings;
         }
         private _getSettingsForScw(): ISettingsForScw {
-            return Helpers.getDefined(this._settingsForScw);
+            return Helpers.getExisted(this._settingsForScw);
         }
     }
 }

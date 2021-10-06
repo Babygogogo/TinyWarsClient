@@ -1,4 +1,5 @@
 
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
@@ -13,6 +14,7 @@ import WarMapModel          from "../../warMap/model/WarMapModel";
 namespace McrCreateModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import BootTimerType    = Types.BootTimerType;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     const REGULAR_TIME_LIMITS = [
         60 * 60 * 24 * 1,   // 1 day
@@ -126,7 +128,7 @@ namespace McrCreateModel {
         setPresetWarRuleId(null);
     }
     export function getPresetWarRuleId(): number | null {
-        return Helpers.getDefined(getSettingsForCommon().presetWarRuleId);
+        return Helpers.getDefined(getSettingsForCommon().presetWarRuleId, ClientErrorCode.McrCreateModel_GetPresetWarRuleId_00);
     }
     export async function tickPresetWarRuleId(): Promise<void> {
         const currWarRuleId = getPresetWarRuleId();
