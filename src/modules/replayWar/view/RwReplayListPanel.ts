@@ -69,7 +69,7 @@ namespace TwnsRwReplayListPanel {
         }
         public static async hide(): Promise<void> {
             if (RwReplayListPanel._instance) {
-                await RwReplayListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await RwReplayListPanel._instance.close();
             }
         }
 
@@ -108,7 +108,7 @@ namespace TwnsRwReplayListPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -416,7 +416,7 @@ namespace TwnsRwReplayListPanel {
             } else {
                 labelId.text    = `ID: ${replayBriefInfo.replayId}`;
                 labelType.text  = Lang.getWarTypeName(Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined;
-                labelName.text  = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(replayBriefInfo.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined;
+                labelName.text  = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(replayBriefInfo.mapId)) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
 

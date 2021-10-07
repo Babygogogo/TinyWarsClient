@@ -62,7 +62,7 @@ namespace RwModel {
         }
 
         const warData                   = ProtoManager.decodeAsSerialWar(encodedWarData);
-        const mapRawData                = Helpers.getExisted(await WarMapModel.getRawData(Helpers.getExisted(WarCommonHelpers.getMapId(warData))).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+        const mapRawData                = Helpers.getExisted(await WarMapModel.getRawData(Helpers.getExisted(WarCommonHelpers.getMapId(warData))));
         const unitDataArray             = mapRawData.unitDataArray || [];
         const field                     = Helpers.getExisted(warData.field);
         warData.seedRandomCurrentState  = Helpers.deepClone(warData.seedRandomInitialState);
@@ -73,7 +73,7 @@ namespace RwModel {
         };
 
         const war = new RwWar();
-        await war.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await war.init(warData);
         war.startRunning().startRunningView();
         war.setReplayId(replayId);
         _war = war;

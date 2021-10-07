@@ -56,7 +56,7 @@ namespace TwnsBwUnitListPanel {
         }
         public static async hide(): Promise<void> {
             if (BwUnitListPanel._instance) {
-                await BwUnitListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwUnitListPanel._instance.close();
             }
         }
 

@@ -49,7 +49,7 @@ namespace TwnsMeClearPanel {
 
         public static async hide(): Promise<void> {
             if (MeClearPanel._instance) {
-                await MeClearPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeClearPanel._instance.close();
             }
         }
 
@@ -98,7 +98,7 @@ namespace TwnsMeClearPanel {
                 await war.initWithMapEditorData({
                     mapRawData  : MeUtility.clearMap(war.serializeForMap(), width, height),
                     slotIndex   : war.getMapSlotIndex(),
-                }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                });
                 war.setIsMapModified(true);
                 war.startRunning()
                     .startRunningView();

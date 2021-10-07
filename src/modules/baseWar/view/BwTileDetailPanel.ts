@@ -75,7 +75,7 @@ namespace TwnsBwTileDetailPanel {
         }
         public static async hide(): Promise<void> {
             if (BwTileDetailPanel._instance) {
-                await BwTileDetailPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwTileDetailPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -114,7 +114,7 @@ namespace TwnsBwTileDetailPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

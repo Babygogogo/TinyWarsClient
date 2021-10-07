@@ -50,7 +50,7 @@ namespace TwnsUserOnlineUsersPanel {
         }
         public static async hide(): Promise<void> {
             if (UserOnlineUsersPanel._instance) {
-                await UserOnlineUsersPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await UserOnlineUsersPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -84,7 +84,7 @@ namespace TwnsUserOnlineUsersPanel {
             this._updateComponentsForLanguage();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
 
             this._msg           = null;
             this._dataForList   = null;

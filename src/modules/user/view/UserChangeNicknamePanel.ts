@@ -44,7 +44,7 @@ namespace TwnsUserChangeNicknamePanel {
 
         public static async hide(): Promise<void> {
             if (UserChangeNicknamePanel._instance) {
-                await UserChangeNicknamePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await UserChangeNicknamePanel._instance.close();
             }
         }
 
@@ -73,7 +73,7 @@ namespace TwnsUserChangeNicknamePanel {
             this._updateComponentsForLanguage();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onTouchedBtnConfirm(): void {

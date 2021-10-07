@@ -53,7 +53,7 @@ namespace TwnsMeAvailableCoPanel {
 
         public static async hide(): Promise<void> {
             if (MeAvailableCoPanel._instance) {
-                await MeAvailableCoPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeAvailableCoPanel._instance.close();
             }
         }
 

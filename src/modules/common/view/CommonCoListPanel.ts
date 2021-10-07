@@ -50,7 +50,7 @@ namespace TwnsCommonCoListPanel {
 
         public static async hide(): Promise<void> {
             if (CommonCoListPanel._instance) {
-                await CommonCoListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonCoListPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -83,7 +83,7 @@ namespace TwnsCommonCoListPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
 
             this._clearGroupCoNames();
             this._setPreviewingPlayerIndex(null);

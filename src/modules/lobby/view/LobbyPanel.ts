@@ -62,7 +62,7 @@ namespace TwnsLobbyPanel {
         }
         public static async hide(): Promise<void> {
             if (LobbyPanel._instance) {
-                await LobbyPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await LobbyPanel._instance.close();
             }
         }
         public static getInstance(): LobbyPanel | null {
@@ -100,7 +100,7 @@ namespace TwnsLobbyPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -264,16 +264,16 @@ namespace TwnsLobbyPanel {
                 (MpwModel.checkIsRedForMyMcwWars())                                                             ||
                 (MpwModel.checkIsRedForMyMfwWars())                                                             ||
                 (MpwModel.checkIsRedForMyCcwWars())                                                             ||
-                (await McrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; })) ||
-                (await MfrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; })) ||
-                (await CcrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }))
+                (await McrModel.checkIsRed()) ||
+                (await MfrModel.checkIsRed()) ||
+                (await CcrModel.checkIsRed())
             );
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
                 (MpwModel.checkIsRedForMyMrwWars())                                                             ||
-                (await MrrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }))
+                (await MrrModel.checkIsRed())
             );
         }
     }

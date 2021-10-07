@@ -63,7 +63,7 @@ namespace TwnsWeActionModifyPanel1 {
         }
         public static async hide(): Promise<void> {
             if (WeActionModifyPanel1._instance) {
-                await WeActionModifyPanel1._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WeActionModifyPanel1._instance.close();
             }
         }
 

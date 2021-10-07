@@ -178,14 +178,14 @@ namespace UserModel {
     }
 
     export async function getUserNickname(userId: number): Promise<string | null> {
-        const info = await getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const info = await getUserPublicInfo(userId);
         return info ? info.nickname ?? null : null;
     }
     export async function getUserMrwRankScoreInfo(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserRankInfo.IUserMrwRankInfo | null> {
-        return (await getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; }))?.userMrwRankInfoArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
+        return (await getUserPublicInfo(userId))?.userMrwRankInfoArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
     export async function getUserMpwStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserWarStatistics.IUserMpwStatistics | null> {
-        return (await getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; }))?.userMpwStatisticsArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
+        return (await getUserPublicInfo(userId))?.userMpwStatisticsArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
     export function getMapRating(mapId: number): number | null {
         return getSelfUserComplexInfo()?.userMapRatingArray?.find(v => v.mapId === mapId)?.rating ?? null;
@@ -214,7 +214,7 @@ namespace UserModel {
         (userSelfInfo) && (setSelfInfo(userSelfInfo));
     }
     export async function updateOnMsgUserGetOnlineState(data: NetMessage.MsgUserGetOnlineState.IS): Promise<void> {
-        const userPublicInfo = await getUserPublicInfo(Helpers.getExisted(data.userId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const userPublicInfo = await getUserPublicInfo(Helpers.getExisted(data.userId));
         if (userPublicInfo) {
             userPublicInfo.isOnline         = data.isOnline;
             userPublicInfo.lastActivityTime = data.lastActivityTime;

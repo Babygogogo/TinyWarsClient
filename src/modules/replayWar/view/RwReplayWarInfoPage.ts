@@ -116,7 +116,7 @@ namespace TwnsRwReplayWarInfoPage {
         private async _updateLabelMapName(): Promise<void> {
             const replayInfo        = this._getReplayInfo();
             this._labelMapName.text = replayInfo
-                ? (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(replayInfo.replayBriefInfo?.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined)
+                ? (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(replayInfo.replayBriefInfo?.mapId)) ?? CommonConstants.ErrorTextForUndefined)
                 : CommonConstants.ErrorTextForUndefined;
         }
 

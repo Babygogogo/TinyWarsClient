@@ -57,7 +57,7 @@ namespace TwnsMcrMainMenuPanel {
 
         public static async hide(): Promise<void> {
             if (McrMainMenuPanel._instance) {
-                await McrMainMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await McrMainMenuPanel._instance.close();
             }
         }
 
@@ -90,7 +90,7 @@ namespace TwnsMcrMainMenuPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -249,11 +249,11 @@ namespace TwnsMcrMainMenuPanel {
 
         private async _updateView(): Promise<void> {
             const watchInfos = WwModel.getWatchRequestedWarInfos();
-            this._btnMyRoom.setRedVisible(await McrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            this._btnMyRoom.setRedVisible(await McrModel.checkIsRed());
             this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMcwWars());
             this._btnWatchWar.setRedVisible((!!watchInfos) && (watchInfos.length > 0));
-            this._btnCoopMode.setRedVisible(MpwModel.checkIsRedForMyCcwWars() || await CcrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
-            this._btnFreeMode.setRedVisible(MpwModel.checkIsRedForMyMfwWars() || await MfrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            this._btnCoopMode.setRedVisible(MpwModel.checkIsRedForMyCcwWars() || await CcrModel.checkIsRed());
+            this._btnFreeMode.setRedVisible(MpwModel.checkIsRedForMyMfwWars() || await MfrModel.checkIsRed());
         }
     }
 }

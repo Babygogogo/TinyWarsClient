@@ -27,9 +27,20 @@ namespace CompatibilityHelpers {
 
     function initListenerForWindowOnError(): void {
         window.onerror = (message, filename, row, col, err) => {
-            const e = err as Types.CustomError;
-            showErrorText(`Code: ${e?.errorCode ?? `--`}\n${message}\n${e?.stack ?? "No available call stack."}`);
+            if (err) {
+                showErrorText(`Code: ${(err as Types.CustomError).errorCode ?? `--`}\n${message}\n${err.stack ?? "No available call stack."}`);
+            } else {
+                showErrorText(`Unknown error.`);
+            }
         };
+        window.addEventListener('unhandledrejection', (err) => {
+            const reason = err.reason;
+            if (reason instanceof Error) {
+                showErrorText(`Code: ${(reason as Types.CustomError).errorCode ?? `--`}\n${reason.message}\n${reason.stack ?? "No available call stack."}`);
+            } else {
+                showErrorText(`Unhandled rejection in promise, reason:\n${reason}`);
+            }
+        });
     }
 
     function initListenersForGameShowAndHide(): void {

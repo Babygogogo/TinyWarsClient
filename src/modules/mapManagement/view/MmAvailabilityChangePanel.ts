@@ -67,7 +67,7 @@ namespace TwnsMmAvailabilityChangePanel {
 
         public static async hide(): Promise<void> {
             if (MmAvailabilityChangePanel._instance) {
-                await MmAvailabilityChangePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MmAvailabilityChangePanel._instance.close();
             }
         }
 
@@ -127,7 +127,7 @@ namespace TwnsMmAvailabilityChangePanel {
         }
 
         private async _onTouchedBtnWarRule(): Promise<void> {
-            const mapRawData = await WarMapModel.getRawData(this._getOpenData().mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const mapRawData = await WarMapModel.getRawData(this._getOpenData().mapId);
             if (mapRawData == null) {
                 throw Helpers.newError(`MmAvailabilityChangePanel._onTouchedBtnWarRule() empty mapRawData.`);
             }
@@ -160,7 +160,7 @@ namespace TwnsMmAvailabilityChangePanel {
         }
 
         private async _updateImages(): Promise<void> {
-            const briefData     = await WarMapModel.getBriefData(this._getOpenData().mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const briefData     = await WarMapModel.getBriefData(this._getOpenData().mapId);
             const extraData     = briefData ? briefData.mapExtraData : null;
             const complexInfo   = extraData ? extraData.mapComplexInfo : null;
             const availability  = complexInfo ? complexInfo.mapAvailability : null;

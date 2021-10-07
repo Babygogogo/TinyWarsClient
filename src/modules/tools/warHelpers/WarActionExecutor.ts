@@ -86,49 +86,49 @@ namespace WarActionExecutor {
         war.setIsExecutingAction(true);
         actionPlanner.setStateExecutingAction();
 
-        await doExecuteAction(war, action, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await doExecuteAction(war, action, isFast);
 
         actionPlanner.setStateIdle();
         war.setIsExecutingAction(false);
     }
 
     async function doExecuteAction(war: BwWar, action: IWarActionContainer, isFast: boolean): Promise<void> {
-        if      (action.WarActionPlayerDeleteUnit)          { await exePlayerDeleteUnit(war, action.WarActionPlayerDeleteUnit, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionPlayerEndTurn)             { await exePlayerEndTurn(war, action.WarActionPlayerEndTurn, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionPlayerProduceUnit)         { await exePlayerProduceUnit(war, action.WarActionPlayerProduceUnit, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionPlayerSurrender)           { await exePlayerSurrender(war, action.WarActionPlayerSurrender, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionPlayerVoteForDraw)         { await exePlayerVoteForDraw(war, action.WarActionPlayerVoteForDraw, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionPlayerUseCoSkill)          { await exePlayerUseCoSkill(war, action.WarActionPlayerUseCoSkill, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionSystemBeginTurn)           { await exeSystemBeginTurn(war, action.WarActionSystemBeginTurn, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionSystemCallWarEvent)        { await exeSystemCallWarEvent(war, action.WarActionSystemCallWarEvent, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionSystemDestroyPlayerForce)  { await exeSystemDestroyPlayerForce(war, action.WarActionSystemDestroyPlayerForce, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionSystemEndWar)              { await exeSystemEndWar(war, action.WarActionSystemEndWar, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionSystemEndTurn)             { await exeSystemEndTurn(war, action.WarActionSystemEndTurn, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionSystemHandleBootPlayer)    { await exeSystemHandleBootPlayer(war, action.WarActionSystemHandleBootPlayer, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitAttackTile)            { await exeUnitAttackTile(war, action.WarActionUnitAttackTile, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitAttackUnit)            { await exeUnitAttackUnit(war, action.WarActionUnitAttackUnit, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitBeLoaded)              { await exeUnitBeLoaded(war, action.WarActionUnitBeLoaded, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitBuildTile)             { await exeUnitBuildTile(war, action.WarActionUnitBuildTile, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitCaptureTile)           { await exeUnitCaptureTile(war, action.WarActionUnitCaptureTile, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitDive)                  { await exeUnitDive(war, action.WarActionUnitDive, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitDropUnit)              { await exeUnitDropUnit(war, action.WarActionUnitDropUnit, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitJoinUnit)              { await exeUnitJoinUnit(war, action.WarActionUnitJoinUnit, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitLaunchFlare)           { await exeUnitLaunchFlare(war, action.WarActionUnitLaunchFlare, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitLaunchSilo)            { await exeUnitLaunchSilo(war, action.WarActionUnitLaunchSilo, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitLoadCo)                { await exeUnitLoadCo(war, action.WarActionUnitLoadCo, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitProduceUnit)           { await exeUnitProduceUnit(war, action.WarActionUnitProduceUnit, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitSupplyUnit)            { await exeUnitSupplyUnit(war, action.WarActionUnitSupplyUnit, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitSurface)               { await exeUnitSurface(war, action.WarActionUnitSurface, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitUseCoSkill)            { await exeUnitUseCoSkill(war, action.WarActionUnitUseCoSkill, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else if (action.WarActionUnitWait)                  { await exeUnitWait(war, action.WarActionUnitWait, isFast).catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
-        else                                                { await exeUnknownAction().catch(err => { CompatibilityHelpers.showError(err); throw err; }); }
+        if      (action.WarActionPlayerDeleteUnit)          { await exePlayerDeleteUnit(war, action.WarActionPlayerDeleteUnit, isFast); }
+        else if (action.WarActionPlayerEndTurn)             { await exePlayerEndTurn(war, action.WarActionPlayerEndTurn, isFast); }
+        else if (action.WarActionPlayerProduceUnit)         { await exePlayerProduceUnit(war, action.WarActionPlayerProduceUnit, isFast); }
+        else if (action.WarActionPlayerSurrender)           { await exePlayerSurrender(war, action.WarActionPlayerSurrender, isFast); }
+        else if (action.WarActionPlayerVoteForDraw)         { await exePlayerVoteForDraw(war, action.WarActionPlayerVoteForDraw, isFast); }
+        else if (action.WarActionPlayerUseCoSkill)          { await exePlayerUseCoSkill(war, action.WarActionPlayerUseCoSkill, isFast); }
+        else if (action.WarActionSystemBeginTurn)           { await exeSystemBeginTurn(war, action.WarActionSystemBeginTurn, isFast); }
+        else if (action.WarActionSystemCallWarEvent)        { await exeSystemCallWarEvent(war, action.WarActionSystemCallWarEvent, isFast); }
+        else if (action.WarActionSystemDestroyPlayerForce)  { await exeSystemDestroyPlayerForce(war, action.WarActionSystemDestroyPlayerForce, isFast); }
+        else if (action.WarActionSystemEndWar)              { await exeSystemEndWar(war, action.WarActionSystemEndWar, isFast); }
+        else if (action.WarActionSystemEndTurn)             { await exeSystemEndTurn(war, action.WarActionSystemEndTurn, isFast); }
+        else if (action.WarActionSystemHandleBootPlayer)    { await exeSystemHandleBootPlayer(war, action.WarActionSystemHandleBootPlayer, isFast); }
+        else if (action.WarActionUnitAttackTile)            { await exeUnitAttackTile(war, action.WarActionUnitAttackTile, isFast); }
+        else if (action.WarActionUnitAttackUnit)            { await exeUnitAttackUnit(war, action.WarActionUnitAttackUnit, isFast); }
+        else if (action.WarActionUnitBeLoaded)              { await exeUnitBeLoaded(war, action.WarActionUnitBeLoaded, isFast); }
+        else if (action.WarActionUnitBuildTile)             { await exeUnitBuildTile(war, action.WarActionUnitBuildTile, isFast); }
+        else if (action.WarActionUnitCaptureTile)           { await exeUnitCaptureTile(war, action.WarActionUnitCaptureTile, isFast); }
+        else if (action.WarActionUnitDive)                  { await exeUnitDive(war, action.WarActionUnitDive, isFast); }
+        else if (action.WarActionUnitDropUnit)              { await exeUnitDropUnit(war, action.WarActionUnitDropUnit, isFast); }
+        else if (action.WarActionUnitJoinUnit)              { await exeUnitJoinUnit(war, action.WarActionUnitJoinUnit, isFast); }
+        else if (action.WarActionUnitLaunchFlare)           { await exeUnitLaunchFlare(war, action.WarActionUnitLaunchFlare, isFast); }
+        else if (action.WarActionUnitLaunchSilo)            { await exeUnitLaunchSilo(war, action.WarActionUnitLaunchSilo, isFast); }
+        else if (action.WarActionUnitLoadCo)                { await exeUnitLoadCo(war, action.WarActionUnitLoadCo, isFast); }
+        else if (action.WarActionUnitProduceUnit)           { await exeUnitProduceUnit(war, action.WarActionUnitProduceUnit, isFast); }
+        else if (action.WarActionUnitSupplyUnit)            { await exeUnitSupplyUnit(war, action.WarActionUnitSupplyUnit, isFast); }
+        else if (action.WarActionUnitSurface)               { await exeUnitSurface(war, action.WarActionUnitSurface, isFast); }
+        else if (action.WarActionUnitUseCoSkill)            { await exeUnitUseCoSkill(war, action.WarActionUnitUseCoSkill, isFast); }
+        else if (action.WarActionUnitWait)                  { await exeUnitWait(war, action.WarActionUnitWait, isFast); }
+        else                                                { await exeUnknownAction(); }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExePlayerDeleteUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExePlayerDeleteUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExePlayerDeleteUnit(war, action)
+            : await normalExePlayerDeleteUnit(war, action);
     }
     async function fastExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<void> {
         const gridIndex = action.gridIndex as GridIndex;
@@ -139,7 +139,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<void> {
-        const desc = await war.getDescForExePlayerDeleteUnit(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExePlayerDeleteUnit(action);
         (desc) && (FloatText.show(desc));
 
         const gridIndex = action.gridIndex as GridIndex;
@@ -155,14 +155,14 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExePlayerEndTurn(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExePlayerEndTurn(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExePlayerEndTurn(war, action)
+            : await normalExePlayerEndTurn(war, action);
     }
     async function fastExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
         war.getTurnManager().endPhaseMain(action);
     }
     async function normalExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
-        // const desc = await war.getDescForExePlayerEndTurn(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        // const desc = await war.getDescForExePlayerEndTurn(action);
         // (desc) && (FloatText.show(desc));
 
         war.getTurnManager().endPhaseMain(action);
@@ -171,8 +171,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExePlayerProduceUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExePlayerProduceUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExePlayerProduceUnit(war, action)
+            : await normalExePlayerProduceUnit(war, action);
     }
     async function fastExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
         const unitType      = action.unitType as Types.UnitType;
@@ -210,7 +210,7 @@ namespace WarActionExecutor {
         playerInTurn.setFund(playerInTurn.getFund() - cost);
     }
     async function normalExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
-        const desc = await war.getDescForExePlayerProduceUnit(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExePlayerProduceUnit(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -270,14 +270,14 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExePlayerSurrender(war).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExePlayerSurrender(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExePlayerSurrender(war)
+            : await normalExePlayerSurrender(war, action);
     }
     async function fastExePlayerSurrender(war: BwWar): Promise<void> {
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
     }
     async function normalExePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender): Promise<void> {
-        const desc = await war.getDescForExePlayerSurrender(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExePlayerSurrender(action);
         (desc) && (FloatText.show(desc));
 
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
@@ -286,8 +286,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExePlayerVoteForDraw(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExePlayerVoteForDraw(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExePlayerVoteForDraw(war, action)
+            : await normalExePlayerVoteForDraw(war, action);
     }
     async function fastExePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw): Promise<void> {
         const playerInTurn = war.getPlayerInTurn();
@@ -301,7 +301,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw): Promise<void> {
-        const desc = await war.getDescForExePlayerVoteForDraw(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExePlayerVoteForDraw(action);
         (desc) && (FloatText.show(desc));
 
         const playerInTurn = war.getPlayerInTurn();
@@ -318,8 +318,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExePlayerUseCoSkill(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExePlayerUseCoSkill(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExePlayerUseCoSkill(war, action)
+            : await normalExePlayerUseCoSkill(war, action);
     }
     async function fastExePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill): Promise<void> {
         const skillType         = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_00);
@@ -478,14 +478,14 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeSystemBeginTurn(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeSystemBeginTurn(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeSystemBeginTurn(war, action)
+            : await normalExeSystemBeginTurn(war, action);
     }
     async function fastExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
         war.getTurnManager().endPhaseWaitBeginTurn(action);
     }
     async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
-        // const desc = await war.getDescForExeSystemBeginTurn(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        // const desc = await war.getDescForExeSystemBeginTurn(action);
         // (desc) && (FloatText.show(desc));
 
         // return war.getTurnManager().endPhaseWaitBeginTurn(action);
@@ -493,7 +493,7 @@ namespace WarActionExecutor {
         const playerInTurn  = war.getPlayerInTurn();
         const playerIndex   = playerInTurn.getPlayerIndex();
         if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
-            const nickname = await playerInTurn.getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const nickname = await playerInTurn.getNickname();
             await new Promise<void>(resolve => {
                 TwnsBwBeginTurnPanel.BwBeginTurnPanel.show({
                     playerIndex,
@@ -501,7 +501,7 @@ namespace WarActionExecutor {
                     nickname,
                     callbackOnFinish    : () => resolve(),
                 });
-            }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            });
         }
 
         war.getTurnManager().endPhaseWaitBeginTurn(action);
@@ -510,17 +510,17 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeSystemCallWarEvent(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeSystemCallWarEvent(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeSystemCallWarEvent(war, action)
+            : await normalExeSystemCallWarEvent(war, action);
     }
     async function fastExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
         const warEventManager   = war.getWarEventManager();
         const warEventId        = Helpers.getExisted(action.warEventId);
         warEventManager.updateWarEventCalledCountOnCall(warEventId);
-        await warEventManager.callWarEvent(warEventId, true).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await warEventManager.callWarEvent(warEventId, true);
     }
     async function normalExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
-        const desc = await war.getDescForExeSystemCallWarEvent(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeSystemCallWarEvent(action);
         (desc) && (FloatText.show(desc));
 
         const warEventManager   = war.getWarEventManager();
@@ -529,7 +529,7 @@ namespace WarActionExecutor {
 
         const extraDataList = action.extraDataList;
         if (extraDataList == null) {
-            await warEventManager.callWarEvent(warEventId, false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await warEventManager.callWarEvent(warEventId, false);
         } else {
             const unitMap       = war.getUnitMap();
             const configVersion = war.getConfigVersion();
@@ -565,14 +565,14 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeSystemDestroyPlayerForce(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeSystemDestroyPlayerForce(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeSystemDestroyPlayerForce(war, action)
+            : await normalExeSystemDestroyPlayerForce(war, action);
     }
     async function fastExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<void> {
         WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), false);
     }
     async function normalExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<void> {
-        const desc = await war.getDescForExeSystemDestroyPlayerForce(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeSystemDestroyPlayerForce(action);
         (desc) && (FloatText.show(desc));
 
         WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), true);
@@ -583,14 +583,14 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemEndWar(war: BwWar, action: IWarActionSystemEndWar, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeSystemEndWar(war).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeSystemEndWar(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeSystemEndWar(war)
+            : await normalExeSystemEndWar(war, action);
     }
     async function fastExeSystemEndWar(war: BwWar): Promise<void> {
         war.setIsEnded(true);
     }
     async function normalExeSystemEndWar(war: BwWar, action: IWarActionSystemEndWar): Promise<void> {
-        const desc = await war.getDescForExeSystemEndWar(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeSystemEndWar(action);
         (desc) && (FloatText.show(desc));
 
         war.setIsEnded(true);
@@ -599,14 +599,14 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeSystemEndTurn(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeSystemEndTurn(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeSystemEndTurn(war, action)
+            : await normalExeSystemEndTurn(war, action);
     }
     async function fastExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
         war.getTurnManager().endPhaseMain(action);
     }
     async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
-        // const desc = await war.getDescForExeSystemEndTurn(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        // const desc = await war.getDescForExeSystemEndTurn(action);
         // (desc) && (FloatText.show(desc));
 
         war.getTurnManager().endPhaseMain(action);
@@ -615,14 +615,14 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeSystemHandleBootPlayer(war).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeSystemHandleBootPlayer(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeSystemHandleBootPlayer(war)
+            : await normalExeSystemHandleBootPlayer(war, action);
     }
     async function fastExeSystemHandleBootPlayer(war: BwWar): Promise<void> {
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
     }
     async function normalExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<void> {
-        const desc = await war.getDescForExeSystemHandleBootPlayer(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeSystemHandleBootPlayer(action);
         (desc) && (FloatText.show(desc));
 
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
@@ -631,8 +631,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitAttackTile(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitAttackTile(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitAttackTile(war, action)
+            : await normalExeUnitAttackTile(war, action);
     }
     async function fastExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<void> {
         const path          = action.path as MovePath;
@@ -812,7 +812,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<void> {
-        const desc = await war.getDescForExeUnitAttackTile(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitAttackTile(action);
         (desc) && (FloatText.show(desc));
 
         const path          = action.path as MovePath;
@@ -830,7 +830,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
                 focusUnit.updateView();
 
             } else {
@@ -841,7 +841,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, action.targetGridIndex as GridIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, action.targetGridIndex as GridIndex);
                 if ((!allVisibleUnits.has(focusUnit))                   &&
                     (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                         war,
@@ -935,7 +935,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
                 focusUnit.updateView();
 
             } else {
@@ -954,7 +954,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, targetGridIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, targetGridIndex);
                 if ((!allVisibleUnits.has(focusUnit))                   &&
                     (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                         war,
@@ -1103,8 +1103,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitAttackUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitAttackUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitAttackUnit(war, action)
+            : await normalExeUnitAttackUnit(war, action);
     }
     async function fastExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<void> {
         const path          = action.path as MovePath;
@@ -1284,7 +1284,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitAttackUnit(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitAttackUnit(action);
         (desc) && (FloatText.show(desc));
 
         const path          = action.path as MovePath;
@@ -1302,7 +1302,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
                 focusUnit.updateView();
 
             } else {
@@ -1313,7 +1313,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, action.targetGridIndex as GridIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, action.targetGridIndex as GridIndex);
                 if ((!allVisibleUnits.has(focusUnit))                   &&
                     (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                         war,
@@ -1407,7 +1407,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
                 focusUnit.updateView();
 
             } else {
@@ -1425,7 +1425,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, targetGridIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, targetGridIndex);
                 if ((!allVisibleUnits.has(focusUnit))                   &&
                     (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                         war,
@@ -1574,8 +1574,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitBeLoaded(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitBeLoaded(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitBeLoaded(war, action)
+            : await normalExeUnitBeLoaded(war, action);
     }
     async function fastExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<void> {
         const path          = action.path as MovePath;
@@ -1594,7 +1594,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<void> {
-        const desc = await war.getDescForExeUnitBeLoaded(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitBeLoaded(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -1613,7 +1613,7 @@ namespace WarActionExecutor {
         if (path.isBlocked) {
             unitMap.setUnitOnMap(focusUnit);
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
 
         } else {
@@ -1621,7 +1621,7 @@ namespace WarActionExecutor {
             unitMap.setUnitLoaded(focusUnit);
             focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
             focusUnit.setViewVisible(false);
             loaderUnit.updateView();
@@ -1633,8 +1633,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitBuildTile(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitBuildTile(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitBuildTile(war, action)
+            : await normalExeUnitBuildTile(war, action);
     }
     async function fastExeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile): Promise<void> {
         const path          = action.path as MovePath;
@@ -1669,7 +1669,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile): Promise<void> {
-        const desc = await war.getDescForExeUnitBuildTile(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitBuildTile(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -1708,7 +1708,7 @@ namespace WarActionExecutor {
             }
         }
 
-        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
@@ -1716,8 +1716,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitCaptureTile(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitCaptureTile(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitCaptureTile(war, action)
+            : await normalExeUnitCaptureTile(war, action);
     }
     async function fastExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<void> {
         const path          = action.path as MovePath;
@@ -1757,7 +1757,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<void> {
-        const desc = await war.getDescForExeUnitCaptureTile(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitCaptureTile(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -1775,7 +1775,7 @@ namespace WarActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
             focusUnit.updateView();
 
         } else {
@@ -1803,7 +1803,7 @@ namespace WarActionExecutor {
                 });
             }
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
             if (war.getPlayerInTurn().getUserId() === UserModel.getSelfUserId()) {
                 await new Promise<void>(resolve => {
                     TwnsBwCaptureProgressPanel.BwCaptureProgressPanel.show({
@@ -1812,7 +1812,7 @@ namespace WarActionExecutor {
                         currentValue        : maxCapturePoint - currentCapturePoint,
                         callbackOnFinish    : () => resolve(),
                     });
-                }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                });
             }
             focusUnit.updateView();
             tile.flushDataToView();
@@ -1825,8 +1825,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitDive(war: BwWar, action: IWarActionUnitDive, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitDive(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitDive(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitDive(war, action)
+            : await normalExeUnitDive(war, action);
     }
     async function fastExeUnitDive(war: BwWar, action: IWarActionUnitDive): Promise<void> {
         const path          = action.path as MovePath;
@@ -1841,7 +1841,7 @@ namespace WarActionExecutor {
         (isSuccessful) && (focusUnit.setIsDiving(true));
     }
     async function normalExeUnitDive(war: BwWar, action: IWarActionUnitDive): Promise<void> {
-        const desc = await war.getDescForExeUnitDive(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitDive(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -1860,7 +1860,7 @@ namespace WarActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(true));
 
-        await focusUnit.moveViewAlongPath(pathNodes, false, path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await focusUnit.moveViewAlongPath(pathNodes, false, path.isBlocked);
         focusUnit.updateView();
         if (isSuccessful) {
             const endingGridIndex = pathNodes[pathNodes.length - 1];
@@ -1882,8 +1882,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitDropUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitDropUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitDropUnit(war, action)
+            : await normalExeUnitDropUnit(war, action);
     }
     async function fastExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<void> {
         const path              = action.path as MovePath;
@@ -1917,7 +1917,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitDropUnit(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitDropUnit(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -1955,7 +1955,7 @@ namespace WarActionExecutor {
             }
         }
 
-        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         if (action.isDropBlocked) {
             war.getGridVisionEffect().showEffectBlock(endingGridIndex);
         }
@@ -1968,19 +1968,19 @@ namespace WarActionExecutor {
                     [endingGridIndex, unitForDrop.getGridIndex()],
                     unitForDrop.getIsDiving(),
                     false,
-                ).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                );
                 unitForDrop.updateView();
             })());
         }
-        await Promise.all(promises).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await Promise.all(promises);
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitJoinUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitJoinUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitJoinUnit(war, action)
+            : await normalExeUnitJoinUnit(war, action);
     }
     async function fastExeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit): Promise<void> {
         const path              = action.path as MovePath;
@@ -2066,7 +2066,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitJoinUnit(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitJoinUnit(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -2086,7 +2086,7 @@ namespace WarActionExecutor {
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
 
         } else {
@@ -2158,7 +2158,7 @@ namespace WarActionExecutor {
                 }
             }
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
             unitMap.getView().removeUnit(targetUnit.getView());
         }
@@ -2169,8 +2169,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitLaunchFlare(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitLaunchFlare(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitLaunchFlare(war, action)
+            : await normalExeUnitLaunchFlare(war, action);
     }
     async function fastExeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare): Promise<void> {
         const path          = action.path as MovePath;
@@ -2191,7 +2191,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare): Promise<void> {
-        const desc = await war.getDescForExeUnitLaunchFlare(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitLaunchFlare(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -2216,7 +2216,7 @@ namespace WarActionExecutor {
             war.getFogMap().updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
         }
 
-        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         if ((isFlareSucceeded) && (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex()))) {
             const effect = war.getGridVisionEffect();
             for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, war.getTileMap().getMapSize())) {
@@ -2231,8 +2231,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitLaunchSilo(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitLaunchSilo(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitLaunchSilo(war, action)
+            : await normalExeUnitLaunchSilo(war, action);
     }
     async function fastExeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo): Promise<void> {
         const path          = action.path as MovePath;
@@ -2267,7 +2267,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo): Promise<void> {
-        const desc = await war.getDescForExeUnitLaunchSilo(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitLaunchSilo(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -2285,7 +2285,7 @@ namespace WarActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
 
         } else {
@@ -2307,7 +2307,7 @@ namespace WarActionExecutor {
                 }
             }
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             const effect = war.getGridVisionEffect();
             for (const grid of targetGrids) {
                 effect.showEffectSiloExplosion(grid);
@@ -2326,8 +2326,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitLoadCo(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitLoadCo(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitLoadCo(war, action)
+            : await normalExeUnitLoadCo(war, action);
     }
     async function fastExeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo): Promise<void> {
         const path          = action.path as MovePath;
@@ -2356,7 +2356,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo): Promise<void> {
-        const desc = await war.getDescForExeUnitLoadCo(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitLoadCo(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -2389,7 +2389,7 @@ namespace WarActionExecutor {
             );
         }
 
-        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
@@ -2397,8 +2397,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitProduceUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitProduceUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitProduceUnit(war, action)
+            : await normalExeUnitProduceUnit(war, action);
     }
     async function fastExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<void> {
         const path          = action.path as MovePath;
@@ -2434,7 +2434,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitProduceUnit(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitProduceUnit(action);
         (desc) && (FloatText.show(desc));
 
         const path          = action.path as MovePath;
@@ -2451,7 +2451,7 @@ namespace WarActionExecutor {
             focusUnit.setActionState(UnitActionState.Acted);
 
             if (path.isBlocked) {
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
                 focusUnit.updateView();
 
             } else {
@@ -2474,7 +2474,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitLoaded(producedUnit);
                 focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
                 focusUnit.updateView();
             }
 
@@ -2484,7 +2484,7 @@ namespace WarActionExecutor {
             focusUnit.setActionState(UnitActionState.Acted);
 
             if (path.isBlocked) {
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
                 focusUnit.updateView();
 
             } else {
@@ -2507,7 +2507,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitLoaded(producedUnit);
                 focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
                 focusUnit.updateView();
             }
         }
@@ -2518,8 +2518,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitSupplyUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitSupplyUnit(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitSupplyUnit(war, action)
+            : await normalExeUnitSupplyUnit(war, action);
     }
     async function fastExeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit): Promise<void> {
         const revisedPath   = action.path as MovePath;
@@ -2553,7 +2553,7 @@ namespace WarActionExecutor {
         }
     }
     async function normalExeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitSupplyUnit(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitSupplyUnit(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -2572,7 +2572,7 @@ namespace WarActionExecutor {
 
         const isBlocked = revisedPath.isBlocked;
         if (isBlocked) {
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), isBlocked);
             focusUnit.updateView();
 
         } else {
@@ -2592,7 +2592,7 @@ namespace WarActionExecutor {
                 }
             }
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), isBlocked);
             focusUnit.updateView();
 
             const gridVisionEffect = war.getGridVisionEffect();
@@ -2608,8 +2608,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitSurface(war: BwWar, action: IWarActionUnitSurface, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitSurface(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitSurface(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitSurface(war, action)
+            : await normalExeUnitSurface(war, action);
     }
     async function fastExeUnitSurface(war: BwWar, action: IWarActionUnitSurface): Promise<void> {
         const unitMap       = war.getUnitMap();
@@ -2624,7 +2624,7 @@ namespace WarActionExecutor {
         (isSuccessful) && (focusUnit.setIsDiving(false));
     }
     async function normalExeUnitSurface(war: BwWar, action: IWarActionUnitSurface): Promise<void> {
-        const desc = await war.getDescForExeUnitSurface(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitSurface(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -2643,7 +2643,7 @@ namespace WarActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(false));
 
-        await focusUnit.moveViewAlongPath(pathNodes, true, revisedPath.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await focusUnit.moveViewAlongPath(pathNodes, true, revisedPath.isBlocked);
         focusUnit.updateView();
         if (isSuccessful) {
             const endingGridIndex = pathNodes[pathNodes.length - 1];
@@ -2665,8 +2665,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitUseCoSkill(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitUseCoSkill(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitUseCoSkill(war, action)
+            : await normalExeUnitUseCoSkill(war, action);
     }
     async function fastExeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill): Promise<void> {
         const skillType         = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_00);
@@ -2734,7 +2734,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
                 focusUnit.updateView();
 
             } else {
@@ -2768,7 +2768,7 @@ namespace WarActionExecutor {
                     });
                 }
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
                 focusUnit.updateView();
 
                 const gridVisionEffect  = war.getGridVisionEffect();
@@ -2810,7 +2810,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
                 focusUnit.updateView();
 
             } else {
@@ -2845,7 +2845,7 @@ namespace WarActionExecutor {
                     skillDataList.push(dataForUseCoSkill);
                 }
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
                 focusUnit.updateView();
 
                 const gridVisionEffect  = war.getGridVisionEffect();
@@ -2880,8 +2880,8 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitWait(war: BwWar, action: IWarActionUnitWait, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeUnitWait(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; })
-            : await normalExeUnitWait(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            ? await fastExeUnitWait(war, action)
+            : await normalExeUnitWait(war, action);
     }
     async function fastExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<void> {
         const unitMap       = war.getUnitMap();
@@ -2894,7 +2894,7 @@ namespace WarActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
     }
     async function normalExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<void> {
-        const desc = await war.getDescForExeUnitWait(action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const desc = await war.getDescForExeUnitWait(action);
         (desc) && (FloatText.show(desc));
 
         const extraData = action.extraData;
@@ -2911,7 +2911,7 @@ namespace WarActionExecutor {
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
-        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
         war.updateTilesAndUnitsOnVisibilityChanged();
     }

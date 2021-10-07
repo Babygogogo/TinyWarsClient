@@ -51,7 +51,7 @@ namespace TwnsBwDialoguePanel {
 
         public static async hide(): Promise<void> {
             if (BwDialoguePanel._instance) {
-                await BwDialoguePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwDialoguePanel._instance.close();
             }
         }
 
@@ -78,7 +78,7 @@ namespace TwnsBwDialoguePanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
 
             this._getOpenData().callbackOnClose();
         }

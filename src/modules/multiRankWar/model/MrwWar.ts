@@ -17,7 +17,7 @@ namespace TwnsMrwWar {
         private _settingsForMrw?    : ISettingsForMrw;
 
         public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._baseInit(data);
             this._setSettingsForMrw(Helpers.getExisted(data.settingsForMrw, ClientErrorCode.MrwWar_Init_00));
 
             this._initView();

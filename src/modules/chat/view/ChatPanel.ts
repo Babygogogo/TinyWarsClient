@@ -71,7 +71,7 @@ namespace TwnsChatPanel {
         }
         public static async hide(): Promise<void> {
             if (ChatPanel._instance) {
-                await ChatPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await ChatPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -105,14 +105,14 @@ namespace TwnsChatPanel {
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
 
-            this._dataForListChat = await this._createDataForListChat().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            this._dataForListChat = await this._createDataForListChat();
             this._listChat.bindData(this._dataForListChat);
             this.setSelectedIndex(this._getDefaultSelectedIndex());
 
             Notify.dispatch(NotifyType.ChatPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
 
             this._dataForListChat.length    = 0;
             this._selectedIndex             = null;
@@ -183,7 +183,7 @@ namespace TwnsChatPanel {
                 }
             }
 
-            const newDataList   = await this._createDataForListChat().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const newDataList   = await this._createDataForListChat();
             this._selectedIndex = newDataList.findIndex(v => {
                 return (v.toCategory == pageData.toCategory)
                     && (v.toTarget == pageData.toTarget);
@@ -193,7 +193,7 @@ namespace TwnsChatPanel {
         }
 
         private async _onMsgChatGetAllMessages(): Promise<void> {
-            this._dataForListChat = await this._createDataForListChat().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            this._dataForListChat = await this._createDataForListChat();
             this._listChat.bindData(this._dataForListChat);
             this.setSelectedIndex(0);
         }
@@ -319,7 +319,7 @@ namespace TwnsChatPanel {
                 ++indexForSort;
             }
             for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.McrRoom)) {
-                if (await McrModel.getRoomInfo(toRoomId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) {
+                if (await McrModel.getRoomInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
@@ -331,7 +331,7 @@ namespace TwnsChatPanel {
                 }
             }
             for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.CcrRoom)) {
-                if (await CcrModel.getRoomInfo(toRoomId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) {
+                if (await CcrModel.getRoomInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
@@ -343,7 +343,7 @@ namespace TwnsChatPanel {
                 }
             }
             for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.MfrRoom)) {
-                if (await MfrModel.getRoomInfo(toRoomId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) {
+                if (await MfrModel.getRoomInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
@@ -632,7 +632,7 @@ namespace TwnsChatPanel {
                         if (warName) {
                             labelName.text = warName;
                         } else {
-                            labelName.text = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined;
+                            labelName.text = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
                         }
                     }
                 });
@@ -649,7 +649,7 @@ namespace TwnsChatPanel {
                         if (warName) {
                             labelName.text = warName;
                         } else {
-                            labelName.text = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined;
+                            labelName.text = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
                         }
                     }
                 });
@@ -691,7 +691,7 @@ namespace TwnsChatPanel {
             this._labelName.textColor   = fromUserId === UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
             this._labelName.text        = `    (${Helpers.getTimestampShortText(Helpers.getExisted(message.timestamp))})`;
 
-            const userInfo = Helpers.getExisted(await UserModel.getUserPublicInfo(fromUserId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            const userInfo = Helpers.getExisted(await UserModel.getUserPublicInfo(fromUserId));
             if ((this._getIsOpening()) && (data === this._getData())) {
                 this._labelName.text = `${userInfo.nickname || `???`}    (${Helpers.getTimestampShortText(Helpers.getExisted(message.timestamp))})`;
             }
@@ -702,7 +702,7 @@ namespace TwnsChatPanel {
             if (message.toCategory !== ChatCategory.Private) {
                 const userId = Helpers.getExisted(message.fromUserId);
                 if (userId !== UserModel.getSelfUserId()) {
-                    const info = await UserModel.getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                    const info = await UserModel.getUserPublicInfo(userId);
                     if (info) {
                         CommonConfirmPanel.show({
                             content : Lang.getFormattedText(LangTextType.F0025, info.nickname),

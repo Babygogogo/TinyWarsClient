@@ -51,7 +51,7 @@ namespace TwnsWwMainMenuPanel {
 
         public static async hide(): Promise<void> {
             if (WwMainMenuPanel._instance) {
-                await WwMainMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WwMainMenuPanel._instance.close();
             }
         }
 
@@ -81,7 +81,7 @@ namespace TwnsWwMainMenuPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

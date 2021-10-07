@@ -76,7 +76,7 @@ namespace TwnsScrCreateMapListPanel {
         }
         public static async hide(): Promise<void> {
             if (ScrCreateMapListPanel._instance) {
-                await ScrCreateMapListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await ScrCreateMapListPanel._instance.close();
             }
         }
         public static getInstance(): ScrCreateMapListPanel {
@@ -107,7 +107,7 @@ namespace TwnsScrCreateMapListPanel {
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         public async setAndReviseSelectedMapId(newMapId: number | null): Promise<void> {
@@ -123,7 +123,7 @@ namespace TwnsScrCreateMapListPanel {
                 (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
 
                 this._listMap.setSelectedIndex(newIndex);
-                await this._showMap(dataList[newIndex].mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await this._showMap(dataList[newIndex].mapId);
             }
         }
         public getSelectedMapId(): number | null {
@@ -132,7 +132,7 @@ namespace TwnsScrCreateMapListPanel {
 
         public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
             this._mapFilters            = mapFilters;
-            const dataArray             = await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const dataArray             = await this._createDataForListMap();
             this._dataForList           = dataArray;
 
             const length                = dataArray.length;
@@ -165,7 +165,7 @@ namespace TwnsScrCreateMapListPanel {
             const selectedMapId = this.getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
-                await ScrCreateModel.resetDataByMapId(selectedMapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await ScrCreateModel.resetDataByMapId(selectedMapId);
                 ScrCreateSettingsPanel.show();
             }
         }
@@ -200,8 +200,8 @@ namespace TwnsScrCreateMapListPanel {
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
                 const mapExtraData  = Helpers.getExisted(mapBriefData.mapExtraData);
                 const mapTag        = mapBriefData.mapTag || {};
-                const realMapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
-                const rating        = await WarMapModel.getAverageRating(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                const realMapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                const rating        = await WarMapModel.getAverageRating(mapId);
                 if ((!mapBriefData.ruleAvailability?.canScw)                                                ||
                     (!mapExtraData.isEnabled)                                                               ||
                     (!mapExtraData.mapComplexInfo?.mapAvailability?.canScw)                                 ||
@@ -225,7 +225,7 @@ namespace TwnsScrCreateMapListPanel {
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })));
+            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)));
             this._uiMapInfo.setData({
                 mapInfo: {
                     mapId,
@@ -354,7 +354,7 @@ namespace TwnsScrCreateMapListPanel {
         private async _onTouchTapBtnNext(): Promise<void> {
             const data = this._getData();
             data.panel.close();
-            await ScrCreateModel.resetDataByMapId(data.mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await ScrCreateModel.resetDataByMapId(data.mapId);
             ScrCreateSettingsPanel.show();
         }
     }

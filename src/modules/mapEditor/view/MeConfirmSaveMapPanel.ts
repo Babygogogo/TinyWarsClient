@@ -48,7 +48,7 @@ namespace TwnsMeConfirmSaveMapPanel {
 
         public static async hide(): Promise<void> {
             if (MeConfirmSaveMapPanel._instance) {
-                await MeConfirmSaveMapPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeConfirmSaveMapPanel._instance.close();
             }
         }
 
@@ -74,7 +74,7 @@ namespace TwnsMeConfirmSaveMapPanel {
             this._updateImgNeedReview();
 
             const mapRawData                    = Helpers.getExisted(MeModel.getWar()).serializeForMap();
-            const errorCode                     = await MeUtility.getErrorCodeForMapRawData(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const errorCode                     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
             this._mapRawData                    = mapRawData;
             this._groupNeedReview.visible       = !errorCode;
             this._labelReviewDescTitle.visible  = !!errorCode;

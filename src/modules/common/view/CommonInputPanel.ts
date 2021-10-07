@@ -48,7 +48,7 @@ namespace TwnsCommonInputPanel {
 
         public static async hide(): Promise<void> {
             if (CommonInputPanel._instance) {
-                await CommonInputPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonInputPanel._instance.close();
             }
         }
 
@@ -83,7 +83,7 @@ namespace TwnsCommonInputPanel {
             input.textDisplay.multiline = !!openData.isMultiLine;
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         public getInputText(): string {

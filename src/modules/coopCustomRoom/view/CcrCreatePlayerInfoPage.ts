@@ -52,7 +52,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
         }
 
         private async _updateComponentsForPlayerInfo(): Promise<void> {
-            this._listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted((await CcrCreateModel.getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).playersCountUnneutral)));
+            this._listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted((await CcrCreateModel.getMapRawData()).playersCountUnneutral)));
         }
 
         private _createDataForListPlayer(playersCountUnneutral: number): DataForPlayerRenderer[] {

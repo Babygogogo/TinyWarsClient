@@ -36,7 +36,7 @@ namespace CcrCreateModel {
     };
 
     export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
-        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
     }
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
@@ -47,7 +47,7 @@ namespace CcrCreateModel {
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
-        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).warRuleArray?.find(v => v.ruleAvailability?.canCcw)?.ruleId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleAvailability?.canCcw)?.ruleId));
     }
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
@@ -77,7 +77,7 @@ namespace CcrCreateModel {
     }
 
     export async function resetDataByWarRuleId(ruleId: number): Promise<void> {
-        const warRule               = Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; }))?.warRuleArray?.find(r => r.ruleId === ruleId));
+        const warRule               = Helpers.getExisted((await getMapRawData())?.warRuleArray?.find(r => r.ruleId === ruleId));
         const humanPlayerIndexArray : number[] = [];
         const aiPlayerIndexArray    : number[] = [];
         for (const playerRule of Helpers.getExisted(warRule.ruleForPlayers?.playerRuleDataArray)) {
@@ -124,9 +124,9 @@ namespace CcrCreateModel {
     }
     export async function tickPresetWarRuleId(): Promise<void> {
         const currWarRuleId = getPresetWarRuleId();
-        const warRuleArray  = Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).warRuleArray);
+        const warRuleArray  = Helpers.getExisted((await getMapRawData()).warRuleArray);
         if (currWarRuleId == null) {
-            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canCcw)?.ruleId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canCcw)?.ruleId));
         } else {
             const warRuleIdList: number[] = [];
             for (let ruleId = currWarRuleId + 1; ruleId < warRuleArray.length; ++ruleId) {
@@ -137,7 +137,7 @@ namespace CcrCreateModel {
             }
             for (const ruleId of warRuleIdList) {
                 if (warRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canCcw) {
-                    await resetDataByWarRuleId(ruleId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                    await resetDataByWarRuleId(ruleId);
                     return;
                 }
             }

@@ -43,7 +43,7 @@ namespace TwnsWeActionAddUnitListPanel {
 
         public static async hide(): Promise<void> {
             if (WeActionAddUnitListPanel._instance) {
-                await WeActionAddUnitListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WeActionAddUnitListPanel._instance.close();
             }
         }
 

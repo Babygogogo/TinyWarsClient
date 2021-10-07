@@ -42,7 +42,7 @@ namespace TwnsMeOffsetPanel {
 
         public static async hide(): Promise<void> {
             if (MeOffsetPanel._instance) {
-                await MeOffsetPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeOffsetPanel._instance.close();
             }
         }
 
@@ -85,7 +85,7 @@ namespace TwnsMeOffsetPanel {
                 await war.initWithMapEditorData({
                     mapRawData  : MeUtility.addOffset(war.serializeForMap(), offsetX, offsetY),
                     slotIndex   : war.getMapSlotIndex(),
-                }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                });
                 war.setIsMapModified(true);
                 war.startRunning()
                     .startRunningView();

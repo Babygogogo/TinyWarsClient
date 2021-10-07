@@ -54,10 +54,10 @@ namespace ScrCreateModel {
     }
 
     export async function getMapBriefData(): Promise<ProtoTypes.Map.IMapBriefData> {
-        return Helpers.getExisted(await WarMapModel.getBriefData(getMapId()).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+        return Helpers.getExisted(await WarMapModel.getBriefData(getMapId()));
     }
     export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
-        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
     }
 
     export function getPlayerRule(playerIndex: number): IDataForPlayerRule {
@@ -73,7 +73,7 @@ namespace ScrCreateModel {
         setSaveSlotIndex(SpmModel.getAvailableIndex());
         setSlotComment(null);
         setPlayerInfoList([]);
-        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).warRuleArray?.find(v => v.ruleAvailability?.canScw)?.ruleId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleAvailability?.canScw)?.ruleId));
     }
     export function getData(): DataForCreateWar {
         return _dataForCreateWar;
@@ -94,20 +94,20 @@ namespace ScrCreateModel {
 
     export async function resetDataByWarRuleId(ruleId: number | null): Promise<void> {
         if (ruleId == null) {
-            await resetDataByCustomWarRuleId().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await resetDataByCustomWarRuleId();
         } else {
-            await resetDataByPresetWarRuleId(ruleId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await resetDataByPresetWarRuleId(ruleId);
         }
     }
     async function resetDataByCustomWarRuleId(): Promise<void> {
-        getSettingsForCommon().warRule = WarRuleHelpers.createDefaultWarRule(null, Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).playersCountUnneutral));
+        getSettingsForCommon().warRule = WarRuleHelpers.createDefaultWarRule(null, Helpers.getExisted((await getMapRawData()).playersCountUnneutral));
         setCustomWarRuleId();
-        await resetPlayerInfoList().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await resetPlayerInfoList();
     }
     async function resetDataByPresetWarRuleId(ruleId: number): Promise<void> {
-        getSettingsForCommon().warRule = Helpers.deepClone(Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).warRuleArray?.find(v => v.ruleId === ruleId)));
+        getSettingsForCommon().warRule = Helpers.deepClone(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleId === ruleId)));
         setPresetWarRuleId(ruleId);
-        await resetPlayerInfoList().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await resetPlayerInfoList();
     }
     function setPresetWarRuleId(ruleId: number | null): void {
         getWarRule().ruleId                     = ruleId;
@@ -122,9 +122,9 @@ namespace ScrCreateModel {
     }
     export async function tickPresetWarRuleId(): Promise<void> {
         const currWarRuleId = getPresetWarRuleId();
-        const warRuleArray  = Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).warRuleArray);
+        const warRuleArray  = Helpers.getExisted((await getMapRawData()).warRuleArray);
         if (currWarRuleId == null) {
-            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canScw)?.ruleId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canScw)?.ruleId));
         } else {
             const warRuleIdList: number[] = [];
             for (let ruleId = currWarRuleId + 1; ruleId < warRuleArray.length; ++ruleId) {
@@ -135,7 +135,7 @@ namespace ScrCreateModel {
             }
             for (const ruleId of warRuleIdList) {
                 if (warRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canScw) {
-                    await resetDataByWarRuleId(ruleId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                    await resetDataByWarRuleId(ruleId);
                     return;
                 }
             }
@@ -148,7 +148,7 @@ namespace ScrCreateModel {
         const settingsForCommon = Helpers.getExisted(data.settingsForCommon);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         const configVersion     = Helpers.getExisted(settingsForCommon.configVersion);
-        const playersCount      = Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).playersCountUnneutral);
+        const playersCount      = Helpers.getExisted((await getMapRawData()).playersCountUnneutral);
         const newPlayerInfoList : IDataForPlayerInRoom[] = [];
 
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {

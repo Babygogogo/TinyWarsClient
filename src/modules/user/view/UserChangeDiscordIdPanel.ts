@@ -48,7 +48,7 @@ namespace TwnsUserChangeDiscordIdPanel {
 
         public static async hide(): Promise<void> {
             if (UserChangeDiscordIdPanel._instance) {
-                await UserChangeDiscordIdPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await UserChangeDiscordIdPanel._instance.close();
             }
         }
 
@@ -86,7 +86,7 @@ namespace TwnsUserChangeDiscordIdPanel {
             this._updateComponentsForLanguage();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onTouchedBtnConfirm(): void {

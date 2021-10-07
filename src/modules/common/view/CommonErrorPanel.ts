@@ -33,7 +33,7 @@ namespace TwnsCommonErrorPanel {
 
         public static async hide(): Promise<void> {
             if (CommonErrorPanel._instance) {
-                await CommonErrorPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonErrorPanel._instance.close();
             }
         }
 

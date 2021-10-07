@@ -18,7 +18,7 @@ namespace TwnsLobbyBackgroundPanel {
         }
         public static async hide(): Promise<void> {
             if (LobbyBackgroundPanel._instance) {
-                await LobbyBackgroundPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await LobbyBackgroundPanel._instance.close();
             }
         }
         public static getInstance(): LobbyBackgroundPanel | null {

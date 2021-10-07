@@ -57,7 +57,7 @@ namespace TwnsRwSearchReplayPanel {
         }
         public static async hide(): Promise<void> {
             if (RwSearchReplayPanel._instance) {
-                await RwSearchReplayPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await RwSearchReplayPanel._instance.close();
             }
         }
 
@@ -85,7 +85,7 @@ namespace TwnsRwSearchReplayPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onTouchedBtnReset(): void {

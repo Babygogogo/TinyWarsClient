@@ -40,7 +40,7 @@ namespace TwnsMeMapTagPanel {
 
         public static async hide(): Promise<void> {
             if (MeMapTagPanel._instance) {
-                await MeMapTagPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeMapTagPanel._instance.close();
             }
         }
 

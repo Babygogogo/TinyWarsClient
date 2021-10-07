@@ -42,7 +42,7 @@ namespace TwnsCommonAlertPanel {
 
         public static async hide(): Promise<void> {
             if (CommonAlertPanel._instance) {
-                await CommonAlertPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonAlertPanel._instance.close();
             }
         }
 
@@ -72,7 +72,7 @@ namespace TwnsCommonAlertPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onTouchedBtnClose(): void {

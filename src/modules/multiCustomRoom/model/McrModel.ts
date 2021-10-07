@@ -129,7 +129,7 @@ namespace McrModel {
     }
     export async function updateOnMsgMcrDeletePlayer(data: ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS): Promise<void> {
         const roomId    = Helpers.getExisted(data.roomId);
-        const roomInfo  = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo  = await getRoomInfo(roomId);
         if (roomInfo) {
             const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const playerData        = playerDataList.find(v => v.playerIndex === data.targetPlayerIndex);
@@ -142,13 +142,13 @@ namespace McrModel {
         }
     }
     export async function updateOnMsgMcrSetReady(data: ProtoTypes.NetMessage.MsgMcrSetReady.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             Helpers.getExisted(roomInfo.playerDataList?.find(v => v.playerIndex === data.playerIndex)).isReady = data.isReady;
         }
     }
     export async function updateOnMsgMcrSetSelfSettings(data: ProtoTypes.NetMessage.MsgMcrSetSelfSettings.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             const oldPlayerIndex            = data.oldPlayerIndex;
             const newPlayerIndex            = data.newPlayerIndex;
@@ -162,13 +162,13 @@ namespace McrModel {
         }
     }
     export async function updateOnMsgMcrGetOwnerPlayerIndex(data: ProtoTypes.NetMessage.MsgMcrGetOwnerPlayerIndex.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             roomInfo.ownerPlayerIndex = data.ownerPlayerIndex;
         }
     }
     export async function updateOnMsgMcrJoinRoom(data: ProtoTypes.NetMessage.MsgMcrJoinRoom.IS): Promise<void> {
-        const roomInfo      = Helpers.getExisted(await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+        const roomInfo      = Helpers.getExisted(await getRoomInfo(Helpers.getExisted(data.roomId)));
         const playerIndex   = data.playerIndex;
         if (!roomInfo.playerDataList) {
             roomInfo.playerDataList = [{
@@ -192,7 +192,7 @@ namespace McrModel {
     }
     export async function updateOnMsgMcrExitRoom(data: ProtoTypes.NetMessage.MsgMcrExitRoom.IS): Promise<void> {
         const roomId    = Helpers.getExisted(data.roomId);
-        const roomInfo  = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo  = await getRoomInfo(roomId);
         if (roomInfo) {
             const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const playerData        = playerDataList.find(v => v.playerIndex === data.playerIndex);
@@ -213,14 +213,14 @@ namespace McrModel {
 
     export async function checkIsRed(): Promise<boolean> {
         for (const roomId of _joinedRoomIdSet) {
-            if (await checkIsRedForRoom(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) {
+            if (await checkIsRedForRoom(roomId)) {
                 return true;
             }
         }
         return false;
     }
     export async function checkIsRedForRoom(roomId: number): Promise<boolean> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo) {
             const selfUserId        = UserModel.getSelfUserId();
             const playerDataList    = roomInfo.playerDataList || [];
@@ -240,7 +240,7 @@ namespace McrModel {
         return false;
     }
     export async function checkCanStartGame(roomId: number): Promise<boolean> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (!roomInfo) {
             return false;
         }
@@ -260,7 +260,7 @@ namespace McrModel {
             return null;
         }
 
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
             return null;
         }
@@ -300,7 +300,7 @@ namespace McrModel {
             return null;
         }
 
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
             return { dataArrayForListSettings: [] };
         }
@@ -314,7 +314,7 @@ namespace McrModel {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)),
                     warRule,
                     callbackOnModify: null,
                 },
@@ -390,7 +390,7 @@ namespace McrModel {
             return null;
         }
 
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
             return null;
         }

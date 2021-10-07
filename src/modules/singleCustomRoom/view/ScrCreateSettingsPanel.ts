@@ -65,7 +65,7 @@ namespace TwnsScrCreateSettingsPanel {
         }
         public static async hide(): Promise<void> {
             if (ScrCreateSettingsPanel._instance) {
-                await ScrCreateSettingsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await ScrCreateSettingsPanel._instance.close();
             }
         }
 
@@ -92,7 +92,7 @@ namespace TwnsScrCreateSettingsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
                     pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
-                    pageData    : await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -119,7 +119,7 @@ namespace TwnsScrCreateSettingsPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
             this._clearTimeoutForBtnConfirm();
         }
 
@@ -192,7 +192,7 @@ namespace TwnsScrCreateSettingsPanel {
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
             }
         }
 
@@ -209,7 +209,7 @@ namespace TwnsScrCreateSettingsPanel {
                 dataArrayForListSettings: [
                     {
                         settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(ScrCreateModel.getMapId()).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(ScrCreateModel.getMapId()),
                         warRule,
                         callbackOnModify: null,
                     },
@@ -218,7 +218,7 @@ namespace TwnsScrCreateSettingsPanel {
                         currentValue    : null,
                         warRule,
                         callbackOnModify: async () => {
-                            await ScrCreateModel.tickPresetWarRuleId().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                            await ScrCreateModel.tickPresetWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },

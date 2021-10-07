@@ -48,14 +48,14 @@ namespace TwnsMeWar {
         private _mapTag?            : IDataForMapTag;
 
         public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._baseInit(data);
             this.getDrawer().init();
 
             this._initView();
         }
         public async initWithMapEditorData(data: ProtoTypes.Map.IMapEditorData): Promise<void> {
             const warData = MeUtility.createISerialWar(data);
-            await this.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this.init(warData);
 
             const mapRawData = Helpers.getExisted(data.mapRawData);
             this.setMapSlotIndex(Helpers.getExisted(data.slotIndex));

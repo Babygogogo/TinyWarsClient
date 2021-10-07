@@ -46,7 +46,7 @@ namespace TwnsCommonConfirmPanel {
 
         public static async hide(): Promise<void> {
             if (CommonConfirmPanel._instance) {
-                await CommonConfirmPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonConfirmPanel._instance.close();
             }
         }
 
@@ -75,7 +75,7 @@ namespace TwnsCommonConfirmPanel {
             this._scrContent.viewport.scrollV = 0;
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onTouchedBtnCancel(): void {

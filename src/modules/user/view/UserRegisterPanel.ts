@@ -48,7 +48,7 @@ namespace TwnsUserRegisterPanel {
 
         public static async hide(): Promise<void> {
             if (UserRegisterPanel._instance) {
-                await UserRegisterPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await UserRegisterPanel._instance.close();
             }
         }
 
@@ -77,7 +77,7 @@ namespace TwnsUserRegisterPanel {
             this._updateComponentsForLanguage();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onMsgUserRegister(e: egret.Event): void {

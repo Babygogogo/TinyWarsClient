@@ -52,7 +52,7 @@ namespace TwnsUserSetStageScalePanel {
 
         public static async hide(): Promise<void> {
             if (UserSetStageScalePanel._instance) {
-                await UserSetStageScalePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await UserSetStageScalePanel._instance.close();
             }
         }
 
@@ -87,7 +87,7 @@ namespace TwnsUserSetStageScalePanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

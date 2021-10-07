@@ -157,15 +157,15 @@ namespace TwnsUiMapInfo {
             const mapInfo = data.mapInfo;
             if (mapInfo) {
                 const mapId             = mapInfo.mapId;
-                const mapRawData        = Helpers.getExisted(await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
-                const rating            = await WarMapModel.getAverageRating(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                const mapRawData        = Helpers.getExisted(await WarMapModel.getRawData(mapId));
+                const rating            = await WarMapModel.getAverageRating(mapId);
                 const myRating          = UserModel.getMapRating(mapId);
-                labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || CommonConstants.ErrorTextForUndefined;
+                labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
                 labelPlayersCount.text  = `${mapRawData.playersCountUnneutral}`;
                 labelRating.text        = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
                 labelRaters.text        = `(${await WarMapModel.getTotalRatersCount(mapId)})`;
                 labelMyRating.text      = myRating != null ? `${myRating}` : Lang.getText(LangTextType.B0001);
-                labelPlayedTimes.text   = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })}`;
+                labelPlayedTimes.text   = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)}`;
                 labelMapSize.text       = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
                 btnSetMyRating.visible  = true;
                 this._listTile.bindData(generateDataForListTile(Helpers.getExisted(mapRawData.tileDataArray)));
@@ -201,7 +201,7 @@ namespace TwnsUiMapInfo {
 
             const mapInfo = data.mapInfo;
             if (mapInfo) {
-                const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapInfo.mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapInfo.mapId));
                 labelDesigner.text  = `${prefix}${mapRawData.designerName || CommonConstants.ErrorTextForUndefined}`;
                 return;
             }

@@ -54,7 +54,7 @@ namespace TwnsWeConditionModifyPanel7 {
 
         public static async hide(): Promise<void> {
             if (WeConditionModifyPanel7._instance) {
-                await WeConditionModifyPanel7._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WeConditionModifyPanel7._instance.close();
             }
         }
 

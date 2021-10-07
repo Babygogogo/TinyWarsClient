@@ -29,7 +29,7 @@ namespace TwnsBwCaptureProgressPanel {
 
         public static async hide(): Promise<void> {
             if (BwCaptureProgressPanel._instance) {
-                await BwCaptureProgressPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwCaptureProgressPanel._instance.close();
             }
         }
 

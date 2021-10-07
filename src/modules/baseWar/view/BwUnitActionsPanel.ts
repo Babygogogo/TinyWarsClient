@@ -46,7 +46,7 @@ namespace TwnsBwUnitActionsPanel {
         }
         public static async hide(): Promise<void> {
             if (BwUnitActionsPanel._instance) {
-                await BwUnitActionsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwUnitActionsPanel._instance.close();
             }
         }
 
@@ -70,7 +70,7 @@ namespace TwnsBwUnitActionsPanel {
             this._updatePosition();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

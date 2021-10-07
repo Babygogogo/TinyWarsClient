@@ -95,7 +95,7 @@ namespace TwnsBwWarEventManager {
             const extraDataList : IExtraDataForSystemCallWarEvent[] = [];
             const actionIdArray = event.actionIdArray || [];
             for (let index = 0; index < actionIdArray.length; ++index) {
-                const extraData = await this._callWarAction(actionIdArray[index], index, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                const extraData = await this._callWarAction(actionIdArray[index], index, isFastExecute);
                 if (extraData) {
                     extraDataList.push(extraData);
                 }
@@ -106,11 +106,11 @@ namespace TwnsBwWarEventManager {
         private async _callWarAction(warEventActionId: number, indexForActionIdList: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | null> {
             const action = this.getWarEventAction(warEventActionId);
             if (action.WeaAddUnit) {
-                return await this._callActionAddUnit(indexForActionIdList, action.WeaAddUnit, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                return await this._callActionAddUnit(indexForActionIdList, action.WeaAddUnit, isFastExecute);
             } else if (action.WeaSetPlayerAliveState) {
-                return await this._callActionSetPlayerAliveState(action.WeaSetPlayerAliveState).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                return await this._callActionSetPlayerAliveState(action.WeaSetPlayerAliveState);
             } else if (action.WeaDialogue) {
-                return await this._callActionDialogue(action.WeaDialogue, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                return await this._callActionDialogue(action.WeaDialogue, isFastExecute);
             } else {
                 throw Helpers.newError(`Invalid action.`);
             }

@@ -258,7 +258,7 @@ namespace TwnsBwPlayer {
             const userId = this.getUserId();
             return (userId == null)
                 ?  `A.I.`
-                : await UserModel.getUserNickname(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || `??`;
+                : await UserModel.getUserNickname(userId) || `??`;
         }
 
         public setCoId(coId: number): void {

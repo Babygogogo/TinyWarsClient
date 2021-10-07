@@ -34,7 +34,7 @@ namespace TwnsBwBeginTurnPanel {
 
         public static async hide(): Promise<void> {
             if (BwBeginTurnPanel._instance) {
-                await BwBeginTurnPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwBeginTurnPanel._instance.close();
             }
         }
 

@@ -45,7 +45,7 @@ namespace TwnsBwDamagePreviewPanel {
         }
         public static async hide(): Promise<void> {
             if (BwDamagePreviewPanel._instance) {
-                await BwDamagePreviewPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwDamagePreviewPanel._instance.close();
             }
         }
 

@@ -33,7 +33,7 @@ namespace TwnsCommonCoInfoPanel {
 
         public static async hide(): Promise<void> {
             if (CommonCoInfoPanel._instance) {
-                await CommonCoInfoPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonCoInfoPanel._instance.close();
             }
         }
 
@@ -62,7 +62,7 @@ namespace TwnsCommonCoInfoPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onNotifyLanguageChanged(): void {

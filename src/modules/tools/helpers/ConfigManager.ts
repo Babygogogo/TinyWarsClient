@@ -201,7 +201,7 @@ namespace ConfigManager {
         _latestConfigVersion = version;
     }
     export async function checkIsVersionValid(version: string): Promise<boolean> {
-        return (await loadConfig(version).catch(err => { CompatibilityHelpers.showError(err); throw err; })) != null;
+        return (await loadConfig(version)) != null;
     }
 
     export async function loadConfig(version: string): Promise<ExtendedFullConfig | null> {
@@ -220,7 +220,7 @@ namespace ConfigManager {
             void 0,
             null,
             RES.ResourceItem.TYPE_BIN
-        ).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        );
         rawConfig = configBin ? ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : null;
 
         if (rawConfig == null) {

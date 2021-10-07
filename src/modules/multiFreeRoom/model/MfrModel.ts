@@ -125,7 +125,7 @@ namespace MfrModel {
     }
     export async function updateOnMsgMfrDeletePlayer(data: ProtoTypes.NetMessage.MsgMfrDeletePlayer.IS): Promise<void> {
         const roomId    = Helpers.getExisted(data.roomId);
-        const roomInfo  = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo  = await getRoomInfo(roomId);
         if (roomInfo) {
             const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const playerData        = playerDataList.find(v => v.playerIndex === data.targetPlayerIndex);
@@ -138,10 +138,10 @@ namespace MfrModel {
         }
     }
     export async function updateOnMsgMfrSetReady(data: ProtoTypes.NetMessage.MsgMfrSetReady.IS): Promise<void> {
-        Helpers.getExisted((await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }))?.playerDataList?.find(v => v.playerIndex === data.playerIndex)).isReady = data.isReady;
+        Helpers.getExisted((await getRoomInfo(Helpers.getExisted(data.roomId)))?.playerDataList?.find(v => v.playerIndex === data.playerIndex)).isReady = data.isReady;
     }
     export async function updateOnMsgMfrSetSelfSettings(data: ProtoTypes.NetMessage.MsgMfrSetSelfSettings.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             const oldPlayerIndex                = data.oldPlayerIndex;
             const newPlayerIndex                = data.newPlayerIndex;
@@ -156,13 +156,13 @@ namespace MfrModel {
         }
     }
     export async function updateOnMsgMfrGetOwnerPlayerIndex(data: ProtoTypes.NetMessage.MsgMfrGetOwnerPlayerIndex.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             roomInfo.ownerPlayerIndex = data.ownerPlayerIndex;
         }
     }
     export async function updateOnMsgMfrJoinRoom(data: ProtoTypes.NetMessage.MsgMfrJoinRoom.IS): Promise<void> {
-        const roomInfo          = Helpers.getExisted(await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+        const roomInfo          = Helpers.getExisted(await getRoomInfo(Helpers.getExisted(data.roomId)));
         const playerIndex       = data.playerIndex;
         const playerDataInWar   = Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.playerManager?.players?.find(v => v.playerIndex === playerIndex));
         if (!roomInfo.playerDataList) {
@@ -187,7 +187,7 @@ namespace MfrModel {
     }
     export async function updateOnMsgMfrExitRoom(data: ProtoTypes.NetMessage.MsgMfrExitRoom.IS): Promise<void> {
         const roomId    = Helpers.getExisted(data.roomId);
-        const roomInfo  = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo  = await getRoomInfo(roomId);
         if (roomInfo) {
             const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const playerData        = playerDataList.find(v => v.playerIndex === data.playerIndex);
@@ -208,14 +208,14 @@ namespace MfrModel {
 
     export async function checkIsRed(): Promise<boolean> {
         for (const roomId of _joinedRoomIdSet) {
-            if (await checkIsRedForRoom(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) {
+            if (await checkIsRedForRoom(roomId)) {
                 return true;
             }
         }
         return false;
     }
     export async function checkIsRedForRoom(roomId: number): Promise<boolean> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo) {
             const selfUserId        = UserModel.getSelfUserId();
             const playerDataList    = roomInfo.playerDataList || [];
@@ -235,7 +235,7 @@ namespace MfrModel {
         return false;
     }
     export async function checkCanStartGame(roomId: number): Promise<boolean> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (!roomInfo) {
             return false;
         }
@@ -251,7 +251,7 @@ namespace MfrModel {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function createDataForCommonWarPlayerInfoPage(roomId: number): Promise<OpenDataForCommonWarPlayerInfoPage> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
             return null;
         }
@@ -289,7 +289,7 @@ namespace MfrModel {
     }
 
     export async function createDataForCommonWarBasicSettingsPage(roomId: number, showPassword: boolean): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
             return { dataArrayForListSettings: [] };
         }
@@ -369,7 +369,7 @@ namespace MfrModel {
     }
 
     export async function createDataForCommonWarAdvancedSettingsPage(roomId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
             return null;
         }

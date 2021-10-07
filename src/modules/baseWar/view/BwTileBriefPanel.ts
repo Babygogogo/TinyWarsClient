@@ -55,7 +55,7 @@ namespace TwnsBwTileBriefPanel {
         }
         public static async hide(): Promise<void> {
             if (BwTileBriefPanel._instance) {
-                await BwTileBriefPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwTileBriefPanel._instance.close();
             }
         }
         public static getInstance(): BwTileBriefPanel {
@@ -101,7 +101,7 @@ namespace TwnsBwTileBriefPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,7 +232,7 @@ namespace TwnsBwTileBriefPanel {
             //         : currentX
             //     );
             // if (newX !== currentX) {
-            //     await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            //     await this._showCloseAnimation();
             //     group.x = newX;
             //     this._showOpenAnimation();
             // }

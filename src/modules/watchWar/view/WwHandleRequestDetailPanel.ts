@@ -47,7 +47,7 @@ namespace TwnsWwHandleRequestDetailPanel {
         }
         public static async hide(): Promise<void> {
             if (WwHandleRequestDetailPanel._instance) {
-                await WwHandleRequestDetailPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WwHandleRequestDetailPanel._instance.close();
             }
         }
 

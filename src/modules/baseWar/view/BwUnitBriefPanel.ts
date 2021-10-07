@@ -58,7 +58,7 @@ namespace TwnsBwUnitBriefPanel {
         }
         public static async hide(): Promise<void> {
             if (BwUnitBriefPanel._instance) {
-                await BwUnitBriefPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwUnitBriefPanel._instance.close();
             }
         }
         public static getInstance(): BwUnitBriefPanel {
@@ -96,7 +96,7 @@ namespace TwnsBwUnitBriefPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
 
             for (const cell of this._cellList) {
                 this._destroyCell(cell);
@@ -246,7 +246,7 @@ namespace TwnsBwUnitBriefPanel {
             //         : currentIsLeftSide
             //     );
             // if (newIsLeftSide !== currentIsLeftSide) {
-            //     await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            //     await this._showCloseAnimation();
             //     this._isLeftSide = newIsLeftSide;
             //     this._updatePosition();
             //     this._showOpenAnimation();

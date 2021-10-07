@@ -43,7 +43,7 @@ namespace TwnsMeVisibilityPanel {
 
         public static async hide(): Promise<void> {
             if (MeVisibilityPanel._instance) {
-                await MeVisibilityPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeVisibilityPanel._instance.close();
             }
         }
 

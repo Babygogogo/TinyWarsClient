@@ -82,7 +82,7 @@ namespace TwnsMpwTopPanel {
 
         public static async hide(): Promise<void> {
             if (MpwTopPanel._instance) {
-                await MpwTopPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MpwTopPanel._instance.close();
             }
         }
 
@@ -266,7 +266,7 @@ namespace TwnsMpwTopPanel {
                 label.text      = Lang.getText(LangTextType.B0676);
                 label.textColor = Types.ColorValue.Green;
             } else {
-                const userPublicInfo = await UserModel.getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                const userPublicInfo = await UserModel.getUserPublicInfo(userId);
                 if ((userPublicInfo == null) || (!userPublicInfo.isOnline)) {
                     label.text      = Lang.getText(LangTextType.B0677);
                     label.textColor = Types.ColorValue.Red;
@@ -279,7 +279,7 @@ namespace TwnsMpwTopPanel {
 
         private async _updateLabelPlayer(): Promise<void> {
             const player            = this._getOpenData().war.getPlayerInTurn();
-            this._labelPlayer.text  = `${await player.getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; })}`;
+            this._labelPlayer.text  = `${await player.getNickname()}`;
         }
 
         private _updateGroupTimer(): void {
@@ -463,7 +463,7 @@ namespace TwnsMpwTopPanel {
             if ((userId == null) || (userId === UserModel.getSelfUserId())) {
                 img.source = `uncompressedColorGreen0000`;
             } else {
-                const userPublicInfo = await UserModel.getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                const userPublicInfo = await UserModel.getUserPublicInfo(userId);
                 if ((userPublicInfo == null) || (!userPublicInfo.isOnline)) {
                     img.source = `uncompressedColorRed0000`;
                 } else {

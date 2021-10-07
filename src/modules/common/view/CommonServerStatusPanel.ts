@@ -46,7 +46,7 @@ namespace TwnsCommonServerStatusPanel {
 
         public static async hide(): Promise<void> {
             if (CommonServerStatusPanel._instance) {
-                await CommonServerStatusPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonServerStatusPanel._instance.close();
             }
         }
 
@@ -73,7 +73,7 @@ namespace TwnsCommonServerStatusPanel {
             CommonProxy.reqCommonGetServerStatus();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onMsgCommonGetServerStatus(e: egret.Event): void {

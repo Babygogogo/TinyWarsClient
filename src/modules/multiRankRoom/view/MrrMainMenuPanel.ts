@@ -51,7 +51,7 @@ namespace TwnsMrrMainMenuPanel {
 
         public static async hide(): Promise<void> {
             if (MrrMainMenuPanel._instance) {
-                await MrrMainMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MrrMainMenuPanel._instance.close();
             }
         }
 
@@ -83,7 +83,7 @@ namespace TwnsMrrMainMenuPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -143,7 +143,7 @@ namespace TwnsMrrMainMenuPanel {
         }
 
         private async _updateComponentsForRed(): Promise<void> {
-            this._btnMyRoom.setRedVisible(await MrrModel.checkIsRed().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            this._btnMyRoom.setRedVisible(await MrrModel.checkIsRed());
             this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMrwWars());
         }
 

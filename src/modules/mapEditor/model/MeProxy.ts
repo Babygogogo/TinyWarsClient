@@ -29,7 +29,7 @@ namespace MeProxy {
     async function _onMsgMeGetMapDataList(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMeGetMapDataList.IS;
         if (!data.errorCode) {
-            await MeModel.resetDataList(data.dataList || []).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await MeModel.resetDataList(data.dataList || []);
             Notify.dispatch(NotifyType.MsgMeGetDataList, data);
         }
     }

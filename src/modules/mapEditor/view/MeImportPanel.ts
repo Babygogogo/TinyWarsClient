@@ -38,7 +38,7 @@ namespace TwnsMeImportPanel {
         }
         public static async hide(): Promise<void> {
             if (MeImportPanel._instance) {
-                await MeImportPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeImportPanel._instance.close();
             }
         }
 
@@ -84,7 +84,7 @@ namespace TwnsMeImportPanel {
             for (const [mapFileName] of WarMapModel.getBriefDataDict()) {
                 dataList.push({
                     mapId: mapFileName,
-                    mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapFileName).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined,
+                    mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapFileName) ?? CommonConstants.ErrorTextForUndefined,
                     panel       : this,
                 });
             }
@@ -92,7 +92,7 @@ namespace TwnsMeImportPanel {
         }
 
         private async _updateListMap(): Promise<void> {
-            this._listMap.bindData(await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            this._listMap.bindData(await this._createDataForListMap());
             this._listMap.scrollVerticalTo(0);
         }
     }
@@ -119,9 +119,9 @@ namespace TwnsMeImportPanel {
                     const war = Helpers.getExisted(MeModel.getWar());
                     war.stopRunning();
                     await war.initWithMapEditorData({
-                        mapRawData  : await WarMapModel.getRawData(data.mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                        mapRawData  : await WarMapModel.getRawData(data.mapId),
                         slotIndex   : war.getMapSlotIndex(),
-                    }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                    });
                     war.setIsMapModified(true);
                     war.startRunning()
                         .startRunningView();

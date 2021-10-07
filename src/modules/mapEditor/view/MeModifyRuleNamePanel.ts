@@ -48,7 +48,7 @@ namespace TwnsMeModifyRuleNamePanel {
 
         public static async hide(): Promise<void> {
             if (MeModifyRuleNamePanel._instance) {
-                await MeModifyRuleNamePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeModifyRuleNamePanel._instance.close();
             }
         }
 

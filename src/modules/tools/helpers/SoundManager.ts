@@ -473,7 +473,7 @@ namespace SoundManager {
             },
             null,
             RES.ResourceItem.TYPE_BIN
-        ).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        );
         if (!arrayBuffer) {
             return null;
         }

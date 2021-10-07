@@ -48,7 +48,7 @@ namespace TwnsCommonJoinRoomPasswordPanel {
         }
         public static async hide(): Promise<void> {
             if (CommonJoinRoomPasswordPanel._instance) {
-                await CommonJoinRoomPasswordPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonJoinRoomPasswordPanel._instance.close();
             }
         }
 
@@ -74,7 +74,7 @@ namespace TwnsCommonJoinRoomPasswordPanel {
             this._inputWarPassword.text = "";
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -112,7 +112,7 @@ namespace TwnsCommonJoinRoomPasswordPanel {
             } else {
                 const mapId = openData.mapId;
                 if (mapId != null) {
-                    label.text = await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || CommonConstants.ErrorTextForUndefined;
+                    label.text = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
                 } else {
                     label.text = Lang.getText(LangTextType.B0555);
                 }

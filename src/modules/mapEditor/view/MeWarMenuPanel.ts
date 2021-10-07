@@ -109,7 +109,7 @@ namespace TwnsMeWarMenuPanel {
         }
         public static async hide(): Promise<void> {
             if (MeWarMenuPanel._instance) {
-                await MeWarMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeWarMenuPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -478,9 +478,9 @@ namespace TwnsMeWarMenuPanel {
                                 const data      = MeModel.getData(slotIndex);
                                 war.stopRunning();
                                 await war.initWithMapEditorData({
-                                    mapRawData: (data ? data.mapRawData : null) || await MeUtility.createDefaultMapRawData(slotIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                                    mapRawData: (data ? data.mapRawData : null) || await MeUtility.createDefaultMapRawData(slotIndex),
                                     slotIndex,
-                                }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                                });
                                 war.setIsMapModified(false);
                                 war.startRunning()
                                     .startRunningView();
@@ -608,7 +608,7 @@ namespace TwnsMeWarMenuPanel {
                 name    : Lang.getText(LangTextType.B0325),
                 callback: async () => {
                     const mapRawData    = war.serializeForMap();
-                    const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                    const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
@@ -643,7 +643,7 @@ namespace TwnsMeWarMenuPanel {
                 name    : Lang.getText(LangTextType.B0557),
                 callback: async () => {
                     const mapRawData    = war.serializeForMap();
-                    const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                    const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
@@ -741,9 +741,9 @@ namespace TwnsMeWarMenuPanel {
                                 const war = this._getWar();
                                 war.stopRunning();
                                 await war.initWithMapEditorData({
-                                    mapRawData  : JSON.parse(await navigator.clipboard.readText().catch(err => { CompatibilityHelpers.showError(err); throw err; })),
+                                    mapRawData  : JSON.parse(await navigator.clipboard.readText()),
                                     slotIndex   : war.getMapSlotIndex(),
-                                }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                                });
                                 war.setIsMapModified(true);
                                 war.startRunning()
                                     .startRunningView();

@@ -19,7 +19,7 @@ namespace TwnsSrwWar {
         private _settingsForSrw?    : ISettingsForSrw;
 
         public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._baseInit(data);
             this._setSettingsForSrw(Helpers.getExisted(data.settingsForSrw, ClientErrorCode.SrwWar_Init_00));
 
             this._initView();

@@ -23,7 +23,7 @@ namespace TwnsBwCommonSettingManager {
         }): Promise<void> {
             const configVersion = settings.configVersion;
             if ((configVersion == null)                                                                                                     ||
-                (!await ConfigManager.checkIsVersionValid(configVersion).catch(err => { CompatibilityHelpers.showError(err); throw err; }))
+                (!await ConfigManager.checkIsVersionValid(configVersion))
             ) {
                 throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwCommonSettingManager_Init_00);
             }

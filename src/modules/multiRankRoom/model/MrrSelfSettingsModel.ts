@@ -24,7 +24,7 @@ namespace MrrSelfSettingsModel {
         clearUnitAndTileSkinId();
         clearAvailableCoIdArray();
 
-        const roomInfo          = Helpers.getExisted(await MrrModel.getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+        const roomInfo          = Helpers.getExisted(await MrrModel.getRoomInfo(roomId));
         const playerDataList    = roomInfo ? roomInfo.playerDataList || [] : [];
         const selfUserId        = UserModel.getSelfUserId();
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);

@@ -48,7 +48,7 @@ namespace TwnsChangeLogModifyPanel {
 
         public static async hide(): Promise<void> {
             if (ChangeLogModifyPanel._instance) {
-                await ChangeLogModifyPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await ChangeLogModifyPanel._instance.close();
             }
         }
 

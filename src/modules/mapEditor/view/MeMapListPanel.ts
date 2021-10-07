@@ -47,7 +47,7 @@ namespace TwnsMeMapListPanel {
         }
         public static async hide(): Promise<void> {
             if (MeMapListPanel._instance) {
-                await MeMapListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeMapListPanel._instance.close();
             }
         }
 
@@ -84,7 +84,7 @@ namespace TwnsMeMapListPanel {
 
             if ((newIndex != null) && (dataArray[newIndex])) {
                 this._listMap.updateSingleData(newIndex, dataArray[newIndex]);
-                await this._showMap(newIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await this._showMap(newIndex);
             } else {
                 this._zoomMap.clearMap();
             }

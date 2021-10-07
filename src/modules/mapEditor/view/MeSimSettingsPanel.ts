@@ -47,7 +47,7 @@ namespace TwnsMeSimSettingsPanel {
         }
         public static async hide(): Promise<void> {
             if (MeSimSettingsPanel._instance) {
-                await MeSimSettingsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeSimSettingsPanel._instance.close();
             }
         }
 

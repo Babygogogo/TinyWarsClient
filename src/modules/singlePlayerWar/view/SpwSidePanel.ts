@@ -50,7 +50,7 @@ namespace TwnsSpwSidePanel {
 
         public static async hide(): Promise<void> {
             if (SpwSidePanel._instance) {
-                await SpwSidePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await SpwSidePanel._instance.close();
             }
         }
 

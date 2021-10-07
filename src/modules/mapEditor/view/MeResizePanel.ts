@@ -49,7 +49,7 @@ namespace TwnsMeResizePanel {
 
         public static async hide(): Promise<void> {
             if (MeResizePanel._instance) {
-                await MeResizePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeResizePanel._instance.close();
             }
         }
 
@@ -101,7 +101,7 @@ namespace TwnsMeResizePanel {
                     await war.initWithMapEditorData({
                         mapRawData  : MeUtility.resizeMap(war.serializeForMap(), width, height),
                         slotIndex   : war.getMapSlotIndex(),
-                    }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                    });
                     war.setIsMapModified(true);
                     war.startRunning()
                         .startRunningView();

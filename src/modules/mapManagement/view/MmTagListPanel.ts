@@ -60,7 +60,7 @@ namespace TwnsMmTagListPanel {
         }
         public static async hide(): Promise<void> {
             if (MmTagListPanel._instance) {
-                await MmTagListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MmTagListPanel._instance.close();
             }
         }
         public static getInstance(): MmTagListPanel {
@@ -106,7 +106,7 @@ namespace TwnsMmTagListPanel {
                 (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
 
                 this._listMap.setSelectedIndex(newIndex);
-                await this._showMap(dataList[newIndex].mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await this._showMap(dataList[newIndex].mapId);
             }
         }
         public getSelectedMapId(): number | null {
@@ -115,7 +115,7 @@ namespace TwnsMmTagListPanel {
 
         public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
             this._mapFilters            = mapFilters;
-            this._dataForList           = await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            this._dataForList           = await this._createDataForListMap();
 
             const length                = this._dataForList.length;
             this._labelNoMap.visible    = length <= 0;
@@ -164,8 +164,8 @@ namespace TwnsMmTagListPanel {
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
                 const mapName           = Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
-                const averageRating     = await WarMapModel.getAverageRating(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-                const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                const averageRating     = await WarMapModel.getAverageRating(mapId);
+                const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId);
                 if ((!mapBriefData.mapExtraData?.isEnabled)                                                                 ||
                     ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
                     ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                    ||
@@ -186,13 +186,13 @@ namespace TwnsMmTagListPanel {
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            const mapRawData                = Helpers.getExisted(await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
-            const rating                    = await WarMapModel.getAverageRating(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            this._labelMapName.text         = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            const mapRawData                = Helpers.getExisted(await WarMapModel.getRawData(mapId));
+            const rating                    = await WarMapModel.getAverageRating(mapId);
+            this._labelMapName.text         = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text        = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
             this._labelPlayersCount.text    = Lang.getFormattedText(LangTextType.F0002, mapRawData.playersCountUnneutral);
             this._labelRating.text          = Lang.getFormattedText(LangTextType.F0003, rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
             this._groupInfo.visible         = true;
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);

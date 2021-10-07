@@ -39,7 +39,7 @@ namespace TwnsMmRejectMapPanel {
 
         public static async hide(): Promise<void> {
             if (MmRejectMapPanel._instance) {
-                await MmRejectMapPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MmRejectMapPanel._instance.close();
             }
         }
 

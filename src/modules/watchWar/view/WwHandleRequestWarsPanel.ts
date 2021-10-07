@@ -70,7 +70,7 @@ namespace TwnsWwHandleRequestWarsPanel {
         }
         public static async hide(): Promise<void> {
             if (WwHandleRequestWarsPanel._instance) {
-                await WwHandleRequestWarsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WwHandleRequestWarsPanel._instance.close();
             }
         }
 
@@ -97,7 +97,7 @@ namespace TwnsWwHandleRequestWarsPanel {
 
             this._hasReceivedData   = false;
             this._isTabInitialized  = false;
-            await this._initTabSettings().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupWarList();
             this._updateComponentsForTargetWarInfo();
@@ -105,7 +105,7 @@ namespace TwnsWwHandleRequestWarsPanel {
             WwProxy.reqWatchRequestedWarInfos();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         public async setAndReviseSelectedWarId(warId: number, needScroll: boolean): Promise<void> {
@@ -174,7 +174,7 @@ namespace TwnsWwHandleRequestWarsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
                     pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
-                    pageData    : await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -228,7 +228,7 @@ namespace TwnsWwHandleRequestWarsPanel {
 
                     this._tabSettings.updatePageData(0, this._createDataForCommonWarMapInfoPage());
                     this._tabSettings.updatePageData(1, this._createDataForCommonWarPlayerInfoPage());
-                    this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                    this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
                     this._tabSettings.updatePageData(3, this._createDataForCommonWarAdvancedSettingsPage());
                 }
             }
@@ -255,7 +255,7 @@ namespace TwnsWwHandleRequestWarsPanel {
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            return await WwModel.createDataForCommonWarBasicSettingsPage(this._getSelectedWarId()).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            return await WwModel.createDataForCommonWarBasicSettingsPage(this._getSelectedWarId());
         }
 
         private _createDataForCommonWarAdvancedSettingsPage(): OpenDataForCommonWarAdvancedSettingsPage {
@@ -380,7 +380,7 @@ namespace TwnsWwHandleRequestWarsPanel {
                         labelName.text = warName;
                     } else {
                         const mapId     = settingsForMcw.mapId;
-                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) || CommonConstants.ErrorTextForUndefined;
+                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                     }
 
                 } else if (settingsForCcw) {
@@ -389,12 +389,12 @@ namespace TwnsWwHandleRequestWarsPanel {
                         labelName.text = warName;
                     } else {
                         const mapId     = settingsForCcw.mapId;
-                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) || CommonConstants.ErrorTextForUndefined;
+                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                     }
 
                 } else if (settingsForMrw) {
                     const mapId     = settingsForMrw.mapId;
-                    labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) || CommonConstants.ErrorTextForUndefined;
+                    labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                 }
             }
         }

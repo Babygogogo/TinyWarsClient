@@ -47,7 +47,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
 
         public static async hide(): Promise<void> {
             if (MmWarRuleAvailableCoPanel._instance) {
-                await MmWarRuleAvailableCoPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MmWarRuleAvailableCoPanel._instance.close();
             }
         }
 

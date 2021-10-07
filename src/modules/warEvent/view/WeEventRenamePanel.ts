@@ -50,7 +50,7 @@ namespace TwnsWeEventRenamePanel {
 
         public static async hide(): Promise<void> {
             if (WeEventRenamePanel._instance) {
-                await WeEventRenamePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WeEventRenamePanel._instance.close();
             }
         }
 

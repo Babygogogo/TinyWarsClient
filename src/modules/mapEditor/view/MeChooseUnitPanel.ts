@@ -46,7 +46,7 @@ namespace TwnsMeChooseUnitPanel {
         }
         public static async hide(): Promise<void> {
             if (MeChooseUnitPanel._instance) {
-                await MeChooseUnitPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeChooseUnitPanel._instance.close();
             }
         }
 

@@ -47,7 +47,7 @@ namespace TwnsWeActionTypeListPanel {
 
         public static async hide(): Promise<void> {
             if (WeActionTypeListPanel._instance) {
-                await WeActionTypeListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WeActionTypeListPanel._instance.close();
             }
         }
 

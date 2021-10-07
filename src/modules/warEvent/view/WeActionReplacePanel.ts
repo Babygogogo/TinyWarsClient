@@ -45,7 +45,7 @@ namespace TwnsWeActionReplacePanel {
 
         public static async hide(): Promise<void> {
             if (WeActionReplacePanel._instance) {
-                await WeActionReplacePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WeActionReplacePanel._instance.close();
             }
         }
 

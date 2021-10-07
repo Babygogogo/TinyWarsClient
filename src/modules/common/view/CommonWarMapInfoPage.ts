@@ -76,7 +76,7 @@ namespace TwnsCommonWarMapInfoPage {
                         },
                     });
 
-                    const mapRawData = await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                    const mapRawData = await WarMapModel.getRawData(mapId);
                     if (mapRawData) {
                         zoomMap.showMapByMapData(mapRawData);
                     } else {

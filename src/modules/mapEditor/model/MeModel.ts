@@ -74,12 +74,12 @@ namespace MeModel {
             unloadWar();
         }
 
-        mapRawData = mapRawData || await MeUtility.createDefaultMapRawData(slotIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        mapRawData = mapRawData || await MeUtility.createDefaultMapRawData(slotIndex);
         _war = new MeWar();
         await _war.initWithMapEditorData({
             mapRawData,
             slotIndex
-        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        });
         _war.setIsMapModified(false);
         _war.setIsReviewingMap(isReview);
         _war.startRunning()

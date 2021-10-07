@@ -46,7 +46,7 @@ namespace TwnsMeMfwSettingsPanel {
         }
         public static async hide(): Promise<void> {
             if (MeMfwSettingsPanel._instance) {
-                await MeMfwSettingsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeMfwSettingsPanel._instance.close();
             }
         }
 
@@ -91,7 +91,7 @@ namespace TwnsMeMfwSettingsPanel {
         private async _onTouchedBtnConfirm(): Promise<void> {
             MeMfwModel.reviseWarRuleForAi();
             const warData   = MeMfwModel.getWarData();
-            const errorCode = await (new TwnsTwWar.TwWar().getErrorCodeForInit(warData)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const errorCode = await (new TwnsTwWar.TwWar().getErrorCodeForInit(warData));
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {

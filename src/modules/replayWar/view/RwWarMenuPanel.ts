@@ -81,7 +81,7 @@ namespace TwnsRwWarMenuPanel {
         }
         public static async hide(): Promise<void> {
             if (RwWarMenuPanel._instance) {
-                await RwWarMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await RwWarMenuPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -203,8 +203,8 @@ namespace TwnsRwWarMenuPanel {
         private async _updateGroupInfo(): Promise<void> {
             const war                   = this._getWar();
             const mapId                 = war.getMapId();
-            this._labelMapName.text     = await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || "----";
-            this._labelMapDesigner.text = await WarMapModel.getDesignerName(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || "----";
+            this._labelMapName.text     = await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----";
+            this._labelMapDesigner.text = await WarMapModel.getDesignerName(mapId) || "----";
             this._labelWarId.text       = `${war.getReplayId()}`;
             this._labelTurnIndex.text   = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text    = `${war.getNextActionId()} / ${war.getExecutedActionManager().getExecutedActionsCount()}`;
@@ -355,7 +355,7 @@ namespace TwnsRwWarMenuPanel {
                         return;
                     }
 
-                    const errorCode = await (new TwnsTwWar.TwWar()).getErrorCodeForInit(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                    const errorCode = await (new TwnsTwWar.TwWar()).getErrorCodeForInit(warData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
@@ -453,7 +453,7 @@ namespace TwnsRwWarMenuPanel {
             const data                  = this._getData();
             const war                   = data.war;
             const player                = data.player;
-            this._labelName.text        = await player.getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            this._labelName.text        = await player.getNickname();
             this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`

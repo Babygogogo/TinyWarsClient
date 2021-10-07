@@ -70,7 +70,7 @@ namespace TwnsMeSymmetryPanel {
 
         public static async hide(): Promise<void> {
             if (MeSymmetryPanel._instance) {
-                await MeSymmetryPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeSymmetryPanel._instance.close();
             }
         }
 

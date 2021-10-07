@@ -58,7 +58,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
 
         public static async hide(): Promise<void> {
             if (MrrSetMaxConcurrentCountPanel._instance) {
-                await MrrSetMaxConcurrentCountPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MrrSetMaxConcurrentCountPanel._instance.close();
             }
         }
 
@@ -100,7 +100,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
             this._loadMaxCountAndUpdateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

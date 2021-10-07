@@ -68,7 +68,7 @@ namespace TwnsMrrMyRoomListPanel {
         }
         public static async hide(): Promise<void> {
             if (MrrMyRoomListPanel._instance) {
-                await MrrMyRoomListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MrrMyRoomListPanel._instance.close();
             }
         }
 
@@ -99,7 +99,7 @@ namespace TwnsMrrMyRoomListPanel {
 
             this._hasReceivedData   = false;
             this._isTabInitialized  = false;
-            await this._initTabSettings().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
@@ -108,7 +108,7 @@ namespace TwnsMrrMyRoomListPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +164,7 @@ namespace TwnsMrrMyRoomListPanel {
             const roomId = MrrModel.getPreviewingRoomId();
             if (roomId != null) {
                 this.close();
-                await MrrSelfSettingsModel.resetData(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MrrSelfSettingsModel.resetData(roomId);
                 MrrRoomInfoPanel.show({
                     roomId,
                 });
@@ -179,22 +179,22 @@ namespace TwnsMrrMyRoomListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : await this._createDataForCommonWarMapInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
-                    pageData    : await this._createDataForCommonWarPlayerInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
                     pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
-                    pageData    : await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
-                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
             this._isTabInitialized = true;
@@ -259,31 +259,31 @@ namespace TwnsMrrMyRoomListPanel {
 
         private async _updateCommonWarMapInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
             }
         }
 
         private async _updateCommonWarPlayerInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage());
             }
         }
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
             }
         }
 
         private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
             }
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const roomId = MrrModel.getPreviewingRoomId();
-            const mapId = roomId == null ? null : (await MrrModel.getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; }))?.settingsForMrw?.mapId;
+            const mapId = roomId == null ? null : (await MrrModel.getRoomInfo(roomId))?.settingsForMrw?.mapId;
             return mapId == null
                 ? null
                 : { mapInfo: { mapId } };
@@ -390,11 +390,11 @@ namespace TwnsMrrMyRoomListPanel {
 
         protected async _onDataChanged(): Promise<void> {
             const roomId            = this._getData().roomId;
-            this._imgRed.visible    = await MrrModel.checkIsRedForRoom(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            this._imgRed.visible    = await MrrModel.checkIsRedForRoom(roomId);
 
-            const roomInfo          = await MrrModel.getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const roomInfo          = await MrrModel.getRoomInfo(roomId);
             this._labelName.text    = roomInfo
-                ? (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(roomInfo.settingsForMrw?.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined)
+                ? (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(roomInfo.settingsForMrw?.mapId)) ?? CommonConstants.ErrorTextForUndefined)
                 : ``;
         }
 
@@ -406,7 +406,7 @@ namespace TwnsMrrMyRoomListPanel {
             const roomId = this._getData().roomId;
             if (roomId != null) {
                 MrrMyRoomListPanel.hide();
-                await MrrSelfSettingsModel.resetData(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MrrSelfSettingsModel.resetData(roomId);
                 MrrRoomInfoPanel.show({
                     roomId,
                 });

@@ -80,7 +80,7 @@ namespace TwnsMcrCreateSettingsPanel {
         }
         public static async hide(): Promise<void> {
             if (McrCreateSettingsPanel._instance) {
-                await McrCreateSettingsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await McrCreateSettingsPanel._instance.close();
             }
         }
 
@@ -110,7 +110,7 @@ namespace TwnsMcrCreateSettingsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
                     pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
-                    pageData    : await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -135,7 +135,7 @@ namespace TwnsMcrCreateSettingsPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
             this._clearTimeoutForBtnConfirm();
         }
 
@@ -217,7 +217,7 @@ namespace TwnsMcrCreateSettingsPanel {
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
-            const playersCountUnneutral = Helpers.getExisted((await McrCreateModel.getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).playersCountUnneutral);
+            const playersCountUnneutral = Helpers.getExisted((await McrCreateModel.getMapRawData()).playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
@@ -239,7 +239,7 @@ namespace TwnsMcrCreateSettingsPanel {
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
             }
         }
 
@@ -251,7 +251,7 @@ namespace TwnsMcrCreateSettingsPanel {
                 dataArrayForListSettings: [
                     {
                         settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(McrCreateModel.getMapId()).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(McrCreateModel.getMapId()),
                         warRule,
                         callbackOnModify: null,
                     },
@@ -296,7 +296,7 @@ namespace TwnsMcrCreateSettingsPanel {
                         currentValue    : null,
                         warRule,
                         callbackOnModify: async () => {
-                            await McrCreateModel.tickPresetWarRuleId().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                            await McrCreateModel.tickPresetWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },

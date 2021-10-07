@@ -82,7 +82,7 @@ namespace TwnsBwWarInfoPanel {
         }
         public static async hide(): Promise<void> {
             if (BwWarInfoPanel._instance) {
-                await BwWarInfoPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwWarInfoPanel._instance.close();
             }
         }
 
@@ -110,7 +110,7 @@ namespace TwnsBwWarInfoPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -143,7 +143,7 @@ namespace TwnsBwWarInfoPanel {
                 labelMapName.text       = ``;
                 labelMapDesigner.text   = ``;
             } else {
-                const briefInfo         = Helpers.getExisted(await WarMapModel.getBriefData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_00);
+                const briefInfo         = Helpers.getExisted(await WarMapModel.getBriefData(mapId), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_00);
                 labelMapName.text       = Helpers.getExisted(Lang.getLanguageText({ textArray: briefInfo.mapNameArray }), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_01);
                 labelMapDesigner.text   = `${Lang.getText(LangTextType.B0251)}: ${Helpers.getExisted(briefInfo.designerName, ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_02)}`;
             }
@@ -731,7 +731,7 @@ namespace TwnsBwWarInfoPanel {
             const labelValue        = this._labelValue;
             labelValue.text         = userId == null
                 ? Lang.getText(LangTextType.B0607)
-                : Helpers.getExisted(await UserModel.getUserNickname(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; }), ClientErrorCode.BwWarInfoPanel_InfoRenderer_UpdateViewAsPlayer_00);
+                : Helpers.getExisted(await UserModel.getUserNickname(userId), ClientErrorCode.BwWarInfoPanel_InfoRenderer_UpdateViewAsPlayer_00);
             labelValue.textColor    = 0xFFFFFF;
 
             const canModify         = checkCanModifyPlayerInfo(war);

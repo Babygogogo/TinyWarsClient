@@ -37,7 +37,7 @@ namespace TwnsLobbyTopPanel {
         }
         public static async hide(): Promise<void> {
             if (LobbyTopPanel._instance) {
-                await LobbyTopPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await LobbyTopPanel._instance.close();
             }
         }
         public static getInstance(): LobbyTopPanel | null {
@@ -66,7 +66,7 @@ namespace TwnsLobbyTopPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onMsgUserLogin(): void {

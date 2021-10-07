@@ -53,7 +53,7 @@ namespace TwnsUserLoginBackgroundPanel {
         }
         public static async hide(): Promise<void> {
             if (UserLoginBackgroundPanel._instance) {
-                await UserLoginBackgroundPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await UserLoginBackgroundPanel._instance.close();
             }
         }
         public static getInstance(): UserLoginBackgroundPanel | null {
@@ -92,7 +92,7 @@ namespace TwnsUserLoginBackgroundPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
 
             this._clearGroupUnits();
         }

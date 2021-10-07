@@ -32,7 +32,7 @@ namespace TwnsCommonBlockPanel {
 
         public static async hide(): Promise<void> {
             if (CommonBlockPanel._instance) {
-                await CommonBlockPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonBlockPanel._instance.close();
             }
         }
 
@@ -51,7 +51,7 @@ namespace TwnsCommonBlockPanel {
             this._showOpenAnimation();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _showOpenAnimation(): void {

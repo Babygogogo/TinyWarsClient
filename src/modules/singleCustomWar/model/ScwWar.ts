@@ -18,7 +18,7 @@ namespace TwnsScwWar {
         private _settingsForScw?    : ISettingsForScw;
 
         public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._baseInit(data);
             this._setSettingsForScw(Helpers.getExisted(data.settingsForScw, ClientErrorCode.ScwWar_Init_00));
 
             this._initView();

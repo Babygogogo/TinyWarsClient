@@ -99,7 +99,7 @@ namespace TwnsBwWar {
         protected async _baseInit(data: ISerialWar): Promise<void> {
             const settingsForCommon = Helpers.getExisted(data.settingsForCommon, ClientErrorCode.BwWar_BaseInit_00);
             const configVersion     = Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.BwWar_BaseInit_01);
-            if (!await ConfigManager.checkIsVersionValid(configVersion).catch(err => { CompatibilityHelpers.showError(err); throw err; })) {
+            if (!await ConfigManager.checkIsVersionValid(configVersion)) {
                 throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwWar_BaseInit_02);
             }
 

@@ -56,7 +56,7 @@ namespace TwnsMcrCreateSearchMapPanel {
         }
         public static async hide(): Promise<void> {
             if (McrCreateSearchMapPanel._instance) {
-                await McrCreateSearchMapPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await McrCreateSearchMapPanel._instance.close();
             }
         }
 
@@ -84,7 +84,7 @@ namespace TwnsMcrCreateSearchMapPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onTouchedBtnReset(): void {

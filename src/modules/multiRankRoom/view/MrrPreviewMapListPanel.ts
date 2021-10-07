@@ -68,7 +68,7 @@ namespace TwnsMrrPreviewMapListPanel {
         }
         public static async hide(): Promise<void> {
             if (MrrPreviewMapListPanel._instance) {
-                await MrrPreviewMapListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MrrPreviewMapListPanel._instance.close();
             }
         }
 
@@ -92,14 +92,14 @@ namespace TwnsMrrPreviewMapListPanel {
             this._showOpenAnimation();
 
             this._isTabInitialized = false;
-            await this._initTabSettings().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
-            await this._initGroupMapList().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._initGroupMapList();
             this.setAndReviseSelectedMapId(-1, true);
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         public async setAndReviseSelectedMapId(mapId: number, needScroll: boolean): Promise<void> {
@@ -110,7 +110,7 @@ namespace TwnsMrrPreviewMapListPanel {
             if (needScroll) {
                 listMap.scrollVerticalToIndex(index);
             }
-            await this._updateComponentsForTargetMapInfo().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._updateComponentsForTargetMapInfo();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -146,12 +146,12 @@ namespace TwnsMrrPreviewMapListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
                     pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
-                    pageData    : await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
-                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
             this._isTabInitialized = true;
@@ -173,7 +173,7 @@ namespace TwnsMrrPreviewMapListPanel {
             const listMap           = this._listMap;
             labelNoMap.visible      = false;
 
-            const dataArray         = await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const dataArray         = await this._createDataForListMap();
             labelLoading.visible    = false;
             labelNoMap.visible      = !dataArray.length;
             listMap.bindData(dataArray);
@@ -201,13 +201,13 @@ namespace TwnsMrrPreviewMapListPanel {
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(1, await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarBasicSettingsPage());
             }
         }
 
         private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(2, await this._createDataForCommonWarAdvancedSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarAdvancedSettingsPage());
             }
         }
 
@@ -229,7 +229,7 @@ namespace TwnsMrrPreviewMapListPanel {
             }
 
             const dataArray : DataForMapNameRenderer[] = [];
-            for (const mapRawData of await Promise.all(promiseArray).catch(err => { CompatibilityHelpers.showError(err); throw err; })) {
+            for (const mapRawData of await Promise.all(promiseArray)) {
                 if ((mapRawData) &&
                     (mapRawData.warRuleArray?.some(v => {
                         return (v.ruleAvailability?.canMrw)
@@ -260,7 +260,7 @@ namespace TwnsMrrPreviewMapListPanel {
                 return null;
             }
 
-            const mapRawData = await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const mapRawData = await WarMapModel.getRawData(mapId);
             if (mapRawData == null) {
                 return null;
             }
@@ -280,7 +280,7 @@ namespace TwnsMrrPreviewMapListPanel {
                 dataArrayForListSettings    : [
                     {
                         settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(mapId),
                         warRule,
                         callbackOnModify: null,
                     },
@@ -339,7 +339,7 @@ namespace TwnsMrrPreviewMapListPanel {
                 return null;
             }
 
-            const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapId));
             const hasFog        = this._getOpenData().hasFog;
             const warRuleArray  = mapRawData.warRuleArray?.filter(v => {
                 return (v.ruleAvailability?.canMrw) && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
@@ -446,7 +446,7 @@ namespace TwnsMrrPreviewMapListPanel {
         }
 
         protected async _onDataChanged(): Promise<void> {
-            this._labelName.text = (await WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) || `??`;
+            this._labelName.text = (await WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId)) || `??`;
         }
 
         private _onTouchTapBtnChoose(): void {

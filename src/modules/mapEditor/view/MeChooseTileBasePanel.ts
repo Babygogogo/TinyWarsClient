@@ -53,7 +53,7 @@ namespace TwnsMeChooseTileBasePanel {
         }
         public static async hide(): Promise<void> {
             if (MeChooseTileBasePanel._instance) {
-                await MeChooseTileBasePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeChooseTileBasePanel._instance.close();
             }
         }
 

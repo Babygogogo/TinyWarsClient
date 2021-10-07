@@ -46,7 +46,7 @@ namespace TwnsUserSetPasswordPanel {
 
         public static async hide(): Promise<void> {
             if (UserSetPasswordPanel._instance) {
-                await UserSetPasswordPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await UserSetPasswordPanel._instance.close();
             }
         }
 
@@ -72,7 +72,7 @@ namespace TwnsUserSetPasswordPanel {
             this._updateOnLanguageChanged();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onMsgUserSetPassword(): void {

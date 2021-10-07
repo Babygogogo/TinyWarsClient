@@ -126,7 +126,7 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const playersCount  = Helpers.getExisted((await CcrCreateModel.getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).playersCountUnneutral);
+            const playersCount  = Helpers.getExisted((await CcrCreateModel.getMapRawData()).playersCountUnneutral);
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });

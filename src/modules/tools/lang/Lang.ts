@@ -510,13 +510,13 @@ namespace Lang {
         let playerIndex     = CommonConstants.WarFirstPlayerIndex;
         for (const playerInfo of data.playerInfoList || []) {
             const userId = playerInfo.userId;
-            playerArray.push(`P${playerIndex}: ${userId != null ? await UserModel.getUserNickname(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) : `----`}`);
+            playerArray.push(`P${playerIndex}: ${userId != null ? await UserModel.getUserNickname(userId) : `----`}`);
             ++playerIndex;
         }
 
         const mapId = data.mapId;
         return [
-            getFormattedText(LangTextType.F0027, mapId != null ? await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) : getText(LangTextType.B0557)),
+            getFormattedText(LangTextType.F0027, mapId != null ? await WarMapModel.getMapNameInCurrentLanguage(mapId) : getText(LangTextType.B0557)),
             ...playerArray,
             getText(LangTextType.A0125)
         ].join("\n");

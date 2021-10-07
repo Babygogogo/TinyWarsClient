@@ -115,7 +115,7 @@ namespace TwnsUiPanel {
             }
             this._setIsRunningClose(true);
 
-            await this._doClose().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._doClose();
             (this.parent) && (this.parent.removeChild(this));
             this._deleteOpenData();
 
@@ -138,7 +138,7 @@ namespace TwnsUiPanel {
                 this._setUiListenerArray(null);
                 this._setNotifyListenerArray(null);
                 this._setCallbackOnTouchedMask(null);
-                await this._onClosed().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await this._onClosed();
             }
         }
 

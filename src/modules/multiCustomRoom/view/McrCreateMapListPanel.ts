@@ -73,7 +73,7 @@ namespace TwnsMcrCreateMapListPanel {
         }
         public static async hide(): Promise<void> {
             if (McrCreateMapListPanel._instance) {
-                await McrCreateMapListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await McrCreateMapListPanel._instance.close();
             }
         }
         public static getInstance(): McrCreateMapListPanel {
@@ -104,7 +104,7 @@ namespace TwnsMcrCreateMapListPanel {
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         public async setAndReviseSelectedMapId(newMapId: number, needScroll: boolean): Promise<void> {
@@ -125,10 +125,10 @@ namespace TwnsMcrCreateMapListPanel {
             this._mapFilters = mapFilters;
 
             const oldSelectedMapId      = this._getSelectedMapId();
-            const dataArray             = await this._createDataForListMap().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const dataArray             = await this._createDataForListMap();
             this._labelNoMap.visible    = dataArray.length <= 0;
             this._listMap.bindData(dataArray);
-            await this.setAndReviseSelectedMapId(oldSelectedMapId ?? -1, true).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this.setAndReviseSelectedMapId(oldSelectedMapId ?? -1, true);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +149,7 @@ namespace TwnsMcrCreateMapListPanel {
             const selectedMapId = this._getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
-                await McrCreateModel.resetDataByMapId(selectedMapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await McrCreateModel.resetDataByMapId(selectedMapId);
                 McrCreateSettingsPanel.show();
             }
         }
@@ -183,9 +183,9 @@ namespace TwnsMcrCreateMapListPanel {
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
                 const mapExtraData      = Helpers.getExisted(mapBriefData.mapExtraData);
                 const mapTag            = mapBriefData.mapTag || {};
-                const realMapName       = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
-                const rating            = await WarMapModel.getAverageRating(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-                const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                const realMapName       = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                const rating            = await WarMapModel.getAverageRating(mapId);
+                const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId);
                 if ((!mapBriefData.ruleAvailability?.canMcw)                                                            ||
                     (!mapExtraData.isEnabled)                                                                           ||
                     (!mapExtraData.mapComplexInfo?.mapAvailability?.canMcw)                                             ||
@@ -218,7 +218,7 @@ namespace TwnsMcrCreateMapListPanel {
             } else {
                 zoomMap.visible     = true;
                 uiMapInfo.visible   = true;
-                zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })));
+                zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)));
                 uiMapInfo.setData({
                     mapInfo: {
                         mapId,
@@ -327,7 +327,7 @@ namespace TwnsMcrCreateMapListPanel {
         protected async _onDataChanged(): Promise<void> {
             const label = this._labelName;
             label.text  = ``;
-            label.text  = await WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) ?? CommonConstants.ErrorTextForUndefined;
+            label.text  = await WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _onTouchTapBtnChoose(): void {
@@ -338,7 +338,7 @@ namespace TwnsMcrCreateMapListPanel {
         private async _onTouchTapBtnNext(): Promise<void> {
             const data = this._getData();
             data.panel.close();
-            await McrCreateModel.resetDataByMapId(data.mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await McrCreateModel.resetDataByMapId(data.mapId);
             McrCreateSettingsPanel.show();
         }
     }

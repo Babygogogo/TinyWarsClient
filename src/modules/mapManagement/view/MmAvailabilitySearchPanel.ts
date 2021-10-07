@@ -44,7 +44,7 @@ namespace TwnsMmAvailabilitySearchPanel {
         }
         public static async hide(): Promise<void> {
             if (MmAvailabilitySearchPanel._instance) {
-                await MmAvailabilitySearchPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MmAvailabilitySearchPanel._instance.close();
             }
         }
 

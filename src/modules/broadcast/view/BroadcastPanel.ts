@@ -35,7 +35,7 @@ namespace TwnsBroadcastPanel {
         }
         public static async hide(): Promise<void> {
             if (BroadcastPanel._instance) {
-                await BroadcastPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BroadcastPanel._instance.close();
             }
         }
         public static getInstance(): BroadcastPanel | null {

@@ -66,7 +66,7 @@ namespace TwnsMmAcceptMapPanel {
 
         public static async hide(): Promise<void> {
             if (MmAcceptMapPanel._instance) {
-                await MmAcceptMapPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MmAcceptMapPanel._instance.close();
             }
         }
 

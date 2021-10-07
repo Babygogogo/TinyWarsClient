@@ -51,7 +51,7 @@ namespace McrProxy {
     async function _onMsgMcrJoinRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrJoinRoom.IS;
         if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrJoinRoom(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await McrModel.updateOnMsgMcrJoinRoom(data);
             Notify.dispatch(NotifyType.MsgMcrJoinRoom, data);
         }
     }
@@ -89,7 +89,7 @@ namespace McrProxy {
     async function _onMsgMcrExitRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrExitRoom.IS;
         if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrExitRoom(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await McrModel.updateOnMsgMcrExitRoom(data);
             Notify.dispatch(NotifyType.MsgMcrExitRoom, data);
         }
     }
@@ -117,7 +117,7 @@ namespace McrProxy {
     async function _onMsgMcrDeletePlayer(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrDeletePlayer.IS;
         if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrDeletePlayer(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await McrModel.updateOnMsgMcrDeletePlayer(data);
             Notify.dispatch(NotifyType.MsgMcrDeletePlayer, data);
         }
     }
@@ -133,7 +133,7 @@ namespace McrProxy {
     async function _onMsgMcrSetReady(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrSetReady.IS;
         if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrSetReady(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await McrModel.updateOnMsgMcrSetReady(data);
             Notify.dispatch(NotifyType.MsgMcrSetReady, data);
         }
     }
@@ -146,7 +146,7 @@ namespace McrProxy {
     async function _onMsgMcrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrSetSelfSettings.IS;
         if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrSetSelfSettings(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await McrModel.updateOnMsgMcrSetSelfSettings(data);
             Notify.dispatch(NotifyType.MsgMcrSetSelfSettings, data);
         }
     }
@@ -154,7 +154,7 @@ namespace McrProxy {
     async function _onMsgMcrGetOwnerPlayerIndex(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrGetOwnerPlayerIndex.IS;
         if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrGetOwnerPlayerIndex(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await McrModel.updateOnMsgMcrGetOwnerPlayerIndex(data);
             Notify.dispatch(NotifyType.MsgMcrGetOwnerPlayerIndex, data);
         }
     }

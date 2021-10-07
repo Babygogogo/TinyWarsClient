@@ -61,7 +61,7 @@ namespace TwnsCommonBanCoPanel {
 
         public static async hide(): Promise<void> {
             if (CommonBanCoPanel._instance) {
-                await CommonBanCoPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonBanCoPanel._instance.close();
             }
         }
 
@@ -100,7 +100,7 @@ namespace TwnsCommonBanCoPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
 
             // this._clearGroupCoTiers();
             this._clearGroupCoNames();

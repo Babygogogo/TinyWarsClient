@@ -16,7 +16,7 @@ namespace TwnsCcwWar {
         private _settingsForCcw?: ISettingsForCcw;
 
         public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._baseInit(data);
             this._setSettingsForCcw(Helpers.getExisted(data.settingsForCcw, ClientErrorCode.CcwWar_Init_00));
 
             this._initView();

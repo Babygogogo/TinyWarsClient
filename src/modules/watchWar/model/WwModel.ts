@@ -139,7 +139,7 @@ namespace WwModel {
             dataArrayForListSettings: [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : mapId == null ? `----` : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(mapId, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_02)).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    currentValue    : mapId == null ? `----` : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(mapId, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_02)),
                     warRule,
                     callbackOnModify: null,
                 },

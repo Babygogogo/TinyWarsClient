@@ -74,7 +74,7 @@ namespace TwnsSpwTopPanel {
 
         public static async hide(): Promise<void> {
             if (SpwTopPanel._instance) {
-                await SpwTopPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await SpwTopPanel._instance.close();
             }
         }
 
@@ -217,7 +217,7 @@ namespace TwnsSpwTopPanel {
 
         private async _updateLabelPlayer(): Promise<void> {
             const player            = this._getOpenData().war.getPlayerInTurn();
-            this._labelPlayer.text  = `${await player.getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; })}`;
+            this._labelPlayer.text  = `${await player.getNickname()}`;
         }
 
         private _updateLabelFundAndAddFund(): void {

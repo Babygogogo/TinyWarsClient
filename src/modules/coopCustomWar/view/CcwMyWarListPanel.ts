@@ -66,7 +66,7 @@ namespace TwnsCcwMyWarListPanel {
         }
         public static async hide(): Promise<void> {
             if (CcwMyWarListPanel._instance) {
-                await CcwMyWarListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CcwMyWarListPanel._instance.close();
             }
         }
 
@@ -93,7 +93,7 @@ namespace TwnsCcwMyWarListPanel {
 
             this._hasReceivedData   = false;
             this._isTabInitialized  = false;
-            await this._initTabSettings().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
@@ -102,7 +102,7 @@ namespace TwnsCcwMyWarListPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -148,22 +148,22 @@ namespace TwnsCcwMyWarListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : await this._createDataForCommonWarMapInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
-                    pageData    : await this._createDataForCommonWarPlayerInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
                     pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
-                    pageData    : await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
-                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
             this._isTabInitialized = true;
@@ -222,25 +222,25 @@ namespace TwnsCcwMyWarListPanel {
 
         private async _updateCommonWarMapInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
             }
         }
 
         private async _updateCommonWarPlayerInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage());
             }
         }
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
             }
         }
 
         private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+                this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
             }
         }
 
@@ -270,15 +270,15 @@ namespace TwnsCcwMyWarListPanel {
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
-            return await MpwModel.createDataForCommonWarPlayerInfoPage(MpwModel.getCcwPreviewingWarId()).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            return await MpwModel.createDataForCommonWarPlayerInfoPage(MpwModel.getCcwPreviewingWarId());
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            return await MpwModel.createDataForCommonWarBasicSettingsPage(MpwModel.getCcwPreviewingWarId()).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            return await MpwModel.createDataForCommonWarBasicSettingsPage(MpwModel.getCcwPreviewingWarId());
         }
 
         private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-            return await MpwModel.createDataForCommonWarAdvancedSettingsPage(MpwModel.getCcwPreviewingWarId()).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            return await MpwModel.createDataForCommonWarAdvancedSettingsPage(MpwModel.getCcwPreviewingWarId());
         }
 
         private _showOpenAnimation(): void {
@@ -395,7 +395,7 @@ namespace TwnsCcwMyWarListPanel {
                         if (mapId == null) {
                             throw Helpers.newError(`CcwMyWarListPanel.WarRenderer._onDataChanged() empty mapId.`);
                         } else {
-                            const mapName = await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                            const mapName = await WarMapModel.getMapNameInCurrentLanguage(mapId);
                             if (mapName == null) {
                                 throw Helpers.newError(`CcwMyWarListPanel.WarRenderer._onDataChanged() empty mapName.`);
                             } else {

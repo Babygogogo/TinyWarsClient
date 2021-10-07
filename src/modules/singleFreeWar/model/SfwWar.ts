@@ -18,7 +18,7 @@ namespace TwnsSfwWar {
         private _settingsForSfw?    : ISettingsForSfw;
 
         public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._baseInit(data);
             this._setSettingsForSfw(Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
 
             this._initView();

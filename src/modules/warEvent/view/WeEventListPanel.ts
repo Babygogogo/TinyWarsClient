@@ -50,7 +50,7 @@ namespace TwnsWeEventListPanel {
         }
         public static async hide(): Promise<void> {
             if (WeEventListPanel._instance) {
-                await WeEventListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WeEventListPanel._instance.close();
             }
         }
 

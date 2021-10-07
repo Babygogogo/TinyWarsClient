@@ -662,7 +662,7 @@ namespace MeUtility {
             return warEventError;
         }
 
-        return await new TwnsTwWar.TwWar().getErrorCodeForInitByMapRawData(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        return await new TwnsTwWar.TwWar().getErrorCodeForInitByMapRawData(mapRawData);
     }
     function getErrorCodeForMapDesigner(mapDesigner: Types.Undefinable<string>): ClientErrorCode {
         if ((mapDesigner == null)                                       ||

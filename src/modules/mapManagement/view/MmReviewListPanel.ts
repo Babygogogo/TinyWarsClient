@@ -47,7 +47,7 @@ namespace TwnsMmReviewListPanel {
         }
         public static async hide(): Promise<void> {
             if (MmReviewListPanel._instance) {
-                await MmReviewListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MmReviewListPanel._instance.close();
             }
         }
 
@@ -85,7 +85,7 @@ namespace TwnsMmReviewListPanel {
 
             if (dataList[newIndex]) {
                 this._listMap.updateSingleData(newIndex, dataList[newIndex]);
-                await this._showMap(newIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await this._showMap(newIndex);
             } else {
                 this._zoomMap.clearMap();
             }

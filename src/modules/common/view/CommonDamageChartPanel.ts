@@ -80,7 +80,7 @@ namespace TwnsCommonDamageChartPanel {
         }
         public static async hide(): Promise<void> {
             if (CommonDamageChartPanel._instance) {
-                await CommonDamageChartPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonDamageChartPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -122,7 +122,7 @@ namespace TwnsCommonDamageChartPanel {
             this._updateListInfo();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
 
             this._selectedIndex = null;
             delete this._dataForListUnit;

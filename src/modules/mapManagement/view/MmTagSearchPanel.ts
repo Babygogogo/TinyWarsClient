@@ -44,7 +44,7 @@ namespace TwnsMmTagSearchPanel {
         }
         public static async hide(): Promise<void> {
             if (MmTagSearchPanel._instance) {
-                await MmTagSearchPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MmTagSearchPanel._instance.close();
             }
         }
 

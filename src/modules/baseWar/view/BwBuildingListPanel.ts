@@ -42,7 +42,7 @@ namespace TwnsBwBuildingListPanel {
 
         public static async hide(): Promise<void> {
             if (BwBuildingListPanel._instance) {
-                await BwBuildingListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwBuildingListPanel._instance.close();
             }
         }
 

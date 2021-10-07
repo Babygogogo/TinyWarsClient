@@ -105,7 +105,7 @@ namespace WarMapModel {
     }
 
     export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {
-        const mapBriefData = await getBriefData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const mapBriefData = await getBriefData(mapId);
         if (!mapBriefData) {
             return null;
         } else {
@@ -113,10 +113,10 @@ namespace WarMapModel {
         }
     }
     export async function getDesignerName(mapId: number): Promise<string | null> {
-        return (await getRawData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }))?.designerName ?? null;
+        return (await getRawData(mapId))?.designerName ?? null;
     }
     export async function getMultiPlayerTotalPlayedTimes(mapId: number): Promise<number> {
-        const mapBriefData  = Helpers.getExisted(await getBriefData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+        const mapBriefData  = Helpers.getExisted(await getBriefData(mapId));
         const complexInfo   = mapBriefData.mapExtraData?.mapComplexInfo;
         let totalTimes      = 0;
         for (const info of complexInfo ? complexInfo.warStatisticsArray || [] : []) {
@@ -132,7 +132,7 @@ namespace WarMapModel {
         return totalTimes;
     }
     export async function getAverageRating(mapId: number): Promise<number | null> {
-        const mapBriefData = await getBriefData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const mapBriefData = await getBriefData(mapId);
         const mapExtraData = mapBriefData ? mapBriefData.mapExtraData : null;
         const totalRaters  = mapExtraData ? mapExtraData.totalRaters : null;
         return totalRaters
@@ -140,7 +140,7 @@ namespace WarMapModel {
             : null;
     }
     export async function getTotalRatersCount(mapId: number): Promise<number | null> {
-        const mapBriefData = await getBriefData(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const mapBriefData = await getBriefData(mapId);
         return mapBriefData ? mapBriefData.mapExtraData?.totalRaters ?? 0 : null;
     }
 

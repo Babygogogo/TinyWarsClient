@@ -58,7 +58,7 @@ namespace TwnsUserSetPrivilegePanel {
 
         public static async hide(): Promise<void> {
             if (UserSetPrivilegePanel._instance) {
-                await UserSetPrivilegePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await UserSetPrivilegePanel._instance.close();
             }
         }
 

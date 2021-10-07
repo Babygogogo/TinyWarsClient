@@ -52,7 +52,7 @@ namespace TwnsCommonChooseCoPanel {
         }
         public static async hide(): Promise<void> {
             if (CommonChooseCoPanel._instance) {
-                await CommonChooseCoPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonChooseCoPanel._instance.close();
             }
         }
 
@@ -80,7 +80,7 @@ namespace TwnsCommonChooseCoPanel {
             this._initListCo();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         public setAndReviseSelectedIndex(newIndex: number): void {

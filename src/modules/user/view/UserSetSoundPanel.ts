@@ -63,7 +63,7 @@ namespace TwnsUserSetSoundPanel {
 
         public static async hide(): Promise<void> {
             if (UserSetSoundPanel._instance) {
-                await UserSetSoundPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await UserSetSoundPanel._instance.close();
             }
         }
 
@@ -111,7 +111,7 @@ namespace TwnsUserSetSoundPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

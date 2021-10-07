@@ -42,7 +42,7 @@ namespace TwnsWarMapBuildingListPanel {
 
         public static async hide(): Promise<void> {
             if (WarMapBuildingListPanel._instance) {
-                await WarMapBuildingListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WarMapBuildingListPanel._instance.close();
             }
         }
 

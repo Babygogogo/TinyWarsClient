@@ -65,7 +65,7 @@ namespace TwnsMmWarRulePanel {
         }
         public static async hide(): Promise<void> {
             if (MmWarRulePanel._instance) {
-                await MmWarRulePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MmWarRulePanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {

@@ -48,7 +48,7 @@ namespace TwnsSpwLoadWarPanel {
         }
         public static async hide(): Promise<void> {
             if (SpwLoadWarPanel._instance) {
-                await SpwLoadWarPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await SpwLoadWarPanel._instance.close();
             }
         }
 
@@ -187,7 +187,7 @@ namespace TwnsSpwLoadWarPanel {
                     const mapId         = WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || CommonConstants.ErrorTextForUndefined);
+                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

@@ -47,7 +47,7 @@ namespace MrrProxy {
         if (data.errorCode) {
             Notify.dispatch(NotifyType.MsgMrrGetRoomPublicInfoFailed, data);
         } else {
-            await MrrModel.updateOnMsgMrrGetRoomPublicInfo(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await MrrModel.updateOnMsgMrrGetRoomPublicInfo(data);
             Notify.dispatch(NotifyType.MsgMrrGetRoomPublicInfo, data);
         }
     }
@@ -73,7 +73,7 @@ namespace MrrProxy {
     async function _onMsgMrrSetBannedCoIdList(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMrrSetBannedCoIdList.IS;
         if (!data.errorCode) {
-            await MrrModel.updateOnMsgMrrSetBannedCoIdList(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await MrrModel.updateOnMsgMrrSetBannedCoIdList(data);
             Notify.dispatch(NotifyType.MsgMrrSetBannedCoIdList, data);
         }
     }
@@ -103,7 +103,7 @@ namespace MrrProxy {
     async function _onMsgMrrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMrrSetSelfSettings.IS;
         if (!data.errorCode) {
-            await MrrModel.updateOnMsgMrrSetSelfSettings(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await MrrModel.updateOnMsgMrrSetSelfSettings(data);
             Notify.dispatch(NotifyType.MsgMrrSetSelfSettings, data);
         }
     }

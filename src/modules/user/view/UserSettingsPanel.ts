@@ -81,7 +81,7 @@ namespace TwnsUserSettingsPanel {
 
         public static async hide(): Promise<void> {
             if (UserSettingsPanel._instance) {
-                await UserSettingsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await UserSettingsPanel._instance.close();
             }
         }
 
@@ -246,7 +246,7 @@ namespace TwnsUserSettingsPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onNotifyLanguageChanged(): void {

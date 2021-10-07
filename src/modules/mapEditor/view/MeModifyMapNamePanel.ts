@@ -45,7 +45,7 @@ namespace TwnsMeModifyMapNamePanel {
 
         public static async hide(): Promise<void> {
             if (MeModifyMapNamePanel._instance) {
-                await MeModifyMapNamePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeModifyMapNamePanel._instance.close();
             }
         }
 

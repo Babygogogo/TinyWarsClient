@@ -47,7 +47,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
         }
         public static async hide(): Promise<void> {
             if (WwDeleteWatcherDetailPanel._instance) {
-                await WwDeleteWatcherDetailPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await WwDeleteWatcherDetailPanel._instance.close();
             }
         }
 

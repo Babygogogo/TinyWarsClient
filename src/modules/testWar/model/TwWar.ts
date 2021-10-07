@@ -137,11 +137,11 @@ namespace TwnsTwWar {
         }
 
         public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._baseInit(data);
         }
         public async initByMapRawData(mapRawData: IMapRawData): Promise<void> {
-            const warData = await _createDataForCreateTwWar(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            await this.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const warData = await _createDataForCreateTwWar(mapRawData);
+            await this.init(warData);
         }
 
         public async getErrorCodeForInit(data: ISerialWar): Promise<ClientErrorCode> {
@@ -190,8 +190,8 @@ namespace TwnsTwWar {
     }
 
     async function _createDataForCreateTwWar(mapRawData: IMapRawData): Promise<ISerialWar> {
-        const dataForPlayerManager  = await _createInitialPlayerManagerDataForTw(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-        const fieldData             = await _createInitialFieldData(mapRawData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const dataForPlayerManager  = await _createInitialPlayerManagerDataForTw(mapRawData);
+        const fieldData             = await _createInitialFieldData(mapRawData);
         const warRule               = (mapRawData.warRuleArray || [])[0];
         const seedRandomState       = new Math.seedrandom("" + Math.random(), { state: true }).state();
         return {

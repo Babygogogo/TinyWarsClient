@@ -12,9 +12,9 @@ namespace ResManager {
         egret.registerImplementation("eui.IAssetAdapter", new AssetAdapter());
         egret.registerImplementation("eui.IThemeAdapter", new ThemeAdapter());
 
-        await RES.loadConfig("resource/default.res.json", "resource/").catch(err => { CompatibilityHelpers.showError(err); throw err; });
-        await _initTheme().catch(err => { CompatibilityHelpers.showError(err); throw err; });
-        // await RES.loadGroup("preload", 0, LoadingUiPanel.create()).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await RES.loadConfig("resource/default.res.json", "resource/");
+        await _initTheme();
+        // await RES.loadGroup("preload", 0, LoadingUiPanel.create());
         // LoadingUiPanel.destroy();
         ResAutoRelease.startAutoRelease();
     }

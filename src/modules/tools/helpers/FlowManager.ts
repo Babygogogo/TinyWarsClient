@@ -93,14 +93,14 @@ namespace FlowManager {
     let _hasOnceWentToLobby = false;
 
     export function startGame(stage: egret.Stage): void {
-        doStartGame(stage).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        doStartGame(stage);
     }
     async function doStartGame(stage: egret.Stage): Promise<void> {
         CompatibilityHelpers.init();
         NetManager.addListeners(_NET_EVENTS);
         Notify.addEventListeners(_NOTIFY_EVENTS);
         StageManager.init(stage);
-        await Promise.all([ResManager.init(), ProtoManager.init()]).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await Promise.all([ResManager.init(), ProtoManager.init()]);
         StageManager.setStageScale(LocalStorage.getStageScale());
 
         Lang.init();
@@ -136,7 +136,7 @@ namespace FlowManager {
         _removeLoadingDom();
         gotoLogin();
 
-        await ResManager.loadMainRes().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await ResManager.loadMainRes();
         (_checkCanFirstGoToLobby()) && (gotoLobby());
     }
 
@@ -182,7 +182,7 @@ namespace FlowManager {
     }
 
     export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
-        const war = await MpwModel.loadWar(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const war = await MpwModel.loadWar(data);
         RwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
@@ -199,7 +199,7 @@ namespace FlowManager {
         SoundManager.playCoBgmWithWar(war, true);
     }
     export async function gotoReplayWar(warData: Uint8Array, replayId: number): Promise<void> {
-        const war = await RwModel.loadWar(warData, replayId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const war = await RwModel.loadWar(warData, replayId);
         MpwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
@@ -219,7 +219,7 @@ namespace FlowManager {
         slotExtraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
         warData         : ProtoTypes.WarSerialization.ISerialWar;
     }): Promise<void> {
-        const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData });
         MpwModel.unloadWar();
         RwModel.unloadWar();
         MeModel.unloadWar();
@@ -235,10 +235,10 @@ namespace FlowManager {
 
         SoundManager.playCoBgmWithWar(war, true);
 
-        await SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
     }
     export async function gotoMapEditorWar(mapRawData: Types.Undefinable<ProtoTypes.Map.IMapRawData>, slotIndex: number, isReview: boolean): Promise<void> {
-        const war = await MeModel.loadWar(mapRawData, slotIndex, isReview).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const war = await MeModel.loadWar(mapRawData, slotIndex, isReview);
         MpwModel.unloadWar();
         SpwModel.unloadWar();
         RwModel.unloadWar();

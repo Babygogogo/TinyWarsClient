@@ -66,7 +66,7 @@ namespace TwnsRwTopPanel {
 
         public static async hide(): Promise<void> {
             if (RwTopPanel._instance) {
-                await RwTopPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await RwTopPanel._instance.close();
             }
         }
 
@@ -172,9 +172,9 @@ namespace TwnsRwTopPanel {
             } else if (war.checkIsInBeginning()) {
                 FloatText.show(Lang.getText(LangTextType.A0042));
             } else {
-                await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
-                await war.loadPreviousCheckPoint().catch(err => { CompatibilityHelpers.showError(err); throw err; });
-                await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await Helpers.checkAndCallLater();
+                await war.loadPreviousCheckPoint();
+                await Helpers.checkAndCallLater();
                 this._updateView();
             }
         }
@@ -189,9 +189,9 @@ namespace TwnsRwTopPanel {
             } else if (war.checkIsInEnd()) {
                 FloatText.show(Lang.getText(LangTextType.A0043));
             } else {
-                await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
-                await war.loadNextCheckPoint().catch(err => { CompatibilityHelpers.showError(err); throw err; });
-                await Helpers.checkAndCallLater().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await Helpers.checkAndCallLater();
+                await war.loadNextCheckPoint();
+                await Helpers.checkAndCallLater();
                 this._updateView();
             }
         }
@@ -253,7 +253,7 @@ namespace TwnsRwTopPanel {
             const war               = this._getWar();
             const player            = war.getPlayerInTurn();
             this._labelPlayer.text  = player
-                ? `${await player.getNickname().catch(err => { CompatibilityHelpers.showError(err); throw err; })} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`
+                ? `${await player.getNickname()} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`
                 : ``;
         }
 

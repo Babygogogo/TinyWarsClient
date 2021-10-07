@@ -51,7 +51,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
         }
         public static async hide(): Promise<void> {
             if (SpmCreateSfwSaveSlotsPanel._instance) {
-                await SpmCreateSfwSaveSlotsPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await SpmCreateSfwSaveSlotsPanel._instance.close();
             }
         }
 
@@ -205,7 +205,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
                     const mapId         = WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) || CommonConstants.ErrorTextForUndefined);
+                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

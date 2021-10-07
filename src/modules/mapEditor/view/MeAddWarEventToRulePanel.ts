@@ -43,7 +43,7 @@ namespace TwnsMeAddWarEventToRulePanel {
 
         public static async hide(): Promise<void> {
             if (MeAddWarEventToRulePanel._instance) {
-                await MeAddWarEventToRulePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeAddWarEventToRulePanel._instance.close();
             }
         }
 

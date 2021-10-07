@@ -129,7 +129,7 @@ namespace CcrModel {
     }
     export async function updateOnMsgCcrDeletePlayer(data: ProtoTypes.NetMessage.MsgCcrDeletePlayer.IS): Promise<void> {
         const roomId    = Helpers.getExisted(data.roomId);
-        const roomInfo  = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo  = await getRoomInfo(roomId);
         if (roomInfo) {
             const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const playerData        = playerDataList.find(v => v.playerIndex === data.targetPlayerIndex);
@@ -142,13 +142,13 @@ namespace CcrModel {
         }
     }
     export async function updateOnMsgCcrSetReady(data: ProtoTypes.NetMessage.MsgCcrSetReady.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             Helpers.getExisted(roomInfo.playerDataList?.find(v => v.playerIndex === data.playerIndex)).isReady = data.isReady;
         }
     }
     export async function updateOnMsgCcrSetSelfSettings(data: ProtoTypes.NetMessage.MsgCcrSetSelfSettings.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             const oldPlayerIndex            = data.oldPlayerIndex;
             const newPlayerIndex            = data.newPlayerIndex;
@@ -162,13 +162,13 @@ namespace CcrModel {
         }
     }
     export async function updateOnMsgCcrGetOwnerPlayerIndex(data: ProtoTypes.NetMessage.MsgCcrGetOwnerPlayerIndex.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             roomInfo.ownerPlayerIndex = data.ownerPlayerIndex;
         }
     }
     export async function updateOnMsgCcrJoinRoom(data: ProtoTypes.NetMessage.MsgCcrJoinRoom.IS): Promise<void> {
-        const roomInfo      = Helpers.getExisted(await getRoomInfo(Helpers.getExisted(data.roomId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+        const roomInfo      = Helpers.getExisted(await getRoomInfo(Helpers.getExisted(data.roomId)));
         const playerIndex   = data.playerIndex;
         if (!roomInfo.playerDataList) {
             roomInfo.playerDataList = [{
@@ -192,7 +192,7 @@ namespace CcrModel {
     }
     export async function updateOnMsgCcrExitRoom(data: ProtoTypes.NetMessage.MsgCcrExitRoom.IS): Promise<void> {
         const roomId    = Helpers.getExisted(data.roomId);
-        const roomInfo  = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo  = await getRoomInfo(roomId);
         if (roomInfo) {
             const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const playerData        = playerDataList.find(v => v.playerIndex === data.playerIndex);
@@ -213,14 +213,14 @@ namespace CcrModel {
 
     export async function checkIsRed(): Promise<boolean> {
         for (const roomId of _joinedRoomIdSet) {
-            if (await checkIsRedForRoom(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; })) {
+            if (await checkIsRedForRoom(roomId)) {
                 return true;
             }
         }
         return false;
     }
     export async function checkIsRedForRoom(roomId: number): Promise<boolean> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo) {
             const selfUserId        = UserModel.getSelfUserId();
             const playerDataList    = roomInfo.playerDataList || [];
@@ -240,7 +240,7 @@ namespace CcrModel {
         return false;
     }
     export async function checkCanStartGame(roomId: number): Promise<boolean> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (!roomInfo) {
             return false;
         }
@@ -256,7 +256,7 @@ namespace CcrModel {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function createDataForCommonWarPlayerInfoPage(roomId: number): Promise<OpenDataForCommonWarPlayerInfoPage> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
             return null;
         }
@@ -295,7 +295,7 @@ namespace CcrModel {
     }
 
     export async function createDataForCommonWarBasicSettingsPage(roomId: number, showPassword: boolean): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
             return { dataArrayForListSettings: [] };
         }
@@ -309,7 +309,7 @@ namespace CcrModel {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)).catch(err => { CompatibilityHelpers.showError(err); throw err; }),
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)),
                     warRule,
                     callbackOnModify: null,
                 },
@@ -381,7 +381,7 @@ namespace CcrModel {
     }
 
     export async function createDataForCommonWarAdvancedSettingsPage(roomId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-        const roomInfo = await getRoomInfo(roomId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
             return null;
         }

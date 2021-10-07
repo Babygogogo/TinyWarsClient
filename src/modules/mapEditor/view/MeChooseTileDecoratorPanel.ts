@@ -45,7 +45,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
         }
         public static async hide(): Promise<void> {
             if (MeChooseTileDecoratorPanel._instance) {
-                await MeChooseTileDecoratorPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeChooseTileDecoratorPanel._instance.close();
             }
         }
 

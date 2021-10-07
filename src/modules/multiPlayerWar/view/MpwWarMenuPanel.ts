@@ -60,7 +60,7 @@ namespace TwnsMpwWarMenuPanel {
         }
         public static async hide(): Promise<void> {
             if (MpwWarMenuPanel._instance) {
-                await MpwWarMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MpwWarMenuPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -103,7 +103,7 @@ namespace TwnsMpwWarMenuPanel {
             Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
 
             Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
         }
@@ -209,7 +209,7 @@ namespace TwnsMpwWarMenuPanel {
             }
 
             const warData   = war.serializeForCreateMfr();
-            const errorCode = await (new TwnsTwWar.TwWar()).getErrorCodeForInit(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const errorCode = await (new TwnsTwWar.TwWar()).getErrorCodeForInit(warData);
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
                 return;

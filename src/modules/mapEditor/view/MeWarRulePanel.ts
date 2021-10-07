@@ -99,7 +99,7 @@ namespace TwnsMeWarRulePanel {
         }
         public static async hide(): Promise<void> {
             if (MeWarRulePanel._instance) {
-                await MeWarRulePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeWarRulePanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {

@@ -141,7 +141,7 @@ namespace TwnsMfrCreatePlayerInfoPage {
             this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
-            const userInfo              = MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(Helpers.getExisted(UserModel.getSelfUserId())).catch(err => { CompatibilityHelpers.showError(err); throw err; }) : null;
+            const userInfo              = MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(Helpers.getExisted(UserModel.getSelfUserId())) : null;
             const labelNickname         = this._labelNickname;
             if (userInfo) {
                 labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;

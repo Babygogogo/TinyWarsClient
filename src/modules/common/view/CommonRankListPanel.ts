@@ -53,7 +53,7 @@ namespace TwnsCommonRankListPanel {
         }
         public static async hide(): Promise<void> {
             if (CommonRankListPanel._instance) {
-                await CommonRankListPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await CommonRankListPanel._instance.close();
             }
         }
 
@@ -84,7 +84,7 @@ namespace TwnsCommonRankListPanel {
             this._updateComponentsForLanguage();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,7 +243,7 @@ namespace TwnsCommonRankListPanel {
             this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;
 
-            const userInfo = await UserModel.getUserPublicInfo(data.userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const userInfo = await UserModel.getUserPublicInfo(data.userId);
             if (userInfo == null) {
                 throw Helpers.newError(`UserRenderer._updateView() empty userInfo.`);
             }

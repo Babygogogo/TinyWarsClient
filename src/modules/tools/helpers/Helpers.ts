@@ -397,7 +397,7 @@ namespace Helpers {
                     _frameBeginTime = Date.now();
                     resolve();
                 }, null);
-            }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            });
         }
     }
     export function createLazyFunc<T>(func: () => T): () => T {

@@ -58,7 +58,7 @@ namespace TwnsScrCreatePlayerInfoPage {
             // nothing to do
         }
         private async _updateComponentsForPlayerInfo(): Promise<void> {
-            const mapRawData    = await ScrCreateModel.getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const mapRawData    = await ScrCreateModel.getMapRawData();
             const listPlayer    = this._listPlayer;
             if (mapRawData) {
                 listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted(mapRawData.playersCountUnneutral)));

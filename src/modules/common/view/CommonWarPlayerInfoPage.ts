@@ -191,7 +191,7 @@ namespace TwnsCommonWarPlayerInfoPage {
                 const callback = data.callbackOnDeletePlayer;
                 if ((callback) && (data.isRoomOwnedBySelf)) {
                     CommonConfirmPanel.show({
-                        content : Lang.getFormattedText(LangTextType.F0029, await UserModel.getUserNickname(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; })),
+                        content : Lang.getFormattedText(LangTextType.F0029, await UserModel.getUserNickname(userId)),
                         callback: () => {
                             callback(playerInfo.playerIndex);
                         },
@@ -240,7 +240,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             }
 
             const userId        = playerInfo.userId;
-            const userInfo      = userId == null ? null : await UserModel.getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const userInfo      = userId == null ? null : await UserModel.getUserPublicInfo(userId);
             const labelNickname = this._labelNickname;
             if (userInfo) {
                 labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
@@ -283,7 +283,7 @@ namespace TwnsCommonWarPlayerInfoPage {
 
         private async _updateComponentsForRankInfo(): Promise<void> {
             const userId                = this._getData().playerInfo.userId;
-            const userInfo              = userId == null ? null : await UserModel.getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const userInfo              = userId == null ? null : await UserModel.getUserPublicInfo(userId);
             const rankScoreArray        = userInfo?.userMrwRankInfoArray;
             const stdRankInfo           = rankScoreArray?.find(v => v.warType === Types.WarType.MrwStd);
             const fogRankInfo           = rankScoreArray?.find(v => v.warType === Types.WarType.MrwFog);

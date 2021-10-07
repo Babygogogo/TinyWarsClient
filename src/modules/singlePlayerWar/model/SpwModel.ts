@@ -53,7 +53,7 @@ namespace SpwModel {
         }
 
         const war = createWarByWarData(warData);
-        await war.init(warData).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await war.init(warData);
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
         war.setSaveSlotExtraData(slotExtraData);
@@ -83,9 +83,9 @@ namespace SpwModel {
     const _warsWithRobotRunning = new Set<BwWar>();
 
     export async function handlePlayerActionAndAutoActions(war: BwWar, action: IWarActionContainer): Promise<void> {
-        await handlePlayerOrRobotAction(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await handlePlayerOrRobotAction(war, action);
 
-        await checkAndHandleAutoActionsAndRobotRecursively(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await checkAndHandleAutoActionsAndRobotRecursively(war);
     }
 
     export async function checkAndHandleAutoActionsAndRobotRecursively(war: BwWar): Promise<void> {
@@ -99,7 +99,7 @@ namespace SpwModel {
             return;
         }
 
-        await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await checkAndHandleSystemActions(war);
 
         if ((checkAndEndWar(war)) || (!war.getIsRunning())) {
             _warsWithRobotRunning.delete(war);
@@ -111,16 +111,16 @@ namespace SpwModel {
             return;
         }
 
-        const robotAction = await WarRobot.getNextAction(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        const robotAction = await WarRobot.getNextAction(war);
         if (!war.getIsRunning()) {
             _warsWithRobotRunning.delete(war);
             return;
         }
 
-        await handlePlayerOrRobotAction(war, robotAction).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await handlePlayerOrRobotAction(war, robotAction);
 
         _warsWithRobotRunning.delete(war);
-        await checkAndHandleAutoActionsAndRobotRecursively(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await checkAndHandleAutoActionsAndRobotRecursively(war);
     }
 
     async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<void> {
@@ -134,7 +134,7 @@ namespace SpwModel {
             throw Helpers.newError(`war.getIsRunning() is false.`);
         }
 
-        await reviseAndExecute(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await reviseAndExecute(war, action);
     }
 
     function checkAndEndWar(war: BwWar): boolean {
@@ -179,15 +179,15 @@ namespace SpwModel {
         // Handle war events.
         const callableWarEventId = war.getWarEventManager().getCallableWarEventId();
         if (callableWarEventId != null) {
-            await handleSystemCallWarEvent(war, callableWarEventId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await handleSystemCallWarEvent(war, callableWarEventId);
+            await checkAndHandleSystemActions(war);
             return true;
         }
 
         // Handle the ending war.
         if (war.checkCanEnd()) {
-            await handleSystemEndWar(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await handleSystemEndWar(war);
+            await checkAndHandleSystemActions(war);
             return true;
         }
 
@@ -204,8 +204,8 @@ namespace SpwModel {
         }
 
         if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
-            await handleSystemBeginTurn(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await handleSystemBeginTurn(war);
+            await checkAndHandleSystemActions(war);
             return true;
         }
 
@@ -215,8 +215,8 @@ namespace SpwModel {
                 throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`);
             }
 
-            await handleSystemHandleBootPlayer(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await handleSystemHandleBootPlayer(war);
+            await checkAndHandleSystemActions(war);
             return true;
         }
 
@@ -229,8 +229,8 @@ namespace SpwModel {
             }
 
             if (player.getAliveState() === Types.PlayerAliveState.Dying) {
-                await handleSystemDestroyPlayerForce(war, playerIndex).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-                await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await handleSystemDestroyPlayerForce(war, playerIndex);
+                await checkAndHandleSystemActions(war);
                 return true;
             }
         }
@@ -241,8 +241,8 @@ namespace SpwModel {
                 throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`);
             }
 
-            await handleSystemEndTurn(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await handleSystemEndTurn(war);
+            await checkAndHandleSystemActions(war);
             return true;
         }
 
@@ -252,8 +252,8 @@ namespace SpwModel {
                 throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`);
             }
 
-            await handleSystemEndTurn(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            await checkAndHandleSystemActions(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await handleSystemEndTurn(war);
+            await checkAndHandleSystemActions(war);
             return true;
         }
 
@@ -265,7 +265,7 @@ namespace SpwModel {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemBeginTurn    : {
             },
-        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        });
     }
     async function handleSystemCallWarEvent(war: BwWar, warEventId: number): Promise<void> {
         await reviseAndExecute(war, {
@@ -273,7 +273,7 @@ namespace SpwModel {
             WarActionSystemCallWarEvent : {
                 warEventId,
             },
-        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        });
     }
     async function handleSystemDestroyPlayerForce(war: BwWar, playerIndex: number): Promise<void> {
         await reviseAndExecute(war, {
@@ -281,33 +281,33 @@ namespace SpwModel {
             WarActionSystemDestroyPlayerForce   : {
                 targetPlayerIndex           : playerIndex,
             },
-        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        });
     }
     async function handleSystemEndWar(war: BwWar): Promise<void> {
         await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndWar   : {
             },
-        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        });
     }
     async function handleSystemHandleBootPlayer(war: BwWar): Promise<void> {
         await reviseAndExecute(war, {
             actionId                        : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemHandleBootPlayer : {
             },
-        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        });
     }
     async function handleSystemEndTurn(war: BwWar): Promise<void> {
         await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndTurn  : {
             },
-        }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        });
     }
 
     async function reviseAndExecute(war: BwWar, action: IWarActionContainer): Promise<void> {
         const revisedAction = WarActionReviser.revise(war, action);
-        await WarActionExecutor.checkAndExecute(war, revisedAction, false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await WarActionExecutor.checkAndExecute(war, revisedAction, false);
 
         war.getExecutedActionManager().addExecutedAction(revisedAction);
     }

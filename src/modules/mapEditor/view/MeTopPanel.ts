@@ -73,7 +73,7 @@ namespace TwnsMeTopPanel {
 
         public static async hide(): Promise<void> {
             if (MeTopPanel._instance) {
-                await MeTopPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MeTopPanel._instance.close();
             }
         }
 

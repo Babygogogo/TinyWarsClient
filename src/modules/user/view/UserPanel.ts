@@ -88,7 +88,7 @@ namespace TwnsUserPanel {
 
         public static async hide(): Promise<void> {
             if (UserPanel._instance) {
-                await UserPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await UserPanel._instance.close();
             }
         }
 
@@ -121,7 +121,7 @@ namespace TwnsUserPanel {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -178,7 +178,7 @@ namespace TwnsUserPanel {
 
         private async _updateView(): Promise<void> {
             const userId    = this._getOpenData().userId;
-            const info      = userId != null ? await UserModel.getUserPublicInfo(userId).catch(err => { CompatibilityHelpers.showError(err); throw err; }) : null;
+            const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : null;
             if (info) {
                 const registerTime          = info.registerTime;
                 const labelRegisterTime1    = this._labelRegisterTime1;
@@ -253,11 +253,11 @@ namespace TwnsUserPanel {
         }
 
         private async _updateLabelTitle(): Promise<void> {
-            const nickname          = await UserModel.getUserNickname(this._getOpenData().userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const nickname          = await UserModel.getUserNickname(this._getOpenData().userId);
             this._labelTitle.text   = Lang.getFormattedText(LangTextType.F0009, nickname);
         }
         private async _updateComponentsForStdRank(): Promise<void> {
-            const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rankName                  = `(${ConfigManager.getRankName(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), score)})`;
@@ -268,7 +268,7 @@ namespace TwnsUserPanel {
             this._labelStdRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
         }
         private async _updateComponentsForFogRank(): Promise<void> {
-            const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rankName                  = `(${ConfigManager.getRankName(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), score)})`;
@@ -319,7 +319,7 @@ namespace TwnsUserPanel {
             this._sclHistoryFog.bindData(dataList);
         }
         private async _updateLabelOnlineTime(): Promise<void> {
-            const info                  = await UserModel.getUserPublicInfo(this._getOpenData().userId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const info                  = await UserModel.getUserPublicInfo(this._getOpenData().userId);
             const onlineTime            = info ? info.onlineTime : null;
             this._labelOnlineTime.text  = onlineTime == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimeDurationText2(onlineTime);
         }
@@ -358,7 +358,7 @@ namespace TwnsUserPanel {
                 labelType.text  = `${playersCount}P`;
             }
 
-            const info              = await UserModel.getUserMpwStatisticsData(data.userId, warType, playersCount).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            const info              = await UserModel.getUserMpwStatisticsData(data.userId, warType, playersCount);
             const winCount          = info ? info.wins || 0 : 0;
             const loseCount         = info ? info.loses || 0 : 0;
             const drawCount         = info ? info.draws || 0 : 0;

@@ -19,7 +19,7 @@ namespace TwnsBwBackgroundPanel {
 
         public static async hide(): Promise<void> {
             if (BwBackgroundPanel._instance) {
-                await BwBackgroundPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwBackgroundPanel._instance.close();
             }
         }
 

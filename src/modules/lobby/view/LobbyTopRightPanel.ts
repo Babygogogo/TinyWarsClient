@@ -1,5 +1,4 @@
 
-import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Types                    from "../../tools/helpers/Types";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import TwnsUiButton             from "../../tools/ui/UiButton";
@@ -27,7 +26,7 @@ namespace TwnsLobbyTopRightPanel {
         }
         public static async hide(): Promise<void> {
             if (LobbyTopRightPanel._instance) {
-                await LobbyTopRightPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await LobbyTopRightPanel._instance.close();
             }
         }
         public static getInstance(): LobbyTopRightPanel | null {
@@ -52,7 +51,7 @@ namespace TwnsLobbyTopRightPanel {
             this._showOpenAnimation();
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
         }
 
         private _onMsgUserLogout(): void {

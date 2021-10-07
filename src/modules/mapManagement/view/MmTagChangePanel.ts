@@ -45,7 +45,7 @@ namespace TwnsMmTagChangePanel {
 
         public static async hide(): Promise<void> {
             if (MmTagChangePanel._instance) {
-                await MmTagChangePanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MmTagChangePanel._instance.close();
             }
         }
 
@@ -69,7 +69,7 @@ namespace TwnsMmTagChangePanel {
 
             this._updateComponentsForLanguage();
 
-            const briefData         = Helpers.getExisted(await WarMapModel.getBriefData(this._getOpenData().mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            const briefData         = Helpers.getExisted(await WarMapModel.getBriefData(this._getOpenData().mapId));
             this._imgFog.visible    = !!(briefData.mapTag || {}).fog;
         }
 
@@ -85,7 +85,7 @@ namespace TwnsMmTagChangePanel {
         }
 
         private async _onTouchedBtnWarRule(): Promise<void> {
-            MmWarRulePanel.show(Helpers.getExisted(await WarMapModel.getRawData(this._getOpenData().mapId).catch(err => { CompatibilityHelpers.showError(err); throw err; })));
+            MmWarRulePanel.show(Helpers.getExisted(await WarMapModel.getRawData(this._getOpenData().mapId)));
             this.close();
         }
 

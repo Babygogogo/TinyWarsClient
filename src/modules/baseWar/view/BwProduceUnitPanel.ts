@@ -58,7 +58,7 @@ namespace TwnsBwProduceUnitPanel {
         }
         public static async hide(): Promise<void> {
             if (BwProduceUnitPanel._instance) {
-                await BwProduceUnitPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await BwProduceUnitPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -95,7 +95,7 @@ namespace TwnsBwProduceUnitPanel {
             Notify.dispatch(NotifyType.BwProduceUnitPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await this._showCloseAnimation();
 
             Notify.dispatch(NotifyType.BwProduceUnitPanelClosed);
         }

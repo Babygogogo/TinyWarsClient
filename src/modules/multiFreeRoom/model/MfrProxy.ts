@@ -50,7 +50,7 @@ namespace MfrProxy {
     async function _onMsgMfrJoinRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrJoinRoom.IS;
         if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrJoinRoom(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await MfrModel.updateOnMsgMfrJoinRoom(data);
             Notify.dispatch(NotifyType.MsgMfrJoinRoom, data);
         }
     }
@@ -87,7 +87,7 @@ namespace MfrProxy {
     async function _onMsgMfrExitRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrExitRoom.IS;
         if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrExitRoom(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await MfrModel.updateOnMsgMfrExitRoom(data);
             Notify.dispatch(NotifyType.MsgMfrExitRoom, data);
         }
     }
@@ -103,7 +103,7 @@ namespace MfrProxy {
     async function _onMsgMfrDeletePlayer(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrDeletePlayer.IS;
         if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrDeletePlayer(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await MfrModel.updateOnMsgMfrDeletePlayer(data);
             Notify.dispatch(NotifyType.MsgMfrDeletePlayer, data);
         }
     }
@@ -119,7 +119,7 @@ namespace MfrProxy {
     async function _onMsgMfrSetReady(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrSetReady.IS;
         if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrSetReady(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await MfrModel.updateOnMsgMfrSetReady(data);
             Notify.dispatch(NotifyType.MsgMfrSetReady, data);
         }
     }
@@ -132,7 +132,7 @@ namespace MfrProxy {
     async function _onMsgMfrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrSetSelfSettings.IS;
         if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrSetSelfSettings(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await MfrModel.updateOnMsgMfrSetSelfSettings(data);
             Notify.dispatch(NotifyType.MsgMfrSetSelfSettings, data);
         }
     }
@@ -140,7 +140,7 @@ namespace MfrProxy {
     async function _onMsgMfrGetOwnerPlayerIndex(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrGetOwnerPlayerIndex.IS;
         if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrGetOwnerPlayerIndex(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await MfrModel.updateOnMsgMfrGetOwnerPlayerIndex(data);
             Notify.dispatch(NotifyType.MsgMfrGetOwnerPlayerIndex, data);
         }
     }

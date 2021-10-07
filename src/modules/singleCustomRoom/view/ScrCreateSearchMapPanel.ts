@@ -44,7 +44,7 @@ namespace TwnsScrCreateSearchMapPanel {
         }
         public static async hide(): Promise<void> {
             if (ScrCreateSearchMapPanel._instance) {
-                await ScrCreateSearchMapPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await ScrCreateSearchMapPanel._instance.close();
             }
         }
 

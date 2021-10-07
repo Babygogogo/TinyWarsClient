@@ -69,7 +69,7 @@ namespace TwnsUiComponent {
                 this._unregisterListeners();
                 this._setUiListenerArray(null);
                 this._setNotifyListenerArray(null);
-                await this._onClosed().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await this._onClosed();
             }
         }
 

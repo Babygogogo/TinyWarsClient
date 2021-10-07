@@ -41,7 +41,7 @@ namespace TwnsMmMainMenuPanel {
 
         public static async hide(): Promise<void> {
             if (MmMainMenuPanel._instance) {
-                await MmMainMenuPanel._instance.close().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                await MmMainMenuPanel._instance.close();
             }
         }
 
@@ -63,7 +63,7 @@ namespace TwnsMmMainMenuPanel {
             this._listCommand.setItemRenderer(CommandRenderer);
 
             this._updateView();
-            this._listCommand.bindData(await this._createDataForListCommand().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            this._listCommand.bindData(await this._createDataForListCommand());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ namespace TwnsMmMainMenuPanel {
         private async _updateView(): Promise<void> {
             this._labelMenuTitle.text   = Lang.getText(LangTextType.B0192);
             this._btnBack.label         = Lang.getText(LangTextType.B0146);
-            this._listCommand.bindData(await this._createDataForListCommand().catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+            this._listCommand.bindData(await this._createDataForListCommand());
         }
 
         private async _createDataForListCommand(): Promise<DataForCommandRenderer[]> {

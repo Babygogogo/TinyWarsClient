@@ -36,7 +36,7 @@ namespace McrCreateModel {
     };
 
     export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
-        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()).catch(err => { CompatibilityHelpers.showError(err); throw err; }));
+        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
     }
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
@@ -47,7 +47,7 @@ namespace McrCreateModel {
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
-        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).warRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId));
     }
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
@@ -82,13 +82,13 @@ namespace McrCreateModel {
 
     export async function resetDataByWarRuleId(ruleId: number | null): Promise<void> {
         if (ruleId == null) {
-            await resetDataByCustomWarRuleId().catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await resetDataByCustomWarRuleId();
         } else {
-            await resetDataByPresetWarRuleId(ruleId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await resetDataByPresetWarRuleId(ruleId);
         }
     }
     async function resetDataByCustomWarRuleId(): Promise<void> {
-        const warRule = WarRuleHelpers.createDefaultWarRule(null, Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).playersCountUnneutral));
+        const warRule = WarRuleHelpers.createDefaultWarRule(null, Helpers.getExisted((await getMapRawData()).playersCountUnneutral));
         setWarRule(warRule);
         setCustomWarRuleId();
 
@@ -104,7 +104,7 @@ namespace McrCreateModel {
         Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
     }
     async function resetDataByPresetWarRuleId(ruleId: number): Promise<void> {
-        const warRule = Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).warRuleArray?.find(r => r.ruleId === ruleId));
+        const warRule = Helpers.getExisted((await getMapRawData()).warRuleArray?.find(r => r.ruleId === ruleId));
         setWarRule(Helpers.deepClone(warRule));
         setPresetWarRuleId(ruleId);
 
@@ -132,9 +132,9 @@ namespace McrCreateModel {
     }
     export async function tickPresetWarRuleId(): Promise<void> {
         const currWarRuleId = getPresetWarRuleId();
-        const warRuleArray  = Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; })).warRuleArray);
+        const warRuleArray  = Helpers.getExisted((await getMapRawData()).warRuleArray);
         if (currWarRuleId == null) {
-            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canMcw)?.ruleId)).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canMcw)?.ruleId));
         } else {
             const warRuleIdList: number[] = [];
             for (let ruleId = currWarRuleId + 1; ruleId < warRuleArray.length; ++ruleId) {
@@ -145,7 +145,7 @@ namespace McrCreateModel {
             }
             for (const ruleId of warRuleIdList) {
                 if (warRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canMcw) {
-                    await resetDataByWarRuleId(ruleId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+                    await resetDataByWarRuleId(ruleId);
                     return;
                 }
             }
