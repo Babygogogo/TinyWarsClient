@@ -320,7 +320,14 @@ namespace TwnsMpwWarMenuPanel {
             TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                 title   : Lang.getText(LangTextType.B0652),
                 content : Lang.getText(LangTextType.A0225),
-                callback: () => FlowManager.gotoMyWarListPanel(this._getWar().getWarType()),
+                callback: () => {
+                    const war = this._getWar();
+                    if (war.getPlayerLoggedIn() != null) {
+                        FlowManager.gotoMyWarListPanel(war.getWarType());
+                    } else {
+                        FlowManager.gotoWatchWarListPanel();
+                    }
+                },
             });
         }
 

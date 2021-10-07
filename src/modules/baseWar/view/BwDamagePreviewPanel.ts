@@ -112,30 +112,19 @@ namespace TwnsBwDamagePreviewPanel {
                 if (!attackerUnit.checkCanAttackTargetAfterMovePath(movePath, gridIndex)) {
                     group.visible = false;
                 } else {
-                    const attackerUnitId                        = attackerUnit.getUnitId();
-                    const { errorCode, battleDamageInfoArray }  = WarDamageCalculator.getEstimatedBattleDamage({
+                    const attackerUnitId        = attackerUnit.getUnitId();
+                    const battleDamageInfoArray = WarDamageCalculator.getEstimatedBattleDamage({
                         war,
                         attackerMovePath: movePath,
                         launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
                         targetGridIndex : gridIndex,
                     });
-                    if (errorCode) {
-                        throw Helpers.newError(`errorCode: ${errorCode}.`);
-                    } else if (battleDamageInfoArray == null) {
-                        throw Helpers.newError(`Empty battleDamageInfoArray.`);
-                    }
-
-                    const { errorCode: errorCodeForDamages, damages } = WarDamageCalculator.getAttackAndCounterDamage({
+                    const damages = WarDamageCalculator.getAttackAndCounterDamage({
                         battleDamageInfoArray,
                         attackerUnitId,
                         targetGridIndex     : gridIndex,
                         unitMap,
                     });
-                    if (errorCodeForDamages) {
-                        throw Helpers.newError(`errorCodeForDamages: ${errorCodeForDamages}.`);
-                    } else if (damages == null) {
-                        throw Helpers.newError(`Empty damages.`);
-                    }
 
                     const { attackDamage, counterDamage }   = damages;
                     const target                            = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);

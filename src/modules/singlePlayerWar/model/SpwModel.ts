@@ -123,7 +123,7 @@ namespace SpwModel {
         await checkAndHandleAutoActionsAndRobotRecursively(war).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
 
-    async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
+    async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<void> {
         if (war.getIsEnded()) {
             throw Helpers.newError(`war.getIsEnded() is true.`);
         }
@@ -134,7 +134,7 @@ namespace SpwModel {
             throw Helpers.newError(`war.getIsRunning() is false.`);
         }
 
-        return await reviseAndExecute(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+        await reviseAndExecute(war, action).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
 
     function checkAndEndWar(war: BwWar): boolean {
@@ -260,69 +260,56 @@ namespace SpwModel {
         // No system action available.
         return false;
     }
-    async function handleSystemBeginTurn(war: BwWar): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemBeginTurn(war: BwWar): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemBeginTurn    : {
             },
         }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
-    async function handleSystemCallWarEvent(war: BwWar, warEventId: number): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemCallWarEvent(war: BwWar, warEventId: number): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemCallWarEvent : {
                 warEventId,
             },
         }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
-    async function handleSystemDestroyPlayerForce(war: BwWar, playerIndex: number): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemDestroyPlayerForce(war: BwWar, playerIndex: number): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemDestroyPlayerForce   : {
                 targetPlayerIndex           : playerIndex,
             },
         }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
-    async function handleSystemEndWar(war: BwWar): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemEndWar(war: BwWar): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndWar   : {
             },
         }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
-    async function handleSystemHandleBootPlayer(war: BwWar): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemHandleBootPlayer(war: BwWar): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                        : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemHandleBootPlayer : {
             },
         }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
-    async function handleSystemEndTurn(war: BwWar): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemEndTurn(war: BwWar): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndTurn  : {
             },
         }).catch(err => { CompatibilityHelpers.showError(err); throw err; });
     }
 
-    async function reviseAndExecute(war: BwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
-        const {
-            errorCode   : errorCodeForRevisedAction,
-            action      : revisedAction,
-        } = WarActionReviser.revise(war, action);
-        if (errorCodeForRevisedAction) {
-            throw Helpers.newError(`SpwModel.reviseAndExecute() errorCodeForRevisedAction: ${errorCodeForRevisedAction}.`);
-        } else if (revisedAction == null) {
-            throw Helpers.newError(`SpwModel.reviseAndExecute() empty revisedAction!.`);
-        }
-
-        const errorCodeForExecute = await WarActionExecutor.checkAndExecute(war, revisedAction, false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-        if (errorCodeForExecute) {
-            throw Helpers.newError(`SpwModel.reviseAndExecute() errorCodeForExecute: ${errorCodeForExecute}.`);
-        }
+    async function reviseAndExecute(war: BwWar, action: IWarActionContainer): Promise<void> {
+        const revisedAction = WarActionReviser.revise(war, action);
+        await WarActionExecutor.checkAndExecute(war, revisedAction, false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
         war.getExecutedActionManager().addExecutedAction(revisedAction);
-        return ClientErrorCode.NoError;
     }
 
     function createWarByWarData(warData: ProtoTypes.WarSerialization.ISerialWar): SpwWar {

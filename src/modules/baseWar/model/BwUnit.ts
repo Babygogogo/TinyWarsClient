@@ -56,7 +56,7 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public init(unitData: ISerialUnit, configVersion: string): ClientErrorCode {
+        public init(unitData: ISerialUnit, configVersion: string): void {
             const validationError = WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                 unitData,
                 configVersion,
@@ -64,38 +64,14 @@ namespace TwnsBwUnit {
                 playersCountUnneutral   : null,
             });
             if (validationError) {
-                return validationError;
+                throw Helpers.newError(`ValidationError: ${validationError}`, validationError);
             }
 
-            const playerIndex = unitData.playerIndex;
-            if (playerIndex == null) {
-                return ClientErrorCode.BwUnitInit00;
-            }
-
-            const unitType = unitData.unitType as UnitType;
-            if (unitType == null) {
-                return ClientErrorCode.BwUnitInit01;
-            }
-
-            const unitId = unitData.unitId;
-            if (unitId == null) {
-                return ClientErrorCode.BwUnitInit02;
-            }
-
-            const gridIndex = GridIndexHelpers.convertGridIndex(unitData.gridIndex);
-            if (gridIndex == null) {
-                return ClientErrorCode.BwUnitInit03;
-            }
-
-            const unitTemplateCfg = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
-            if (!unitTemplateCfg) {
-                return ClientErrorCode.BwUnitInit04;
-            }
-
-            if (!ConfigManager.getDamageChartCfgs(configVersion, unitType)) {
-                return ClientErrorCode.BwUnitInit05;
-            }
-
+            const playerIndex       = Helpers.getExisted(unitData.playerIndex, ClientErrorCode.BwUnit_Init_00);
+            const unitType          = Helpers.getExisted(unitData.unitType, ClientErrorCode.BwUnit_Init_01) as UnitType;
+            const unitId            = Helpers.getExisted(unitData.unitId, ClientErrorCode.BwUnit_Init_02);
+            const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex), ClientErrorCode.BwUnit_Init_03);
+            const unitTemplateCfg   = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
             this.setGridIndex(gridIndex);
             this.setUnitId(unitId);
             this._setTemplateCfg(unitTemplateCfg);
@@ -116,8 +92,6 @@ namespace TwnsBwUnit {
             this.setCurrentBuildMaterial(unitData.currentBuildMaterial ?? (unitTemplateCfg.maxBuildMaterial ?? null));
 
             this.getView().init(this);
-
-            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

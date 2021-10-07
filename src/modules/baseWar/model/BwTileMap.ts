@@ -32,53 +32,42 @@ namespace TwnsBwTileMap {
             configVersion           : string;
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
-        }): ClientErrorCode {
+        }): void {
             if (data == null) {
-                return ClientErrorCode.BwTileMapInit00;
+                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwTileMap_Init_00);
             }
 
-            const tiles = data.tiles;
-            if (tiles == null) {
-                return ClientErrorCode.BwTileMapInit01;
-            }
-
+            const tiles     = Helpers.getExisted(data.tiles, ClientErrorCode.BwTileMap_Init_01);
             const mapWidth  = mapSize.width;
             const mapHeight = mapSize.height;
             if ((!WarCommonHelpers.checkIsValidMapSize(mapSize)) ||
                 (mapWidth * mapHeight !== tiles.length)
             ) {
-                return ClientErrorCode.BwTileMapInit02;
+                throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwTileMap_Init_02);
             }
 
             const map = Helpers.createEmptyMap<BwTile>(mapWidth, mapHeight);
             for (const tileData of tiles) {
-                const gridIndex = GridIndexHelpers.convertGridIndex(tileData.gridIndex);
-                if (gridIndex == null) {
-                    return ClientErrorCode.BwTileMapInit03;
-                }
-
+                const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.BwTileMap_Init_03);
                 if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
-                    return ClientErrorCode.BwTileMapInit04;
+                    throw Helpers.newError(`The gridIndex is not inside the map.`, ClientErrorCode.BwTileMap_Init_04);
                 }
 
                 const gridX = gridIndex.x;
                 const gridY = gridIndex.y;
                 if (map[gridX][gridY]) {
-                    return ClientErrorCode.BwTileMapInit05;
+                    throw Helpers.newError(`Duplicated gridIndex: ${gridX}, ${gridY}`, ClientErrorCode.BwTileMap_Init_05);
                 }
 
-                const tile      = new BwTile();
-                const tileError = tile.init(tileData, configVersion);
-                if (tileError) {
-                    return tileError;
-                }
+                const tile = new BwTile();
+                tile.init(tileData, configVersion);
 
                 const playerIndex = tile.getPlayerIndex();
                 if ((playerIndex == null)                                   ||
                     (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
                     (playerIndex > playersCountUnneutral)
                 ) {
-                    return ClientErrorCode.BwTileMapInit06;
+                    throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTileMap_Init_06);
                 }
 
                 map[gridX][gridY] = tile;
@@ -88,15 +77,13 @@ namespace TwnsBwTileMap {
             this._setMapSize(mapWidth, mapHeight);
 
             this.getView().init(this);
-
-            return ClientErrorCode.NoError;
         }
         public fastInit({ data, configVersion, mapSize, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialTileMap>;
             configVersion           : string;
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
-        }): ClientErrorCode {
+        }): void {
             const map = this._getMap();
             for (const tileData of data ? data.tiles || [] : []) {
                 const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
@@ -104,8 +91,6 @@ namespace TwnsBwTileMap {
             }
 
             this.getView().fastInit(this);
-
-            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

@@ -177,11 +177,8 @@ namespace TwnsBwWarEventManager {
                 revisedUnitData.gridIndex   = gridIndex;
                 revisedUnitData.unitId      = unitId;
 
-                const unit      = new TwnsBwUnit.BwUnit();
-                const unitError = unit.init(revisedUnitData, configVersion);
-                if (unitError) {
-                    throw Helpers.newError(`BwWarEventManager._callActionAddUnit() unitError: ${unitError}`);
-                }
+                const unit = new TwnsBwUnit.BwUnit();
+                unit.init(revisedUnitData, configVersion);
 
                 resultingUnitList.push(revisedUnitData);
                 unit.startRunning(war);

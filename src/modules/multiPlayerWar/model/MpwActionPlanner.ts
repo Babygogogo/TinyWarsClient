@@ -563,17 +563,13 @@ namespace TwnsMpwActionPlanner {
         // Functions for getting the next state when the player inputs.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State {
-            const selfPlayerIndex = this._getPlayerIndexLoggedIn();
-            if (selfPlayerIndex == null) {
-                throw Helpers.newError(`MpwActionPlanner._getNextStateOnTapWhenIdle() empty selfPlayerIndex.`);
-            }
-
+            const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
+                if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;

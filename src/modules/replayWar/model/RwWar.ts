@@ -424,10 +424,7 @@ namespace TwnsRwWar {
         }
         private async _doExecuteAction(action: IWarActionContainer, isFastExecute: boolean): Promise<void> {
             this.setNextActionId(this.getNextActionId() + 1);
-            const errorCode = await WarActionExecutor.checkAndExecute(this, action, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-            if (errorCode) {
-                throw Helpers.newError(`RwWar._doExecuteAction() errorCode: ${errorCode}`);
-            }
+            await WarActionExecutor.checkAndExecute(this, action, isFastExecute).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
             const isInEnd = this.checkIsInEnd();
             if (isInEnd) {

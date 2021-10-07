@@ -74,22 +74,12 @@ namespace TwnsBwPlayerManager {
                 playerMap.set(playerIndex, player);
             }
         }
-        public fastInit(data: ISerialPlayerManager, configVersion: string): ClientErrorCode {
+        public fastInit(data: ISerialPlayerManager, configVersion: string): void {
             for (const playerData of data ? data.players || [] : []) {
-                const playerIndex = playerData.playerIndex;
-                if (playerIndex == null) {
-                    return ClientErrorCode.BwPlayerManager_FastInit_00;
-                }
-
-                const player = this.getPlayer(playerIndex);
-                if (player == null) {
-                    return ClientErrorCode.BwPlayerManager_FastInit_01;
-                }
-
+                const playerIndex   = Helpers.getExisted(playerData.playerIndex, ClientErrorCode.BwPlayerManager_FastInit_00);
+                const player        = Helpers.getExisted(this.getPlayer(playerIndex), ClientErrorCode.BwPlayerManager_FastInit_01);
                 player.init(playerData, configVersion);
             }
-
-            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

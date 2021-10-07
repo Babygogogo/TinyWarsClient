@@ -51,6 +51,7 @@ import TwnsUserLoginPanel           from "../../user/view/UserLoginPanel";
 import WarMapModel                  from "../../warMap/model/WarMapModel";
 import WarMapProxy                  from "../../warMap/model/WarMapProxy";
 import WwProxy                      from "../../watchWar/model/WwProxy";
+import TwnsWwOngoingWarsPanel       from "../../watchWar/view/WwOngoingWarsPanel";
 import Lang                         from "../lang/Lang";
 import TwnsLangTextType             from "../lang/LangTextType";
 import NetManager                   from "../network/NetManager";
@@ -180,16 +181,11 @@ namespace FlowManager {
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
-    export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<ClientErrorCode> {
-        const { errorCode, war } = await MpwModel.loadWar(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
+    export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
+        const war = await MpwModel.loadWar(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         RwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        if (errorCode) {
-            return errorCode;
-        } else if (war == null) {
-            return ClientErrorCode.FlowManager_GotoMultiPlayerWar_00;
-        }
 
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();
@@ -201,8 +197,6 @@ namespace FlowManager {
         TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playCoBgmWithWar(war, true);
-
-        return ClientErrorCode.NoError;
     }
     export async function gotoReplayWar(warData: Uint8Array, replayId: number): Promise<void> {
         const war = await RwModel.loadWar(warData, replayId).catch(err => { CompatibilityHelpers.showError(err); throw err; });
@@ -280,6 +274,10 @@ namespace FlowManager {
     export function gotoRwReplayListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
         TwnsRwReplayListPanel.RwReplayListPanel.show();
+    }
+    export function gotoWatchWarListPanel(): void {
+        _unloadAllWarsAndOpenCommonPanels();
+        TwnsWwOngoingWarsPanel.McrWatchOngoingWarsPanel.show();
     }
 
     export function gotoMfrCreateSettingsPanel(warData: ProtoTypes.WarSerialization.ISerialWar): void {

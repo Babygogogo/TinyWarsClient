@@ -35,52 +35,41 @@ namespace TwnsBwUnitMap {
             configVersion           : string;
             mapSize                 : Types.MapSize;
             playersCountUnneutral   : number;
-        }): ClientErrorCode {
+        }): void {
             if (data == null) {
-                return ClientErrorCode.BwUnitMapInit00;
+                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwUnitMap_Init_00);
             }
 
-            const nextUnitId = data.nextUnitId;
-            if (nextUnitId == null) {
-                return ClientErrorCode.BwUnitMapInit01;
-            }
-
+            const nextUnitId = Helpers.getExisted(data.nextUnitId, ClientErrorCode.BwUnitMap_Init_01);
             if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
-                return ClientErrorCode.BwUnitMapInit02;
+                throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwUnitMap_Init_02);
             }
 
             const mapWidth      = mapSize.width;
             const map           = Helpers.createEmptyMap<BwUnit>(mapWidth);
             const loadedUnits   = new Map<number, BwUnit>();
             const allUnits      = new Map<number, BwUnit>();
-
             for (const unitData of data.units || []) {
-                const unit      = new BwUnit();
-                const unitError = unit.init(unitData, configVersion);
-                if (unitError) {
-                    return unitError;
-                }
+                const unit = new BwUnit();
+                unit.init(unitData, configVersion);
 
                 const gridIndex = unit.getGridIndex();
                 if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
-                    return ClientErrorCode.BwUnitMapInit03;
+                    throw Helpers.newError(`Invalid gridIndex: ${gridIndex.x}, ${gridIndex.y}`, ClientErrorCode.BwUnitMap_Init_03);
                 }
 
                 const unitId = unit.getUnitId();
-                if (unitId == null) {
-                    return ClientErrorCode.BwUnitMapInit04;
-                }
                 if (allUnits.has(unitId)) {
-                    return ClientErrorCode.BwUnitMapInit05;
+                    throw Helpers.newError(`Duplicated unitId: ${unitId}`, ClientErrorCode.BwUnitMap_Init_04);
                 }
                 if (unitId >= nextUnitId) {
-                    return ClientErrorCode.BwUnitMapInit06;
+                    throw Helpers.newError(`Invalid unitId: ${unitId}`, ClientErrorCode.BwUnitMap_Init_05);
                 }
                 allUnits.set(unitId, unit);
 
                 const playerIndex = unit.getPlayerIndex();
                 if ((playerIndex == null) || (playerIndex > playersCountUnneutral)) {
-                    return ClientErrorCode.BwUnitMapInit07;
+                    throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwUnitMap_Init_06);
                 }
 
                 if (unit.getLoaderUnitId() != null) {
@@ -88,7 +77,7 @@ namespace TwnsBwUnitMap {
                 } else {
                     const { x, y } = gridIndex;
                     if (map[x][y]) {
-                        return ClientErrorCode.BwUnitMapInit08;
+                        throw Helpers.newError(`The grid is occupied: ${x}, ${y}`, ClientErrorCode.BwUnitMap_Init_07);
                     }
 
                     map[x][y] = unit;
@@ -97,42 +86,31 @@ namespace TwnsBwUnitMap {
 
             const loadUnitCounts = new Map<number, number>();
             for (const [, loadedUnit] of loadedUnits) {
-                const loaderId = loadedUnit.getLoaderUnitId();
-                if (loaderId == null) {
-                    return ClientErrorCode.BwUnitMapInit09;
-                }
-
-                const loader = allUnits.get(loaderId);
-                if (loader == null) {
-                    return ClientErrorCode.BwUnitMapInit10;
-                }
+                const loaderId  = Helpers.getExisted(loadedUnit.getLoaderUnitId(), ClientErrorCode.BwUnitMap_Init_08);
+                const loader    = Helpers.getExisted(allUnits.get(loaderId), ClientErrorCode.BwUnitMap_Init_09);
                 if (loader.getPlayerIndex() !== loadedUnit.getPlayerIndex()) {
-                    return ClientErrorCode.BwUnitMapInit11;
+                    throw Helpers.newError(`Invalid playerIndex.`, ClientErrorCode.BwUnitMap_Init_10);
                 }
 
                 const gridIndex1 = loader.getGridIndex();
                 const gridIndex2 = loadedUnit.getGridIndex();
                 if ((!gridIndex1) || (!gridIndex2) || (!GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2))) {
-                    return ClientErrorCode.BwUnitMapInit12;
+                    throw Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.BwUnitMap_Init_11);
                 }
 
                 const maxLoadCount  = loader.getMaxLoadUnitsCount();
                 const loadCount     = (loadUnitCounts.get(loaderId) || 0) + 1;
                 if ((maxLoadCount == null) || (loadCount > maxLoadCount)) {
-                    return ClientErrorCode.BwUnitMapInit13;
+                    throw Helpers.newError(`Over load.`, ClientErrorCode.BwUnitMap_Init_12);
                 }
                 loadUnitCounts.set(loaderId, loadCount);
 
-                const unitType = loadedUnit.getUnitType();
-                if (unitType == null) {
-                    return ClientErrorCode.BwUnitMapInit14;
-                }
-
-                const loadUnitCategory = loader.getLoadUnitCategory();
+                const unitType          = loadedUnit.getUnitType();
+                const loadUnitCategory  = loader.getLoadUnitCategory();
                 if ((loadUnitCategory == null)                                                          ||
                     (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, loadUnitCategory))
                 ) {
-                    return ClientErrorCode.BwUnitMapInit15;
+                    throw Helpers.newError(`Invalid unitType: ${unitType}`, ClientErrorCode.BwUnitMap_Init_13);
                 }
             }
 
@@ -142,16 +120,14 @@ namespace TwnsBwUnitMap {
             this.setNextUnitId(nextUnitId);
 
             this.getView().init(this);
-
-            return ClientErrorCode.NoError;
         }
         public fastInit({ data, configVersion, mapSize, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialUnitMap>;
             configVersion           : string;
             mapSize                 : Types.MapSize;
             playersCountUnneutral   : number;
-        }): ClientErrorCode {
-            return this.init({ data, configVersion, mapSize, playersCountUnneutral });
+        }): void {
+            this.init({ data, configVersion, mapSize, playersCountUnneutral });
         }
 
         public startRunning(war: BwWar): void {

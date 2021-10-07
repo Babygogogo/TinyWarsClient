@@ -139,62 +139,39 @@ namespace WarCommonHelpers {
         war             : BwWar;
         rawPath         : Types.Undefinable<ProtoTypes.Structure.IMovePath>;
         launchUnitId    : Types.Undefinable<number>;
-    }): { errorCode: ClientErrorCode, revisedPath?: Types.MovePath} {
+    }): Types.MovePath {
         if (rawPath == null) {
-            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_00 };
+            throw Helpers.newError(`Empty rawPath.`, ClientErrorCode.BwHelpers_GetRevisedPath_00);
         }
+
         const rawPathNodes = rawPath.nodes;
         if ((rawPathNodes == null) || (!rawPathNodes.length)) {
-            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_01 };
+            throw Helpers.newError(`Empty rawPathNodes.`, ClientErrorCode.BwHelpers_GetRevisedPath_01);
         }
 
-        const beginningGridIndex = GridIndexHelpers.convertGridIndex(rawPathNodes[0]);
-        if (beginningGridIndex == null) {
-            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_02 };
-        }
-
-        const playerInTurn  = war.getPlayerInTurn();
-        if (playerInTurn == null) {
-            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_03 };
-        }
-
-        const unitMap   = war.getUnitMap();
-        const focusUnit = launchUnitId != null ? unitMap.getUnitLoadedById(launchUnitId) : unitMap.getUnitOnMap(beginningGridIndex);
+        const beginningGridIndex    = Helpers.getExisted(GridIndexHelpers.convertGridIndex(rawPathNodes[0]), ClientErrorCode.BwHelpers_GetRevisedPath_02);
+        const playerInTurn          = war.getPlayerInTurn();
+        const unitMap               = war.getUnitMap();
+        const focusUnit             = launchUnitId != null ? unitMap.getUnitLoadedById(launchUnitId) : unitMap.getUnitOnMap(beginningGridIndex);
         if ((!focusUnit)                                                    ||
             (focusUnit.getPlayerIndex() !== playerInTurn.getPlayerIndex())  ||
             (focusUnit.getActionState() !== Types.UnitActionState.Idle)     ||
             (war.getTurnPhaseCode() !== Types.TurnPhaseCode.Main)
         ) {
-            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_04 };
+            throw Helpers.newError(`Invalid focusUnit.`, ClientErrorCode.BwHelpers_GetRevisedPath_03);
         }
 
         if (launchUnitId != null) {
             const gridIndex = focusUnit.getGridIndex();
-            if (gridIndex == null) {
-                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_05 };
-            }
-
             if (!GridIndexHelpers.checkIsEqual(gridIndex, beginningGridIndex)) {
-                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_06 };
+                throw Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.BwHelpers_GetRevisedPath_04);
             }
         }
 
-        const tileMap = war.getTileMap();
-        const mapSize = tileMap.getMapSize();
-        if (mapSize == null) {
-            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_07 };
-        }
-
-        const teamIndexInTurn = playerInTurn.getTeamIndex();
-        if (teamIndexInTurn == null) {
-            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_08 };
-        }
-
-        const maxFuelConsumption = focusUnit.getFinalMoveRange();
-        if (maxFuelConsumption == null) {
-            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_09 };
-        }
-
+        const tileMap                   = war.getTileMap();
+        const mapSize                   = tileMap.getMapSize();
+        const teamIndexInTurn           = playerInTurn.getTeamIndex();
+        const maxFuelConsumption        = focusUnit.getFinalMoveRange();
         const revisedNodes              = [GridIndexHelpers.clone(beginningGridIndex)];
         let revisedTotalFuelConsumption = 0;
         let rawTotalFuelConsumption     = 0;
@@ -206,41 +183,21 @@ namespace WarCommonHelpers {
                 (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))                            ||
                 (revisedNodes.some(g => GridIndexHelpers.checkIsEqual(g, gridIndex)))
             ) {
-                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_10 };
+                throw Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.BwHelpers_GetRevisedPath_05);
             }
 
-            const tile = tileMap.getTile(gridIndex);
-            if (tile == null) {
-                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_11 };
-            }
-
-            const fuelConsumption = tile.getMoveCostByUnit(focusUnit);
-            if (fuelConsumption == null) {
-                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_12 };
-            }
-
+            const tile              = tileMap.getTile(gridIndex);
+            const fuelConsumption   = Helpers.getExisted(tile.getMoveCostByUnit(focusUnit), ClientErrorCode.BwHelpers_GetRevisedPath_06);
             rawTotalFuelConsumption += fuelConsumption;
             if (rawTotalFuelConsumption > maxFuelConsumption) {
-                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_13 };
+                throw Helpers.newError(`Invalid rawTotalFuelConsumption: ${rawTotalFuelConsumption}`, ClientErrorCode.BwHelpers_GetRevisedPath_07);
             }
 
             const existingUnit = unitMap.getUnitOnMap(gridIndex);
             if ((existingUnit) && (existingUnit.getTeamIndex() !== teamIndexInTurn)) {
-                const unitType = existingUnit.getUnitType();
-                if (unitType == null) {
-                    return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_14 };
-                }
-
-                const isDiving = existingUnit.getIsDiving();
-                if (isDiving == null) {
-                    return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_15 };
-                }
-
-                const unitPlayerIndex = existingUnit.getPlayerIndex();
-                if (unitPlayerIndex == null) {
-                    return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_16 };
-                }
-
+                const unitType          = existingUnit.getUnitType();
+                const isDiving          = existingUnit.getIsDiving();
+                const unitPlayerIndex   = existingUnit.getPlayerIndex();
                 if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex,
@@ -249,7 +206,7 @@ namespace WarCommonHelpers {
                     unitPlayerIndex,
                     observerTeamIndex   : teamIndexInTurn,
                 })) {
-                    return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_17 };
+                    throw Helpers.newError(`There is a blocking visible unit.`, ClientErrorCode.BwHelpers_GetRevisedPath_08);
                 } else {
                     isBlocked = true;
                 }
@@ -262,12 +219,9 @@ namespace WarCommonHelpers {
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            revisedPath : {
-                nodes           : revisedNodes,
-                isBlocked       : isBlocked,
-                fuelConsumption : revisedTotalFuelConsumption,
-            },
+            nodes           : revisedNodes,
+            isBlocked       : isBlocked,
+            fuelConsumption : revisedTotalFuelConsumption,
         };
     }
 

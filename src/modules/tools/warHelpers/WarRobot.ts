@@ -1600,15 +1600,12 @@ namespace WarRobot {
             if ((_IS_NEED_VISIBILITY) && (targetUnit != null) && (!visibleUnits.has(targetUnit))) {
                 continue;
             }
-
-            const { errorCode: errorCodeForDamage, battleDamageInfoArray } = WarDamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
-            if (errorCodeForDamage) {
+            if (!unit.checkCanAttackTargetAfterMovePath(pathNodes, targetGridIndex)) {
                 continue;
-            } else if (battleDamageInfoArray == null) {
-                throw Helpers.newError(`Empty battleDamageInfoArray.`, ClientErrorCode.SpwRobot_GetScoreAndActionUnitAttack_00);
             }
 
-            const score = await getScoreForActionUnitAttack({
+            const battleDamageInfoArray = WarDamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
+            const score                 = await getScoreForActionUnitAttack({
                 commonParams,
                 focusUnit           : unit,
                 focusUnitGridIndex  : gridIndex,

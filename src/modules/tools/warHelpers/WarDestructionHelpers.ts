@@ -11,18 +11,10 @@ namespace WarDestructionHelpers {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import BwWar            = TwnsBwWar.BwWar;
 
-    export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): ClientErrorCode {
-        const unitMap   = war.getUnitMap();
-        const unit      = unitMap.getUnitOnMap(gridIndex);
-        if (unit == null) {
-            return ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_00;
-        }
-
-        const allCoUnits = unitMap.getAllCoUnits(unit.getPlayerIndex());
-        if (allCoUnits == null) {
-            return ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_01;
-        }
-
+    export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): void {
+        const unitMap       = war.getUnitMap();
+        const unit          = Helpers.getExisted(unitMap.getUnitOnMap(gridIndex), ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_00);
+        const allCoUnits    = unitMap.getAllCoUnits(unit.getPlayerIndex());
         unitMap.removeUnitOnMap(gridIndex, true);
         war.getTileMap().getTile(gridIndex).updateOnUnitLeave();
 
@@ -35,11 +27,7 @@ namespace WarDestructionHelpers {
         const player                = unit.getPlayer();
         const destroyedCoUnitsCount = destroyedUnits.filter(u => u.getHasLoadedCo()).length;
         if (destroyedCoUnitsCount > 0) {
-            const currentEnergy = player.getCoCurrentEnergy();
-            if (currentEnergy == null) {
-                return ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_02;
-            }
-
+            const currentEnergy     = player.getCoCurrentEnergy();
             const totalCoUnitsCount = allCoUnits.length;
             const restCoUnitsCount  = totalCoUnitsCount - destroyedCoUnitsCount;
             player.setCoIsDestroyedInTurn(true);
@@ -58,8 +46,6 @@ namespace WarDestructionHelpers {
             const warView = war.getView();
             (warView) && (warView.showVibration());
         }
-
-        return ClientErrorCode.NoError;
     }
 
     export function destroyPlayerForce(war: BwWar, playerIndex: number, showExplosionEffect: boolean): void {

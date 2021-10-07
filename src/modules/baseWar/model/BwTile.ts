@@ -45,18 +45,12 @@ namespace TwnsBwTile {
         private _hasFog         = false;
         private _war?           : BwWar;
 
-        public init(data: ISerialTile, configVersion: string): ClientErrorCode {
-            const deserializeError = this.deserialize(data, configVersion);
-            if (deserializeError) {
-                return deserializeError;
-            }
-
+        public init(data: ISerialTile, configVersion: string): void {
+            this.deserialize(data, configVersion);
             this.setHasFog(false);
-
-            return ClientErrorCode.NoError;
         }
-        public fastInit(data: ISerialTile, configVersion: string): ClientErrorCode {
-            return this.init(data, configVersion);
+        public fastInit(data: ISerialTile, configVersion: string): void {
+            this.init(data, configVersion);
         }
 
         public startRunning(war: BwWar): void {
@@ -66,58 +60,38 @@ namespace TwnsBwTile {
             this.flushDataToView();
         }
 
-        public deserialize(data: ISerialTile, configVersion: string): ClientErrorCode {
-            const gridIndex = GridIndexHelpers.convertGridIndex(data.gridIndex);
-            if (gridIndex == null) {
-                return ClientErrorCode.BwTile_Deserialize_00;
-            }
-
-            const gridX = gridIndex.x;
-            const gridY = gridIndex.y;
+        public deserialize(data: ISerialTile, configVersion: string): void {
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.BwTile_Deserialize_00);
+            const gridX     = gridIndex.x;
+            const gridY     = gridIndex.y;
             if ((gridX < 0)                                                 ||
                 (gridY < 0)                                                 ||
                 ((gridX + 1) * (gridY + 1) > CommonConstants.MapMaxGridsCount)
             ) {
-                return ClientErrorCode.BwTile_Deserialize_01;
+                throw Helpers.newError(`Invalid gridX and/or gridY: ${gridX}, ${gridY}`, ClientErrorCode.BwTile_Deserialize_01);
             }
 
-            const objectType = data.objectType as TileObjectType;
-            if (objectType == null) {
-                return ClientErrorCode.BwTile_Deserialize_02;
-            }
-
-            const baseType = data.baseType as TileBaseType;
-            if (baseType == null) {
-                return ClientErrorCode.BwTile_Deserialize_03;
-            }
-
-            const playerIndex = data.playerIndex;
+            const objectType    = Helpers.getExisted(data.objectType, ClientErrorCode.BwTile_Deserialize_02) as TileObjectType;
+            const baseType      = Helpers.getExisted(data.baseType, ClientErrorCode.BwTile_Deserialize_03) as TileBaseType;
+            const playerIndex   = data.playerIndex;
             if ((playerIndex == null)                                                           ||
                 (!ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType))
             ) {
-                return ClientErrorCode.BwTile_Deserialize_04;
+                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTile_Deserialize_04);
             }
 
-            const templateCfg = ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType);
-            if (templateCfg == null) {
-                return ClientErrorCode.BwTile_Deserialize_05;
-            }
-
-            if (ConfigManager.getMoveCostCfg(configVersion, baseType, objectType) == null) {
-                return ClientErrorCode.BwTile_Deserialize_06;
-            }
-
+            const templateCfg       = ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType);
             const maxBuildPoint     = templateCfg.maxBuildPoint;
             const currentBuildPoint = data.currentBuildPoint;
             if (maxBuildPoint == null) {
                 if (currentBuildPoint != null) {
-                    return ClientErrorCode.BwTile_Deserialize_07;
+                    throw Helpers.newError(`Invalid currentBuildPoint: ${currentBuildPoint}`, ClientErrorCode.BwTile_Deserialize_05);
                 }
             } else {
                 if ((currentBuildPoint != null)                                     &&
                     ((currentBuildPoint > maxBuildPoint) || (currentBuildPoint < 0))
                 ) {
-                    return ClientErrorCode.BwTile_Deserialize_08;
+                    throw Helpers.newError(`Invalid currentBuildPoint: ${currentBuildPoint}`, ClientErrorCode.BwTile_Deserialize_06);
                 }
             }
 
@@ -125,13 +99,13 @@ namespace TwnsBwTile {
             const currentCapturePoint   = data.currentCapturePoint;
             if (maxCapturePoint == null) {
                 if (currentCapturePoint != null) {
-                    return ClientErrorCode.BwTile_Deserialize_09;
+                    throw Helpers.newError(`Invalid currentCapturePoint: ${currentCapturePoint}`, ClientErrorCode.BwTile_Deserialize_07);
                 }
             } else {
                 if ((currentCapturePoint != null)                                       &&
                     ((currentCapturePoint > maxCapturePoint) || (currentCapturePoint < 0))
                 ) {
-                    return ClientErrorCode.BwTile_Deserialize_10;
+                    throw Helpers.newError(`Invalid currentCapturePoint: ${currentCapturePoint}`, ClientErrorCode.BwTile_Deserialize_08);
                 }
             }
 
@@ -139,30 +113,30 @@ namespace TwnsBwTile {
             const currentHp = data.currentHp;
             if (maxHp == null) {
                 if (currentHp != null) {
-                    return ClientErrorCode.BwTile_Deserialize_11;
+                    throw Helpers.newError(`Invalid currentHp: ${currentHp}`, ClientErrorCode.BwTile_Deserialize_09);
                 }
             } else {
                 if ((currentHp != null)                     &&
                     ((currentHp > maxHp) || (currentHp < 0))
                 ) {
-                    return ClientErrorCode.BwTile_Deserialize_12;
+                    throw Helpers.newError(`Invalid currentHp: ${currentHp}`, ClientErrorCode.BwTile_Deserialize_10);
                 }
             }
 
             const baseShapeId = data.baseShapeId;
             if (!ConfigManager.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
-                return ClientErrorCode.BwTile_Deserialize_13;
+                throw Helpers.newError(`Invalid baseShapeId: ${baseShapeId}`, ClientErrorCode.BwTile_Deserialize_11);
             }
 
             const objectShapeId = data.objectShapeId;
             if (!ConfigManager.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
-                return ClientErrorCode.BwTile_Deserialize_14;
+                throw Helpers.newError(`Invalid objectShapeId: ${objectShapeId}`, ClientErrorCode.BwTile_Deserialize_12);
             }
 
             const decoratorType     = data.decoratorType ?? null;
             const decoratorShapeId  = data.decoratorShapeId ?? null;
             if (!ConfigManager.checkIsValidTileDecoratorShapeId(decoratorType, decoratorShapeId)) {
-                return ClientErrorCode.BwTile_Deserialize_15;
+                throw Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_13);
             }
 
             this._setTemplateCfg(templateCfg);
@@ -179,8 +153,6 @@ namespace TwnsBwTile {
             this.setCurrentHp(currentHp ?? (templateCfg.maxHp ?? null));
             this.setCurrentBuildPoint(currentBuildPoint ?? (templateCfg.maxBuildPoint ?? null));
             this.setCurrentCapturePoint(currentCapturePoint ?? (templateCfg.maxCapturePoint ?? null));
-
-            return ClientErrorCode.NoError;
         }
         public serialize(): ISerialTile {
             const data: ISerialTile = {
@@ -487,7 +459,7 @@ namespace TwnsBwTile {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}, baseType: ${baseType}, objectType: ${objectType}`);
             }
 
-            if (this.init({
+            this.init({
                 gridIndex       : this.getGridIndex(),
                 objectType,
                 baseType,
@@ -496,9 +468,7 @@ namespace TwnsBwTile {
                 objectShapeId   : objectType === this.getObjectType() ? this.getObjectShapeId() : null,
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
-            }, this.getConfigVersion())) {
-                throw Helpers.newError(`BwTile.resetByTypeAndPlayerIndex() failed to init!`);
-            }
+            }, this.getConfigVersion());
             this.startRunning(this.getWar());
         }
         public deleteTileDecorator(): void {

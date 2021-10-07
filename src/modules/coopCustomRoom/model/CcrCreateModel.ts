@@ -76,7 +76,7 @@ namespace CcrCreateModel {
         return Helpers.getExisted(getSettingsForCommon().configVersion);
     }
 
-    export async function resetDataByWarRuleId(ruleId: number): Promise<ClientErrorCode> {
+    export async function resetDataByWarRuleId(ruleId: number): Promise<void> {
         const warRule               = Helpers.getExisted((await getMapRawData().catch(err => { CompatibilityHelpers.showError(err); throw err; }))?.warRuleArray?.find(r => r.ruleId === ruleId));
         const humanPlayerIndexArray : number[] = [];
         const aiPlayerIndexArray    : number[] = [];
@@ -96,9 +96,6 @@ namespace CcrCreateModel {
             playerIndex     : selfPlayerIndex,
             configVersion   : getConfigVersion(),
         });
-        if (availableCoIdArray == null) {
-            return ClientErrorCode.CcrModel_ResetDataByWarRuleId_06;
-        }
 
         settingsForCommon.warRule = Helpers.deepClone(warRule);
         setPresetWarRuleId(ruleId);
@@ -108,15 +105,10 @@ namespace CcrCreateModel {
 
         const selfCoId = getSelfCoId();
         if ((selfCoId == null) || (availableCoIdArray.indexOf(selfCoId) < 0)) {
-            const coId = WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
-            if (coId == null) {
-                return ClientErrorCode.CcrModel_ResetDataByWarRuleId_07;
-            }
-            setSelfCoId(coId);
+            setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
         }
 
         Notify.dispatch(NotifyType.CcrCreateTeamIndexChanged);
-        return ClientErrorCode.NoError;
     }
     function setPresetWarRuleId(ruleId: number | null): void {
         const settingsForCommon                                 = getSettingsForCommon();

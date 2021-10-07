@@ -34,9 +34,9 @@ namespace TwnsBwFogMap {
             data                    : Types.Undefinable<ISerialFogMap>;
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
-        }): ClientErrorCode {
+        }): void {
             if (data == null) {
-                return ClientErrorCode.BwFogMapInit00;
+                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwFogMap_Init_00);
             }
 
             const forceFogCode = data.forceFogCode as ForceFogCode;
@@ -44,48 +44,38 @@ namespace TwnsBwFogMap {
                 (forceFogCode !== ForceFogCode.Fog)     &&
                 (forceFogCode !== ForceFogCode.None)
             ) {
-                return ClientErrorCode.BwFogMapInit01;
+                throw Helpers.newError(`Invalid forceFogCode: ${forceFogCode}`, ClientErrorCode.BwFogMap_Init_01);
             }
 
             const forceExpirePlayerIndex = data.forceExpirePlayerIndex;
             if ((forceExpirePlayerIndex != null)                                                                                    &&
                 ((forceExpirePlayerIndex < CommonConstants.WarNeutralPlayerIndex) || (forceExpirePlayerIndex > playersCountUnneutral))
             ) {
-                return ClientErrorCode.BwFogMapInit02;
+                throw Helpers.newError(`Invalid forceExpirePlayerIndex: ${forceExpirePlayerIndex}`, ClientErrorCode.BwFogMap_Init_02);
             }
 
             const forceExpireTurnIndex = data.forceExpireTurnIndex;
             if (((forceExpirePlayerIndex == null) && (forceExpireTurnIndex != null)) ||
                 ((forceExpirePlayerIndex != null) && (forceExpireTurnIndex == null))
             ) {
-                return ClientErrorCode.BwFogMapInit03;
+                throw Helpers.newError(`Invalid forceExpireTurnIndex: ${forceExpireTurnIndex}`, ClientErrorCode.BwFogMap_Init_03);
             }
 
             if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
-                return ClientErrorCode.BwFogMapInit04;
+                throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwFogMap_Init_04);
             }
 
             const allMapsFromPath   = createEmptyMaps<Visibility>(mapSize, playersCountUnneutral);
             const playerIndexSet    = new Set<number>();
             for (const d of data.mapsFromPath || []) {
-                const playerIndex = d.playerIndex;
-                if (playerIndex == null) {
-                    return ClientErrorCode.BwFogMapInit05;
-                }
+                const playerIndex = Helpers.getExisted(d.playerIndex, ClientErrorCode.BwFogMap_Init_05);
                 if (playerIndexSet.has(playerIndex)) {
-                    return ClientErrorCode.BwFogMapInit06;
+                    throw Helpers.newError(`Duplicated playerIndex: ${playerIndex}`, ClientErrorCode.BwFogMap_Init_06);
                 }
                 playerIndexSet.add(playerIndex);
 
-                const mapFromPath = allMapsFromPath.get(playerIndex);
-                if (mapFromPath == null) {
-                    return ClientErrorCode.BwFogMapInit07;
-                }
-
-                const resetMapError = resetMapFromPath(mapFromPath, mapSize, d.visibilityArray ?? null);
-                if (resetMapError) {
-                    return resetMapError;
-                }
+                const mapFromPath = Helpers.getExisted(allMapsFromPath.get(playerIndex), ClientErrorCode.BwFogMap_Init_07);
+                resetMapFromPath(mapFromPath, mapSize, d.visibilityArray ?? null);
             }
 
             this._setMapSize(Helpers.deepClone(mapSize));
@@ -93,15 +83,13 @@ namespace TwnsBwFogMap {
             this.setForceFogCode(forceFogCode);
             this.setForceExpirePlayerIndex(forceExpirePlayerIndex ?? null);
             this.setForceExpireTurnIndex(forceExpireTurnIndex ?? null);
-
-            return ClientErrorCode.NoError;
         }
         public fastInit({ data, mapSize, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialFogMap>;
             mapSize                 : Types.MapSize;
             playersCountUnneutral   : number;
-        }): ClientErrorCode {
-            return this.init({
+        }): void {
+            this.init({
                 data,
                 mapSize,
                 playersCountUnneutral
@@ -445,26 +433,26 @@ namespace TwnsBwFogMap {
         }
     }
 
-    function resetMapFromPath(mapFromPath: Visibility[][], mapSize: MapSize, visibilityList: Visibility[] | null): ClientErrorCode {
+    function resetMapFromPath(mapFromPath: Visibility[][], mapSize: MapSize, visibilityList: Visibility[] | null): void {
         const { width, height } = mapSize;
         if (mapFromPath.length !== width) {
-            return ClientErrorCode.BwFogMapResetMapFromPath00;
+            throw Helpers.newError(`Invalid width: ${width}`, ClientErrorCode.BwFogMap_ResetMapFromPath_00);
         }
 
         for (let x = 0; x < width; ++x) {
             const column = mapFromPath[x];
             if ((column == null) || (column.length !== height)) {
-                return ClientErrorCode.BwFogMapResetMapFromPath01;
+                throw Helpers.newError(`Invalid height: ${height}`, ClientErrorCode.BwFogMap_ResetMapFromPath_01);
             }
         }
 
         if (visibilityList == null) {
             fillMap(mapFromPath, 0);
-            return ClientErrorCode.NoError;
+            return;
         }
 
         if (visibilityList.length !== width * height) {
-            return ClientErrorCode.BwFogMapResetMapFromPath02;
+            throw Helpers.newError(`Invalid visibilityList.length: ${visibilityList.length}`, ClientErrorCode.BwFogMap_ResetMapFromPath_02);
         }
 
         for (let x = 0; x < width; ++x) {
@@ -475,14 +463,12 @@ namespace TwnsBwFogMap {
                     (visibility !== Visibility.OutsideVision)   &&
                     (visibility !== Visibility.TrueVision)
                 ) {
-                    return ClientErrorCode.BwFogMapResetMapFromPath03;
+                    throw Helpers.newError(`Invalid visibility: ${visibility}`, ClientErrorCode.BwFogMap_ResetMapFromPath_03);
                 }
 
                 column[y] = visibility;
             }
         }
-
-        return ClientErrorCode.NoError;
     }
 }
 

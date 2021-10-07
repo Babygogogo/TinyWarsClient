@@ -183,8 +183,8 @@ namespace WarCoSkillHelpers {
             }
 
             // cfg:（范围类别，地形类别，部队种类，hp，状态（0=未行动，1=已行动））
-            const unit      = new TwnsBwUnit.BwUnit();
-            const unitError = unit.init({
+            const unit = new TwnsBwUnit.BwUnit();
+            unit.init({
                 gridIndex,
                 unitId,
                 playerIndex     : selfPlayerIndex,
@@ -192,9 +192,6 @@ namespace WarCoSkillHelpers {
                 currentHp       : cfg[3],
                 actionState     : cfg[4],
             }, configVersion);
-            if (unitError) {
-                throw Helpers.newError(`WarCoSkillHelpers.exeSelfAddUnit() unitError: ${unitError}.`);
-            }
 
             unit.startRunning(war);
             unitMap.setNextUnitId(unitId + 1);

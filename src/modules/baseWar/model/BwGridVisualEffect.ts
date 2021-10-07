@@ -1,5 +1,4 @@
 
-import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import Types                        from "../../tools/helpers/Types";
 import Notify                       from "../../tools/notify/Notify";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";
@@ -8,7 +7,6 @@ import TwnsBwWar                    from "./BwWar";
 
 namespace TwnsBwGridVisualEffect {
     import GridIndex                = Types.GridIndex;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import BwGridVisualEffectView   = TwnsBwGridVisualEffectView.BwGridVisualEffectView;
     import BwWar                    = TwnsBwWar.BwWar;
@@ -26,15 +24,11 @@ namespace TwnsBwGridVisualEffect {
             { type: NotifyType.BwSiloExploded,     callback: this._onNotifyBwSiloExploded },
         ];
 
-        public init(): ClientErrorCode {
+        public init(): void {
             this.getView().init(this);
-
-            return ClientErrorCode.NoError;
         }
-        public fastInit(): ClientErrorCode {
+        public fastInit(): void {
             this.getView().fastInit(this);
-
-            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

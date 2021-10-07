@@ -530,25 +530,18 @@ namespace MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<{ errorCode: ClientErrorCode, war?: MpwWar }> {
+    export async function loadWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<MpwWar> {
         if (getWar()) {
             Logger.warn(`MpwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
         const war = createWarByWarData(data);
-        if (war == null) {
-            return { errorCode: ClientErrorCode.MpwModel_LoadWar_00 };
-        }
-
         await war.init(data).catch(err => { CompatibilityHelpers.showError(err); throw err; });
         war.startRunning().startRunningView();
         _setWar(war);
 
-        return {
-            errorCode   : ClientErrorCode.NoError,
-            war,
-        };
+        return war;
     }
     export function unloadWar(): void {
         const war = getWar();
@@ -699,11 +692,7 @@ namespace MpwModel {
         }
 
         war.getExecutedActionManager().addExecutedAction(container);
-
-        const errorCode = await WarActionExecutor.checkAndExecute(war, container, false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
-        if (errorCode) {
-            throw Helpers.newError(`MpwModel.checkAndRunFirstCachedAction() errorCode: ${errorCode}.`);
-        }
+        await WarActionExecutor.checkAndExecute(war, container, false).catch(err => { CompatibilityHelpers.showError(err); throw err; });
 
         const playerManager     = war.getPlayerManager();
         const remainingVotes    = war.getDrawVoteManager().getRemainingVotes();

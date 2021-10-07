@@ -6,7 +6,7 @@
     "build": "echo helloworld"
   },
   "dependencies": {
-    "@egret/egret-webpack-bundler": "^1.2.10",
-    "@egret/eui-compiler": "^1.4.8"
+    "@egret/egret-webpack-bundler": "^1.2.11",
+    "@egret/eui-compiler": "^1.4.9"
   }
 }
