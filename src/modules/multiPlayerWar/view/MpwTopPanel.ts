@@ -5,7 +5,6 @@ import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
 import TwnsMpwWar               from "../../multiPlayerWar/model/MpwWar";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import SoundManager             from "../../tools/helpers/SoundManager";

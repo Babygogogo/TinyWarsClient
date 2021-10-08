@@ -1,5 +1,4 @@
 
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
 import Notify               from "../../tools/notify/Notify";

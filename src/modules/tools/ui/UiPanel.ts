@@ -1,6 +1,5 @@
 
 import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
-import CompatibilityHelpers from "../helpers/CompatibilityHelpers";
 import Helpers              from "../helpers/Helpers";
 import Logger               from "../helpers/Logger";
 import SoundManager         from "../helpers/SoundManager";

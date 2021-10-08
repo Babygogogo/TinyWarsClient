@@ -1,7 +1,6 @@
 
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
-import CompatibilityHelpers             from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
 import Helpers                          from "../../tools/helpers/Helpers";

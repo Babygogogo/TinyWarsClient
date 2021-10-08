@@ -4,7 +4,6 @@ import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBas
 import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import SpmModel                             from "../../singlePlayerMode/model/SpmModel";
 import SpmProxy                             from "../../singlePlayerMode/model/SpmProxy";
-import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";

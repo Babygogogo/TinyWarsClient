@@ -7,7 +7,6 @@ import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBas
 import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                        from "../../tools/helpers/ConfigManager";
 import FloatText                            from "../../tools/helpers/FloatText";
 import Helpers                              from "../../tools/helpers/Helpers";

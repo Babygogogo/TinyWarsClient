@@ -4,7 +4,6 @@ import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
 import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
 import TwnsMrrMainMenuPanel         from "../../multiRankRoom/view/MrrMainMenuPanel";
 import TwnsSpmMainMenuPanel         from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";

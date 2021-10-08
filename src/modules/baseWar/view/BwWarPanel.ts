@@ -2,7 +2,6 @@
 import TwnsUiPanel          from "../../tools/ui/UiPanel";
 import TwnsBwWar            from "../model/BwWar";
 import Types                from "../../tools/helpers/Types";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 
 namespace TwnsBwWarPanel {
     import BwWar            = TwnsBwWar.BwWar;

@@ -1,6 +1,5 @@
 
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import Helpers              from "../../tools/helpers/Helpers";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";

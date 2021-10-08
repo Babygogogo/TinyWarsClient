@@ -1,5 +1,4 @@
 
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import FloatText            from "../../tools/helpers/FloatText";
 import Helpers              from "../../tools/helpers/Helpers";
 import LocalStorage         from "../../tools/helpers/LocalStorage";

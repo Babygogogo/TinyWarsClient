@@ -1,6 +1,5 @@
 
 import CommonConstants      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";

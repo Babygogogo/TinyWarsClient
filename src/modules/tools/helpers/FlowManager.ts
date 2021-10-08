@@ -61,7 +61,6 @@ import TwnsNotifyType               from "../notify/NotifyType";
 import ProtoManager                 from "../proto/ProtoManager";
 import ProtoTypes                   from "../proto/ProtoTypes";
 import ResManager                   from "../res/ResManager";
-import TwnsClientErrorCode          from "./ClientErrorCode";
 import CompatibilityHelpers         from "./CompatibilityHelpers";
 import ConfigManager                from "./ConfigManager";
 import Helpers                      from "./Helpers";
@@ -73,7 +72,6 @@ import Timer                        from "./Timer";
 import Types                        from "./Types";
 
 namespace FlowManager {
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;

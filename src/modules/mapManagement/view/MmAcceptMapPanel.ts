@@ -1,7 +1,6 @@
 
 import TwnsMeWar            from "../../mapEditor/model/MeWar";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";

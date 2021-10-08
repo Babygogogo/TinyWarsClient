@@ -1,7 +1,6 @@
 
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
 import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
-import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";

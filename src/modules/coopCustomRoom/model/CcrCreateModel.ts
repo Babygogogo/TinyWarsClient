@@ -1,7 +1,5 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
@@ -14,7 +12,6 @@ import WarMapModel          from "../../warMap/model/WarMapModel";
 namespace CcrCreateModel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import BootTimerType            = Types.BootTimerType;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
 
     export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgCcrCreateRoom.IC;
 

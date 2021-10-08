@@ -7,7 +7,6 @@ import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPa
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import MfrModel                             from "../../multiFreeRoom/model/MfrModel";
 import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
-import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";

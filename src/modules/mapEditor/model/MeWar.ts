@@ -1,7 +1,6 @@
 
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";

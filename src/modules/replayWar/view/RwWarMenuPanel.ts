@@ -6,7 +6,6 @@ import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers             from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";

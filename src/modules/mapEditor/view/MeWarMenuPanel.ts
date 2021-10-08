@@ -7,7 +7,6 @@ import TwnsCommonInputPanel         from "../../common/view/CommonInputPanel";
 import TwnsMmAcceptMapPanel         from "../../mapManagement/view/MmAcceptMapPanel";
 import TwnsMmRejectMapPanel         from "../../mapManagement/view/MmRejectMapPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                    from "../../tools/helpers/FloatText";
 import FlowManager                  from "../../tools/helpers/FlowManager";
 import Helpers                      from "../../tools/helpers/Helpers";

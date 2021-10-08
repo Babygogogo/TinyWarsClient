@@ -10,7 +10,6 @@ import MpwProxy                             from "../../multiPlayerWar/model/Mpw
 import TwnsMrwWar                           from "../../multiRankWar/model/MrwWar";
 import TwnsClientErrorCode                  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";

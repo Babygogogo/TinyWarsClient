@@ -5,7 +5,6 @@ import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
 import SpmModel                 from "../../singlePlayerMode/model/SpmModel";
 import SpmProxy                 from "../../singlePlayerMode/model/SpmProxy";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";

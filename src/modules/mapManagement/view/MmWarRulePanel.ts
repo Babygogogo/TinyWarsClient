@@ -1,7 +1,6 @@
 
 import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers             from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                          from "../../tools/helpers/Helpers";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";

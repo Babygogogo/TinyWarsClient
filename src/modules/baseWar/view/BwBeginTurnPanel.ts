@@ -1,5 +1,4 @@
 
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import SoundManager         from "../../tools/helpers/SoundManager";
 import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";

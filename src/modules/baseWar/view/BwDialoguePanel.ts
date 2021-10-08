@@ -1,6 +1,5 @@
 
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import SoundManager             from "../../tools/helpers/SoundManager";

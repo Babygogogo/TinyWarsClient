@@ -2,7 +2,6 @@
 import TwnsBwUnit               from "../../baseWar/model/BwUnit";
 import TwnsBwUnitView           from "../../baseWar/view/BwUnitView";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";

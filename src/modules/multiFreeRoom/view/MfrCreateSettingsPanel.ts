@@ -5,7 +5,6 @@ import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPa
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";

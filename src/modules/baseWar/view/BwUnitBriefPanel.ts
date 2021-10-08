@@ -1,11 +1,9 @@
 
-import CommonModel              from "../../common/model/CommonModel";
 import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
-import SoundManager from "../../tools/helpers/SoundManager";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import StageManager             from "../../tools/helpers/StageManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -18,7 +16,6 @@ import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelper
 import TwnsBwUnit               from "../model/BwUnit";
 import TwnsBwWar                from "../model/BwWar";
 import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
-import TwnsBwTileBriefPanel     from "./BwTileBriefPanel";
 import TwnsBwUnitDetailPanel    from "./BwUnitDetailPanel";
 import TwnsBwUnitView           from "./BwUnitView";
 

@@ -5,7 +5,6 @@ import McrModel                 from "../../multiCustomRoom/model/McrModel";
 import MfrModel                 from "../../multiFreeRoom/model/MfrModel";
 import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Timer                    from "../../tools/helpers/Timer";

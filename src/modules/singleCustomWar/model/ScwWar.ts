@@ -2,7 +2,6 @@
 import TwnsSpwWar           from "../../singlePlayerWar/model/SpwWar";
 import TwnsSpwWarMenuPanel  from "../../singlePlayerWar/view/SpwWarMenuPanel";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";

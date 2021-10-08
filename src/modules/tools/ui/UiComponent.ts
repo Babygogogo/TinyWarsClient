@@ -1,5 +1,4 @@
 
-import CompatibilityHelpers from "../helpers/CompatibilityHelpers";
 import Types                from "../helpers/Types";
 import Notify               from "../notify/Notify";
 

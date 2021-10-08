@@ -11,7 +11,6 @@ import TwnsMfwMyWarListPanel    from "../../multiFreeWar/view/MfwMyWarListPanel"
 import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
 import TwnsMrrMainMenuPanel     from "../../multiRankRoom/view/MrrMainMenuPanel";
 import TwnsSpmMainMenuPanel     from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";

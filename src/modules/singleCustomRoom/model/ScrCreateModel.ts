@@ -1,7 +1,6 @@
 
 import SpmModel             from "../../singlePlayerMode/model/SpmModel";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import Helpers              from "../../tools/helpers/Helpers";
 import Lang                 from "../../tools/lang/Lang";

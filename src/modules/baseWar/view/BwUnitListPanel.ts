@@ -3,7 +3,6 @@ import TwnsBwUnit               from "../../baseWar/model/BwUnit";
 import TwnsBwWar                from "../../baseWar/model/BwWar";
 import CommonModel              from "../../common/model/CommonModel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
 import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";

@@ -5,7 +5,6 @@ import UserModel                from "../../user/model/UserModel";
 import UserProxy                from "../../user/model/UserProxy";
 import WarMapModel              from "../../warMap/model/WarMapModel";
 import CommonConstants          from "../helpers/CommonConstants";
-import CompatibilityHelpers     from "../helpers/CompatibilityHelpers";
 import ConfigManager            from "../helpers/ConfigManager";
 import FloatText                from "../helpers/FloatText";
 import Helpers                  from "../helpers/Helpers";

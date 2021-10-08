@@ -5,7 +5,6 @@ import SpmProxy                         from "../../singlePlayerMode/model/SpmPr
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
 import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
-import CompatibilityHelpers             from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
 import Helpers                          from "../../tools/helpers/Helpers";

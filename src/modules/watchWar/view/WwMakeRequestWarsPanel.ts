@@ -7,7 +7,6 @@ import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPa
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import TwnsClientErrorCode                  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                            from "../../tools/helpers/FloatText";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";

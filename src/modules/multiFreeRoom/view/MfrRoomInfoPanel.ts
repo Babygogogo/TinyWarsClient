@@ -8,7 +8,6 @@ import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPla
 import MfrModel                             from "../../multiFreeRoom/model/MfrModel";
 import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                        from "../../tools/helpers/ConfigManager";
 import FloatText                            from "../../tools/helpers/FloatText";
 import Helpers                              from "../../tools/helpers/Helpers";

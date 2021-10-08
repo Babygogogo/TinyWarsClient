@@ -8,7 +8,6 @@ import TwnsCommonServerStatusPanel  from "../../common/view/CommonServerStatusPa
 import TwnsLobbyBackgroundPanel     from "../../lobby/view/LobbyBackgroundPanel";
 import TwnsMmMainMenuPanel          from "../../mapManagement/view/MmMainMenuPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import LocalStorage                 from "../../tools/helpers/LocalStorage";
 import StageManager                 from "../../tools/helpers/StageManager";

@@ -25,7 +25,6 @@ import McrJoinModel                         from "../model/McrJoinModel";
 import TwnsMcrMainMenuPanel                 from "./McrMainMenuPanel";
 import TwnsMcrRoomInfoPanel                 from "./McrRoomInfoPanel";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 
 namespace TwnsMcrMyRoomListPanel {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;

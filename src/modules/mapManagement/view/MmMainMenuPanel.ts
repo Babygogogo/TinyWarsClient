@@ -1,5 +1,4 @@
 
-import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                    from "../../tools/helpers/FloatText";
 import FlowManager                  from "../../tools/helpers/FlowManager";
 import Types                        from "../../tools/helpers/Types";

@@ -4,7 +4,6 @@ import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBas
 import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import McrProxy                             from "../../multiCustomRoom/model/McrProxy";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                        from "../../tools/helpers/ConfigManager";
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";

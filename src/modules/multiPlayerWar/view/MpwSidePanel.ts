@@ -1,7 +1,6 @@
 
 import TwnsBwWarInfoPanel       from "../../baseWar/view/BwWarInfoPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
 import SoundManager             from "../../tools/helpers/SoundManager";

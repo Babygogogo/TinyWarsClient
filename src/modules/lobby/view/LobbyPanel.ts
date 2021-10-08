@@ -9,7 +9,6 @@ import MrrModel                 from "../../multiRankRoom/model/MrrModel";
 import TwnsMrrMainMenuPanel     from "../../multiRankRoom/view/MrrMainMenuPanel";
 import TwnsSpmMainMenuPanel     from "../../singlePlayerMode/view/SpmMainMenuPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers     from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";

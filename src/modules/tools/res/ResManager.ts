@@ -1,5 +1,4 @@
 
-import CompatibilityHelpers from "../helpers/CompatibilityHelpers";
 import FloatText            from "../helpers/FloatText";
 import Logger               from "../helpers/Logger";
 import StageManager         from "../helpers/StageManager";

@@ -1,6 +1,5 @@
 
 import MfrModel             from "../../multiFreeRoom/model/MfrModel";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import NetManager           from "../../tools/network/NetManager";
 import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import Notify               from "../../tools/notify/Notify";

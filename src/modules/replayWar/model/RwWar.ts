@@ -3,7 +3,6 @@ import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingMan
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
-import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
 import SoundManager                 from "../../tools/helpers/SoundManager";

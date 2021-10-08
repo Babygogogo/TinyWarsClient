@@ -1,7 +1,6 @@
 
 import TwnsUiPanel          from "../../tools/ui/UiPanel";
 import Types                from "../../tools/helpers/Types";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 
 namespace TwnsLobbyBackgroundPanel {
     export class LobbyBackgroundPanel extends TwnsUiPanel.UiPanel<void> {

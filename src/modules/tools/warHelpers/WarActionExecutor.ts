@@ -8,7 +8,6 @@ import TwnsBwCaptureProgressPanel   from "../../baseWar/view/BwCaptureProgressPa
 import UserModel                    from "../../user/model/UserModel";
 import TwnsClientErrorCode          from "../helpers/ClientErrorCode";
 import CommonConstants              from "../helpers/CommonConstants";
-import CompatibilityHelpers         from "../helpers/CompatibilityHelpers";
 import ConfigManager                from "../helpers/ConfigManager";
 import FloatText                    from "../helpers/FloatText";
 import GridIndexHelpers             from "../helpers/GridIndexHelpers";

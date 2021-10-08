@@ -3,7 +3,6 @@ import ChatModel                    from "../../chat/model/ChatModel";
 import TwnsChatPanel                from "../../chat/view/ChatPanel";
 import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
 import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
-import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import TwnsNotifyType               from "../../tools/notify/NotifyType";

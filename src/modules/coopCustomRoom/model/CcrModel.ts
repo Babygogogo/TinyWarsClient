@@ -4,7 +4,6 @@ import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBas
 import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import CcrProxy                             from "../../coopCustomRoom/model/CcrProxy";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";
 import Notify                               from "../../tools/notify/Notify";

@@ -3,7 +3,6 @@ import UserModel            from "../../user/model/UserModel";
 import WarMapModel          from "../../warMap/model/WarMapModel";
 import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
 import CommonConstants      from "../helpers/CommonConstants";
-import CompatibilityHelpers from "../helpers/CompatibilityHelpers";
 import Helpers              from "../helpers/Helpers";
 import LocalStorage         from "../helpers/LocalStorage";
 import TwnsServerErrorCode  from "../helpers/ServerErrorCode";

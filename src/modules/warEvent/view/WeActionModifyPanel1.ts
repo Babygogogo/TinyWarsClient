@@ -2,7 +2,6 @@
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers         from "../../tools/helpers/CompatibilityHelpers";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
 import GridIndexHelpers             from "../../tools/helpers/GridIndexHelpers";

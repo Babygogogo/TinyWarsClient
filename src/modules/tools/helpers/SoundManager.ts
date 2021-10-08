@@ -2,7 +2,6 @@
 import TwnsBwWar            from "../../baseWar/model/BwWar";
 import Lang                 from "../lang/Lang";
 import TwnsLangTextType     from "../lang/LangTextType";
-import CompatibilityHelpers from "./CompatibilityHelpers";
 import FloatText            from "./FloatText";
 import Helpers              from "./Helpers";
 import LocalStorage         from "./LocalStorage";

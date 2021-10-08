@@ -5,7 +5,6 @@ import TwnsMcrMainMenuPanel                 from "../../multiCustomRoom/view/Mcr
 import MpwModel                             from "../../multiPlayerWar/model/MpwModel";
 import TwnsMrwMyWarListPanel                from "../../multiRankWar/view/MrwMyWarListPanel";
 import TwnsSpmMainMenuPanel                 from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import CompatibilityHelpers                 from "../../tools/helpers/CompatibilityHelpers";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";
 import TwnsNotifyType                       from "../../tools/notify/NotifyType";

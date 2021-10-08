@@ -4,7 +4,6 @@ import Notify           from "../notify/Notify";
 import TwnsNotifyType   from "../notify/NotifyType";
 import ProtoManager     from "../proto/ProtoManager";
 import CommonConstants  from "./CommonConstants";
-import CompatibilityHelpers from "./CompatibilityHelpers";
 import Helpers          from "./Helpers";
 import Types            from "./Types";
 

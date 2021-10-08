@@ -4,9 +4,7 @@ import TwnsCommonAlertPanel from "../../common/view/CommonAlertPanel";
 import TwnsScwWar           from "../../singleCustomWar/model/ScwWar";
 import TwnsSfwWar           from "../../singleFreeWar/model/SfwWar";
 import TwnsSrwWar           from "../../singleRankWar/model/SrwWar";
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
-import CompatibilityHelpers from "../../tools/helpers/CompatibilityHelpers";
 import FlowManager          from "../../tools/helpers/FlowManager";
 import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
@@ -27,7 +25,6 @@ namespace SpwModel {
     import SrwWar                   = TwnsSrwWar.SrwWar;
     import SpwPlayerManager         = TwnsSpwPlayerManager.SpwPlayerManager;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import WarSerialization         = ProtoTypes.WarSerialization;
     import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
     import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
