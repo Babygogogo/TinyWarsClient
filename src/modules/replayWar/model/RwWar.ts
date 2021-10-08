@@ -19,10 +19,6 @@ import TwnsRwField                  from "./RwField";
 import TwnsRwPlayerManager          from "./RwPlayerManager";
 
 namespace TwnsRwWar {
-    import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
-    import RwWarMenuPanel           = TwnsRwWarMenuPanel.RwWarMenuPanel;
-    import RwPlayerManager          = TwnsRwPlayerManager.RwPlayerManager;
-    import RwField                  = TwnsRwField.RwField;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import WarType                  = Types.WarType;
@@ -30,19 +26,17 @@ namespace TwnsRwWar {
     import IWarActionContainer      = WarAction.IWarActionContainer;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                    = TwnsBwWar.BwWar;
-    import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
 
     type CheckPointData = {
         warData     : ISerialWar;
         nextActionId: number;
     };
 
-    export class RwWar extends BwWar {
-        private readonly _playerManager         = new RwPlayerManager();
-        private readonly _field                 = new RwField();
-        private readonly _commonSettingManager  = new BwCommonSettingManager();
-        private readonly _warEventManager       = new BwWarEventManager();
+    export class RwWar extends TwnsBwWar.BwWar {
+        private readonly _playerManager         = new TwnsRwPlayerManager.RwPlayerManager();
+        private readonly _field                 = new TwnsRwField.RwField();
+        private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();
+        private readonly _warEventManager       = new TwnsBwWarEventManager.BwWarEventManager();
 
         private _settingsForMcw?                    : ProtoTypes.WarSettings.ISettingsForMcw | null;
         private _settingsForScw?                    : ProtoTypes.WarSettings.ISettingsForScw | null;
@@ -75,16 +69,16 @@ namespace TwnsRwWar {
         public getCanCheat(): boolean {
             return false;
         }
-        public getField(): RwField {
+        public getField(): TwnsRwField.RwField {
             return this._field;
         }
-        public getPlayerManager(): RwPlayerManager {
+        public getPlayerManager(): TwnsRwPlayerManager.RwPlayerManager {
             return this._playerManager;
         }
-        public getCommonSettingManager(): BwCommonSettingManager {
+        public getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): BwWarEventManager {
+        public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
             return this._warEventManager;
         }
 
@@ -256,7 +250,7 @@ namespace TwnsRwWar {
             throw Helpers.newError(`Invalid war data.`);
         }
         public getIsWarMenuPanelOpening(): boolean {
-            return RwWarMenuPanel.getIsOpening();
+            return TwnsRwWarMenuPanel.RwWarMenuPanel.getIsOpening();
         }
 
         public getSettingsBootTimerParams(): number[] {

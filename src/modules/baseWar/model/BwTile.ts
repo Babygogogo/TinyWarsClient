@@ -21,9 +21,6 @@ namespace TwnsBwTile {
     import TileTemplateCfg      = Types.TileTemplateCfg;
     import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnit               = TwnsBwUnit.BwUnit;
-    import BwTileView           = TwnsBwTileView.BwTileView;
-    import BwWar                = TwnsBwWar.BwWar;
 
     export class BwTile {
         private _templateCfg?           : TileTemplateCfg;
@@ -41,9 +38,9 @@ namespace TwnsBwTile {
         private _currentBuildPoint?     : number | null;
         private _currentCapturePoint?   : number | null;
 
-        private readonly _view  = new BwTileView();
+        private readonly _view  = new TwnsBwTileView.BwTileView();
         private _hasFog         = false;
-        private _war?           : BwWar;
+        private _war?           : TwnsBwWar.BwWar;
 
         public init(data: ISerialTile, configVersion: string): void {
             this.deserialize(data, configVersion);
@@ -53,7 +50,7 @@ namespace TwnsBwTile {
             this.init(data, configVersion);
         }
 
-        public startRunning(war: BwWar): void {
+        public startRunning(war: TwnsBwWar.BwWar): void {
             this._setWar(war);
         }
         public startRunningView(): void {
@@ -224,10 +221,10 @@ namespace TwnsBwTile {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: BwWar): void {
+        private _setWar(war: TwnsBwWar.BwWar): void {
             this._war = war;
         }
-        public getWar(): BwWar {
+        public getWar(): TwnsBwWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -250,7 +247,7 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
-        public getView(): BwTileView {
+        public getView(): TwnsBwTileView.BwTileView {
             return this._view;
         }
         public flushDataToView(): void {
@@ -406,7 +403,7 @@ namespace TwnsBwTile {
         public getDefenseAmount(): number {
             return this._getTemplateCfg().defenseAmount;
         }
-        public getDefenseAmountForUnit(unit: BwUnit): number {
+        public getDefenseAmountForUnit(unit: TwnsBwUnit.BwUnit): number {
             return this.checkCanDefendUnit(unit)
                 ? this.getDefenseAmount() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp()
                 : 0;
@@ -415,7 +412,7 @@ namespace TwnsBwTile {
         public getDefenseUnitCategory(): Types.UnitCategory {
             return this._getTemplateCfg().defenseUnitCategory;
         }
-        public checkCanDefendUnit(unit: BwUnit): boolean {
+        public checkCanDefendUnit(unit: TwnsBwUnit.BwUnit): boolean {
             return ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), this.getDefenseUnitCategory());
         }
 
@@ -555,7 +552,7 @@ namespace TwnsBwTile {
         public getMoveCostByMoveType(moveType: Types.MoveType): number | null {
             return this._getMoveCostCfg()[moveType]?.cost ?? null;
         }
-        public getMoveCostByUnit(unit: BwUnit): number | null {
+        public getMoveCostByUnit(unit: TwnsBwUnit.BwUnit): number | null {
             const tileType = this.getType();
             if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))                                            &&
                 (this.getTeamIndex() !== unit.getTeamIndex())                                                                       &&
@@ -578,14 +575,14 @@ namespace TwnsBwTile {
             return this._getTemplateCfg().repairAmount ?? null;
         }
 
-        public checkCanRepairUnit(unit: BwUnit): boolean {
+        public checkCanRepairUnit(unit: TwnsBwUnit.BwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && ((unit.getCurrentHp() < unit.getMaxHp()) || (unit.checkCanBeSupplied()))
                 && (unit.getTeamIndex() === this.getTeamIndex())
                 && (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
         }
-        public checkCanSupplyUnit(unit: BwUnit): boolean {
+        public checkCanSupplyUnit(unit: TwnsBwUnit.BwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && (unit.checkCanBeSupplied())
@@ -593,7 +590,7 @@ namespace TwnsBwTile {
                 && (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
         }
 
-        public getRepairHpAndCostForUnit(unit: BwUnit): Types.RepairHpAndCost | null {
+        public getRepairHpAndCostForUnit(unit: TwnsBwUnit.BwUnit): Types.RepairHpAndCost | null {
             if (!this.checkCanRepairUnit(unit)) {
                 return null;
             }

@@ -6,17 +6,14 @@ import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsMeField      from "./MeField";
 
 namespace TwnsMeFogMap {
-    import BwFogMap                 = TwnsBwFogMap.BwFogMap;
-    import MeField                  = TwnsMeField.MeField;
     import WarSerialization         = ProtoTypes.WarSerialization;
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
-    import BwWar                    = TwnsBwWar.BwWar;
 
-    export class MeFogMap extends BwFogMap {
+    export class MeFogMap extends TwnsBwFogMap.BwFogMap {
         public serializeForCreateSfw(): ISerialFogMap {
             const mapSize           = this.getMapSize();
-            const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
+            const maxPlayerIndex    = (this._getWar().getField() as TwnsMeField.MeField).getMaxPlayerIndex();
             const serialMapsFromPath: IDataForFogMapFromPath[] = [];
             for (const [playerIndex, map] of this._getAllMapsFromPath()) {
                 if (playerIndex > maxPlayerIndex) {
@@ -40,7 +37,7 @@ namespace TwnsMeFogMap {
             };
         }
 
-        public startRunning(war: BwWar): void {
+        public startRunning(war: TwnsBwWar.BwWar): void {
             this._setWar(war);
 
             for (const tile of war.getTileMap().getAllTiles()) {

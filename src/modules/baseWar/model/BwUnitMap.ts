@@ -17,18 +17,15 @@ namespace TwnsBwUnitMap {
     import ISerialUnitMap   = WarSerialization.ISerialUnitMap;
     import ISerialUnit      = WarSerialization.ISerialUnit;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnit           = TwnsBwUnit.BwUnit;
-    import BwUnitMapView    = TwnsBwUnitMapView.BwUnitMapView;
-    import BwWar            = TwnsBwWar.BwWar;
 
     export class BwUnitMap {
-        private _war?           : BwWar;
+        private _war?           : TwnsBwWar.BwWar;
         private _nextUnitId?    : number;
-        private _map?           : (BwUnit | null)[][];
+        private _map?           : (TwnsBwUnit.BwUnit | null)[][];
         private _mapSize?       : Types.MapSize;
-        private _loadedUnits?   : Map<number, BwUnit>;
+        private _loadedUnits?   : Map<number, TwnsBwUnit.BwUnit>;
 
-        private readonly _view  = new BwUnitMapView();
+        private readonly _view  = new TwnsBwUnitMapView.BwUnitMapView();
 
         public init({ data, configVersion, mapSize, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialUnitMap>;
@@ -46,11 +43,11 @@ namespace TwnsBwUnitMap {
             }
 
             const mapWidth      = mapSize.width;
-            const map           = Helpers.createEmptyMap<BwUnit>(mapWidth);
-            const loadedUnits   = new Map<number, BwUnit>();
-            const allUnits      = new Map<number, BwUnit>();
+            const map           = Helpers.createEmptyMap<TwnsBwUnit.BwUnit>(mapWidth);
+            const loadedUnits   = new Map<number, TwnsBwUnit.BwUnit>();
+            const allUnits      = new Map<number, TwnsBwUnit.BwUnit>();
             for (const unitData of data.units || []) {
-                const unit = new BwUnit();
+                const unit = new TwnsBwUnit.BwUnit();
                 unit.init(unitData, configVersion);
 
                 const gridIndex = unit.getGridIndex();
@@ -130,7 +127,7 @@ namespace TwnsBwUnitMap {
             this.init({ data, configVersion, mapSize, playersCountUnneutral });
         }
 
-        public startRunning(war: BwWar): void {
+        public startRunning(war: TwnsBwWar.BwWar): void {
             this._setWar(war);
             this._forEachUnitOnMap(unit => unit.startRunning(war));
             this._forEachUnitLoaded(unit => unit.startRunning(war));
@@ -197,24 +194,24 @@ namespace TwnsBwUnitMap {
             };
         }
 
-        private _setMap(map: (BwUnit | null)[][]): void {
+        private _setMap(map: (TwnsBwUnit.BwUnit | null)[][]): void {
             this._map = map;
         }
-        private _getMap(): (BwUnit | null)[][] {
+        private _getMap(): (TwnsBwUnit.BwUnit | null)[][] {
             return Helpers.getExisted(this._map);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): BwUnitMapView {
+        public getView(): TwnsBwUnitMapView.BwUnitMapView {
             return this._view;
         }
 
-        private _setWar(war: BwWar): void {
+        private _setWar(war: TwnsBwWar.BwWar): void {
             this._war = war;
         }
-        public getWar(): BwWar {
+        public getWar(): TwnsBwWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -232,7 +229,7 @@ namespace TwnsBwUnitMap {
             this._nextUnitId = id;
         }
 
-        public getUnit(gridIndex: GridIndex, unitId: Types.Undefinable<number>): BwUnit | null {
+        public getUnit(gridIndex: GridIndex, unitId: Types.Undefinable<number>): TwnsBwUnit.BwUnit | null {
             if (unitId == null) {
                 return this.getUnitOnMap(gridIndex);
             } else {
@@ -249,7 +246,7 @@ namespace TwnsBwUnitMap {
                 }
             }
         }
-        public getUnitById(unitId: number): BwUnit | null {
+        public getUnitById(unitId: number): TwnsBwUnit.BwUnit | null {
             const unitLoaded = this.getUnitLoadedById(unitId);
             if (unitLoaded) {
                 return unitLoaded;
@@ -265,10 +262,10 @@ namespace TwnsBwUnitMap {
             }
         }
 
-        public getUnitOnMap(gridIndex: GridIndex): BwUnit | null {
+        public getUnitOnMap(gridIndex: GridIndex): TwnsBwUnit.BwUnit | null {
             return this._getMap()[gridIndex.x][gridIndex.y] ?? null;
         }
-        public getVisibleUnitOnMap(gridIndex: GridIndex): BwUnit | null {
+        public getVisibleUnitOnMap(gridIndex: GridIndex): TwnsBwUnit.BwUnit | null {
             const unit = this.getUnitOnMap(gridIndex);
             if (unit == null) {
                 return null;
@@ -287,18 +284,18 @@ namespace TwnsBwUnitMap {
                 : null;
         }
 
-        public getUnitLoadedById(unitId: number): BwUnit | null {
+        public getUnitLoadedById(unitId: number): TwnsBwUnit.BwUnit | null {
             return this.getLoadedUnits().get(unitId) ?? null;
         }
-        private _setLoadedUnits(units: Map<number, BwUnit>): void {
+        private _setLoadedUnits(units: Map<number, TwnsBwUnit.BwUnit>): void {
             this._loadedUnits = units;
         }
-        public getLoadedUnits(): Map<number, BwUnit> {
+        public getLoadedUnits(): Map<number, TwnsBwUnit.BwUnit> {
             return Helpers.getExisted(this._loadedUnits);
         }
-        public getUnitsLoadedByLoader(loader: BwUnit, isRecursive: boolean): BwUnit[] {
-            const units: BwUnit[] = [];
-            this._forEachUnitLoaded((unit: BwUnit) => {
+        public getUnitsLoadedByLoader(loader: TwnsBwUnit.BwUnit, isRecursive: boolean): TwnsBwUnit.BwUnit[] {
+            const units: TwnsBwUnit.BwUnit[] = [];
+            this._forEachUnitLoaded((unit: TwnsBwUnit.BwUnit) => {
                 if (unit.getLoaderUnitId() === loader.getUnitId()) {
                     units.push(unit);
                     (isRecursive) && (units.push(...this.getUnitsLoadedByLoader(unit, isRecursive)));
@@ -307,23 +304,23 @@ namespace TwnsBwUnitMap {
             return units;
         }
 
-        public getAllUnitsOnMap(): BwUnit[] {
-            const units: BwUnit[] = [];
+        public getAllUnitsOnMap(): TwnsBwUnit.BwUnit[] {
+            const units: TwnsBwUnit.BwUnit[] = [];
             this._forEachUnitOnMap(unit => units.push(unit));
             return units;
         }
-        public getAllUnitsLoaded(): BwUnit[] {
-            const units: BwUnit[] = [];
+        public getAllUnitsLoaded(): TwnsBwUnit.BwUnit[] {
+            const units: TwnsBwUnit.BwUnit[] = [];
             this._forEachUnitLoaded(unit => units.push(unit));
             return units;
         }
-        public getAllUnits(): BwUnit[] {
+        public getAllUnits(): TwnsBwUnit.BwUnit[] {
             const units = this.getAllUnitsOnMap();
             this._forEachUnitLoaded(unit => units.push(unit));
             return units;
         }
 
-        public setUnitLoaded(unit: BwUnit): void {
+        public setUnitLoaded(unit: TwnsBwUnit.BwUnit): void {
             const loadedUnits = this.getLoadedUnits();
             if (loadedUnits == null) {
                 throw Helpers.newError(`BwUnitMap.setUnitLoaded() the map is not initialized.`);
@@ -347,7 +344,7 @@ namespace TwnsBwUnitMap {
             loadedUnits.delete(unitId);
         }
 
-        public setUnitOnMap(unit: BwUnit): void {
+        public setUnitOnMap(unit: TwnsBwUnit.BwUnit): void {
             const mapSize   = this.getMapSize();
             const map       = this._getMap();
             if ((!mapSize) || (!map)) {
@@ -387,18 +384,18 @@ namespace TwnsBwUnitMap {
             }
         }
 
-        private _forEachUnit(func: (unit: BwUnit) => any): void {
+        private _forEachUnit(func: (unit: TwnsBwUnit.BwUnit) => any): void {
             this._forEachUnitOnMap(func);
             this._forEachUnitLoaded(func);
         }
-        private _forEachUnitOnMap(func: (unit: BwUnit) => any): void {
+        private _forEachUnitOnMap(func: (unit: TwnsBwUnit.BwUnit) => any): void {
             for (const column of this._getMap()) {
                 for (const unit of column) {
                     (unit) && (func(unit));
                 }
             }
         }
-        private _forEachUnitLoaded(func: (unit: BwUnit) => any): void {
+        private _forEachUnitLoaded(func: (unit: TwnsBwUnit.BwUnit) => any): void {
             for (const [, unit] of this.getLoadedUnits()) {
                 func(unit);
             }
@@ -462,8 +459,8 @@ namespace TwnsBwUnitMap {
             return list;
         }
 
-        public getAllCoUnits(playerIndex: number): BwUnit[] {
-            const coUnits: BwUnit[] = [];
+        public getAllCoUnits(playerIndex: number): TwnsBwUnit.BwUnit[] {
+            const coUnits: TwnsBwUnit.BwUnit[] = [];
             for (const [, unit] of this.getLoadedUnits()) {
                 if ((unit.getPlayerIndex() === playerIndex) && (unit.getHasLoadedCo())) {
                     coUnits.push(unit);

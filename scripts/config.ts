@@ -10,7 +10,6 @@ import { WebpackDevServerPlugin, WebpackBundlePlugin } from './plugins/webpack-p
 
 const config: ResourceManagerConfig = {
 
-
     buildConfig: (params) => {
 
         const { target, command, projectName, version } = params;
@@ -101,6 +100,97 @@ const config: ResourceManagerConfig = {
             throw `unknown command : ${params.command}`;
         }
     },
+
+    // buildConfig: (params) => {
+
+    //     const { target, command, projectName, version } = params;
+
+    //     if (command == 'build') {
+    //         const outputDir = 'bin-debug';
+    //         return {
+    //             outputDir,
+    //             commands: [
+    //                 // new EmitResConfigFilePlugin({
+    //                 //     output: "resource/default.res.json",
+    //                 //     typeSelector: config.typeSelector,
+    //                 //     nameSelector: p => path.basename(p).replace(/\./gi, "_"),
+    //                 //     groupSelector: p => "preload"
+    //                 // }),
+    //                 new ExmlPlugin('debug'), // 非 EUI 项目关闭此设置
+    //                 // new EuiCompilerPlugin(),//新的 eui 编译器
+    //                 new IncrementCompilePlugin(),
+    //                 // new WebpackBundlePlugin({ //新的 Webpack 编译器
+    //                 //     libraryType: "debug",
+    //                 //     defines: { DEBUG: true, RELEASE: false },
+    //                 //     typescript: { mode: 'legacy' },
+    //                 //     html: {
+    //                 //         templateFilePath: "template/web/index.html"
+    //                 //     }
+    //                 // }),
+    //                 new ManifestPlugin({ output: "manifest.json" })
+    //             ]
+    //         };
+    //     }
+    //     else if (command == 'publish') {
+    //         const outputDir = `bin-release/web/${version}`;
+    //         return {
+    //             outputDir,
+    //             commands: [
+    //                 new CustomPlugin(),
+    //                 new CompilePlugin({ libraryType: "release", defines: { DEBUG: false, RELEASE: true } }),
+    //                 // new WebpackBundlePlugin({ //新的 Webpack 编译器
+    //                 //     libraryType: "release",
+    //                 //     defines: { DEBUG: false, RELEASE: true },
+    //                 //     typescript: { mode: 'legacy' },
+    //                 //     html: {
+    //                 //         templateFilePath: "template/web/index.html"
+    //                 //     },
+    //                 // }),
+    //                 new ExmlPlugin('commonjs2'), // 非 EUI 项目关闭此设置
+    //                 // new EuiCompilerPlugin(),//新的 eui 编译器
+    //                 new UglifyPlugin([{
+    //                     sources: ["main.js"],
+    //                     target: "main.min.js"
+    //                 }]),
+    //                 new RenamePlugin({
+    //                     verbose: true, hash: 'crc32', matchers: [
+    //                         { from: "**/*.js", to: "[path][name]_[hash].[ext]" }
+    //                     ]
+    //                 }),
+    //                 new ManifestPlugin({ output: "manifest.json" })
+    //             ]
+    //         };
+    //     }
+    //     else if (command == 'run') {
+    //         const outputDir = '.';
+    //         return {
+    //             outputDir,
+    //             commands: [
+    //                 // new EmitResConfigFilePlugin({
+    //                 //     output: "resource/default.res.json",
+    //                 //     typeSelector: config.typeSelector,
+    //                 //     nameSelector: p => path.basename(p).replace(/\./gi, "_"),
+    //                 //     groupSelector: p => "preload"
+    //                 // }),
+    //                 new ExmlPlugin('debug'), // 非 EUI 项目关闭此设置
+    //                 // new EuiCompilerPlugin(),//新的 eui 编译器
+    //                 new IncrementCompilePlugin(),
+    //                 // new WebpackDevServerPlugin({ //新的 Webpack 编译器
+    //                 //     libraryType: "debug",
+    //                 //     defines: { DEBUG: true, RELEASE: false },
+    //                 //     typescript: { mode: 'legacy' },
+    //                 //     html: {
+    //                 //         templateFilePath: "template/web/index.html"
+    //                 //     },
+    //                 //     open: true
+    //                 // }),
+    //             ]
+    //         };
+    //     }
+    //     else {
+    //         throw `unknown command : ${params.command}`;
+    //     }
+    // },
 
     mergeSelector: (p) => {
         if (p.indexOf("assets/bitmap/") >= 0) {

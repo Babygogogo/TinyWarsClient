@@ -10,8 +10,6 @@ import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwCursor {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import BwWar            = TwnsBwWar.BwWar;
-    import BwCursorView     = TwnsBwCursorView.BwCursorView;
 
     export class BwCursor {
         private _gridX              = 0;
@@ -19,9 +17,9 @@ namespace TwnsBwCursor {
         private _previousGridIndex  : Types.GridIndex | null = null;
         private _mapSize?           : Types.MapSize;
         private _isMovableByTouches = true;
-        private readonly _view      = new BwCursorView();
+        private readonly _view      = new TwnsBwCursorView.BwCursorView();
 
-        private _war?               : BwWar;
+        private _war?               : TwnsBwWar.BwWar;
 
         private _notifyListeners: Notify.Listener[] = [
             { type: NotifyType.BwCursorTapped,                 callback: this._onNotifyBwCursorTapped },
@@ -39,7 +37,7 @@ namespace TwnsBwCursor {
             this.getView().fastInit(this);
         }
 
-        public startRunning(war: BwWar): void {
+        public startRunning(war: TwnsBwWar.BwWar): void {
             this._war = war;
 
             Notify.addEventListeners(this._notifyListeners, this, false, 10);
@@ -78,11 +76,11 @@ namespace TwnsBwCursor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getWar(): BwWar {
+        public getWar(): TwnsBwWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 
-        public getView(): BwCursorView {
+        public getView(): TwnsBwCursorView.BwCursorView {
             return this._view;
         }
         public updateView(): void {

@@ -6,27 +6,22 @@ import TwnsMeActionPlanner  from "./MeActionPlanner";
 import TwnsMeFogMap         from "./MeFogMap";
 
 namespace TwnsMeField {
-    import BwField          = TwnsBwField.BwField;
-    import MeActionPlanner  = TwnsMeActionPlanner.MeActionPlanner;
-    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
-    import MeFogMap         = TwnsMeFogMap.MeFogMap;
-
-    export class MeField extends BwField {
-        private readonly _fogMap        = new MeFogMap();
+    export class MeField extends TwnsBwField.BwField {
+        private readonly _fogMap        = new TwnsMeFogMap.MeFogMap();
         private readonly _tileMap       = new TwnsBwTileMap.BwTileMap();
-        private readonly _unitMap       = new BwUnitMap();
-        private readonly _actionPlanner = new MeActionPlanner();
+        private readonly _unitMap       = new TwnsBwUnitMap.BwUnitMap();
+        private readonly _actionPlanner = new TwnsMeActionPlanner.MeActionPlanner();
 
-        public getFogMap(): MeFogMap {
+        public getFogMap(): TwnsMeFogMap.MeFogMap {
             return this._fogMap;
         }
         public getTileMap(): TwnsBwTileMap.BwTileMap {
             return this._tileMap;
         }
-        public getUnitMap(): BwUnitMap {
+        public getUnitMap(): TwnsBwUnitMap.BwUnitMap {
             return this._unitMap;
         }
-        public getActionPlanner(): MeActionPlanner {
+        public getActionPlanner(): TwnsMeActionPlanner.MeActionPlanner {
             return this._actionPlanner;
         }
 

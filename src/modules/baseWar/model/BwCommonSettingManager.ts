@@ -9,10 +9,9 @@ import TwnsBwWar            from "./BwWar";
 namespace TwnsBwCommonSettingManager {
     import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                = TwnsBwWar.BwWar;
 
     export class BwCommonSettingManager {
-        private _war?               : BwWar;
+        private _war?               : TwnsBwWar.BwWar;
         private _settingsForCommon? : ISettingsForCommon;
 
         public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
@@ -52,14 +51,14 @@ namespace TwnsBwCommonSettingManager {
             return this.serializeForCreateSfw();
         }
 
-        public startRunning(war: BwWar): void {
+        public startRunning(war: TwnsBwWar.BwWar): void {
             this._setWar(war);
         }
 
-        private _setWar(war: BwWar): void {
+        private _setWar(war: TwnsBwWar.BwWar): void {
             this._war = war;
         }
-        protected _getWar(): BwWar {
+        protected _getWar(): TwnsBwWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 

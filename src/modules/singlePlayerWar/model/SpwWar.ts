@@ -13,20 +13,16 @@ import TwnsSpwField                 from "./SpwField";
 import TwnsSpwPlayerManager         from "./SpwPlayerManager";
 
 namespace TwnsSpwWar {
-    import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
-    import SpwPlayerManager         = TwnsSpwPlayerManager.SpwPlayerManager;
-    import SpwField                 = TwnsSpwField.SpwField;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarAction                = ProtoTypes.WarAction;
     import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-    import BwWar                    = TwnsBwWar.BwWar;
     import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
 
-    export abstract class SpwWar extends BwWar {
-        private readonly _playerManager         = new SpwPlayerManager();
-        private readonly _field                 = new SpwField();
+    export abstract class SpwWar extends TwnsBwWar.BwWar {
+        private readonly _playerManager         = new TwnsSpwPlayerManager.SpwPlayerManager();
+        private readonly _field                 = new TwnsSpwField.SpwField();
         private readonly _commonSettingManager  = new BwCommonSettingManager();
-        private readonly _warEventManager       = new BwWarEventManager();
+        private readonly _warEventManager       = new TwnsBwWarEventManager.BwWarEventManager();
 
         private _saveSlotIndex?     : number;
         private _saveSlotExtraData? : ISpmWarSaveSlotExtraData;
@@ -147,16 +143,16 @@ namespace TwnsSpwWar {
             return null;
         }
 
-        public getPlayerManager(): SpwPlayerManager {
+        public getPlayerManager(): TwnsSpwPlayerManager.SpwPlayerManager {
             return this._playerManager;
         }
-        public getField(): SpwField {
+        public getField(): TwnsSpwField.SpwField {
             return this._field;
         }
         public getCommonSettingManager(): BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): BwWarEventManager {
+        public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
             return this._warEventManager;
         }
 
@@ -179,10 +175,10 @@ namespace TwnsSpwWar {
         }
 
         public getHumanPlayerIndexes(): number[] {
-            return (this.getPlayerManager() as SpwPlayerManager).getHumanPlayerIndexes();
+            return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayerIndexes();
         }
         public getHumanPlayers(): TwnsBwPlayer.BwPlayer[] {
-            return (this.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
+            return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayers();
         }
     }
 }

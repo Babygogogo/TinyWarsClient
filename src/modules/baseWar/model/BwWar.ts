@@ -28,25 +28,13 @@ namespace TwnsBwWar {
     import WarAction                = ProtoTypes.WarAction;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnitMap                = TwnsBwUnitMap.BwUnitMap;
-    import BwCursor                 = TwnsBwCursor.BwCursor;
-    import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
-    import BwDrawVoteManager        = TwnsBwDrawVoteManager.BwDrawVoteManager;
-    import BwExecutedActionManager  = TwnsBwExecutedActionManager.BwExecutedActionManager;
-    import BwWarView                = TwnsBwWarView.BwWarView;
-    import BwField                  = TwnsBwField.BwField;
-    import BwFogMap                 = TwnsBwFogMap.BwFogMap;
-    import BwGridVisualEffect       = TwnsBwGridVisualEffect.BwGridVisualEffect;
-    import BwPlayerManager          = TwnsBwPlayerManager.BwPlayerManager;
-    import BwRandomNumberManager    = TwnsBwRandomNumberManager.BwRandomNumberManager;
-    import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
 
     export abstract class BwWar {
         private readonly _turnManager           = new TwnsBwTurnManager.BwTurnManager();
-        private readonly _executedActionManager = new BwExecutedActionManager();
-        private readonly _randomNumberManager   = new BwRandomNumberManager();
-        private readonly _drawVoteManager       = new BwDrawVoteManager();
-        private readonly _view                  = new BwWarView();
+        private readonly _executedActionManager = new TwnsBwExecutedActionManager.BwExecutedActionManager();
+        private readonly _randomNumberManager   = new TwnsBwRandomNumberManager.BwRandomNumberManager();
+        private readonly _drawVoteManager       = new TwnsBwDrawVoteManager.BwDrawVoteManager();
+        private readonly _view                  = new TwnsBwWarView.BwWarView();
 
         private _warId                  : number | null = null;
         private _isRunning              = false;
@@ -60,10 +48,10 @@ namespace TwnsBwWar {
         public abstract getIsNeedSeedRandom(): boolean;
         public abstract getIsWarMenuPanelOpening(): boolean;
         public abstract getCanCheat(): boolean;
-        public abstract getPlayerManager(): BwPlayerManager;
-        public abstract getField(): BwField;
-        public abstract getCommonSettingManager(): BwCommonSettingManager;
-        public abstract getWarEventManager(): BwWarEventManager;
+        public abstract getPlayerManager(): TwnsBwPlayerManager.BwPlayerManager;
+        public abstract getField(): TwnsBwField.BwField;
+        public abstract getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager;
+        public abstract getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager;
         public abstract getSettingsBootTimerParams(): number[];
         public abstract getIsRunTurnPhaseWithExtraData(): boolean;
         public abstract updateTilesAndUnitsOnVisibilityChanged(): void;
@@ -139,7 +127,7 @@ namespace TwnsBwWar {
         protected _fastInitView(): void {
             this.getView().fastInit(this);
         }
-        public getView(): BwWarView {
+        public getView(): TwnsBwWarView.BwWarView {
             return this._view;
         }
 
@@ -302,10 +290,10 @@ namespace TwnsBwWar {
         public getTurnManager(): TwnsBwTurnManager.BwTurnManager {
             return this._turnManager;
         }
-        public getFogMap(): BwFogMap {
+        public getFogMap(): TwnsBwFogMap.BwFogMap {
             return this.getField().getFogMap();
         }
-        public getUnitMap(): BwUnitMap {
+        public getUnitMap(): TwnsBwUnitMap.BwUnitMap {
             return this.getField().getUnitMap();
         }
         public getTileMap(): TwnsBwTileMap.BwTileMap {
@@ -314,10 +302,10 @@ namespace TwnsBwWar {
         public getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
             return this.getField().getActionPlanner();
         }
-        public getGridVisionEffect(): BwGridVisualEffect {
+        public getGridVisionEffect(): TwnsBwGridVisualEffect.BwGridVisualEffect {
             return this.getField().getGridVisualEffect();
         }
-        public getCursor(): BwCursor {
+        public getCursor(): TwnsBwCursor.BwCursor {
             return this.getField().getCursor();
         }
 
@@ -332,13 +320,13 @@ namespace TwnsBwWar {
             return this.getPlayerManager().getAliveWatcherTeamIndexes(watcherUserId);
         }
 
-        public getDrawVoteManager(): BwDrawVoteManager {
+        public getDrawVoteManager(): TwnsBwDrawVoteManager.BwDrawVoteManager {
             return this._drawVoteManager;
         }
-        public getRandomNumberManager(): BwRandomNumberManager {
+        public getRandomNumberManager(): TwnsBwRandomNumberManager.BwRandomNumberManager {
             return this._randomNumberManager;
         }
-        public getExecutedActionManager(): BwExecutedActionManager {
+        public getExecutedActionManager(): TwnsBwExecutedActionManager.BwExecutedActionManager {
             return this._executedActionManager;
         }
     }

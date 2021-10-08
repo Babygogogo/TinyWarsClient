@@ -25,9 +25,6 @@ import TwnsSpwWar                       from "../model/SpwWar";
 import TwnsSpwLoadWarPanel              from "./SpwLoadWarPanel";
 
 namespace TwnsSpwWarMenuPanel {
-    import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
-    import SpwWar                       = TwnsSpwWar.SpwWar;
-    import SpwLoadWarPanel              = TwnsSpwLoadWarPanel.SpwLoadWarPanel;
     import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
@@ -56,7 +53,7 @@ namespace TwnsSpwWarMenuPanel {
         private readonly _btnGotoWarList!       : TwnsUiButton.UiButton;
         private readonly _btnGotoLobby!         : TwnsUiButton.UiButton;
 
-        private _war?           : SpwWar;
+        private _war?           : TwnsSpwWar.SpwWar;
 
         public static show(): void {
             if (!SpwWarMenuPanel._instance) {
@@ -123,10 +120,10 @@ namespace TwnsSpwWarMenuPanel {
             Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
         }
 
-        private _setWar(war: SpwWar): void {
+        private _setWar(war: TwnsSpwWar.SpwWar): void {
             this._war = war;
         }
-        private _getWar(): SpwWar {
+        private _getWar(): TwnsSpwWar.SpwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -200,7 +197,7 @@ namespace TwnsSpwWarMenuPanel {
                 return;
             }
 
-            SpwLoadWarPanel.show();
+            TwnsSpwLoadWarPanel.SpwLoadWarPanel.show();
         }
 
         private _onTouchedBtnUnitList(): void {
@@ -242,7 +239,7 @@ namespace TwnsSpwWarMenuPanel {
             }
 
             const war = this._getWar();
-            SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
+            TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
         }
 
         private async _onTouchedBtnFreeMode(): Promise<void> {

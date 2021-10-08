@@ -11,14 +11,12 @@ import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsBwTileView       from "./BwTileView";
 
 namespace TwnsBwTileMapView {
-    import BwTileView   = TwnsBwTileView.BwTileView;
     import NotifyType   = TwnsNotifyType.NotifyType;
-    import BwTileMap    = TwnsBwTileMap.BwTileMap;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
     export class BwTileMapView extends egret.DisplayObjectContainer {
-        private readonly _tileViewArray     : BwTileView[] = [];
+        private readonly _tileViewArray     : TwnsBwTileView.BwTileView[] = [];
         private readonly _baseLayer         = new egret.DisplayObjectContainer();
         private readonly _decoratorLayer    = new egret.DisplayObjectContainer();
         private readonly _gridBorderLayer   = new egret.DisplayObjectContainer();
@@ -31,7 +29,7 @@ namespace TwnsBwTileMapView {
             { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyIsShowGridBorderChanged },
         ];
 
-        private _tileMap?: BwTileMap;
+        private _tileMap?: TwnsBwTileMap.BwTileMap;
 
         public constructor() {
             super();
@@ -44,7 +42,7 @@ namespace TwnsBwTileMapView {
             this._gridBorderLayer.alpha = 0.3;
         }
 
-        public init(tileMap: BwTileMap): void {
+        public init(tileMap: TwnsBwTileMap.BwTileMap): void {
             this._tileMap = tileMap;
 
             const tileViewArray     = this._tileViewArray;
@@ -99,7 +97,7 @@ namespace TwnsBwTileMapView {
             }
             this._updateGridBorderLayerVisible();
         }
-        public fastInit(tileMap: BwTileMap): void {
+        public fastInit(tileMap: TwnsBwTileMap.BwTileMap): void {
             this._tileMap = tileMap;
         }
 

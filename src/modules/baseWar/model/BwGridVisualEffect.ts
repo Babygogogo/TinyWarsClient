@@ -8,11 +8,9 @@ import TwnsBwWar                    from "./BwWar";
 namespace TwnsBwGridVisualEffect {
     import GridIndex                = Types.GridIndex;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import BwGridVisualEffectView   = TwnsBwGridVisualEffectView.BwGridVisualEffectView;
-    import BwWar                    = TwnsBwWar.BwWar;
 
     export class BwGridVisualEffect {
-        private readonly _view = new BwGridVisualEffectView();
+        private readonly _view = new TwnsBwGridVisualEffectView.BwGridVisualEffectView();
 
         private _notifyListeners: Notify.Listener[] = [
             { type: NotifyType.BwUnitBeAttacked,   callback: this._onNotifyBwUnitBeAttacked },
@@ -31,7 +29,7 @@ namespace TwnsBwGridVisualEffect {
             this.getView().fastInit(this);
         }
 
-        public startRunning(war: BwWar): void {
+        public startRunning(war: TwnsBwWar.BwWar): void {
             Notify.addEventListeners(this._notifyListeners, this, false, 1);
         }
         public startRunningView(): void {
@@ -43,7 +41,7 @@ namespace TwnsBwGridVisualEffect {
             this.getView().stopRunningView();
         }
 
-        public getView(): BwGridVisualEffectView {
+        public getView(): TwnsBwGridVisualEffectView.BwGridVisualEffectView {
             return this._view;
         }
 

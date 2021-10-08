@@ -17,34 +17,28 @@ import TwnsMpwPlayerManager         from "./MpwPlayerManager";
 import MpwUtility                   from "./MpwUtility";
 
 namespace TwnsMpwWar {
-    import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
-    import MpwPlayerManager         = TwnsMpwPlayerManager.MpwPlayerManager;
-    import MpwField                 = TwnsMpwField.MpwField;
-    import MpwWarMenuPanel          = TwnsMpwWarMenuPanel.MpwWarMenuPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarAction                = ProtoTypes.WarAction;
-    import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
-    import BwWar                    = TwnsBwWar.BwWar;
 
-    export abstract class MpwWar extends BwWar {
-        private readonly _playerManager         = new MpwPlayerManager();
-        private readonly _field                 = new MpwField();
-        private readonly _commonSettingManager  = new BwCommonSettingManager();
-        private readonly _warEventManager       = new BwWarEventManager();
+    export abstract class MpwWar extends TwnsBwWar.BwWar {
+        private readonly _playerManager         = new TwnsMpwPlayerManager.MpwPlayerManager();
+        private readonly _field                 = new TwnsMpwField.MpwField();
+        private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();
+        private readonly _warEventManager       = new TwnsBwWarEventManager.BwWarEventManager();
 
-        public getField(): MpwField {
+        public getField(): TwnsMpwField.MpwField {
             return this._field;
         }
-        public getPlayerManager(): MpwPlayerManager {
+        public getPlayerManager(): TwnsMpwPlayerManager.MpwPlayerManager {
             return this._playerManager;
         }
-        public getCommonSettingManager(): BwCommonSettingManager {
+        public getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager {
             return this._commonSettingManager;
         }
         public getIsWarMenuPanelOpening(): boolean {
-            return MpwWarMenuPanel.getIsOpening();
+            return TwnsMpwWarMenuPanel.MpwWarMenuPanel.getIsOpening();
         }
-        public getWarEventManager(): BwWarEventManager {
+        public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
             return this._warEventManager;
         }
 

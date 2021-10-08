@@ -16,16 +16,13 @@ namespace TwnsBwTileMap {
     import ISerialTileMap   = WarSerialization.ISerialTileMap;
     import ISerialTile      = WarSerialization.ISerialTile;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar            = TwnsBwWar.BwWar;
-    import BwTileMapView    = TwnsBwTileMapView.BwTileMapView;
-    import BwTile           = TwnsBwTile.BwTile;
 
     export class BwTileMap {
-        private _map?        : BwTile[][];
+        private _map?        : TwnsBwTile.BwTile[][];
         private _mapSize?    : MapSize;
-        private _war?        : BwWar;
+        private _war?        : TwnsBwWar.BwWar;
 
-        private readonly _view  = new BwTileMapView();
+        private readonly _view  = new TwnsBwTileMapView.BwTileMapView();
 
         public init({ data, configVersion, mapSize, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialTileMap>;
@@ -46,7 +43,7 @@ namespace TwnsBwTileMap {
                 throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwTileMap_Init_02);
             }
 
-            const map = Helpers.createEmptyMap<BwTile>(mapWidth, mapHeight);
+            const map = Helpers.createEmptyMap<TwnsBwTile.BwTile>(mapWidth, mapHeight);
             for (const tileData of tiles) {
                 const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.BwTileMap_Init_03);
                 if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
@@ -59,7 +56,7 @@ namespace TwnsBwTileMap {
                     throw Helpers.newError(`Duplicated gridIndex: ${gridX}, ${gridY}`, ClientErrorCode.BwTileMap_Init_05);
                 }
 
-                const tile = new BwTile();
+                const tile = new TwnsBwTile.BwTile();
                 tile.init(tileData, configVersion);
 
                 const playerIndex = tile.getPlayerIndex();
@@ -93,7 +90,7 @@ namespace TwnsBwTileMap {
             this.getView().fastInit(this);
         }
 
-        public startRunning(war: BwWar): void {
+        public startRunning(war: TwnsBwWar.BwWar): void {
             this._setWar(war);
             this._forEachTile(tile => tile.startRunning(war));
         }
@@ -139,39 +136,39 @@ namespace TwnsBwTileMap {
             return { tiles: tilesData };
         }
 
-        private _setWar(war: BwWar): void {
+        private _setWar(war: TwnsBwWar.BwWar): void {
             this._war = war;
         }
-        public getWar(): BwWar {
+        public getWar(): TwnsBwWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 
-        private _setMap(map: BwTile[][]): void {
+        private _setMap(map: TwnsBwTile.BwTile[][]): void {
             this._map = map;
         }
-        protected _getMap(): BwTile[][] {
+        protected _getMap(): TwnsBwTile.BwTile[][] {
             return Helpers.getExisted(this._map);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): BwTileMapView {
+        public getView(): TwnsBwTileMapView.BwTileMapView {
             return this._view;
         }
 
-        private _forEachTile(func: (t: BwTile) => any): void {
+        private _forEachTile(func: (t: TwnsBwTile.BwTile) => any): void {
             for (const column of this._getMap()) {
                 for (const tile of column) {
                     func(tile);
                 }
             }
         }
-        public getTile(gridIndex: Types.GridIndex): BwTile {
+        public getTile(gridIndex: Types.GridIndex): TwnsBwTile.BwTile {
             return this._getMap()[gridIndex.x][gridIndex.y];
         }
-        public getAllTiles(): BwTile[] {
-            const tileArray: BwTile[] = [];
+        public getAllTiles(): TwnsBwTile.BwTile[] {
+            const tileArray: TwnsBwTile.BwTile[] = [];
             this._forEachTile(tile => tileArray.push(tile));
             return tileArray;
         }

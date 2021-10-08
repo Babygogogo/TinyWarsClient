@@ -23,9 +23,6 @@ import UserProxy                        from "../../user/model/UserProxy";
 import TwnsMpwWar                       from "../model/MpwWar";
 
 namespace TwnsMpwWarMenuPanel {
-    import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import MpwWar                       = TwnsMpwWar.MpwWar;
-    import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
 
@@ -107,7 +104,7 @@ namespace TwnsMpwWarMenuPanel {
             Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
         }
 
-        private _getWar(): MpwWar {
+        private _getWar(): TwnsMpwWar.MpwWar {
             return Helpers.getExisted(MpwModel.getWar());
         }
 
@@ -122,7 +119,7 @@ namespace TwnsMpwWarMenuPanel {
         }
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
-            CommonConfirmPanel.show({
+            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
@@ -192,7 +189,7 @@ namespace TwnsMpwWarMenuPanel {
             }
 
             const war = this._getWar();
-            SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
+            TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
         }
 
         private async _onTouchedBtnFreeMode(): Promise<void> {

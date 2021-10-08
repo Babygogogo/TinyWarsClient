@@ -20,10 +20,9 @@ namespace TwnsWeActionTypeListPanel {
     import IWarEventAction      = ProtoTypes.WarEvent.IWarEventAction;
     import ActionType           = Types.WarEventActionType;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import BwWar                = TwnsBwWar.BwWar;
 
     type OpenDataForWeActionTypeListPanel = {
-        war         : BwWar;
+        war         : TwnsBwWar.BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
@@ -104,7 +103,7 @@ namespace TwnsWeActionTypeListPanel {
     }
 
     type DataForTypeRenderer = {
-        war             : BwWar;
+        war             : TwnsBwWar.BwWar;
         fullData        : ProtoTypes.Map.IWarEventFullData;
         newActionType   : ActionType;
         action          : IWarEventAction;

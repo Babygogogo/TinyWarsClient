@@ -20,7 +20,6 @@ namespace TwnsBwPlayer {
     import CoType           = Types.CoType;
     import ISerialPlayer    = ProtoTypes.WarSerialization.ISerialPlayer;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar            = TwnsBwWar.BwWar;
 
     export class BwPlayer {
         private _playerIndex?               : number;
@@ -37,7 +36,7 @@ namespace TwnsBwPlayer {
         private _watchOngoingSrcUserIds?    : Set<number>;
         private _watchRequestSrcUserIds?    : Set<number>;
 
-        private _war?                       : BwWar;
+        private _war?                       : TwnsBwWar.BwWar;
 
         public init(data: ISerialPlayer, configVersion: string): void {
             const fund              = Helpers.getExisted(data.fund, ClientErrorCode.BwPlayer_Init_00);
@@ -110,7 +109,7 @@ namespace TwnsBwPlayer {
             this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
         }
 
-        public startRunning(war: BwWar): void {
+        public startRunning(war: TwnsBwWar.BwWar): void {
             this._setWar(war);
         }
 
@@ -155,10 +154,10 @@ namespace TwnsBwPlayer {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: BwWar): void {
+        private _setWar(war: TwnsBwWar.BwWar): void {
             this._war = war;
         }
-        private _getWar(): BwWar {
+        private _getWar(): TwnsBwWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 

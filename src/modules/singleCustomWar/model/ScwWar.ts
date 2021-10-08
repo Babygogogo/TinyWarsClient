@@ -7,13 +7,11 @@ import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 namespace TwnsScwWar {
-    import SpwWar           = TwnsSpwWar.SpwWar;
-    import SpwWarMenuPanel  = TwnsSpwWarMenuPanel.SpwWarMenuPanel;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForScw  = ProtoTypes.WarSettings.ISettingsForScw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
-    export class ScwWar extends SpwWar {
+    export class ScwWar extends TwnsSpwWar.SpwWar {
         private _settingsForScw?    : ISettingsForScw;
 
         public async init(data: ISerialWar): Promise<void> {
@@ -47,7 +45,7 @@ namespace TwnsScwWar {
             return false;
         }
         public getIsWarMenuPanelOpening(): boolean {
-            return SpwWarMenuPanel.getIsOpening();
+            return TwnsSpwWarMenuPanel.SpwWarMenuPanel.getIsOpening();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

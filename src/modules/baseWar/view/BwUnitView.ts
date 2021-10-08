@@ -13,7 +13,6 @@ import CommonConstants      from "../../tools/helpers/CommonConstants";
 namespace TwnsBwUnitView {
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
-    import BwUnit               = TwnsBwUnit.BwUnit;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = CommonConstants.GridSize;
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_X               = _GRID_WIDTH * 3 / 4;
@@ -27,7 +26,7 @@ namespace TwnsBwUnitView {
         private _imgState   = new TwnsUiImage.UiImage();
         private _imgUnit    = new TwnsUiImage.UiImage();
 
-        private _unit                       : BwUnit | null = null;
+        private _unit                       : TwnsBwUnit.BwUnit | null = null;
         private _animationType              = UnitAnimationType.Stand;
         private _isDark                     = false;
         private _framesForStateAnimation    = [] as string[];
@@ -47,7 +46,7 @@ namespace TwnsBwUnitView {
             this.addChild(this._imgHp);
         }
 
-        public init(unit: BwUnit): BwUnitView {
+        public init(unit: TwnsBwUnit.BwUnit): BwUnitView {
             this._setUnit(unit);
 
             return this;
@@ -59,10 +58,10 @@ namespace TwnsBwUnitView {
             return this;
         }
 
-        private _setUnit(unit: BwUnit): void {
+        private _setUnit(unit: TwnsBwUnit.BwUnit): void {
             this._unit = unit;
         }
-        public getUnit(): BwUnit | null {
+        public getUnit(): TwnsBwUnit.BwUnit | null {
             return this._unit;
         }
 

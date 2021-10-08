@@ -15,26 +15,19 @@ import MeUtility                    from "./MeUtility";
 import TwnsMeWarEventManager        from "./MeWarEventManager";
 
 namespace TwnsMeWar {
-    import MeDrawer                 = TwnsMeDrawer.MeDrawer;
-    import MeField                  = TwnsMeField.MeField;
-    import MePlayerManager          = TwnsMePlayerManager.MePlayerManager;
-    import MeCommonSettingManager   = TwnsMeCommonSettingManager.MeCommonSettingManager;
-    import MeWarEventManager        = TwnsMeWarEventManager.MeWarEventManager;
-    import MeWarMenuPanel           = TwnsMeWarMenuPanel.MeWarMenuPanel;
     import WarAction                = ProtoTypes.WarAction;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import IWarRule                 = ProtoTypes.WarRule.IWarRule;
     import IMapRawData              = ProtoTypes.Map.IMapRawData;
     import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
     import ILanguageText            = ProtoTypes.Structure.ILanguageText;
-    import BwWar                    = TwnsBwWar.BwWar;
 
-    export class MeWar extends BwWar {
-        private readonly _playerManager         = new MePlayerManager();
-        private readonly _field                 = new MeField();
-        private readonly _commonSettingManager  = new MeCommonSettingManager();
-        private readonly _drawer                = new MeDrawer();
-        private readonly _warEventManager       = new MeWarEventManager();
+    export class MeWar extends TwnsBwWar.BwWar {
+        private readonly _playerManager         = new TwnsMePlayerManager.MePlayerManager();
+        private readonly _field                 = new TwnsMeField.MeField();
+        private readonly _commonSettingManager  = new TwnsMeCommonSettingManager.MeCommonSettingManager();
+        private readonly _drawer                = new TwnsMeDrawer.MeDrawer();
+        private readonly _warEventManager       = new TwnsMeWarEventManager.MeWarEventManager();
 
         private _mapModifiedTime?   : number;
         private _mapSlotIndex?      : number;
@@ -66,14 +59,14 @@ namespace TwnsMeWar {
             this.setMapTag(mapRawData.mapTag || {});
         }
 
-        public startRunning(): BwWar {
+        public startRunning(): TwnsBwWar.BwWar {
             super.startRunning();
 
             this.getDrawer().startRunning(this);
 
             return this;
         }
-        public stopRunning(): BwWar {
+        public stopRunning(): TwnsBwWar.BwWar {
             super.stopRunning();
 
             this.getDrawer().stopRunning();
@@ -84,7 +77,7 @@ namespace TwnsMeWar {
         public serializeForMap(): IMapRawData {
             const unitMap               = this.getUnitMap();
             const mapSize               = unitMap.getMapSize();
-            const playersCountUnneutral = (this.getField() as MeField).getMaxPlayerIndex();
+            const playersCountUnneutral = (this.getField() as TwnsMeField.MeField).getMaxPlayerIndex();
             MeUtility.reviseAllUnitIds(unitMap);
 
             return {
@@ -119,23 +112,23 @@ namespace TwnsMeWar {
             return null;
         }
         public getIsWarMenuPanelOpening(): boolean {
-            return MeWarMenuPanel.getIsOpening();
+            return TwnsMeWarMenuPanel.MeWarMenuPanel.getIsOpening();
         }
 
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }
 
-        public getPlayerManager(): MePlayerManager {
+        public getPlayerManager(): TwnsMePlayerManager.MePlayerManager {
             return this._playerManager;
         }
-        public getField(): MeField {
+        public getField(): TwnsMeField.MeField {
             return this._field;
         }
-        public getCommonSettingManager(): MeCommonSettingManager {
+        public getCommonSettingManager(): TwnsMeCommonSettingManager.MeCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): MeWarEventManager {
+        public getWarEventManager(): TwnsMeWarEventManager.MeWarEventManager {
             return this._warEventManager;
         }
 
@@ -229,7 +222,7 @@ namespace TwnsMeWar {
             return null;
         }
 
-        public getDrawer(): MeDrawer {
+        public getDrawer(): TwnsMeDrawer.MeDrawer {
             return this._drawer;
         }
 

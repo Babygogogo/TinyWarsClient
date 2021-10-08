@@ -15,7 +15,6 @@ namespace TwnsBwUnitMapView {
     import BwUnitView           = TwnsBwUnitView.BwUnitView;
     import UnitCategory         = Types.UnitCategory;
     import ActionPlannerState   = Types.ActionPlannerState;
-    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -30,7 +29,7 @@ namespace TwnsBwUnitMapView {
             { type: NotifyType.UserSettingsUnitOpacityChanged,  callback: this._onNotifyUserSettingsUnitOpacityChanged },
         ];
 
-        private _unitMap    : BwUnitMap | null = null;
+        private _unitMap    : TwnsBwUnitMap.BwUnitMap | null = null;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers.
@@ -44,7 +43,7 @@ namespace TwnsBwUnitMapView {
             this._updateOpacityForAllLayers();
         }
 
-        public init(unitMap: BwUnitMap): void {
+        public init(unitMap: TwnsBwUnitMap.BwUnitMap): void {
             this._setUnitMap(unitMap);
 
             this._clearAllUnits();
@@ -63,10 +62,10 @@ namespace TwnsBwUnitMapView {
             Notify.removeEventListeners(this._notifyListeners, this);
         }
 
-        private _getUnitMap(): BwUnitMap {
+        private _getUnitMap(): TwnsBwUnitMap.BwUnitMap {
             return Helpers.getExisted(this._unitMap);
         }
-        private _setUnitMap(unitMap: BwUnitMap): void {
+        private _setUnitMap(unitMap: TwnsBwUnitMap.BwUnitMap): void {
             this._unitMap = unitMap;
         }
 

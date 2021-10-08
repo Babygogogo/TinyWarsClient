@@ -30,10 +30,6 @@ namespace WarCommonHelpers {
     import ISerialWar       = WarSerialization.ISerialWar;
     import WarSerialization = ProtoTypes.WarSerialization;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnit           = TwnsBwUnit.BwUnit;
-    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
-    import BwWar            = TwnsBwWar.BwWar;
-    import BwTile           = TwnsBwTile.BwTile;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -136,7 +132,7 @@ namespace WarCommonHelpers {
     }
 
     export function getRevisedPath({ war, rawPath, launchUnitId }: {
-        war             : BwWar;
+        war             : TwnsBwWar.BwWar;
         rawPath         : Types.Undefinable<ProtoTypes.Structure.IMovePath>;
         launchUnitId    : Types.Undefinable<number>;
     }): Types.MovePath {
@@ -225,7 +221,7 @@ namespace WarCommonHelpers {
         };
     }
 
-    export function checkIsPathDestinationOccupiedByOtherVisibleUnit(war: BwWar, rawPath: GridIndex[]): boolean {
+    export function checkIsPathDestinationOccupiedByOtherVisibleUnit(war: TwnsBwWar.BwWar, rawPath: GridIndex[]): boolean {
         if (rawPath.length == 1) {
             return false;
         } else {
@@ -247,7 +243,7 @@ namespace WarCommonHelpers {
         }
     }
 
-    export function createDistanceMap(tileMap: TwnsBwTileMap.BwTileMap, unit: BwUnit, destination: GridIndex): { distanceMap: (number | null)[][], maxDistance: number } {
+    export function createDistanceMap(tileMap: TwnsBwTileMap.BwTileMap, unit: TwnsBwUnit.BwUnit, destination: GridIndex): { distanceMap: (number | null)[][], maxDistance: number } {
         const area          : MovableArea = [];
         const availableGrids: AvailableMovableGrid[] = [];
         _updateAvailableGrids({
@@ -291,7 +287,7 @@ namespace WarCommonHelpers {
         return { distanceMap, maxDistance};
     }
 
-    export function findNearestCapturableTile(tileMap: TwnsBwTileMap.BwTileMap, unitMap: BwUnitMap, unit: BwUnit): BwTile | null {
+    export function findNearestCapturableTile(tileMap: TwnsBwTileMap.BwTileMap, unitMap: TwnsBwUnitMap.BwUnitMap, unit: TwnsBwUnit.BwUnit): TwnsBwTile.BwTile | null {
         const area          : MovableArea = [];
         const availableGrids: AvailableMovableGrid[] = [];
         _updateAvailableGrids({
@@ -503,7 +499,7 @@ namespace WarCommonHelpers {
      * You must call unitMap.addUnitOnMap() or unitMap.addUnitLoaded() after calling this function.
      */
     export function moveUnit({ war, pathNodes, launchUnitId, fuelConsumption }: {
-        war             : BwWar;
+        war             : TwnsBwWar.BwWar;
         pathNodes       : GridIndex[];
         launchUnitId    : Types.Undefinable<number>;
         fuelConsumption : number;
@@ -540,7 +536,7 @@ namespace WarCommonHelpers {
     }
 
     export function updateTilesAndUnitsBeforeExecutingAction(
-        war         : BwWar,
+        war         : TwnsBwWar.BwWar,
         extraData   : Types.Undefinable<{
             actingTiles?        : ISerialTile[] | null;
             actingUnits?        : ISerialUnit[] | null;
@@ -556,7 +552,7 @@ namespace WarCommonHelpers {
         }
     }
     function addUnitsBeforeExecutingAction(
-        war             : BwWar,
+        war             : TwnsBwWar.BwWar,
         unitsData       : Types.Undefinable<ISerialUnit[]>,
         isViewVisible   : boolean
     ): void {
@@ -570,7 +566,7 @@ namespace WarCommonHelpers {
                 }
 
                 if (!unitMap.getUnitById(unitId)) {
-                    const unit = new BwUnit();
+                    const unit = new TwnsBwUnit.BwUnit();
                     unit.init(unitData, configVersion);
 
                     const isOnMap = unit.getLoaderUnitId() == null;
@@ -586,7 +582,7 @@ namespace WarCommonHelpers {
             }
         }
     }
-    function updateTilesBeforeExecutingAction(war: BwWar, tilesData: Types.Undefinable<ISerialTile[]>): void {
+    function updateTilesBeforeExecutingAction(war: TwnsBwWar.BwWar, tilesData: Types.Undefinable<ISerialTile[]>): void {
         if ((tilesData) && (tilesData.length)) {
             const tileMap   = war.getTileMap();
             for (const tileData of tilesData) {
@@ -629,7 +625,7 @@ namespace WarCommonHelpers {
         return gridIndex.x * mapHeight + gridIndex.y;
     }
 
-    export function getIdleBuildingGridIndex(war: BwWar): Types.GridIndex | null {
+    export function getIdleBuildingGridIndex(war: TwnsBwWar.BwWar): Types.GridIndex | null {
         const playerIndex               = war.getPlayerIndexInTurn();
         const field                     = war.getField();
         const tileMap                   = field.getTileMap();
@@ -672,7 +668,7 @@ namespace WarCommonHelpers {
 
         return null;
     }
-    export function getIdleUnitGridIndex(war: BwWar): Types.GridIndex | null {
+    export function getIdleUnitGridIndex(war: TwnsBwWar.BwWar): Types.GridIndex | null {
         const playerIndex               = war.getPlayerIndexInTurn();
         const field                     = war.getField();
         const unitMap                   = field.getUnitMap();

@@ -25,9 +25,6 @@ namespace TwnsBwUnit {
     import UnitTemplateCfg      = Types.UnitTemplateCfg;
     import ISerialUnit          = ProtoTypes.WarSerialization.ISerialUnit;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                = TwnsBwWar.BwWar;
-    import BwTile               = TwnsBwTile.BwTile;
-    import BwUnitView           = TwnsBwUnitView.BwUnitView;
 
     export class BwUnit {
         private _templateCfg?               : UnitTemplateCfg;
@@ -50,8 +47,8 @@ namespace TwnsBwUnit {
         private _loaderUnitId?              : number | null;
         private _primaryWeaponCurrentAmmo?  : number | null;
 
-        private readonly _view              = new BwUnitView();
-        private _war?                       : BwWar;
+        private readonly _view              = new TwnsBwUnitView.BwUnitView();
+        private _war?                       : TwnsBwWar.BwWar;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
@@ -94,7 +91,7 @@ namespace TwnsBwUnit {
             this.getView().init(this);
         }
 
-        public startRunning(war: BwWar): void {
+        public startRunning(war: TwnsBwWar.BwWar): void {
             if (war.getConfigVersion() !== this.getConfigVersion()) {
                 throw Helpers.newError(`BwUnit.startRunning() invalid configVersion.`);
                 return;
@@ -165,10 +162,10 @@ namespace TwnsBwUnit {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: BwWar): void {
+        private _setWar(war: TwnsBwWar.BwWar): void {
             this._war = war;
         }
-        public getWar(): BwWar {
+        public getWar(): TwnsBwWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -208,7 +205,7 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
-        public getView(): BwUnitView {
+        public getView(): TwnsBwUnitView.BwUnitView {
             return this._view;
         }
 
@@ -753,7 +750,7 @@ namespace TwnsBwUnit {
         public checkIsCapturer(): boolean {
             return this._getTemplateCfg()?.canCaptureTile === 1;
         }
-        public checkCanCaptureTile(tile: BwTile): boolean {
+        public checkCanCaptureTile(tile: TwnsBwTile.BwTile): boolean {
             return (this.checkIsCapturer())
                 && (this.getTeamIndex() !== tile.getTeamIndex())
                 && (tile.getMaxCapturePoint() != null);
@@ -1144,7 +1141,7 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for launch silo.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanLaunchSiloOnTile(tile: BwTile): boolean {
+        public checkCanLaunchSiloOnTile(tile: TwnsBwTile.BwTile): boolean {
             return (this._getTemplateCfg()?.canLaunchSilo === 1) && (tile.getType() === TileType.Silo);
         }
 
@@ -1164,7 +1161,7 @@ namespace TwnsBwUnit {
         public checkIsTileBuilder(): boolean {
             return this._getBuildableTileCfg() != null;
         }
-        public checkCanBuildOnTile(tile: BwTile): boolean {
+        public checkCanBuildOnTile(tile: TwnsBwTile.BwTile): boolean {
             const tileObjectType = tile.getObjectType();
             if (tileObjectType == null) {
                 throw Helpers.newError(`BwUnit.checkCanBuildOnTile() tileObjectType is empty.`);

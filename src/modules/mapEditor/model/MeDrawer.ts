@@ -15,7 +15,6 @@ import MeUtility                from "./MeUtility";
 import TwnsMeWar                from "./MeWar";
 
 namespace TwnsMeDrawer {
-    import MeWar                = TwnsMeWar.MeWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import DrawerMode           = Types.MapEditorDrawerMode;
@@ -25,7 +24,6 @@ namespace TwnsMeDrawer {
     import TileBaseType         = Types.TileBaseType;
     import TileDecoratorType    = Types.TileDecoratorType;
     import TileObjectType       = Types.TileObjectType;
-    import BwUnit               = TwnsBwUnit.BwUnit;
 
     export type DataForDrawTileObject = {
         objectType  : TileObjectType;
@@ -46,12 +44,12 @@ namespace TwnsMeDrawer {
     };
 
     export class MeDrawer {
-        private _war?                           : MeWar;
+        private _war?                           : TwnsMeWar.MeWar;
         private _mode                           = DrawerMode.Preview;
         private _drawTargetTileObjectData       : DataForDrawTileObject | null = null;
         private _drawTargetTileBaseData         : DataForDrawTileBase | null = null;
         private _drawTargetTileDecoratorData    : DataForDrawTileDecorator | null = null;
-        private _drawTargetUnit                 : BwUnit | null = null;
+        private _drawTargetUnit                 : TwnsBwUnit.BwUnit | null = null;
         private _symmetricalDrawType            = SymmetryType.None;
 
         private _notifyListeners: Notify.Listener[] = [
@@ -63,7 +61,7 @@ namespace TwnsMeDrawer {
             return this;
         }
 
-        public startRunning(war: MeWar): void {
+        public startRunning(war: TwnsMeWar.MeWar): void {
             this._setWar(war);
             Notify.addEventListeners(this._notifyListeners, this);
         }
@@ -83,10 +81,10 @@ namespace TwnsMeDrawer {
             this._handleAction(data.draggedTo);
         }
 
-        private _setWar(war: MeWar): void {
+        private _setWar(war: TwnsMeWar.MeWar): void {
             this._war = war;
         }
-        private _getWar(): MeWar {
+        private _getWar(): TwnsMeWar.MeWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -149,7 +147,7 @@ namespace TwnsMeDrawer {
 
         public setModeDrawUnit(data: DataForDrawUnit): void {
             const war   = this._getWar();
-            const unit  = new BwUnit();
+            const unit  = new TwnsBwUnit.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
@@ -161,10 +159,10 @@ namespace TwnsMeDrawer {
             this._setDrawTargetUnit(unit);
             this._setMode(DrawerMode.DrawUnit);
         }
-        private _setDrawTargetUnit(unit: BwUnit): void {
+        private _setDrawTargetUnit(unit: TwnsBwUnit.BwUnit): void {
             this._drawTargetUnit = unit;
         }
-        public getDrawTargetUnit(): BwUnit | null {
+        public getDrawTargetUnit(): TwnsBwUnit.BwUnit | null {
             return this._drawTargetUnit;
         }
 
@@ -376,7 +374,7 @@ namespace TwnsMeDrawer {
             const unitMap       = war.getUnitMap();
             const unitId        = unitMap.getNextUnitId();
             const targetUnit    = Helpers.getExisted(this.getDrawTargetUnit());
-            const unit          = new BwUnit();
+            const unit          = new TwnsBwUnit.BwUnit();
             unit.init({
                 gridIndex,
                 playerIndex : targetUnit.getPlayerIndex(),

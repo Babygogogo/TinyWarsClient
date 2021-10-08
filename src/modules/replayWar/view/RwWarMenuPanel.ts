@@ -30,12 +30,8 @@ import RwProxy                          from "../model/RwProxy";
 import TwnsRwWar                        from "../model/RwWar";
 
 namespace TwnsRwWarMenuPanel {
-    import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
-    import RwWar                        = TwnsRwWar.RwWar;
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import LangTextType                 = TwnsLangTextType.LangTextType;
-    import BwPlayer                     = TwnsBwPlayer.BwPlayer;
 
     // eslint-disable-next-line no-shadow
     enum MenuType {
@@ -117,7 +113,7 @@ namespace TwnsRwWarMenuPanel {
             Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
         }
 
-        private _getWar(): RwWar {
+        private _getWar(): TwnsRwWar.RwWar {
             return Helpers.getExisted(RwModel.getWar());
         }
 
@@ -138,7 +134,7 @@ namespace TwnsRwWarMenuPanel {
 
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
-            CommonConfirmPanel.show({
+            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
@@ -302,7 +298,7 @@ namespace TwnsRwWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0651),
                 callback: () => {
-                    CommonConfirmPanel.show({
+                    TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                         title   : Lang.getText(LangTextType.B0651),
                         content : Lang.getText(LangTextType.A0225),
                         callback: () => FlowManager.gotoRwReplayListPanel(),
@@ -315,7 +311,7 @@ namespace TwnsRwWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0054),
                 callback: () => {
-                    CommonConfirmPanel.show({
+                    TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                         title   : Lang.getText(LangTextType.B0054),
                         content : Lang.getText(LangTextType.A0025),
                         callback: () => FlowManager.gotoLobby(),
@@ -332,7 +328,7 @@ namespace TwnsRwWarMenuPanel {
                     if (war.getIsExecutingAction()) {
                         FloatText.show(Lang.getText(LangTextType.A0103));
                     } else {
-                        SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
+                        TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
                     }
                 },
             };
@@ -360,7 +356,7 @@ namespace TwnsRwWarMenuPanel {
                         return;
                     }
 
-                    CommonConfirmPanel.show({
+                    TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                         content : Lang.getText(LangTextType.A0201),
                         callback: () => {
                             FlowManager.gotoMfrCreateSettingsPanel(warData);
@@ -382,7 +378,7 @@ namespace TwnsRwWarMenuPanel {
                 name    : Lang.getText(LangTextType.B0430),
                 callback: () => {
                     const isEnabled = UserModel.getSelfSettingsIsSetPathMode();
-                    CommonConfirmPanel.show({
+                    TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                         content : Lang.getFormattedText(
                             LangTextType.F0033,
                             Lang.getText(isEnabled ? LangTextType.B0431 : LangTextType.B0432),
@@ -433,8 +429,8 @@ namespace TwnsRwWarMenuPanel {
     }
 
     type DataForPlayerRenderer = {
-        war     : RwWar;
-        player  : BwPlayer;
+        war     : TwnsRwWar.RwWar;
+        player  : TwnsBwPlayer.BwPlayer;
     };
 
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
@@ -492,9 +488,9 @@ namespace TwnsRwWarMenuPanel {
             ];
         }
         private _createDataColor(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(LangTextType.B0397),
@@ -503,9 +499,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataFund(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0032),
@@ -514,9 +510,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataBuildings(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const info = this._getTilesCountAndIncome(war, playerIndex);
             return {
@@ -526,9 +522,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataCoName(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const cfg = ConfigManager.getCoBasicCfg(war.getConfigVersion(), player.getCoId());
             return {
@@ -540,9 +536,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataEnergy(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue         = player.getCoCurrentEnergy();
             const powerEnergy       = player.getCoPowerEnergy();
@@ -560,9 +556,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataUnitAndValue(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const unitsCountAndValue = this._getUnitsCountAndValue(war, playerIndex);
             return {
@@ -572,9 +568,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataInitialFund(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
             return {
@@ -584,9 +580,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataIncomeMultiplier(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
             return {
@@ -596,9 +592,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataEnergyAddPctOnLoadCo(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             return {
@@ -608,9 +604,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataEnergyGrowthMultiplier(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
             return {
@@ -620,9 +616,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataMoveRangeModifier(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
             return {
@@ -632,9 +628,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataAttackPowerModifier(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
             return {
@@ -644,9 +640,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataVisionRangeModifier(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
             return {
@@ -656,9 +652,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataLuckLowerLimit(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
             return {
@@ -668,9 +664,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataLuckUpperLimit(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
             return {
@@ -680,7 +676,7 @@ namespace TwnsRwWarMenuPanel {
             };
         }
 
-        private _getTilesCountAndIncome(war: RwWar, playerIndex: number): { count: number, income: number } {
+        private _getTilesCountAndIncome(war: TwnsRwWar.RwWar, playerIndex: number): { count: number, income: number } {
             let count   = 0;
             let income  = 0;
             for (const tile of war.getTileMap().getAllTiles()) {
@@ -692,7 +688,7 @@ namespace TwnsRwWarMenuPanel {
             return { count, income };
         }
 
-        private _getUnitsCountAndValue(war: RwWar, playerIndex: number): { count: number, value: number } {
+        private _getUnitsCountAndValue(war: TwnsRwWar.RwWar, playerIndex: number): { count: number, value: number } {
             const unitMap   = war.getUnitMap();
             let count       = 0;
             let value       = 0;

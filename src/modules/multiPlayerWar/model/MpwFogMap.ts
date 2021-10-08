@@ -5,11 +5,8 @@ import MpwUtility           from "./MpwUtility";
 import TwnsMpwWar           from "./MpwWar";
 
 namespace TwnsMpwFogMap {
-    import BwFogMap = TwnsBwFogMap.BwFogMap;
-    import MpwWar   = TwnsMpwWar.MpwWar;
-
-    export class MpwFogMap extends BwFogMap {
-        public startRunning(war: MpwWar): void {
+    export class MpwFogMap extends TwnsBwFogMap.BwFogMap {
+        public startRunning(war: TwnsMpwWar.MpwWar): void {
             this._setWar(war);
 
             const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
