@@ -3037,11 +3037,6 @@ var egret;
                     return;
                 }
                 this.$smoothing = value;
-                if (egret.nativeRender) {
-                    if (this.$nativeDisplayObject.setSmoothing) {
-                        this.$nativeDisplayObject.setSmoothing(value);
-                    }
-                }
             },
             enumerable: true,
             configurable: true
@@ -3327,9 +3322,9 @@ var egret;
             else if (frameNum > this.$totalFrames) {
                 frameNum = this.$totalFrames;
             }
-            // if (frameNum == this.$nextFrameNum) {
-            //     return;
-            // }
+            if (frameNum == this.$nextFrameNum) {
+                return;
+            }
             this.$nextFrameNum = frameNum;
             this.advanceFrame();
             this.constructFrame();
@@ -3414,8 +3409,8 @@ var egret;
                     self.offsetPoint.x, self.offsetPoint.y, texture.$getScaleBitmapWidth(), texture.$getScaleBitmapHeight(),
                     texture.$sourceWidth, texture.$sourceHeight]);
                 //todo 负数offsetPoint
-                self.$nativeDisplayObject.setWidth(texture.$getTextureWidth());
-                self.$nativeDisplayObject.setHeight(texture.$getTextureHeight());
+                self.$nativeDisplayObject.setWidth(texture.$getTextureWidth() + self.offsetPoint.x);
+                self.$nativeDisplayObject.setHeight(texture.$getTextureHeight() + self.offsetPoint.y);
             }
             else {
                 var p = self.$parent;

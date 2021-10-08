@@ -8,7 +8,7 @@ import { CustomPlugin } from './myplugin';
 import { EuiCompilerPlugin } from './plugins/eui-compiler-plugin';
 import { WebpackDevServerPlugin, WebpackBundlePlugin } from './plugins/webpack-plugin';
 
-const USE_OLD_COMPILER = false;
+const USE_OLD_COMPILER = true;
 
 const config: ResourceManagerConfig = {
 
