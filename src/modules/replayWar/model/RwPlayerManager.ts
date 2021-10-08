@@ -1,5 +1,5 @@
 
-import TwnsBwPlayerManager from "../../baseWar/model/BwPlayerManager";
+// import TwnsBwPlayerManager from "../../baseWar/model/BwPlayerManager";
 
 namespace TwnsRwPlayerManager {
     import BwPlayerManager = TwnsBwPlayerManager.BwPlayerManager;
@@ -11,4 +11,4 @@ namespace TwnsRwPlayerManager {
     }
 }
 
-export default TwnsRwPlayerManager;
+// export default TwnsRwPlayerManager;

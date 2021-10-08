@@ -1,9 +1,9 @@
 
-import Types            from "../../tools/helpers/Types";
-import ConfigManager    from "../../tools/helpers/ConfigManager";
-import Helpers          from "../../tools/helpers/Helpers";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import UserModel        from "../../user/model/UserModel";
+// import Types            from "../../tools/helpers/Types";
+// import ConfigManager    from "../../tools/helpers/ConfigManager";
+// import Helpers          from "../../tools/helpers/Helpers";
+// import ProtoTypes       from "../../tools/proto/ProtoTypes";
+// import UserModel        from "../../user/model/UserModel";
 
 namespace CommonModel {
     import UnitType             = Types.UnitType;
@@ -260,4 +260,4 @@ namespace CommonModel {
     }
 }
 
-export default CommonModel;
+// export default CommonModel;

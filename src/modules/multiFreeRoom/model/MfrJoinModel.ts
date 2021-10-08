@@ -1,11 +1,11 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 namespace MfrJoinModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -74,4 +74,4 @@ namespace MfrJoinModel {
     }
 }
 
-export default MfrJoinModel;
+// export default MfrJoinModel;

@@ -1,6 +1,6 @@
 
-import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
-import Types                    from "../../tools/helpers/Types";
+// import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
+// import Types                    from "../../tools/helpers/Types";
 
 namespace TwnsMeActionPlanner {
     import GridIndex        = Types.GridIndex;
@@ -135,4 +135,4 @@ namespace TwnsMeActionPlanner {
     }
 }
 
-export default TwnsMeActionPlanner;
+// export default TwnsMeActionPlanner;

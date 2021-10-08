@@ -1,10 +1,10 @@
 
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsBwGridVisualEffect   from "../model/BwGridVisualEffect";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsBwGridVisualEffect   from "../model/BwGridVisualEffect";
 
 namespace TwnsBwGridVisualEffectView {
     import GridIndex            = Types.GridIndex;
@@ -269,4 +269,4 @@ namespace TwnsBwGridVisualEffectView {
     }
 }
 
-export default TwnsBwGridVisualEffectView;
+// export default TwnsBwGridVisualEffectView;

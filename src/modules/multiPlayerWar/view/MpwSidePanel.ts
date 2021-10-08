@@ -1,18 +1,18 @@
 
-import TwnsBwWarInfoPanel       from "../../baseWar/view/BwWarInfoPanel";
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import FloatText                from "../../tools/helpers/FloatText";
-import Helpers                  from "../../tools/helpers/Helpers";
-import SoundManager             from "../../tools/helpers/SoundManager";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
-import TwnsMpwWar               from "../model/MpwWar";
-import TwnsMpwWarMenuPanel      from "./MpwWarMenuPanel";
+// import TwnsBwWarInfoPanel       from "../../baseWar/view/BwWarInfoPanel";
+// import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+// import FloatText                from "../../tools/helpers/FloatText";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import SoundManager             from "../../tools/helpers/SoundManager";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+// import TwnsMpwWar               from "../model/MpwWar";
+// import TwnsMpwWarMenuPanel      from "./MpwWarMenuPanel";
 
 namespace TwnsMpwSidePanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -374,4 +374,4 @@ namespace TwnsMpwSidePanel {
     }
 }
 
-export default TwnsMpwSidePanel;
+// export default TwnsMpwSidePanel;

@@ -1,26 +1,26 @@
 
-import ChatModel                from "../../chat/model/ChatModel";
-import TwnsChatPanel            from "../../chat/view/ChatPanel";
-import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import ConfigManager            from "../../tools/helpers/ConfigManager";
-import SoundManager             from "../../tools/helpers/SoundManager";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import NotifyData               from "../../tools/notify/NotifyData";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
-import TwnsUserPanel            from "../../user/view/UserPanel";
-import TwnsUserSettingsPanel    from "../../user/view/UserSettingsPanel";
-import TwnsSpwWar               from "../model/SpwWar";
-import TwnsSpwWarMenuPanel      from "./SpwWarMenuPanel";
+// import ChatModel                from "../../chat/model/ChatModel";
+// import TwnsChatPanel            from "../../chat/view/ChatPanel";
+// import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import ConfigManager            from "../../tools/helpers/ConfigManager";
+// import SoundManager             from "../../tools/helpers/SoundManager";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import NotifyData               from "../../tools/notify/NotifyData";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+// import TwnsUserPanel            from "../../user/view/UserPanel";
+// import TwnsUserSettingsPanel    from "../../user/view/UserSettingsPanel";
+// import TwnsSpwWar               from "../model/SpwWar";
+// import TwnsSpwWarMenuPanel      from "./SpwWarMenuPanel";
 
 namespace TwnsSpwTopPanel {
     import UserPanel            = TwnsUserPanel.UserPanel;
@@ -402,4 +402,4 @@ namespace TwnsSpwTopPanel {
     }
 }
 
-export default TwnsSpwTopPanel;
+// export default TwnsSpwTopPanel;

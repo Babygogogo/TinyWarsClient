@@ -1,17 +1,17 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
-import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
-import TwnsBwTileView       from "../view/BwTileView";
-import TwnsBwPlayer         from "./BwPlayer";
-import TwnsBwUnit           from "./BwUnit";
-import TwnsBwWar            from "./BwWar";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+// import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+// import TwnsBwTileView       from "../view/BwTileView";
+// import TwnsBwPlayer         from "./BwPlayer";
+// import TwnsBwUnit           from "./BwUnit";
+// import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwTile {
     import TileType             = Types.TileType;
@@ -766,4 +766,4 @@ namespace TwnsBwTile {
     }
 }
 
-export default TwnsBwTile;
+// export default TwnsBwTile;

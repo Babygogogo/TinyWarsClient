@@ -1,18 +1,18 @@
 
-import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import ConfigManager            from "../../tools/helpers/ConfigManager";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
+// import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import ConfigManager            from "../../tools/helpers/ConfigManager";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
 
 namespace TwnsCommonWarAdvancedSettingsPage {
     import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
@@ -350,4 +350,4 @@ namespace TwnsCommonWarAdvancedSettingsPage {
     }
 }
 
-export default TwnsCommonWarAdvancedSettingsPage;
+// export default TwnsCommonWarAdvancedSettingsPage;

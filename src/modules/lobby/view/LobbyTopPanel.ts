@@ -1,15 +1,15 @@
 
-import TwnsChatPanel            from "../../chat/view/ChatPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import Helpers                  from "../../tools/helpers/Helpers";
-import SoundManager             from "../../tools/helpers/SoundManager";
-import Types                    from "../../tools/helpers/Types";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import UserModel                from "../../user/model/UserModel";
-import TwnsUserOnlineUsersPanel from "../../user/view/UserOnlineUsersPanel";
-import TwnsUserPanel            from "../../user/view/UserPanel";
+// import TwnsChatPanel            from "../../chat/view/ChatPanel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import SoundManager             from "../../tools/helpers/SoundManager";
+// import Types                    from "../../tools/helpers/Types";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import UserModel                from "../../user/model/UserModel";
+// import TwnsUserOnlineUsersPanel from "../../user/view/UserOnlineUsersPanel";
+// import TwnsUserPanel            from "../../user/view/UserPanel";
 
 namespace TwnsLobbyTopPanel {
     import UserPanel            = TwnsUserPanel.UserPanel;
@@ -122,4 +122,4 @@ namespace TwnsLobbyTopPanel {
     }
 }
 
-export default TwnsLobbyTopPanel;
+// export default TwnsLobbyTopPanel;

@@ -1,16 +1,16 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
-import RwProxy              from "../model/RwProxy";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsUiButton         from "../../tools/ui/UiButton";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+// import RwProxy              from "../model/RwProxy";
 
 namespace TwnsRwSearchReplayPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -172,4 +172,4 @@ namespace TwnsRwSearchReplayPanel {
     }
 }
 
-export default TwnsRwSearchReplayPanel;
+// export default TwnsRwSearchReplayPanel;

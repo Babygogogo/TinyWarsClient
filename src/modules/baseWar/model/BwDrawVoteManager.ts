@@ -1,10 +1,10 @@
 
-import TwnsBwWar            from "../../baseWar/model/BwWar";
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+// import TwnsBwWar            from "../../baseWar/model/BwWar";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 
 namespace TwnsBwDrawVoteManager {
     import ISerialPlayerManager = ProtoTypes.WarSerialization.ISerialPlayerManager;
@@ -70,4 +70,4 @@ namespace TwnsBwDrawVoteManager {
     }
 }
 
-export default TwnsBwDrawVoteManager;
+// export default TwnsBwDrawVoteManager;

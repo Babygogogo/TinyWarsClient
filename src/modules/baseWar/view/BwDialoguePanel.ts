@@ -1,17 +1,17 @@
 
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import ConfigManager            from "../../tools/helpers/ConfigManager";
-import Helpers                  from "../../tools/helpers/Helpers";
-import SoundManager             from "../../tools/helpers/SoundManager";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+// import ConfigManager            from "../../tools/helpers/ConfigManager";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import SoundManager             from "../../tools/helpers/SoundManager";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
 namespace TwnsBwDialoguePanel {
     import LangTextType = TwnsLangTextType.LangTextType;
@@ -207,4 +207,4 @@ namespace TwnsBwDialoguePanel {
     }
 }
 
-export default TwnsBwDialoguePanel;
+// export default TwnsBwDialoguePanel;

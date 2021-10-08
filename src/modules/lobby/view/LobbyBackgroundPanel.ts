@@ -1,6 +1,6 @@
 
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import Types                from "../../tools/helpers/Types";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import Types                from "../../tools/helpers/Types";
 
 namespace TwnsLobbyBackgroundPanel {
     export class LobbyBackgroundPanel extends TwnsUiPanel.UiPanel<void> {
@@ -32,4 +32,4 @@ namespace TwnsLobbyBackgroundPanel {
     }
 }
 
-export default TwnsLobbyBackgroundPanel;
+// export default TwnsLobbyBackgroundPanel;

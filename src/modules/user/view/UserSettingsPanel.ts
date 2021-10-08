@@ -1,36 +1,36 @@
 
-import TwnsChangeLogPanel           from "../../changeLog/view/ChangeLogPanel";
-import TwnsChatPanel                from "../../chat/view/ChatPanel";
-import TwnsCommonChangeVersionPanel from "../../common/view/CommonChangeVersionPanel";
-import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
-import TwnsCommonRankListPanel      from "../../common/view/CommonRankListPanel";
-import TwnsCommonServerStatusPanel  from "../../common/view/CommonServerStatusPanel";
-import TwnsLobbyBackgroundPanel     from "../../lobby/view/LobbyBackgroundPanel";
-import TwnsMmMainMenuPanel          from "../../mapManagement/view/MmMainMenuPanel";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Helpers                      from "../../tools/helpers/Helpers";
-import LocalStorage                 from "../../tools/helpers/LocalStorage";
-import StageManager                 from "../../tools/helpers/StageManager";
-import Timer                        from "../../tools/helpers/Timer";
-import Types                        from "../../tools/helpers/Types";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiImage                  from "../../tools/ui/UiImage";
-import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-import TwnsUiRadioButton            from "../../tools/ui/UiRadioButton";
-import UserModel                    from "../../user/model/UserModel";
-import UserProxy                    from "../../user/model/UserProxy";
-import TwnsUserChangeDiscordIdPanel from "./UserChangeDiscordIdPanel";
-import TwnsUserChangeNicknamePanel  from "./UserChangeNicknamePanel";
-import TwnsUserOnlineUsersPanel     from "./UserOnlineUsersPanel";
-import TwnsUserSetPasswordPanel     from "./UserSetPasswordPanel";
-import TwnsUserSetPrivilegePanel    from "./UserSetPrivilegePanel";
-import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
-import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
+// import TwnsChangeLogPanel           from "../../changeLog/view/ChangeLogPanel";
+// import TwnsChatPanel                from "../../chat/view/ChatPanel";
+// import TwnsCommonChangeVersionPanel from "../../common/view/CommonChangeVersionPanel";
+// import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
+// import TwnsCommonRankListPanel      from "../../common/view/CommonRankListPanel";
+// import TwnsCommonServerStatusPanel  from "../../common/view/CommonServerStatusPanel";
+// import TwnsLobbyBackgroundPanel     from "../../lobby/view/LobbyBackgroundPanel";
+// import TwnsMmMainMenuPanel          from "../../mapManagement/view/MmMainMenuPanel";
+// import CommonConstants              from "../../tools/helpers/CommonConstants";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import LocalStorage                 from "../../tools/helpers/LocalStorage";
+// import StageManager                 from "../../tools/helpers/StageManager";
+// import Timer                        from "../../tools/helpers/Timer";
+// import Types                        from "../../tools/helpers/Types";
+// import Lang                         from "../../tools/lang/Lang";
+// import TwnsLangTextType             from "../../tools/lang/LangTextType";
+// import Notify                       from "../../tools/notify/Notify";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import TwnsUiButton                 from "../../tools/ui/UiButton";
+// import TwnsUiImage                  from "../../tools/ui/UiImage";
+// import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+// import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+// import TwnsUiRadioButton            from "../../tools/ui/UiRadioButton";
+// import UserModel                    from "../../user/model/UserModel";
+// import UserProxy                    from "../../user/model/UserProxy";
+// import TwnsUserChangeDiscordIdPanel from "./UserChangeDiscordIdPanel";
+// import TwnsUserChangeNicknamePanel  from "./UserChangeNicknamePanel";
+// import TwnsUserOnlineUsersPanel     from "./UserOnlineUsersPanel";
+// import TwnsUserSetPasswordPanel     from "./UserSetPasswordPanel";
+// import TwnsUserSetPrivilegePanel    from "./UserSetPrivilegePanel";
+// import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
+// import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
 
 namespace TwnsUserSettingsPanel {
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -449,4 +449,4 @@ namespace TwnsUserSettingsPanel {
     }
 }
 
-export default TwnsUserSettingsPanel;
+// export default TwnsUserSettingsPanel;

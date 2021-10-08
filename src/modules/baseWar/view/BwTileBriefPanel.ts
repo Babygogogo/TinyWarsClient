@@ -1,19 +1,19 @@
 
-import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
-import SoundManager             from "../../tools/helpers/SoundManager";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import NotifyData               from "../../tools/notify/NotifyData";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsBwWar                from "../model/BwWar";
-import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
-import TwnsBwTileDetailPanel    from "./BwTileDetailPanel";
-import TwnsBwTileView           from "./BwTileView";
+// import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+// import SoundManager             from "../../tools/helpers/SoundManager";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import NotifyData               from "../../tools/notify/NotifyData";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsBwWar                from "../model/BwWar";
+// import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
+// import TwnsBwTileDetailPanel    from "./BwTileDetailPanel";
+// import TwnsBwTileView           from "./BwTileView";
 
 namespace TwnsBwTileBriefPanel {
     import Tween                = egret.Tween;
@@ -255,4 +255,4 @@ namespace TwnsBwTileBriefPanel {
     }
 }
 
-export default TwnsBwTileBriefPanel;
+// export default TwnsBwTileBriefPanel;

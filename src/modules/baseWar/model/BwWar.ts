@@ -1,28 +1,28 @@
 
-import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Timer                        from "../../tools/helpers/Timer";
-import Types                        from "../../tools/helpers/Types";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
-import WarEventHelper               from "../../warEvent/model/WarEventHelper";
-import TwnsBwWarView                from "../view/BwWarView";
-import TwnsBwActionPlanner          from "./BwActionPlanner";
-import TwnsBwCommonSettingManager   from "./BwCommonSettingManager";
-import TwnsBwCursor                 from "./BwCursor";
-import TwnsBwDrawVoteManager        from "./BwDrawVoteManager";
-import TwnsBwExecutedActionManager  from "./BwExecutedActionManager";
-import TwnsBwField                  from "./BwField";
-import TwnsBwFogMap                 from "./BwFogMap";
-import TwnsBwGridVisualEffect       from "./BwGridVisualEffect";
-import TwnsBwPlayer                 from "./BwPlayer";
-import TwnsBwPlayerManager          from "./BwPlayerManager";
-import TwnsBwRandomNumberManager    from "./BwRandomNumberManager";
-import TwnsBwTileMap                from "./BwTileMap";
-import TwnsBwTurnManager            from "./BwTurnManager";
-import TwnsBwUnitMap                from "./BwUnitMap";
-import TwnsBwWarEventManager        from "./BwWarEventManager";
+// import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+// import ConfigManager                from "../../tools/helpers/ConfigManager";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import Timer                        from "../../tools/helpers/Timer";
+// import Types                        from "../../tools/helpers/Types";
+// import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+// import WarCommonHelpers             from "../../tools/warHelpers/WarCommonHelpers";
+// import WarEventHelper               from "../../warEvent/model/WarEventHelper";
+// import TwnsBwWarView                from "../view/BwWarView";
+// import TwnsBwActionPlanner          from "./BwActionPlanner";
+// import TwnsBwCommonSettingManager   from "./BwCommonSettingManager";
+// import TwnsBwCursor                 from "./BwCursor";
+// import TwnsBwDrawVoteManager        from "./BwDrawVoteManager";
+// import TwnsBwExecutedActionManager  from "./BwExecutedActionManager";
+// import TwnsBwField                  from "./BwField";
+// import TwnsBwFogMap                 from "./BwFogMap";
+// import TwnsBwGridVisualEffect       from "./BwGridVisualEffect";
+// import TwnsBwPlayer                 from "./BwPlayer";
+// import TwnsBwPlayerManager          from "./BwPlayerManager";
+// import TwnsBwRandomNumberManager    from "./BwRandomNumberManager";
+// import TwnsBwTileMap                from "./BwTileMap";
+// import TwnsBwTurnManager            from "./BwTurnManager";
+// import TwnsBwUnitMap                from "./BwUnitMap";
+// import TwnsBwWarEventManager        from "./BwWarEventManager";
 
 namespace TwnsBwWar {
     import WarAction                = ProtoTypes.WarAction;
@@ -332,4 +332,4 @@ namespace TwnsBwWar {
     }
 }
 
-export default TwnsBwWar;
+// export default TwnsBwWar;

@@ -1,12 +1,12 @@
 
-import CommonModel      from "../../common/model/CommonModel";
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import Timer            from "../../tools/helpers/Timer";
-import Types            from "../../tools/helpers/Types";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import UserModel        from "../../user/model/UserModel";
+// import CommonModel      from "../../common/model/CommonModel";
+// import CommonConstants  from "../../tools/helpers/CommonConstants";
+// import Helpers          from "../../tools/helpers/Helpers";
+// import Timer            from "../../tools/helpers/Timer";
+// import Types            from "../../tools/helpers/Types";
+// import ProtoTypes       from "../../tools/proto/ProtoTypes";
+// import TwnsUiImage      from "../../tools/ui/UiImage";
+// import UserModel        from "../../user/model/UserModel";
 
 namespace TwnsBwTileView {
     import TileObjectType       = Types.TileObjectType;
@@ -120,4 +120,4 @@ namespace TwnsBwTileView {
     }
 }
 
-export default TwnsBwTileView;
+// export default TwnsBwTileView;

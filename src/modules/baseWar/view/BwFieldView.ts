@@ -1,11 +1,11 @@
 
-import Helpers                      from "../../tools/helpers/Helpers";
-import TwnsBwField                  from "../model/BwField";
-import TwnsBwActionPlannerView      from "./BwActionPlannerView";
-import TwnsBwCursorView             from "./BwCursorView";
-import TwnsBwGridVisualEffectView   from "./BwGridVisualEffectView";
-import TwnsBwTileMapView            from "./BwTileMapView";
-import TwnsBwUnitMapView            from "./BwUnitMapView";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import TwnsBwField                  from "../model/BwField";
+// import TwnsBwActionPlannerView      from "./BwActionPlannerView";
+// import TwnsBwCursorView             from "./BwCursorView";
+// import TwnsBwGridVisualEffectView   from "./BwGridVisualEffectView";
+// import TwnsBwTileMapView            from "./BwTileMapView";
+// import TwnsBwUnitMapView            from "./BwUnitMapView";
 
 namespace TwnsBwFieldView {
     export class BwFieldView extends egret.DisplayObjectContainer {
@@ -81,4 +81,4 @@ namespace TwnsBwFieldView {
     }
 }
 
-export default TwnsBwFieldView;
+// export default TwnsBwFieldView;

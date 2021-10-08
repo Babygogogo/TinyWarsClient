@@ -1,8 +1,8 @@
 
-import FloatText            from "../helpers/FloatText";
-import Logger               from "../helpers/Logger";
-import StageManager         from "../helpers/StageManager";
-import ResAutoRelease       from "./ResAutoRelease";
+// import FloatText            from "../helpers/FloatText";
+// import Logger               from "../helpers/Logger";
+// import StageManager         from "../helpers/StageManager";
+// import ResAutoRelease       from "./ResAutoRelease";
 
 namespace ResManager {
     let _isLoadedMainResource = false;
@@ -187,4 +187,4 @@ namespace ResManager {
     */
 }
 
-export default ResManager;
+// export default ResManager;

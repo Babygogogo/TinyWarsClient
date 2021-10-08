@@ -1,7 +1,7 @@
 
-import TwnsBwTile       from "../../baseWar/model/BwTile";
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Types            from "../../tools/helpers/Types";
+// import TwnsBwTile       from "../../baseWar/model/BwTile";
+// import CommonConstants  from "../../tools/helpers/CommonConstants";
+// import Types            from "../../tools/helpers/Types";
 
 namespace MpwUtility {
     import BwTile = TwnsBwTile.BwTile;
@@ -23,4 +23,4 @@ namespace MpwUtility {
     }
 }
 
-export default MpwUtility;
+// export default MpwUtility;

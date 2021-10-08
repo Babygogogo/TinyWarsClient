@@ -1,14 +1,14 @@
 
-import CommonModel      from "../../common/model/CommonModel";
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import ConfigManager    from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers from "../../tools/helpers/GridIndexHelpers";
-import Helpers          from "../../tools/helpers/Helpers";
-import Timer            from "../../tools/helpers/Timer";
-import Types            from "../../tools/helpers/Types";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
-import UserModel        from "../../user/model/UserModel";
+// import CommonModel      from "../../common/model/CommonModel";
+// import CommonConstants  from "../../tools/helpers/CommonConstants";
+// import ConfigManager    from "../../tools/helpers/ConfigManager";
+// import GridIndexHelpers from "../../tools/helpers/GridIndexHelpers";
+// import Helpers          from "../../tools/helpers/Helpers";
+// import Timer            from "../../tools/helpers/Timer";
+// import Types            from "../../tools/helpers/Types";
+// import TwnsUiImage      from "../../tools/ui/UiImage";
+// import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
+// import UserModel        from "../../user/model/UserModel";
 
 namespace TwnsWarMapUnitView {
     const { width: GRID_WIDTH, height: GRID_HEIGHT }    = CommonConstants.GridSize;
@@ -241,4 +241,4 @@ namespace TwnsWarMapUnitView {
     }
 }
 
-export default TwnsWarMapUnitView;
+// export default TwnsWarMapUnitView;

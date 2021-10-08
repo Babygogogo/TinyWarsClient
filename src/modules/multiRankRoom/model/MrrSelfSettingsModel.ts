@@ -1,12 +1,12 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import Helpers              from "../../tools/helpers/Helpers";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel            from "../../user/model/UserModel";
-import MrrModel             from "./MrrModel";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+// import UserModel            from "../../user/model/UserModel";
+// import MrrModel             from "./MrrModel";
 
 namespace MrrSelfSettingsModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -133,4 +133,4 @@ namespace MrrSelfSettingsModel {
     }
 }
 
-export default MrrSelfSettingsModel;
+// export default MrrSelfSettingsModel;

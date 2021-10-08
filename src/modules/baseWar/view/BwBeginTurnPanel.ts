@@ -1,10 +1,10 @@
 
-import SoundManager         from "../../tools/helpers/SoundManager";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import SoundManager         from "../../tools/helpers/SoundManager";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsBwBeginTurnPanel {
     type OpenDataForBwBeginTurnPanel = {
@@ -70,4 +70,4 @@ namespace TwnsBwBeginTurnPanel {
     }
 }
 
-export default TwnsBwBeginTurnPanel;
+// export default TwnsBwBeginTurnPanel;

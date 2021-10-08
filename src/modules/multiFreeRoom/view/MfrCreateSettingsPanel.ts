@@ -1,31 +1,31 @@
 
-import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
-import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
-import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
-import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import FloatText                            from "../../tools/helpers/FloatText";
-import FlowManager                          from "../../tools/helpers/FlowManager";
-import Helpers                              from "../../tools/helpers/Helpers";
-import Types                                from "../../tools/helpers/Types";
-import Lang                                 from "../../tools/lang/Lang";
-import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-import TwnsNotifyType                       from "../../tools/notify/NotifyType";
-import TwnsUiButton                         from "../../tools/ui/UiButton";
-import TwnsUiImage                          from "../../tools/ui/UiImage";
-import TwnsUiLabel                          from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                          from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
-import TwnsUiTab                            from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
-import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
-import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
-import MfrCreateModel                       from "../model/MfrCreateModel";
-import TwnsMfrCreateAdvancedSettingsPage    from "./MfrCreateAdvancedSettingsPage";
-import TwnsMfrCreatePlayerInfoPage          from "./MfrCreatePlayerInfoPage";
-import TwnsMfrMainMenuPanel                 from "./MfrMainMenuPanel";
+// import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+// import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+// import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+// import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+// import MfrProxy                             from "../../multiFreeRoom/model/MfrProxy";
+// import CommonConstants                      from "../../tools/helpers/CommonConstants";
+// import FloatText                            from "../../tools/helpers/FloatText";
+// import FlowManager                          from "../../tools/helpers/FlowManager";
+// import Helpers                              from "../../tools/helpers/Helpers";
+// import Types                                from "../../tools/helpers/Types";
+// import Lang                                 from "../../tools/lang/Lang";
+// import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import TwnsUiButton                         from "../../tools/ui/UiButton";
+// import TwnsUiImage                          from "../../tools/ui/UiImage";
+// import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+// import TwnsUiTab                            from "../../tools/ui/UiTab";
+// import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+// import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
+// import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+// import MfrCreateModel                       from "../model/MfrCreateModel";
+// import TwnsMfrCreateAdvancedSettingsPage    from "./MfrCreateAdvancedSettingsPage";
+// import TwnsMfrCreatePlayerInfoPage          from "./MfrCreatePlayerInfoPage";
+// import TwnsMfrMainMenuPanel                 from "./MfrMainMenuPanel";
 
 namespace TwnsMfrCreateSettingsPanel {
     import MfrMainMenuPanel                         = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
@@ -496,4 +496,4 @@ namespace TwnsMfrCreateSettingsPanel {
     }
 }
 
-export default TwnsMfrCreateSettingsPanel;
+// export default TwnsMfrCreateSettingsPanel;

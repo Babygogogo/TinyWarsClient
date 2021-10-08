@@ -1,18 +1,18 @@
 
-import TwnsBwWar                from "../../baseWar/model/BwWar";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import Notify                   from "../../tools/notify/Notify";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import WarEventHelper           from "../model/WarEventHelper";
+// import TwnsBwWar                from "../../baseWar/model/BwWar";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import Notify                   from "../../tools/notify/Notify";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import WarEventHelper           from "../model/WarEventHelper";
 
 namespace TwnsWeActionTypeListPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -181,4 +181,4 @@ namespace TwnsWeActionTypeListPanel {
     }
 }
 
-export default TwnsWeActionTypeListPanel;
+// export default TwnsWeActionTypeListPanel;

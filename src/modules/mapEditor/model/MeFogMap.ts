@@ -1,9 +1,9 @@
 
-import TwnsBwFogMap     from "../../baseWar/model/BwFogMap";
-import TwnsBwWar        from "../../baseWar/model/BwWar";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
-import TwnsMeField      from "./MeField";
+// import TwnsBwFogMap     from "../../baseWar/model/BwFogMap";
+// import TwnsBwWar        from "../../baseWar/model/BwWar";
+// import ProtoTypes       from "../../tools/proto/ProtoTypes";
+// import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
+// import TwnsMeField      from "./MeField";
 
 namespace TwnsMeFogMap {
     import WarSerialization         = ProtoTypes.WarSerialization;
@@ -47,4 +47,4 @@ namespace TwnsMeFogMap {
     }
 }
 
-export default TwnsMeFogMap;
+// export default TwnsMeFogMap;

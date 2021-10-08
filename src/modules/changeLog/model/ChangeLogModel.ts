@@ -1,5 +1,5 @@
 
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
+// import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
 namespace ChangeLogModel {
     import IChangeLogMessage    = ProtoTypes.ChangeLog.IChangeLogMessage;
@@ -27,4 +27,4 @@ namespace ChangeLogModel {
     }
 }
 
-export default ChangeLogModel;
+// export default ChangeLogModel;

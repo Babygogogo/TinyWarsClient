@@ -1,25 +1,25 @@
 
-import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
-import TwnsMeTileSimpleView     from "../../mapEditor/view/MeTileSimpleView";
-import UserModel                from "../../user/model/UserModel";
-import UserProxy                from "../../user/model/UserProxy";
-import WarMapModel              from "../../warMap/model/WarMapModel";
-import CommonConstants          from "../helpers/CommonConstants";
-import ConfigManager            from "../helpers/ConfigManager";
-import FloatText                from "../helpers/FloatText";
-import Helpers                  from "../helpers/Helpers";
-import SoundManager             from "../helpers/SoundManager";
-import Types                    from "../helpers/Types";
-import Lang                     from "../lang/Lang";
-import TwnsLangTextType         from "../lang/LangTextType";
-import TwnsNotifyType           from "../notify/NotifyType";
-import ProtoTypes               from "../proto/ProtoTypes";
-import WarCommonHelpers         from "../warHelpers/WarCommonHelpers";
-import TwnsUiComponent          from "./UiComponent";
-import TwnsUiImage              from "./UiImage";
-import TwnsUiLabel              from "./UiLabel";
-import TwnsUiListItemRenderer   from "./UiListItemRenderer";
-import TwnsUiScrollList         from "./UiScrollList";
+// import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
+// import TwnsMeTileSimpleView     from "../../mapEditor/view/MeTileSimpleView";
+// import UserModel                from "../../user/model/UserModel";
+// import UserProxy                from "../../user/model/UserProxy";
+// import WarMapModel              from "../../warMap/model/WarMapModel";
+// import CommonConstants          from "../helpers/CommonConstants";
+// import ConfigManager            from "../helpers/ConfigManager";
+// import FloatText                from "../helpers/FloatText";
+// import Helpers                  from "../helpers/Helpers";
+// import SoundManager             from "../helpers/SoundManager";
+// import Types                    from "../helpers/Types";
+// import Lang                     from "../lang/Lang";
+// import TwnsLangTextType         from "../lang/LangTextType";
+// import TwnsNotifyType           from "../notify/NotifyType";
+// import ProtoTypes               from "../proto/ProtoTypes";
+// import WarCommonHelpers         from "../warHelpers/WarCommonHelpers";
+// import TwnsUiComponent          from "./UiComponent";
+// import TwnsUiImage              from "./UiImage";
+// import TwnsUiLabel              from "./UiLabel";
+// import TwnsUiListItemRenderer   from "./UiListItemRenderer";
+// import TwnsUiScrollList         from "./UiScrollList";
 
 namespace TwnsUiMapInfo {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -296,4 +296,4 @@ namespace TwnsUiMapInfo {
     }
 }
 
-export default TwnsUiMapInfo;
+// export default TwnsUiMapInfo;

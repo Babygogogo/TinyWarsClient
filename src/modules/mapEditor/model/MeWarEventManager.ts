@@ -1,8 +1,8 @@
 
-import TwnsBwWarEventManager    from "../../baseWar/model/BwWarEventManager";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import TwnsBwWarEventManager    from "../../baseWar/model/BwWarEventManager";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
 
 namespace TwnsMeWarEventManager {
     import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
@@ -60,4 +60,4 @@ namespace TwnsMeWarEventManager {
     }
 }
 
-export default TwnsMeWarEventManager;
+// export default TwnsMeWarEventManager;

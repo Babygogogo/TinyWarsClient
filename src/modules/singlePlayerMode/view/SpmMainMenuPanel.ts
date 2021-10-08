@@ -1,18 +1,18 @@
 
-import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
-import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
-import TwnsMrrMainMenuPanel         from "../../multiRankRoom/view/MrrMainMenuPanel";
-import TwnsScrCreateMapListPanel    from "../../singleCustomRoom/view/ScrCreateMapListPanel";
-import FloatText                    from "../../tools/helpers/FloatText";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Types                        from "../../tools/helpers/Types";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-import TwnsSpmWarListPanel          from "./SpmWarListPanel";
+// import TwnsLobbyBottomPanel         from "../../lobby/view/LobbyBottomPanel";
+// import TwnsLobbyTopPanel            from "../../lobby/view/LobbyTopPanel";
+// import TwnsMcrMainMenuPanel         from "../../multiCustomRoom/view/McrMainMenuPanel";
+// import TwnsMrrMainMenuPanel         from "../../multiRankRoom/view/MrrMainMenuPanel";
+// import TwnsScrCreateMapListPanel    from "../../singleCustomRoom/view/ScrCreateMapListPanel";
+// import FloatText                    from "../../tools/helpers/FloatText";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import Types                        from "../../tools/helpers/Types";
+// import Lang                         from "../../tools/lang/Lang";
+// import TwnsLangTextType             from "../../tools/lang/LangTextType";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import TwnsUiButton                 from "../../tools/ui/UiButton";
+// import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+// import TwnsSpmWarListPanel          from "./SpmWarListPanel";
 
 namespace TwnsSpmMainMenuPanel {
     import SpmWarListPanel          = TwnsSpmWarListPanel.SpmWarListPanel;
@@ -175,4 +175,4 @@ namespace TwnsSpmMainMenuPanel {
     }
 }
 
-export default TwnsSpmMainMenuPanel;
+// export default TwnsSpmMainMenuPanel;

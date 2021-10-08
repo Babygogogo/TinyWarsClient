@@ -1,27 +1,27 @@
 
-import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import ConfigManager            from "../../tools/helpers/ConfigManager";
-import FloatText                from "../../tools/helpers/FloatText";
-import Helpers                  from "../../tools/helpers/Helpers";
-import SoundManager             from "../../tools/helpers/SoundManager";
-import Timer                    from "../../tools/helpers/Timer";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
-import TwnsWarMapUnitView       from "../../warMap/view/WarMapUnitView";
-import TwnsBwTile               from "../model/BwTile";
-import TwnsBwWar                from "../model/BwWar";
-import TwnsBwTileView           from "./BwTileView";
+// import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import ConfigManager            from "../../tools/helpers/ConfigManager";
+// import FloatText                from "../../tools/helpers/FloatText";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import SoundManager             from "../../tools/helpers/SoundManager";
+// import Timer                    from "../../tools/helpers/Timer";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+// import TwnsWarMapUnitView       from "../../warMap/view/WarMapUnitView";
+// import TwnsBwTile               from "../model/BwTile";
+// import TwnsBwWar                from "../model/BwWar";
+// import TwnsBwTileView           from "./BwTileView";
 
 namespace TwnsBwTileDetailPanel {
     import WarMapUnitView   = TwnsWarMapUnitView.WarMapUnitView;
@@ -715,4 +715,4 @@ namespace TwnsBwTileDetailPanel {
     }
 }
 
-export default TwnsBwTileDetailPanel;
+// export default TwnsBwTileDetailPanel;

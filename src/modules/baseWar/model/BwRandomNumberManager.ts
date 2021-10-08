@@ -1,8 +1,8 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 namespace TwnsBwRandomNumberManager {
     import ISeedRandomState = ProtoTypes.Structure.ISeedRandomState;
@@ -69,4 +69,4 @@ namespace TwnsBwRandomNumberManager {
     }
 }
 
-export default TwnsBwRandomNumberManager;
+// export default TwnsBwRandomNumberManager;

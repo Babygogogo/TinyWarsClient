@@ -1,9 +1,9 @@
 
-import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsMeField          from "./MeField";
-import MeUtility            from "./MeUtility";
+// import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsMeField          from "./MeField";
+// import MeUtility            from "./MeUtility";
 
 namespace TwnsMePlayerManager {
     import BwPlayerManager      = TwnsBwPlayerManager.BwPlayerManager;
@@ -44,4 +44,4 @@ namespace TwnsMePlayerManager {
     }
 }
 
-export default TwnsMePlayerManager;
+// export default TwnsMePlayerManager;

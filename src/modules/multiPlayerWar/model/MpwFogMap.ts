@@ -1,8 +1,8 @@
 
-import TwnsBwFogMap         from "../../baseWar/model/BwFogMap";
-import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
-import MpwUtility           from "./MpwUtility";
-import TwnsMpwWar           from "./MpwWar";
+// import TwnsBwFogMap         from "../../baseWar/model/BwFogMap";
+// import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+// import MpwUtility           from "./MpwUtility";
+// import TwnsMpwWar           from "./MpwWar";
 
 namespace TwnsMpwFogMap {
     export class MpwFogMap extends TwnsBwFogMap.BwFogMap {
@@ -23,4 +23,4 @@ namespace TwnsMpwFogMap {
     }
 }
 
-export default TwnsMpwFogMap;
+// export default TwnsMpwFogMap;

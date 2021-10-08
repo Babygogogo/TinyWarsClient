@@ -1,12 +1,12 @@
 
-import ChatProxy            from "../../chat/model/ChatProxy";
-import TwnsCommonErrorPanel from "../../common/view/CommonErrorPanel";
-import Lang                 from "../lang/Lang";
-import TwnsLangTextType     from "../lang/LangTextType";
-import CommonConstants      from "./CommonConstants";
-import FloatText            from "./FloatText";
-import SoundManager         from "./SoundManager";
-import Types                from "./Types";
+// import ChatProxy            from "../../chat/model/ChatProxy";
+// import TwnsCommonErrorPanel from "../../common/view/CommonErrorPanel";
+// import Lang                 from "../lang/Lang";
+// import TwnsLangTextType     from "../lang/LangTextType";
+// import CommonConstants      from "./CommonConstants";
+// import FloatText            from "./FloatText";
+// import SoundManager         from "./SoundManager";
+// import Types                from "./Types";
 
 namespace CompatibilityHelpers {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -151,4 +151,4 @@ namespace CompatibilityHelpers {
     }
 }
 
-export default CompatibilityHelpers;
+// export default CompatibilityHelpers;

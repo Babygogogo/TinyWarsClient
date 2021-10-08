@@ -1,11 +1,11 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsBwPlayer         from "./BwPlayer";
-import TwnsBwWar            from "./BwWar";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsBwPlayer         from "./BwPlayer";
+// import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwPlayerManager {
     import WarSerialization         = ProtoTypes.WarSerialization;
@@ -261,4 +261,4 @@ namespace TwnsBwPlayerManager {
     }
 }
 
-export default TwnsBwPlayerManager;
+// export default TwnsBwPlayerManager;

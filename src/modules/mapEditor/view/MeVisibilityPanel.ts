@@ -1,14 +1,14 @@
 
-import TwnsBwWar            from "../../baseWar/model/BwWar";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import MeModel              from "../model/MeModel";
+// import TwnsBwWar            from "../../baseWar/model/BwWar";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import MeModel              from "../model/MeModel";
 
 namespace TwnsMeVisibilityPanel {
     import LangTextType = TwnsLangTextType.LangTextType;
@@ -127,4 +127,4 @@ namespace TwnsMeVisibilityPanel {
     }
 }
 
-export default TwnsMeVisibilityPanel;
+// export default TwnsMeVisibilityPanel;

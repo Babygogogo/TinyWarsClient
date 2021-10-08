@@ -1,10 +1,10 @@
 
-import Helpers                  from "../helpers/Helpers";
-import SoundManager             from "../helpers/SoundManager";
-import TwnsUiComponent          from "./UiComponent";
-import TwnsUiListItemRenderer   from "./UiListItemRenderer";
-import TwnsUiTabItemRenderer    from "./UiTabItemRenderer";
-import TwnsUiTabPage            from "./UiTabPage";
+// import Helpers                  from "../helpers/Helpers";
+// import SoundManager             from "../helpers/SoundManager";
+// import TwnsUiComponent          from "./UiComponent";
+// import TwnsUiListItemRenderer   from "./UiListItemRenderer";
+// import TwnsUiTabItemRenderer    from "./UiTabItemRenderer";
+// import TwnsUiTabPage            from "./UiTabPage";
 
 namespace TwnsUiTab {
     export class UiTab<DataForTabItemRenderer, DataForPage> extends TwnsUiComponent.UiComponent {
@@ -185,4 +185,4 @@ namespace TwnsUiTab {
     };
 }
 
-export default TwnsUiTab;
+// export default TwnsUiTab;

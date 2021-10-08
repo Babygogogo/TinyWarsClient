@@ -1,16 +1,16 @@
 
-import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
-import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
-import TwnsBwWar                    from "../../baseWar/model/BwWar";
-import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import WarVisibilityHelpers         from "../../tools/warHelpers/WarVisibilityHelpers";
-import TwnsSpwField                 from "./SpwField";
-import TwnsSpwPlayerManager         from "./SpwPlayerManager";
+// import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
+// import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
+// import TwnsBwWar                    from "../../baseWar/model/BwWar";
+// import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
+// import CommonConstants              from "../../tools/helpers/CommonConstants";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import Lang                         from "../../tools/lang/Lang";
+// import TwnsLangTextType             from "../../tools/lang/LangTextType";
+// import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+// import WarVisibilityHelpers         from "../../tools/warHelpers/WarVisibilityHelpers";
+// import TwnsSpwField                 from "./SpwField";
+// import TwnsSpwPlayerManager         from "./SpwPlayerManager";
 
 namespace TwnsSpwWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -183,4 +183,4 @@ namespace TwnsSpwWar {
     }
 }
 
-export default TwnsSpwWar;
+// export default TwnsSpwWar;

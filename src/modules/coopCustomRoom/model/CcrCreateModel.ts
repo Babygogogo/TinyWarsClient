@@ -1,13 +1,13 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
-import WarMapModel          from "../../warMap/model/WarMapModel";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+// import WarMapModel          from "../../warMap/model/WarMapModel";
 
 namespace CcrCreateModel {
     import NotifyType               = TwnsNotifyType.NotifyType;
@@ -371,4 +371,4 @@ namespace CcrCreateModel {
     }
 }
 
-export default CcrCreateModel;
+// export default CcrCreateModel;

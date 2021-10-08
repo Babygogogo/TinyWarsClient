@@ -1,24 +1,24 @@
 
-import TwnsBwTile           from "../../baseWar/model/BwTile";
-import TwnsBwTileMap        from "../../baseWar/model/BwTileMap";
-import TwnsBwUnit           from "../../baseWar/model/BwUnit";
-import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
-import TwnsTwWar            from "../../testWar/model/TwWar";
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Timer                from "../../tools/helpers/Timer";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
-import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel            from "../../user/model/UserModel";
-import WarEventHelper       from "../../warEvent/model/WarEventHelper";
-import TwnsMeWar            from "./MeWar";
+// import TwnsBwTile           from "../../baseWar/model/BwTile";
+// import TwnsBwTileMap        from "../../baseWar/model/BwTileMap";
+// import TwnsBwUnit           from "../../baseWar/model/BwUnit";
+// import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
+// import TwnsTwWar            from "../../testWar/model/TwWar";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Timer                from "../../tools/helpers/Timer";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+// import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+// import UserModel            from "../../user/model/UserModel";
+// import WarEventHelper       from "../../warEvent/model/WarEventHelper";
+// import TwnsMeWar            from "./MeWar";
 
 namespace MeUtility {
     import BwTile               = TwnsBwTile.BwTile;
@@ -739,4 +739,4 @@ namespace MeUtility {
     }
 }
 
-export default MeUtility;
+// export default MeUtility;

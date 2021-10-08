@@ -1,12 +1,12 @@
 
-import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
-import Helpers              from "../helpers/Helpers";
-import Logger               from "../helpers/Logger";
-import SoundManager         from "../helpers/SoundManager";
-import StageManager         from "../helpers/StageManager";
-import Types                from "../helpers/Types";
-import TwnsUiButton         from "./UiButton";
-import TwnsUiComponent      from "./UiComponent";
+// import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+// import Helpers              from "../helpers/Helpers";
+// import Logger               from "../helpers/Logger";
+// import SoundManager         from "../helpers/SoundManager";
+// import StageManager         from "../helpers/StageManager";
+// import Types                from "../helpers/Types";
+// import TwnsUiButton         from "./UiButton";
+// import TwnsUiComponent      from "./UiComponent";
 
 namespace TwnsUiPanel {
     const NAMES_FOR_BUTTON_CONFIRM = [
@@ -238,4 +238,4 @@ namespace TwnsUiPanel {
     }
 }
 
-export default TwnsUiPanel;
+// export default TwnsUiPanel;

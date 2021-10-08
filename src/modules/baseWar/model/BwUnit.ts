@@ -1,17 +1,17 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
-import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
-import TwnsBwUnitView       from "../view/BwUnitView";
-import TwnsBwPlayer         from "./BwPlayer";
-import TwnsBwTile           from "./BwTile";
-import TwnsBwWar            from "./BwWar";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+// import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+// import TwnsBwUnitView       from "../view/BwUnitView";
+// import TwnsBwPlayer         from "./BwPlayer";
+// import TwnsBwTile           from "./BwTile";
+// import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwUnit {
     import UnitActionState      = Types.UnitActionState;
@@ -1642,4 +1642,4 @@ namespace TwnsBwUnit {
     }
 }
 
-export default TwnsBwUnit;
+// export default TwnsBwUnit;

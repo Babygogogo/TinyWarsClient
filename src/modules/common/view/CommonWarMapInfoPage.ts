@@ -1,14 +1,14 @@
 
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiMapInfo        from "../../tools/ui/UiMapInfo";
-import TwnsUiTabPage        from "../../tools/ui/UiTabPage";
-import TwnsUiZoomableMap    from "../../tools/ui/UiZoomableMap";
-import WarMapModel          from "../../warMap/model/WarMapModel";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiMapInfo        from "../../tools/ui/UiMapInfo";
+// import TwnsUiTabPage        from "../../tools/ui/UiTabPage";
+// import TwnsUiZoomableMap    from "../../tools/ui/UiZoomableMap";
+// import WarMapModel          from "../../warMap/model/WarMapModel";
 
 namespace TwnsCommonWarMapInfoPage {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -98,4 +98,4 @@ namespace TwnsCommonWarMapInfoPage {
     }
 }
 
-export default TwnsCommonWarMapInfoPage;
+// export default TwnsCommonWarMapInfoPage;

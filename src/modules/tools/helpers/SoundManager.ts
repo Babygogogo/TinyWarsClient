@@ -1,12 +1,12 @@
 
-import TwnsBwWar            from "../../baseWar/model/BwWar";
-import Lang                 from "../lang/Lang";
-import TwnsLangTextType     from "../lang/LangTextType";
-import FloatText            from "./FloatText";
-import Helpers              from "./Helpers";
-import LocalStorage         from "./LocalStorage";
-import Logger               from "./Logger";
-import Types                from "./Types";
+// import TwnsBwWar            from "../../baseWar/model/BwWar";
+// import Lang                 from "../lang/Lang";
+// import TwnsLangTextType     from "../lang/LangTextType";
+// import FloatText            from "./FloatText";
+// import Helpers              from "./Helpers";
+// import LocalStorage         from "./LocalStorage";
+// import Logger               from "./Logger";
+// import Types                from "./Types";
 
 namespace SoundManager {
     import SoundType            = Types.SoundType;
@@ -486,4 +486,4 @@ namespace SoundManager {
     }
 }
 
-export default SoundManager;
+// export default SoundManager;

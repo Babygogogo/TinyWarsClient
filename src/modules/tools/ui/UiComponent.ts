@@ -1,6 +1,6 @@
 
-import Types                from "../helpers/Types";
-import Notify               from "../notify/Notify";
+// import Types                from "../helpers/Types";
+// import Notify               from "../notify/Notify";
 
 namespace TwnsUiComponent {
     import UiListener   = Types.UiListener;
@@ -134,4 +134,4 @@ namespace TwnsUiComponent {
     }
 }
 
-export default TwnsUiComponent;
+// export default TwnsUiComponent;

@@ -1,8 +1,8 @@
 
-import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
-import Helpers              from "../helpers/Helpers";
-import Logger               from "../helpers/Logger";
-import TwnsUiComponent      from "./UiComponent";
+// import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+// import Helpers              from "../helpers/Helpers";
+// import Logger               from "../helpers/Logger";
+// import TwnsUiComponent      from "./UiComponent";
 
 namespace TwnsUiTabPage {
     import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
@@ -49,4 +49,4 @@ namespace TwnsUiTabPage {
     }
 }
 
-export default TwnsUiTabPage;
+// export default TwnsUiTabPage;

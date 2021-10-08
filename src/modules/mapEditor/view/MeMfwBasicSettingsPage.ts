@@ -1,17 +1,17 @@
 
-import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
-import TwnsCommonHelpPanel          from "../../common/view/CommonHelpPanel";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiImage                  from "../../tools/ui/UiImage";
-import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-import TwnsUiTabPage                from "../../tools/ui/UiTabPage";
-import TwnsWarMapBuildingListPanel  from "../../warMap/view/WarMapBuildingListPanel";
-import MeMfwModel                   from "../model/MeMfwModel";
+// import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
+// import TwnsCommonHelpPanel          from "../../common/view/CommonHelpPanel";
+// import CommonConstants              from "../../tools/helpers/CommonConstants";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import Lang                         from "../../tools/lang/Lang";
+// import TwnsLangTextType             from "../../tools/lang/LangTextType";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import TwnsUiButton                 from "../../tools/ui/UiButton";
+// import TwnsUiImage                  from "../../tools/ui/UiImage";
+// import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+// import TwnsUiTabPage                from "../../tools/ui/UiTabPage";
+// import TwnsWarMapBuildingListPanel  from "../../warMap/view/WarMapBuildingListPanel";
+// import MeMfwModel                   from "../model/MeMfwModel";
 
 namespace TwnsMeMfwBasicSettingsPage {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -136,4 +136,4 @@ namespace TwnsMeMfwBasicSettingsPage {
     }
 }
 
-export default TwnsMeMfwBasicSettingsPage;
+// export default TwnsMeMfwBasicSettingsPage;

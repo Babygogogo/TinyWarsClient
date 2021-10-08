@@ -1,14 +1,14 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import UserModel            from "../../user/model/UserModel";
-import TwnsBwTileMap        from "../model/BwTileMap";
-import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
-import TwnsBwTileView       from "./BwTileView";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import UserModel            from "../../user/model/UserModel";
+// import TwnsBwTileMap        from "../model/BwTileMap";
+// import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+// import TwnsBwTileView       from "./BwTileView";
 
 namespace TwnsBwTileMapView {
     import NotifyType   = TwnsNotifyType.NotifyType;
@@ -256,4 +256,4 @@ namespace TwnsBwTileMapView {
     }
 }
 
-export default TwnsBwTileMapView;
+// export default TwnsBwTileMapView;

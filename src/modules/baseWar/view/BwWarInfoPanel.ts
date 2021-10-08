@@ -1,29 +1,29 @@
 
-import TwnsCommonChooseCoPanel  from "../../common/view/CommonChooseCoPanel";
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
-import SpwModel                 from "../../singlePlayerWar/model/SpwModel";
-import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import ConfigManager            from "../../tools/helpers/ConfigManager";
-import FloatText                from "../../tools/helpers/FloatText";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
-import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel                from "../../user/model/UserModel";
-import WarMapModel              from "../../warMap/model/WarMapModel";
-import TwnsBwWar                from "../model/BwWar";
+// import TwnsCommonChooseCoPanel  from "../../common/view/CommonChooseCoPanel";
+// import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+// import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
+// import SpwModel                 from "../../singlePlayerWar/model/SpwModel";
+// import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import ConfigManager            from "../../tools/helpers/ConfigManager";
+// import FloatText                from "../../tools/helpers/FloatText";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+// import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
+// import UserModel                from "../../user/model/UserModel";
+// import WarMapModel              from "../../warMap/model/WarMapModel";
+// import TwnsBwWar                from "../model/BwWar";
 
 namespace TwnsBwWarInfoPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -1006,4 +1006,4 @@ namespace TwnsBwWarInfoPanel {
     }
 }
 
-export default TwnsBwWarInfoPanel;
+// export default TwnsBwWarInfoPanel;

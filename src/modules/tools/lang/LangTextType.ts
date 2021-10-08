@@ -136,4 +136,4 @@ namespace TwnsLangTextType {
     }
 }
 
-export default TwnsLangTextType;
+// export default TwnsLangTextType;

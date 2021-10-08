@@ -35,4 +35,4 @@ namespace TwnsUiLabel {
     }
 }
 
-export default TwnsUiLabel;
+// export default TwnsUiLabel;

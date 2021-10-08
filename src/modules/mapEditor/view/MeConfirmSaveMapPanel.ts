@@ -1,18 +1,18 @@
 
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import MeModel                  from "../model/MeModel";
-import MeProxy                  from "../model/MeProxy";
-import MeUtility                from "../model/MeUtility";
+// import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import MeModel                  from "../model/MeModel";
+// import MeProxy                  from "../model/MeProxy";
+// import MeUtility                from "../model/MeUtility";
 
 namespace TwnsMeConfirmSaveMapPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -127,4 +127,4 @@ namespace TwnsMeConfirmSaveMapPanel {
     }
 }
 
-export default TwnsMeConfirmSaveMapPanel;
+// export default TwnsMeConfirmSaveMapPanel;

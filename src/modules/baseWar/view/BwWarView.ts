@@ -1,13 +1,13 @@
 
-import TwnsBwWar                from "../../baseWar/model/BwWar";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import Helpers                  from "../../tools/helpers/Helpers";
-import StageManager             from "../../tools/helpers/StageManager";
-import Types                    from "../../tools/helpers/Types";
-import Notify                   from "../../tools/notify/Notify";
-import NotifyData               from "../../tools/notify/NotifyData";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiZoomableComponent  from "../../tools/ui/UiZoomableComponent";
+// import TwnsBwWar                from "../../baseWar/model/BwWar";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import StageManager             from "../../tools/helpers/StageManager";
+// import Types                    from "../../tools/helpers/Types";
+// import Notify                   from "../../tools/notify/Notify";
+// import NotifyData               from "../../tools/notify/NotifyData";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiZoomableComponent  from "../../tools/ui/UiZoomableComponent";
 
 namespace TwnsBwWarView {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -169,4 +169,4 @@ namespace TwnsBwWarView {
     }
 }
 
-export default TwnsBwWarView;
+// export default TwnsBwWarView;

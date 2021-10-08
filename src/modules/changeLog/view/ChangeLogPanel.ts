@@ -1,23 +1,23 @@
 
-import ChangeLogModel           from "../../changeLog/model/ChangeLogModel";
-import ChangeLogProxy           from "../../changeLog/model/ChangeLogProxy";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import FloatText                from "../../tools/helpers/FloatText";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import UserModel                from "../../user/model/UserModel";
-import TwnsChangeLogAddPanel    from "./ChangeLogAddPanel";
-import TwnsChangeLogModifyPanel from "./ChangeLogModifyPanel";
+// import ChangeLogModel           from "../../changeLog/model/ChangeLogModel";
+// import ChangeLogProxy           from "../../changeLog/model/ChangeLogProxy";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import FloatText                from "../../tools/helpers/FloatText";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import UserModel                from "../../user/model/UserModel";
+// import TwnsChangeLogAddPanel    from "./ChangeLogAddPanel";
+// import TwnsChangeLogModifyPanel from "./ChangeLogModifyPanel";
 
 namespace TwnsChangeLogPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -191,4 +191,4 @@ namespace TwnsChangeLogPanel {
     }
 }
 
-export default TwnsChangeLogPanel;
+// export default TwnsChangeLogPanel;

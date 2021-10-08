@@ -1,5 +1,5 @@
 
-import Logger from "../helpers/Logger";
+// import Logger from "../helpers/Logger";
 
 namespace ResAutoRelease {
     const RELEASE_INTERVAL  = window.CLIENT_VERSION === "DEVELOP" ? 3 : 30;
@@ -284,4 +284,4 @@ namespace ResAutoRelease {
     }
 }
 
-export default ResAutoRelease;
+// export default ResAutoRelease;

@@ -1,20 +1,20 @@
 
-import TwnsCommonAlertPanel from "../../common/view/CommonAlertPanel";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiComponent      from "../../tools/ui/UiComponent";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+// import TwnsCommonAlertPanel from "../../common/view/CommonAlertPanel";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton         from "../../tools/ui/UiButton";
+// import TwnsUiComponent      from "../../tools/ui/UiComponent";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 
 namespace TwnsMeAvailableCoPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -327,4 +327,4 @@ namespace TwnsMeAvailableCoPanel {
     }
 }
 
-export default TwnsMeAvailableCoPanel;
+// export default TwnsMeAvailableCoPanel;

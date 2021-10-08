@@ -1,7 +1,7 @@
 
-import Types            from "./Types";
-import ProtoTypes       from "../proto/ProtoTypes";
-import CommonConstants  from "./CommonConstants";
+// import Types            from "./Types";
+// import ProtoTypes       from "../proto/ProtoTypes";
+// import CommonConstants  from "./CommonConstants";
 
 namespace LocalStorage {
     import storage                      = egret.localStorage;
@@ -114,4 +114,4 @@ namespace LocalStorage {
     }
 }
 
-export default LocalStorage;
+// export default LocalStorage;

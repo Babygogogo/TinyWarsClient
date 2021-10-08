@@ -1,22 +1,22 @@
 
-import TwnsCommonChooseCoPanel      from "../../common/view/CommonChooseCoPanel";
-import TwnsCommonCoInfoPanel        from "../../common/view/CommonCoInfoPanel";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import NotifyData                   from "../../tools/notify/NotifyData";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiImage                  from "../../tools/ui/UiImage";
-import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
-import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
-import TwnsUiTabPage                from "../../tools/ui/UiTabPage";
-import WarRuleHelpers               from "../../tools/warHelpers/WarRuleHelpers";
-import ScrCreateModel               from "../model/ScrCreateModel";
+// import TwnsCommonChooseCoPanel      from "../../common/view/CommonChooseCoPanel";
+// import TwnsCommonCoInfoPanel        from "../../common/view/CommonCoInfoPanel";
+// import CommonConstants              from "../../tools/helpers/CommonConstants";
+// import ConfigManager                from "../../tools/helpers/ConfigManager";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import Lang                         from "../../tools/lang/Lang";
+// import TwnsLangTextType             from "../../tools/lang/LangTextType";
+// import NotifyData                   from "../../tools/notify/NotifyData";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton                 from "../../tools/ui/UiButton";
+// import TwnsUiImage                  from "../../tools/ui/UiImage";
+// import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+// import TwnsUiTabPage                from "../../tools/ui/UiTabPage";
+// import WarRuleHelpers               from "../../tools/warHelpers/WarRuleHelpers";
+// import ScrCreateModel               from "../model/ScrCreateModel";
 
 namespace TwnsScrCreatePlayerInfoPage {
     import CommonCoInfoPanel        = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
@@ -209,4 +209,4 @@ namespace TwnsScrCreatePlayerInfoPage {
     }
 }
 
-export default TwnsScrCreatePlayerInfoPage;
+// export default TwnsScrCreatePlayerInfoPage;

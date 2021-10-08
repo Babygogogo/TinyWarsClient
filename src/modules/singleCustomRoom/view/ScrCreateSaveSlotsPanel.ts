@@ -1,19 +1,19 @@
 
-import SpmModel                 from "../../singlePlayerMode/model/SpmModel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
-import WarMapModel              from "../../warMap/model/WarMapModel";
-import ScrCreateModel           from "../model/ScrCreateModel";
+// import SpmModel                 from "../../singlePlayerMode/model/SpmModel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+// import WarMapModel              from "../../warMap/model/WarMapModel";
+// import ScrCreateModel           from "../model/ScrCreateModel";
 
 namespace TwnsScrCreateSaveSlotsPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -164,4 +164,4 @@ namespace TwnsScrCreateSaveSlotsPanel {
     }
 }
 
-export default TwnsScrCreateSaveSlotsPanel;
+// export default TwnsScrCreateSaveSlotsPanel;

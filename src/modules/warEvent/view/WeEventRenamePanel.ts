@@ -1,18 +1,18 @@
 
-import TwnsBwWar            from "../../baseWar/model/BwWar";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import FloatText            from "../../tools/helpers/FloatText";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+// import TwnsBwWar            from "../../baseWar/model/BwWar";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import FloatText            from "../../tools/helpers/FloatText";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton         from "../../tools/ui/UiButton";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
 namespace TwnsWeEventRenamePanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -120,4 +120,4 @@ namespace TwnsWeEventRenamePanel {
     }
 }
 
-export default TwnsWeEventRenamePanel;
+// export default TwnsWeEventRenamePanel;

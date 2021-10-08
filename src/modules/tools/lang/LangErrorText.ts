@@ -1,6 +1,6 @@
 
-import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
-import TwnsServerErrorCode  from "../helpers/ServerErrorCode";
+// import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+// import TwnsServerErrorCode  from "../helpers/ServerErrorCode";
 
 namespace TwnsLangErrorText {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
@@ -223,4 +223,4 @@ namespace TwnsLangErrorText {
     };
 }
 
-export default TwnsLangErrorText;
+// export default TwnsLangErrorText;

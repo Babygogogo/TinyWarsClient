@@ -1,18 +1,18 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import FloatText            from "../../tools/helpers/FloatText";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
-import MeModel              from "../model/MeModel";
-import MeUtility            from "../model/MeUtility";
-import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import FloatText            from "../../tools/helpers/FloatText";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsUiButton         from "../../tools/ui/UiButton";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+// import MeModel              from "../model/MeModel";
+// import MeUtility            from "../model/MeUtility";
+// import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
 
 namespace TwnsMeClearPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -143,4 +143,4 @@ namespace TwnsMeClearPanel {
     }
 }
 
-export default TwnsMeClearPanel;
+// export default TwnsMeClearPanel;

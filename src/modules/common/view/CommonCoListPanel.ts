@@ -1,19 +1,19 @@
 
-import TwnsBwWar                from "../../baseWar/model/BwWar";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import ConfigManager            from "../../tools/helpers/ConfigManager";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
-import TwnsUiComponent          from "../../tools/ui/UiComponent";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsCommonHelpPanel      from "./CommonHelpPanel";
+// import TwnsBwWar                from "../../baseWar/model/BwWar";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import ConfigManager            from "../../tools/helpers/ConfigManager";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
+// import TwnsUiComponent          from "../../tools/ui/UiComponent";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsCommonHelpPanel      from "./CommonHelpPanel";
 
 namespace TwnsCommonCoListPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -264,4 +264,4 @@ namespace TwnsCommonCoListPanel {
     }
 }
 
-export default TwnsCommonCoListPanel;
+// export default TwnsCommonCoListPanel;

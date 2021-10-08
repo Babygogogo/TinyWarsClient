@@ -1,10 +1,10 @@
 
-import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
-import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import Helpers                      from "../../tools/helpers/Helpers";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import TwnsMeWar                    from "./MeWar";
+// import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
+// import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+// import ConfigManager                from "../../tools/helpers/ConfigManager";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+// import TwnsMeWar                    from "./MeWar";
 
 namespace TwnsMeCommonSettingManager {
     import MeWar                = TwnsMeWar.MeWar;
@@ -42,4 +42,4 @@ namespace TwnsMeCommonSettingManager {
     }
 }
 
-export default TwnsMeCommonSettingManager;
+// export default TwnsMeCommonSettingManager;

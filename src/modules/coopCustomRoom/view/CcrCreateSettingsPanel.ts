@@ -1,24 +1,24 @@
 
-import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
-import FloatText                            from "../../tools/helpers/FloatText";
-import FlowManager                          from "../../tools/helpers/FlowManager";
-import Helpers                              from "../../tools/helpers/Helpers";
-import Types                                from "../../tools/helpers/Types";
-import Lang                                 from "../../tools/lang/Lang";
-import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-import TwnsNotifyType                       from "../../tools/notify/NotifyType";
-import TwnsUiButton                         from "../../tools/ui/UiButton";
-import TwnsUiLabel                          from "../../tools/ui/UiLabel";
-import TwnsUiPanel                          from "../../tools/ui/UiPanel";
-import TwnsUiTab                            from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
-import WarMapModel                          from "../../warMap/model/WarMapModel";
-import CcrCreateModel                       from "../model/CcrCreateModel";
-import CcrProxy                             from "../model/CcrProxy";
-import TwnsCcrCreateAdvancedSettingsPage    from "./CcrCreateAdvancedSettingsPage";
-import TwnsCcrCreateMapListPanel            from "./CcrCreateMapListPanel";
-import TwnsCcrCreatePlayerInfoPage          from "./CcrCreatePlayerInfoPage";
+// import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+// import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+// import FloatText                            from "../../tools/helpers/FloatText";
+// import FlowManager                          from "../../tools/helpers/FlowManager";
+// import Helpers                              from "../../tools/helpers/Helpers";
+// import Types                                from "../../tools/helpers/Types";
+// import Lang                                 from "../../tools/lang/Lang";
+// import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import TwnsUiButton                         from "../../tools/ui/UiButton";
+// import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+// import TwnsUiTab                            from "../../tools/ui/UiTab";
+// import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+// import WarMapModel                          from "../../warMap/model/WarMapModel";
+// import CcrCreateModel                       from "../model/CcrCreateModel";
+// import CcrProxy                             from "../model/CcrProxy";
+// import TwnsCcrCreateAdvancedSettingsPage    from "./CcrCreateAdvancedSettingsPage";
+// import TwnsCcrCreateMapListPanel            from "./CcrCreateMapListPanel";
+// import TwnsCcrCreatePlayerInfoPage          from "./CcrCreatePlayerInfoPage";
 
 namespace TwnsCcrCreateSettingsPanel {
     import CcrCreateAdvancedSettingsPage            = TwnsCcrCreateAdvancedSettingsPage.CcrCreateAdvancedSettingsPage;
@@ -366,4 +366,4 @@ namespace TwnsCcrCreateSettingsPanel {
     }
 }
 
-export default TwnsCcrCreateSettingsPanel;
+// export default TwnsCcrCreateSettingsPanel;

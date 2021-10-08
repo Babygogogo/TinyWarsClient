@@ -1,23 +1,23 @@
 
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
-import SpmModel                 from "../../singlePlayerMode/model/SpmModel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import FlowManager              from "../../tools/helpers/FlowManager";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
-import WarMapModel              from "../../warMap/model/WarMapModel";
-import SpwModel                 from "../model/SpwModel";
+// import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+// import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
+// import SpmModel                 from "../../singlePlayerMode/model/SpmModel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import FlowManager              from "../../tools/helpers/FlowManager";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+// import WarMapModel              from "../../warMap/model/WarMapModel";
+// import SpwModel                 from "../model/SpwModel";
 
 namespace TwnsSpwLoadWarPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -193,4 +193,4 @@ namespace TwnsSpwLoadWarPanel {
     }
 }
 
-export default TwnsSpwLoadWarPanel;
+// export default TwnsSpwLoadWarPanel;

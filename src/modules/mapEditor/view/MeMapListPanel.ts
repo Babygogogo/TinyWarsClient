@@ -1,21 +1,21 @@
 
-import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import FlowManager              from "../../tools/helpers/FlowManager";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import TwnsUiZoomableMap        from "../../tools/ui/UiZoomableMap";
-import MeModel                  from "../model/MeModel";
-import MeProxy                  from "../model/MeProxy";
+// import TwnsCommonAlertPanel     from "../../common/view/CommonAlertPanel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import FlowManager              from "../../tools/helpers/FlowManager";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import TwnsUiZoomableMap        from "../../tools/ui/UiZoomableMap";
+// import MeModel                  from "../model/MeModel";
+// import MeProxy                  from "../model/MeProxy";
 
 namespace TwnsMeMapListPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -228,4 +228,4 @@ namespace TwnsMeMapListPanel {
     }
 }
 
-export default TwnsMeMapListPanel;
+// export default TwnsMeMapListPanel;

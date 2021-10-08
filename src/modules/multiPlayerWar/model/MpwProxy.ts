@@ -1,16 +1,16 @@
 
-import TwnsBwWar                from "../../baseWar/model/BwWar";
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import NetManager               from "../../tools/network/NetManager";
-import TwnsNetMessageCodes      from "../../tools/network/NetMessageCodes";
-import Notify                   from "../../tools/notify/Notify";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import TwnsBwWar                from "../../baseWar/model/BwWar";
+// import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+// import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import NetManager               from "../../tools/network/NetManager";
+// import TwnsNetMessageCodes      from "../../tools/network/NetMessageCodes";
+// import Notify                   from "../../tools/notify/Notify";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
 
 namespace MpwProxy {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -120,4 +120,4 @@ namespace MpwProxy {
     }
 }
 
-export default MpwProxy;
+// export default MpwProxy;

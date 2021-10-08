@@ -1,6 +1,6 @@
 
-import Helpers                      from "../../tools/helpers/Helpers";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 
 namespace TwnsBwExecutedActionManager {
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
@@ -57,4 +57,4 @@ namespace TwnsBwExecutedActionManager {
     }
 }
 
-export default TwnsBwExecutedActionManager;
+// export default TwnsBwExecutedActionManager;

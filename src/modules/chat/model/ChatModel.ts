@@ -1,11 +1,11 @@
 
-import FloatText        from "../../tools/helpers/FloatText";
-import Helpers          from "../../tools/helpers/Helpers";
-import Logger           from "../../tools/helpers/Logger";
-import Types            from "../../tools/helpers/Types";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import UserModel        from "../../user/model/UserModel";
-import TwnsChatPanel    from "../view/ChatPanel";
+// import FloatText        from "../../tools/helpers/FloatText";
+// import Helpers          from "../../tools/helpers/Helpers";
+// import Logger           from "../../tools/helpers/Logger";
+// import Types            from "../../tools/helpers/Types";
+// import ProtoTypes       from "../../tools/proto/ProtoTypes";
+// import UserModel        from "../../user/model/UserModel";
+// import TwnsChatPanel    from "../view/ChatPanel";
 
 namespace ChatModel {
     import ChatCategory     = Types.ChatMessageToCategory;
@@ -149,4 +149,4 @@ namespace ChatModel {
     }
 }
 
-export default ChatModel;
+// export default ChatModel;

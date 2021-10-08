@@ -1,12 +1,12 @@
 
-import Helpers              from "../../tools/helpers/Helpers";
-import SoundManager         from "../../tools/helpers/SoundManager";
-import Types                from "../../tools/helpers/Types";
-import Notify               from "../../tools/notify/Notify";
-import NotifyData           from "../../tools/notify/NotifyData";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsBwCursorView     from "../view/BwCursorView";
-import TwnsBwWar            from "./BwWar";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import SoundManager         from "../../tools/helpers/SoundManager";
+// import Types                from "../../tools/helpers/Types";
+// import Notify               from "../../tools/notify/Notify";
+// import NotifyData           from "../../tools/notify/NotifyData";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsBwCursorView     from "../view/BwCursorView";
+// import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwCursor {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -137,4 +137,4 @@ namespace TwnsBwCursor {
     }
 }
 
-export default TwnsBwCursor;
+// export default TwnsBwCursor;

@@ -1,13 +1,13 @@
 
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
-import TwnsMmTagListPanel   from "./MmTagListPanel";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsUiButton         from "../../tools/ui/UiButton";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+// import TwnsMmTagListPanel   from "./MmTagListPanel";
 
 namespace TwnsMmTagSearchPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -109,4 +109,4 @@ namespace TwnsMmTagSearchPanel {
     }
 }
 
-export default TwnsMmTagSearchPanel;
+// export default TwnsMmTagSearchPanel;

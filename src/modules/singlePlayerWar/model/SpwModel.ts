@@ -1,22 +1,22 @@
 
-import TwnsBwWar            from "../../baseWar/model/BwWar";
-import TwnsCommonAlertPanel from "../../common/view/CommonAlertPanel";
-import TwnsScwWar           from "../../singleCustomWar/model/ScwWar";
-import TwnsSfwWar           from "../../singleFreeWar/model/SfwWar";
-import TwnsSrwWar           from "../../singleRankWar/model/SrwWar";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import FlowManager          from "../../tools/helpers/FlowManager";
-import Helpers              from "../../tools/helpers/Helpers";
-import Logger               from "../../tools/helpers/Logger";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarActionExecutor    from "../../tools/warHelpers/WarActionExecutor";
-import WarActionReviser     from "../../tools/warHelpers/WarActionReviser";
-import WarRobot             from "../../tools/warHelpers/WarRobot";
-import TwnsSpwPlayerManager from "./SpwPlayerManager";
-import TwnsSpwWar           from "./SpwWar";
+// import TwnsBwWar            from "../../baseWar/model/BwWar";
+// import TwnsCommonAlertPanel from "../../common/view/CommonAlertPanel";
+// import TwnsScwWar           from "../../singleCustomWar/model/ScwWar";
+// import TwnsSfwWar           from "../../singleFreeWar/model/SfwWar";
+// import TwnsSrwWar           from "../../singleRankWar/model/SrwWar";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import FlowManager          from "../../tools/helpers/FlowManager";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Logger               from "../../tools/helpers/Logger";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarActionExecutor    from "../../tools/warHelpers/WarActionExecutor";
+// import WarActionReviser     from "../../tools/warHelpers/WarActionReviser";
+// import WarRobot             from "../../tools/warHelpers/WarRobot";
+// import TwnsSpwPlayerManager from "./SpwPlayerManager";
+// import TwnsSpwWar           from "./SpwWar";
 
 namespace SpwModel {
     import SpwWar                   = TwnsSpwWar.SpwWar;
@@ -322,4 +322,4 @@ namespace SpwModel {
     }
 }
 
-export default SpwModel;
+// export default SpwModel;

@@ -1,11 +1,11 @@
 
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Notify                   from "../../tools/notify/Notify";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
-import McrModel                 from "./McrModel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Notify                   from "../../tools/notify/Notify";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
+// import McrModel                 from "./McrModel";
 
 namespace McrJoinModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -96,4 +96,4 @@ namespace McrJoinModel {
     }
 }
 
-export default McrJoinModel;
+// export default McrJoinModel;

@@ -1,9 +1,9 @@
 
-import Types                        from "../../tools/helpers/Types";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import TwnsBwGridVisualEffectView   from "../view/BwGridVisualEffectView";
-import TwnsBwWar                    from "./BwWar";
+// import Types                        from "../../tools/helpers/Types";
+// import Notify                       from "../../tools/notify/Notify";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import TwnsBwGridVisualEffectView   from "../view/BwGridVisualEffectView";
+// import TwnsBwWar                    from "./BwWar";
 
 namespace TwnsBwGridVisualEffect {
     import GridIndex                = Types.GridIndex;
@@ -121,4 +121,4 @@ namespace TwnsBwGridVisualEffect {
     }
 }
 
-export default TwnsBwGridVisualEffect;
+// export default TwnsBwGridVisualEffect;

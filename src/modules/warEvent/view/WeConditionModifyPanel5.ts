@@ -1,18 +1,18 @@
 
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Types                        from "../../tools/helpers/Types";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiImage                  from "../../tools/ui/UiImage";
-import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-import WarEventHelper               from "../model/WarEventHelper";
-import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
+// import CommonConstants              from "../../tools/helpers/CommonConstants";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import Types                        from "../../tools/helpers/Types";
+// import Lang                         from "../../tools/lang/Lang";
+// import TwnsLangTextType             from "../../tools/lang/LangTextType";
+// import Notify                       from "../../tools/notify/Notify";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton                 from "../../tools/ui/UiButton";
+// import TwnsUiImage                  from "../../tools/ui/UiImage";
+// import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+// import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+// import WarEventHelper               from "../model/WarEventHelper";
+// import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
 namespace TwnsWeConditionModifyPanel5 {
     import WeConditionTypeListPanel = TwnsWeConditionTypeListPanel.WeConditionTypeListPanel;
@@ -149,4 +149,4 @@ namespace TwnsWeConditionModifyPanel5 {
     }
 }
 
-export default TwnsWeConditionModifyPanel5;
+// export default TwnsWeConditionModifyPanel5;

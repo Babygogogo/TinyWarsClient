@@ -1,11 +1,11 @@
 
-import TwnsUiComponent      from "./UiComponent";
-import TwnsUiImage          from "./UiImage";
-import Helpers              from "../helpers/Helpers";
-import Notify               from "../notify/Notify";
-import TwnsNotifyType       from "../notify/NotifyType";
-import StageManager         from "../helpers/StageManager";
-import Types                from "../helpers/Types";
+// import TwnsUiComponent      from "./UiComponent";
+// import TwnsUiImage          from "./UiImage";
+// import Helpers              from "../helpers/Helpers";
+// import Notify               from "../notify/Notify";
+// import TwnsNotifyType       from "../notify/NotifyType";
+// import StageManager         from "../helpers/StageManager";
+// import Types                from "../helpers/Types";
 
 namespace TwnsUiZoomableComponent {
     import NotifyType               = TwnsNotifyType.NotifyType;
@@ -430,4 +430,4 @@ namespace TwnsUiZoomableComponent {
     }
 }
 
-export default TwnsUiZoomableComponent;
+// export default TwnsUiZoomableComponent;

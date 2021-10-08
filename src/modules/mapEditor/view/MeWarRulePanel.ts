@@ -1,34 +1,34 @@
 
-import TwnsBwWarEventManager            from "../../baseWar/model/BwWarEventManager";
-import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
-import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
-import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
-import CommonConstants                  from "../../tools/helpers/CommonConstants";
-import ConfigManager                    from "../../tools/helpers/ConfigManager";
-import FloatText                        from "../../tools/helpers/FloatText";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Types                            from "../../tools/helpers/Types";
-import Lang                             from "../../tools/lang/Lang";
-import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-import Notify                           from "../../tools/notify/Notify";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                     from "../../tools/ui/UiButton";
-import TwnsUiImage                      from "../../tools/ui/UiImage";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import WarRuleHelpers                   from "../../tools/warHelpers/WarRuleHelpers";
-import TwnsWeEventListPanel             from "../../warEvent/view/WeEventListPanel";
-import TwnsMeField                      from "../model/MeField";
-import MeModel                          from "../model/MeModel";
-import TwnsMeWar                        from "../model/MeWar";
-import TwnsMeAddWarEventToRulePanel     from "./MeAddWarEventToRulePanel";
-import TwnsMeAvailableCoPanel           from "./MeAvailableCoPanel";
-import TwnsMeModifyRuleNamePanel        from "./MeModifyRuleNamePanel";
-import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
+// import TwnsBwWarEventManager            from "../../baseWar/model/BwWarEventManager";
+// import TwnsCommonChooseCoPanel          from "../../common/view/CommonChooseCoPanel";
+// import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
+// import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
+// import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
+// import CommonConstants                  from "../../tools/helpers/CommonConstants";
+// import ConfigManager                    from "../../tools/helpers/ConfigManager";
+// import FloatText                        from "../../tools/helpers/FloatText";
+// import Helpers                          from "../../tools/helpers/Helpers";
+// import Types                            from "../../tools/helpers/Types";
+// import Lang                             from "../../tools/lang/Lang";
+// import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+// import Notify                           from "../../tools/notify/Notify";
+// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton                     from "../../tools/ui/UiButton";
+// import TwnsUiImage                      from "../../tools/ui/UiImage";
+// import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+// import WarRuleHelpers                   from "../../tools/warHelpers/WarRuleHelpers";
+// import TwnsWeEventListPanel             from "../../warEvent/view/WeEventListPanel";
+// import TwnsMeField                      from "../model/MeField";
+// import MeModel                          from "../model/MeModel";
+// import TwnsMeWar                        from "../model/MeWar";
+// import TwnsMeAddWarEventToRulePanel     from "./MeAddWarEventToRulePanel";
+// import TwnsMeAvailableCoPanel           from "./MeAvailableCoPanel";
+// import TwnsMeModifyRuleNamePanel        from "./MeModifyRuleNamePanel";
+// import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
 namespace TwnsMeWarRulePanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -1201,4 +1201,4 @@ namespace TwnsMeWarRulePanel {
     }
 }
 
-export default TwnsMeWarRulePanel;
+// export default TwnsMeWarRulePanel;

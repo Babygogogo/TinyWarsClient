@@ -1,11 +1,11 @@
 
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import Types            from "../../tools/helpers/Types";
-import Notify           from "../../tools/notify/Notify";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoManager     from "../../tools/proto/ProtoManager";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
+// import CommonConstants  from "../../tools/helpers/CommonConstants";
+// import Helpers          from "../../tools/helpers/Helpers";
+// import Types            from "../../tools/helpers/Types";
+// import Notify           from "../../tools/notify/Notify";
+// import TwnsNotifyType   from "../../tools/notify/NotifyType";
+// import ProtoManager     from "../../tools/proto/ProtoManager";
+// import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
 namespace SpmModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -127,4 +127,4 @@ namespace SpmModel {
     }
 }
 
-export default SpmModel;
+// export default SpmModel;

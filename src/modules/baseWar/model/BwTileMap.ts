@@ -1,14 +1,14 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsBwTileMapView    from "../view/BwTileMapView";
-import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
-import TwnsBwTile           from "./BwTile";
-import TwnsBwWar            from "./BwWar";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsBwTileMapView    from "../view/BwTileMapView";
+// import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+// import TwnsBwTile           from "./BwTile";
+// import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwTileMap {
     import MapSize          = Types.MapSize;
@@ -205,4 +205,4 @@ namespace TwnsBwTileMap {
     }
 }
 
-export default TwnsBwTileMap;
+// export default TwnsBwTileMap;

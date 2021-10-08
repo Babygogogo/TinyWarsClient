@@ -1,10 +1,10 @@
 
-import MfrModel             from "../../multiFreeRoom/model/MfrModel";
-import NetManager           from "../../tools/network/NetManager";
-import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import MfrModel             from "../../multiFreeRoom/model/MfrModel";
+// import NetManager           from "../../tools/network/NetManager";
+// import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 namespace MfrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -204,4 +204,4 @@ namespace MfrProxy {
     }
 }
 
-export default MfrProxy;
+// export default MfrProxy;

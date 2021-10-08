@@ -1,16 +1,16 @@
 
-import UserModel            from "../../user/model/UserModel";
-import WarMapModel          from "../../warMap/model/WarMapModel";
-import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
-import CommonConstants      from "../helpers/CommonConstants";
-import Helpers              from "../helpers/Helpers";
-import LocalStorage         from "../helpers/LocalStorage";
-import TwnsServerErrorCode  from "../helpers/ServerErrorCode";
-import Types                from "../helpers/Types";
-import ProtoTypes           from "../proto/ProtoTypes";
-import TwnsLangCommonText   from "./LangCommonText";
-import TwnsLangErrorText    from "./LangErrorText";
-import TwnsLangTextType     from "./LangTextType";
+// import UserModel            from "../../user/model/UserModel";
+// import WarMapModel          from "../../warMap/model/WarMapModel";
+// import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+// import CommonConstants      from "../helpers/CommonConstants";
+// import Helpers              from "../helpers/Helpers";
+// import LocalStorage         from "../helpers/LocalStorage";
+// import TwnsServerErrorCode  from "../helpers/ServerErrorCode";
+// import Types                from "../helpers/Types";
+// import ProtoTypes           from "../proto/ProtoTypes";
+// import TwnsLangCommonText   from "./LangCommonText";
+// import TwnsLangErrorText    from "./LangErrorText";
+// import TwnsLangTextType     from "./LangTextType";
 
 namespace Lang {
     import LanguageType             = Types.LanguageType;
@@ -522,4 +522,4 @@ namespace Lang {
     }
 }
 
-export default Lang;
+// export default Lang;

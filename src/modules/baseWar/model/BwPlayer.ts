@@ -1,16 +1,16 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
-import UserModel            from "../../user/model/UserModel";
-import TwnsBwWar            from "./BwWar";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+// import UserModel            from "../../user/model/UserModel";
+// import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwPlayer {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -431,4 +431,4 @@ namespace TwnsBwPlayer {
     }
 }
 
-export default TwnsBwPlayer;
+// export default TwnsBwPlayer;
