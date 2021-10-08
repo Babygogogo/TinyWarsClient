@@ -111,6 +111,10 @@ namespace TwnsLangErrorText {
             `还有玩家未准备就绪`,
             `Some players are not ready yet.`,
         ],
+        [ServerErrorCode.ExeChatAddMessage_ExeWithSocket_0005]: [
+            `您说话太频繁了，请稍后再试`,
+            `You talk too often. Please retry later.`,
+        ],
         [ServerErrorCode.MsgMapGetRawData0001]: [
             "地图不存在，获取raw data失败。",
             "The map doesn't exist thus fail to get its raw data.",

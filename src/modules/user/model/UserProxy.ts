@@ -39,6 +39,15 @@ namespace UserProxy {
             } },
         });
     }
+    export function reqRawLogin(account: string, password: string): void {
+        NetManager.send({
+            MsgUserLogin: { c: {
+                account,
+                password,
+                isAutoRelogin   : false,
+            } },
+        });
+    }
     function _onMsgUserLogin(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserLogin.IS;
         if (!data.errorCode) {

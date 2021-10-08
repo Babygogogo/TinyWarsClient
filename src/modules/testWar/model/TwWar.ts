@@ -140,27 +140,22 @@ namespace TwnsTwWar {
             await this._baseInit(data);
         }
         public async initByMapRawData(mapRawData: IMapRawData): Promise<void> {
-            const warData = await _createDataForCreateTwWar(mapRawData);
-            await this.init(warData);
+            await this.init(await _createDataForCreateTwWar(mapRawData));
         }
 
         public async getErrorCodeForInit(data: ISerialWar): Promise<ClientErrorCode> {
-            try {
-                await this.init(data);
-            } catch (e) {
+            await this.init(data).catch(e => {
                 const error = e as Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInit_00;
-            }
+            });
 
             return ClientErrorCode.NoError;
         }
         public async getErrorCodeForInitByMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-            try {
-                await this.initByMapRawData(mapRawData);
-            } catch (e) {
+            await this.initByMapRawData(mapRawData).catch(e => {
                 const error = e as Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitByMapRawData_00;
-            }
+            });
 
             return ClientErrorCode.NoError;
         }

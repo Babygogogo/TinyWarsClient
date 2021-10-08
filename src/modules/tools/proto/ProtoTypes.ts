@@ -20396,6 +20396,9 @@ export declare namespace User {
 
         /** UserComplexInfo userMapRatingArray */
         userMapRatingArray?: (User.IUserMapRating[]|null);
+
+        /** UserComplexInfo lastChatTime */
+        lastChatTime?: (number|null);
     }
 
     /** Represents a UserComplexInfo. */
@@ -20421,6 +20424,9 @@ export declare namespace User {
 
         /** UserComplexInfo userMapRatingArray. */
         public userMapRatingArray: User.IUserMapRating[];
+
+        /** UserComplexInfo lastChatTime. */
+        public lastChatTime: number;
 
         /**
          * Creates a new UserComplexInfo instance using the specified properties.
